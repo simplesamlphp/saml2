@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Statement;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -15,7 +15,14 @@ use SimpleSAML\Assert\Assert;
  */
 final class CustomStatement extends Statement
 {
-    protected const XSI_TYPE = 'CustomStatement';
+    /** @var string */
+    protected const NS_XSI_TYPE_NAME = 'CustomStatement';
+
+    /** @var string */
+    protected const NS_XSI_TYPE_NAMESPACE = C::NAMESPACE;
+
+    /** @var string */
+    protected const NS_XSI_TYPE_PREFIX = 'ssp';
 
     /** @var string */
     protected string $value;
@@ -28,8 +35,7 @@ final class CustomStatement extends Statement
      */
     public function __construct(string $value)
     {
-        parent::__construct(self::XSI_TYPE);
-
+        parent::__construct(self::getXsiType());
         $this->setValue($value);
     }
 
@@ -57,15 +63,6 @@ final class CustomStatement extends Statement
 
 
     /**
-     * @inheritDoc
-     */
-    public static function getXsiType(): string
-    {
-        return self::XSI_TYPE;
-    }
-
-
-    /**
      * Convert XML into an CustomStatement
      *
      * @param \DOMElement $xml The XML element we should load
@@ -73,7 +70,7 @@ final class CustomStatement extends Statement
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->getAttributeNS(C::NS_XSI, 'type'), 'CustomStatement');
+        Assert::same($xml->getAttributeNS(C::NS_XSI, 'type'), 'ssp:CustomStatement');
 
         return new self($xml->textContent);
     }

@@ -7,6 +7,10 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ExtensionPointInterface;
+use SimpleSAML\SAML2\XML\ExtensionPointTrait;
+use SimpleSAML\SAML2\XML\saml\Statement;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
@@ -14,8 +18,10 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
  *
  * @package simplesamlphp/saml2
  */
-abstract class Statement extends AbstractStatement
+abstract class Statement extends AbstractStatementType implements ExtensionPointInterface
 {
+    use ExtensionPointTrait;
+
     /** @var string */
     public const LOCALNAME = 'Statement';
 

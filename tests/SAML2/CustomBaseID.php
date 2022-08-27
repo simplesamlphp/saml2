@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\BaseID;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Assert\Assert;
 
 use function floatval;
@@ -18,7 +18,14 @@ use function strval;
  */
 final class CustomBaseID extends BaseID
 {
-    protected const XSI_TYPE = 'CustomBaseID';
+    /** @var string */
+    protected const NS_XSI_TYPE_NAME = 'CustomBaseID';
+
+    /** @var string */
+    protected const NS_XSI_TYPE_NAMESPACE = C::NAMESPACE;
+
+    /** @var string */
+    protected const NS_XSI_TYPE_PREFIX = 'ssp';
 
 
     /**
@@ -30,7 +37,7 @@ final class CustomBaseID extends BaseID
      */
     public function __construct(float $value, string $NameQualifier = null, string $SPNameQualifier = null)
     {
-        parent::__construct(self::XSI_TYPE, strval($value), $NameQualifier, $SPNameQualifier);
+        parent::__construct(self::getXsiType(), $NameQualifier, $SPNameQualifier);
     }
 
 
@@ -43,14 +50,5 @@ final class CustomBaseID extends BaseID
 
         $baseID = BaseID::fromXML($xml);
         return new self(floatval($xml->textContent), $baseID->getNameQualifier(), $baseID->getSPNameQualifier());
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    public static function getXsiType(): string
-    {
-        return self::XSI_TYPE;
     }
 }

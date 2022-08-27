@@ -8,6 +8,8 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\ExtensionPointInterface;
+use SimpleSAML\SAML2\XML\ExtensionPointTrait;
 use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\XMLStringElementTrait;
@@ -22,9 +24,13 @@ use function trim;
  *
  * @package simplesamlphp/saml2
  */
-class BaseID extends AbstractSamlElement implements BaseIdentifierInterface, EncryptableElementInterface
+class BaseID extends AbstractSamlElement implements
+     BaseIdentifierInterface,
+     EncryptableElementInterface,
+     ExtensionPointInterface
 {
     use EncryptableElementTrait;
+    use ExtensionPointTrait;
     use IDNameQualifiersTrait;
     use XMLStringElementTrait;
 

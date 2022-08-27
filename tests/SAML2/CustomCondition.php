@@ -4,27 +4,31 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2;
 
+use SimpleSAML\Assert\Assert;
 use DOMElement;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ExtensionPointInterface;
+use SimpleSAML\SAML2\XML\ExtensionPointTrait;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\Condition;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\Test\SAML2\Constants as C;
 
 /**
  * @covers \SimpleSAML\Test\SAML2\CustomCondition
  * @package simplesamlphp\saml2
  */
-final class CustomCondition extends Condition
+final class CustomCondition extends Condition implements ExtensionPointInterface
 {
-    /** @var string */
-    protected const XSI_TYPE = 'ssp:CustomCondition';
+    use ExtensionPointTrait;
 
     /** @var string */
-    protected const XSI_TYPE_NS = 'urn:custom:ssp';
+    protected const NS_XSI_TYPE_NAME = 'CustomCondition';
 
     /** @var string */
-    protected const XSI_TYPE_PREFIX = 'ssp';
+    protected const NS_XSI_TYPE_NAMESPACE = C::NAMESPACE;
+
+    /** @var string */
+    protected const NS_XSI_TYPE_PREFIX = 'ssp';
 
     /** @var \SimpleSAML\SAML2\XML\saml\Audience[] */
     protected $audience = [];
@@ -37,8 +41,7 @@ final class CustomCondition extends Condition
      */
     public function __construct(array $audience)
     {
-        parent::__construct('dummy', self::XSI_TYPE);
-
+        parent::__construct(self::getXsiType());
         $this->setAudience($audience);
     }
 
@@ -64,15 +67,6 @@ final class CustomCondition extends Condition
         Assert::allIsInstanceOf($audience, Audience::class);
 
         $this->audience = $audience;
-    }
-
-
-    /**
-     * @inheritDoc
-     */
-    public static function getXsiType(): string
-    {
-        return self::XSI_TYPE;
     }
 
 
