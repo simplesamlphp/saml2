@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
-use Mockery;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\BaseID;
@@ -70,12 +69,10 @@ XML
         $this->subjectConfirmation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_SubjectConfirmation.xml'
         );
-    }
 
-
-    public function tearDown(): void
-    {
-        Mockery::close();
+        $container = new MockContainer();
+        $container->registerExtensionHandler(CustomBaseID::class);
+        ContainerSingleton::setContainer($container);
     }
 
 
@@ -340,16 +337,6 @@ XML
      */
     public function testCustomIDHandler(): void
     {
-        $container = ContainerSingleton::getInstance();
-        $mock = Mockery::mock(AbstractContainer::class);
-        /**
-         * @psalm-suppress InvalidArgument
-         * @psalm-suppress UndefinedMagicMethod
-         */
-        $mock->shouldReceive('getIdentifierHandler')->andReturn(CustomBaseID::class);
-        /** @psalm-suppress InvalidArgument */
-        ContainerSingleton::setContainer($mock);
-
         $samlNamespace = Subject::NS;
         $xsiNamespace = C::NS_XSI;
 

@@ -98,26 +98,6 @@ trait IdentifierTrait
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null $identifier */
         $identifier = array_pop($identifiers);
 
-        if ($identifier !== null) {
-            // check if the identifier is a BaseID that we can process
-            if ($identifier instanceof BaseID) {
-                $type = $identifier->getType();
-                $container = ContainerSingleton::getInstance();
-
-                /** @var \SimpleSAML\SAML2\XML\saml\BaseIdentifierInterface|null $handler */
-                $handler = $container->getIdentifierHandler($type);
-
-                if ($handler !== null) {
-                    // we have a handler, use it for this id
-                    $list = $xml->getElementsByTagNameNS(BaseID::NS, 'BaseID');
-
-                    /** @var \DOMElement $element */
-                    $element = $list->item(0);
-                    $identifier = $handler::fromXML($element);
-                }
-            }
-        }
-
         return $identifier;
     }
 }

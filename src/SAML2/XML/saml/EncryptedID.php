@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use InvalidArgumentException;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\XMLElementInterface;
 use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
@@ -60,12 +62,20 @@ class EncryptedID extends AbstractSamlElement implements EncryptedElementInterfa
                 return Issuer::fromXML($xml);
             case BaseID::NS . ':BaseID':
                 $xsiType = $xml->getAttributeNS(C::NS_XSI, 'type');
+                Assert::validQName($xsiType, SchemaViolationException::class);
+
+                // @TODO: deal with non-prefixed types
+                list($prefix, $localName) = explode(':', $xsiType);
+                $namespace = $xml->lookupNamespaceURI($prefix);
+
                 $container = ContainerSingleton::getInstance();
-                $handler = $container->getIdentifierHandler($xsiType);
+                $handler = $container->getElementHandler($namespace, $localName);
                 if ($handler !== null) {
                     return $handler::fromXML($xml);
                 }
-                return BaseID::fromXML($xml);
+
+                // @TODO: deal with unknown or unregistered BaseIDs
+                // Fall thru
             default:
               // Fall thru
         }

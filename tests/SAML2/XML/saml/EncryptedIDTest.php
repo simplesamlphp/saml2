@@ -62,6 +62,7 @@ final class EncryptedIDTest extends TestCase
 
         $container = new MockContainer();
         $container->setBlacklistedAlgorithms(null);
+        $container->registerExtensionHandler(CustomBaseID::class);
         ContainerSingleton::setContainer($container);
     }
 
@@ -228,11 +229,6 @@ final class EncryptedIDTest extends TestCase
         $id = $encid->decrypt($decryptor);
         $this->assertInstanceOf(BaseID::class, $id);
         $this->assertEquals(strval($customid), strval($id));
-
-        // test a custom BaseID with a registered handler
-        $container = $this->createMock(MockContainer::class);
-        $container->method('getIdentifierHandler')->willReturn(CustomBaseID::class);
-        ContainerSingleton::setContainer($container);
 
         $encid = EncryptedID::fromXML($doc->documentElement);
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
