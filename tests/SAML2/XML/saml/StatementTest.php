@@ -64,7 +64,7 @@ final class StatementTest extends TestCase
     {
         $statement = CustomStatement::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('CustomStatement', $statement->getType());
+        $this->assertEquals('ssp:CustomStatement', $statement->getXsiType());
         $this->assertEquals('SomeStatement', $statement->getValue());
 
         $this->assertEquals(
