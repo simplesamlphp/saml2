@@ -8,6 +8,9 @@ use DOMDocument;
 use DOMElement;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\Test\SAML2\CustomStatement;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -19,6 +22,7 @@ use function strval;
  * Class \SAML2\XML\saml\StatementTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\Statement
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractStatementType
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
@@ -36,6 +40,10 @@ final class StatementTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Statement.xml'
         );
+
+        $container = new MockContainer();
+        $container->registerExtensionHandler(CustomStatement::class);
+        ContainerSingleton::setContainer($container);
     }
 
 
@@ -46,7 +54,9 @@ final class StatementTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $statement = new CustomStatement('SomeStatement');
+        $statement = new CustomStatement(
+            [new Audience('urn:some:audience')],
+        );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -65,7 +75,9 @@ final class StatementTest extends TestCase
         $statement = CustomStatement::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals('ssp:CustomStatement', $statement->getXsiType());
-        $this->assertEquals('SomeStatement', $statement->getValue());
+        $audience = $statement->getAudience();
+        $this->assertCount(1, $audience);
+        $this->assertEquals('urn:some:audience', $audience[0]->getContent());
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),

@@ -11,6 +11,6 @@ use DOMElement;
  *
  * @package simplesamlphp/saml2
  */
-abstract class AbstractStatement extends AbstractSamlElement
+abstract class AbstractStatementType extends AbstractSamlElement
 {
 }

@@ -14,7 +14,7 @@ use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
  *
  * @package simplesamlphp/saml2
  */
-class AttributeStatement extends AbstractStatement
+class AttributeStatement extends AbstractStatementType
 {
     /** @var \SimpleSAML\SAML2\XML\saml\Attribute[] */
     protected array $attributes = [];

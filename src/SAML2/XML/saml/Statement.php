@@ -12,6 +12,10 @@ use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 use SimpleSAML\SAML2\XML\ExtensionPointTrait;
 use SimpleSAML\SAML2\XML\saml\Statement;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
+
+use function count;
+use function explode;
 
 /**
  * Class implementing the <saml:Statement> extension point.
@@ -25,42 +29,42 @@ abstract class Statement extends AbstractStatementType implements ExtensionPoint
     /** @var string */
     public const LOCALNAME = 'Statement';
 
-    /** @var string */
-    protected string $type;
-
 
     /**
-     * Initialize a saml:Statement from scratch
+     * Convert an XML element into a Statement.
      *
-     * @param string $type
+     * @param \DOMElement $xml The root XML element
+     * @return \SimpleSAML\SAML2\XML\saml\Statement The condition
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    protected function __construct(string $type)
+    public static function fromXML(DOMElement $xml): object
     {
-        $this->setType($type);
-    }
+        Assert::same($xml->localName, 'Statement', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, C::NS_SAML, InvalidDOMElementException::class);
+        Assert::true(
+            $xml->hasAttributeNS(C::NS_XSI, 'type'),
+            'Missing required xsi:type in <saml:Statement> element.',
+            SchemaViolationException::class
+        );
 
+        $type = $xml->getAttributeNS(C::NS_XSI, 'type');
+        Assert::validQName($type, SchemaViolationException::class);
 
-    /**
-     * Get the type of this BaseID (expressed in the xsi:type attribute).
-     *
-     * @return string
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
+        $qname = explode(':', $type, 2);
+        if (count($qname) === 2) {
+            list($prefix, $element) = $qname;
+        } else {
+            $prefix = null;
+            list($element) = $qname;
+        }
+        $ns = $xml->lookupNamespaceUri($prefix);
+        $handler = Utils::getContainer()->getElementHandler($ns, $element);
 
+        Assert::notNull($handler, 'Unknown Statement type `' . $type . '`.');
+        Assert::isAOf($handler, Statement::class);
 
-    /**
-     * Set the type of this BaseID (in the xsi:type attribute)
-     *
-     * @param string $type
-     *
-     */
-    protected function setType(string $type): void
-    {
-        Assert::notEmpty($type, 'The "xsi:type" attribute of an identifier cannot be empty.');
-        $this->type = $type;
+        return $handler::fromXML($xml);
     }
 
 
@@ -68,14 +72,15 @@ abstract class Statement extends AbstractStatementType implements ExtensionPoint
      * Convert this Statement to XML.
      *
      * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this BaseID.
+     * @return \DOMElement The XML element after adding the data corresponding to this Statement.
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $element = $this->instantiateParentElement($parent);
+        $e = $this->instantiateParentElement($parent);
 
-        $element->setAttributeNS(C::NS_XSI, 'xsi:type', $this->type);
+        $e->setAttribute('xmlns:' . static::NS_XSI_TYPE_PREFIX, static::NS_XSI_TYPE_NAMESPACE);
+        $e->setAttributeNS(C::NS_XSI, 'xsi:type', static::getXsiType());
 
-        return $element;
+        return $e;
     }
 }
