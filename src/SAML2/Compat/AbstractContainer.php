@@ -8,7 +8,7 @@ use Psr\Log\LoggerInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\AbstractXMLElement;
 use SimpleSAML\SAML2\XML\saml\Condition;
-use SimpleSAML\SAML2\XML\saml\CustomIdentifierInterface;
+use SimpleSAML\SAML2\XML\saml\BaseIdentifierInterface;
 
 use function array_key_exists;
 use function is_subclass_of;
@@ -124,7 +124,7 @@ abstract class AbstractContainer
     public function registerExtensionHandler(string $class): void
     {
         Assert::subclassOf($class, AbstractXMLElement::class);
-        if (is_subclass_of($class, CustomIdentifierInterface::class, true)) {
+        if (is_subclass_of($class, BaseIdentifierInterface::class, true)) {
             $key = $class::getXsiType() . ':BaseID';
         } else {
             $key = join(':', [urlencode($class::NS), AbstractXMLElement::getClassName($class)]);
@@ -158,11 +158,11 @@ abstract class AbstractContainer
      * Search for a class that implements a custom identifier type.
      *
      * Such classes must have been registered previously by calling registerExtensionHandler(), and they must
-     * implement \SimpleSAML\SAML2\XML\saml\CustomIdentifierInterface.
+     * implement \SimpleSAML\SAML2\XML\saml\BaseIdentifierInterface.
      *
      * @param string $type The type of the identifier (xsi:type of the BaseID element).
      *
-     * @return string|null The fully-qualified name of a class implementing \SimpleSAML\SAML2\XML\saml\CustomIdentifierInterface
+     * @return string|null The fully-qualified name of a class implementing \SimpleSAML\SAML2\XML\saml\BaseIdentifierInterface
      * or null if no such class has been registered before.
      * @psalm-return class-string|null
      */

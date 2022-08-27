@@ -7,7 +7,6 @@ namespace SimpleSAML\Test\SAML2;
 use DOMElement;
 use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\BaseID;
-use SimpleSAML\SAML2\XML\saml\CustomIdentifierInterface;
 use SimpleSAML\Assert\Assert;
 
 use function floatval;
@@ -17,7 +16,7 @@ use function strval;
  * @covers \SimpleSAML\Test\SAML2\CustomBaseID
  * @package simplesamlphp\saml2
  */
-final class CustomBaseID extends BaseID implements CustomIdentifierInterface
+final class CustomBaseID extends BaseID
 {
     protected const XSI_TYPE = 'CustomBaseID';
 
