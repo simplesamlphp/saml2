@@ -41,7 +41,7 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
-use function str_repeat;
+use function str_pad;
 use function strval;
 
 /**
@@ -330,7 +330,7 @@ XML
         );
 
         new EntityDescriptor(
-            str_repeat('urn:x-simplesamlphp:', C::ENTITYID_MAX_LENGTH + 1),
+            str_pad('urn:x-simplesamlphp:', C::ENTITYID_MAX_LENGTH + 1, 'a'),
             null,
             null,
             null,
