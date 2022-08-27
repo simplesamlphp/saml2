@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 use function var_export;
@@ -30,7 +30,7 @@ abstract class MessageFactory
     {
         Assert::same(
             $xml->namespaceURI,
-            Constants::NS_SAMLP,
+            C::NS_SAMLP,
             'Unknown namespace of SAML message: ' . var_export($xml->namespaceURI, true),
             InvalidDOMElementException::class
         );

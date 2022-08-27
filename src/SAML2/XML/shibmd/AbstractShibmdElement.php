@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\shibmd;
 
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\AbstractXMLElement;
 
 /**

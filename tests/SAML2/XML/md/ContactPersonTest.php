@@ -7,7 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\ContactPerson;
 use SimpleSAML\SAML2\XML\md\Company;
@@ -183,8 +183,8 @@ final class ContactPersonTest extends TestCase
      */
     public function testUnmarshallingMultipleCompanies(): void
     {
-        $company = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'Company');
-        $newCompany = $this->xmlRepresentation->createElementNS(Constants::NS_MD, 'Company', 'Alt. Co.');
+        $company = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'Company');
+        $newCompany = $this->xmlRepresentation->createElementNS(C::NS_MD, 'Company', 'Alt. Co.');
         /** @psalm-suppress PossiblyNullPropertyFetch */
         $this->xmlRepresentation->documentElement->insertBefore($newCompany, $company->item(0)->nextSibling);
         $this->expectException(AssertionFailedException::class);
@@ -198,8 +198,8 @@ final class ContactPersonTest extends TestCase
      */
     public function testUnmarshallingMultipleGivenNames(): void
     {
-        $givenName = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'GivenName');
-        $newName = $this->xmlRepresentation->createElementNS(Constants::NS_MD, 'GivenName', 'New Name');
+        $givenName = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'GivenName');
+        $newName = $this->xmlRepresentation->createElementNS(C::NS_MD, 'GivenName', 'New Name');
         /** @psalm-suppress PossiblyNullPropertyFetch */
         $this->xmlRepresentation->documentElement->insertBefore($newName, $givenName->item(0)->nextSibling);
         $this->expectException(AssertionFailedException::class);
@@ -214,8 +214,8 @@ final class ContactPersonTest extends TestCase
      */
     public function testUnmarshallingMultipleSurNames(): void
     {
-        $surName = $this->xmlRepresentation->getElementsByTagNameNS(Constants::NS_MD, 'SurName');
-        $newName = $this->xmlRepresentation->createElementNS(Constants::NS_MD, 'SurName', 'New Name');
+        $surName = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'SurName');
+        $newName = $this->xmlRepresentation->createElementNS(C::NS_MD, 'SurName', 'New Name');
         /** @psalm-suppress PossiblyNullPropertyFetch */
         $this->xmlRepresentation->documentElement->insertBefore($newName, $surName->item(0)->nextSibling);
         $this->expectException(AssertionFailedException::class);
@@ -229,7 +229,7 @@ final class ContactPersonTest extends TestCase
      */
     public function testUnmarshallingWithoutOptionalArguments(): void
     {
-        $mdNamespace = Constants::NS_MD;
+        $mdNamespace = C::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:ContactPerson contactType="other" xmlns:md="{$mdNamespace}"/>
 XML

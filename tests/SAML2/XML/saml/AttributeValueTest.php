@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
@@ -77,10 +77,9 @@ final class AttributeValueTest extends TestCase
         $av = new AttributeValue(null);
         $this->assertNull($av->getValue());
         $this->assertEquals('xs:nil', $av->getXsiType());
-        $nssaml = Constants::NS_SAML;
-        $nsxsi = Constants::NS_XSI;
-        $this->assertEquals(
-            <<<XML
+        $nssaml = C::NS_SAML;
+        $nsxsi = C::NS_XSI;
+        $this->assertEquals(<<<XML
 <saml:AttributeValue xmlns:saml="$nssaml" xmlns:xsi="$nsxsi" xsi:nil="1"/>
 XML
             ,

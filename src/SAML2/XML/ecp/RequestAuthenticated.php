@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\ecp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -53,13 +53,13 @@ final class RequestAuthenticated extends AbstractEcpElement
 
         // Assert required attributes
         Assert::true(
-            $xml->hasAttributeNS(Constants::NS_SOAP, 'actor'),
+            $xml->hasAttributeNS(C::NS_SOAP, 'actor'),
             'Missing SOAP-ENV:actor attribute in <ecp:RequestAuthenticated>.',
             MissingAttributeException::class
         );
 
-        $mustUnderstand = $xml->getAttributeNS(Constants::NS_SOAP, 'mustUnderstand');
-        $actor = $xml->getAttributeNS(Constants::NS_SOAP, 'actor');
+        $mustUnderstand = $xml->getAttributeNS(C::NS_SOAP, 'mustUnderstand');
+        $actor = $xml->getAttributeNS(C::NS_SOAP, 'actor');
 
         Assert::oneOf(
             $mustUnderstand,
@@ -91,9 +91,9 @@ final class RequestAuthenticated extends AbstractEcpElement
         $response = $this->instantiateParentElement($parent);
 
         if (!is_null($this->mustUnderstand)) {
-            $response->setAttributeNS(Constants::NS_SOAP, 'SOAP-ENV:mustUnderstand', strval($this->mustUnderstand));
+            $response->setAttributeNS(C::NS_SOAP, 'SOAP-ENV:mustUnderstand', strval($this->mustUnderstand));
         }
-        $response->setAttributeNS(Constants::NS_SOAP, 'SOAP-ENV:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
+        $response->setAttributeNS(C::NS_SOAP, 'SOAP-ENV:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
 
         return $response;
     }

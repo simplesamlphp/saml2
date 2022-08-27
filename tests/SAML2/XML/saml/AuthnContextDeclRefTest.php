@@ -6,7 +6,6 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;

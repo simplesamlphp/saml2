@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -60,7 +60,7 @@ final class NameIDPolicyTest extends TestCase
      */
     public function testMarshallingEmptyElement(): void
     {
-        $samlpns = Constants::NS_SAMLP;
+        $samlpns = C::NS_SAMLP;
         $nameIdPolicy = new NameIDPolicy();
         $this->assertEquals(
             "<samlp:NameIDPolicy xmlns:samlp=\"$samlpns\"/>",

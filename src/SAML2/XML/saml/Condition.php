@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
@@ -77,7 +77,7 @@ abstract class Condition extends AbstractConditionType
         $e = $this->instantiateParentElement($parent);
 
         $e->setAttribute('xmlns:' . static::XSI_TYPE_PREFIX, static::XSI_TYPE_NS);
-        $e->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
+        $e->setAttributeNS(C::NS_XSI, 'xsi:type', $this->type);
 
         return $e;
     }

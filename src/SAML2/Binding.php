@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2;
 
 use Exception;
 use Psr\Http\Message\ServerRequestInterface;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 
@@ -44,17 +45,17 @@ abstract class Binding
     public static function getBinding(string $urn): Binding
     {
         switch ($urn) {
-            case Constants::BINDING_HTTP_POST:
-            case Constants::BINDING_HOK_SSO:
+            case C::BINDING_HTTP_POST:
+            case C::BINDING_HOK_SSO:
                 return new HTTPPost();
-            case Constants::BINDING_HTTP_REDIRECT:
+            case C::BINDING_HTTP_REDIRECT:
                 return new HTTPRedirect();
-            case Constants::BINDING_HTTP_ARTIFACT:
+            case C::BINDING_HTTP_ARTIFACT:
                 return new HTTPArtifact();
             // ECP ACS is defined with the PAOS binding, but as the IdP, we
             // talk to the ECP using SOAP -- if support for ECP as an SP is
             // implemented, this logic may need to change
-            case Constants::BINDING_PAOS:
+            case C::BINDING_PAOS:
                 return new SOAP();
             default:
                 throw new UnsupportedBindingException('Unsupported binding: ' . var_export($urn, true));

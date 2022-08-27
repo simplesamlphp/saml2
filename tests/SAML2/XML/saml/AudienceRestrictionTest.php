@@ -6,7 +6,6 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;

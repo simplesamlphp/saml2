@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Constants;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
@@ -34,7 +34,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
     use ExtendableElementTrait;
 
     /** The namespace-attribute for the xs:any element */
-    public const NAMESPACE = Constants::XS_ANY_NS_OTHER;
+    public const NAMESPACE = C::XS_ANY_NS_OTHER;
 
 
     /**

@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
 
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 
 use function sprintf;
@@ -21,10 +21,10 @@ final class SubjectConfirmationMethod implements SubjectConfirmationConstraintVa
         SubjectConfirmation $subjectConfirmation,
         Result $result
     ): void {
-        if ($subjectConfirmation->getMethod() !== Constants::CM_BEARER) {
+        if ($subjectConfirmation->getMethod() !== C::CM_BEARER) {
             $result->addError(sprintf(
                 'Invalid Method on SubjectConfirmation, current;y only Bearer (%s) is supported',
-                Constants::CM_BEARER
+                C::CM_BEARER
             ));
         }
     }

@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
@@ -44,7 +44,7 @@ final class AuthnContextClassRefTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $authnContextClassRef = new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT);
+        $authnContextClassRef = new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -61,6 +61,6 @@ final class AuthnContextClassRefTest extends TestCase
     public function testUnmarshalling(): void
     {
         $authnContextClassRef = AuthnContextClassRef::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals(Constants::AC_PASSWORD_PROTECTED_TRANSPORT, $authnContextClassRef->getContent());
+        $this->assertEquals(C::AC_PASSWORD_PROTECTED_TRANSPORT, $authnContextClassRef->getContent());
     }
 }

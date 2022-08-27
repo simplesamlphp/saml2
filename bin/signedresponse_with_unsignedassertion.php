@@ -18,7 +18,7 @@ $document = DOMDocumentFactory::fromFile(dirname(dirname(__FILE__)) . '/tests/re
 $unsignedAssertion = Assertion::fromXML($document->documentElement);
 
 $unsignedResponse = new Response(
-    new Status(new StatusCode(Constants::STATUS_SUCCESS)),
+    new Status(new StatusCode(C::STATUS_SUCCESS)),
     new Issuer('https://IdentityProvider.com'),
     'abc123',
     null,

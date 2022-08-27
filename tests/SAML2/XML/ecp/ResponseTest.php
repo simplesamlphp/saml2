@@ -8,7 +8,7 @@ use DOMDocument;
 use DOMElement;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\ecp\Response;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -63,7 +63,7 @@ final class ResponseTest extends TestCase
         $response = new Response('https://example.com/ACS');
         $return = $response->toXML($element);
 
-        $elements = $element->getElementsByTagNameNS(Constants::NS_ECP, 'Response');
+        $elements = $element->getElementsByTagNameNS(C::NS_ECP, 'Response');
 
         $this->assertEquals(1, $elements->length);
         $this->assertEquals($return, $elements->item(0));
@@ -100,7 +100,7 @@ final class ResponseTest extends TestCase
     public function testUnmarshallingWithMissingMustUnderstandThrowsException(): void
     {
         $document = $this->xmlRepresentation->documentElement;
-        $document->removeAttributeNS(Constants::NS_SOAP, 'mustUnderstand');
+        $document->removeAttributeNS(C::NS_SOAP, 'mustUnderstand');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing SOAP-ENV:mustUnderstand attribute in <ecp:Response>.');
@@ -114,7 +114,7 @@ final class ResponseTest extends TestCase
     public function testUnmarshallingWithMissingActorThrowsException(): void
     {
         $document = $this->xmlRepresentation->documentElement;
-        $document->removeAttributeNS(Constants::NS_SOAP, 'actor');
+        $document->removeAttributeNS(C::NS_SOAP, 'actor');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing SOAP-ENV:actor attribute in <ecp:Response>.');

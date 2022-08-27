@@ -7,7 +7,6 @@ namespace SimpleSAML\Test\SAML2\XML\mdui;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\mdui\Description;
 use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;

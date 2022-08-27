@@ -9,7 +9,7 @@ use DOMElement;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -78,7 +78,7 @@ final class LogoutRequestTest extends MockeryTestCase
 
         $logoutRequestElement = $logoutRequest->toXML();
         $this->assertEquals('LogoutRequest', $logoutRequestElement->localName);
-        $this->assertEquals(Constants::NS_SAMLP, $logoutRequestElement->namespaceURI);
+        $this->assertEquals(C::NS_SAMLP, $logoutRequestElement->namespaceURI);
 
         $xpCache = XPath::getXPath($logoutRequestElement);
         $nameIdElements = XPath::xpQuery($logoutRequestElement, './saml_assertion:NameID', $xpCache);

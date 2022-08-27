@@ -9,7 +9,7 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\SAML2\XML\saml\NameID;
@@ -91,7 +91,7 @@ XML
                 'SomeNameIDValue',
                 null,
                 'https://sp.example.org/authentication/sp/metadata',
-                Constants::NAMEID_TRANSIENT,
+                C::NAMEID_TRANSIENT,
                 null
             ),
             [
@@ -101,7 +101,7 @@ XML
                         'SomeOtherNameIDValue',
                         null,
                         'https://sp.example.org/authentication/sp/metadata',
-                        Constants::NAMEID_TRANSIENT,
+                        C::NAMEID_TRANSIENT,
                         null
                     ),
                     new SubjectConfirmationData(
@@ -130,7 +130,7 @@ XML
                 'SomeNameIDValue',
                 null,
                 'https://sp.example.org/authentication/sp/metadata',
-                Constants::NAMEID_TRANSIENT,
+                C::NAMEID_TRANSIENT,
                 null
             ),
             [
@@ -140,7 +140,7 @@ XML
                         'SomeOtherNameIDValue',
                         null,
                         'https://sp.example.org/authentication/sp/metadata',
-                        Constants::NAMEID_TRANSIENT,
+                        C::NAMEID_TRANSIENT,
                         null
                     ),
                     new SubjectConfirmationData(
@@ -185,7 +185,7 @@ XML
                         'SomeOtherNameIDValue',
                         null,
                         'https://sp.example.org/authentication/sp/metadata',
-                        Constants::NAMEID_TRANSIENT,
+                        C::NAMEID_TRANSIENT,
                         null
                     ),
                     new SubjectConfirmationData(
@@ -275,7 +275,7 @@ XML
     public function testMultipleIdentifiers(): void
     {
         $samlNamespace = Subject::NS;
-        $xsiNamespace = Constants::NS_XSI;
+        $xsiNamespace = C::NS_XSI;
 
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:Subject xmlns:saml="{$samlNamespace}">
@@ -308,7 +308,7 @@ XML
     public function testNoCustomIDHandler(): void
     {
         $samlNamespace = Subject::NS;
-        $xsiNamespace = Constants::NS_XSI;
+        $xsiNamespace = C::NS_XSI;
 
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:Subject xmlns:saml="{$samlNamespace}">
@@ -351,7 +351,7 @@ XML
         ContainerSingleton::setContainer($mock);
 
         $samlNamespace = Subject::NS;
-        $xsiNamespace = Constants::NS_XSI;
+        $xsiNamespace = C::NS_XSI;
 
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:Subject xmlns:saml="{$samlNamespace}">

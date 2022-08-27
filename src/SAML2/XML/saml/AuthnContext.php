@@ -6,7 +6,6 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDecl;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;

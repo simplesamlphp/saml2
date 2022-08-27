@@ -7,7 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
@@ -60,7 +60,7 @@ final class RequestedAuthnContextTest extends TestCase
     public function testMarshallingWithMixedContextsFails(): void
     {
         $authnContextDeclRef = new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml');
-        $authnContextClassRef = new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT);
+        $authnContextClassRef = new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT);
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('You need either AuthnContextClassRef or AuthnContextDeclRef, not both.');
@@ -110,8 +110,8 @@ final class RequestedAuthnContextTest extends TestCase
      */
     public function testUnmarshallingWithMixedContextsFails(): void
     {
-        $samlNamespace = Constants::NS_SAML;
-        $samlpNamespace = Constants::NS_SAMLP;
+        $samlNamespace = C::NS_SAML;
+        $samlpNamespace = C::NS_SAMLP;
 
         $document = DOMDocumentFactory::fromString(<<<XML
 <samlp:RequestedAuthnContext xmlns:samlp="{$samlpNamespace}" Comparison="minimum">

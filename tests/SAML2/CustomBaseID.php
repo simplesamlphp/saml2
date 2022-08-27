@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\Assert\Assert;
 
@@ -39,7 +39,7 @@ final class CustomBaseID extends BaseID
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->getAttributeNS(Constants::NS_XSI, 'type'), 'CustomBaseID');
+        Assert::same($xml->getAttributeNS(C::NS_XSI, 'type'), 'CustomBaseID');
 
         $baseID = BaseID::fromXML($xml);
         return new self(floatval($xml->textContent), $baseID->getNameQualifier(), $baseID->getSPNameQualifier());

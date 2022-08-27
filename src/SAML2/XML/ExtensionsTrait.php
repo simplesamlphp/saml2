@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\XMLElementInterface;
 
@@ -52,7 +52,7 @@ trait ExtensionsTrait
                 ProtocolViolationException::class
             );
             Assert::true(
-                !in_array($namespace, [Constants::NS_SAML, Constants::NS_SAMLP], true),
+                !in_array($namespace, [C::NS_SAML, C::NS_SAMLP], true),
                 'Extensions MUST NOT include any SAML-defined namespace elements.',
                 ProtocolViolationException::class
             );

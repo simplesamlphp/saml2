@@ -8,6 +8,7 @@ use DOMDocument;
 use Exception;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use Psr\Http\Message\ServerRequestInterface;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ecp\Response as ECPResponse;
@@ -42,7 +43,7 @@ class SOAP extends Binding
     <SOAP-ENV:Body />
 </SOAP-ENV:Envelope>
 SOAP;
-        $envelope = sprintf($envelope, Constants::NS_SOAP);
+        $envelope = sprintf($envelope, C::NS_SOAP);
 
         $doc = new DOMDocument();
         $doc->loadXML($envelope);
@@ -52,7 +53,7 @@ SOAP;
         // profile, this is the Response itself.
         if ($message instanceof Response) {
             /** @var \DOMElement $header */
-            $header = $doc->getElementsByTagNameNS(Constants::NS_SOAP, 'Header')->item(0);
+            $header = $doc->getElementsByTagNameNS(C::NS_SOAP, 'Header')->item(0);
 
             $requestAuthenticated = new RequestAuthenticated();
             $header->appendChild($header->ownerDocument->importNode($requestAuthenticated->toXML(), true));
@@ -66,7 +67,7 @@ SOAP;
         }
 
         /** @var \DOMElement $body */
-        $body = $doc->getElementsByTagNameNs(Constants::NS_SOAP, 'Body')->item(0);
+        $body = $doc->getElementsByTagNameNs(C::NS_SOAP, 'Body')->item(0);
 
         $body->appendChild($doc->importNode($message->toXML(), true));
 

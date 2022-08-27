@@ -7,7 +7,7 @@ namespace SimpleSAML\Test\SAML2\Response\Validation\ConstraintValidator;
 use Mockery;
 use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Response\Validation\Result;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator\IsSuccessful;
 use SimpleSAML\SAML2\XML\samlp\Response;
@@ -58,10 +58,10 @@ final class IsSuccessfulTest extends MockeryTestCase
     {
         $responseStatus = new Status(
             new StatusCode(
-                Constants::STATUS_SUCCESS,
+                C::STATUS_SUCCESS,
                 [
                     new StatusCode(
-                        Constants::STATUS_PREFIX . 'bar'
+                        C::STATUS_PREFIX . 'bar'
                     )
                 ]
             ),

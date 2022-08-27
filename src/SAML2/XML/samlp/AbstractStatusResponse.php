@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 
 /**
@@ -77,7 +77,7 @@ abstract class AbstractStatusResponse extends AbstractMessage
      */
     public function isSuccess(): bool
     {
-        return $this->status->getStatusCode()->getValue() === Constants::STATUS_SUCCESS;
+        return $this->status->getStatusCode()->getValue() === C::STATUS_SUCCESS;
     }
 
 

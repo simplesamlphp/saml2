@@ -8,7 +8,7 @@ use DOMDocument;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\md\NameIDFormat;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
@@ -51,7 +51,7 @@ final class NameIDFormatTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $nameIdFormat = new NameIDFormat(Constants::NAMEID_PERSISTENT);
+        $nameIdFormat = new NameIDFormat(C::NAMEID_PERSISTENT);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -69,6 +69,6 @@ final class NameIDFormatTest extends TestCase
     {
         $nameIdFormat = NameIDFormat::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals(Constants::NAMEID_PERSISTENT, $nameIdFormat->getContent());
+        $this->assertEquals(C::NAMEID_PERSISTENT, $nameIdFormat->getContent());
     }
 }

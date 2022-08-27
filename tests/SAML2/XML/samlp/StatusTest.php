@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
@@ -57,10 +57,10 @@ final class StatusTest extends TestCase
     {
         $status = new Status(
             new StatusCode(
-                Constants::STATUS_RESPONDER,
+                C::STATUS_RESPONDER,
                 [
                     new StatusCode(
-                        Constants::STATUS_REQUEST_DENIED
+                        C::STATUS_REQUEST_DENIED
                     )
                 ]
             ),
@@ -85,10 +85,10 @@ final class StatusTest extends TestCase
     {
         $status = new Status(
             new StatusCode(
-                Constants::STATUS_RESPONDER,
+                C::STATUS_RESPONDER,
                 [
                     new StatusCode(
-                        Constants::STATUS_REQUEST_DENIED
+                        C::STATUS_REQUEST_DENIED
                     )
                 ]
             ),
@@ -121,12 +121,12 @@ final class StatusTest extends TestCase
         $status = Status::fromXML($this->xmlRepresentation->documentElement);
 
         $statusCode = $status->getStatusCode();
-        $this->assertEquals(Constants::STATUS_RESPONDER, $statusCode->getValue());
+        $this->assertEquals(C::STATUS_RESPONDER, $statusCode->getValue());
 
         $subCodes = $status->getStatusCode()->getSubCodes();
         $this->assertCount(1, $subCodes);
 
-        $this->assertEquals(Constants::STATUS_REQUEST_DENIED, $subCodes[0]->getValue());
+        $this->assertEquals(C::STATUS_REQUEST_DENIED, $subCodes[0]->getValue());
 
         $statusMessage = $status->getStatusMessage();
         $this->assertEquals('Something went wrong', $statusMessage->getContent());

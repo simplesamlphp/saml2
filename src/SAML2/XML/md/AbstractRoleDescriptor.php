@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 
 use function implode;
@@ -143,7 +143,7 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
         foreach ($protocols as $protocol) {
             Assert::validURI($protocol, SchemaViolationException::class);
         }
-        Assert::oneOf(Constants::NS_SAMLP, $protocols, 'At least SAML 2.0 must be one of supported protocols.');
+        Assert::oneOf(C::NS_SAMLP, $protocols, 'At least SAML 2.0 must be one of supported protocols.');
 
         $this->protocolSupportEnumeration = $protocols;
     }

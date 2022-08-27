@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\EntityDescriptor;
 use SimpleSAML\SAML2\XML\md\EntitiesDescriptor;
@@ -70,11 +70,11 @@ final class EntitiesDescriptorTest extends TestCase
             ]
         );
         $entitiesdChildElement = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
-            Constants::NS_MD,
+            C::NS_MD,
             'EntitiesDescriptor'
         );
         $entitydElement = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
-            Constants::NS_MD,
+            C::NS_MD,
             'EntityDescriptor'
         );
 
@@ -107,7 +107,7 @@ final class EntitiesDescriptorTest extends TestCase
     public function testMarshallingWithNoName(): void
     {
         $entitydElement = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
-            Constants::NS_MD,
+            C::NS_MD,
             'EntityDescriptor'
         );
         /** @psalm-suppress PossiblyNullArgument */
@@ -126,7 +126,7 @@ final class EntitiesDescriptorTest extends TestCase
     public function testMarshallingWithOnlyEntitiesDescriptor(): void
     {
         $entitiesdChildElement = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
-            Constants::NS_MD,
+            C::NS_MD,
             'EntitiesDescriptor'
         );
         /** @psalm-suppress PossiblyNullArgument */
@@ -198,7 +198,7 @@ final class EntitiesDescriptorTest extends TestCase
     public function testUnmarshallingWithoutEntities(): void
     {
         $entities = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
-            Constants::NS_MD,
+            C::NS_MD,
             'EntitiesDescriptor'
         );
         /** @psalm-suppress PossiblyNullArgument */
@@ -215,7 +215,7 @@ final class EntitiesDescriptorTest extends TestCase
     public function testUnmarshallingWithoutEntity(): void
     {
         $entity = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
-            Constants::NS_MD,
+            C::NS_MD,
             'EntityDescriptor'
         );
         /*
@@ -239,7 +239,7 @@ final class EntitiesDescriptorTest extends TestCase
     {
         // remove child EntitiesDescriptor
         $entities = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
-            Constants::NS_MD,
+            C::NS_MD,
             'EntitiesDescriptor'
         );
         /** @psalm-suppress PossiblyNullArgument */
@@ -247,7 +247,7 @@ final class EntitiesDescriptorTest extends TestCase
 
         // remove child EntityDescriptor
         $entity = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
-            Constants::NS_MD,
+            C::NS_MD,
             'EntityDescriptor'
         );
         /** @psalm-suppress PossiblyNullArgument */

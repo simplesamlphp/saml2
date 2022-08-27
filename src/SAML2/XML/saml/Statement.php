@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
@@ -68,7 +68,7 @@ abstract class Statement extends AbstractStatement
     {
         $element = $this->instantiateParentElement($parent);
 
-        $element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
+        $element->setAttributeNS(C::NS_XSI, 'xsi:type', $this->type);
 
         return $element;
     }

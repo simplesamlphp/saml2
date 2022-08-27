@@ -7,7 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\md\AttributeConsumingService;
 use SimpleSAML\SAML2\XML\md\RequestedAttribute;
 use SimpleSAML\SAML2\XML\md\ServiceDescription;
@@ -101,7 +101,7 @@ final class AttributeConsumingServiceTest extends TestCase
         );
 
         $descr = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
-            Constants::NS_MD,
+            C::NS_MD,
             'ServiceDescription'
         );
 
@@ -244,7 +244,7 @@ final class AttributeConsumingServiceTest extends TestCase
      */
     public function testUnmarshallingWithoutServiceName(): void
     {
-        $name = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(Constants::NS_MD, 'ServiceName');
+        $name = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(C::NS_MD, 'ServiceName');
         /** @psalm-suppress PossiblyNullArgument */
         $this->xmlRepresentation->documentElement->removeChild($name->item(0));
         $this->expectException(MissingElementException::class);
@@ -259,7 +259,7 @@ final class AttributeConsumingServiceTest extends TestCase
     public function testUnmarshallingWithoutRequestedAttributes(): void
     {
         $reqAttr = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
-            Constants::NS_MD,
+            C::NS_MD,
             'RequestedAttribute'
         );
         /** @psalm-suppress PossiblyNullArgument */

@@ -7,7 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AuthzService;
 use SimpleSAML\SAML2\XML\md\NameIDFormat;
@@ -54,11 +54,11 @@ final class PDPDescriptorTest extends TestCase
         );
 
         $this->authzService = new AuthzService(
-            Constants::BINDING_SOAP,
+            C::BINDING_SOAP,
             'https://IdentityProvider.com/SAML/AA/SOAP'
         );
         $this->assertionIDRequestService = new AssertionIDRequestService(
-            Constants::BINDING_URI,
+            C::BINDING_URI,
             'https://IdentityProvider.com/SAML/AA/URI'
         );
     }
@@ -77,9 +77,9 @@ final class PDPDescriptorTest extends TestCase
             ["urn:oasis:names:tc:SAML:2.0:protocol"],
             [$this->assertionIDRequestService],
             [
-                new NameIDFormat(Constants::NAMEID_X509_SUBJECT_NAME),
-                new NameIDFormat(Constants::NAMEID_PERSISTENT),
-                new NameIDFormat(Constants::NAMEID_TRANSIENT),
+                new NameIDFormat(C::NAMEID_X509_SUBJECT_NAME),
+                new NameIDFormat(C::NAMEID_PERSISTENT),
+                new NameIDFormat(C::NAMEID_TRANSIENT),
             ]
         );
 
@@ -153,9 +153,9 @@ final class PDPDescriptorTest extends TestCase
         $this->assertCount(3, $pdpd->getNameIDFormats());
         $this->assertEquals(
             [
-                new NameIDFormat(Constants::NAMEID_X509_SUBJECT_NAME),
-                new NameIDFormat(Constants::NAMEID_PERSISTENT),
-                new NameIDFormat(Constants::NAMEID_TRANSIENT),
+                new NameIDFormat(C::NAMEID_X509_SUBJECT_NAME),
+                new NameIDFormat(C::NAMEID_PERSISTENT),
+                new NameIDFormat(C::NAMEID_TRANSIENT),
             ],
             $pdpd->getNameIDFormats()
         );
@@ -187,7 +187,7 @@ final class PDPDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutOptionalArguments(): void
     {
-        $mdns = Constants::NS_MD;
+        $mdns = C::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:PDPDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
   <md:AuthzService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"

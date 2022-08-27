@@ -8,7 +8,7 @@ use Exception;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Binding;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use SimpleSAML\SAML2\HTTPArtifact;
 use SimpleSAML\SAML2\HTTPPost;
@@ -26,15 +26,15 @@ final class BindingTest extends TestCase
      */
     public function testGetBinding(): void
     {
-        $bind = Binding::getBinding(Constants::BINDING_HTTP_POST);
+        $bind = Binding::getBinding(C::BINDING_HTTP_POST);
         $this->assertInstanceOf(HTTPPost::class, $bind);
-        $bind = Binding::getBinding(Constants::BINDING_HTTP_REDIRECT);
+        $bind = Binding::getBinding(C::BINDING_HTTP_REDIRECT);
         $this->assertInstanceOf(HTTPRedirect::class, $bind);
-        $bind = Binding::getBinding(Constants::BINDING_HTTP_ARTIFACT);
+        $bind = Binding::getBinding(C::BINDING_HTTP_ARTIFACT);
         $this->assertInstanceOf(HTTPArtifact::class, $bind);
-        $bind = Binding::getBinding(Constants::BINDING_HOK_SSO);
+        $bind = Binding::getBinding(C::BINDING_HOK_SSO);
         $this->assertInstanceOf(HTTPPost::class, $bind);
-        $bind = Binding::getBinding(Constants::BINDING_PAOS);
+        $bind = Binding::getBinding(C::BINDING_PAOS);
         $this->assertInstanceOf(SOAP::class, $bind);
 
         $this->expectException(UnsupportedBindingException::class);
@@ -132,7 +132,7 @@ final class BindingTest extends TestCase
      */
     public function testGetSetDestination(): void
     {
-        $bind = Binding::getBinding(Constants::BINDING_HTTP_POST);
+        $bind = Binding::getBinding(C::BINDING_HTTP_POST);
         $dest = $bind->getDestination();
         $this->assertNull($dest);
 

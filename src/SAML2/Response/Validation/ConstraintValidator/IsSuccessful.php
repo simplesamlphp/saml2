@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Response\Validation\ConstraintValidator;
 
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator;
 use SimpleSAML\SAML2\Response\Validation\Result;
 use SimpleSAML\SAML2\XML\samlp\Response;
@@ -67,8 +67,8 @@ class IsSuccessful implements ConstraintValidator
      */
     private function truncateStatus(string $status): string
     {
-        $prefixLength = strlen(Constants::STATUS_PREFIX);
-        if (strpos($status, Constants::STATUS_PREFIX) !== 0) {
+        $prefixLength = strlen(C::STATUS_PREFIX);
+        if (strpos($status, C::STATUS_PREFIX) !== 0) {
             return $status;
         }
 

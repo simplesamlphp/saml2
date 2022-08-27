@@ -7,7 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\md\EncryptionMethod;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
@@ -55,7 +55,7 @@ final class EncryptionMethodTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $alg = Constants::KEY_TRANSPORT_OAEP_MGF1P;
+        $alg = C::KEY_TRANSPORT_OAEP_MGF1P;
         $chunkXml = DOMDocumentFactory::fromString('<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>');
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 
@@ -73,9 +73,9 @@ final class EncryptionMethodTest extends TestCase
      */
     public function testMarshallingWithoutOptionalParameters(): void
     {
-        $encryptionMethod = new EncryptionMethod(Constants::KEY_TRANSPORT_OAEP_MGF1P);
+        $encryptionMethod = new EncryptionMethod(C::KEY_TRANSPORT_OAEP_MGF1P);
         $document = DOMDocumentFactory::fromString(
-            '<md:EncryptionMethod xmlns:md="' . Constants::NS_MD .
+            '<md:EncryptionMethod xmlns:md="' . C::NS_MD .
             '" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>'
         );
 
@@ -88,7 +88,7 @@ final class EncryptionMethodTest extends TestCase
 
     public function testMarshallingElementOrdering(): void
     {
-        $alg = Constants::KEY_TRANSPORT_OAEP_MGF1P;
+        $alg = C::KEY_TRANSPORT_OAEP_MGF1P;
         $chunkXml = DOMDocumentFactory::fromString('<other:Element xmlns:other="urn:other:elt">Value</other:Element>');
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 
@@ -149,7 +149,7 @@ final class EncryptionMethodTest extends TestCase
      */
     public function testUnmarshallingWithoutOptionalParameters(): void
     {
-        $mdns = Constants::NS_MD;
+        $mdns = C::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:EncryptionMethod xmlns:md="{$mdns}" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>
 XML

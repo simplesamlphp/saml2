@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use InvalidArgumentException;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\XMLElementInterface;
 use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
@@ -59,7 +59,7 @@ class EncryptedID extends AbstractSamlElement implements EncryptedElementInterfa
             case Issuer::NS . ':Issuer':
                 return Issuer::fromXML($xml);
             case BaseID::NS . ':BaseID':
-                $xsiType = $xml->getAttributeNS(Constants::NS_XSI, 'type');
+                $xsiType = $xml->getAttributeNS(C::NS_XSI, 'type');
                 $container = ContainerSingleton::getInstance();
                 $handler = $container->getIdentifierHandler($xsiType);
                 if ($handler !== null) {

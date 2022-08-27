@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XMLSecurity\Constants;
+use SimpleSAML\XMLSecurity\Constants as C;
 
 use function dirname;
 use function strval;
@@ -45,7 +45,7 @@ final class DigestMethodTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $digestMethod = new DigestMethod(Constants::DIGEST_SHA256);
+        $digestMethod = new DigestMethod(C::DIGEST_SHA256);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -60,7 +60,7 @@ final class DigestMethodTest extends TestCase
     {
         $digestMethod = DigestMethod::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals(Constants::DIGEST_SHA256, $digestMethod->getAlgorithm());
+        $this->assertEquals(C::DIGEST_SHA256, $digestMethod->getAlgorithm());
     }
 
 

@@ -9,7 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Constants;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableElementTrait;
 
@@ -28,7 +28,7 @@ final class UIInfo extends AbstractMduiElement
     use ExtendableElementTrait;
 
     /** The namespace-attribute for the xs:any element */
-    public const NAMESPACE = Constants::XS_ANY_NS_OTHER;
+    public const NAMESPACE = C::XS_ANY_NS_OTHER;
 
     /**
      * The DisplayName, as an array of DisplayName objects

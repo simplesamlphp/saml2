@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\Condition;
@@ -90,12 +90,12 @@ final class CustomCondition extends Condition
         Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Condition::NS, InvalidDOMElementException::class);
         Assert::true(
-            $xml->hasAttributeNS(Constants::NS_XSI, 'type'),
+            $xml->hasAttributeNS(C::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:Condition> element.',
             InvalidDOMElementException::class
         );
 
-        $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
+        $type = $xml->getAttributeNS(C::NS_XSI, 'type');
         list($prefix, $element) = explode(':', $type, 2);
 
         $ns = $xml->lookupNamespaceUri($prefix);

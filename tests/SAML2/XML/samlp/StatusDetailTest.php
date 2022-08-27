@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\samlp\StatusDetail;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -62,7 +62,7 @@ final class StatusDetailTest extends TestCase
      */
     public function testMarshallingEmptyElement(): void
     {
-        $samlpns = Constants::NS_SAMLP;
+        $samlpns = C::NS_SAMLP;
         $statusDetail = new StatusDetail([]);
         $this->assertEquals(
             "<samlp:StatusDetail xmlns:samlp=\"$samlpns\"/>",

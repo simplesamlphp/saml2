@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\SAML2\XML\saml\Conditions;
@@ -82,7 +82,7 @@ final class ConditionsTest extends TestCase
      */
     public function testMarshallingWithNoElements(): void
     {
-        $samlns = Constants::NS_SAML;
+        $samlns = C::NS_SAML;
         $conditions = new Conditions();
         $this->assertEquals(
             "<saml:Conditions xmlns:saml=\"$samlns\"/>",

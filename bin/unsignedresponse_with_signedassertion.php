@@ -26,7 +26,7 @@ $unsignedAssertion = Assertion::fromXML($document->documentElement);
 $unsignedAssertion->sign($signer);
 
 $unsignedResponse = new Response(
-    new Status(new StatusCode(Constants::STATUS_SUCCESS)),
+    new Status(new StatusCode(C::STATUS_SUCCESS)),
     new Issuer('https://IdentityProvider.com'),
     'abc123',
     null,

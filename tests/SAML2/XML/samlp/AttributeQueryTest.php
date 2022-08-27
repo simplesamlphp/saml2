@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
@@ -54,7 +54,7 @@ final class AttributeQueryTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $nameId = new NameID('urn:example:subject', null, null, Constants::NAMEID_UNSPECIFIED);
+        $nameId = new NameID('urn:example:subject', null, null, C::NAMEID_UNSPECIFIED);
 
         $attributeQuery = new AttributeQuery(
             new Subject($nameId),
@@ -91,7 +91,7 @@ final class AttributeQueryTest extends TestCase
                     ]
                 )
             ],
-            new Issuer('https://example.org/', null, null, Constants::NAMEID_ENTITY),
+            new Issuer('https://example.org/', null, null, C::NAMEID_ENTITY),
             'aaf23196-1773-2113-474a-fe114412ab72',
             1504698567
         );
@@ -134,7 +134,7 @@ final class AttributeQueryTest extends TestCase
             [
                 new Attribute(
                     'test1',
-                    Constants::NAMEFORMAT_URI,
+                    C::NAMEFORMAT_URI,
                     null,
                     [
                         new AttributeValue('test1_attrv1'),
@@ -143,7 +143,7 @@ final class AttributeQueryTest extends TestCase
                 ),
                 new Attribute(
                     'test2',
-                    Constants::NAMEFORMAT_URI,
+                    C::NAMEFORMAT_URI,
                     null,
                     [
                         new AttributeValue('test2_attrv1'),
@@ -151,7 +151,7 @@ final class AttributeQueryTest extends TestCase
                         new AttributeValue('test2_attrv3')
                     ]
                 ),
-                new Attribute('test3', Constants::NAMEFORMAT_URI)
+                new Attribute('test3', C::NAMEFORMAT_URI)
             ]
         );
         $attributeQueryElement = $attributeQuery->toXML();
@@ -162,11 +162,11 @@ final class AttributeQueryTest extends TestCase
         $attributes = XPath::xpQuery($attributeQueryElement, './saml_assertion:Attribute', $xpCache);
         $this->assertCount(3, $attributes);
         $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));
-        $this->assertEquals(Constants::NAMEFORMAT_URI, $attributes[0]->getAttribute('NameFormat'));
+        $this->assertEquals(C::NAMEFORMAT_URI, $attributes[0]->getAttribute('NameFormat'));
         $this->assertEquals('test2', $attributes[1]->getAttribute('Name'));
-        $this->assertEquals(Constants::NAMEFORMAT_URI, $attributes[1]->getAttribute('NameFormat'));
+        $this->assertEquals(C::NAMEFORMAT_URI, $attributes[1]->getAttribute('NameFormat'));
         $this->assertEquals('test3', $attributes[2]->getAttribute('Name'));
-        $this->assertEquals(Constants::NAMEFORMAT_URI, $attributes[2]->getAttribute('NameFormat'));
+        $this->assertEquals(C::NAMEFORMAT_URI, $attributes[2]->getAttribute('NameFormat'));
 
         // Sanity check: test if values are still ok
         $av1 = XPath::xpQuery($attributes[0], './saml_assertion:AttributeValue', $xpCache);

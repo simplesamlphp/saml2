@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XMLSecurity\Constants;
+use SimpleSAML\XMLSecurity\Constants as C;
 
 use function dirname;
 use function strval;
@@ -45,7 +45,7 @@ final class SigningMethodTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $signingMethod = new SigningMethod(Constants::SIG_RSA_SHA256, 1024, 4096);
+        $signingMethod = new SigningMethod(C::SIG_RSA_SHA256, 1024, 4096);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -60,7 +60,7 @@ final class SigningMethodTest extends TestCase
     {
         $signingMethod = SigningMethod::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals(Constants::SIG_RSA_SHA256, $signingMethod->getAlgorithm());
+        $this->assertEquals(C::SIG_RSA_SHA256, $signingMethod->getAlgorithm());
         $this->assertEquals(1024, $signingMethod->getMinKeySize());
         $this->assertEquals(4096, $signingMethod->getMaxKeySize());
     }

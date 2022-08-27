@@ -7,7 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\ServiceName;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
@@ -101,7 +101,7 @@ final class ServiceNameTest extends TestCase
      */
     public function testUnmarshallingWithoutLang(): void
     {
-        $this->xmlRepresentation->documentElement->removeAttributeNS(Constants::NS_XML, 'lang');
+        $this->xmlRepresentation->documentElement->removeAttributeNS(C::NS_XML, 'lang');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing xml:lang from ServiceName');
@@ -115,7 +115,7 @@ final class ServiceNameTest extends TestCase
      */
     public function testUnmarshallingWithEmptyLang(): void
     {
-        $this->xmlRepresentation->documentElement->setAttributeNS(Constants::NS_XML, 'lang', '');
+        $this->xmlRepresentation->documentElement->setAttributeNS(C::NS_XML, 'lang', '');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('xml:lang cannot be empty.');

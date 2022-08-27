@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -144,7 +144,7 @@ class Response extends AbstractStatusResponse
 
         $assertions = [];
         foreach ($xml->childNodes as $node) {
-            if ($node->namespaceURI !== Constants::NS_SAML) {
+            if ($node->namespaceURI !== C::NS_SAML) {
                 continue;
             } elseif (!($node instanceof DOMElement)) {
                 continue;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\AbstractXMLElement;
 
 /**
@@ -15,7 +15,7 @@ use SimpleSAML\XML\AbstractXMLElement;
 abstract class AbstractMdElement extends AbstractXMLElement
 {
     /** @var string */
-    public const NS = Constants::NS_MD;
+    public const NS = C::NS_MD;
 
     /** @var string */
     public const NS_PREFIX = 'md';

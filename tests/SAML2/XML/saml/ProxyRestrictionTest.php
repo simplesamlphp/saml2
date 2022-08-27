@@ -8,7 +8,6 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
 

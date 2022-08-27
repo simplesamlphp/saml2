@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
@@ -46,9 +46,9 @@ final class StatusCodeTest extends TestCase
     {
 
         $statusCode = new StatusCode(
-            Constants::STATUS_RESPONDER,
+            C::STATUS_RESPONDER,
             [
-                new StatusCode(Constants::STATUS_REQUEST_DENIED)
+                new StatusCode(C::STATUS_REQUEST_DENIED)
             ]
         );
 
@@ -64,11 +64,11 @@ final class StatusCodeTest extends TestCase
     public function testUnmarshalling(): void
     {
         $statusCode = StatusCode::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals(Constants::STATUS_RESPONDER, $statusCode->getValue());
+        $this->assertEquals(C::STATUS_RESPONDER, $statusCode->getValue());
 
         $subCodes = $statusCode->getSubCodes();
         $this->assertCount(1, $subCodes);
 
-        $this->assertEquals(Constants::STATUS_REQUEST_DENIED, $subCodes[0]->getValue());
+        $this->assertEquals(C::STATUS_REQUEST_DENIED, $subCodes[0]->getValue());
     }
 }

@@ -7,7 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use DOMDocument;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\SubjectLocality;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
@@ -68,7 +68,7 @@ final class SubjectLocalityTest extends TestCase
      */
     public function testMarshallingWithNoElements(): void
     {
-        $samlns = Constants::NS_SAML;
+        $samlns = C::NS_SAML;
         $subjectLocality = new SubjectLocality();
         $this->assertEquals(
             "<saml:SubjectLocality xmlns:saml=\"$samlns\"/>",

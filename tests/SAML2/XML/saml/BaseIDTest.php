@@ -6,7 +6,6 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;

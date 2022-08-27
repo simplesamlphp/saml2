@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Statement;
 use SimpleSAML\Assert\Assert;
 
@@ -73,7 +73,7 @@ final class CustomStatement extends Statement
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->getAttributeNS(Constants::NS_XSI, 'type'), 'CustomStatement');
+        Assert::same($xml->getAttributeNS(C::NS_XSI, 'type'), 'CustomStatement');
 
         return new self($xml->textContent);
     }

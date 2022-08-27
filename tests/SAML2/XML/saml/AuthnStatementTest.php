@@ -7,7 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use DOMDocument;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
@@ -57,7 +57,7 @@ final class AuthnStatementTest extends TestCase
     {
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
+                new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
                 null,
                 null,
                 [new AuthenticatingAuthority('https://idp.example.com/SAML2')]
@@ -81,7 +81,7 @@ final class AuthnStatementTest extends TestCase
     {
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef(Constants::AC_PASSWORD_PROTECTED_TRANSPORT),
+                new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
                 null,
                 null,
                 [new AuthenticatingAuthority('https://idp.example.com/SAML2')]
@@ -137,7 +137,7 @@ final class AuthnStatementTest extends TestCase
      */
     public function testUnmarshallingWithoutAuthnContextThrowsException(): void
     {
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:AuthnStatement xmlns:saml="{$samlNamespace}"
     AuthnInstant="2020-03-23T23:37:24Z"
@@ -174,7 +174,7 @@ XML
      */
     public function testMoreThanOneAuthnContextThrowsException(): void
     {
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $xml = <<<XML
 <saml:AuthnStatement xmlns:saml="{$samlNamespace}" AuthnInstant="2010-03-05T13:34:28Z">
   <saml:AuthnContext>
@@ -201,7 +201,7 @@ XML;
      */
     public function testMissingAuthnContextThrowsException(): void
     {
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $xml = <<<XML
 <saml:AuthnStatement xmlns:saml="{$samlNamespace}" AuthnInstant="2010-03-05T13:34:28Z">
 </saml:AuthnStatement>

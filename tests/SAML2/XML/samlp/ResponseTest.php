@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
@@ -35,11 +35,11 @@ final class ResponseTest extends TestCase
         $status = new Status(new StatusCode());
         $issuer = new Issuer('SomeIssuer');
 
-        $response = new Response($status, $issuer, null, null, null, 'urn:some:destination', Constants::CONSENT_EXPLICIT);
+        $response = new Response($status, $issuer, null, null, null, 'urn:some:destination', C::CONSENT_EXPLICIT);
         $responseElement = $response->toXML();
 
         $this->assertTrue($responseElement->hasAttribute('Consent'));
-        $this->assertEquals($responseElement->getAttribute('Consent'), Constants::CONSENT_EXPLICIT);
+        $this->assertEquals($responseElement->getAttribute('Consent'), C::CONSENT_EXPLICIT);
 
         $this->assertTrue($responseElement->hasAttribute('Destination'));
         $this->assertEquals($responseElement->getAttribute('Destination'), 'urn:some:destination');

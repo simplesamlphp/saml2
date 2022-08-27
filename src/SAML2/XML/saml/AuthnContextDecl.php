@@ -7,7 +7,6 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use DOMNodeList;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\SAML2\Utils;

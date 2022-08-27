@@ -9,7 +9,7 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\SAML2\XML\saml\NameID;
@@ -141,7 +141,7 @@ final class SubjectConfirmationTest extends TestCase
      */
     public function testManyNameIDThrowsException(): void
     {
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
   <saml:NameID>SomeNameIDValue</saml:NameID>
@@ -162,7 +162,7 @@ XML
      */
     public function testMultipleIdentifiers(): void
     {
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
   <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="someType">SomeNameIDValue</saml:BaseID>
@@ -184,7 +184,7 @@ XML
      */
     public function testManySubjectConfirmationDataThrowsException(): void
     {
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
   <saml:NameID>SomeNameIDValue</saml:NameID>
@@ -207,7 +207,7 @@ XML
      */
     public function testNoCustomIDHandler(): void
     {
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
   <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CustomBaseID">SomeIDValue</saml:BaseID>
@@ -246,7 +246,7 @@ XML
         /** @psalm-suppress InvalidArgument */
         ContainerSingleton::setContainer($mock);
 
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
   <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CustomBaseID">123.456</saml:BaseID>

@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -151,7 +151,7 @@ class ArtifactResolve extends AbstractRequest
 
         /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = parent::toUnsignedXML($parent);
-        $artifactelement = $e->ownerDocument->createElementNS(Constants::NS_SAMLP, 'Artifact', $this->artifact);
+        $artifactelement = $e->ownerDocument->createElementNS(C::NS_SAMLP, 'Artifact', $this->artifact);
         $e->appendChild($artifactelement);
 
         return $e;

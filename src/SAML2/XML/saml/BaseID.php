@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\XMLStringElementTrait;
@@ -123,12 +123,12 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface, Enc
         Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, BaseID::NS, InvalidDOMElementException::class);
         Assert::true(
-            $xml->hasAttributeNS(Constants::NS_XSI, 'type'),
+            $xml->hasAttributeNS(C::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:BaseID> element.',
             InvalidDOMElementException::class
         );
 
-        $type = $xml->getAttributeNS(Constants::NS_XSI, 'type');
+        $type = $xml->getAttributeNS(C::NS_XSI, 'type');
 
         return new self(
             $type,
@@ -159,7 +159,7 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface, Enc
 
         $element->textContent = $this->content;
 
-        $element->setAttributeNS(Constants::NS_XSI, 'xsi:type', $this->type);
+        $element->setAttributeNS(C::NS_XSI, 'xsi:type', $this->type);
 
         return $element;
     }

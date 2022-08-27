@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\AbstractXMLElement;
 use SimpleSAML\Assert\Assert;
@@ -106,16 +106,16 @@ class AttributeValue extends AbstractSamlElement
         Assert::same($xml->namespaceURI, AttributeValue::NS, InvalidDOMElementException::class);
         $value = $xml->textContent;
         if (
-            $xml->hasAttributeNS(Constants::NS_XSI, "type") &&
-            $xml->getAttributeNS(Constants::NS_XSI, "type") === "xs:integer"
+            $xml->hasAttributeNS(C::NS_XSI, "type") &&
+            $xml->getAttributeNS(C::NS_XSI, "type") === "xs:integer"
         ) {
             // we have an integer as value
             $value = intval($value);
         } elseif (
             // null value
-            $xml->hasAttributeNS(Constants::NS_XSI, "nil") &&
-            ($xml->getAttributeNS(Constants::NS_XSI, "nil") === "1" ||
-                $xml->getAttributeNS(Constants::NS_XSI, "nil") === "true")
+            $xml->hasAttributeNS(C::NS_XSI, "nil") &&
+            ($xml->getAttributeNS(C::NS_XSI, "nil") === "1" ||
+                $xml->getAttributeNS(C::NS_XSI, "nil") === "true")
         ) {
             $value = null;
         } else {
@@ -153,12 +153,12 @@ class AttributeValue extends AbstractSamlElement
         switch ($type) {
             case "integer":
                 // make sure that the xs namespace is available in the AttributeValue
-                $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xs', Constants::NS_XS);
-                $e->setAttributeNS(Constants::NS_XSI, "xsi:type", "xs:integer");
+                $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xs', C::NS_XS);
+                $e->setAttributeNS(C::NS_XSI, "xsi:type", "xs:integer");
                 $e->textContent = strval($this->value);
                 break;
             case "NULL":
-                $e->setAttributeNS(Constants::NS_XSI, "xsi:nil", "1");
+                $e->setAttributeNS(C::NS_XSI, "xsi:nil", "1");
                 $e->textContent = "";
                 break;
             case "array":

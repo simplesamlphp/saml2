@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\samlp\GetComplete;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
@@ -94,7 +94,7 @@ final class ScopingTest extends TestCase
      */
     public function testMarshallingWithNoElements(): void
     {
-        $samlpns = Constants::NS_SAMLP;
+        $samlpns = C::NS_SAMLP;
         $scoping = new Scoping();
         $this->assertEquals(
             "<samlp:Scoping xmlns:samlp=\"$samlpns\"/>",

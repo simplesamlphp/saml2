@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 
@@ -30,7 +30,7 @@ final class StatusCode extends AbstractSamlpElement
      * @param string $Value
      * @param \SimpleSAML\SAML2\XML\samlp\StatusCode[] $subCodes
      */
-    public function __construct(string $Value = Constants::STATUS_SUCCESS, array $subCodes = [])
+    public function __construct(string $Value = C::STATUS_SUCCESS, array $subCodes = [])
     {
         $this->setValue($Value);
         $this->setSubCodes($subCodes);

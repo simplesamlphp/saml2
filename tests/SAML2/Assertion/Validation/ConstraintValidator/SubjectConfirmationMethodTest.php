@@ -7,7 +7,7 @@ namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 
 /**
@@ -22,7 +22,7 @@ final class SubjectConfirmationMethodTest extends MockeryTestCase
      */
     public function aSubjectConfirmationWithBearerMethodIsValid(): void
     {
-        $subjectConfirmation = new SubjectConfirmation(Constants::CM_BEARER);
+        $subjectConfirmation = new SubjectConfirmation(C::CM_BEARER);
 
         $validator = new SubjectConfirmationMethod();
         $result = new Result();
@@ -39,7 +39,7 @@ final class SubjectConfirmationMethodTest extends MockeryTestCase
      */
     public function aSubjectConfirmationWithHolderOfKeyMethodIsNotValid(): void
     {
-        $subjectConfirmation = new SubjectConfirmation(Constants::CM_HOK);
+        $subjectConfirmation = new SubjectConfirmation(C::CM_HOK);
 
         $validator = new SubjectConfirmationMethod();
         $result    = new Result();

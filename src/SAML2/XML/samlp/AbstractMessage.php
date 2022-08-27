@@ -8,7 +8,7 @@ use DOMDocument;
 use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utilities\Temporal;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
@@ -464,8 +464,8 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
         $root = $this->instantiateParentElement($parent);
 
         /* Ugly hack to add another namespace declaration to the root element. */
-        $root->setAttributeNS(Constants::NS_SAML, 'saml:tmp', 'tmp');
-        $root->removeAttributeNS(Constants::NS_SAML, 'tmp');
+        $root->setAttributeNS(C::NS_SAML, 'saml:tmp', 'tmp');
+        $root->removeAttributeNS(C::NS_SAML, 'tmp');
 
         $root->setAttribute('Version', $this->version);
         $root->setAttribute('ID', $this->id);
@@ -475,7 +475,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
             $root->setAttribute('Destination', $this->destination);
         }
 
-        if ($this->consent !== null && $this->consent !== Constants::CONSENT_UNSPECIFIED) {
+        if ($this->consent !== null && $this->consent !== C::CONSENT_UNSPECIFIED) {
             $root->setAttribute('Consent', $this->consent);
         }
 

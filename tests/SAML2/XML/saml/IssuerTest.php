@@ -7,7 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
@@ -75,7 +75,7 @@ final class IssuerTest extends TestCase
             'TheIssuerValue',
             'TheNameQualifier',
             'TheSPNameQualifier',
-            Constants::NAMEID_ENTITY,
+            C::NAMEID_ENTITY,
             'TheSPProvidedID'
         );
     }
@@ -122,7 +122,7 @@ final class IssuerTest extends TestCase
      */
     public function testUnmarshallingEntityFormat(): void
     {
-        $this->xmlRepresentation->documentElement->setAttribute('Format', Constants::NAMEID_ENTITY);
+        $this->xmlRepresentation->documentElement->setAttribute('Format', C::NAMEID_ENTITY);
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Illegal combination of attributes being used');

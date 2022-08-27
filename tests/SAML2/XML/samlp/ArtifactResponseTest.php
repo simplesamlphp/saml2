@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
@@ -53,9 +53,9 @@ final class ArtifactResponseTest extends TestCase
         $id = '_306f8ec5b618f361c70b6ffb1480eade';
         $issueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
         $destination = 'https://idp.example.org/SAML2/SSO/Artifact';
-        $protocolBinding = Constants::BINDING_HTTP_ARTIFACT;
+        $protocolBinding = C::BINDING_HTTP_ARTIFACT;
         $assertionConsumerServiceURL = 'https://sp.example.com/SAML2/SSO/Artifact';
-        $nameIdPolicy = new NameIDPolicy(Constants::NAMEID_EMAIL_ADDRESS, null, false);
+        $nameIdPolicy = new NameIDPolicy(C::NAMEID_EMAIL_ADDRESS, null, false);
 
         $authnRequest = new AuthnRequest(
             null,

@@ -7,7 +7,6 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
