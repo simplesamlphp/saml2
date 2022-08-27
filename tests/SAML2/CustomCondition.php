@@ -4,28 +4,24 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2;
 
-use SimpleSAML\Assert\Assert;
 use DOMElement;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\ExtensionPointInterface;
-use SimpleSAML\SAML2\XML\ExtensionPointTrait;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\Condition;
-use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\Assert\Assert;
 
 /**
  * @covers \SimpleSAML\Test\SAML2\CustomCondition
  * @package simplesamlphp\saml2
  */
-final class CustomCondition extends Condition implements ExtensionPointInterface
+final class CustomCondition extends Condition
 {
-    use ExtensionPointTrait;
+    /** @var string */
+    protected const NS_XSI_TYPE_NAME = 'CustomConditionType';
 
     /** @var string */
-    protected const NS_XSI_TYPE_NAME = 'CustomCondition';
-
-    /** @var string */
-    protected const NS_XSI_TYPE_NAMESPACE = C::NAMESPACE;
+    protected const NS_XSI_TYPE_NAMESPACE = 'urn:x-simplesamlphp:namespace';
 
     /** @var string */
     protected const NS_XSI_TYPE_PREFIX = 'ssp';
@@ -41,7 +37,6 @@ final class CustomCondition extends Condition implements ExtensionPointInterface
      */
     public function __construct(array $audience)
     {
-        parent::__construct(self::getXsiType());
         $this->setAudience($audience);
     }
 
@@ -90,17 +85,11 @@ final class CustomCondition extends Condition implements ExtensionPointInterface
         );
 
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');
-        list($prefix, $element) = explode(':', $type, 2);
-
-        $ns = $xml->lookupNamespaceUri($prefix);
-        $handler = Utils::getContainer()->getElementHandler($ns, $element);
-
-        Assert::notNull($handler, 'Unknown Condition type `' . $type . '`.');
-        Assert::isAOf($handler, Condition::class);
+        Assert::same($type, self::getXsiType());
 
         $audience = Audience::getChildrenOfClass($xml);
 
-        return new $handler($audience);
+        return new self($audience);
     }
 
 
