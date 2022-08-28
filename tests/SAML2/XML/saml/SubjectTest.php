@@ -10,7 +10,6 @@ use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\SAML2\XML\saml\NameID;
@@ -312,7 +311,9 @@ XML
 
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:Subject xmlns:saml="{$samlNamespace}">
-  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xsi:type="CustomBaseID">SomeBaseID</saml:BaseID>
+  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xmlns:ssp="urn:x-unknown:phpunit" xsi:type="ssp:UnknownBaseIDType">
+    <saml:Audience>urn:some:audience</saml:Audience>
+  </saml:BaseID>
   <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
     <saml:SubjectConfirmationData
         NotOnOrAfter="2020-02-27T11:26:36Z"
@@ -326,7 +327,7 @@ XML
         $subject = Subject::fromXML($document->documentElement);
         $identifier = $subject->getIdentifier();
         $this->assertInstanceOf(UnknownID::class, $identifier);
-        $this->assertEquals('CustomBaseID', $identifier->getXsiType());
+        $this->assertEquals('urn:x-unknown:phpunit:UnknownBaseIDType', $identifier->getXsiType());
         $this->assertEquals(
             $document->saveXML($document->documentElement),
             strval($subject)
@@ -345,7 +346,9 @@ XML
 
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:Subject xmlns:saml="{$samlNamespace}">
-  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xmlns:ssp="urn:x-simplesamlphp:namespace" xsi:type="ssp:CustomBaseID"></saml:BaseID>
+  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xmlns:ssp="urn:x-simplesamlphp:namespace" xsi:type="ssp:CustomBaseIDType">
+    <saml:Audience>urn:some:audience</saml:Audience>
+  </saml:BaseID>
   <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
     <saml:SubjectConfirmationData
         NotOnOrAfter="2020-02-27T11:26:36Z"
@@ -358,8 +361,12 @@ XML
 
         $subject = Subject::fromXML($document->documentElement);
         $identifier = $subject->getIdentifier();
-        $this->assertInstanceOf(AbstractBaseID::class, $identifier);
-        $this->assertEquals(CustomBaseID::class, get_class($identifier));
+        $this->assertInstanceOf(CustomBaseID::class, $identifier);
+
+        $audience = $identifier->getAudience();
+        $this->assertCount(1, $audience);
+        $this->assertEquals('urn:some:audience', $audience[0]->getContent());
+
         $this->assertEquals(
             $document->saveXML($document->documentElement),
             strval($subject)

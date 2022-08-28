@@ -77,7 +77,7 @@ final class BaseIDTest extends TestCase
         $this->assertInstanceOf(CustomBaseID::class, $baseId);
         $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
-        $this->assertEquals('ssp:CustomBaseID', $baseId->getXsiType());
+        $this->assertEquals('ssp:CustomBaseIDType', $baseId->getXsiType());
 
         $audience = $baseId->getAudience();
         $this->assertCount(1, $audience);
@@ -100,7 +100,7 @@ final class BaseIDTest extends TestCase
         $this->assertInstanceOf(CustomBaseID::class, $baseId);
         $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
-        $this->assertEquals('ssp:CustomBaseID', $baseId->getXsiType());
+        $this->assertEquals('ssp:CustomBaseIDType', $baseId->getXsiType());
 
         $audience = $baseId->getAudience();
         $this->assertCount(1, $audience);

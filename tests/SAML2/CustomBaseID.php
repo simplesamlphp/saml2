@@ -19,7 +19,7 @@ use SimpleSAML\Assert\Assert;
 final class CustomBaseID extends AbstractBaseID
 {
     /** @var string */
-    protected const XSI_TYPE_NAME = 'CustomBaseID';
+    protected const XSI_TYPE_NAME = 'CustomBaseIDType';
 
     /** @var string */
     protected const XSI_TYPE_NAMESPACE = C::NAMESPACE;

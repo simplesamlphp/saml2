@@ -206,7 +206,7 @@ XML
         $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
-  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CustomBaseID">SomeIDValue</saml:BaseID>
+  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:unk="urn:x-unknown:phpunit" xsi:type="unk:UnknownBaseIDType">SomeIDValue</saml:BaseID>
   <saml:SubjectConfirmationData Recipient="Me" />
 </saml:SubjectConfirmation>
 XML
@@ -217,7 +217,9 @@ XML
         $identifier = $subjectConfirmation->getIdentifier();
         $this->assertEquals('urn:test:SomeMethod', $subjectConfirmation->getMethod());
         $this->assertEquals(UnknownID::class, get_class($identifier));
-        $this->assertEquals('CustomBaseID', $identifier->getXsiType());
+        $this->assertEquals('BaseID', $identifier::getLocalName());
+        $this->assertEquals('urn:x-unknown:phpunit:UnknownBaseIDType', $identifier->getXsiType());
+        $this->assertEquals('SomeIDValue', $identifier->getRawIdentifier()->getXML()->textContent);
         $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
         $this->assertEquals(
             $document->saveXML($document->documentElement),
@@ -234,16 +236,23 @@ XML
         $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
-  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ssp:CustomBaseID" xmlns:ssp="urn:x-simplesamlphp:namespace"></saml:BaseID>
+  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ssp="urn:x-simplesamlphp:namespace" xsi:type="ssp:CustomBaseIDType">
+    <saml:Audience>urn:some:audience</saml:Audience>
+  </saml:BaseID>
   <saml:SubjectConfirmationData Recipient="Me" />
 </saml:SubjectConfirmation>
 XML
         );
 
         $subjectConfirmation = SubjectConfirmation::fromXML($document->documentElement);
-        $identifier = $subjectConfirmation->getIdentifier();
         $this->assertEquals('urn:test:SomeMethod', $subjectConfirmation->getMethod());
+
+        $identifier = $subjectConfirmation->getIdentifier();
         $this->assertInstanceOf(CustomBaseID::class, $identifier);
+
+        $audience = $identifier->getAudience();
+        $this->assertCount(1, $audience);
+        $this->assertEquals('urn:some:audience', $audience[0]->getContent());
         $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
         $this->assertEquals(
             $document->saveXML($document->documentElement),
