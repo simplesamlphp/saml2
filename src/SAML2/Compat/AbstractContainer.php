@@ -12,7 +12,7 @@ use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 
 use function array_key_exists;
 use function is_subclass_of;
-use function join;
+use function implode;
 
 abstract class AbstractContainer
 {
