@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 
 use function array_key_exists;
 use function explode;
+use function is_subclass_of;
 use function join;
 
 abstract class AbstractContainer
@@ -123,7 +124,7 @@ abstract class AbstractContainer
     public function registerExtensionHandler(string $class): void
     {
         Assert::subclassOf($class, AbstractXMLElement::class);
-        if (in_array(ExtensionPointInterface::class, class_implements($class))) {
+        if (is_subclass_of($class, ExtensionPointInterface::class, true)) {
             $key = join(':', [$class::getXsiTypeNamespaceURI(), $class::getXsiTypeName()]);
         } else {
             $className = AbstractXMLElementName::getClassName($class);
