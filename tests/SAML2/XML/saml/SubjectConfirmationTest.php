@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
-use SimpleSAML\SAML2\XML\saml\UnknownID;
-use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -41,10 +37,6 @@ final class SubjectConfirmationTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_SubjectConfirmation.xml'
         );
-
-        $container = new MockContainer();
-        $container->registerExtensionHandler(CustomBaseID::class);
-        ContainerSingleton::setContainer($container);
     }
 
 
@@ -195,68 +187,5 @@ XML
             'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.'
         );
         SubjectConfirmation::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test that when no custom identifier handlers are registered, a regular UnknownID is used.
-     */
-    public function testNoCustomIDHandler(): void
-    {
-        $samlNamespace = C::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
-  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:unk="urn:x-unknown:phpunit" xsi:type="unk:UnknownBaseIDType">SomeIDValue</saml:BaseID>
-  <saml:SubjectConfirmationData Recipient="Me" />
-</saml:SubjectConfirmation>
-XML
-        );
-
-        $subjectConfirmation = SubjectConfirmation::fromXML($document->documentElement);
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\AbstractBaseID $identifier */
-        $identifier = $subjectConfirmation->getIdentifier();
-        $this->assertEquals('urn:test:SomeMethod', $subjectConfirmation->getMethod());
-        $this->assertEquals(UnknownID::class, get_class($identifier));
-        $this->assertEquals('BaseID', $identifier::getLocalName());
-        $this->assertEquals('urn:x-unknown:phpunit:UnknownBaseIDType', $identifier->getXsiType());
-        $this->assertEquals('SomeIDValue', $identifier->getRawIdentifier()->getXML()->textContent);
-        $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
-        $this->assertEquals(
-            $document->saveXML($document->documentElement),
-            strval($subjectConfirmation)
-        );
-    }
-
-
-    /**
-     * Test that custom ID handlers work when processing SubjectConfirmation objects from XML.
-     */
-    public function testCustomIDHandler(): void
-    {
-        $samlNamespace = C::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
-  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ssp="urn:x-simplesamlphp:namespace" xsi:type="ssp:CustomBaseIDType">
-    <saml:Audience>urn:some:audience</saml:Audience>
-  </saml:BaseID>
-  <saml:SubjectConfirmationData Recipient="Me" />
-</saml:SubjectConfirmation>
-XML
-        );
-
-        $subjectConfirmation = SubjectConfirmation::fromXML($document->documentElement);
-        $this->assertEquals('urn:test:SomeMethod', $subjectConfirmation->getMethod());
-
-        $identifier = $subjectConfirmation->getIdentifier();
-        $this->assertInstanceOf(CustomBaseID::class, $identifier);
-
-        $audience = $identifier->getAudience();
-        $this->assertCount(1, $audience);
-        $this->assertEquals('urn:some:audience', $audience[0]->getContent());
-        $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
-        $this->assertEquals(
-            $document->saveXML($document->documentElement),
-            strval($subjectConfirmation)
-        );
     }
 }

@@ -9,6 +9,8 @@ use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
+use SimpleSAML\SAML2\XML\saml\UnknownID;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -20,6 +22,7 @@ use function strval;
  * Class \SAML2\XML\saml\BaseIDTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\BaseID
+ * @covers \SimpleSAML\SAML2\XML\saml\UnknownID
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  *
  * @package simplesamlphp/saml2
@@ -70,7 +73,7 @@ final class BaseIDTest extends TestCase
 
     /**
      */
-    public function testUnmarshalling(): void
+    public function testUnmarshallingRegistered(): void
     {
         $baseId = AbstractBaseID::fromXML($this->xmlRepresentation->documentElement);
 
@@ -92,23 +95,23 @@ final class BaseIDTest extends TestCase
 
     /**
      */
-    public function testUnmarshallingCustomClass(): void
+    public function testUnmarshallingUnregistered(): void
     {
-        /** @var \SimpleSAML\Test\SAML2\CustomBaseID $baseId */
-        $baseId = CustomBaseID::fromXML($this->xmlRepresentation->documentElement);
+        $element = $this->xmlRepresentation->documentElement;
+        $element->setAttributeNS(C::NS_XSI, 'xsi:type', 'ssp:UnknownBaseIDType');
 
-        $this->assertInstanceOf(CustomBaseID::class, $baseId);
+        $baseId = AbstractBaseID::fromXML($element);
+
+        $this->assertInstanceOf(UnknownID::class, $baseId);
         $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
-        $this->assertEquals('ssp:CustomBaseIDType', $baseId->getXsiType());
+        $this->assertEquals('urn:x-simplesamlphp:namespace:UnknownBaseIDType', $baseId->getXsiType());
 
-        $audience = $baseId->getAudience();
-        $this->assertCount(1, $audience);
-        $this->assertEquals('urn:some:audience', $audience[0]->getContent());
+        $chunk = $baseId->getRawIdentifier();
+        $this->assertEquals('saml', $chunk->getPrefix());
+        $this->assertEquals('BaseID', $chunk->getLocalName());
+        $this->assertEquals(C::NS_SAML, $chunk->getNamespaceURI());
 
-        $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($baseId)
-        );
+        $this->assertEquals($element->ownerDocument->saveXML($element), strval($chunk));
     }
 }

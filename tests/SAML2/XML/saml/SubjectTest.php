@@ -6,17 +6,13 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Audience;
-use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
-use SimpleSAML\SAML2\XML\saml\UnknownID;
 use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -71,10 +67,6 @@ XML
         $this->subjectConfirmation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_SubjectConfirmation.xml'
         );
-
-        $container = new MockContainer();
-        $container->registerExtensionHandler(CustomBaseID::class);
-        ContainerSingleton::setContainer($container);
     }
 
 
@@ -278,7 +270,9 @@ XML
 
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:Subject xmlns:saml="{$samlNamespace}">
-  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xsi:type="CustomBaseID">SomeBaseID</saml:BaseID>
+  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xsi:type="CustomBaseIDType">
+    <saml:Audience>urn:some:audience</saml:Audience>
+  </saml:BaseID>
   <saml:NameID
       SPNameQualifier="https://sp.example.org/authentication/sp/metadata"
       Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">SomeOtherNameIDValue</saml:NameID>
@@ -297,79 +291,5 @@ XML
             'A <saml:Subject> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.'
         );
         Subject::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test that unmarshalling a Subject from XML returns an UnknownID object when no handlers
-     * are registered.
-     */
-    public function testNoCustomIDHandler(): void
-    {
-        $samlNamespace = Subject::NS;
-        $xsiNamespace = C::NS_XSI;
-
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:Subject xmlns:saml="{$samlNamespace}">
-  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xmlns:ssp="urn:x-unknown:phpunit" xsi:type="ssp:UnknownBaseIDType">
-    <saml:Audience>urn:some:audience</saml:Audience>
-  </saml:BaseID>
-  <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
-    <saml:SubjectConfirmationData
-        NotOnOrAfter="2020-02-27T11:26:36Z"
-        Recipient="https://sp.example.org/authentication/sp/consume-assertion"
-        InResponseTo="def456"/>
-  </saml:SubjectConfirmation>
-</saml:Subject>
-XML
-        );
-
-        $subject = Subject::fromXML($document->documentElement);
-        $identifier = $subject->getIdentifier();
-        $this->assertInstanceOf(UnknownID::class, $identifier);
-        $this->assertEquals('urn:x-unknown:phpunit:UnknownBaseIDType', $identifier->getXsiType());
-        $this->assertEquals(
-            $document->saveXML($document->documentElement),
-            strval($subject)
-        );
-    }
-
-
-    /**
-     * Test that unmarshalling a Subject from XML returns a custom identifier object if its corresponding
-     * class has been registered.
-     */
-    public function testCustomIDHandler(): void
-    {
-        $samlNamespace = Subject::NS;
-        $xsiNamespace = C::NS_XSI;
-
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:Subject xmlns:saml="{$samlNamespace}">
-  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xmlns:ssp="urn:x-simplesamlphp:namespace" xsi:type="ssp:CustomBaseIDType">
-    <saml:Audience>urn:some:audience</saml:Audience>
-  </saml:BaseID>
-  <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
-    <saml:SubjectConfirmationData
-        NotOnOrAfter="2020-02-27T11:26:36Z"
-        Recipient="https://sp.example.org/authentication/sp/consume-assertion"
-        InResponseTo="def456"/>
-  </saml:SubjectConfirmation>
-</saml:Subject>
-XML
-        );
-
-        $subject = Subject::fromXML($document->documentElement);
-        $identifier = $subject->getIdentifier();
-        $this->assertInstanceOf(CustomBaseID::class, $identifier);
-
-        $audience = $identifier->getAudience();
-        $this->assertCount(1, $audience);
-        $this->assertEquals('urn:some:audience', $audience[0]->getContent());
-
-        $this->assertEquals(
-            $document->saveXML($document->documentElement),
-            strval($subject)
-        );
     }
 }
