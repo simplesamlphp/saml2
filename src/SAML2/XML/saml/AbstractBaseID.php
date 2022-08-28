@@ -125,14 +125,15 @@ abstract class AbstractBaseID extends AbstractSamlElement implements
                 new Chunk($xml),
                 $type,
                 self::getAttribute($xml, 'NameQualifier', null),
-                self::getAttribute($xml, 'SPNameQualifier', null)
+                self::getAttribute($xml, 'SPNameQualifier', null),
             );
         }
 
         Assert::subclassOf(
             $handler,
             AbstractBaseID::class,
-            'Elements implementing BaseID must extend \SimpleSAML\SAML2\XML\saml\AbstractBaseID.');
+            'Elements implementing BaseID must extend \SimpleSAML\SAML2\XML\saml\AbstractBaseID.',
+        );
         return $handler::fromXML($xml);
     }
 
