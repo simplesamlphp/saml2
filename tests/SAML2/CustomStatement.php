@@ -20,7 +20,7 @@ use function explode;
 final class CustomStatement extends AbstractStatement
 {
     /** @var string */
-    protected const XSI_TYPE_NAME = 'CustomStatement';
+    protected const XSI_TYPE_NAME = 'CustomStatementType';
 
     /** @var string */
     protected const XSI_TYPE_NAMESPACE = C::NAMESPACE;
@@ -39,6 +39,7 @@ final class CustomStatement extends AbstractStatement
      */
     public function __construct(array $audience)
     {
+        parent::__construct(self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME);
         $this->setAudience($audience);
     }
 

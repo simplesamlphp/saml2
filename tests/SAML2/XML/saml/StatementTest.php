@@ -74,7 +74,7 @@ final class StatementTest extends TestCase
     {
         $statement = CustomStatement::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('ssp:CustomStatement', $statement->getXsiType());
+        $this->assertEquals('ssp:CustomStatementType', $statement->getXsiType());
         $audience = $statement->getAudience();
         $this->assertCount(1, $audience);
         $this->assertEquals('urn:some:audience', $audience[0]->getContent());

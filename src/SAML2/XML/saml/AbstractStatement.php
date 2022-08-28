@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 use SimpleSAML\SAML2\XML\ExtensionPointTrait;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 
@@ -81,11 +82,18 @@ abstract class AbstractStatement extends AbstractStatementType implements Extens
             list($element) = $qname;
         }
         $ns = $xml->lookupNamespaceUri($prefix);
-        $handler = Utils::getContainer()->getElementHandler($ns, $element);
+        $handler = Utils::getContainer()->getExtensionHandler($ns, $element);
 
-        Assert::notNull($handler, 'Unknown Statement type `' . $type . '`.');
-        Assert::isAOf($handler, Statement::class);
+        if ($handler === null) {
+            // we don't have a handler, proceed with unknown condition
+            return new UnknownCondition(new Chunk($xml), $type);
+        }
 
+        Assert::subclassOf(
+            $handler,
+            AbstractStatement::class,
+            'Elements implementing Statement must extend \SimpleSAML\SAML2\XML\saml\AbstractStatement.'
+        );
         return $handler::fromXML($xml);
     }
 
