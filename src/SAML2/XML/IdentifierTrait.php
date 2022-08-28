@@ -6,9 +6,8 @@ namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\XML\saml\BaseID;
+use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
@@ -63,7 +62,7 @@ trait IdentifierTrait
     {
         $class = static::NS_PREFIX . ':' . self::getClassName(static::class);
 
-        $baseId = BaseID::getChildrenOfClass($xml);
+        $baseId = AbstractBaseID::getChildrenOfClass($xml);
         $nameId = NameID::getChildrenOfClass($xml);
         $encryptedId = EncryptedID::getChildrenOfClass($xml);
 

@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\XML\saml\Audience;
-use SimpleSAML\SAML2\XML\saml\BaseID;
+use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -34,7 +33,7 @@ final class BaseIDTest extends TestCase
      */
     public function setup(): void
     {
-        $this->testedClass = BaseID::class;
+        $this->testedClass = AbstractBaseID::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_BaseID.xml'
@@ -73,7 +72,7 @@ final class BaseIDTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $baseId = BaseID::fromXML($this->xmlRepresentation->documentElement);
+        $baseId = AbstractBaseID::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertInstanceOf(CustomBaseID::class, $baseId);
         $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
