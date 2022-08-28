@@ -59,22 +59,8 @@ class EncryptedID extends AbstractSamlElement implements EncryptedElementInterfa
                 return NameID::fromXML($xml);
             case Issuer::NS . ':Issuer':
                 return Issuer::fromXML($xml);
-            case BaseID::NS . ':BaseID':
-                $xsiType = $xml->getAttributeNS(C::NS_XSI, 'type');
-                Assert::validQName($xsiType, SchemaViolationException::class);
-
-                // @TODO: deal with non-prefixed types
-                list($prefix, $localName) = explode(':', $xsiType);
-                $namespace = $xml->lookupNamespaceURI($prefix);
-
-                $container = ContainerSingleton::getInstance();
-                $handler = $container->getElementHandler($namespace, $localName);
-                if ($handler !== null) {
-                    return $handler::fromXML($xml);
-                }
-
-                // @TODO: deal with unknown or unregistered BaseIDs
-                // Fall thru
+            case AbstractBaseID::NS . ':BaseID':
+                return AbstractBaseID::fromXML($xml);
             default:
               // Fall thru
         }
