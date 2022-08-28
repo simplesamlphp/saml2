@@ -126,7 +126,8 @@ abstract class AbstractContainer
         if (in_array(ExtensionPointInterface::class, class_implements($class))) {
             $key = join(':', [$class::getXsiTypeNamespaceURI(), $class::getXsiTypeName()]);
         } else {
-            $key = join(':', [$class::NS, AbstractXMLElement::getClassName($class)]);
+            $className = AbstractXMLElementName::getClassName($class);
+            $key = ($class::NS === null) ? $className : join(':', [$class::NS, $className]);
         }
         $this->registry[$key] = $class;
     }
@@ -138,19 +139,19 @@ abstract class AbstractContainer
      * Such classes must have been registered previously by calling registerExtensionHandler(), and they must
      * extend \SimpleSAML\XML\AbstractXMLElement.
      *
-     * @param string $namespace The namespace URI for the given element.
+     * @param string|null $namespace The namespace URI for the given element.
      * @param string $element The local name of the element.
      *
      * @return string|null The fully-qualified name of a class extending \SimpleSAML\XML\AbstractXMLElement and
      * implementing support for the given element, or null if no such class has been registered before.
      * @psalm-return class-string|null
      */
-    public function getElementHandler(string $namespace, string $elementOrType): ?string
+    public function getElementHandler(?string $namespace, string $elementOrType): ?string
     {
-        Assert::validURI($namespace, SchemaViolationException::class);
+        Assert::nullOrValidURI($namespace, SchemaViolationException::class);
         Assert::validNCName($elementOrType, SchemaViolationException::class);
 
-        $key = join(':', [$namespace, $elementOrType]);
+        $key = ($namespace === null) ? $elementOrType : join(':', [$namespace, $elementOrType]);
         if (array_key_exists($key, $this->registry) === true) {
             return $this->registry[$key];
         }
