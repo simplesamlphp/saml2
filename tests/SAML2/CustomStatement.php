@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AbstractStatement;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\Assert\Assert;
-
-use function explode;
 
 /**
+ * Example class to demonstrate how Statement can be extended.
+ *
  * @package simplesamlphp\saml2
  */
 final class CustomStatement extends AbstractStatement
@@ -29,7 +28,7 @@ final class CustomStatement extends AbstractStatement
     protected const XSI_TYPE_PREFIX = 'ssp';
 
     /** @var \SimpleSAML\SAML2\XML\saml\Audience[] $audience */
-    protected array $audience;
+    protected array $audience = [];
 
 
     /**

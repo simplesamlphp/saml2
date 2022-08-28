@@ -74,6 +74,7 @@ abstract class AbstractCondition extends AbstractConditionType implements Extens
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');
         Assert::validQName($type, SchemaViolationException::class);
 
+        // first, try to resolve the type to a full namespaced version
         $qname = explode(':', $type, 2);
         if (count($qname) === 2) {
             list($prefix, $element) = $qname;
@@ -82,6 +83,9 @@ abstract class AbstractCondition extends AbstractConditionType implements Extens
             list($element) = $qname;
         }
         $ns = $xml->lookupNamespaceUri($prefix);
+        $type = ($ns === null ) ? $element : implode(':', [$ns, $element]);
+
+        // now check if we have a handler registered for it
         $handler = Utils::getContainer()->getExtensionHandler($ns, $element);
         if ($handler === null) {
             // we don't have a handler, proceed with unknown condition

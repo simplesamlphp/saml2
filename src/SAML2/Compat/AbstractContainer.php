@@ -20,7 +20,7 @@ abstract class AbstractContainer
     private const XSI_TYPE_PREFIX = '<xsi:type>';
 
     /** @var array */
-    public array $registry = [];
+    protected array $registry = [];
 
     /** @var array|null */
     protected ?array $blacklistedEncryptionAlgorithms;

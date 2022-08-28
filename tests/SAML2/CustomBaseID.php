@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
  * Example class to demonstrate how BaseID can be extended.
  *
- * @covers \SimpleSAML\Test\SAML2\CustomBaseID
  * @package simplesamlphp\saml2
  */
 final class CustomBaseID extends AbstractBaseID
@@ -28,7 +28,7 @@ final class CustomBaseID extends AbstractBaseID
     protected const XSI_TYPE_PREFIX = 'ssp';
 
     /** @var \SimpleSAML\SAML2\XML\saml\Audience[] $audience */
-    protected array $audience;
+    protected array $audience = [];
 
 
     /**

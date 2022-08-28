@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
-use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AbstractCondition;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
- * @covers \SimpleSAML\Test\SAML2\CustomCondition
+ * Example class to demonstrate how Condition can be extended.
  *
  * @package simplesamlphp\saml2
  */
@@ -22,19 +22,19 @@ final class CustomCondition extends AbstractCondition
     protected const XSI_TYPE_NAME = 'CustomConditionType';
 
     /** @var string */
-    protected const XSI_TYPE_NAMESPACE = 'urn:x-simplesamlphp:namespace';
+    protected const XSI_TYPE_NAMESPACE = C::NAMESPACE;
 
     /** @var string */
     protected const XSI_TYPE_PREFIX = 'ssp';
 
-    /** @var \SimpleSAML\SAML2\XML\saml\Audience[] */
+    /** @var \SimpleSAML\SAML2\XML\saml\Audience[] $audience */
     protected array $audience = [];
 
 
     /**
      * CustomCondition constructor.
      *
-     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $value
+     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
      */
     public function __construct(array $audience)
     {

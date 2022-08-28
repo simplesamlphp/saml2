@@ -34,7 +34,7 @@ abstract class AbstractStatement extends AbstractStatementType implements Extens
 
 
     /**
-     * Initialize a custom saml:Condition element.
+     * Initialize a custom saml:Statement element.
      *
      * @param string $type
      */
@@ -57,7 +57,7 @@ abstract class AbstractStatement extends AbstractStatementType implements Extens
      * Convert an XML element into a Statement.
      *
      * @param \DOMElement $xml The root XML element
-     * @return \SimpleSAML\SAML2\XML\saml\AbstractStatement The condition
+     * @return \SimpleSAML\SAML2\XML\saml\AbstractStatement The statement
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
@@ -74,6 +74,7 @@ abstract class AbstractStatement extends AbstractStatementType implements Extens
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');
         Assert::validQName($type, SchemaViolationException::class);
 
+        // first, try to resolve the type to a full namespaced version
         $qname = explode(':', $type, 2);
         if (count($qname) === 2) {
             list($prefix, $element) = $qname;
@@ -82,11 +83,13 @@ abstract class AbstractStatement extends AbstractStatementType implements Extens
             list($element) = $qname;
         }
         $ns = $xml->lookupNamespaceUri($prefix);
-        $handler = Utils::getContainer()->getExtensionHandler($ns, $element);
+        $type = ($ns === null ) ? $element : implode(':', [$ns, $element]);
 
+        // now check if we have a handler registered for it
+        $handler = Utils::getContainer()->getExtensionHandler($ns, $element);
         if ($handler === null) {
-            // we don't have a handler, proceed with unknown condition
-            return new UnknownCondition(new Chunk($xml), $type);
+            // we don't have a handler, proceed with unknown statement
+            return new UnknownStatement(new Chunk($xml), $type);
         }
 
         Assert::subclassOf(

@@ -7,10 +7,12 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use DOMDocument;
 use DOMElement;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
+use SimpleSAML\SAML2\XML\saml\AbstractStatement;
 use SimpleSAML\SAML2\XML\saml\Audience;
+use SimpleSAML\SAML2\XML\saml\UnknownStatement;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\CustomStatement;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -70,9 +72,10 @@ final class StatementTest extends TestCase
 
     /**
      */
-    public function testUnmarshallingCustomClass(): void
+    public function testUnmarshallingRegistered(): void
     {
         $statement = CustomStatement::fromXML($this->xmlRepresentation->documentElement);
+        $this->assertInstanceOf(CustomStatement::class, $statement);
 
         $this->assertEquals('ssp:CustomStatementType', $statement->getXsiType());
         $audience = $statement->getAudience();
@@ -84,4 +87,26 @@ final class StatementTest extends TestCase
             strval($statement)
         );
     }
+
+
+    /**
+     */
+    public function testUnmarshallingUnregistered(): void
+    {
+        $element = $this->xmlRepresentation->documentElement;
+        $element->setAttributeNS(C::NS_XSI, 'xsi:type', 'ssp:UnknownStatementType');
+
+        $statement = AbstractStatement::fromXML($element);
+
+        $this->assertInstanceOf(UnknownStatement::class, $statement);
+        $this->assertEquals('urn:x-simplesamlphp:namespace:UnknownStatementType', $statement->getXsiType());
+
+        $chunk = $statement->getRawStatement();
+        $this->assertEquals('saml', $chunk->getPrefix());
+        $this->assertEquals('Statement', $chunk->getLocalName());
+        $this->assertEquals(C::NS_SAML, $chunk->getNamespaceURI());
+
+        $this->assertEquals($element->ownerDocument->saveXML($element), strval($chunk));
+    }
+
 }
