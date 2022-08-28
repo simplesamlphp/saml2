@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 use SimpleSAML\SAML2\XML\ExtensionPointTrait;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 
@@ -82,10 +83,16 @@ abstract class AbstractCondition extends AbstractConditionType implements Extens
         }
         $ns = $xml->lookupNamespaceUri($prefix);
         $handler = Utils::getContainer()->getElementHandler($ns, $element);
+        if ($handler === null) {
+            // we don't have a handler, proceed with unknown condition
+            return new UnknownCondition(new Chunk($xml), $type);
+        }
 
-        Assert::notNull($handler, 'Unknown Condition type `' . $type . '`.');
-        Assert::isAOf($handler, Condition::class);
-
+        Assert::subclassOf(
+            $handler,
+            AbstractCondition::class,
+            'Elements implementing Condition must extend \SimpleSAML\SAML2\XML\saml\AbstractCondition.'
+        );
         return $handler::fromXML($xml);
     }
 

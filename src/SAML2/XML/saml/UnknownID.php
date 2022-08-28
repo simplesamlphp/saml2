@@ -15,7 +15,7 @@ use SimpleSAML\XML\Chunk;
 final class UnknownID extends AbstractBaseID
 {
     /** @var \SimpleSAML\XML\Chunk */
-    private Chunk $chunk;
+    protected Chunk $chunk;
 
     /**
      * @param \SimpleSAML\XML\Chunk $chunk The whole BaseID element as a chunk object.
@@ -46,7 +46,7 @@ final class UnknownID extends AbstractBaseID
 
 
     /**
-     * Convert this custom ID to XML.
+     * Convert this unknown ID to XML.
      *
      * @param \DOMElement|null $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this unknown ID.

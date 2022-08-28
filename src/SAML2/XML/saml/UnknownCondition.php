@@ -1,0 +1,55 @@
+<?php
+
+declare(strict_types=1);
+
+namespace SimpleSAML\SAML2\XML\saml;
+
+use DOMElement;
+use SimpleSAML\XML\Chunk;
+
+/**
+ * Class for unknown conditions.
+ *
+ * @package simplesamlphp/saml2
+ */
+final class UnknownCondition extends AbstractCondition
+{
+    /** @var \SimpleSAML\XML\Chunk */
+    protected Chunk $chunk;
+
+
+    /**
+     * @param \SimpleSAML\XML\Chunk $chunk The whole Condition element as a chunk object.
+     * @param string $type The xsi:type of this condition.
+     */
+    public function __construct(
+        Chunk $chunk,
+        string $type
+    ) {
+        parent::__construct($type);
+        $this->chunk = $chunk;
+    }
+
+
+    /**
+     * Get the raw version of this condition as a Chunk.
+     *
+     * @return \SimpleSAML\XML\Chunk
+     */
+    public function getRawCondition(): Chunk
+    {
+        return $this->chunk;
+    }
+
+
+    /**
+     * Convert this unknown condition to XML.
+     *
+     * @param \DOMElement|null $parent The element we are converting to XML.
+     * @return \DOMElement The XML element after adding the data corresponding to this unknown condition.
+     */
+    public function toXML(DOMElement $parent = null): DOMElement
+    {
+        return $this->chunk->toXML($parent);
+    }
+}
