@@ -82,7 +82,7 @@ abstract class AbstractCondition extends AbstractConditionType implements Extens
             list($element) = $qname;
         }
         $ns = $xml->lookupNamespaceUri($prefix);
-        $handler = Utils::getContainer()->getElementHandler($ns, $element);
+        $handler = Utils::getContainer()->getExtensionHandler($ns, $element);
         if ($handler === null) {
             // we don't have a handler, proceed with unknown condition
             return new UnknownCondition(new Chunk($xml), $type);
