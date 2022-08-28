@@ -16,6 +16,9 @@ use function join;
 
 abstract class AbstractContainer
 {
+    /** @var string */
+    private const XSI_TYPE_PREFIX = '<xsi:type>';
+
     /** @var array */
     public array $registry = [];
 
@@ -124,10 +127,10 @@ abstract class AbstractContainer
     {
         Assert::subclassOf($class, AbstractXMLElement::class);
         if (is_subclass_of($class, ExtensionPointInterface::class, true)) {
-            $key = implode(':', [$class::getXsiTypeNamespaceURI(), $class::getXsiTypeName(), 'BaseID']);
+            $key = implode(':', [self::XSI_TYPE_PREFIX, $class::getXsiTypeNamespaceURI(), $class::getXsiTypeName()]);
         } else {
             $className = AbstractXMLElement::getClassName($class);
-            $key = ($class::NS === null) ? $className : join(':', [$class::NS, $className]);
+            $key = ($class::NS === null) ? $className : implode(':', [$class::NS, $className]);
         }
         $this->registry[$key] = $class;
     }
@@ -175,11 +178,11 @@ abstract class AbstractContainer
     public function getExtensionHandler(string $type): ?string
     {
         Assert::notEmpty($type, 'Cannot search for identifier handlers with an empty type.');
-        $handlerClass = $type . ':BaseID';
-        if (!array_key_exists($handlerClass, $this->registry)) {
+        $type = implode(':', [self::XSI_TYPE_PREFIX, $type]);
+        if (!array_key_exists($type, $this->registry)) {
             return null;
         }
-        Assert::implementsInterface($this->registry[$handlerClass], ExtensionPointInterface::class);
-        return $this->registry[$handlerClass];
+        Assert::implementsInterface($this->registry[$type], ExtensionPointInterface::class);
+        return $this->registry[$type];
     }
 }
