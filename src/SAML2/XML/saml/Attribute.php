@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\XMLElementInterface;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
@@ -20,7 +20,7 @@ use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
  *
  * @package simplesamlphp/saml2
  */
-class Attribute extends AbstractSamlElement implements IdentifierInterface, EncryptableElementInterface
+class Attribute extends AbstractSamlElement implements XMLElementInterface, EncryptableElementInterface
 {
     use EncryptableElementTrait;
     use ExtendableAttributesTrait;
