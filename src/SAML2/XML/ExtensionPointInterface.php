@@ -32,7 +32,7 @@ interface ExtensionPointInterface
      *
      * @return string
      */
-    public static function getNamespacePrefix(): string;
+    public static function getXsiTypePrefix(): string;
 
 
     /**
@@ -40,5 +40,5 @@ interface ExtensionPointInterface
      *
      * @return string
      */
-    public static function getXsiType(): string;
+    public function getXsiType(): string;
 }

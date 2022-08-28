@@ -23,14 +23,14 @@ trait ExtensionPointTrait
     public static function getXsiTypeName(): string
     {
         Assert::true(
-            defined('static::NS_XSI_TYPE_NAME'),
+            defined('static::XSI_TYPE_NAME'),
             self::getClassName(static::class)
-            . '::NS_XSI_TYPE_NAME constant must be defined and set to unprefixed type for the xsi:type it represents.',
+            . '::XSI_TYPE_NAME constant must be defined and set to unprefixed type for the xsi:type it represents.',
             RuntimeException::class,
         );
 
-        Assert::validNCName(static::NS_XSI_TYPE_NAME, SchemaViolationException::class);
-        return static::NS_XSI_TYPE_NAME;
+        Assert::validNCName(static::XSI_TYPE_NAME, SchemaViolationException::class);
+        return static::XSI_TYPE_NAME;
     }
 
 
@@ -42,14 +42,14 @@ trait ExtensionPointTrait
     public static function getXsiTypeNamespaceURI(): string
     {
         Assert::true(
-            defined('static::NS_XSI_TYPE_NAMESPACE'),
+            defined('static::XSI_TYPE_NAMESPACE'),
             self::getClassName(static::class)
-            . '::NS_XSI_TYPE_NAMESPACE constant must be defined and set to the namespace for the xsi:type it represents.',
+            . '::XSI_TYPE_NAMESPACE constant must be defined and set to the namespace for the xsi:type it represents.',
             RuntimeException::class,
         );
 
-        Assert::validURI(static::NS_XSI_TYPE_NAMESPACE, SchemaViolationException::class);
-        return static::NS_XSI_TYPE_NAMESPACE;
+        Assert::validURI(static::XSI_TYPE_NAMESPACE, SchemaViolationException::class);
+        return static::XSI_TYPE_NAMESPACE;
     }
 
 
@@ -58,27 +58,16 @@ trait ExtensionPointTrait
      *
      * @return string
      */
-    public static function getXsiTypeNamespacePrefix(): string
+    public static function getXsiTypePrefix(): string
     {
         Assert::true(
-            defined('static::NS_XSI_TYPE_PREFIX'),
+            defined('static::XSI_TYPE_PREFIX'),
             self::getClassName(static::class)
-            . '::NS_XSI_TYPE_PREFIX constant must be defined and set to the namespace for the xsi:type it represents.',
+            . '::XSI_TYPE_PREFIX constant must be defined and set to the namespace for the xsi:type it represents.',
             RuntimeException::class,
         );
 
-        Assert::validNCName(static::NS_XSI_TYPE_PREFIX, SchemaViolationException::class);
-        return static::NS_XSI_TYPE_PREFIX;
-    }
-
-
-    /**
-     * Return the xsi:type value corresponding this element.
-     *
-     * @return string
-     */
-    public static function getXsiType(): string
-    {
-        return static::getXsiTypeNamespacePrefix() . ':' . static::getXsiTypeName();
+        Assert::validNCName(static::XSI_TYPE_PREFIX, SchemaViolationException::class);
+        return static::XSI_TYPE_PREFIX;
     }
 }
