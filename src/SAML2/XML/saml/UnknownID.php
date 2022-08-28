@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DOMElement;
 use SimpleSAML\XML\Chunk;
 
 /**
@@ -41,5 +42,17 @@ final class UnknownID extends AbstractBaseID
     public function getRawIdentifier(): Chunk
     {
         return $this->chunk;
+    }
+
+
+    /**
+     * Convert this custom ID to XML.
+     *
+     * @param \DOMElement|null $parent The element we are converting to XML.
+     * @return \DOMElement The XML element after adding the data corresponding to this unknown ID.
+     */
+    public function toXML(DOMElement $parent = null): DOMElement
+    {
+        return $this->chunk->toXML($parent);
     }
 }
