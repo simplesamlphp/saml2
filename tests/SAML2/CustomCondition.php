@@ -9,6 +9,7 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AbstractCondition;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
  * @covers \SimpleSAML\Test\SAML2\CustomCondition
@@ -27,7 +28,7 @@ final class CustomCondition extends AbstractCondition
     protected const XSI_TYPE_PREFIX = 'ssp';
 
     /** @var \SimpleSAML\SAML2\XML\saml\Audience[] */
-    protected $audience = [];
+    protected array $audience = [];
 
 
     /**
