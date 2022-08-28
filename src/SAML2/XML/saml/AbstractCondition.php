@@ -21,19 +21,42 @@ use function explode;
  *
  * @package simplesamlphp/saml2
  */
-abstract class Condition extends AbstractConditionType implements ExtensionPointInterface
+abstract class AbstractCondition extends AbstractConditionType implements ExtensionPointInterface
 {
     use ExtensionPointTrait;
 
     /** @var string */
     public const LOCALNAME = 'Condition';
 
+    /** @var string */
+    protected string $type;
+
+
+    /**
+     * Initialize a custom saml:Condition element.
+     *
+     * @param string $type
+     */
+    protected function __construct(string $type)
+    {
+        $this->type = $type;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getXsiType(): string
+    {
+        return $this->type;
+    }
+
 
     /**
      * Convert an XML element into a Condition.
      *
      * @param \DOMElement $xml The root XML element
-     * @return \SimpleSAML\SAML2\XML\saml\Condition The condition
+     * @return \SimpleSAML\SAML2\XML\saml\AbstractCondition The condition
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
@@ -77,8 +100,8 @@ abstract class Condition extends AbstractConditionType implements ExtensionPoint
     {
         $e = $this->instantiateParentElement($parent);
 
-        $e->setAttribute('xmlns:' . static::NS_XSI_TYPE_PREFIX, static::NS_XSI_TYPE_NAMESPACE);
-        $e->setAttributeNS(C::NS_XSI, 'xsi:type', static::getXsiType());
+        $e->setAttribute('xmlns:' . static::getXsiTypePrefix(), static::getXsiTypeNamespaceURI());
+        $e->setAttributeNS(C::NS_XSI, 'xsi:type', $this->getXsiType());
 
         return $e;
     }

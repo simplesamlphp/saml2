@@ -6,25 +6,25 @@ namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Audience;
-use SimpleSAML\SAML2\XML\saml\Condition;
+use SimpleSAML\SAML2\XML\saml\AbstractCondition;
 use SimpleSAML\Assert\Assert;
 
 /**
  * @covers \SimpleSAML\Test\SAML2\CustomCondition
+ *
  * @package simplesamlphp\saml2
  */
-final class CustomCondition extends Condition
+final class CustomCondition extends AbstractCondition
 {
     /** @var string */
-    protected const NS_XSI_TYPE_NAME = 'CustomConditionType';
+    protected const XSI_TYPE_NAME = 'CustomConditionType';
 
     /** @var string */
-    protected const NS_XSI_TYPE_NAMESPACE = 'urn:x-simplesamlphp:namespace';
+    protected const XSI_TYPE_NAMESPACE = 'urn:x-simplesamlphp:namespace';
 
     /** @var string */
-    protected const NS_XSI_TYPE_PREFIX = 'ssp';
+    protected const XSI_TYPE_PREFIX = 'ssp';
 
     /** @var \SimpleSAML\SAML2\XML\saml\Audience[] */
     protected $audience = [];
@@ -37,6 +37,7 @@ final class CustomCondition extends Condition
      */
     public function __construct(array $audience)
     {
+        parent::__construct(self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME);
         $this->setAudience($audience);
     }
 
@@ -66,10 +67,10 @@ final class CustomCondition extends Condition
 
 
     /**
-     * Convert XML into an Condition
+     * Convert XML into a Condition
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\saml\Condition
+     * @return \SimpleSAML\SAML2\XML\saml\AbstractCondition
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
@@ -77,7 +78,7 @@ final class CustomCondition extends Condition
     {
         Assert::same($xml->localName, 'Condition', InvalidDOMElementException::class);
         Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, Condition::NS, InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, AbstractCondition::NS, InvalidDOMElementException::class);
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:Condition> element.',
@@ -85,7 +86,7 @@ final class CustomCondition extends Condition
         );
 
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');
-        Assert::same($type, self::getXsiType());
+        Assert::same($type, self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME);
 
         $audience = Audience::getChildrenOfClass($xml);
 
