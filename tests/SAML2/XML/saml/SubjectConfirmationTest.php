@@ -4,16 +4,15 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
+use SimpleSAML\SAML2\XML\saml\UnknownID;
 use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -200,7 +199,7 @@ XML
 
 
     /**
-     * Test that when no custom identifier handlers are registered, a regular BaseID is used.
+     * Test that when no custom identifier handlers are registered, a regular UnknownID is used.
      */
     public function testNoCustomIDHandler(): void
     {
@@ -214,12 +213,11 @@ XML
         );
 
         $subjectConfirmation = SubjectConfirmation::fromXML($document->documentElement);
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\BaseID $identifier */
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\AbstractBaseID $identifier */
         $identifier = $subjectConfirmation->getIdentifier();
         $this->assertEquals('urn:test:SomeMethod', $subjectConfirmation->getMethod());
-        $this->assertEquals(BaseID::class, get_class($identifier));
-        $this->assertEquals('CustomBaseID', $identifier->getType());
-        $this->assertEquals('SomeIDValue', $identifier->getContent());
+        $this->assertEquals(UnknownID::class, get_class($identifier));
+        $this->assertEquals('CustomBaseID', $identifier->getXsiType());
         $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
         $this->assertEquals(
             $document->saveXML($document->documentElement),
@@ -236,7 +234,7 @@ XML
         $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
-  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CustomBaseID">123.456</saml:BaseID>
+  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ssp:CustomBaseID" xmlns:ssp="urn:x-simplesamlphp:namespace"></saml:BaseID>
   <saml:SubjectConfirmationData Recipient="Me" />
 </saml:SubjectConfirmation>
 XML
@@ -246,13 +244,10 @@ XML
         $identifier = $subjectConfirmation->getIdentifier();
         $this->assertEquals('urn:test:SomeMethod', $subjectConfirmation->getMethod());
         $this->assertInstanceOf(CustomBaseID::class, $identifier);
-        $this->assertEquals('123.456', $identifier->getContent());
         $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
         $this->assertEquals(
             $document->saveXML($document->documentElement),
             strval($subjectConfirmation)
         );
-
-        ContainerSingleton::setContainer($container);
     }
 }
