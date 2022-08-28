@@ -6,6 +6,9 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\BaseID;
 use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
@@ -36,6 +39,10 @@ final class BaseIDTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_BaseID.xml'
         );
+
+        $container = new MockContainer();
+        $container->registerExtensionHandler(CustomBaseID::class);
+        ContainerSingleton::setContainer($container);
     }
 
 
@@ -47,7 +54,7 @@ final class BaseIDTest extends TestCase
     public function testMarshalling(): void
     {
         $baseId = new CustomBaseID(
-            123.456,
+            [new Audience('urn:some:audience')],
             'TheNameQualifier',
             'TheSPNameQualifier'
         );
@@ -68,10 +75,14 @@ final class BaseIDTest extends TestCase
     {
         $baseId = BaseID::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('123.456', $baseId->getContent());
+        $this->assertInstanceOf(CustomBaseID::class, $baseId);
         $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
-        $this->assertEquals('CustomBaseID', $baseId->getType());
+        $this->assertEquals('ssp:CustomBaseID', $baseId->getXsiType());
+
+        $audience = $baseId->getAudience();
+        $this->assertCount(1, $audience);
+        $this->assertEquals('urn:some:audience', $audience[0]->getContent());
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -87,9 +98,14 @@ final class BaseIDTest extends TestCase
         /** @var \SimpleSAML\Test\SAML2\CustomBaseID $baseId */
         $baseId = CustomBaseID::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals(123.456, $baseId->getContent());
+        $this->assertInstanceOf(CustomBaseID::class, $baseId);
         $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
         $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
+        $this->assertEquals('ssp:CustomBaseID', $baseId->getXsiType());
+
+        $audience = $baseId->getAudience();
+        $this->assertCount(1, $audience);
+        $this->assertEquals('urn:some:audience', $audience[0]->getContent());
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
