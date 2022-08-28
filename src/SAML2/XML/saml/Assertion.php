@@ -239,12 +239,12 @@ class Assertion extends AbstractSamlElement implements
 
 
     /**
-     * @return \SimpleSAML\SAML2\XML\saml\Statement[]
+     * @return \SimpleSAML\SAML2\XML\saml\AbstractStatement[]
      */
     public function getStatements(): array
     {
         return array_values(array_filter($this->statements, function ($statement) {
-            return $statement instanceof Statement;
+            return $statement instanceof AbstractStatement;
         }));
     }
 
@@ -467,7 +467,7 @@ class Assertion extends AbstractSamlElement implements
 
         $authnStatement = AuthnStatement::getChildrenOfClass($xml);
         $attrStatement = AttributeStatement::getChildrenOfClass($xml);
-        $statements = Statement::getChildrenOfClass($xml);
+        $statements = AbstractStatement::getChildrenOfClass($xml);
 
         $assertion = new self(
             array_pop($issuer),

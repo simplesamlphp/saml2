@@ -10,7 +10,6 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 use SimpleSAML\SAML2\XML\ExtensionPointTrait;
-use SimpleSAML\SAML2\XML\saml\Statement;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 
@@ -22,19 +21,42 @@ use function explode;
  *
  * @package simplesamlphp/saml2
  */
-abstract class Statement extends AbstractStatementType implements ExtensionPointInterface
+abstract class AbstractStatement extends AbstractStatementType implements ExtensionPointInterface
 {
     use ExtensionPointTrait;
 
     /** @var string */
     public const LOCALNAME = 'Statement';
 
+    /** @var string */
+    protected string $type;
+
+
+    /**
+     * Initialize a custom saml:Condition element.
+     *
+     * @param string $type
+     */
+    protected function __construct(string $type)
+    {
+        $this->type = $type;
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function getXsiType(): string
+    {
+        return $this->type;
+    }
+
 
     /**
      * Convert an XML element into a Statement.
      *
      * @param \DOMElement $xml The root XML element
-     * @return \SimpleSAML\SAML2\XML\saml\Statement The condition
+     * @return \SimpleSAML\SAML2\XML\saml\AbstractStatement The condition
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
@@ -78,8 +100,8 @@ abstract class Statement extends AbstractStatementType implements ExtensionPoint
     {
         $e = $this->instantiateParentElement($parent);
 
-        $e->setAttribute('xmlns:' . static::NS_XSI_TYPE_PREFIX, static::NS_XSI_TYPE_NAMESPACE);
-        $e->setAttributeNS(C::NS_XSI, 'xsi:type', static::getXsiType());
+        $e->setAttribute('xmlns:' . static::getXsiTypePrefix(), static::getXsiTypeNamespaceURI());
+        $e->setAttributeNS(C::NS_XSI, 'xsi:type', $this->getXsiType());
 
         return $e;
     }

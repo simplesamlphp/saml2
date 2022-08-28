@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
 use SimpleSAML\SAML2\XML\saml\Audience;
-use SimpleSAML\SAML2\XML\saml\Statement;
+use SimpleSAML\SAML2\XML\saml\AbstractStatement;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -15,19 +15,18 @@ use SimpleSAML\Assert\Assert;
 use function explode;
 
 /**
- * @covers \SimpleSAML\Test\SAML2\CustomStatement
  * @package simplesamlphp\saml2
  */
-final class CustomStatement extends Statement
+final class CustomStatement extends AbstractStatement
 {
     /** @var string */
-    protected const NS_XSI_TYPE_NAME = 'CustomStatement';
+    protected const XSI_TYPE_NAME = 'CustomStatement';
 
     /** @var string */
-    protected const NS_XSI_TYPE_NAMESPACE = C::NAMESPACE;
+    protected const XSI_TYPE_NAMESPACE = C::NAMESPACE;
 
     /** @var string */
-    protected const NS_XSI_TYPE_PREFIX = 'ssp';
+    protected const XSI_TYPE_PREFIX = 'ssp';
 
     /** @var \SimpleSAML\SAML2\XML\saml\Audience[] $audience */
     protected array $audience;
@@ -79,7 +78,7 @@ final class CustomStatement extends Statement
     {
         Assert::same($xml->localName, 'Statement', InvalidDOMElementException::class);
         Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, Statement::NS, InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, AbstractStatement::NS, InvalidDOMElementException::class);
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:Statement> element.',
@@ -87,7 +86,7 @@ final class CustomStatement extends Statement
         );
 
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');
-        Assert::same($type, self::getXsiType());
+        Assert::same($type, self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME);
 
         $audience = Audience::getChildrenOfClass($xml);
 
