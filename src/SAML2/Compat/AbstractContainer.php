@@ -7,18 +7,20 @@ namespace SimpleSAML\SAML2\Compat;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\AbstractXMLElement;
-use SimpleSAML\SAML2\XML\saml\Condition;
-use SimpleSAML\SAML2\XML\saml\BaseIdentifierInterface;
+use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 
 use function array_key_exists;
 use function is_subclass_of;
-use function join;
-use function urlencode;
+use function implode;
 
 abstract class AbstractContainer
 {
+    /** @var string */
+    private const XSI_TYPE_PREFIX = '<xsi:type>';
+
     /** @var array */
-    protected array $registry;
+    protected array $registry = [];
 
     /** @var array|null */
     protected ?array $blacklistedEncryptionAlgorithms;
@@ -110,7 +112,7 @@ abstract class AbstractContainer
      *
      * @param string $filename The path to the file we want to write to.
      * @param string $data The data we should write to the file.
-     * @param int $mode The permissions to apply to the file. Defaults to 0600.
+     * @param int|null $mode The permissions to apply to the file. Defaults to 0600.
      */
     abstract public function writeFile(string $filename, string $data, int $mode = null): void;
 
@@ -118,16 +120,17 @@ abstract class AbstractContainer
     /**
      * Register a class that can handle given extension points of the standard.
      *
-     * @param string $class The class name of a class extending AbstractXMLElement or BaseID.
+     * @param string $class The class name of a class extending AbstractXMLElement or implementing ExtensionPointInterface.
      * @psalm-param class-string $class
      */
     public function registerExtensionHandler(string $class): void
     {
         Assert::subclassOf($class, AbstractXMLElement::class);
-        if (is_subclass_of($class, BaseIdentifierInterface::class, true)) {
-            $key = $class::getXsiType() . ':BaseID';
+        if (is_subclass_of($class, ExtensionPointInterface::class, true)) {
+            $key = implode(':', [self::XSI_TYPE_PREFIX, $class::getXsiTypeNamespaceURI(), $class::getXsiTypeName()]);
         } else {
-            $key = join(':', [urlencode($class::NS), AbstractXMLElement::getClassName($class)]);
+            $className = AbstractXMLElement::getClassName($class);
+            $key = ($class::NS === null) ? $className : implode(':', [$class::NS, $className]);
         }
         $this->registry[$key] = $class;
     }
@@ -139,37 +142,47 @@ abstract class AbstractContainer
      * Such classes must have been registered previously by calling registerExtensionHandler(), and they must
      * extend \SimpleSAML\XML\AbstractXMLElement.
      *
-     * @param string $namespace The namespace URI for the given element.
+     * @param string|null $namespace The namespace URI for the given element.
      * @param string $element The local name of the element.
      *
      * @return string|null The fully-qualified name of a class extending \SimpleSAML\XML\AbstractXMLElement and
      * implementing support for the given element, or null if no such class has been registered before.
      * @psalm-return class-string|null
      */
-    public function getElementHandler(string $namespace, string $element): ?string
+    public function getElementHandler(?string $namespace, string $element): ?string
     {
-        Assert::notEmpty($namespace, 'Cannot search for handlers without an associated namespace URI.');
-        Assert::notEmpty($element, 'Cannot search for handlers without an associated element name.');
-        return $this->registry[join(':', [urlencode($namespace), $element])];
+        Assert::nullOrValidURI($namespace, SchemaViolationException::class);
+        Assert::validNCName($element, SchemaViolationException::class);
+
+        $key = ($namespace === null) ? $element : implode(':', [$namespace, $element]);
+        if (array_key_exists($key, $this->registry) === true) {
+            return $this->registry[$key];
+        }
+
+        return null;
     }
 
 
     /**
-     * Search for a class that implements a custom identifier type.
+     * Search for a class that implements a custom element type.
      *
      * Such classes must have been registered previously by calling registerExtensionHandler(), and they must
-     * implement \SimpleSAML\SAML2\XML\saml\BaseIdentifierInterface.
+     * implement \SimpleSAML\SAML2\XML\saml\ExtensionPointInterface.
      *
-     * @param string $type The type of the identifier (xsi:type of the BaseID element).
+     * @param string $type The type of the identifier (xsi:type of a BaseID element).
      *
-     * @return string|null The fully-qualified name of a class implementing \SimpleSAML\SAML2\XML\saml\BaseIdentifierInterface
-     * or null if no such class has been registered before.
+     * @return string|null The fully-qualified name of a class implementing
+     *  \SimpleSAML\SAML2\XML\saml\ExtensionPointInterface or null if no such class has been registered before.
      * @psalm-return class-string|null
      */
-    public function getIdentifierHandler(string $type): ?string
+    public function getExtensionHandler(string $type): ?string
     {
         Assert::notEmpty($type, 'Cannot search for identifier handlers with an empty type.');
-        $handler = $type . ':BaseID';
-        return array_key_exists($handler, $this->registry) ? $this->registry[$handler] : null;
+        $type = implode(':', [self::XSI_TYPE_PREFIX, $type]);
+        if (!array_key_exists($type, $this->registry)) {
+            return null;
+        }
+        Assert::implementsInterface($this->registry[$type], ExtensionPointInterface::class);
+        return $this->registry[$type];
     }
 }

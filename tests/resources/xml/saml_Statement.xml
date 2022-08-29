@@ -1,1 +1,3 @@
-<saml:Statement xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="CustomStatement">SomeStatement</saml:Statement>
+<saml:Statement xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ssp="urn:x-simplesamlphp:namespace" xsi:type="ssp:CustomStatementType">
+  <saml:Audience>urn:some:audience</saml:Audience>
+</saml:Statement>

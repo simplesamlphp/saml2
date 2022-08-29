@@ -20,7 +20,7 @@ use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
  * @package simplesamlphp/saml2
  */
 
-abstract class NameIDType extends AbstractSamlElement implements IdentifierInterface, EncryptableElementInterface
+abstract class NameIDType extends AbstractSamlElement implements BaseIdentifierInterface, EncryptableElementInterface
 {
     use IDNameQualifiersTrait;
     use XMLStringElementTrait;

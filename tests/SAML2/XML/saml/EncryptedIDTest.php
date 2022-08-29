@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DOMDocument;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Configuration;
@@ -13,17 +12,15 @@ use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
-use SimpleSAML\SAML2\XML\saml\BaseID;
+use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
-use SimpleSAML\XMLSecurity\Key\PrivateKey;
-use SimpleSAML\XMLSecurity\Key\PublicKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\xenc\CarriedKeyName;
@@ -62,6 +59,7 @@ final class EncryptedIDTest extends TestCase
 
         $container = new MockContainer();
         $container->setBlacklistedAlgorithms(null);
+        $container->registerExtensionHandler(CustomBaseID::class);
         ContainerSingleton::setContainer($container);
     }
 
@@ -216,7 +214,8 @@ final class EncryptedIDTest extends TestCase
         $this->assertEquals(strval($issuer), strval($id));
 
         // test a custom BaseID without registering it
-        $customid = new CustomBaseID(1.0, 'name_qualifier');
+        $audience = new Audience("http://audience.com");
+        $customid = new CustomBaseID([$audience], 'NameQualifier', 'name_qualifier');
         $encid = new EncryptedID($customid->encrypt($encryptor));
         $doc = DOMDocumentFactory::fromString(strval($encid));
 
@@ -226,13 +225,8 @@ final class EncryptedIDTest extends TestCase
             $privKey
         );
         $id = $encid->decrypt($decryptor);
-        $this->assertInstanceOf(BaseID::class, $id);
+        $this->assertInstanceOf(AbstractBaseID::class, $id);
         $this->assertEquals(strval($customid), strval($id));
-
-        // test a custom BaseID with a registered handler
-        $container = $this->createMock(MockContainer::class);
-        $container->method('getIdentifierHandler')->willReturn(CustomBaseID::class);
-        ContainerSingleton::setContainer($container);
 
         $encid = EncryptedID::fromXML($doc->documentElement);
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(

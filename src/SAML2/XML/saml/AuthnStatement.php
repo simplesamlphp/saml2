@@ -20,7 +20,7 @@ use function gmdate;
  *
  * @package simplesamlphp/saml2
  */
-final class AuthnStatement extends AbstractStatement
+final class AuthnStatement extends AbstractStatementType
 {
     /** @var \SimpleSAML\SAML2\XML\saml\AuthnContext */
     protected AuthnContext $authnContext;

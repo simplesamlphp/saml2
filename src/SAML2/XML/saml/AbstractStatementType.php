@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 /**
- * Interface for several types of identifiers.
+ * Base abstract class for all Statement types.
  *
  * @package simplesamlphp/saml2
  */
-interface IdentifierInterface
+abstract class AbstractStatementType extends AbstractSamlElement
 {
-
 }

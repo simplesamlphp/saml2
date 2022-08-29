@@ -6,9 +6,8 @@ namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\SAML2\XML\saml\BaseID;
+use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
@@ -63,7 +62,7 @@ trait IdentifierTrait
     {
         $class = static::NS_PREFIX . ':' . self::getClassName(static::class);
 
-        $baseId = BaseID::getChildrenOfClass($xml);
+        $baseId = AbstractBaseID::getChildrenOfClass($xml);
         $nameId = NameID::getChildrenOfClass($xml);
         $encryptedId = EncryptedID::getChildrenOfClass($xml);
 
@@ -97,26 +96,6 @@ trait IdentifierTrait
 
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null $identifier */
         $identifier = array_pop($identifiers);
-
-        if ($identifier !== null) {
-            // check if the identifier is a BaseID that we can process
-            if ($identifier instanceof BaseID) {
-                $type = $identifier->getType();
-                $container = ContainerSingleton::getInstance();
-
-                /** @var \SimpleSAML\SAML2\XML\saml\BaseIdentifierInterface|null $handler */
-                $handler = $container->getIdentifierHandler($type);
-
-                if ($handler !== null) {
-                    // we have a handler, use it for this id
-                    $list = $xml->getElementsByTagNameNS(BaseID::NS, 'BaseID');
-
-                    /** @var \DOMElement $element */
-                    $element = $list->item(0);
-                    $identifier = $handler::fromXML($element);
-                }
-            }
-        }
 
         return $identifier;
     }

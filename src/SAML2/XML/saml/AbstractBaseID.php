@@ -8,25 +8,33 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ExtensionPointInterface;
+use SimpleSAML\SAML2\XML\ExtensionPointTrait;
 use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
 
-use function trim;
+use function count;
+use function explode;
 
 /**
  * SAML BaseID data type.
  *
  * @package simplesamlphp/saml2
  */
-class BaseID extends AbstractSamlElement implements BaseIdentifierInterface, EncryptableElementInterface
+abstract class AbstractBaseID extends AbstractSamlElement implements
+     BaseIdentifierInterface,
+     EncryptableElementInterface,
+     ExtensionPointInterface
 {
     use EncryptableElementTrait;
+    use ExtensionPointTrait;
     use IDNameQualifiersTrait;
-    use XMLStringElementTrait;
 
     /** @var string */
     public const LOCALNAME = 'BaseID';
@@ -39,57 +47,26 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface, Enc
      * Initialize a saml:BaseID from scratch
      *
      * @param string $type
-     * @param string $value
      * @param string|null $NameQualifier
      * @param string|null $SPNameQualifier
      */
     protected function __construct(
         string $type,
-        string $value,
         ?string $NameQualifier = null,
         ?string $SPNameQualifier = null
     ) {
-        $this->setType($type);
-        $this->setContent($value);
+        $this->type = $type;
         $this->setNameQualifier($NameQualifier);
         $this->setSPNameQualifier($SPNameQualifier);
     }
 
 
     /**
-     * Get the type of this BaseID (expressed in the xsi:type attribute).
-     *
-     * @return string
+     * @inheritDoc
      */
-    public function getType(): string
+    public function getXsiType(): string
     {
         return $this->type;
-    }
-
-
-    /**
-     * Set the type of this BaseID (in the xsi:type attribute)
-     *
-     * @param string $type
-     */
-    protected function setType(string $type): void
-    {
-        Assert::notWhitespaceOnly($type, 'The "xsi:type" attribute of an identifier cannot be empty.');
-
-        $this->type = $type;
-    }
-
-
-    /**
-     * Validate the content of the element.
-     *
-     * @param string $content  The value to go in the XML textContent
-     * @throws \Exception on failure
-     * @return void
-     */
-    protected function validateContent(string $content): void
-    {
-        Assert::notWhitespaceOnly($content);
     }
 
 
@@ -112,30 +89,52 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface, Enc
      * Convert XML into an BaseID
      *
      * @param \DOMElement $xml The XML element we should load
-     *
-     * @return \SimpleSAML\SAML2\XML\saml\BaseID
+     * @return \SimpleSAML\SAML2\XML\saml\BaseIdentifierInterface
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
         Assert::same($xml->localName, 'BaseID', InvalidDOMElementException::class);
-        Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, BaseID::NS, InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, C::NS_SAML, InvalidDOMElementException::class);
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:BaseID> element.',
-            InvalidDOMElementException::class
+            SchemaViolationException::class
         );
 
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');
+        Assert::validQName($type, SchemaViolationException::class);
 
-        return new self(
-            $type,
-            trim($xml->textContent),
-            self::getAttribute($xml, 'NameQualifier', null),
-            self::getAttribute($xml, 'SPNameQualifier', null)
+        // first, try to resolve the type to a full namespaced version
+        $qname = explode(':', $type, 2);
+        if (count($qname) === 2) {
+            list($prefix, $element) = $qname;
+        } else {
+            $prefix = null;
+            list($element) = $qname;
+        }
+        $ns = $xml->lookupNamespaceUri($prefix);
+        $type = ($ns === null ) ? $element : implode(':', [$ns, $element]);
+
+        // now check if we have a handler registered for it
+        $handler = Utils::getContainer()->getExtensionHandler($type);
+        if ($handler === null) {
+            // we don't have a handler, proceed with unknown identifier
+            return new UnknownID(
+                new Chunk($xml),
+                $type,
+                self::getAttribute($xml, 'NameQualifier', null),
+                self::getAttribute($xml, 'SPNameQualifier', null),
+            );
+        }
+
+        Assert::subclassOf(
+            $handler,
+            AbstractBaseID::class,
+            'Elements implementing BaseID must extend \SimpleSAML\SAML2\XML\saml\AbstractBaseID.',
         );
+        return $handler::fromXML($xml);
     }
 
 
@@ -147,20 +146,18 @@ class BaseID extends AbstractSamlElement implements BaseIdentifierInterface, Enc
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $element = $this->instantiateParentElement($parent);
+        $e = $this->instantiateParentElement($parent);
+        $e->setAttribute('xmlns:' . static::getXsiTypePrefix(), static::getXsiTypeNamespaceURI());
+        $e->setAttributeNS(C::NS_XSI, 'xsi:type', $this->getXsiType());
 
         if ($this->NameQualifier !== null) {
-            $element->setAttribute('NameQualifier', $this->NameQualifier);
+            $e->setAttribute('NameQualifier', $this->NameQualifier);
         }
 
         if ($this->SPNameQualifier !== null) {
-            $element->setAttribute('SPNameQualifier', $this->SPNameQualifier);
+            $e->setAttribute('SPNameQualifier', $this->SPNameQualifier);
         }
 
-        $element->textContent = $this->content;
-
-        $element->setAttributeNS(C::NS_XSI, 'xsi:type', $this->type);
-
-        return $element;
+        return $e;
     }
 }

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DOMDocument;
-use Mockery;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\Compat\MockContainer;
+use SimpleSAML\SAML2\XML\saml\AbstractCondition;
 use SimpleSAML\SAML2\XML\saml\Audience;
+use SimpleSAML\SAML2\XML\saml\UnknownCondition;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\CustomCondition;
 use SimpleSAML\Test\XML\SerializableXMLTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -43,24 +43,9 @@ final class ConditionTest extends TestCase
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Condition.xml'
         );
 
-        $container = ContainerSingleton::getInstance();
-        $mock = Mockery::mock(AbstractContainer::class);
-
-        /**
-         * @psalm-suppress InvalidArgument
-         * @psalm-suppress UndefinedMagicMethod
-         */
-
-        $mock->shouldReceive('getElementHandler')->andReturn(CustomCondition::class);
-
-        /** @psalm-suppress InvalidArgument */
-        ContainerSingleton::setContainer($mock);
-    }
-
-
-    public function tearDown(): void
-    {
-        Mockery::close();
+        $container = new MockContainer();
+        $container->registerExtensionHandler(CustomCondition::class);
+        ContainerSingleton::setContainer($container);
     }
 
 
@@ -87,10 +72,41 @@ final class ConditionTest extends TestCase
 
     /**
      */
-    public function testUnmarshalling(): void
+    public function testUnmarshallingRegistered(): void
     {
         $condition = CustomCondition::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('ssp:CustomCondition', $condition->getType());
+        $this->assertInstanceOf(CustomCondition::class, $condition);
+        $this->assertEquals('ssp:CustomConditionType', $condition->getXsiType());
+
+        $audience = $condition->getAudience();
+        $this->assertCount(1, $audience);
+        $this->assertEquals('urn:some:audience', $audience[0]->getContent());
+
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($condition)
+        );
+    }
+
+
+    /**
+     */
+    public function testUnmarshallingUnregistered(): void
+    {
+        $element = $this->xmlRepresentation->documentElement;
+        $element->setAttributeNS(C::NS_XSI, 'xsi:type', 'ssp:UnknownConditionType');
+
+        $condition = AbstractCondition::fromXML($element);
+
+        $this->assertInstanceOf(UnknownCondition::class, $condition);
+        $this->assertEquals('urn:x-simplesamlphp:namespace:UnknownConditionType', $condition->getXsiType());
+
+        $chunk = $condition->getRawCondition();
+        $this->assertEquals('saml', $chunk->getPrefix());
+        $this->assertEquals('Condition', $chunk->getLocalName());
+        $this->assertEquals(C::NS_SAML, $chunk->getNamespaceURI());
+
+        $this->assertEquals($element->ownerDocument->saveXML($element), strval($chunk));
     }
 }

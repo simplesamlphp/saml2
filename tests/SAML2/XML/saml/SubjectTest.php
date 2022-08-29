@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
-use Mockery;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Compat\AbstractContainer;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\saml\BaseID;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
@@ -70,12 +67,6 @@ XML
         $this->subjectConfirmation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_SubjectConfirmation.xml'
         );
-    }
-
-
-    public function tearDown(): void
-    {
-        Mockery::close();
     }
 
 
@@ -175,7 +166,7 @@ XML
     {
         $subject = new Subject(
             new CustomBaseID(
-                123.456,
+                [new Audience('urn:some:audience')],
                 'https://sp.example.org/authentication/sp/metadata'
             ),
             [
@@ -279,7 +270,9 @@ XML
 
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:Subject xmlns:saml="{$samlNamespace}">
-  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xsi:type="CustomBaseID">SomeBaseID</saml:BaseID>
+  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xsi:type="CustomBaseIDType">
+    <saml:Audience>urn:some:audience</saml:Audience>
+  </saml:BaseID>
   <saml:NameID
       SPNameQualifier="https://sp.example.org/authentication/sp/metadata"
       Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">SomeOtherNameIDValue</saml:NameID>
@@ -298,83 +291,5 @@ XML
             'A <saml:Subject> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.'
         );
         Subject::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test that unmarshalling a Subject from XML returns a regular BaseID object when no handlers
-     * are registered.
-     */
-    public function testNoCustomIDHandler(): void
-    {
-        $samlNamespace = Subject::NS;
-        $xsiNamespace = C::NS_XSI;
-
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:Subject xmlns:saml="{$samlNamespace}">
-  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xsi:type="CustomBaseID">SomeBaseID</saml:BaseID>
-  <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
-    <saml:SubjectConfirmationData
-        NotOnOrAfter="2020-02-27T11:26:36Z"
-        Recipient="https://sp.example.org/authentication/sp/consume-assertion"
-        InResponseTo="def456"/>
-  </saml:SubjectConfirmation>
-</saml:Subject>
-XML
-        );
-
-        $subject = Subject::fromXML($document->documentElement);
-        $identifier = $subject->getIdentifier();
-        $this->assertInstanceOf(BaseID::class, $identifier);
-        $this->assertEquals('CustomBaseID', $identifier->getType());
-        $this->assertEquals(
-            $document->saveXML($document->documentElement),
-            strval($subject)
-        );
-    }
-
-
-    /**
-     * Test that unmarshalling a Subject from XML returns a custom identifier object if its corresponding
-     * class has been registered.
-     */
-    public function testCustomIDHandler(): void
-    {
-        $container = ContainerSingleton::getInstance();
-        $mock = Mockery::mock(AbstractContainer::class);
-        /**
-         * @psalm-suppress InvalidArgument
-         * @psalm-suppress UndefinedMagicMethod
-         */
-        $mock->shouldReceive('getIdentifierHandler')->andReturn(CustomBaseID::class);
-        /** @psalm-suppress InvalidArgument */
-        ContainerSingleton::setContainer($mock);
-
-        $samlNamespace = Subject::NS;
-        $xsiNamespace = C::NS_XSI;
-
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:Subject xmlns:saml="{$samlNamespace}">
-  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xsi:type="CustomBaseID">123.456</saml:BaseID>
-  <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
-    <saml:SubjectConfirmationData
-        NotOnOrAfter="2020-02-27T11:26:36Z"
-        Recipient="https://sp.example.org/authentication/sp/consume-assertion"
-        InResponseTo="def456"/>
-  </saml:SubjectConfirmation>
-</saml:Subject>
-XML
-        );
-
-        $subject = Subject::fromXML($document->documentElement);
-        $identifier = $subject->getIdentifier();
-        $this->assertInstanceOf(BaseID::class, $identifier);
-        $this->assertEquals(CustomBaseID::class, get_class($identifier));
-        $this->assertEquals(
-            $document->saveXML($document->documentElement),
-            strval($subject)
-        );
-
-        ContainerSingleton::setContainer($container);
     }
 }

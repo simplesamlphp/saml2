@@ -5,40 +5,40 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\saml\Audience;
-use SimpleSAML\SAML2\XML\saml\Condition;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\XML\saml\Audience;
+use SimpleSAML\SAML2\XML\saml\AbstractCondition;
+use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
- * @covers \SimpleSAML\Test\SAML2\CustomCondition
+ * Example class to demonstrate how Condition can be extended.
+ *
  * @package simplesamlphp\saml2
  */
-final class CustomCondition extends Condition
+final class CustomCondition extends AbstractCondition
 {
     /** @var string */
-    protected const XSI_TYPE = 'ssp:CustomCondition';
+    protected const XSI_TYPE_NAME = 'CustomConditionType';
 
     /** @var string */
-    protected const XSI_TYPE_NS = 'urn:custom:ssp';
+    protected const XSI_TYPE_NAMESPACE = C::NAMESPACE;
 
     /** @var string */
     protected const XSI_TYPE_PREFIX = 'ssp';
 
-    /** @var \SimpleSAML\SAML2\XML\saml\Audience[] */
-    protected $audience = [];
+    /** @var \SimpleSAML\SAML2\XML\saml\Audience[] $audience */
+    protected array $audience = [];
 
 
     /**
      * CustomCondition constructor.
      *
-     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $value
+     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
      */
     public function __construct(array $audience)
     {
-        parent::__construct('dummy', self::XSI_TYPE);
-
+        parent::__construct(self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME);
         $this->setAudience($audience);
     }
 
@@ -68,19 +68,10 @@ final class CustomCondition extends Condition
 
 
     /**
-     * @inheritDoc
-     */
-    public static function getXsiType(): string
-    {
-        return self::XSI_TYPE;
-    }
-
-
-    /**
-     * Convert XML into an Condition
+     * Convert XML into a Condition
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\saml\Condition
+     * @return \SimpleSAML\SAML2\XML\saml\AbstractCondition
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
@@ -88,7 +79,7 @@ final class CustomCondition extends Condition
     {
         Assert::same($xml->localName, 'Condition', InvalidDOMElementException::class);
         Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, Condition::NS, InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, AbstractCondition::NS, InvalidDOMElementException::class);
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:Condition> element.',
@@ -96,17 +87,11 @@ final class CustomCondition extends Condition
         );
 
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');
-        list($prefix, $element) = explode(':', $type, 2);
-
-        $ns = $xml->lookupNamespaceUri($prefix);
-        $handler = Utils::getContainer()->getElementHandler($ns, $element);
-
-        Assert::notNull($handler, 'Unknown Condition type `' . $type . '`.');
-        Assert::isAOf($handler, Condition::class);
+        Assert::same($type, self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME);
 
         $audience = Audience::getChildrenOfClass($xml);
 
-        return new $handler($audience);
+        return new self($audience);
     }
 
 

@@ -246,7 +246,7 @@ final class Conditions extends AbstractSamlElement
             Assert::validDateTimeZulu($notOnOrAfter, ProtocolViolationException::class);
         }
 
-        $condition = Condition::getChildrenOfClass($xml);
+        $condition = AbstractCondition::getChildrenOfClass($xml);
         $audienceRestriction = AudienceRestriction::getChildrenOfClass($xml);
         $oneTimeUse = XMLUtils::extractStrings($xml, AbstractSamlElement::NS, 'OneTimeUse');
         $proxyRestriction = ProxyRestriction::getChildrenOfClass($xml);

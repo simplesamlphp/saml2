@@ -5,77 +5,92 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\XML\saml\Statement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\XML\saml\Audience;
+use SimpleSAML\SAML2\XML\saml\AbstractStatement;
+use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
- * @covers \SimpleSAML\Test\SAML2\CustomStatement
+ * Example class to demonstrate how Statement can be extended.
+ *
  * @package simplesamlphp\saml2
  */
-final class CustomStatement extends Statement
+final class CustomStatement extends AbstractStatement
 {
-    protected const XSI_TYPE = 'CustomStatement';
+    /** @var string */
+    protected const XSI_TYPE_NAME = 'CustomStatementType';
 
     /** @var string */
-    protected string $value;
+    protected const XSI_TYPE_NAMESPACE = C::NAMESPACE;
+
+    /** @var string */
+    protected const XSI_TYPE_PREFIX = 'ssp';
+
+    /** @var \SimpleSAML\SAML2\XML\saml\Audience[] $audience */
+    protected array $audience = [];
 
 
     /**
      * CustomStatement constructor.
      *
-     * @param string $value
+     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
      */
-    public function __construct(string $value)
+    public function __construct(array $audience)
     {
-        parent::__construct(self::XSI_TYPE);
-
-        $this->setValue($value);
+        parent::__construct(self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME);
+        $this->setAudience($audience);
     }
 
 
     /**
-     * Get the value of this Statement.
+     * Get the value of the audience-attribute.
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\XML\saml\Audience[]
      */
-    public function getValue(): string
+    public function getAudience(): array
     {
-        return $this->value;
+        return $this->audience;
     }
 
 
     /**
-     * Set the value of this Statement.
+     * Set the value of the audience-attribute
      *
-     * @param string $value
+     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
      */
-    protected function setValue(string $value): void
+    protected function setAudience(array $audience): void
     {
-        $this->value = $value;
+        Assert::allIsInstanceOf($audience, Audience::class);
+        $this->audience = $audience;
     }
 
 
     /**
-     * @inheritDoc
-     */
-    public static function getXsiType(): string
-    {
-        return self::XSI_TYPE;
-    }
-
-
-    /**
-     * Convert XML into an CustomStatement
+     * Convert XML into an Statement
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return self
+     * @return \SimpleSAML\SAML2\XML\saml\Statement
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->getAttributeNS(C::NS_XSI, 'type'), 'CustomStatement');
+        Assert::same($xml->localName, 'Statement', InvalidDOMElementException::class);
+        Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, AbstractStatement::NS, InvalidDOMElementException::class);
+        Assert::true(
+            $xml->hasAttributeNS(C::NS_XSI, 'type'),
+            'Missing required xsi:type in <saml:Statement> element.',
+            InvalidDOMElementException::class
+        );
 
-        return new self($xml->textContent);
+        $type = $xml->getAttributeNS(C::NS_XSI, 'type');
+        Assert::same($type, self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME);
+
+        $audience = Audience::getChildrenOfClass($xml);
+
+        return new self($audience);
     }
 
 
@@ -88,7 +103,10 @@ final class CustomStatement extends Statement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
-        $e->textContent = $this->getValue();
+
+        foreach ($this->audience as $audience) {
+            $audience->toXML($e);
+        }
 
         return $e;
     }

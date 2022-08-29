@@ -99,7 +99,7 @@ class Assertion extends AbstractSamlElement implements
     /**
      * The statements made by this assertion.
      *
-     * @var \SimpleSAML\SAML2\XML\saml\AbstractStatement[]
+     * @var \SimpleSAML\SAML2\XML\saml\AbstractStatementType[]
      */
     protected array $statements = [];
 
@@ -147,7 +147,7 @@ class Assertion extends AbstractSamlElement implements
      * @param int|null $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Subject|null $subject
      * @param \SimpleSAML\SAML2\XML\saml\Conditions|null $conditions
-     * @param \SimpleSAML\SAML2\XML\saml\AbstractStatement[] $statements
+     * @param \SimpleSAML\SAML2\XML\saml\AbstractStatementType[] $statements
      */
     public function __construct(
         Issuer $issuer,
@@ -239,12 +239,12 @@ class Assertion extends AbstractSamlElement implements
 
 
     /**
-     * @return \SimpleSAML\SAML2\XML\saml\Statement[]
+     * @return \SimpleSAML\SAML2\XML\saml\AbstractStatement[]
      */
     public function getStatements(): array
     {
         return array_values(array_filter($this->statements, function ($statement) {
-            return $statement instanceof Statement;
+            return $statement instanceof AbstractStatement;
         }));
     }
 
@@ -252,11 +252,11 @@ class Assertion extends AbstractSamlElement implements
     /**
      * Set the statements in this assertion
      *
-     * @param \SimpleSAML\SAML2\XML\saml\AbstractStatement[] $statements
+     * @param \SimpleSAML\SAML2\XML\saml\AbstractStatementType[] $statements
      */
     protected function setStatements(array $statements): void
     {
-        Assert::allIsInstanceOf($statements, AbstractStatement::class);
+        Assert::allIsInstanceOf($statements, AbstractStatementType::class);
 
         $this->statements = $statements;
     }
@@ -467,7 +467,7 @@ class Assertion extends AbstractSamlElement implements
 
         $authnStatement = AuthnStatement::getChildrenOfClass($xml);
         $attrStatement = AttributeStatement::getChildrenOfClass($xml);
-        $statements = Statement::getChildrenOfClass($xml);
+        $statements = AbstractStatement::getChildrenOfClass($xml);
 
         $assertion = new self(
             array_pop($issuer),

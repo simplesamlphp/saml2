@@ -18,23 +18,23 @@ use function count;
 use function explode;
 
 /**
- * Class implementing the <saml:Statement> extension point.
+ * SAML Condition data type.
  *
  * @package simplesamlphp/saml2
  */
-abstract class AbstractStatement extends AbstractStatementType implements ExtensionPointInterface
+abstract class AbstractCondition extends AbstractConditionType implements ExtensionPointInterface
 {
     use ExtensionPointTrait;
 
     /** @var string */
-    public const LOCALNAME = 'Statement';
+    public const LOCALNAME = 'Condition';
 
     /** @var string */
     protected string $type;
 
 
     /**
-     * Initialize a custom saml:Statement element.
+     * Initialize a custom saml:Condition element.
      *
      * @param string $type
      */
@@ -54,20 +54,20 @@ abstract class AbstractStatement extends AbstractStatementType implements Extens
 
 
     /**
-     * Convert an XML element into a Statement.
+     * Convert an XML element into a Condition.
      *
      * @param \DOMElement $xml The root XML element
-     * @return \SimpleSAML\SAML2\XML\saml\AbstractStatement The statement
+     * @return \SimpleSAML\SAML2\XML\saml\AbstractCondition The condition
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): object
     {
-        Assert::same($xml->localName, 'Statement', InvalidDOMElementException::class);
+        Assert::same($xml->localName, 'Condition', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, C::NS_SAML, InvalidDOMElementException::class);
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
-            'Missing required xsi:type in <saml:Statement> element.',
+            'Missing required xsi:type in <saml:Condition> element.',
             SchemaViolationException::class
         );
 
@@ -88,24 +88,24 @@ abstract class AbstractStatement extends AbstractStatementType implements Extens
         // now check if we have a handler registered for it
         $handler = Utils::getContainer()->getExtensionHandler($ns, $element);
         if ($handler === null) {
-            // we don't have a handler, proceed with unknown statement
-            return new UnknownStatement(new Chunk($xml), $type);
+            // we don't have a handler, proceed with unknown condition
+            return new UnknownCondition(new Chunk($xml), $type);
         }
 
         Assert::subclassOf(
             $handler,
-            AbstractStatement::class,
-            'Elements implementing Statement must extend \SimpleSAML\SAML2\XML\saml\AbstractStatement.'
+            AbstractCondition::class,
+            'Elements implementing Condition must extend \SimpleSAML\SAML2\XML\saml\AbstractCondition.'
         );
         return $handler::fromXML($xml);
     }
 
 
     /**
-     * Convert this Statement to XML.
+     * Convert this Condition to XML.
      *
      * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this Statement.
+     * @return \DOMElement The XML element after adding the data corresponding to this Condition.
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
