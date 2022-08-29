@@ -63,7 +63,7 @@ final class BaseIDTest extends TestCase
             'TheNameQualifier',
             'TheSPNameQualifier'
         );
-
+var_dump($baseId->toXML()->ownerDocument->saveXML());
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($baseId)

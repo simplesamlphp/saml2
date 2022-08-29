@@ -7,7 +7,6 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
 use SimpleSAML\XML\StringElementTrait;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\Constants as C;
@@ -20,9 +19,8 @@ use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
  * @package simplesamlphp/saml2
  */
 
-abstract class NameIDType extends AbstractSamlElement implements BaseIdentifierInterface, EncryptableElementInterface
+abstract class NameIDType extends AbstractBaseIDType implements  EncryptableElementInterface
 {
-    use IDNameQualifiersTrait;
     use StringElementTrait;
     use EncryptableElementTrait;
 
@@ -73,11 +71,10 @@ abstract class NameIDType extends AbstractSamlElement implements BaseIdentifierI
         ?string $Format = null,
         ?string $SPProvidedID = null
     ) {
+        parent::__construct($NameQualifier, $SPNameQualifier);
         $this->dataType = C::XMLENC_ELEMENT;
 
         $this->setContent($value);
-        $this->setNameQualifier($NameQualifier);
-        $this->setSPNameQualifier($SPNameQualifier);
         $this->setFormat($Format);
         $this->setSPProvidedID($SPProvidedID);
     }
@@ -150,16 +147,7 @@ abstract class NameIDType extends AbstractSamlElement implements BaseIdentifierI
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        /** @psalm-var \DOMDocument $element->ownerDocument */
-        $element = $this->instantiateParentElement($parent);
-
-        if ($this->getNameQualifier() !== null) {
-            $element->setAttribute('NameQualifier', $this->getNameQualifier());
-        }
-
-        if ($this->getSPNameQualifier() !== null) {
-            $element->setAttribute('SPNameQualifier', $this->getSPNameQualifier());
-        }
+        $e = parent::toXML($parent);
 
         if ($this->getFormat() !== null) {
             $element->setAttribute('Format', $this->getFormat());
