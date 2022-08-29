@@ -10,8 +10,6 @@ use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\XML\StringElementTrait;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\Constants as C;
-use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
-use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
 
 /**
  * SAML NameIDType abstract data type.
@@ -19,7 +17,7 @@ use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
  * @package simplesamlphp/saml2
  */
 
-abstract class NameIDType extends AbstractBaseIDType implements  EncryptableElementInterface
+abstract class NameIDType extends AbstractBaseIDType
 {
     use StringElementTrait;
     use EncryptableElementTrait;
@@ -159,20 +157,5 @@ abstract class NameIDType extends AbstractBaseIDType implements  EncryptableElem
 
         $element->textContent = $this->getContent();
         return $element;
-    }
-
-
-    public function getBlacklistedAlgorithms(): ?array
-    {
-        $container = ContainerSingleton::getInstance();
-        return $container->getBlacklistedEncryptionAlgorithms();
-    }
-
-
-    public function getEncryptionBackend(): ?EncryptionBackend
-    {
-        // return the encryption backend you want to use,
-        // or null if you are fine with the default
-        return null;
     }
 }

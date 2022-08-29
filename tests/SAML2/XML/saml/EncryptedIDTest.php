@@ -17,6 +17,7 @@ use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\UnknownID;
 use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
@@ -202,21 +203,7 @@ final class EncryptedIDTest extends TestCase
         $id = $encid->decrypt($decryptor);
         $this->assertEquals(strval($nameid), strval($id));
 
-        // test with Issuer
-        $issuer = new Issuer('entityID');
-        $encid = new EncryptedID($issuer->encrypt($encryptor));
-        $doc = DOMDocumentFactory::fromString(strval($encid));
-
-        $encid = EncryptedID::fromXML($doc->documentElement);
-        $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encid->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
-            $privKey
-        );
-        $id = $encid->decrypt($decryptor);
-        $this->assertInstanceOf(Issuer::class, $id);
-        $this->assertEquals(strval($issuer), strval($id));
-
-        // test a custom BaseID without registering it
+        // test a custom BaseID that's registered
         $audience = new Audience("http://audience.com");
         $customid = new CustomBaseID([$audience], 'NameQualifier', 'name_qualifier');
         $encid = new EncryptedID($customid->encrypt($encryptor));
@@ -228,8 +215,39 @@ final class EncryptedIDTest extends TestCase
             $privKey
         );
         $id = $encid->decrypt($decryptor);
-        $this->assertInstanceOf(AbstractBaseID::class, $id);
+        $this->assertInstanceOf(CustomBaseID::class, $id);
         $this->assertEquals(strval($customid), strval($id));
+
+        // test a custom BaseID that's unregistered
+        $unknownid = new class() extends AbstractBaseID {
+            public function __construct()
+            {
+                parent::__construct('phpunit:UnknownBaseIDType', 'NameQualifier', 'name_qualifier');
+            }
+
+            public function getQualifiedName(): string
+            {
+                return 'saml:BaseID';
+            }
+
+            public static function getNamespaceURI(): string
+            {
+                return C::NS_SAML;
+            }
+
+            public static function getXsiTypePrefix(): string
+            {
+                return 'phpunit';
+            }
+
+            public static function getXsiTypeNamespaceURI(): string
+            {
+                return 'urn:x-simplesamlphp-phpunit';
+            }
+        };
+
+        $encid = new EncryptedID($unknownid->encrypt($encryptor));
+        $doc = DOMDocumentFactory::fromString(strval($encid));
 
         $encid = EncryptedID::fromXML($doc->documentElement);
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
@@ -237,7 +255,7 @@ final class EncryptedIDTest extends TestCase
             $privKey
         );
         $id = $encid->decrypt($decryptor);
-        $this->assertInstanceOf(CustomBaseID::class, $id);
+        $this->assertInstanceOf(UnknownID::class, $id);
         $this->assertEquals(strval($customid), strval($id));
 
         // test with unsupported ID
