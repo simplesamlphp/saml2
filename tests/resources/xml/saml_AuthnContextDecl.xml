@@ -1,7 +1,7 @@
 <saml:AuthnContextDecl xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
- <samlacpass:AuthenticationContextDeclaration>
-   <samlacpass:Identification nym="verinymity">
-    <samlacpass:Extension>
+  <samlacpass:AuthenticationContextDeclaration>
+    <samlacpass:Identification nym="verinymity">
+     <samlacpass:Extension>
       <safeac:NoVerification/>
       </samlacpass:Extension>
     </samlacpass:Identification>

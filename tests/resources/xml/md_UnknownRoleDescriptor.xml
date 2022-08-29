@@ -1,4 +1,4 @@
-<ssp:SomeRoleDescriptor xmlns:ssp="urn:x-simplesamlphp:namespace" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:test="urn:test:something" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol urn:x-simplesamlphp:protocol" errorURL="https://error.reporting/">
+<md:RoleDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ssp="urn:x-simplesamlphp:namespace" xsi:type="ssp:CustomRoleDescriptorType" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:test="urn:test:something" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol urn:x-simplesamlphp:protocol" errorURL="https://error.reporting/">
   <md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
     <ssp:Chunk>Some</ssp:Chunk>
   </md:Extensions>
@@ -30,4 +30,4 @@
     <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
   </md:ContactPerson>
   <ssp:Chunk>Other</ssp:Chunk>
-</ssp:SomeRoleDescriptor>
+</md:RoleDescriptor>
