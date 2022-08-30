@@ -89,7 +89,7 @@ final class EncryptionMethodTest extends TestCase
     public function testMarshallingElementOrdering(): void
     {
         $alg = C::KEY_TRANSPORT_OAEP_MGF1P;
-        $chunkXml = DOMDocumentFactory::fromString('<other:Element xmlns:other="urn:other:elt">Value</other:Element>');
+        $chunkXml = DOMDocumentFactory::fromString('<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>');
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 
         $em = new EncryptionMethod($alg, 10, '9lWu3Q==', [$chunk]);
@@ -109,7 +109,7 @@ final class EncryptionMethodTest extends TestCase
 
         $this->assertCount(2, $emElements);
         $this->assertEquals('xenc:OAEPparams', $emElements[0]->tagName);
-        $this->assertEquals('other:Element', $emElements[1]->tagName);
+        $this->assertEquals('ssp:Chunk', $emElements[1]->tagName);
     }
 
 
@@ -127,8 +127,6 @@ final class EncryptionMethodTest extends TestCase
         $this->assertEquals($alg, $em->getAlgorithm());
         $this->assertEquals(10, $em->getKeySize());
         $this->assertEquals('9lWu3Q==', $em->getOAEPParams());
-        $this->assertCount(1, $em->getChildren());
-        $this->assertInstanceOf(Chunk::class, $em->getChildren()[0]);
     }
 
 

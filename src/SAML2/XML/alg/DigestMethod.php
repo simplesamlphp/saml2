@@ -6,9 +6,11 @@ namespace SimpleSAML\SAML2\XML\alg;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\Exception\InvalidArgumentException;
 
@@ -20,6 +22,11 @@ use SimpleSAML\XMLSecurity\Exception\InvalidArgumentException;
  */
 final class DigestMethod extends AbstractAlgElement
 {
+    use ExtendableElementTrait;
+
+    /** The namespace-attribute for the xs:any element */
+    public const NAMESPACE = C::XS_ANY_NS_ANY;
+
     /**
      * An URI identifying an algorithm supported for digest operations.
      *
@@ -32,10 +39,12 @@ final class DigestMethod extends AbstractAlgElement
      * Create/parse an alg:DigestMethod element.
      *
      * @param string $Algorithm
+     * @param \SimpleSAML\XML\Chunk[] $elements
      */
-    public function __construct(string $Algorithm)
+    public function __construct(string $Algorithm, array $elements = [])
     {
         $this->setAlgorithm($Algorithm);
+        $this->setElements($elements);
     }
 
 
@@ -85,7 +94,16 @@ final class DigestMethod extends AbstractAlgElement
 
         $Algorithm = self::getAttribute($xml, 'Algorithm');
 
-        return new static($Algorithm);
+        $elements = [];
+        foreach ($xml->childNodes as $element) {
+            if (!($element instanceof DOMElement)) {
+                continue;
+            }
+
+            $elements[] = new Chunk($element);
+        }
+
+        return new static($Algorithm, $elements);
     }
 
 
@@ -99,6 +117,10 @@ final class DigestMethod extends AbstractAlgElement
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Algorithm', $this->Algorithm);
+
+        foreach ($this->elements as $element) {
+            $e->appendChild($e->ownerDocument->importNode($element->getXML(), true));
+        }
 
         return $e;
     }

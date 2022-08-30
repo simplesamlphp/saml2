@@ -10,9 +10,10 @@ use SimpleSAML\SAML2\XML\alg\SigningMethod;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
+use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XMLSecurity\Constants as C;
 
 use function dirname;
 use function strval;
@@ -49,7 +50,14 @@ final class SigningMethodTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $signingMethod = new SigningMethod(C::SIG_RSA_SHA256, 1024, 4096);
+        $signingMethod = new SigningMethod(
+            C::SIG_RSA_SHA256,
+            1024,
+            4096,
+            [new Chunk(DOMDocumentFactory::fromString(
+                '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>')->documentElement)
+            ],
+        );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -67,6 +75,13 @@ final class SigningMethodTest extends TestCase
         $this->assertEquals(C::SIG_RSA_SHA256, $signingMethod->getAlgorithm());
         $this->assertEquals(1024, $signingMethod->getMinKeySize());
         $this->assertEquals(4096, $signingMethod->getMaxKeySize());
+
+        $elements = $signingMethod->getElements();
+        $this->assertCount(1, $elements);
+        $this->assertEquals('Chunk', $elements[0]->getLocalName());
+        $this->assertEquals('ssp', $elements[0]->getPrefix());
+        $this->assertEquals(C::NAMESPACE, $elements[0]->getNamespaceURI());
+        $this->assertEquals('Some', $elements[0]->getXML()->textContent);
     }
 
 
