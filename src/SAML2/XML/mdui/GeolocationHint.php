@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\StringElementTrait;
 
 /**
  * Class implementing GeolocationHint.
@@ -15,7 +15,7 @@ use SimpleSAML\XML\XMLStringElementTrait;
  */
 final class GeolocationHint extends AbstractMduiElement
 {
-    use XMLStringElementTrait;
+    use StringElementTrait;
 
 
     /**

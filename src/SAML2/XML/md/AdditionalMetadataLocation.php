@@ -9,7 +9,7 @@ use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\StringElementTrait;
 
 use function trim;
 
@@ -20,7 +20,7 @@ use function trim;
  */
 final class AdditionalMetadataLocation extends AbstractMdElement
 {
-    use XMLStringElementTrait;
+    use StringElementTrait;
 
 
     /**

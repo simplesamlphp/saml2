@@ -8,7 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\StringElementTrait;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
@@ -23,7 +23,7 @@ use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
 abstract class NameIDType extends AbstractSamlElement implements BaseIdentifierInterface, EncryptableElementInterface
 {
     use IDNameQualifiersTrait;
-    use XMLStringElementTrait;
+    use StringElementTrait;
     use EncryptableElementTrait;
 
     /**

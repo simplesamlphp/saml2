@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\StringElementTrait;
 
 /**
  * Class representing a samlp:StatusMessage element.
@@ -16,7 +16,7 @@ use SimpleSAML\XML\XMLStringElementTrait;
  */
 final class StatusMessage extends AbstractSamlpElement
 {
-    use XMLStringElementTrait;
+    use StringElementTrait;
 
 
     /**

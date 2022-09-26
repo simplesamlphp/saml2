@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\StringElementTrait;
 
 /**
  * Class implementing Company.
@@ -15,7 +15,7 @@ use SimpleSAML\XML\XMLStringElementTrait;
  */
 final class Company extends AbstractMdElement
 {
-    use XMLStringElementTrait;
+    use StringElementTrait;
 
 
     /**

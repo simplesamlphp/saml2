@@ -9,7 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\StringElementTrait;
 
 /**
  * Class implementing AffiliateMember.
@@ -18,7 +18,7 @@ use SimpleSAML\XML\XMLStringElementTrait;
  */
 final class AffiliateMember extends AbstractMdElement
 {
-    use XMLStringElementTrait;
+    use StringElementTrait;
 
 
     /**

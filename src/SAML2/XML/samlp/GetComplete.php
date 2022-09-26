@@ -8,7 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\StringElementTrait;
 
 /**
  * Class representing a samlp:GetComplete element.
@@ -17,7 +17,7 @@ use SimpleSAML\XML\XMLStringElementTrait;
  */
 final class GetComplete extends AbstractSamlpElement
 {
-    use XMLStringElementTrait;
+    use StringElementTrait;
 
 
     /**

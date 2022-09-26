@@ -8,7 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\StringElementTrait;
 
 /**
  * Class which represents the Scope element found in Shibboleth metadata.
@@ -18,7 +18,7 @@ use SimpleSAML\XML\XMLStringElementTrait;
  */
 final class Scope extends AbstractShibmdElement
 {
-    use XMLStringElementTrait;
+    use StringElementTrait;
 
     /**
      * Whether this is a regexp scope.

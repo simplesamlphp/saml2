@@ -8,7 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\StringElementTrait;
 
 /**
  * Class implementing AttributeProfile.
@@ -17,7 +17,7 @@ use SimpleSAML\XML\XMLStringElementTrait;
  */
 final class AttributeProfile extends AbstractMdElement
 {
-    use XMLStringElementTrait;
+    use StringElementTrait;
 
 
     /**

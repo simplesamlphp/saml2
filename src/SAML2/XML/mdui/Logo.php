@@ -8,7 +8,7 @@ use DOMElement;
 use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\StringElementTrait;
 
 use function filter_var;
 use function strval;
@@ -23,7 +23,7 @@ use function trim;
  */
 final class Logo extends AbstractMduiElement
 {
-    use XMLStringElementTrait;
+    use StringElementTrait;
 
     /**
      * The width of this logo.

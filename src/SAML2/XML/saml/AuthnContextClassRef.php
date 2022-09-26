@@ -9,7 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\StringElementTrait;
 
 /**
  * Class representing SAML2 AuthnContextClassRef
@@ -18,7 +18,7 @@ use SimpleSAML\XML\XMLStringElementTrait;
  */
 final class AuthnContextClassRef extends AbstractSamlElement
 {
-    use XMLStringElementTrait;
+    use StringElementTrait;
 
 
     /**

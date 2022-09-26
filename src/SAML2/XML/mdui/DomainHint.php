@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\mdui;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\StringElementTrait;
 
 use function filter_var;
 
@@ -18,7 +18,7 @@ use function filter_var;
  */
 final class DomainHint extends AbstractMduiElement
 {
-    use XMLStringElementTrait;
+    use StringElementTrait;
 
 
     /**

@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\mdui;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\StringElementTrait;
 
 /**
  * Class implementing IPHint.
@@ -16,7 +16,7 @@ use SimpleSAML\XML\XMLStringElementTrait;
  */
 final class IPHint extends AbstractMduiElement
 {
-    use XMLStringElementTrait;
+    use StringElementTrait;
 
 
     /**

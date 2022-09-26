@@ -9,7 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\StringElementTrait;
 
 use function array_key_first;
 
@@ -20,7 +20,7 @@ use function array_key_first;
  */
 abstract class AbstractLocalizedName extends AbstractMdElement
 {
-    use XMLStringElementTrait;
+    use StringElementTrait;
 
     /**
      * The language this string is on.

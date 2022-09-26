@@ -8,7 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\StringElementTrait;
 
 /**
  * Class representing a samlp:RequesterID element.
@@ -17,7 +17,7 @@ use SimpleSAML\XML\XMLStringElementTrait;
  */
 final class RequesterID extends AbstractSamlpElement
 {
-    use XMLStringElementTrait;
+    use StringElementTrait;
 
 
     /**
