@@ -6,10 +6,12 @@ namespace SimpleSAML\SAML2\XML\alg;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\Exception\InvalidArgumentException;
 
@@ -23,6 +25,11 @@ use function strval;
  */
 final class SigningMethod extends AbstractAlgElement
 {
+    use ExtendableElementTrait;
+
+    /** The namespace-attribute for the xs:any element */
+    public const NAMESPACE = C::XS_ANY_NS_ANY;
+
     /**
      * An URI identifying the algorithm supported for XML signature operations.
      *
@@ -53,12 +60,14 @@ final class SigningMethod extends AbstractAlgElement
      * @param string $Algorithm
      * @param int|null $MinKeySize
      * @param int|null $MaxKeySize
+     * @param \SimpleSAML\XML\Chunk[] $elements
      */
-    public function __construct(string $Algorithm, ?int $MinKeySize = null, ?int $MaxKeySize = null)
+    public function __construct(string $Algorithm, ?int $MinKeySize = null, ?int $MaxKeySize = null, array $elements = [])
     {
         $this->setAlgorithm($Algorithm);
         $this->setMinKeySize($MinKeySize);
         $this->setMaxKeySize($MaxKeySize);
+        $this->setElements($elements);
     }
 
 
@@ -155,7 +164,16 @@ final class SigningMethod extends AbstractAlgElement
         $MinKeySize = self::getIntegerAttribute($xml, 'MinKeySize', null);
         $MaxKeySize = self::getIntegerAttribute($xml, 'MaxKeySize', null);
 
-        return new static($Algorithm, $MinKeySize, $MaxKeySize);
+        $elements = [];
+        foreach ($xml->childNodes as $element) {
+            if (!($element instanceof DOMElement)) {
+                continue;
+            }
+
+            $elements[] = new Chunk($element);
+        }
+
+        return new static($Algorithm, $MinKeySize, $MaxKeySize, $elements);
     }
 
 
@@ -177,6 +195,10 @@ final class SigningMethod extends AbstractAlgElement
 
         if ($this->MaxKeySize !== null) {
             $e->setAttribute('MaxKeySize', strval($this->MaxKeySize));
+        }
+
+        foreach ($this->elements as $element) {
+            $e->appendChild($e->ownerDocument->importNode($element->getXML(), true));
         }
 
         return $e;

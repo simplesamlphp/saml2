@@ -18,41 +18,22 @@
         targetNamespace="urn:x-simplesamlphp:namespace"
         version="0.1" elementFormDefault="qualified"> 
 
+<include schemaLocation='../../../vendor/simplesamlphp/xml-common/tests/resources/schemas/simplesamlphp.xsd'/>
 <import namespace='urn:oasis:names:tc:SAML:2.0:metadata'
-          schemaLocation='../../../schemas/saml-schema-metadata-2.0.xsd'/>
-
-<!-- Start ExtendableElement -->
-
-<element name="ExtendableElement" type="ssp:ExtendableElementType"/>
-<complexType name="ExtendableElementType">
-  <sequence> 
-    <element ref="ssp:Chunk"/> 
-    <any namespace="##other" processContents="lax"/>
-    <!-- (1,1) elements from (1,1) external namespace -->
-  </sequence>  
-</complexType>
-
-<!-- End ExtendableElement -->
-
-<!-- Start Chunk -->
-
-<element name="Chunk" type="string"/>
-
-<!-- End Chunk -->
+        schemaLocation='../../../schemas/saml-schema-metadata-2.0.xsd'/>
 
 <!-- Start SomeRoleDescriptor -->
 
 <element name="SomeRoleDescriptor" type="ssp:SomeRoleDescriptorType"/>
-
-    <complexType name="SomeRoleDescriptorType">
-        <complexContent>
-            <extension base="md:RoleDescriptorType">
-                <sequence>
-                    <element ref="ssp:Chunk" maxOccurs="unbounded"/>
-                </sequence>
-            </extension>
-        </complexContent>
-    </complexType>
+<complexType name="SomeRoleDescriptorType">
+  <complexContent>
+    <extension base="md:RoleDescriptorType">
+      <sequence>
+        <element ref="ssp:Chunk" maxOccurs="unbounded"/>
+      </sequence>
+    </extension>
+  </complexContent>
+</complexType>
 
 <!-- End SomeRoleDescriptor -->
 
