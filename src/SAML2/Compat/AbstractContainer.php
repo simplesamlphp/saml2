@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\Compat;
 
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XML\AbstractElement;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 
@@ -120,16 +120,16 @@ abstract class AbstractContainer
     /**
      * Register a class that can handle given extension points of the standard.
      *
-     * @param string $class The class name of a class extending AbstractXMLElement or implementing ExtensionPointInterface.
+     * @param string $class The class name of a class extending AbstractElement or implementing ExtensionPointInterface.
      * @psalm-param class-string $class
      */
     public function registerExtensionHandler(string $class): void
     {
-        Assert::subclassOf($class, AbstractXMLElement::class);
+        Assert::subclassOf($class, AbstractElement::class);
         if (is_subclass_of($class, ExtensionPointInterface::class, true)) {
             $key = implode(':', [self::XSI_TYPE_PREFIX, $class::getXsiTypeNamespaceURI(), $class::getXsiTypeName()]);
         } else {
-            $className = AbstractXMLElement::getClassName($class);
+            $className = AbstractElement::getClassName($class);
             $key = ($class::NS === null) ? $className : implode(':', [$class::NS, $className]);
         }
         $this->registry[$key] = $class;
@@ -140,12 +140,12 @@ abstract class AbstractContainer
      * Search for a class that implements an $element in the given $namespace.
      *
      * Such classes must have been registered previously by calling registerExtensionHandler(), and they must
-     * extend \SimpleSAML\XML\AbstractXMLElement.
+     * extend \SimpleSAML\XML\AbstractElement.
      *
      * @param string|null $namespace The namespace URI for the given element.
      * @param string $element The local name of the element.
      *
-     * @return string|null The fully-qualified name of a class extending \SimpleSAML\XML\AbstractXMLElement and
+     * @return string|null The fully-qualified name of a class extending \SimpleSAML\XML\AbstractElement and
      * implementing support for the given element, or null if no such class has been registered before.
      * @psalm-return class-string|null
      */

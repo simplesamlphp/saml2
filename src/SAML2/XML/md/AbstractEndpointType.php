@@ -24,7 +24,7 @@ use SimpleSAML\XML\ExtendableElementTrait;
  *   - Alternatively, you may want to extend the type to add new attributes (e.g look at IndexedEndpointType). In that
  *     case, you cannot use this class normally, as if you change the signature of the constructor, you cannot call
  *     fromXML() in this class. In order to process an XML document, you can use the get*Attribute() static methods
- *     from AbstractXMLElement, and reimplement the fromXML() method with them to suit your new constructor.
+ *     from AbstractElement, and reimplement the fromXML() method with them to suit your new constructor.
  *
  * @package simplesamlphp/saml2
  */

@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XML\AbstractElement;
 use SimpleSAML\Assert\Assert;
 
 use function gettype;
@@ -25,7 +25,7 @@ use function is_string;
 class AttributeValue extends AbstractSamlElement
 {
     /**
-     * @var string|int|\SimpleSAML\XML\AbstractXMLElement|null
+     * @var string|int|\SimpleSAML\XML\AbstractElement|null
      */
     protected $value;
 
@@ -37,7 +37,7 @@ class AttributeValue extends AbstractSamlElement
      *  - string
      *  - int
      *  - null
-     *  - \SimpleSAML\XML\AbstractXMLElement[]
+     *  - \SimpleSAML\XML\AbstractElement[]
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied value is neither a string or a DOMElement
      */
@@ -45,13 +45,13 @@ class AttributeValue extends AbstractSamlElement
     {
         Assert::true(
             is_string($value) || is_int($value) || is_null($value) || is_array($value),
-            'Value must be of type "string", "int", "null", or an array of "AbstractXMLElement".'
+            'Value must be of type "string", "int", "null", or an array of "AbstractElement".'
         );
         if (is_array($value)) {
             Assert::allIsInstanceOf(
                 $value,
-                AbstractXMLElement::class,
-                'All values passed as an array must be an instance of "AbstractXMLElement".'
+                AbstractElement::class,
+                'All values passed as an array must be an instance of "AbstractElement".'
             );
         }
         $this->value = $value;
@@ -73,8 +73,8 @@ class AttributeValue extends AbstractSamlElement
             case "NULL":
                 return "xs:nil";
             case "object":
-                /** @var \SimpleSAML\XML\AbstractXMLElement $this->value */
-                return $this->value::getNamespacePrefix() . ":" . AbstractXMLElement::getClassName(get_class($this->value));
+                /** @var \SimpleSAML\XML\AbstractElement $this->value */
+                return $this->value::getNamespacePrefix() . ":" . AbstractElement::getClassName(get_class($this->value));
             default:
                 return "xs:string";
         }
@@ -84,7 +84,7 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Get this attribute value.
      *
-     * @return string|int|\SimpleSAML\XML\AbstractXMLElement[]|null
+     * @return string|int|\SimpleSAML\XML\AbstractElement[]|null
      */
     public function getValue()
     {

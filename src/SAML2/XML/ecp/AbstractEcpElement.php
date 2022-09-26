@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\ecp;
 
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\XML\AbstractXMLElement;
+use SimpleSAML\XML\AbstractElement;
 
 /**
  * Abstract class to be implemented by all the classes in this namespace
  *
  * @package simplesamlphp/saml2
  */
-abstract class AbstractEcpElement extends AbstractXMLElement
+abstract class AbstractEcpElement extends AbstractElement
 {
     /** @var string */
     public const NS = C::NS_ECP;
