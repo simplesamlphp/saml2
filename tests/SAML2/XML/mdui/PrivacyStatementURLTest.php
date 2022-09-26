@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL;
-use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
+use SimpleSAML\Test\XML\ArrayizableElementTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -28,7 +28,7 @@ use function strval;
  */
 final class PrivacyStatementURLTest extends TestCase
 {
-    use ArrayizableXMLTestTrait;
+    use ArrayizableElementTestTrait;
     use SerializableElementTestTrait;
 
 

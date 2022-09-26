@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\OrganizationName;
-use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
+use SimpleSAML\Test\XML\ArrayizableElementTestTrait;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -27,7 +27,7 @@ use function strval;
  */
 final class OrganizationNameTest extends TestCase
 {
-    use ArrayizableXMLTestTrait;
+    use ArrayizableElementTestTrait;
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 

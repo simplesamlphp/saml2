@@ -11,7 +11,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\mdui\Logo;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
+use SimpleSAML\Test\XML\ArrayizableElementTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -27,7 +27,7 @@ use function strval;
  */
 final class LogoTest extends TestCase
 {
-    use ArrayizableXMLTestTrait;
+    use ArrayizableElementTestTrait;
     use SerializableElementTestTrait;
 
 

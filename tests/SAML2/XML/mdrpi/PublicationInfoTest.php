@@ -10,7 +10,7 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
-use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
+use SimpleSAML\Test\XML\ArrayizableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -28,7 +28,7 @@ use function strval;
  */
 final class PublicationInfoTest extends TestCase
 {
-    use ArrayizableXMLTestTrait;
+    use ArrayizableElementTestTrait;
     use SerializableElementTestTrait;
 
 

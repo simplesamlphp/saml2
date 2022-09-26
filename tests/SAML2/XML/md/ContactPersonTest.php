@@ -16,7 +16,7 @@ use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\md\GivenName;
 use SimpleSAML\SAML2\XML\md\SurName;
 use SimpleSAML\SAML2\XML\md\TelephoneNumber;
-use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
+use SimpleSAML\Test\XML\ArrayizableElementTestTrait;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\Chunk;
@@ -36,7 +36,7 @@ use function strval;
  */
 final class ContactPersonTest extends TestCase
 {
-    use ArrayizableXMLTestTrait;
+    use ArrayizableElementTestTrait;
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
