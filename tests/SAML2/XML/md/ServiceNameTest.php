@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\ServiceName;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableXMLTestTrait;
+use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function dirname;
@@ -28,7 +28,7 @@ use function strval;
 final class ServiceNameTest extends TestCase
 {
     use SchemaValidationTestTrait;
-    use SerializableXMLTestTrait;
+    use SerializableElementTestTrait;
 
 
     /** @var array */

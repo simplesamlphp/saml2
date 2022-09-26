@@ -10,7 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\mdui\DisplayName;
 use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
-use SimpleSAML\Test\XML\SerializableXMLTestTrait;
+use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function dirname;
@@ -27,7 +27,7 @@ use function strval;
 final class DisplayNameTest extends TestCase
 {
     use ArrayizableXMLTestTrait;
-    use SerializableXMLTestTrait;
+    use SerializableElementTestTrait;
 
 
     /**

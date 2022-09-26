@@ -13,7 +13,7 @@ use SimpleSAML\SAML2\XML\md\AuthzService;
 use SimpleSAML\SAML2\XML\md\NameIDFormat;
 use SimpleSAML\SAML2\XML\md\PDPDescriptor;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableXMLTestTrait;
+use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function dirname;
@@ -31,7 +31,7 @@ use function strval;
 final class PDPDescriptorTest extends TestCase
 {
     use SchemaValidationTestTrait;
-    use SerializableXMLTestTrait;
+    use SerializableElementTestTrait;
 
 
     /** @var \SimpleSAML\SAML2\XML\md\AuthzService */

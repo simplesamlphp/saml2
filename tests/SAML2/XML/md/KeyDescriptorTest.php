@@ -10,7 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\EncryptionMethod;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableXMLTestTrait;
+use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\XML\ds\AbstractDsElement;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
@@ -29,7 +29,7 @@ use function strval;
 final class KeyDescriptorTest extends TestCase
 {
     use SchemaValidationTestTrait;
-    use SerializableXMLTestTrait;
+    use SerializableElementTestTrait;
 
 
     /**

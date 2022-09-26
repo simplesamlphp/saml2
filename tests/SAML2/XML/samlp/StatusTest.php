@@ -12,7 +12,7 @@ use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\SAML2\XML\samlp\StatusDetail;
 use SimpleSAML\SAML2\XML\samlp\StatusMessage;
-use SimpleSAML\Test\XML\SerializableXMLTestTrait;
+use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
 
@@ -29,7 +29,7 @@ use function strval;
  */
 final class StatusTest extends TestCase
 {
-    use SerializableXMLTestTrait;
+    use SerializableElementTestTrait;
 
     /** @var \DOMDocument $detail */
     private DOMDocument $detail;

@@ -18,7 +18,7 @@ use SimpleSAML\SAML2\XML\mdui\Logo;
 use SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL;
 use SimpleSAML\SAML2\XML\mdui\UIInfo;
 use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
-use SimpleSAML\Test\XML\SerializableXMLTestTrait;
+use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -35,7 +35,7 @@ use function strval;
 final class UIInfoTest extends TestCase
 {
     use ArrayizableXMLTestTrait;
-    use SerializableXMLTestTrait;
+    use SerializableElementTestTrait;
 
 
     /**

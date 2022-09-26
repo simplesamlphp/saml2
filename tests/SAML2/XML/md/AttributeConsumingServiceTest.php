@@ -14,7 +14,7 @@ use SimpleSAML\SAML2\XML\md\ServiceDescription;
 use SimpleSAML\SAML2\XML\md\ServiceName;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableXMLTestTrait;
+use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -33,7 +33,7 @@ use function strval;
 final class AttributeConsumingServiceTest extends TestCase
 {
     use SchemaValidationTestTrait;
-    use SerializableXMLTestTrait;
+    use SerializableElementTestTrait;
 
 
     /**

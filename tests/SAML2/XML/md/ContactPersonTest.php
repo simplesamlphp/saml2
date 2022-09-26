@@ -18,7 +18,7 @@ use SimpleSAML\SAML2\XML\md\SurName;
 use SimpleSAML\SAML2\XML\md\TelephoneNumber;
 use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableXMLTestTrait;
+use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -38,7 +38,7 @@ final class ContactPersonTest extends TestCase
 {
     use ArrayizableXMLTestTrait;
     use SchemaValidationTestTrait;
-    use SerializableXMLTestTrait;
+    use SerializableElementTestTrait;
 
 
     /**

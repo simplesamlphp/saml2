@@ -13,7 +13,7 @@ use SimpleSAML\SAML2\XML\mdui\GeolocationHint;
 use SimpleSAML\SAML2\XML\mdui\IPHint;
 use SimpleSAML\SAML2\XML\mdui\Keywords;
 use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
-use SimpleSAML\Test\XML\SerializableXMLTestTrait;
+use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -30,7 +30,7 @@ use function strval;
 final class DiscoHintsTest extends TestCase
 {
     use ArrayizableXMLTestTrait;
-    use SerializableXMLTestTrait;
+    use SerializableElementTestTrait;
 
 
     /**

@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\XML\mdui\Keywords;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\Test\XML\ArrayizableXMLTestTrait;
-use SimpleSAML\Test\XML\SerializableXMLTestTrait;
+use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
@@ -27,7 +27,7 @@ use function strval;
 final class KeywordsTest extends TestCase
 {
     use ArrayizableXMLTestTrait;
-    use SerializableXMLTestTrait;
+    use SerializableElementTestTrait;
 
 
     /**

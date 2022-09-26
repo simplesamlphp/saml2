@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\ecp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Test\XML\SerializableXMLTestTrait;
+use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -22,7 +22,7 @@ use function strval;
  */
 final class RequestAuthenticatedTest extends TestCase
 {
-    use SerializableXMLTestTrait;
+    use SerializableElementTestTrait;
 
 
     /**
