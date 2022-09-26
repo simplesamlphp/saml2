@@ -8,7 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\XML\XMLElementInterface;
+use SimpleSAML\XML\ElementInterface;
 
 use function in_array;
 
@@ -19,14 +19,14 @@ use function in_array;
  */
 trait ExtensionsTrait
 {
-    /** @var \SimpleSAML\XML\XMLElementInterface[] */
+    /** @var \SimpleSAML\XML\ElementInterface[] */
     protected array $extensions = [];
 
 
     /**
      * Extensions constructor.
      *
-     * @param \SimpleSAML\XML\XMLElementInterface[] $extensions
+     * @param \SimpleSAML\XML\ElementInterface[] $extensions
      */
     public function __construct(array $extensions)
     {
@@ -37,11 +37,11 @@ trait ExtensionsTrait
     /**
      * Set an array with all extensions present.
      *
-     * @param array \SimpleSAML\XML\XMLElementInterface[] $extensions
+     * @param array \SimpleSAML\XML\ElementInterface[] $extensions
      */
     protected function setList(array $extensions): void
     {
-        Assert::allIsInstanceOf($extensions, XMLElementInterface::class);
+        Assert::allIsInstanceOf($extensions, ElementInterface::class);
 
         foreach ($extensions as $extension) {
             $namespace = $extension->getNamespaceURI();
@@ -65,7 +65,7 @@ trait ExtensionsTrait
     /**
      * Get an array with all extensions present.
      *
-     * @return \SimpleSAML\XML\XMLElementInterface[]
+     * @return \SimpleSAML\XML\ElementInterface[]
      */
     public function getList(): array
     {
