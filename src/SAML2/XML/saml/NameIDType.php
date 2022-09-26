@@ -20,7 +20,6 @@ use SimpleSAML\XMLSecurity\Constants as C;
 abstract class NameIDType extends AbstractBaseIDType
 {
     use StringElementTrait;
-    use EncryptableElementTrait;
 
     /**
      * A URI reference representing the classification of string-based identifier information. See Section 8.3 for the
