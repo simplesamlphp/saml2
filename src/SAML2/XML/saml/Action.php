@@ -8,7 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\XMLStringElementTrait;
+use SimpleSAML\XML\StringElementTrait;
 
 /**
  * Class representing SAML2 Action
@@ -17,7 +17,7 @@ use SimpleSAML\XML\XMLStringElementTrait;
  */
 final class Action extends AbstractSamlElement
 {
-    use XMLStringElementTrait;
+    use StringElementTrait;
 
 
     /**
@@ -70,11 +70,11 @@ final class Action extends AbstractSamlElement
      * Convert XML into a Action
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\saml\Action
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'Action', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Action::NS, InvalidDOMElementException::class);
