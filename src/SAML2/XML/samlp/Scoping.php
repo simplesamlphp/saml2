@@ -125,7 +125,7 @@ final class Scoping extends AbstractSamlpElement
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'Scoping', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Scoping::NS, InvalidDOMElementException::class);
@@ -134,7 +134,7 @@ final class Scoping extends AbstractSamlpElement
         $idpList = IDPList::getChildrenOfClass($xml);
         $requesterId = RequesterID::getChildrenOfClass($xml);
 
-        return new self(
+        return new static(
             is_null($proxyCount) ? null : intval($proxyCount),
             array_pop($idpList),
             $requesterId

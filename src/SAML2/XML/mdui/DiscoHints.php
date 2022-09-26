@@ -175,7 +175,7 @@ final class DiscoHints extends AbstractMduiElement
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'DiscoHints', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, DiscoHints::NS, InvalidDOMElementException::class);
@@ -190,7 +190,7 @@ final class DiscoHints extends AbstractMduiElement
             $children[] = new Chunk($node);
         }
 
-        return new self($children, $IPHint, $DomainHint, $GeolocationHint);
+        return new static($children, $IPHint, $DomainHint, $GeolocationHint);
     }
 
 
@@ -230,7 +230,7 @@ final class DiscoHints extends AbstractMduiElement
      * @param array $data
      * @return self
      */
-    public static function fromArray(array $data): object
+    public static function fromArray(array $data): static
     {
         $IPHint = [];
         foreach ($data['IPHint'] as $hint) {
@@ -247,7 +247,7 @@ final class DiscoHints extends AbstractMduiElement
             $GeolocationHint[] = new GeolocationHint($hint);
         }
 
-        return new self([], $IPHint, $DomainHint, $GeolocationHint);
+        return new static([], $IPHint, $DomainHint, $GeolocationHint);
     }
 
 

@@ -127,7 +127,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'EntityDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, EntityDescriptor::NS, InvalidDOMElementException::class);
@@ -205,7 +205,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
             ProtocolViolationException::class,
         );
 
-        $entity = new self(
+        $entity = new static(
             $entityID,
             self::getAttribute($xml, 'ID', null),
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,

@@ -243,7 +243,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'SPSSODescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SPSSODescriptor::NS, InvalidDOMElementException::class);
@@ -259,7 +259,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
-        $spssod = new self(
+        $spssod = new static(
             AssertionConsumerService::getChildrenOfClass($xml),
             preg_split('/[\s]+/', trim($protocols)),
             self::getBooleanAttribute($xml, 'AuthnRequestsSigned', null),

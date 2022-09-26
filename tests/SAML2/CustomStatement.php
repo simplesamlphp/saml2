@@ -74,7 +74,7 @@ final class CustomStatement extends AbstractStatement
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'Statement', InvalidDOMElementException::class);
         Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
@@ -90,7 +90,7 @@ final class CustomStatement extends AbstractStatement
 
         $audience = Audience::getChildrenOfClass($xml);
 
-        return new self($audience);
+        return new static($audience);
     }
 
 

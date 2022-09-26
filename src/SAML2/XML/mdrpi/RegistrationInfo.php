@@ -156,7 +156,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'RegistrationInfo', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, RegistrationInfo::NS, InvalidDOMElementException::class);
@@ -171,7 +171,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
         }
         $RegistrationPolicy = RegistrationPolicy::getChildrenOfClass($xml);
 
-        return new self($registrationAuthority, $registrationInstant, $RegistrationPolicy);
+        return new static($registrationAuthority, $registrationInstant, $RegistrationPolicy);
     }
 
 
@@ -204,7 +204,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
      * @param array $data
      * @return self
      */
-    public static function fromArray(array $data): object
+    public static function fromArray(array $data): static
     {
         Assert::keyExists($data, 'registrationAuthority');
 
@@ -222,7 +222,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
             $registrationPolicy[] = RegistrationPolicy::fromArray([$k => $v]);
         }
 
-        return new self($registrationAuthority, $registrationInstant, $registrationPolicy);
+        return new static($registrationAuthority, $registrationInstant, $registrationPolicy);
     }
 
 

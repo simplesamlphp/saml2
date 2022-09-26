@@ -53,7 +53,7 @@ final class RequestInitiator extends AbstractEndpointType
      * @return static
      * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         $qualifiedName = static::getClassName(static::class);
         Assert::eq(

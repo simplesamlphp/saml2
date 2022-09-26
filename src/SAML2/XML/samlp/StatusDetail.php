@@ -54,7 +54,7 @@ final class StatusDetail extends AbstractSamlpElement
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'StatusDetail', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, StatusDetail::NS, InvalidDOMElementException::class);
@@ -68,7 +68,7 @@ final class StatusDetail extends AbstractSamlpElement
             $details[] = new Chunk($detail);
         }
 
-        return new self($details);
+        return new static($details);
     }
 
 

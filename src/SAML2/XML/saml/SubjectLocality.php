@@ -106,12 +106,12 @@ final class SubjectLocality extends AbstractSamlElement
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'SubjectLocality', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SubjectLocality::NS, InvalidDOMElementException::class);
 
-        return new self(
+        return new static(
             self::getAttribute($xml, 'Address', null),
             self::getAttribute($xml, 'DNSName', null)
         );

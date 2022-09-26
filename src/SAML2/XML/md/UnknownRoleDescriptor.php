@@ -31,7 +31,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
 
@@ -42,7 +42,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
 
-        $object = new self(
+        $object = new static(
             preg_split('/[\s]+/', trim($protocols)),
             self::getAttribute($xml, 'ID', null),
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,

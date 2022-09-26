@@ -62,7 +62,7 @@ class LogoutResponse extends AbstractStatusResponse
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'LogoutResponse', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, LogoutResponse::NS, InvalidDOMElementException::class);
@@ -86,7 +86,7 @@ class LogoutResponse extends AbstractStatusResponse
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');
 
-        $response = new self(
+        $response = new static(
             array_pop($status),
             array_pop($issuer),
             self::getAttribute($xml, 'ID'),

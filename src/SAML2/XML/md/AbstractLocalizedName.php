@@ -87,7 +87,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, static::getLocalName(), InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, static::NS, InvalidDOMElementException::class);
@@ -121,7 +121,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement
      * @param array $data
      * @return self
      */
-    public static function fromArray(array $data): object
+    public static function fromArray(array $data): static
     {
         $lang = array_key_first($data);
         $value = $data[$lang];

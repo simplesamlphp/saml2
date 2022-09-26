@@ -90,7 +90,7 @@ final class IDPList extends AbstractSamlpElement
      * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'IDPList', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, IDPList::NS, InvalidDOMElementException::class);
@@ -101,7 +101,7 @@ final class IDPList extends AbstractSamlpElement
         $getComplete = GetComplete::getChildrenOfClass($xml);
         Assert::maxCount($getComplete, 1, 'Only one <samlp:GetComplete> element is allowed.', TooManyElementsException::class);
 
-        return new self(
+        return new static(
             $idpEntry,
             empty($getComplete) ? null : array_pop($getComplete)
         );

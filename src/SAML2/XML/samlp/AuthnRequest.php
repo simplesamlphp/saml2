@@ -440,7 +440,7 @@ class AuthnRequest extends AbstractRequest
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'AuthnRequest', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AuthnRequest::NS, InvalidDOMElementException::class);
@@ -484,7 +484,7 @@ class AuthnRequest extends AbstractRequest
         $scoping = Scoping::getChildrenOfClass($xml);
         Assert::maxCount($scoping, 1, 'Only one <samlp:Scoping> element is allowed.', TooManyElementsException::class);
 
-        $request = new self(
+        $request = new static(
             array_pop($requestedAuthnContext),
             array_pop($subject),
             array_pop($nameIdPolicy),

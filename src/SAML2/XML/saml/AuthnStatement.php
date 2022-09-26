@@ -184,7 +184,7 @@ final class AuthnStatement extends AbstractStatementType
      * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
      * @throws \Exception if the authentication instant is not a valid timestamp.
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'AuthnStatement', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AuthnStatement::NS, InvalidDOMElementException::class);
@@ -215,7 +215,7 @@ final class AuthnStatement extends AbstractStatementType
 
         $subjectLocality = SubjectLocality::getChildrenOfClass($xml);
 
-        return new self(
+        return new static(
             array_pop($authnContext),
             $authnInstant,
             $sessionNotOnOrAfter,

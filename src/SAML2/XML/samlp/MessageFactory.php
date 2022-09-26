@@ -26,7 +26,7 @@ abstract class MessageFactory
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): AbstractMessage
     {
         Assert::same(
             $xml->namespaceURI,

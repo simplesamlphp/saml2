@@ -111,7 +111,7 @@ class Response extends AbstractStatusResponse
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'Response', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Response::NS, InvalidDOMElementException::class);
@@ -157,7 +157,7 @@ class Response extends AbstractStatusResponse
             }
         }
 
-        $response = new self(
+        $response = new static(
             array_pop($status),
             empty($issuer) ? null : array_pop($issuer),
             $id,

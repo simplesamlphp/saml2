@@ -176,7 +176,7 @@ class LogoutRequest extends AbstractRequest
      * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'LogoutRequest', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, LogoutRequest::NS, InvalidDOMElementException::class);
@@ -214,7 +214,7 @@ class LogoutRequest extends AbstractRequest
 
         $sessionIndex = SessionIndex::getChildrenOfClass($xml);
 
-        $request = new self(
+        $request = new static(
             $identifier,
             $notOnOrAfter,
             self::getAttribute($xml, 'Reason', null),

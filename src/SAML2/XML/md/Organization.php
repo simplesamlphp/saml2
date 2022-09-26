@@ -151,7 +151,7 @@ final class Organization extends AbstractMdElement
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'Organization', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Organization::NS, InvalidDOMElementException::class);
@@ -178,7 +178,7 @@ final class Organization extends AbstractMdElement
             TooManyElementsException::class
         );
 
-        return new self(
+        return new static(
             $names,
             $displayNames,
             $urls,

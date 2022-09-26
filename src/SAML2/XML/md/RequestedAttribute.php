@@ -86,12 +86,12 @@ final class RequestedAttribute extends Attribute
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'RequestedAttribute', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, RequestedAttribute::NS, InvalidDOMElementException::class);
 
-        return new self(
+        return new static(
             self::getAttribute($xml, 'Name'),
             self::getBooleanAttribute($xml, 'isRequired', null),
             self::getAttribute($xml, 'NameFormat', null),

@@ -277,7 +277,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * @throws \SimpleSAML\Assert\AssertionFailedException
      *   if NotBefore or NotOnOrAfter contain an invalid date.
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'SubjectConfirmationData', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SubjectConfirmationData::NS, InvalidDOMElementException::class);
@@ -311,7 +311,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
             }
         }
 
-        return new self(
+        return new static(
             $NotBefore,
             $NotOnOrAfter,
             $Recipient,

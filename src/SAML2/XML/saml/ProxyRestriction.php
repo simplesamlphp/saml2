@@ -91,7 +91,7 @@ final class ProxyRestriction extends AbstractConditionType
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'ProxyRestriction', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ProxyRestriction::NS, InvalidDOMElementException::class);
@@ -99,7 +99,7 @@ final class ProxyRestriction extends AbstractConditionType
         $count = self::getIntegerAttribute($xml, 'Count', null);
         $audience = Audience::getChildrenOfClass($xml);
 
-        return new self($audience, $count);
+        return new static($audience, $count);
     }
 
 

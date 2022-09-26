@@ -51,11 +51,11 @@ final class AttributeProfile extends AbstractMdElement
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   If the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'AttributeProfile', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AttributeProfile::NS, InvalidDOMElementException::class);
 
-        return new self($xml->textContent);
+        return new static($xml->textContent);
     }
 }

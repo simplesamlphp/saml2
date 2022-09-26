@@ -88,7 +88,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'AffiliationDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AffiliationDescriptor::NS, InvalidDOMElementException::class);
@@ -107,7 +107,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
-        $afd = new self(
+        $afd = new static(
             $owner,
             $members,
             self::getAttribute($xml, 'ID', null),

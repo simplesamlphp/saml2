@@ -74,7 +74,7 @@ final class Response extends AbstractEcpElement
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing any of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'Response', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Response::NS, InvalidDOMElementException::class);
@@ -112,7 +112,7 @@ final class Response extends AbstractEcpElement
             ProtocolViolationException::class,
         );
 
-        return new self(self::getAttribute($xml, 'AssertionConsumerServiceURL'));
+        return new static(self::getAttribute($xml, 'AssertionConsumerServiceURL'));
     }
 
 

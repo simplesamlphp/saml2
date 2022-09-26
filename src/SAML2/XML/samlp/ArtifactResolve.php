@@ -96,7 +96,7 @@ class ArtifactResolve extends AbstractRequest
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'ArtifactResolve', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ArtifactResolve::NS, InvalidDOMElementException::class);
@@ -120,7 +120,7 @@ class ArtifactResolve extends AbstractRequest
         $results = XPath::xpQuery($xml, './saml_protocol:Artifact', XPath::getXPath($xml));
         $artifact = $results[0]->textContent;
 
-        $resolve = new self(
+        $resolve = new static(
             $artifact,
             array_pop($issuer),
             self::getAttribute($xml, 'ID'),

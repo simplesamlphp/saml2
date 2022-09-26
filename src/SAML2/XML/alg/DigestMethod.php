@@ -78,14 +78,14 @@ final class DigestMethod extends AbstractAlgElement
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the mandatory Algorithm-attribute is missing
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'DigestMethod', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, DigestMethod::NS, InvalidDOMElementException::class);
 
         $Algorithm = self::getAttribute($xml, 'Algorithm');
 
-        return new self($Algorithm);
+        return new static($Algorithm);
     }
 
 

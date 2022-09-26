@@ -44,7 +44,7 @@ final class NameID extends NameIDType
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'NameID', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, NameID::NS, InvalidDOMElementException::class);
@@ -54,6 +54,6 @@ final class NameID extends NameIDType
         $Format = self::getAttribute($xml, 'Format', null);
         $SPProvidedID = self::getAttribute($xml, 'SPProvidedID', null);
 
-        return new self($xml->textContent, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
+        return new static($xml->textContent, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
     }
 }

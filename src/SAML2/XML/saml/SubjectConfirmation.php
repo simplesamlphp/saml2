@@ -112,7 +112,7 @@ final class SubjectConfirmation extends AbstractSamlElement
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'SubjectConfirmation', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SubjectConfirmation::NS, InvalidDOMElementException::class);
@@ -128,7 +128,7 @@ final class SubjectConfirmation extends AbstractSamlElement
             TooManyElementsException::class
         );
 
-        return new self(
+        return new static(
             $Method,
             $identifier,
             array_pop($subjectConfirmationData)

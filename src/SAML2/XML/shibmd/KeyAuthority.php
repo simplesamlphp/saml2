@@ -102,7 +102,7 @@ final class KeyAuthority extends AbstractShibmdElement
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'KeyAuthority', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, KeyAuthority::NS, InvalidDOMElementException::class);
@@ -113,7 +113,7 @@ final class KeyAuthority extends AbstractShibmdElement
         $keys = KeyInfo::getChildrenOfClass($xml);
         Assert::minCount($keys, 1);
 
-        return new self($keys, $verifyDepth, self::getAttributesNSFromXML($xml));
+        return new static($keys, $verifyDepth, self::getAttributesNSFromXML($xml));
     }
 
 

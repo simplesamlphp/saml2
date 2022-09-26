@@ -168,7 +168,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing any of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         $qualifiedName = static::getClassName(static::class);
         Assert::eq(

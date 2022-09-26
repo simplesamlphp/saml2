@@ -432,7 +432,7 @@ class Assertion extends AbstractSamlElement implements
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      * @throws \Exception
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'Assertion', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Assertion::NS, InvalidDOMElementException::class);
@@ -469,7 +469,7 @@ class Assertion extends AbstractSamlElement implements
         $attrStatement = AttributeStatement::getChildrenOfClass($xml);
         $statements = AbstractStatement::getChildrenOfClass($xml);
 
-        $assertion = new self(
+        $assertion = new static(
             array_pop($issuer),
             self::getAttribute($xml, 'ID'),
             $issueInstant,

@@ -95,7 +95,7 @@ final class StatusCode extends AbstractSamlpElement
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'StatusCode', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, StatusCode::NS, InvalidDOMElementException::class);
@@ -103,7 +103,7 @@ final class StatusCode extends AbstractSamlpElement
         $Value = self::getAttribute($xml, 'Value');
         $subCodes = StatusCode::getChildrenOfClass($xml);
 
-        return new self(
+        return new static(
             $Value,
             $subCodes
         );

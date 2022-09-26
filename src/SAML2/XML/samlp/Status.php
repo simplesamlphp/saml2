@@ -140,7 +140,7 @@ final class Status extends AbstractSamlpElement
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'Status', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Status::NS, InvalidDOMElementException::class);
@@ -154,7 +154,7 @@ final class Status extends AbstractSamlpElement
 
         $statusDetails = StatusDetail::getChildrenOfClass($xml);
 
-        return new self(
+        return new static(
             array_pop($statusCode),
             array_pop($statusMessage),
             $statusDetails

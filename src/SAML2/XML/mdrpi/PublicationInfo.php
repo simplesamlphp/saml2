@@ -186,7 +186,7 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'PublicationInfo', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, PublicationInfo::NS, InvalidDOMElementException::class);
@@ -203,7 +203,7 @@ final class PublicationInfo extends AbstractMdrpiElement
         $publicationId = self::getAttribute($xml, 'publicationId', null);
         $UsagePolicy = UsagePolicy::getChildrenOfClass($xml);
 
-        return new self($publisher, $creationInstant, $publicationId, $UsagePolicy);
+        return new static($publisher, $creationInstant, $publicationId, $UsagePolicy);
     }
 
 
@@ -240,7 +240,7 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @param array $data
      * @return self
      */
-    public static function fromArray(array $data): object
+    public static function fromArray(array $data): static
     {
         Assert::keyExists($data, 'publisher');
 
@@ -261,7 +261,7 @@ final class PublicationInfo extends AbstractMdrpiElement
             $usagePolicy[] = UsagePolicy::fromArray([$k => $v]);
         }
 
-        return new self($publisher, $creationInstant, $publicationId, $usagePolicy);
+        return new static($publisher, $creationInstant, $publicationId, $usagePolicy);
     }
 
 

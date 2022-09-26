@@ -121,7 +121,7 @@ final class NameIDPolicy extends AbstractSamlpElement
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'NameIDPolicy', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, NameIDPolicy::NS, InvalidDOMElementException::class);
@@ -130,7 +130,7 @@ final class NameIDPolicy extends AbstractSamlpElement
         $SPNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);
         $AllowCreate = self::getAttribute($xml, 'AllowCreate', null);
 
-        return new self(
+        return new static(
             $Format,
             $SPNameQualifier,
             ($AllowCreate === 'true') ? true : false

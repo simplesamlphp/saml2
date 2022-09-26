@@ -231,7 +231,7 @@ final class Conditions extends AbstractSamlElement
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'Conditions', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Conditions::NS, InvalidDOMElementException::class);
@@ -264,7 +264,7 @@ final class Conditions extends AbstractSamlElement
             ProtocolViolationException::class
         );
 
-        return new self(
+        return new static(
             $notBefore !== null ? XMLUtils::xsDateTimeToTimestamp($notBefore) : null,
             $notOnOrAfter !== null ? XMLUtils::xsDateTimeToTimestamp($notOnOrAfter) : null,
             $condition,

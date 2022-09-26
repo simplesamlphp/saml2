@@ -78,7 +78,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'EntitiesDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, EntitiesDescriptor::NS, InvalidDOMElementException::class);
@@ -93,7 +93,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
-        $entities = new self(
+        $entities = new static(
             EntityDescriptor::getChildrenOfClass($xml),
             EntitiesDescriptor::getChildrenOfClass($xml),
             self::getAttribute($xml, 'Name', null),

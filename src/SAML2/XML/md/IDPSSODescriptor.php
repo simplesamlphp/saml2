@@ -142,7 +142,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'IDPSSODescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, IDPSSODescriptor::NS, InvalidDOMElementException::class);
@@ -158,7 +158,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
-        $idpssod = new self(
+        $idpssod = new static(
             SingleSignOnService::getChildrenOfClass($xml),
             preg_split('/[\s]+/', trim($protocols)),
             self::getBooleanAttribute($xml, 'WantAuthnRequestsSigned', null),

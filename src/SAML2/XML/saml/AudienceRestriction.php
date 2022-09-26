@@ -64,14 +64,14 @@ final class AudienceRestriction extends AbstractConditionType
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'AudienceRestriction', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AudienceRestriction::NS, InvalidDOMElementException::class);
 
         $audience = Audience::getChildrenOfClass($xml);
 
-        return new self($audience);
+        return new static($audience);
     }
 
 

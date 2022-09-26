@@ -31,7 +31,7 @@ final class Extensions extends AbstractSamlpElement
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::eq(
             $xml->namespaceURI,
@@ -52,6 +52,6 @@ final class Extensions extends AbstractSamlpElement
             $ret[] = new Chunk($node);
         }
 
-        return new self($ret);
+        return new static($ret);
     }
 }

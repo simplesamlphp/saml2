@@ -84,7 +84,7 @@ final class Scope extends AbstractShibmdElement
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'Scope', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Scope::NS, InvalidDOMElementException::class);
@@ -93,7 +93,7 @@ final class Scope extends AbstractShibmdElement
         /** @psalm-var bool $regexp */
         $regexp = self::getBooleanAttribute($xml, 'regexp', 'false');
 
-        return new self($scope, $regexp);
+        return new static($scope, $regexp);
     }
 
 

@@ -44,15 +44,15 @@ final class TelephoneNumber extends AbstractMdElement
      * Create a class from an array
      *
      * @param array $data
-     * @return self
+     * @return static
      */
-    public static function fromArray(array $data): object
+    public static function fromArray(array $data): static
     {
         Assert::notEmpty($data);
         Assert::count($data, 1);
 
         $index = array_key_first($data);
-        return new self($data[$index]);
+        return new static($data[$index]);
     }
 
 

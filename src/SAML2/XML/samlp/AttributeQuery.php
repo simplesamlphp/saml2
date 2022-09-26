@@ -125,7 +125,7 @@ class AttributeQuery extends AbstractSubjectQuery
      * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'AttributeQuery', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AttributeQuery::NS, InvalidDOMElementException::class);
@@ -154,7 +154,7 @@ class AttributeQuery extends AbstractSubjectQuery
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
-        $request = new self(
+        $request = new static(
             array_pop($subject),
             Attribute::getChildrenOfClass($xml),
             array_pop($issuer),

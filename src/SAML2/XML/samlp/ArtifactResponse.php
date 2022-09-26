@@ -100,7 +100,7 @@ class ArtifactResponse extends AbstractStatusResponse
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'ArtifactResponse', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ArtifactResponse::NS, InvalidDOMElementException::class);
@@ -143,7 +143,7 @@ class ArtifactResponse extends AbstractStatusResponse
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
-        $response = new self(
+        $response = new static(
             array_pop($status),
             empty($issuer) ? null : array_pop($issuer),
             $id,

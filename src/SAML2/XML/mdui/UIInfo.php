@@ -367,7 +367,7 @@ final class UIInfo extends AbstractMduiElement
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'UIInfo', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, UIInfo::NS, InvalidDOMElementException::class);
@@ -387,7 +387,7 @@ final class UIInfo extends AbstractMduiElement
             }
         }
 
-        return new self(
+        return new static(
             $DisplayName,
             $Description,
             $InformationURL,
@@ -449,7 +449,7 @@ final class UIInfo extends AbstractMduiElement
      * @param array $data
      * @return self
      */
-    public static function fromArray(array $data): object
+    public static function fromArray(array $data): static
     {
         $DisplayName = [];
         if (!empty($data['DisplayName'])) {
@@ -493,7 +493,7 @@ final class UIInfo extends AbstractMduiElement
             }
         }
 
-        return new self(
+        return new static(
             $DisplayName,
             $Description,
             $InformationURL,

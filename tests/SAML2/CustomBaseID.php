@@ -71,7 +71,7 @@ final class CustomBaseID extends AbstractBaseID
     /**
      * @inheritDoc
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'BaseID', InvalidDOMElementException::class);
         Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
@@ -90,7 +90,7 @@ final class CustomBaseID extends AbstractBaseID
 
         $audience = Audience::getChildrenOfClass($xml);
 
-        return new self($audience, $nameQualifier, $spNameQualifier);
+        return new static($audience, $nameQualifier, $spNameQualifier);
     }
 
 

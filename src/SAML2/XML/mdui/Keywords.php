@@ -120,7 +120,7 @@ final class Keywords extends AbstractMduiElement
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'Keywords', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Keywords::NS, InvalidDOMElementException::class);
@@ -131,7 +131,7 @@ final class Keywords extends AbstractMduiElement
 
         $Keywords = explode('+', $xml->textContent);
 
-        return new self($lang, $Keywords);
+        return new static($lang, $Keywords);
     }
 
 
@@ -162,7 +162,7 @@ final class Keywords extends AbstractMduiElement
      * @param array $data
      * @return self
      */
-    public static function fromArray(array $data): object
+    public static function fromArray(array $data): static
     {
         Assert::notEmpty($data);
         Assert::count($data, 1);
@@ -170,7 +170,7 @@ final class Keywords extends AbstractMduiElement
         $lang = array_key_first($data);
         $keywords = $data[$lang];
 
-        return new self($lang, $keywords);
+        return new static($lang, $keywords);
     }
 
 

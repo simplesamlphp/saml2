@@ -144,7 +144,7 @@ final class KeyDescriptor extends AbstractMdElement
      * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'KeyDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, KeyDescriptor::NS, InvalidDOMElementException::class);
@@ -153,7 +153,7 @@ final class KeyDescriptor extends AbstractMdElement
         Assert::minCount($keyInfoElements, 1, 'No ds:KeyInfo in the KeyDescriptor.', MissingElementException::class);
         Assert::maxCount($keyInfoElements, 1, 'More than one ds:KeyInfo in the KeyDescriptor.', TooManyElementsException::class);
 
-        return new self(
+        return new static(
             $keyInfoElements[0],
             self::getAttribute($xml, 'use', null),
             EncryptionMethod::getChildrenOfClass($xml)

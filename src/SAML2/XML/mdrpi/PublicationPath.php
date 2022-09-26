@@ -82,14 +82,14 @@ final class PublicationPath extends AbstractMdrpiElement
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'PublicationPath', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, PublicationPath::NS, InvalidDOMElementException::class);
 
         $Publication = Publication::getChildrenOfClass($xml);
 
-        return new self($Publication);
+        return new static($Publication);
     }
 
 
@@ -117,14 +117,14 @@ final class PublicationPath extends AbstractMdrpiElement
      * @param array $data
      * @return self
      */
-    public static function fromArray(array $data): object
+    public static function fromArray(array $data): static
     {
         $publication = [];
         foreach ($data as $p) {
             $publication[] = Publication::fromArray($p);
         }
 
-        return new self($publication);
+        return new static($publication);
     }
 
 

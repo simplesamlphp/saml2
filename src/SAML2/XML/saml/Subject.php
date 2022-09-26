@@ -84,7 +84,7 @@ final class Subject extends AbstractSamlElement
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'Subject', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Subject::NS, InvalidDOMElementException::class);
@@ -101,7 +101,7 @@ final class Subject extends AbstractSamlElement
             );
         }
 
-        return new self(
+        return new static(
             $identifier,
             $subjectConfirmation
         );

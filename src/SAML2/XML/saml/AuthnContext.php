@@ -170,7 +170,7 @@ final class AuthnContext extends AbstractSamlElement
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'AuthnContext', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AuthnContext::NS, InvalidDOMElementException::class);
@@ -201,7 +201,7 @@ final class AuthnContext extends AbstractSamlElement
 
         $authorities = AuthenticatingAuthority::getChildrenOfClass($xml);
 
-        return new self(
+        return new static(
             array_pop($authnContextClassRef),
             array_pop($authnContextDecl),
             array_pop($authnContextDeclRef),

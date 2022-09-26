@@ -101,7 +101,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'AuthnAuthorityDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AuthnAuthorityDescriptor::NS, InvalidDOMElementException::class);
@@ -123,7 +123,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
-        $authority = new self(
+        $authority = new static(
             $authnQueryServices,
             preg_split('/[\s]+/', trim($protocols)),
             $assertionIDRequestServices,

@@ -268,7 +268,7 @@ final class ContactPerson extends AbstractMdElement
      * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
      * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): object
+    public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'ContactPerson', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ContactPerson::NS, InvalidDOMElementException::class);
@@ -290,7 +290,7 @@ final class ContactPerson extends AbstractMdElement
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
 
-        return new self(
+        return new static(
             $contactType,
             array_pop($company),
             array_pop($givenName),
@@ -353,7 +353,7 @@ final class ContactPerson extends AbstractMdElement
      * @param array $data
      * @return self
      */
-    public static function fromArray(array $data): object
+    public static function fromArray(array $data): static
     {
         Assert::keyExists($data, 'ContactType');
 
@@ -396,7 +396,7 @@ final class ContactPerson extends AbstractMdElement
             $attributes[] = $elt->getAttributeNode($name);
         }
 
-        return new self(
+        return new static(
             $ContactType,
             $Company,
             $GivenName,
