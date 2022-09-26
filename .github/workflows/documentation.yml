@@ -16,16 +16,6 @@ jobs:
     runs-on: [ubuntu-latest]
 
     steps:
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
-        with:
-          php-version: '8.0'
-          tools: composer:v2
-          extensions: intl, mbstring, xml
-
-      - name: Setup problem matchers for PHP
-        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
-
       - uses: actions/checkout@v3
 
       - name: Lint markdown files
@@ -33,3 +23,11 @@ jobs:
         with:
           files: .
           ignore_path: .markdownlintignore
+
+      - name: Perform spell check
+        uses: codespell-project/actions-codespell@master
+        with:
+          path: '**/*.md'
+          check_filenames: true
+          ignore_words_list: tekst
+
