@@ -183,7 +183,7 @@ final class AttributeConsumingService extends AbstractMdElement
      * @param \SimpleSAML\SAML2\XML\md\RequestedAttribute[] $requestedAttributes
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
-    public function setRequestedAttributes(array $requestedAttributes): void
+    protected function setRequestedAttributes(array $requestedAttributes): void
     {
         Assert::allIsInstanceOf(
             $requestedAttributes,

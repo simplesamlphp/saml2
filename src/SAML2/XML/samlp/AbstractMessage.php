@@ -367,7 +367,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      *
      * @param string|null $relayState The new RelayState
      */
-    public function setRelayState(string $relayState = null): void
+    private function setRelayState(string $relayState = null): void
     {
         Assert::nullOrNotWhitespaceOnly($relayState);
 

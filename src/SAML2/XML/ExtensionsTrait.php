@@ -39,7 +39,7 @@ trait ExtensionsTrait
      *
      * @param array \SimpleSAML\XML\XMLElementInterface[] $extensions
      */
-    public function setList(array $extensions): void
+    protected function setList(array $extensions): void
     {
         Assert::allIsInstanceOf($extensions, XMLElementInterface::class);
 

@@ -80,7 +80,7 @@ class ArtifactResolve extends AbstractRequest
      *
      * @param string $artifact
      */
-    public function setArtifact(string $artifact): void
+    private function setArtifact(string $artifact): void
     {
         $this->artifact = $artifact;
     }

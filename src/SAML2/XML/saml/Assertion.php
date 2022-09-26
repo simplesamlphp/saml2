@@ -38,7 +38,7 @@ use function array_values;
  *
  * @package simplesamlphp/saml2
  */
-class Assertion extends AbstractSamlElement implements
+final class Assertion extends AbstractSamlElement implements
     EncryptableElementInterface,
     SignableElementInterface,
     SignedElementInterface
@@ -278,7 +278,7 @@ class Assertion extends AbstractSamlElement implements
      *
      * @param string|null $id The new identifier of this assertion.
      */
-    public function setId(?string $id): void
+    private function setId(?string $id): void
     {
         Assert::nullOrNotWhitespaceOnly($id);
 
@@ -306,7 +306,7 @@ class Assertion extends AbstractSamlElement implements
      *
      * @param int|null $issueInstant The new issue timestamp of this assertion, as an UNIX timestamp.
      */
-    public function setIssueInstant(?int $issueInstant): void
+    private function setIssueInstant(?int $issueInstant): void
     {
         if ($issueInstant === null) {
             $issueInstant = Temporal::getTime();
@@ -332,7 +332,7 @@ class Assertion extends AbstractSamlElement implements
      *
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer The new issuer of this assertion.
      */
-    public function setIssuer(Issuer $issuer): void
+    private function setIssuer(Issuer $issuer): void
     {
         $this->issuer = $issuer;
     }
@@ -355,7 +355,7 @@ class Assertion extends AbstractSamlElement implements
      * @param array $SubjectConfirmation Array of \SimpleSAML\SAML2\XML\saml\SubjectConfirmation elements.
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
-    public function setSubjectConfirmation(array $SubjectConfirmation): void
+    private function setSubjectConfirmation(array $SubjectConfirmation): void
     {
         Assert::allIsInstanceOf($SubjectConfirmation, SubjectConfirmation::class);
         $this->SubjectConfirmation = $SubjectConfirmation;

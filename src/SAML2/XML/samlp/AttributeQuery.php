@@ -90,7 +90,7 @@ class AttributeQuery extends AbstractSubjectQuery
      *
      * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes All requested attributes, as an associative array.
      */
-    public function setAttributes(array $attributes): void
+    private function setAttributes(array $attributes): void
     {
         Assert::allIsInstanceOf($attributes, Attribute::class);
 

@@ -122,7 +122,7 @@ abstract class NameIDType extends AbstractSamlElement implements BaseIdentifierI
      *
      * @param string|null $spProvidedID
      */
-    public function setSPProvidedID(?string $spProvidedID): void
+    private function setSPProvidedID(?string $spProvidedID): void
     {
         Assert::nullOrNotWhitespaceOnly($spProvidedID);
         $this->SPProvidedID = $spProvidedID;

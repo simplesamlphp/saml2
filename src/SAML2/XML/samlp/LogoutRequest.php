@@ -112,7 +112,7 @@ class LogoutRequest extends AbstractRequest
      *
      * @param int|null $notOnOrAfter The expiration time of this request.
      */
-    public function setNotOnOrAfter(?int $notOnOrAfter = null): void
+    private function setNotOnOrAfter(?int $notOnOrAfter = null): void
     {
         $this->notOnOrAfter = $notOnOrAfter;
     }
@@ -135,7 +135,7 @@ class LogoutRequest extends AbstractRequest
      *
      * @param string|null $reason The optional reason for this request in URN format
      */
-    public function setReason(?string $reason = null): void
+    private function setReason(?string $reason = null): void
     {
         Assert::nullOrValidURI($reason, SchemaViolationException::class);
         $this->reason = $reason;
@@ -158,7 +158,7 @@ class LogoutRequest extends AbstractRequest
      *
      * @param \SimpleSAML\SAML2\XML\samlp\SessionIndex[] $sessionIndexes The SessionIndexes, or an empty array if all sessions should be terminated.
      */
-    public function setSessionIndexes(array $sessionIndexes): void
+    private function setSessionIndexes(array $sessionIndexes): void
     {
         Assert::allIsInstanceOf($sessionIndexes, SessionIndex::class);
         $this->sessionIndexes = $sessionIndexes;

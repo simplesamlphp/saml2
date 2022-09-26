@@ -145,7 +145,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      * @param \SimpleSAML\SAML2\XML\md\AuthzService[] $authzServices
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
-    protected function setAuthzServiceEndpoints(array $authzServices = []): void
+    private function setAuthzServiceEndpoints(array $authzServices = []): void
     {
         Assert::minCount($authzServices, 1, 'At least one md:AuthzService endpoint must be present.');
         Assert::allIsInstanceOf(
@@ -174,7 +174,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServices
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
-    public function setAssertionIDRequestServices(array $assertionIDRequestServices): void
+    private function setAssertionIDRequestServices(array $assertionIDRequestServices): void
     {
         Assert::allIsInstanceOf(
             $assertionIDRequestServices,
@@ -201,7 +201,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormats
      */
-    public function setNameIDFormats(array $nameIDFormats): void
+    private function setNameIDFormats(array $nameIDFormats): void
     {
         Assert::allIsInstanceOf($nameIDFormats, NameIDFormat::class);
         $this->NameIDFormats = $nameIDFormats;
