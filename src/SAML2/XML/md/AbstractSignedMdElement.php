@@ -18,4 +18,14 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements Sign
 {
     use SignableElementTrait;
     use SignedElementTrait;
+
+
+    /**
+     * @return array|null
+     */
+    public function getBlacklistedAlgorithms(): ?array
+    {
+        $container = ContainerSingleton::getInstance();
+        return $container->getBlacklistedEncryptionAlgorithms();
+    }
 }

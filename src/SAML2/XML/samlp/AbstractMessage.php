@@ -414,6 +414,25 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
 
     /**
+     * @return \DOMElement
+     */
+    protected function getOriginalXML(): DOMElement
+    {
+        return $this->xml ?? $this->toUnsignedXML();
+    }
+
+
+    /**
+     * @return array|null
+     */
+    public function getBlacklistedAlgorithms(): ?array
+    {
+        $container = ContainerSingleton::getInstance();
+        return $container->getBlacklistedEncryptionAlgorithms();
+    }
+
+
+    /**
      * Create XML from this class
      *
      * @param \DOMElement|null $parent
@@ -441,15 +460,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
         }
 
         return $e;
-    }
-
-
-    /**
-     * @return \DOMElement
-     */
-    protected function getOriginalXML(): DOMElement
-    {
-        return $this->xml ?? $this->toUnsignedXML();
     }
 
 
