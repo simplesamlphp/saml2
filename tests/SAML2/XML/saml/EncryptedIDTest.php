@@ -218,33 +218,13 @@ final class EncryptedIDTest extends TestCase
         $this->assertInstanceOf(CustomBaseID::class, $id);
         $this->assertEquals(strval($customid), strval($id));
 
+        // Remove registration by using a clean container
+        $container = new MockContainer();
+        $container->setBlacklistedAlgorithms(null);
+        ContainerSingleton::setContainer($container);
+
         // test a custom BaseID that's unregistered
-        $unknownid = new class() extends AbstractBaseID {
-            public function __construct()
-            {
-                parent::__construct('phpunit:UnknownBaseIDType', 'NameQualifier', 'name_qualifier');
-            }
-
-            public function getQualifiedName(): string
-            {
-                return 'saml:BaseID';
-            }
-
-            public static function getNamespaceURI(): string
-            {
-                return C::NS_SAML;
-            }
-
-            public static function getXsiTypePrefix(): string
-            {
-                return 'phpunit';
-            }
-
-            public static function getXsiTypeNamespaceURI(): string
-            {
-                return 'urn:x-simplesamlphp-phpunit';
-            }
-        };
+        $unknownid = new CustomBaseID([$audience], 'NameQualifier', 'name_qualifier');
 
         $encid = new EncryptedID($unknownid->encrypt($encryptor));
         $doc = DOMDocumentFactory::fromString(strval($encid));
@@ -256,7 +236,7 @@ final class EncryptedIDTest extends TestCase
         );
         $id = $encid->decrypt($decryptor);
         $this->assertInstanceOf(UnknownID::class, $id);
-        $this->assertEquals(strval($customid), strval($id));
+        $this->assertEquals(strval($unknownid), strval($id));
 
         // test with unsupported ID
         $attr = new Attribute('name');
