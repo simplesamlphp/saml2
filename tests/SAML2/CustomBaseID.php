@@ -9,6 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
@@ -34,13 +35,15 @@ final class CustomBaseID extends AbstractBaseID
     /**
      * CustomBaseID constructor.
      *
-     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
+     * @param \SimpleSAML\XML\Chunk $xml
      * @param string|null $NameQualifier
      * @param string|null $SPNameQualifier
      */
-    public function __construct(array $audience, string $NameQualifier = null, string $SPNameQualifier = null)
+    public function __construct(Chunk $xml, string $NameQualifier = null, string $SPNameQualifier = null)
     {
         parent::__construct(self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME, $NameQualifier, $SPNameQualifier);
+
+        $audience = Audience::getChildrenOfClass($xml->toXML());
         $this->setAudience($audience);
     }
 
@@ -87,9 +90,7 @@ final class CustomBaseID extends AbstractBaseID
         $nameQualifier = self::getAttribute($xml, 'NameQualifier', null);
         $spNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);
 
-        $audience = Audience::getChildrenOfClass($xml);
-
-        return new static($audience, $nameQualifier, $spNameQualifier);
+        return new static(new Chunk($xml), $nameQualifier, $spNameQualifier);
     }
 
 

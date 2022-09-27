@@ -21,6 +21,7 @@ use SimpleSAML\SAML2\XML\saml\UnknownID;
 use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
@@ -204,9 +205,15 @@ final class EncryptedIDTest extends TestCase
         $this->assertEquals(strval($nameid), strval($id));
 
         // test a custom BaseID that's registered
-        $audience = new Audience("http://audience.com");
-        $customid = new CustomBaseID([$audience], 'NameQualifier', 'name_qualifier');
-        $encid = new EncryptedID($customid->encrypt($encryptor));
+        $customId = new CustomBaseID(
+            new Chunk(DOMDocumentFactory::fromFile(
+                dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_BaseID.xml',
+            )->documentElement),
+            'TheNameQualifier',
+            'TheSPNameQualifier',
+        );
+
+        $encid = new EncryptedID($customId->encrypt($encryptor));
         $doc = DOMDocumentFactory::fromString(strval($encid));
 
         $encid = EncryptedID::fromXML($doc->documentElement);
@@ -216,7 +223,7 @@ final class EncryptedIDTest extends TestCase
         );
         $id = $encid->decrypt($decryptor);
         $this->assertInstanceOf(CustomBaseID::class, $id);
-        $this->assertEquals(strval($customid), strval($id));
+        $this->assertEquals(strval($customId), strval($id));
 
         // Remove registration by using a clean container
         $container = new MockContainer();
@@ -224,9 +231,9 @@ final class EncryptedIDTest extends TestCase
         ContainerSingleton::setContainer($container);
 
         // test a custom BaseID that's unregistered
-        $unknownid = new CustomBaseID([$audience], 'NameQualifier', 'name_qualifier');
+        $unknownId = $customId;
 
-        $encid = new EncryptedID($unknownid->encrypt($encryptor));
+        $encid = new EncryptedID($unknownId->encrypt($encryptor));
         $doc = DOMDocumentFactory::fromString(strval($encid));
 
         $encid = EncryptedID::fromXML($doc->documentElement);
@@ -236,7 +243,7 @@ final class EncryptedIDTest extends TestCase
         );
         $id = $encid->decrypt($decryptor);
         $this->assertInstanceOf(UnknownID::class, $id);
-        $this->assertEquals(strval($unknownid), strval($id));
+        $this->assertEquals(strval($unknownId), strval($id));
 
         // test with unsupported ID
         $attr = new Attribute('name');

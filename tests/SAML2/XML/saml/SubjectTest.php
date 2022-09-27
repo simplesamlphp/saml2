@@ -223,8 +223,10 @@ XML
 
         $subject = new Subject(
             new CustomBaseID(
-                [new Audience('urn:some:audience')],
-                'https://sp.example.org/authentication/sp/metadata'
+                new Chunk(DOMDocumentFactory::fromFile(
+                    dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Audience.xml',
+                )->documentElement),
+                'https://sp.example.org/authentication/sp/metadata',
             ),
             [
                 new SubjectConfirmation(

@@ -14,6 +14,7 @@ use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function dirname;
@@ -59,14 +60,14 @@ final class BaseIDTest extends TestCase
     public function testMarshalling(): void
     {
         $baseId = new CustomBaseID(
-            [new Audience('urn:some:audience')],
+            new Chunk($this->xmlRepresentation->documentElement),
             'TheNameQualifier',
-            'TheSPNameQualifier'
+            'TheSPNameQualifier',
         );
-var_dump($baseId->toXML()->ownerDocument->saveXML());
+
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($baseId)
+            strval($baseId),
         );
     }
 
