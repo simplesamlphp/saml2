@@ -145,8 +145,8 @@ class HTTPArtifact extends Binding
         $soap = new SOAPClient();
 
         // Send message through SoapClient
-        /** @var \SAML2\ArtifactResponse $artifactResponse */
-        $artifactResponse = $soap->send($ar, $this->spMetadata);
+        /** @var \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $artifactResponse */
+        $artifactResponse = $soap->send($ar, $this->spMetadata, $idpMetadata);
 
         if (!$artifactResponse->isSuccess()) {
             throw new \Exception('Received error from ArtifactResolutionService.');
