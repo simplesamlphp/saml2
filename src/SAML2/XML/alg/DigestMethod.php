@@ -67,13 +67,6 @@ final class DigestMethod extends AbstractAlgElement
     private function setAlgorithm(string $algorithm): void
     {
         Assert::validURI($algorithm, SchemaViolationException::class); // Covers the empty string
-        Assert::oneOf(
-            $algorithm,
-            array_keys(C::$DIGEST_ALGORITHMS),
-            'Invalid digest method',
-            InvalidArgumentException::class
-        );
-
         $this->Algorithm = $algorithm;
     }
 

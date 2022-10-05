@@ -127,8 +127,10 @@ class Response extends AbstractStatusResponse
         $destination = self::getAttribute($xml, 'Destination', null);
         $consent = self::getAttribute($xml, 'Consent', null);
 
-        /** @psalm-suppress PossiblyNullArgument */
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
+        // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
+        $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
+
         Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
         $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
 

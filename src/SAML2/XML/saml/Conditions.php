@@ -238,11 +238,17 @@ final class Conditions extends AbstractSamlElement
 
         $notBefore = self::getAttribute($xml, 'NotBefore', null);
         if ($notBefore !== null) {
+            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
+            $notBefore = preg_replace('/([.][0-9]+Z)$/', 'Z', $notBefore, 1);
+
             Assert::validDateTimeZulu($notBefore, ProtocolViolationException::class);
         }
 
         $notOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
         if ($notOnOrAfter !== null) {
+            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
+            $notOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $notOnOrAfter, 1);
+
             Assert::validDateTimeZulu($notOnOrAfter, ProtocolViolationException::class);
         }
 

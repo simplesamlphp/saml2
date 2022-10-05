@@ -186,11 +186,17 @@ class LogoutRequest extends AbstractRequest
         Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
 
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
+        // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
+        $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
+
         Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
         $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
 
         $notOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
         if ($notOnOrAfter !== null) {
+            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
+            $notOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $notOnOrAfter, 1);
+
             Assert::validDateTimeZulu($notOnOrAfter, ProtocolViolationException::class);
             $notOnOrAfter = XMLUtils::xsDateTimeToTimestamp($notOnOrAfter);
         }

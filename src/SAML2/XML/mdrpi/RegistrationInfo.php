@@ -166,6 +166,9 @@ final class RegistrationInfo extends AbstractMdrpiElement
 
         // 2.1.1:  Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier
         if ($registrationInstant !== null) {
+            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
+            $registrationInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $registrationInstant, 1);
+
             Assert::validDateTimeZulu($registrationInstant, ProtocolViolationException::class);
             $registrationInstant = XMLUtils::xsDateTimeToTimestamp($registrationInstant);
         }

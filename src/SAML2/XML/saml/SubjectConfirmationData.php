@@ -284,12 +284,18 @@ final class SubjectConfirmationData extends AbstractSamlElement
 
         $NotBefore = self::getAttribute($xml, 'NotBefore', null);
         if ($NotBefore !== null) {
+            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
+            $NotBefore = preg_replace('/([.][0-9]+Z)$/', 'Z', $NotBefore, 1);
+
             Assert::validDateTimeZulu($NotBefore, ProtocolViolationException::class);
             $NotBefore = XMLUtils::xsDateTimeToTimestamp($NotBefore);
         }
 
         $NotOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
         if ($NotOnOrAfter !== null) {
+            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
+            $NotOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $NotOnOrAfter, 1);
+
             Assert::validDateTimeZulu($NotOnOrAfter, ProtocolViolationException::class);
             $NotOnOrAfter = XMLUtils::xsDateTimeToTimestamp($NotOnOrAfter);
         }

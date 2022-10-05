@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\StringElementTrait;
 
 /**
@@ -28,6 +29,34 @@ final class GeolocationHint extends AbstractMduiElement
 
 
     /**
+     * Set the content of the element.
+     *
+     * @param string $content  The value to go in the XML textContent
+     */
+    protected function setContent(string $content): void
+    {
+        $sanitized = $this->sanitizeContent($content);
+        $this->validateContent($sanitized);
+
+        // Store the email address with any whitespace removed
+        $this->content = $sanitized;
+    }
+
+
+    /**
+     * Sanitize the content of the element.
+     *
+     * @param string $content  The unsanitized textContent
+     * @throws \Exception on failure
+     * @return string
+     */
+    protected function sanitizeContent(string $content): string
+    {
+        return preg_replace('/\s+/', '', $content);
+    }
+
+
+    /**
      * Validate the content of the element.
      *
      * @param string $content  The value to go in the XML textContent
@@ -37,6 +66,8 @@ final class GeolocationHint extends AbstractMduiElement
     protected function validateContent(string $content): void
     {
         Assert::notEmpty($content, 'GeolocationHint cannot be empty');
-        Assert::regex($content, '/^geo:([-+]?\d+(?:\.\d+)?),([-+]?\d+(?:\.\d+)?)(?:\?z=(\d{1,2}))?$/', 'Content is not a valid geolocation');
+        // Assert::regex($content, '/^geo:([-+]?\d+(?:\.\d+)?),([-+]?\d+(?:\.\d+)?)(?:\?z=(\d{1,2}))?$/', 'Content is not a valid geolocation:  %s');
+        // The regex above is incomplete, so for now we only test for a valid URI (according to the schema, anyURI)
+        Assert::validURI($content, SchemaViolationException::class);
     }
 }

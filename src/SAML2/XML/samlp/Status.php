@@ -74,7 +74,7 @@ final class Status extends AbstractSamlpElement
                 C::STATUS_RESPONDER,
                 C::STATUS_VERSION_MISMATCH,
             ],
-            'Invalid top-level status code',
+            'Invalid top-level status code:  %s',
             ProtocolViolationException::class
         );
 

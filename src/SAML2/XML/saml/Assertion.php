@@ -439,6 +439,9 @@ final class Assertion extends AbstractSamlElement implements
         Assert::same(self::getAttribute($xml, 'Version'), '2.0', 'Unsupported version: %s');
 
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
+        // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
+        $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
+
         Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
         $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
 

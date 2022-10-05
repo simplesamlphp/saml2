@@ -50,7 +50,7 @@ final class EmailAddress extends AbstractMdElement
      */
     protected function sanitizeContent(string $content): string
     {
-        return preg_replace('/^mailto:/i', '', $content);
+        return rtrim(trim(preg_replace('/^mailto:/i', '', $content)), '`');
     }
 
 

@@ -90,12 +90,6 @@ final class SigningMethod extends AbstractAlgElement
     private function setAlgorithm(string $algorithm): void
     {
         Assert::validURI($algorithm, SchemaViolationException::class); // Covers the empty string
-        Assert::oneOf(
-            $algorithm,
-            array_merge(array_keys(C::$RSA_DIGESTS), array_keys(C::$HMAC_DIGESTS)),
-            'Invalid signature method',
-            InvalidArgumentException::class
-        );
         $this->Algorithm = $algorithm;
     }
 

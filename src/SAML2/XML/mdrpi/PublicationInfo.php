@@ -196,6 +196,9 @@ final class PublicationInfo extends AbstractMdrpiElement
 
         // 2.2.1:  Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier
         if ($creationInstant !== null) {
+            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
+            $creationInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $creationInstant, 1);
+
             Assert::validDateTimeZulu($creationInstant, ProtocolViolationException::class);
             $creationInstant = XMLUtils::xsDateTimeToTimestamp($creationInstant);
         }

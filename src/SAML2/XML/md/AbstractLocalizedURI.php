@@ -17,6 +17,54 @@ use function filter_var;
 abstract class AbstractLocalizedURI extends AbstractLocalizedName
 {
     /**
+     * Set the content of the element.
+     *
+     * @param string $content  The value to go in the XML textContent
+     */
+    protected function setContent(string $content): void
+    {
+        $this->validateContent($content);
+        $this->content = $content;
+    }
+
+
+    /**
+     * Get the content of the element.
+     *
+     * @return string
+     */
+    public function getContent(): string
+    {
+        return $this->sanitizeContent($this->getRawContent());
+    }
+
+
+    /**
+     * Get the raw and unsanitized content of the element.
+     *
+     * @return string
+     */
+    public function getRawContent(): string
+    {
+        return $this->content;
+    }
+
+
+    /**
+     * Sanitize the content of the element.
+     *
+     * @param string $content  The unsanitized textContent
+     * @throws \Exception on failure
+     * @return string
+     */
+    protected function sanitizeContent(string $content): string
+    {
+        // We've seen metadata in the wild that had stray whitespace around URIs, causing assertions to fail
+        return trim($content);
+    }
+
+
+    /**
      * Validate the content of the element.
      *
      * @param string $content  The value to go in the XML textContent
@@ -25,6 +73,6 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
      */
     protected function validateContent(string $content): void
     {
-        Assert::validURI($content, SchemaViolationException::class); // Covers the empty string
+        Assert::validURI($this->sanitizeContent($content), SchemaViolationException::class); // Covers the empty string
     }
 }

@@ -204,11 +204,17 @@ final class AuthnStatement extends AbstractStatementType
         );
 
         $authnInstant = self::getAttribute($xml, 'AuthnInstant');
+        // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
+        $authnInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $authnInstant, 1);
+
         Assert::validDateTimeZulu($authnInstant, ProtocolViolationException::class);
         $authnInstant = XMLUtils::xsDateTimeToTimestamp($authnInstant);
 
         $sessionNotOnOrAfter = self::getAttribute($xml, 'SessionNotOnOrAfter', null);
         if ($sessionNotOnOrAfter !== null) {
+            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
+            $sessionNotOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $sessionNotOnOrAfter, 1);
+
             Assert::validDateTimeZulu($sessionNotOnOrAfter, ProtocolViolationException::class);
             $sessionNotOnOrAfter = XMLUtils::xsDateTimeToTimestamp($sessionNotOnOrAfter);
         }
