@@ -167,7 +167,7 @@ final class Logo extends AbstractMduiElement
         $Width = self::getIntegerAttribute($xml, 'width');
         /** @var int $Height */
         $Height = self::getIntegerAttribute($xml, 'height');
-        $lang = self::getAttribute($xml, 'xml:lang');
+        $lang = self::getAttribute($xml, 'xml:lang', null);
 
         return new static($Url, $Height, $Width, $lang);
     }
