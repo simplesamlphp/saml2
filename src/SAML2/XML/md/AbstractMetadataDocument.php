@@ -184,8 +184,8 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 
         if ($this->isSigned() === true && $this->signer === null) {
             // We already have a signed document and no signer was set to re-sign it
-            $e->ownerDocument->importNode($this->xml, true);
-            return $e->appendChild($this->xml);
+            $node = $e->ownerDocument->importNode($this->xml, true);
+            return $e->appendChild($node);
         }
 
         foreach ($this->getAttributesNS() as $attr) {

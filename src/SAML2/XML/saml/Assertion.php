@@ -534,11 +534,9 @@ final class Assertion extends AbstractSamlElement implements
     public function toXML(DOMElement $parent = null): DOMElement
     {
         if ($this->isSigned() === true && $this->signer === null) {
-            $e = $this->instantiateParentElement($parent);
-
             // We already have a signed document and no signer was set to re-sign it
-            $e->ownerDocument->importNode($this->xml, true);
-            return $e->appendChild($this->xml);
+            $node = $e->ownerDocument->importNode($this->xml, true);
+            return $e->appendChild($node);
         }
 
         $e = $this->toUnsignedXML($parent);
