@@ -286,15 +286,14 @@ final class SPSSODescriptor extends AbstractSSODescriptor
 
 
     /**
-     * Add this SPSSODescriptor to an EntityDescriptor.
+     * Convert this assertion to an unsigned XML document.
+     * This method does not sign the resulting XML document.
      *
-     * @param \DOMElement|null $parent The EntityDescriptor we should append this SPSSODescriptor to.
-     * @return \DOMElement
-     * @throws \Exception
+     * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
-        $e = parent::toXML($parent);
+        $e = parent::toUnsignedXML($parent);
 
         if (is_bool($this->authnRequestsSigned)) {
             $e->setAttribute('AuthnRequestsSigned', $this->authnRequestsSigned ? 'true' : 'false');
@@ -310,12 +309,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor
 
         foreach ($this->attributeConsumingService as $acs) {
             $acs->toXML($e);
-        }
-
-        if ($this->signer !== null) {
-            $signedXML = $this->doSign($e);
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
-            return $signedXML;
         }
 
         return $e;

@@ -133,60 +133,6 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
 
 
     /**
-     * Initialize an IDPSSODescriptor.
-     *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return \SimpleSAML\SAML2\XML\md\IDPSSODescriptor
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
-     */
-    public static function fromXML(DOMElement $xml): static
-    {
-        Assert::same($xml->localName, 'IDPSSODescriptor', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, IDPSSODescriptor::NS, InvalidDOMElementException::class);
-
-        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
-        $orgs = Organization::getChildrenOfClass($xml);
-        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor', TooManyElementsException::class);
-
-        $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
-
-        $signature = Signature::getChildrenOfClass($xml);
-        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
-
-        $idpssod = new static(
-            SingleSignOnService::getChildrenOfClass($xml),
-            preg_split('/[\s]+/', trim($protocols)),
-            self::getBooleanAttribute($xml, 'WantAuthnRequestsSigned', null),
-            NameIDMappingService::getChildrenOfClass($xml),
-            AssertionIDRequestService::getChildrenOfClass($xml),
-            AttributeProfile::getChildrenOfClass($xml),
-            Attribute::getChildrenOfClass($xml),
-            self::getAttribute($xml, 'ID', null),
-            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
-            self::getAttribute($xml, 'cacheDuration', null),
-            !empty($extensions) ? $extensions[0] : null,
-            self::getAttribute($xml, 'errorURL', null),
-            KeyDescriptor::getChildrenOfClass($xml),
-            !empty($orgs) ? $orgs[0] : null,
-            ContactPerson::getChildrenOfClass($xml),
-            ArtifactResolutionService::getChildrenOfClass($xml),
-            SingleLogoutService::getChildrenOfClass($xml),
-            ManageNameIDService::getChildrenOfClass($xml),
-            NameIDFormat::getChildrenOfClass($xml)
-        );
-        if (!empty($signature)) {
-            $idpssod->setSignature($signature[0]);
-        }
-        return $idpssod;
-    }
-
-
-    /**
      * Collect the value of the WantAuthnRequestsSigned-property
      *
      * @return bool|null
@@ -341,15 +287,68 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
 
 
     /**
-     * Add this IDPSSODescriptor to an EntityDescriptor.
+     * Initialize an IDPSSODescriptor.
      *
-     * @param \DOMElement|null $parent The EntityDescriptor we should append this IDPSSODescriptor to.
-     * @return \DOMElement
-     * @throws \Exception
+     * @param \DOMElement $xml The XML element we should load.
+     * @return \SimpleSAML\SAML2\XML\md\IDPSSODescriptor
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public static function fromXML(DOMElement $xml): static
     {
-        $e = parent::toXML($parent);
+        Assert::same($xml->localName, 'IDPSSODescriptor', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, IDPSSODescriptor::NS, InvalidDOMElementException::class);
+
+        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
+        $validUntil = self::getAttribute($xml, 'validUntil', null);
+        $orgs = Organization::getChildrenOfClass($xml);
+        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor', TooManyElementsException::class);
+
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
+
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
+
+        $idpssod = new static(
+            SingleSignOnService::getChildrenOfClass($xml),
+            preg_split('/[\s]+/', trim($protocols)),
+            self::getBooleanAttribute($xml, 'WantAuthnRequestsSigned', null),
+            NameIDMappingService::getChildrenOfClass($xml),
+            AssertionIDRequestService::getChildrenOfClass($xml),
+            AttributeProfile::getChildrenOfClass($xml),
+            Attribute::getChildrenOfClass($xml),
+            self::getAttribute($xml, 'ID', null),
+            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
+            self::getAttribute($xml, 'cacheDuration', null),
+            !empty($extensions) ? $extensions[0] : null,
+            self::getAttribute($xml, 'errorURL', null),
+            KeyDescriptor::getChildrenOfClass($xml),
+            !empty($orgs) ? $orgs[0] : null,
+            ContactPerson::getChildrenOfClass($xml),
+            ArtifactResolutionService::getChildrenOfClass($xml),
+            SingleLogoutService::getChildrenOfClass($xml),
+            ManageNameIDService::getChildrenOfClass($xml),
+            NameIDFormat::getChildrenOfClass($xml)
+        );
+        if (!empty($signature)) {
+            $idpssod->setSignature($signature[0]);
+        }
+        return $idpssod;
+    }
+
+
+    /**
+     * Convert this assertion to an unsigned XML document.
+     * This method does not sign the resulting XML document.
+     *
+     * @return \DOMElement The root element of the DOM tree
+     */
+    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
+    {
+        $e = parent::toUnsignedXML($parent);
 
         if (is_bool($this->wantAuthnRequestsSigned)) {
             $e->setAttribute('WantAuthnRequestsSigned', $this->wantAuthnRequestsSigned ? 'true' : 'false');
@@ -373,12 +372,6 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
 
         foreach ($this->attributes as $a) {
             $a->toXML($e);
-        }
-
-        if ($this->signer !== null) {
-            $signedXML = $this->doSign($e);
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
-            return $signedXML;
         }
 
         return $e;

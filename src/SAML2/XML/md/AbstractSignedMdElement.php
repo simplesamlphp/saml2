@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DOMElement;
 use SimpleSAML\XMLSecurity\XML\SignableElementTrait;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignedElementTrait;
@@ -28,4 +29,37 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements Sign
         $container = ContainerSingleton::getInstance();
         return $container->getBlacklistedEncryptionAlgorithms();
     }
+
+    /**
+     * @param \DOMElement|null $parent The EntityDescriptor we should append this SPSSODescriptor to.
+     * @return \DOMElement
+     * @throws \Exception
+     */
+    public function toXML(DOMElement $parent = null): DOMElement
+    {
+        if ($this->isSigned() === true && $this->signer === null) {
+            $e = $this->instantiateParentElement($parent);
+
+            // We already have a signed document and no signer was set to re-sign it
+            $node = $e->ownerDocument->importNode($this->xml, true);
+            return $e->appendChild($node);
+        }
+
+        $e = $this->toUnsignedXML($parent);
+
+        if ($this->signer !== null) {
+            $signedXML = $this->doSign($e);
+            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
+            return $signedXML;
+        }
+
+        return $e;
+    }
+
+
+    /**
+     * @param  \DOMElement|null $parent
+     * @return \DOMElement
+     */
+    abstract public function toUnsignedXML(DOMElement $parent = null): DOMElement;
 }

@@ -394,7 +394,7 @@ final class Assertion extends AbstractSamlElement implements
 
 
     /**
-     * @inheritDoc
+     * @return \DOMElement
      */
     protected function getOriginalXML(): DOMElement
     {
@@ -535,11 +535,12 @@ final class Assertion extends AbstractSamlElement implements
     {
         if ($this->isSigned() === true && $this->signer === null) {
             // We already have a signed document and no signer was set to re-sign it
-            $node = $e->ownerDocument->importNode($this->xml, true);
-            return $e->appendChild($node);
+            $node = $parent->ownerDocument->importNode($this->xml, true);
+            return $parent->appendChild($node);
         }
 
         $e = $this->toUnsignedXML($parent);
+
         if ($this->signer !== null) {
             $signedXML = $this->doSign($e);
 

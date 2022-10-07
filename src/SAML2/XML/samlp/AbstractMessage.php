@@ -433,36 +433,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
 
     /**
-     * Create XML from this class
-     *
-     * @param \DOMElement|null $parent
-     * @return \DOMElement
-     */
-    public function toXML(?DOMElement $parent = null): DOMElement
-    {
-        if ($this->isSigned() === true && $this->signer === null) {
-            // We already have a signed document and no signer was set to re-sign it
-            $node = $e->ownerDocument->importNode($this->xml, true);
-            return $e->appendChild($node);
-        }
-
-        $e = $this->toUnsignedXML($parent);
-        if ($this->signer !== null) {
-            $signedXML = $this->doSign($e);
-
-            // Test for an Issuer
-            $messageElements = XPath::xpQuery($signedXML, './saml_assertion:Issuer', XPath::getXPath($signedXML));
-            $issuer = array_pop($messageElements);
-
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $issuer->nextSibling);
-            return $signedXML;
-        }
-
-        return $e;
-    }
-
-
-    /**
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
      *
@@ -497,5 +467,38 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
         }
 
         return $root;
+    }
+
+
+    /**
+     * Create XML from this class
+     *
+     * @param \DOMElement|null $parent
+     * @return \DOMElement
+     */
+    public function toXML(?DOMElement $parent = null): DOMElement
+    {
+        if ($this->isSigned() === true && $this->signer === null) {
+            $e = $this->instantiateParentElement($parent);
+
+            // We already have a signed document and no signer was set to re-sign it
+            $node = $e->ownerDocument->importNode($this->xml, true);
+            return $e->appendChild($node);
+        }
+
+        $e = $this->toUnsignedXML($parent);
+
+        if ($this->signer !== null) {
+            $signedXML = $this->doSign($e);
+
+            // Test for an Issuer
+            $messageElements = XPath::xpQuery($signedXML, './saml_assertion:Issuer', XPath::getXPath($signedXML));
+            $issuer = array_pop($messageElements);
+
+            $signedXML->insertBefore($this->signature->toXML($signedXML), $issuer->nextSibling);
+            return $signedXML;
+        }
+
+        return $e;
     }
 }

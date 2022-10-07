@@ -386,15 +386,14 @@ final class EntityDescriptor extends AbstractMetadataDocument
 
 
     /**
-     * Create this EntityDescriptor.
+     * Convert this assertion to an unsigned XML document.
+     * This method does not sign the resulting XML document.
      *
-     * @param \DOMElement|null $parent The EntitiesDescriptor we should append this EntityDescriptor to.
-     * @return \DOMElement
-     * @throws \Exception
+     * @return \DOMElement The root element of the DOM tree
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
-        $e = parent::toXML($parent);
+        $e = parent::toUnsignedXML($parent);
         $e->setAttribute('entityID', $this->entityID);
 
         foreach ($this->getAttributesNS() as $attr) {
@@ -419,12 +418,6 @@ final class EntityDescriptor extends AbstractMetadataDocument
 
         foreach ($this->AdditionalMetadataLocation as $n) {
             $n->toXML($e);
-        }
-
-        if ($this->signer !== null) {
-            $signedXML = $this->doSign($e);
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
-            return $signedXML;
         }
 
         return $e;

@@ -165,11 +165,11 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 
 
     /**
-     * @inheritDoc
+     * @return \DOMElement
      */
     protected function getOriginalXML(): DOMElement
     {
-        return $this->xml ?? $this->toXML();
+        return $this->xml ?? $this->toUnsignedXML();
     }
 
 
@@ -178,15 +178,9 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      *
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toUnsignedXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-
-        if ($this->isSigned() === true && $this->signer === null) {
-            // We already have a signed document and no signer was set to re-sign it
-            $node = $e->ownerDocument->importNode($this->xml, true);
-            return $e->appendChild($node);
-        }
 
         foreach ($this->getAttributesNS() as $attr) {
             $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
