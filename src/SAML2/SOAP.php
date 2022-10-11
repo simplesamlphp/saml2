@@ -8,7 +8,10 @@ use DOMDocument;
 use Exception;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use Psr\Http\Message\ServerRequestInterface;
-use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SOAP\Constants as C;
+use SimpleSAML\SOAP11\XML\env\Body;
+use SimpleSAML\SOAP11\XML\env\Envelope;
+use SimpleSAML\SOAP11\XML\env\Header;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ecp\Response as ECPResponse;
@@ -36,42 +39,27 @@ class SOAP extends Binding
      */
     public function getOutputToSend(AbstractMessage $message)
     {
-        $envelope = <<<SOAP
-<?xml version="1.0" encoding="utf-8"?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="%s">
-    <SOAP-ENV:Header />
-    <SOAP-ENV:Body />
-</SOAP-ENV:Envelope>
-SOAP;
-        $envelope = sprintf($envelope, C::NS_SOAP);
-
-        $doc = new DOMDocument();
-        $doc->loadXML($envelope);
+        $header = new Header();
 
         // In the Artifact Resolution profile, this will be an ArtifactResolve
         // containing another message (e.g. a Response), however in the ECP
         // profile, this is the Response itself.
         if ($message instanceof Response) {
-            /** @var \DOMElement $header */
-            $header = $doc->getElementsByTagNameNS(C::NS_SOAP, 'Header')->item(0);
-
             $requestAuthenticated = new RequestAuthenticated(1);
-            $header->appendChild($header->ownerDocument->importNode($requestAuthenticated->toXML(), true));
 
             $destination = $this->destination ?: $message->getDestination();
             if ($destination === null) {
                 throw new Exception('No destination available for SOAP message.');
             }
             $response = new ECPResponse($destination);
-            $response->toXML($header);
+            $header = new Header([$requestAuthenticated, $response]);
         }
 
-        /** @var \DOMElement $body */
-        $body = $doc->getElementsByTagNameNs(C::NS_SOAP, 'Body')->item(0);
-
-        $body->appendChild($doc->importNode($message->toXML(), true));
-
-        return $doc->saveXML();
+        $env = new Envelope(
+            new Body([$message]),
+            $header,
+        );
+        return $env->toXML()->ownerDocument->saveXML();
     }
 
 

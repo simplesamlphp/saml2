@@ -13,6 +13,9 @@ use SimpleSAML\SAML2\Exception\RuntimeException;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
+use SimpleSAML\SOAP11\XML\Body;
+use SimpleSAML\SOAP11\XML\Envelope;
+use SimpleSAML\SOAP11\XML\Fault;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
 use SimpleSAML\XML\Exception\UnparseableXMLException;
@@ -34,12 +37,6 @@ use function stream_context_get_options;
  */
 class SOAPClient
 {
-    public const START_SOAP_ENVELOPE = '<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">\
-        <soap-env:Header/><soap-env:Body>';
-
-    public const END_SOAP_ENVELOPE = '</soap-env:Body></soap-env:Envelope>';
-
-
     /**
      * This function sends the SOAP message to the service location and returns SOAP response
      *
@@ -134,49 +131,44 @@ class SOAPClient
             $options['proxy_port'] = $srcMetadata->getValue('saml.SOAPClient.proxyport');
         }
 
-        $x = new BuiltinSoapClient(null, $options);
-
-        // Add soap-envelopes
-        $request = $msg->toXML();
-        $request = self::START_SOAP_ENVELOPE . $request->ownerDocument->saveXML($request) . self::END_SOAP_ENVELOPE;
-
-        $container->debugMessage($request, 'out');
-
-        $action = 'http://www.oasis-open.org/committees/security';
         $destination = $msg->getDestination();
         if ($destination === null) {
             throw new Exception('Cannot send SOAP message, no destination set.');
         }
 
+        // Add soap-envelopes
+        $env = new Envelope(new Body([new Chunk($msg->toXML())]))->toXML();
+        $request = $env->ownerDocument->saveXML();
+
+        $container->debugMessage($request, 'out');
+
+        $action = 'http://www.oasis-open.org/committees/security';
         /* Perform SOAP Request over HTTP */
-        $soapresponsexml = $x->__doRequest($request, $destination, $action, SOAP_1_1);
+        $x = new BuiltinSoapClient(null, $options);
+        $soapresponsexml = $x->__doRequest($request, $destination, $action, SOAP_1_1, false);
         if (empty($soapresponsexml)) {
             throw new Exception('Empty SOAP response, check peer certificate.');
         }
 
         Utils::getContainer()->debugMessage($soapresponsexml, 'in');
 
-        // Convert to SAML2\XML\samlp\AbstractMessage (\DOMElement)
-        try {
-            $dom = DOMDocumentFactory::fromString($soapresponsexml);
-        } catch (InvalidArgumentException | UnparseableXmlException | RuntimeException $e) {
-            throw new \Exception($e->getMessage(), 0, $e);
-        }
-        $xpCache = XPath::getXPath($dom->firstChild);
-        $soapresponse = XPath::xpQuery($dom->firstChild, '/soap-env:Envelope/soap-env:Body/*[1]', $xpCache);
-        if (empty($soapresponse)) {
-            throw new \Exception('Not a SOAP response', 0);
-        }
-        $container->debugMessage($dom->documentElement, 'in');
+        $env = Envelope::fromXML($dom = DOMDocumentFactory::fromString($soapresponsexml)->documentElement);
+        $container->debugMessage($env->toXML()->ownerDocument->saveXML(), 'in');
 
         $soapfault = $this->getSOAPFault($dom);
-        if (isset($soapfault)) {
-            throw new Exception($soapfault);
+        if ($soapfault !== null) {
+            throw new Exception(
+                sprintf(
+                    "Actor: '%s';  Message: '%s';  Code: '%s'",
+                    $soapfault->getFaultActor()->getContent(),
+                    $soapfault->getFaultString()->getContent(),
+                    $soapfault->getFaultCode()->getContent(),
+                ),
+            );
         }
-        //Extract the message from the response
-        /** @var \DOMElement[] $samlresponse */
-        $samlresponse = XPath::xpQuery($dom->firstChild, '/soap-env:Envelope/soap-env:Body/*[1]', $xpCache);
-        $samlresponse = MessageFactory::fromXML($samlresponse[0]);
+
+        // Extract the message from the response
+        $samlresponse = MessageFactory::fromXML($env->getBody()->getChildren()[0]->toXML());
 
         /* Add validator to message which uses the SSL context. */
         self::addSSLValidator($samlresponse, $context);
@@ -259,9 +251,9 @@ class SOAPClient
      * Extracts the SOAP Fault from SOAP message
      *
      * @param \DOMDocument $soapMessage Soap response needs to be type DOMDocument
-     * @return string|null $soapfaultstring
+     * @return \SimpleSAML\SOAP11\XML\env\Fault|null
      */
-    private function getSOAPFault(DOMDocument $soapMessage): ?string
+    private function getSOAPFault(DOMDocument $soapMessage): ?Fault
     {
         $xpCache = XPath::getXPath($soapMessage->firstChild);
         /** @psalm-suppress PossiblyNullArgument */
@@ -269,20 +261,9 @@ class SOAPClient
 
         if (empty($soapFault)) {
             /* No fault. */
-
             return null;
         }
-        $soapFaultElement = $soapFault[0];
-        // There is a fault element but we haven't found out what the fault string is
-        $soapFaultString = "Unknown fault string found";
 
-        // find out the fault string
-        $xpCache = XPath::getXPath($soapFaultElement);
-        $faultStringElement = XPath::xpQuery($soapFaultElement, './soap-env:faultstring', $xpCache);
-        if (!empty($faultStringElement)) {
-            return $faultStringElement[0]->textContent;
-        }
-
-        return $soapFaultString;
+        return Fault::fromXML($soapFault[0]);
     }
 }

@@ -11,8 +11,15 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use SimpleSAML\SAML2\SOAP;
+use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
+use SimpleSAML\SAML2\XML\ecp\Response;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
+use SimpleSAML\SOAP\Constants as C;
+use SimpleSAML\XML\DOMDocumentFactory;
+
+use function dirname;
+use function sprintf;
 
 /**
  * @covers \SimpleSAML\SAML2\SOAP
@@ -42,18 +49,18 @@ final class SOAPTest extends MockeryTestCase
         $issuer = 'https://ServiceProvider.com/SAML';
 
         $stub = $this->getStubWithInput(<<<SOAP
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
-    <SOAP-ENV:Body>
-        <samlp:ArtifactResolve
-          xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-          xmlns="urn:oasis:names:tc:SAML:2.0:assertion"
-          Version="2.0" ID="{$id}"
-          IssueInstant="2004-01-21T19:00:49Z">
-            <Issuer>{$issuer}</Issuer>
-            <samlp:Artifact>{$artifact}</samlp:Artifact>
-        </samlp:ArtifactResolve>
-    </SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
+<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
+  <env:Body>
+      <samlp:ArtifactResolve
+        xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
+        xmlns="urn:oasis:names:tc:SAML:2.0:assertion"
+        Version="2.0" ID="{$id}"
+        IssueInstant="2004-01-21T19:00:49Z">
+          <Issuer>{$issuer}</Issuer>
+          <samlp:Artifact>{$artifact}</samlp:Artifact>
+      </samlp:ArtifactResolve>
+  </env:Body>
+</env:Envelope>
 SOAP
         );
 
@@ -73,47 +80,24 @@ SOAP
      */
     public function testSendArtifactResponse(): void
     {
-        $doc = new DOMDocument();
-        $doc->loadXML(<<<XML
-<samlp:ArtifactResponse
-  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-  xmlns="urn:oasis:names:tc:SAML:2.0:assertion"
-  Version="2.0" ID="_FQvGknDfws2Z"
-  InResponseTo="_6c3a4f8b9c2d"
-  IssueInstant="2004-01-21T19:00:49Z">
-    <Issuer>https://IdentityProvider.com/SAML</Issuer>
-    <samlp:Status>
-        <samlp:StatusCode
-          Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
-    </samlp:Status>
-    <samlp:LogoutResponse Version="2.0" ID="_b0730d21b628110d8b7e004005b13a2b"
-      IssueInstant="2004-01-21T19:05:49Z"
-      InResponseTo="_d2b7c388cec36fa7c39c28fd298644a8">
-        <Issuer>https://ServiceProvider.com/SAML</Issuer>
-        <samlp:Status>
-            <samlp:StatusCode
-              Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
-        </samlp:Status>
-    </samlp:LogoutResponse>
-</samlp:ArtifactResponse>
-XML
+        $artifact = DOMDocumentFactory::fromFile(
+            dirname(dirname(__FILE__)) . '/resources/xml/samlp_ArtifactResponse.xml'
         );
+        $message = MessageFactory::fromXML($artifact->documentElement);
 
-        $message = MessageFactory::fromXML($doc->documentElement);
+        $doc = DOMDocumentFactory::fromString(<<<SOAP
+<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"><env:Body /></env:Envelope>
+SOAP
+);
 
-        $expected = <<<SOAP
-<?xml version="1.0" encoding="utf-8"?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
-    <SOAP-ENV:Header/>
-    <SOAP-ENV:Body><samlp:ArtifactResponse xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Version="2.0" ID="_FQvGknDfws2Z" IssueInstant="2004-01-21T19:00:49Z" InResponseTo="_6c3a4f8b9c2d"><saml:Issuer>https://IdentityProvider.com/SAML</saml:Issuer><samlp:Status><samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/></samlp:Status><samlp:LogoutResponse Version="2.0" ID="_b0730d21b628110d8b7e004005b13a2b" IssueInstant="2004-01-21T19:05:49Z" InResponseTo="_d2b7c388cec36fa7c39c28fd298644a8"><saml:Issuer>https://ServiceProvider.com/SAML</saml:Issuer><samlp:Status><samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/></samlp:Status></samlp:LogoutResponse></samlp:ArtifactResponse></SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
-
-SOAP;
+        /** @var \DOMElement $body */
+        $body = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV_11, 'Body')->item(0);
+        $body->appendChild($doc->importNode($message->toXML(), true));
 
         $soap = new SOAP();
-        $output = $soap->getOutputToSend($message);
+        $actual = $soap->getOutputToSend($message);
 
-        $this->assertEquals($expected, $output);
+        $this->assertEquals($doc->saveXML(), $actual);
     }
 
 
@@ -121,73 +105,37 @@ SOAP;
      */
     public function testSendResponse(): void
     {
-        $doc = new DOMDocument();
-        $doc->loadXML(<<<XML
-<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Version="2.0" ID="_8e8dc5f69a98cc4c1ff3427e5ce34606fd672f91e6" IssueInstant="2014-07-17T01:01:48Z" Destination="http://sp.example.com/demo1/index.php?acs" InResponseTo="ONELOGIN_4fee3b046395c4e751011e97f8900b5273d56685">
-  <saml:Issuer>http://idp.example.com/metadata.php</saml:Issuer>
-  <samlp:Status>
-    <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
-  </samlp:Status>
-  <saml:Assertion Version="2.0" ID="_d71a3a8e9fcc45c9e9d248ef7049393fc8f04e5f75" IssueInstant="2014-07-17T01:01:48Z">
-    <saml:Issuer>http://idp.example.com/metadata.php</saml:Issuer>
-    <saml:Subject>
-      <saml:NameID
-          Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
-          SPNameQualifier="http://sp.example.com/demo1/metadata.php">_ce3d2948b4cf20146dee0a0b3dd6f69b6cf86f62d7</saml:NameID>
-      <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
-        <saml:SubjectConfirmationData
-            NotOnOrAfter="2024-01-18T06:21:48Z"
-            Recipient="http://sp.example.com/demo1/index.php?acs"
-            InResponseTo="ONELOGIN_4fee3b046395c4e751011e97f8900b5273d56685"/>
-      </saml:SubjectConfirmation>
-    </saml:Subject>
-    <saml:Conditions NotBefore="2014-07-17T01:01:18Z" NotOnOrAfter="2024-01-18T06:21:48Z">
-      <saml:AudienceRestriction>
-        <saml:Audience>http://sp.example.com/demo1/metadata.php</saml:Audience>
-      </saml:AudienceRestriction>
-    </saml:Conditions>
-    <saml:AuthnStatement AuthnInstant="2014-07-17T01:01:48Z" SessionIndex="_be9967abd904ddcae3c0eb4189adbe3f71e327cf93" SessionNotOnOrAfter="2024-07-17T09:01:48Z">
-      <saml:AuthnContext>
-        <saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:Password</saml:AuthnContextClassRef>
-      </saml:AuthnContext>
-    </saml:AuthnStatement>
-    <saml:AttributeStatement>
-      <saml:Attribute Name="uid" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
-        <saml:AttributeValue>test</saml:AttributeValue>
-      </saml:Attribute>
-      <saml:Attribute Name="mail" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
-        <saml:AttributeValue>test@example.com</saml:AttributeValue>
-      </saml:Attribute>
-      <saml:Attribute Name="eduPersonAffiliation" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
-        <saml:AttributeValue>users</saml:AttributeValue>
-        <saml:AttributeValue>examplerole1</saml:AttributeValue>
-      </saml:Attribute>
-    </saml:AttributeStatement>
-  </saml:Assertion>
-</samlp:Response>
-XML
+        $response = DOMDocumentFactory::fromFile(
+            dirname(dirname(__FILE__)) . '/resources/xml/samlp_Response.xml'
         );
+        $message = MessageFactory::fromXML($response->documentElement);
 
-        $message = MessageFactory::fromXML($doc->getElementsByTagName('Response')->item(0));
+        $doc = DOMDocumentFactory::fromString(<<<SOAP
+<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"><env:Header /><env:Body /></env:Envelope>
+SOAP
+);
+        $requestAuthenticated = new RequestAuthenticated(1);
+        $ecpResponse = new Response('https://example.org/metadata');
 
-        $expected = <<<SOAP
-<?xml version="1.0" encoding="utf-8"?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
-    <SOAP-ENV:Header><ecp:RequestAuthenticated xmlns:ecp="urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp" SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next"/><ecp:Response xmlns:ecp="urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp" SOAP-ENV:mustUnderstand="1" SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next" AssertionConsumerServiceURL="http://sp.example.com/demo1/index.php?acs"/></SOAP-ENV:Header>
-    <SOAP-ENV:Body><samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Version="2.0" ID="_8e8dc5f69a98cc4c1ff3427e5ce34606fd672f91e6" IssueInstant="2014-07-17T01:01:48Z" Destination="http://sp.example.com/demo1/index.php?acs" InResponseTo="ONELOGIN_4fee3b046395c4e751011e97f8900b5273d56685"><saml:Issuer>http://idp.example.com/metadata.php</saml:Issuer><samlp:Status><samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/></samlp:Status><saml:Assertion Version="2.0" ID="_d71a3a8e9fcc45c9e9d248ef7049393fc8f04e5f75" IssueInstant="2014-07-17T01:01:48Z"><saml:Issuer>http://idp.example.com/metadata.php</saml:Issuer><saml:Subject><saml:NameID SPNameQualifier="http://sp.example.com/demo1/metadata.php" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">_ce3d2948b4cf20146dee0a0b3dd6f69b6cf86f62d7</saml:NameID><saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer"><saml:SubjectConfirmationData NotOnOrAfter="2024-01-18T06:21:48Z" Recipient="http://sp.example.com/demo1/index.php?acs" InResponseTo="ONELOGIN_4fee3b046395c4e751011e97f8900b5273d56685"/></saml:SubjectConfirmation></saml:Subject><saml:Conditions NotBefore="2014-07-17T01:01:18Z" NotOnOrAfter="2024-01-18T06:21:48Z"><saml:AudienceRestriction><saml:Audience>http://sp.example.com/demo1/metadata.php</saml:Audience></saml:AudienceRestriction></saml:Conditions><saml:AuthnStatement AuthnInstant="2014-07-17T01:01:48Z" SessionIndex="_be9967abd904ddcae3c0eb4189adbe3f71e327cf93" SessionNotOnOrAfter="2024-07-17T09:01:48Z"><saml:AuthnContext><saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:Password</saml:AuthnContextClassRef></saml:AuthnContext></saml:AuthnStatement><saml:AttributeStatement><saml:Attribute Name="uid" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"><saml:AttributeValue>test</saml:AttributeValue></saml:Attribute><saml:Attribute Name="mail" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"><saml:AttributeValue>test@example.com</saml:AttributeValue></saml:Attribute><saml:Attribute Name="eduPersonAffiliation" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic"><saml:AttributeValue>users</saml:AttributeValue><saml:AttributeValue>examplerole1</saml:AttributeValue></saml:Attribute></saml:AttributeStatement></saml:Assertion></samlp:Response></SOAP-ENV:Body>
-</SOAP-ENV:Envelope>
 
-SOAP;
+        /** @var \DOMElement $header */
+        $header = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV_11, 'Header')->item(0);
+        $header->appendChild($doc->importNode($requestAuthenticated->toXML(), true));
+        $header->appendChild($doc->importNode($ecpResponse->toXML(), true));
+
+        /** @var \DOMElement $body */
+        $body = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV_11, 'Body')->item(0);
+        $body->appendChild($doc->importNode($message->toXML(), true));
 
         $soap = new SOAP();
-        $output = $soap->getOutputToSend($message);
+        $actual = $soap->getOutputToSend($message);
 
-        $this->assertEquals($expected, $output);
+        $this->assertEquals($doc->saveXML(), $actual);
     }
 
 
     /**
-     * @return SOAP
+     * @return \SimpleSAML\SAML2\SOAP
      */
     private function getStubWithInput($input): SOAP
     {
