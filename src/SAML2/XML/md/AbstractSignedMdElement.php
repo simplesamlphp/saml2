@@ -39,9 +39,11 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements Sign
     public function toXML(DOMElement $parent = null): DOMElement
     {
         if ($this->isSigned() === true && $this->signer === null) {
-            $e = $this->instantiateParentElement($parent);
-
             // We already have a signed document and no signer was set to re-sign it
+            if ($parent === null) {
+                return $this->xml;
+            }
+
             $node = $e->ownerDocument->importNode($this->getXML(), true);
             return $e->appendChild($node);
         }
