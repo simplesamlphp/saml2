@@ -183,12 +183,12 @@ final class Logo extends AbstractMduiElement
     {
         /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
-        $e->textContent = $this->content;
-        $e->setAttribute('height', strval($this->height));
-        $e->setAttribute('width', strval($this->width));
+        $e->textContent = $this->getContent();
+        $e->setAttribute('height', strval($this->getHeight()));
+        $e->setAttribute('width', strval($this->getWidth()));
 
-        if ($this->lang !== null) {
-            $e->setAttribute('xml:lang', $this->lang);
+        if ($this->getLanguage() !== null) {
+            $e->setAttribute('xml:lang', $this->getLanguage());
         }
 
         return $e;

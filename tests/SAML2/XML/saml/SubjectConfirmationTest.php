@@ -98,12 +98,7 @@ final class SubjectConfirmationTest extends TestCase
     public function testUnmarshalling(): void
     {
         $subjectConfirmation = SubjectConfirmation::fromXML($this->xmlRepresentation->documentElement);
-        $identifier = $subjectConfirmation->getIdentifier();
 
-        $this->assertEquals('urn:test:SomeMethod', $subjectConfirmation->getMethod());
-        $this->assertInstanceOf(NameID::class, $identifier);
-        $this->assertEquals('SomeNameIDValue', $identifier->getContent());
-        $this->assertInstanceOf(SubjectConfirmationData::class, $subjectConfirmation->getSubjectConfirmationData());
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($subjectConfirmation)

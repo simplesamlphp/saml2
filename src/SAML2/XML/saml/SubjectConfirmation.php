@@ -145,14 +145,12 @@ final class SubjectConfirmation extends AbstractSamlElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('Method', $this->Method);
+        $e->setAttribute('Method', $this->getMethod());
 
-        if ($this->identifier !== null) {
-            $this->identifier->toXML($e);
-        }
+        $this->getIdentifier()?->toXML($e);
 
-        if ($this->SubjectConfirmationData !== null) {
-            $this->SubjectConfirmationData->toXML($e);
+        if ($this->getSubjectConfirmationData() !== null && !$this->getSubjectConfirmationData()->isEmptyElement()) {
+            $this->getSubjectConfirmationData()->toXML($e);
         }
 
         return $e;

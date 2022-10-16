@@ -68,9 +68,10 @@ final class PublicationTest extends TestCase
     {
         $publication = Publication::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('SomePublisher', $publication->getPublisher());
-        $this->assertEquals(1293840000, $publication->getCreationInstant());
-        $this->assertEquals('SomePublicationId', $publication->getPublicationId());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($publication)
+        );
     }
 
 

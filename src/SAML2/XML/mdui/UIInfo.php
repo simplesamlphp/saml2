@@ -409,31 +409,31 @@ final class UIInfo extends AbstractMduiElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        foreach ($this->DisplayName as $child) {
+        foreach ($this->getDisplayName() as $child) {
             $child->toXML($e);
         }
 
-        foreach ($this->Description as $child) {
+        foreach ($this->getDescription() as $child) {
             $child->toXML($e);
         }
 
-        foreach ($this->InformationURL as $child) {
+        foreach ($this->getInformationURL() as $child) {
             $child->toXML($e);
         }
 
-        foreach ($this->PrivacyStatementURL as $child) {
+        foreach ($this->getPrivacyStatementURL() as $child) {
             $child->toXML($e);
         }
 
-        foreach ($this->Keywords as $child) {
+        foreach ($this->getKeywords() as $child) {
             $child->toXML($e);
         }
 
-        foreach ($this->Logo as $child) {
+        foreach ($this->getLogo() as $child) {
             $child->toXML($e);
         }
 
-        foreach ($this->elements as $child) {
+        foreach ($this->getElements() as $child) {
             $child->toXML($e);
         }
 

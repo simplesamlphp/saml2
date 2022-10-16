@@ -79,21 +79,10 @@ final class RegistrationInfoTest extends TestCase
     {
         $registrationInfo = RegistrationInfo::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('https://ExampleAuthority', $registrationInfo->getRegistrationAuthority());
-        $this->assertEquals(1234567890, $registrationInfo->getRegistrationInstant());
-
-        $registrationPolicy = $registrationInfo->getRegistrationPolicy();
-        $this->assertCount(2, $registrationPolicy);
         $this->assertEquals(
-            'http://www.example.org/aai/metadata/en_registration.html',
-            $registrationPolicy[0]->getContent()
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($registrationInfo)
         );
-        $this->assertEquals('en', $registrationPolicy[0]->getLanguage());
-        $this->assertEquals(
-            'http://www.example.org/aai/metadata/de_registration.html',
-            $registrationPolicy[1]->getContent()
-        );
-        $this->assertEquals('de', $registrationPolicy[1]->getLanguage());
     }
 
 

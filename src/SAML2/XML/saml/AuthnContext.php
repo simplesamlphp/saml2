@@ -220,19 +220,11 @@ final class AuthnContext extends AbstractSamlElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        if (!empty($this->authnContextClassRef)) {
-            $this->authnContextClassRef->toXML($e);
-        }
+        $this->getAuthnContextClassRef()?->toXML($e);
+        $this->getAuthnContextDecl()?->toXML($e);
+        $this->getAuthnContextDeclRef()?->toXML($e);
 
-        if (!empty($this->authnContextDecl)) {
-            $this->authnContextDecl->toXML($e);
-        }
-
-        if (!empty($this->authnContextDeclRef)) {
-            $this->authnContextDeclRef->toXML($e);
-        }
-
-        foreach ($this->authenticatingAuthorities as $authority) {
+        foreach ($this->getAuthenticatingAuthorities() as $authority) {
             $authority->toXML($e);
         }
 

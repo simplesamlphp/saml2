@@ -186,20 +186,20 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
             $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
         }
 
-        if ($this->id !== null) {
-            $e->setAttribute('ID', $this->id);
+        if ($this->getId() !== null) {
+            $e->setAttribute('ID', $this->getId());
         }
 
-        if ($this->validUntil !== null) {
-            $e->setAttribute('validUntil', gmdate('Y-m-d\TH:i:s\Z', $this->validUntil));
+        if ($this->getValidUntil() !== null) {
+            $e->setAttribute('validUntil', gmdate('Y-m-d\TH:i:s\Z', $this->getValidUntil()));
         }
 
-        if ($this->cacheDuration !== null) {
-            $e->setAttribute('cacheDuration', $this->cacheDuration);
+        if ($this->getCacheDuration() !== null) {
+            $e->setAttribute('cacheDuration', $this->getCacheDuration());
         }
 
-        if ($this->Extensions !== null && !$this->Extensions->isEmptyElement()) {
-            $this->Extensions->toXML($e);
+        if ($this->getExtensions() !== null && !$this->getExtensions()->isEmptyElement()) {
+            $this->getExtensions()->toXML($e);
         }
 
         return $e;

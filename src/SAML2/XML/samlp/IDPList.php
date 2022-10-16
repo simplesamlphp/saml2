@@ -118,13 +118,11 @@ final class IDPList extends AbstractSamlpElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        foreach ($this->IDPEntry as $idpEntry) {
+        foreach ($this->getIDPEntry() as $idpEntry) {
             $idpEntry->toXML($e);
         }
 
-        if (!is_null($this->getComplete)) {
-            $this->getComplete->toXML($e);
-        }
+        $this->getGetComplete()?->toXML($e);
 
         return $e;
     }

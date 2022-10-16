@@ -93,6 +93,10 @@ final class AffiliateMemberTest extends TestCase
     public function testUnmarshalling(): void
     {
         $affiliateMember = AffiliateMember::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals('https://some.entity.org/id', $affiliateMember->getContent());
+
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($affiliateMember)
+        );
     }
 }

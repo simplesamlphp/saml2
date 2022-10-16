@@ -171,13 +171,13 @@ final class KeyDescriptor extends AbstractMdElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        if ($this->use !== null) {
-            $e->setAttribute('use', $this->use);
+        if ($this->getUse() !== null) {
+            $e->setAttribute('use', $this->getUse());
         }
 
         $this->KeyInfo->toXML($e);
 
-        foreach ($this->EncryptionMethods as $em) {
+        foreach ($this->getEncryptionMethods() as $em) {
             $em->toXML($e);
         }
 

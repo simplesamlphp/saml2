@@ -91,11 +91,10 @@ final class RequestedAttributeTest extends TestCase
     {
         $ra = RequestedAttribute::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('attr', $ra->getName());
-        $this->assertEquals(C::NAMEFORMAT_URI, $ra->getNameFormat());
-        $this->assertEquals('Attribute', $ra->getFriendlyName());
-        $this->assertEquals('value1', $ra->getAttributeValues()[0]->getValue());
-        $this->assertTrue($ra->getIsRequired());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($ra)
+        );
     }
 
 

@@ -446,24 +446,22 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
         $root->setAttributeNS(C::NS_SAML, 'saml:tmp', 'tmp');
         $root->removeAttributeNS(C::NS_SAML, 'tmp');
 
-        $root->setAttribute('Version', $this->version);
-        $root->setAttribute('ID', $this->id);
-        $root->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->issueInstant));
+        $root->setAttribute('Version', $this->getVersion());
+        $root->setAttribute('ID', $this->getId());
+        $root->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->getIssueInstant()));
 
-        if ($this->destination !== null) {
-            $root->setAttribute('Destination', $this->destination);
+        if ($this->getDestination() !== null) {
+            $root->setAttribute('Destination', $this->getDestination());
         }
 
-        if ($this->consent !== null && $this->consent !== C::CONSENT_UNSPECIFIED) {
-            $root->setAttribute('Consent', $this->consent);
+        if ($this->getConsent() !== null && $this->getConsent() !== C::CONSENT_UNSPECIFIED) {
+            $root->setAttribute('Consent', $this->getConsent());
         }
 
-        if ($this->issuer !== null) {
-            $this->issuer->toXML($root);
-        }
+        $this->getIssuer()?->toXML($root);
 
-        if ($this->Extensions !== null && !$this->Extensions->isEmptyElement()) {
-            $this->Extensions->toXML($root);
+        if ($this->getExtensions() !== null && !$this->getExtensions()->isEmptyElement()) {
+            $this->getExtensions()->toXML($root);
         }
 
         return $root;

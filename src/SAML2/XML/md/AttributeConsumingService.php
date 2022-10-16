@@ -211,19 +211,19 @@ final class AttributeConsumingService extends AbstractMdElement
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('index', strval($this->index));
 
-        if ($this->isDefault === true) {
+        if ($this->getIsDefault() === true) {
             $e->setAttribute('isDefault', 'true');
-        } elseif ($this->isDefault === false) {
+        } elseif ($this->getIsDefault() === false) {
             $e->setAttribute('isDefault', 'false');
         }
 
-        foreach ($this->serviceNames as $name) {
+        foreach ($this->getServiceNames() as $name) {
             $name->toXML($e);
         }
-        foreach ($this->serviceDescriptions as $description) {
+        foreach ($this->getServiceDescriptions() as $description) {
             $description->toXML($e);
         }
-        foreach ($this->requestedAttributes as $ra) {
+        foreach ($this->getRequestedAttributes() as $ra) {
             $ra->toXML($e);
         }
 

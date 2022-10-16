@@ -121,7 +121,7 @@ final class StatusCode extends AbstractSamlpElement
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Value', $this->getValue());
 
-        foreach ($this->subCodes as $subCode) {
+        foreach ($this->getSubCodes() as $subCode) {
             $subCode->toXML($e);
         }
 

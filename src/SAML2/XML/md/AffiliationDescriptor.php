@@ -224,11 +224,11 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         $e = parent::toUnsignedXML($parent);
         $e->setAttribute('affiliationOwnerID', $this->affiliationOwnerID);
 
-        foreach ($this->AffiliateMembers as $am) {
+        foreach ($this->getAffiliateMembers() as $am) {
             $am->toXML($e);
         }
 
-        foreach ($this->KeyDescriptors as $kd) {
+        foreach ($this->getKeyDescriptors() as $kd) {
             $kd->toXML($e);
         }
 

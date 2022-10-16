@@ -213,11 +213,11 @@ abstract class AbstractEndpointType extends AbstractMdElement
     {
         $e = parent::instantiateParentElement($parent);
 
-        $e->setAttribute('Binding', $this->Binding);
-        $e->setAttribute('Location', $this->Location);
+        $e->setAttribute('Binding', $this->getBinding());
+        $e->setAttribute('Location', $this->getLocation());
 
-        if ($this->ResponseLocation !== null) {
-            $e->setAttribute('ResponseLocation', $this->ResponseLocation);
+        if ($this->getResponseLocation() !== null) {
+            $e->setAttribute('ResponseLocation', $this->getResponseLocation());
         }
 
         foreach ($this->getAttributesNS() as $a) {
@@ -225,7 +225,9 @@ abstract class AbstractEndpointType extends AbstractMdElement
         }
 
         foreach ($this->getElements() as $child) {
-            $e->appendChild($e->ownerDocument->importNode($child->toXML(), true));
+            if (!$child->isEmptyElement()) {
+                $child->toXML($e);
+            }
         }
 
         return $e;

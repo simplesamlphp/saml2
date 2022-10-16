@@ -334,36 +334,11 @@ final class IDPSSODescriptorTest extends TestCase
     public function testUnmarshalling(): void
     {
         $idpssod = IDPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertCount(2, $idpssod->getSingleSignOnServices());
-        $this->assertInstanceOf(SingleSignOnService::class, $idpssod->getSingleSignOnServices()[0]);
-        $this->assertInstanceOf(SingleSignOnService::class, $idpssod->getSingleSignOnServices()[1]);
-        $this->assertCount(2, $idpssod->getSingleLogoutServices());
-        $this->assertInstanceOf(SingleLogoutService::class, $idpssod->getSingleLogoutServices()[0]);
-        $this->assertInstanceOf(SingleLogoutService::class, $idpssod->getSingleLogoutServices()[1]);
-        $this->assertTrue($idpssod->wantAuthnRequestsSigned());
-        $this->assertCount(2, $idpssod->getNameIDMappingServices());
-        $this->assertInstanceOf(NameIDMappingService::class, $idpssod->getNameIDMappingServices()[0]);
-        $this->assertInstanceOf(NameIDMappingService::class, $idpssod->getNameIDMappingServices()[1]);
-        $this->assertCount(3, $idpssod->getNameIDFormats());
-        $this->assertEquals(C::NAMEID_X509_SUBJECT_NAME, $idpssod->getNameIDFormats()[0]->getContent());
-        $this->assertEquals(C::NAMEID_PERSISTENT, $idpssod->getNameIDFormats()[1]->getContent());
-        $this->assertEquals(C::NAMEID_TRANSIENT, $idpssod->getNameIDFormats()[2]->getContent());
-        $this->assertCount(2, $idpssod->getAssertionIDRequestServices());
-        $this->assertInstanceOf(AssertionIDRequestService::class, $idpssod->getAssertionIDRequestServices()[0]);
-        $this->assertInstanceOf(AssertionIDRequestService::class, $idpssod->getAssertionIDRequestServices()[1]);
 
-        $attributeProfiles = $idpssod->getAttributeProfiles();
-        $this->assertCount(2, $attributeProfiles);
-        $this->assertEquals('urn:attribute:profile1', $attributeProfiles[0]->getContent());
-        $this->assertEquals('urn:attribute:profile2', $attributeProfiles[1]->getContent());
-
-        $this->assertCount(2, $idpssod->getSupportedAttributes());
-        $this->assertInstanceOf(Attribute::class, $idpssod->getSupportedAttributes()[0]);
-        $this->assertInstanceOf(Attribute::class, $idpssod->getSupportedAttributes()[1]);
-        $this->assertCount(1, $idpssod->getArtifactResolutionServices());
-        $this->assertInstanceOf(ArtifactResolutionService::class, $idpssod->getArtifactResolutionServices()[0]);
-        $this->assertCount(1, $idpssod->getManageNameIDServices());
-        $this->assertInstanceOf(ManageNameIDService::class, $idpssod->getManageNameIDServices()[0]);
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($idpssod)
+        );
     }
 
 

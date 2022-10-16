@@ -183,16 +183,16 @@ final class SigningMethod extends AbstractAlgElement
 
         $e->setAttribute('Algorithm', $this->Algorithm);
 
-        if ($this->MinKeySize !== null) {
-            $e->setAttribute('MinKeySize', strval($this->MinKeySize));
+        if ($this->getMinKeySize() !== null) {
+            $e->setAttribute('MinKeySize', strval($this->getMinKeySize()));
         }
 
-        if ($this->MaxKeySize !== null) {
-            $e->setAttribute('MaxKeySize', strval($this->MaxKeySize));
+        if ($this->getMaxKeySize() !== null) {
+            $e->setAttribute('MaxKeySize', strval($this->getMaxKeySize()));
         }
 
-        foreach ($this->elements as $element) {
-            $e->appendChild($e->ownerDocument->importNode($element->getXML(), true));
+        foreach ($this->getElements() as $element) {
+            $element->toXML($e);
         }
 
         return $e;

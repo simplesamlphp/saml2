@@ -137,11 +137,11 @@ abstract class AbstractStatusResponse extends AbstractMessage
     {
         $e = parent::toUnsignedXML($parent);
 
-        if ($this->inResponseTo !== null) {
-            $e->setAttribute('InResponseTo', $this->inResponseTo);
+        if ($this->getInResponseTo() !== null) {
+            $e->setAttribute('InResponseTo', $this->getInResponseTo());
         }
 
-        $this->status->toXML($e);
+        $this->getStatus()->toXML($e);
 
         return $e;
     }

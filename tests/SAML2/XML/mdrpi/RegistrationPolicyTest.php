@@ -73,6 +73,7 @@ final class RegistrationPolicyTest extends TestCase
     public function testUnmarshalling(): void
     {
         $name = RegistrationPolicy::fromXML($this->xmlRepresentation->documentElement);
+
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)

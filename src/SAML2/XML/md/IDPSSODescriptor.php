@@ -354,23 +354,23 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
             $e->setAttribute('WantAuthnRequestsSigned', $this->wantAuthnRequestsSigned ? 'true' : 'false');
         }
 
-        foreach ($this->ssoServiceEndpoints as $ep) {
+        foreach ($this->getSingleSignOnServices() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->nameIDMappingServiceEndpoints as $ep) {
+        foreach ($this->getNameIDMappingServices() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->assertionIDRequestServiceEndpoints as $ep) {
+        foreach ($this->getAssertionIDRequestServices() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->attributeProfiles as $ap) {
+        foreach ($this->getAttributeProfiles() as $ap) {
             $ap->toXML($e);
         }
 
-        foreach ($this->attributes as $a) {
+        foreach ($this->getSupportedAttributes() as $a) {
             $a->toXML($e);
         }
 

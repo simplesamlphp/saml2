@@ -79,10 +79,11 @@ IMG;
     public function testUnmarshalling(): void
     {
         $logo = Logo::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals("nl", $logo->getLanguage());
-        $this->assertEquals(200, $logo->getHeight());
-        $this->assertEquals(300, $logo->getWidth());
-        $this->assertEquals($this->url, $logo->getContent());
+
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($logo)
+        );
     }
 
 

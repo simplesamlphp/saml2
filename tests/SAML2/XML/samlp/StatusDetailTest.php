@@ -78,14 +78,9 @@ final class StatusDetailTest extends TestCase
     {
         $statusDetail = StatusDetail::fromXML($this->xmlRepresentation->documentElement);
 
-        $statusDetailElement = $statusDetail->getElements();
-        $statusDetailElement = $statusDetailElement[0]->getXML();
-
-        $this->assertEquals('Cause', $statusDetailElement->localName);
         $this->assertEquals(
-            'org.sourceid.websso.profiles.idp.FailedAuthnSsoException',
-            $statusDetailElement->textContent
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($statusDetail)
         );
-        $this->assertFalse($statusDetail->isEmptyElement());
     }
 }

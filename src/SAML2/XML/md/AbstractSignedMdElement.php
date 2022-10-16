@@ -30,6 +30,7 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements Sign
         return $container->getBlacklistedEncryptionAlgorithms();
     }
 
+
     /**
      * @param \DOMElement|null $parent The EntityDescriptor we should append this SPSSODescriptor to.
      * @return \DOMElement
@@ -41,7 +42,7 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements Sign
             $e = $this->instantiateParentElement($parent);
 
             // We already have a signed document and no signer was set to re-sign it
-            $node = $e->ownerDocument->importNode($this->xml, true);
+            $node = $e->ownerDocument->importNode($this->getXML(), true);
             return $e->appendChild($node);
         }
 

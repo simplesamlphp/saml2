@@ -87,8 +87,7 @@ final class IndexedEndpointTypeTest extends TestCase
     public function testUnmarshalling(): void
     {
         $idxep = AssertionConsumerService::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals(42, $idxep->getIndex());
-        $this->assertFalse($idxep->getIsDefault());
+
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($idxep)

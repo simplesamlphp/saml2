@@ -103,7 +103,7 @@ final class PublicationPath extends AbstractMdrpiElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        foreach ($this->Publication as $pub) {
+        foreach ($this->getPublication() as $pub) {
             $pub->toXML($e);
         }
 

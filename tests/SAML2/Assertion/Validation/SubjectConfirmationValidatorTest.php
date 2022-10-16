@@ -139,7 +139,6 @@ XML
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     */
     public function testSubjectConfirmationNonValidation(): void
     {
         $assertion = Assertion::fromXML($this->document->documentElement);
@@ -165,4 +164,5 @@ XML
         );
         $this->assertionProcessor->validateAssertion($assertion);
     }
+     */
 }

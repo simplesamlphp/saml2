@@ -174,11 +174,9 @@ final class Status extends AbstractSamlpElement
 
         $this->statusCode->toXML($e);
 
-        if (!is_null($this->statusMessage)) {
-            $this->statusMessage->toXML($e);
-        }
+        $this->getStatusMessage()?->toXML($e);
 
-        foreach ($this->statusDetails as $sd) {
+        foreach ($this->getStatusDetails() as $sd) {
             if (!$sd->isEmptyElement()) {
                 $sd->toXML($e);
             }

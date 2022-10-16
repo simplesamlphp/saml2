@@ -56,7 +56,10 @@ final class AuthenticatingAuthorityTest extends TestCase
     {
         $authenticatingAuthority = AuthenticatingAuthority::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('https://idp.example.com/SAML2', $authenticatingAuthority->getContent());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($authenticatingAuthority)
+        );
     }
 }
 

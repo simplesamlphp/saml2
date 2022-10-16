@@ -79,11 +79,11 @@ final class KeywordsTest extends TestCase
     public function testUnmarshalling(): void
     {
         $keywords = Keywords::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals("nl", $keywords->getLanguage());
-        $this->assertCount(3, $keywords->getKeywords());
-        $this->assertEquals("KLM", $keywords->getKeywords()[0]);
-        $this->assertEquals("koninklijke luchtvaart", $keywords->getKeywords()[1]);
-        $this->assertEquals("maatschappij", $keywords->getKeywords()[2]);
+
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($keywords)
+        );
     }
 
 

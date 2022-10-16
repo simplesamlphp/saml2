@@ -275,30 +275,9 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     {
         $aad = AttributeAuthorityDescriptor::fromXML($this->xmlRepresentation->documentElement);
 
-        $as = $aad->getAttributeServices();
-        $this->assertCount(1, $as, "Wrong number of AttributeService elements.");
-        $this->assertEquals(C::BINDING_SOAP, $as[0]->getBinding());
-        $this->assertEquals('https://IdentityProvider.com/SAML/AA/SOAP', $as[0]->getLocation());
-
-        $aidrs = $aad->getAssertionIDRequestServices();
-        $this->assertCount(1, $aidrs, "Wrong number of AssertionIDRequestService elements.");
-        $this->assertEquals(C::BINDING_URI, $aidrs[0]->getBinding());
-        $this->assertEquals('https://IdentityProvider.com/SAML/AA/URI', $aidrs[0]->getLocation());
-
-        $nameIdFormats = $aad->getNameIDFormats();
-        $this->assertCount(3, $nameIdFormats);
-        $this->assertEquals(C::NAMEID_X509_SUBJECT_NAME, $nameIdFormats[0]->getContent());
-        $this->assertEquals(C::NAMEID_PERSISTENT, $nameIdFormats[1]->getContent());
-        $this->assertEquals(C::NAMEID_TRANSIENT, $nameIdFormats[2]->getContent());
-
-        $attrs = $aad->getAttributes();
-        $this->assertCount(2, $attrs, "Wrong number of attributes.");
         $this->assertEquals(
-            [
-                new AttributeProfile(C::PROFILE_1),
-                new AttributeProfile(C::PROFILE_2),
-            ],
-            $aad->getAttributeProfiles()
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($aad)
         );
     }
 

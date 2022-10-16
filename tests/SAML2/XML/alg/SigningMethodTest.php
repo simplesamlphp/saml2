@@ -72,16 +72,10 @@ final class SigningMethodTest extends TestCase
     {
         $signingMethod = SigningMethod::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals(C::SIG_RSA_SHA256, $signingMethod->getAlgorithm());
-        $this->assertEquals(1024, $signingMethod->getMinKeySize());
-        $this->assertEquals(4096, $signingMethod->getMaxKeySize());
-
-        $elements = $signingMethod->getElements();
-        $this->assertCount(1, $elements);
-        $this->assertEquals('Chunk', $elements[0]->getLocalName());
-        $this->assertEquals('ssp', $elements[0]->getPrefix());
-        $this->assertEquals(C::NAMESPACE, $elements[0]->getNamespaceURI());
-        $this->assertEquals('Some', $elements[0]->getXML()->textContent);
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($signingMethod)
+        );
     }
 
 

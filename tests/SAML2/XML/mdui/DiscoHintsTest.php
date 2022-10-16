@@ -90,17 +90,12 @@ final class DiscoHintsTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $disco = DiscoHints::fromXML($this->xmlRepresentation->documentElement);
+        $discoHints = DiscoHints::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertCount(2, $disco->getIPHint());
-        $this->assertEquals('130.59.0.0/16', $disco->getIPHint()[0]->getContent());
-        $this->assertEquals('2001:620::0/96', $disco->getIPHint()[1]->getContent());
-        $this->assertCount(2, $disco->getDomainHint());
-        $this->assertEquals('example.com', $disco->getDomainHint()[0]->getContent());
-        $this->assertEquals('www.example.com', $disco->getDomainHint()[1]->getContent());
-        $this->assertCount(2, $disco->getGeolocationHint());
-        $this->assertEquals('geo:47.37328,8.531126', $disco->getGeolocationHint()[0]->getContent());
-        $this->assertEquals('geo:19.34343,12.342514', $disco->getGeolocationHint()[1]->getContent());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($discoHints)
+        );
     }
 
 

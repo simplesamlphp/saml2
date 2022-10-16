@@ -204,19 +204,19 @@ final class DiscoHints extends AbstractMduiElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        foreach ($this->elements as $child) {
+        foreach ($this->getElements() as $child) {
             $child->toXML($e);
         }
 
-        foreach ($this->IPHint as $hint) {
+        foreach ($this->getIPHint() as $hint) {
             $hint->toXML($e);
         }
 
-        foreach ($this->DomainHint as $hint) {
+        foreach ($this->getDomainHint() as $hint) {
             $hint->toXML($e);
         }
 
-        foreach ($this->GeolocationHint as $hint) {
+        foreach ($this->getGeolocationHint() as $hint) {
             $hint->toXML($e);
         }
 

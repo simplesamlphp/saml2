@@ -224,21 +224,21 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('Name', $this->Name);
+        $e->setAttribute('Name', $this->getName());
 
-        if ($this->NameFormat !== null) {
-            $e->setAttribute('NameFormat', $this->NameFormat);
+        if ($this->getNameFormat() !== null) {
+            $e->setAttribute('NameFormat', $this->getNameFormat());
         }
 
-        if ($this->FriendlyName !== null) {
-            $e->setAttribute('FriendlyName', $this->FriendlyName);
+        if ($this->getFriendlyName() !== null) {
+            $e->setAttribute('FriendlyName', $this->getFriendlyName());
         }
 
         foreach ($this->getAttributesNS() as $attr) {
             $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
         }
 
-        foreach ($this->AttributeValues as $av) {
+        foreach ($this->getAttributeValues() as $av) {
             $av->toXML($e);
         }
 

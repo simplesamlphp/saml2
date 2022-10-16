@@ -85,7 +85,7 @@ final class AudienceRestriction extends AbstractConditionType
     {
         $e = $this->instantiateParentElement($parent);
 
-        foreach ($this->audience as $audience) {
+        foreach ($this->getAudience() as $audience) {
             $audience->toXML($e);
         }
 

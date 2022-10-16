@@ -97,12 +97,11 @@ final class RequestedAuthnContextTest extends TestCase
     public function testUnmarshalling(): void
     {
         $requestedAuthnContext = RequestedAuthnContext::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals('exact', $requestedAuthnContext->getComparison());
 
-        $contexts = $requestedAuthnContext->getRequestedAuthnContexts();
-        $this->assertCount(1, $contexts);
-        $this->assertInstanceOf(AuthnContextDeclRef::class, $contexts[0]);
-        $this->assertEquals('https://example.org/relative/path/to/document.xml', $contexts[0]->getContent());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($requestedAuthnContext)
+        );
     }
 
 

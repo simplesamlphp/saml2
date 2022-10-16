@@ -70,6 +70,7 @@ final class DescriptionTest extends TestCase
     public function testUnmarshalling(): void
     {
         $name = Description::fromXML($this->xmlRepresentation->documentElement);
+
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)

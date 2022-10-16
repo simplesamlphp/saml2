@@ -219,17 +219,17 @@ final class PublicationInfo extends AbstractMdrpiElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('publisher', $this->publisher);
+        $e->setAttribute('publisher', $this->getPublisher());
 
-        if ($this->creationInstant !== null) {
-            $e->setAttribute('creationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->creationInstant));
+        if ($this->getCreationInstant() !== null) {
+            $e->setAttribute('creationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->getCreationInstant()));
         }
 
-        if ($this->publicationId !== null) {
-            $e->setAttribute('publicationId', $this->publicationId);
+        if ($this->getPublicationId() !== null) {
+            $e->setAttribute('publicationId', $this->getPublicationId());
         }
 
-        foreach ($this->UsagePolicy as $up) {
+        foreach ($this->getUsagePolicy() as $up) {
             $up->toXML($e);
         }
 

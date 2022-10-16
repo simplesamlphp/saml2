@@ -107,9 +107,9 @@ final class Scope extends AbstractShibmdElement
     {
         /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
-        $e->textContent = $this->content;
+        $e->textContent = $this->getContent();
 
-        if ($this->regexp === true) {
+        if ($this->isRegexpScope() === true) {
             $e->setAttribute('regexp', 'true');
         } else {
             $e->setAttribute('regexp', 'false');

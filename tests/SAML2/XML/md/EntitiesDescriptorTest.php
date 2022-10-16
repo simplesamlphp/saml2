@@ -161,12 +161,11 @@ final class EntitiesDescriptorTest extends TestCase
     public function testUnmarshalling(): void
     {
         $entitiesd = EntitiesDescriptor::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals('Federation', $entitiesd->getName());
-        $this->assertInstanceOf(Extensions::class, $entitiesd->getExtensions());
-        $this->assertCount(1, $entitiesd->getEntitiesDescriptors());
-        $this->assertInstanceOf(EntitiesDescriptor::class, $entitiesd->getEntitiesDescriptors()[0]);
-        $this->assertCount(1, $entitiesd->getEntityDescriptors());
-        $this->assertInstanceOf(EntityDescriptor::class, $entitiesd->getEntityDescriptors()[0]);
+
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($entitiesd)
+        );
     }
 
 

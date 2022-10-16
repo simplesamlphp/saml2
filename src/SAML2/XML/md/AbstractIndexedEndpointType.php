@@ -97,10 +97,10 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
-        $e->setAttribute('index', strval($this->index));
+        $e->setAttribute('index', strval($this->getIndex()));
 
-        if (is_bool($this->isDefault)) {
-            $e->setAttribute('isDefault', $this->isDefault ? 'true' : 'false');
+        if (is_bool($this->getIsDefault())) {
+            $e->setAttribute('isDefault', $this->getIsDefault() ? 'true' : 'false');
         }
 
         return $e;

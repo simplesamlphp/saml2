@@ -89,14 +89,9 @@ final class PublicationPathTest extends TestCase
     {
         $publicationPath = PublicationPath::fromXML($this->xmlRepresentation->documentElement);
 
-        $publication = $publicationPath->getPublication();
-        $this->assertCount(2, $publication);
-
-        $this->assertEquals('SomePublisher', $publication[0]->getPublisher());
-        $this->assertEquals(1293840000, $publication[0]->getCreationInstant());
-        $this->assertEquals('SomePublicationId', $publication[0]->getPublicationId());
-        $this->assertEquals('SomeOtherPublisher', $publication[1]->getPublisher());
-        $this->assertEquals(1293840000, $publication[1]->getCreationInstant());
-        $this->assertEquals('SomeOtherPublicationId', $publication[1]->getPublicationId());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($publicationPath)
+        );
     }
 }

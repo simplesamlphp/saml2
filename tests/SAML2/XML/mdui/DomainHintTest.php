@@ -63,6 +63,7 @@ final class DomainHintTest extends TestCase
     public function testUnmarshalling(): void
     {
         $hint = DomainHint::fromXML($this->xmlRepresentation->documentElement);
+
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($hint)

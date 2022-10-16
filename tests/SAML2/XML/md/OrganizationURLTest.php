@@ -77,6 +77,7 @@ final class OrganizationURLTest extends TestCase
     public function testUnmarshalling(): void
     {
         $name = OrganizationURL::fromXML($this->xmlRepresentation->documentElement);
+
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)

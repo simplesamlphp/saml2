@@ -152,7 +152,10 @@ final class EntityAttributesTest extends TestCase
         $entityAttributes->addChild($signedAssertion);
         $entityAttributes->addChild($attribute2);
 
-        $this->assertEquals($this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement), strval($entityAttributes));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($entityAttributes)
+        );
     }
 
 
@@ -161,29 +164,10 @@ final class EntityAttributesTest extends TestCase
     public function testUnmarshalling(): void
     {
         $entityAttributes = EntityAttributes::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertCount(3, $entityAttributes->getChildren());
 
-        $this->assertInstanceOf(Attribute::class, $entityAttributes->getChildren()[0]);
-        $this->assertInstanceOf(Assertion::class, $entityAttributes->getChildren()[1]);
-        $this->assertInstanceOf(Attribute::class, $entityAttributes->getChildren()[2]);
-
-        $this->assertEquals('attrib1', $entityAttributes->getChildren()[0]->getName());
         $this->assertEquals(
-            C::NAMEFORMAT_URI,
-            $entityAttributes->getChildren()[0]->getNameFormat()
-        );
-        $this->assertCount(3, $entityAttributes->getChildren()[0]->getAttributeValues());
-
-        $this->assertEquals('Assertion', $entityAttributes->getChildren()[1]->getLocalName());
-        $this->assertEquals(
-            '2022-08-12T16:37:52Z',
-            $entityAttributes->getChildren()[1]->getXML()->getAttribute('IssueInstant')
-        );
-
-        $this->assertEquals('foo', $entityAttributes->getChildren()[2]->getName());
-        $this->assertEquals(
-            'urn:simplesamlphp:v1:simplesamlphp',
-            $entityAttributes->getChildren()[2]->getNameFormat()
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($entityAttributes)
         );
     }
 }

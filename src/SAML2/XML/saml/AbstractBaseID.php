@@ -150,12 +150,12 @@ abstract class AbstractBaseID extends AbstractSamlElement implements
         $e->setAttribute('xmlns:' . static::getXsiTypePrefix(), static::getXsiTypeNamespaceURI());
         $e->setAttributeNS(C::NS_XSI, 'xsi:type', $this->getXsiType());
 
-        if ($this->NameQualifier !== null) {
-            $e->setAttribute('NameQualifier', $this->NameQualifier);
+        if ($this->getNameQualifier() !== null) {
+            $e->setAttribute('NameQualifier', $this->getNameQualifier());
         }
 
-        if ($this->SPNameQualifier !== null) {
-            $e->setAttribute('SPNameQualifier', $this->SPNameQualifier);
+        if ($this->getSPNameQualifier() !== null) {
+            $e->setAttribute('SPNameQualifier', $this->getSPNameQualifier());
         }
 
         return $e;

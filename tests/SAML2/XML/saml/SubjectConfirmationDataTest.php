@@ -126,39 +126,11 @@ final class SubjectConfirmationDataTest extends TestCase
     public function testUnmarshalling(): void
     {
         $subjectConfirmationData = SubjectConfirmationData::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals(987654321, $subjectConfirmationData->getNotBefore());
-        $this->assertEquals(1234567890, $subjectConfirmationData->getNotOnOrAfter());
-        $this->assertEquals(C::ENTITY_SP, $subjectConfirmationData->getRecipient());
-        $this->assertEquals('SomeRequestID', $subjectConfirmationData->getInResponseTo());
-        $this->assertEquals('127.0.0.1', $subjectConfirmationData->getAddress());
 
         $this->assertEquals(
-            [
-                '{urn:test:something}attr1' => [
-                    'qualifiedName' => 'test:attr1',
-                    'namespaceURI' => 'urn:test:something',
-                    'value' => 'testval1'
-                ],
-                '{urn:test:something}attr2' => [
-                    'qualifiedName' => 'test:attr2',
-                    'namespaceURI' => 'urn:test:something',
-                    'value' => 'testval2'
-                ]
-            ],
-            $subjectConfirmationData->getAttributesNS()
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($subjectConfirmationData)
         );
-        $this->assertEquals('testval1', $subjectConfirmationData->getAttributeNS('urn:test:something', 'attr1'));
-        $this->assertEquals('testval2', $subjectConfirmationData->getAttributeNS('urn:test:something', 'attr2'));
-
-        /** @psalm-var \SimpleSAML\XMLSecurity\XML\ds\KeyInfo $info */
-        $info = $subjectConfirmationData->getInfo()[0];
-
-        /** @psalm-var \SimpleSAML\XMLSecurity\XML\ds\KeyName $keyName */
-        $keyName = $info->getInfo()[0];
-        $this->assertEquals('SomeKey', $keyName->getContent());
-
-        $info = $subjectConfirmationData->getInfo()[1];
-        $this->assertInstanceOf(Chunk::class, $info);
     }
 
 

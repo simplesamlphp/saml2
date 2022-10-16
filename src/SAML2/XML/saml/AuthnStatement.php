@@ -241,20 +241,20 @@ final class AuthnStatement extends AbstractStatementType
     {
         $e = $this->instantiateParentElement($parent);
 
-        if ($this->subjectLocality !== null) {
-            $this->subjectLocality->toXML($e);
+        if ($this->getSubjectLocality() !== null && !$this->getSubjectLocality()->isEmptyElement()) {
+            $this->getSubjectLocality()->toXML($e);
         }
 
-        $this->authnContext->toXML($e);
+        $this->getAuthnContext()->toXML($e);
 
-        $e->setAttribute('AuthnInstant', gmdate('Y-m-d\TH:i:s\Z', $this->authnInstant));
+        $e->setAttribute('AuthnInstant', gmdate('Y-m-d\TH:i:s\Z', $this->getAuthnInstant()));
 
-        if ($this->sessionIndex !== null) {
-            $e->setAttribute('SessionIndex', $this->sessionIndex);
+        if ($this->getSessionIndex() !== null) {
+            $e->setAttribute('SessionIndex', $this->getSessionIndex());
         }
 
-        if ($this->sessionNotOnOrAfter !== null) {
-            $e->setAttribute('SessionNotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->sessionNotOnOrAfter));
+        if ($this->getSessionNotOnOrAfter() !== null) {
+            $e->setAttribute('SessionNotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->getSessionNotOnOrAfter()));
         }
 
         return $e;

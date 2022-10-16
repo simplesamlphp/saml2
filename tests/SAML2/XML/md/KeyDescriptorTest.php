@@ -115,15 +115,11 @@ XML
     public function testUnmarshalling(): void
     {
         $kd = KeyDescriptor::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals('signing', $kd->getUse());
 
-        $knfo = $kd->getKeyInfo();
-        $info = $knfo->getInfo();
-        $this->assertCount(1, $info);
-        $this->assertCount(1, $info);
-        $this->assertInstanceOf(KeyName::class, $info[0]);
-        $this->assertCount(1, $kd->getEncryptionMethods());
-        $this->assertEquals('http://www.w3.org/2001/04/xmlenc#rsa-1_5', $kd->getEncryptionMethods()[0]->getAlgorithm());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($kd)
+        );
     }
 
 

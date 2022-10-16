@@ -101,26 +101,6 @@ final class ConditionsTest extends TestCase
     {
         $conditions = Conditions::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals(1405558878, $conditions->getNotBefore());
-        $this->assertEquals(1705558908, $conditions->getNotOnOrAfter());
-        $this->assertEmpty($conditions->getCondition());
-
-        $audienceRestriction = $conditions->getAudienceRestriction();
-        $this->assertCount(1, $audienceRestriction);
-
-        $audiences = $audienceRestriction[0]->getAudience();
-        $this->assertCount(1, $audiences);
-        $this->assertEquals('http://sp.example.com/demo1/metadata.php', $audiences[0]->getContent());
-
-        $this->assertTrue($conditions->getOneTimeUse());
-
-        $proxyRestriction = $conditions->getProxyRestriction();
-        $this->assertInstanceOf(ProxyRestriction::class, $proxyRestriction);
-
-        $audiences = $proxyRestriction->getAudience();
-        $this->assertCount(1, $audiences);
-        $this->assertEquals('http://sp.example.com/demo2/metadata.php', $audiences[0]->getContent());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($conditions)

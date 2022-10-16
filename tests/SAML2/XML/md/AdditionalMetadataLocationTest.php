@@ -81,8 +81,11 @@ final class AdditionalMetadataLocationTest extends TestCase
     public function testUnmarshalling(): void
     {
         $additionalMetadataLocation = AdditionalMetadataLocation::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals(C::NAMESPACE, $additionalMetadataLocation->getNamespace());
-        $this->assertEquals(C::LOCATION_A, $additionalMetadataLocation->getContent());
+
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($additionalMetadataLocation)
+        );
     }
 
 

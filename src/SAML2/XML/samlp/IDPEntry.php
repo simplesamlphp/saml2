@@ -128,14 +128,14 @@ final class IDPEntry extends AbstractSamlpElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('ProviderID', $this->providerId);
+        $e->setAttribute('ProviderID', $this->getProviderId());
 
-        if ($this->name !== null) {
-            $e->setAttribute('Name', $this->name);
+        if ($this->getName() !== null) {
+            $e->setAttribute('Name', $this->getName());
         }
 
-        if ($this->loc !== null) {
-            $e->setAttribute('Loc', $this->loc);
+        if ($this->getLoc() !== null) {
+            $e->setAttribute('Loc', $this->getLoc());
         }
 
         return $e;

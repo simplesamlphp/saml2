@@ -106,23 +106,11 @@ final class AttributeQueryTest extends TestCase
     public function testUnmarshalling(): void
     {
         $aq = AttributeQuery::fromXML($this->xmlRepresentation->documentElement);
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
-        $issuer = $aq->getIssuer();
 
-        $subject = $aq->getSubject();
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\NameID $identifier */
-        $identifier = $subject->getIdentifier();
-
-        // Sanity check
-        $this->assertEquals('https://example.org/', $issuer->getContent());
-        $this->assertEquals('urn:example:subject', $identifier->getContent());
-
-        $attributes = $aq->getAttributes();
-        $this->assertCount(4, $attributes);
-        $this->assertEquals('test1', $attributes[0]->getName());
-        $this->assertEquals('test2', $attributes[1]->getName());
-        $this->assertEquals('test3', $attributes[2]->getName());
-        $this->assertEquals('test4', $attributes[3]->getName());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($aq)
+        );
     }
 
 

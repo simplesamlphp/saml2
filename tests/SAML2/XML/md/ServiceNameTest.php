@@ -89,6 +89,7 @@ final class ServiceNameTest extends TestCase
     public function testUnmarshalling(): void
     {
         $name = ServiceName::fromXML($this->xmlRepresentation->documentElement);
+
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)

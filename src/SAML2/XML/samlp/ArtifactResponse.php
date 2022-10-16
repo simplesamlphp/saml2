@@ -177,9 +177,7 @@ class ArtifactResponse extends AbstractStatusResponse
     {
         $e = parent::toUnsignedXML($parent);
 
-        if ($this->message !== null) {
-            $this->message->toXML($e);
-        }
+        $this->getMessage()?->toXML($e);
 
         return $e;
     }

@@ -61,6 +61,10 @@ final class AuthnContextClassRefTest extends TestCase
     public function testUnmarshalling(): void
     {
         $authnContextClassRef = AuthnContextClassRef::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals(C::AC_PASSWORD_PROTECTED_TRANSPORT, $authnContextClassRef->getContent());
+
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($authnContextClassRef)
+        );
     }
 }

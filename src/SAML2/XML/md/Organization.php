@@ -202,19 +202,17 @@ final class Organization extends AbstractMdElement
             $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
         }
 
-        if ($this->Extensions !== null) {
-            $this->Extensions->toXML($e);
-        }
+        $this->getExtensions()?->toXML($e);
 
-        foreach ($this->OrganizationName as $name) {
+        foreach ($this->getOrganizationName() as $name) {
             $name->toXML($e);
         }
 
-        foreach ($this->OrganizationDisplayName as $displayName) {
+        foreach ($this->getOrganizationDisplayName() as $displayName) {
             $displayName->toXML($e);
         }
 
-        foreach ($this->OrganizationURL as $url) {
+        foreach ($this->getOrganizationURL() as $url) {
             $url->toXML($e);
         }
 

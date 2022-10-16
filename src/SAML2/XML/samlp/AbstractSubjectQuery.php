@@ -86,7 +86,7 @@ abstract class AbstractSubjectQuery extends AbstractRequest
 
         $parent = parent::toUnsignedXML($parent);
 
-        $this->subject->toXML($parent);
+        $this->getSubject()->toXML($parent);
 
         return $parent;
     }

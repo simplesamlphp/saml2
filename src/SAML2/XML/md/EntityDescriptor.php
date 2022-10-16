@@ -400,23 +400,18 @@ final class EntityDescriptor extends AbstractMetadataDocument
             $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
         }
 
-        foreach ($this->RoleDescriptor as $n) {
+        foreach ($this->getRoleDescriptors() as $n) {
             $n->toXML($e);
         }
 
-        if ($this->AffiliationDescriptor !== null) {
-            $this->AffiliationDescriptor->toXML($e);
-        }
+        $this->getAffiliationDescriptor()?->toXML($e);
+        $this->getOrganization()?->toXML($e);
 
-        if ($this->Organization !== null) {
-            $this->Organization->toXML($e);
-        }
-
-        foreach ($this->ContactPerson as $cp) {
+        foreach ($this->getContactPersons() as $cp) {
             $cp->toXML($e);
         }
 
-        foreach ($this->AdditionalMetadataLocation as $n) {
+        foreach ($this->getAdditionalMetadataLocations() as $n) {
             $n->toXML($e);
         }
 

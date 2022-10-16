@@ -152,15 +152,13 @@ final class Scoping extends AbstractSamlpElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        if ($this->proxyCount !== null) {
-            $e->setAttribute('ProxyCount', strval($this->proxyCount));
+        if ($this->getProxyCount() !== null) {
+            $e->setAttribute('ProxyCount', strval($this->getProxyCount()));
         }
 
-        if ($this->IDPList !== null) {
-            $this->IDPList->toXML($e);
-        }
+        $this->getIDPList()?->toXML($e);
 
-        foreach ($this->requesterId as $rid) {
+        foreach ($this->getRequesterId() as $rid) {
             $rid->toXML($e);
         }
 

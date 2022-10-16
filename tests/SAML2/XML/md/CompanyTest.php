@@ -68,6 +68,7 @@ final class CompanyTest extends TestCase
     public function testUnmarshalling(): void
     {
         $name = Company::fromXML($this->xmlRepresentation->documentElement);
+
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)

@@ -108,5 +108,4 @@ final class StatementTest extends TestCase
 
         $this->assertEquals($element->ownerDocument->saveXML($element), strval($chunk));
     }
-
 }

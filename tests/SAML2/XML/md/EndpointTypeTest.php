@@ -116,14 +116,6 @@ final class EndpointTypeTest extends TestCase
     public function testUnmarshalling(): void
     {
         $endpointType = AttributeService::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals('https://whatever/', $endpointType->getLocation());
-        $this->assertEquals('https://foo.bar/', $endpointType->getResponseLocation());
-        $this->assertEquals(C::BINDING_HTTP_POST, $endpointType->getBinding());
-
-        $this->assertTrue($endpointType->hasAttributeNS(C::NAMESPACE, 'attr'));
-        $this->assertEquals('value', $endpointType->getAttributeNS(C::NAMESPACE, 'attr'));
-        $this->assertFalse($endpointType->hasAttributeNS(C::NAMESPACE, 'invalid'));
-        $this->assertNull($endpointType->getAttributeNS(C::NAMESPACE, 'invalid'));
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),

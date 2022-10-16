@@ -194,37 +194,11 @@ final class UIInfoTest extends TestCase
     public function testUnmarshalling(): void
     {
         $uiinfo = UIInfo::fromXML($this->xmlRepresentation->documentElement);
-        $uiinfo->addChild(
-            new Chunk(DOMDocumentFactory::fromString('<child3 />')->documentElement)
-        );
 
-        $this->assertCount(2, $uiinfo->getDisplayName());
-        $this->assertEquals('University of Examples', $uiinfo->getDisplayName()[0]->getContent());
-        $this->assertEquals('en', $uiinfo->getDisplayName()[0]->getLanguage());
-        $this->assertEquals('Univërsitä øf Exåmpleß', $uiinfo->getDisplayName()[1]->getContent());
-        $this->assertEquals('el', $uiinfo->getDisplayName()[1]->getLanguage());
-        $this->assertCount(2, $uiinfo->getInformationURL());
-        $this->assertEquals('http://www.example.edu/en/', $uiinfo->getInformationURL()[0]->getContent());
-        $this->assertEquals('en', $uiinfo->getInformationURL()[0]->getLanguage());
-        $this->assertEquals('http://www.example.edu/', $uiinfo->getInformationURL()[1]->getContent());
-        $this->assertEquals('el', $uiinfo->getInformationURL()[1]->getLanguage());
-        $this->assertCount(1, $uiinfo->getPrivacyStatementURL());
-        $this->assertEquals('https://example.org/privacy', $uiinfo->getPrivacyStatementURL()[0]->getContent());
-        $this->assertEquals('en', $uiinfo->getPrivacyStatementURL()[0]->getLanguage());
-        $this->assertCount(1, $uiinfo->getDescription());
-        $this->assertEquals('Just an example', $uiinfo->getDescription()[0]->getContent());
-        $this->assertCount(1, $uiinfo->getLogo());
-        $this->assertEquals('https://example.org/idp/images/logo_87x88.png', $uiinfo->getLogo()[0]->getContent());
-        $this->assertEquals(87, $uiinfo->getLogo()[0]->getWidth());
-        $this->assertEquals(88, $uiinfo->getLogo()[0]->getHeight());
-        $this->assertEquals("fy", $uiinfo->getLogo()[0]->getLanguage());
-        $this->assertCount(2, $uiinfo->getKeywords());
-        $this->assertEquals('University Fictional', $uiinfo->getKeywords()[0]->getKeywords()[0]);
-        $this->assertEquals('fr', $uiinfo->getKeywords()[1]->getLanguage());
-        $this->assertCount(3, $uiinfo->getElements());
-        $this->assertEquals('child1', $uiinfo->getElements()[0]->getLocalName());
-        $this->assertEquals('child2', $uiinfo->getElements()[1]->getLocalName());
-        $this->assertEquals('child3', $uiinfo->getElements()[2]->getLocalName());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($uiinfo)
+        );
     }
 
 

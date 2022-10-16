@@ -84,8 +84,6 @@ final class SingleSignOnServiceTest extends TestCase
     {
         $ssoep = SingleSignOnService::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals(C::BINDING_HTTP_POST, $ssoep->getBinding());
-        $this->assertEquals(C::LOCATION_A, $ssoep->getLocation());
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($ssoep)

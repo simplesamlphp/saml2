@@ -128,7 +128,7 @@ final class Response extends AbstractEcpElement
 
         $response->setAttributeNS(C::NS_SOAP, 'SOAP-ENV:mustUnderstand', '1');
         $response->setAttributeNS(C::NS_SOAP, 'SOAP-ENV:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
-        $response->setAttribute('AssertionConsumerServiceURL', $this->AssertionConsumerServiceURL);
+        $response->setAttribute('AssertionConsumerServiceURL', $this->getAssertionConsumerServiceURL());
 
         return $response;
     }

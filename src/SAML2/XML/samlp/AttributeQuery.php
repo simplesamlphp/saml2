@@ -187,7 +187,7 @@ class AttributeQuery extends AbstractSubjectQuery
     {
         $e = parent::toUnsignedXML($parent);
 
-        foreach ($this->attributes as $attribute) {
+        foreach ($this->getAttributes() as $attribute) {
             $attribute->toXML($e);
         }
 

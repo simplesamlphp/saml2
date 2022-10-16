@@ -141,12 +141,12 @@ final class RequestedAuthnContext extends AbstractSamlpElement
         /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
 
-        foreach ($this->requestedAuthnContexts as $context) {
-            $e->appendChild($e->ownerDocument->importNode($context->toXML(), true));
+        foreach ($this->getRequestedAuthnContexts() as $context) {
+            $context->toXML($e);
         }
 
-        if ($this->Comparison !== null) {
-            $e->setAttribute('Comparison', $this->Comparison);
+        if ($this->getComparison() !== null) {
+            $e->setAttribute('Comparison', $this->getComparison());
         }
 
         return $e;

@@ -63,6 +63,10 @@ final class AuthnContextDeclTest extends TestCase
     {
         /** @psalm-var \DOMNode $authnContextDecl[1] */
         $authnContextDecl = AuthnContextDecl::fromXML($this->xmlRepresentation->documentElement)->getDecl();
-        $this->assertEquals('samlacpass:AuthenticationContextDeclaration', $authnContextDecl[1]->localName);
+
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($authnContextDecl)
+        );
     }
 }

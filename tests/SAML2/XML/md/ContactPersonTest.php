@@ -125,30 +125,12 @@ final class ContactPersonTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $cp = ContactPerson::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals('other', $cp->getContactType());
-        $this->assertEquals('Test Company', $cp->getCompany()->getContent());
-        $this->assertEquals('John', $cp->getGivenName()->getContent());
-        $this->assertEquals('Doe', $cp->getSurName()->getContent());
-        $this->assertEquals('mailto:john.doe@test.company', $cp->getEmailAddresses()[1]->getContent());
-        $this->assertEquals('1-234-567-8901', $cp->getTelephoneNumbers()[0]->getContent());
+        $contactPerson = ContactPerson::fromXML($this->xmlRepresentation->documentElement);
+
         $this->assertEquals(
-            [
-                '{urn:test:something}attr1' => [
-                    'qualifiedName' => 'test:attr1',
-                    'namespaceURI' => 'urn:test:something',
-                    'value' => 'testval1'
-                ],
-                '{urn:test:something}attr2' => [
-                    'qualifiedName' => 'test:attr2',
-                    'namespaceURI' => 'urn:test:something',
-                    'value' => 'testval2'
-                ]
-            ],
-            $cp->getAttributesNS()
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($contactPerson)
         );
-        $this->assertEquals('testval1', $cp->getAttributeNS('urn:test:something', 'attr1'));
-        $this->assertEquals('testval2', $cp->getAttributeNS('urn:test:something', 'attr2'));
     }
 
 

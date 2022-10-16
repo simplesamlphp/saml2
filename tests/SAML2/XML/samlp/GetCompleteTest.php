@@ -59,7 +59,10 @@ final class GetCompleteTest extends TestCase
     {
         $getComplete = GetComplete::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('https://some/location', $getComplete->getContent());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($getComplete)
+        );
     }
 }
 

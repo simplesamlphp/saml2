@@ -528,53 +528,47 @@ class AuthnRequest extends AbstractRequest
     {
         $e = parent::toUnsignedXML($parent);
 
-        if ($this->forceAuthn === true) {
+        if ($this->getForceAuthn() === true) {
             $e->setAttribute('ForceAuthn', 'true');
         }
 
-        if (!empty($this->ProviderName)) {
-            $e->setAttribute('ProviderName', $this->ProviderName);
+        if (!empty($this->getProviderName())) {
+            $e->setAttribute('ProviderName', $this->getProviderName());
         }
 
-        if ($this->isPassive === true) {
+        if ($this->getIsPassive() === true) {
             $e->setAttribute('IsPassive', 'true');
         }
 
-        if ($this->assertionConsumerServiceIndex !== null) {
-            $e->setAttribute('AssertionConsumerServiceIndex', strval($this->assertionConsumerServiceIndex));
+        if ($this->getAssertionConsumerServiceIndex() !== null) {
+            $e->setAttribute('AssertionConsumerServiceIndex', strval($this->getAssertionConsumerServiceIndex()));
         } else {
-            if ($this->assertionConsumerServiceURL !== null) {
-                $e->setAttribute('AssertionConsumerServiceURL', $this->assertionConsumerServiceURL);
+            if ($this->getAssertionConsumerServiceURL() !== null) {
+                $e->setAttribute('AssertionConsumerServiceURL', $this->getAssertionConsumerServiceURL());
             }
-            if ($this->protocolBinding !== null) {
-                $e->setAttribute('ProtocolBinding', $this->protocolBinding);
-            }
-        }
-
-        if ($this->attributeConsumingServiceIndex !== null) {
-            $e->setAttribute('AttributeConsumingServiceIndex', strval($this->attributeConsumingServiceIndex));
-        }
-
-        if ($this->subject !== null) {
-            $this->subject->toXML($e);
-        }
-
-        if ($this->nameIdPolicy !== null) {
-            if (!$this->nameIdPolicy->isEmptyElement()) {
-                $this->nameIdPolicy->toXML($e);
+            if ($this->getProtocolBinding() !== null) {
+                $e->setAttribute('ProtocolBinding', $this->getProtocolBinding());
             }
         }
 
-        if ($this->conditions !== null && !$this->conditions->isEmptyElement()) {
-            $this->conditions->toXML($e);
+        if ($this->getAttributeConsumingServiceIndex() !== null) {
+            $e->setAttribute('AttributeConsumingServiceIndex', strval($this->getAttributeConsumingServiceIndex()));
         }
 
-        if (!empty($this->requestedAuthnContext)) {
-            $this->requestedAuthnContext->toXML($e);
+        $this->getSubject()?->toXML($e);
+
+        if ($this->getNameIdPolicy() !== null && !$this->getNameIdPolicy()->isEmptyElement()) {
+            $this->getNameIdPolicy()->toXML($e);
         }
 
-        if ($this->scoping !== null && !$this->scoping->isEmptyElement()) {
-            $this->scoping->toXML($e);
+        if ($this->getConditions() !== null && !$this->getConditions()->isEmptyElement()) {
+            $this->getConditions()->toXML($e);
+        }
+
+        $this->getRequestedAuthnContext()?->toXML($e);
+
+        if ($this->getScoping() !== null && !$this->getScoping()->isEmptyElement()) {
+            $this->getScoping()->toXML($e);
         }
 
         return $e;

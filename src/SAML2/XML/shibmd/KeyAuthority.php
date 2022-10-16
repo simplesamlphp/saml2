@@ -132,11 +132,11 @@ final class KeyAuthority extends AbstractShibmdElement
             $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
         }
 
-        if ($this->VerifyDepth !== null) {
-            $e->setAttribute('VerifyDepth', strval($this->VerifyDepth));
+        if ($this->getVerifyDepth() !== null) {
+            $e->setAttribute('VerifyDepth', strval($this->getVerifyDepth()));
         }
 
-        foreach ($this->keys as $key) {
+        foreach ($this->getKeys() as $key) {
             $key->toXML($e);
         }
 

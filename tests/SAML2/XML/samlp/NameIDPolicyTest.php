@@ -76,9 +76,9 @@ final class NameIDPolicyTest extends TestCase
     {
         $nameIdPolicy = NameIDPolicy::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('TheSPNameQualifier', $nameIdPolicy->getSPNameQualifier());
-        $this->assertEquals('urn:the:format', $nameIdPolicy->getFormat());
-        $this->assertEquals(true, $nameIdPolicy->getAllowCreate());
-        $this->assertFalse($nameIdPolicy->isEmptyElement());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($nameIdPolicy)
+        );
     }
 }

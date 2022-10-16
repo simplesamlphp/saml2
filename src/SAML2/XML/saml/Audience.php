@@ -69,7 +69,7 @@ final class Audience extends AbstractSamlElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $element = $this->instantiateParentElement($parent);
-        $element->textContent = $this->content;
+        $element->textContent = $this->getContent();
 
         return $element;
     }

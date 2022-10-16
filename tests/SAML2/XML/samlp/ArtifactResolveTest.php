@@ -64,9 +64,9 @@ final class ArtifactResolveTest extends TestCase
         $issuer = new Issuer('https://ServiceProvider.com/SAML');
 
         $ar = ArtifactResolve::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals($artifact, $ar->getArtifact());
-        $this->assertEquals($id, $ar->getId());
-        $this->assertInstanceOf(Issuer::class, $issuer);
-        $this->assertEquals($issuer->getContent(), $ar->getIssuer()->getContent());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($ar),
+        );
     }
 }

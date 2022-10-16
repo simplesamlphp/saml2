@@ -68,7 +68,9 @@ final class ActionTest extends TestCase
     {
         $action = Action::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('SomeAction', $action->getContent());
-        $this->assertEquals(C::NAMESPACE, $action->getNamespace());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($action)
+        );
     }
 }

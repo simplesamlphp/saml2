@@ -88,18 +88,10 @@ final class OrganizationTest extends TestCase
     public function testUnmarshalling(): void
     {
         $org = Organization::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertCount(1, $org->getOrganizationName());
+
         $this->assertEquals(
-            strval(new OrganizationName('en', 'Identity Providers R US')),
-            strval($org->getOrganizationName()[0])
-        );
-        $this->assertEquals(
-            strval(new OrganizationDisplayName('en', 'Identity Providers R US, a Division of Lerxst Corp.')),
-            strval($org->getOrganizationDisplayName()[0])
-        );
-        $this->assertEquals(
-            strval(new OrganizationURL('en', 'https://IdentityProvider.com')),
-            strval($org->getOrganizationURL()[0])
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($org)
         );
     }
 }

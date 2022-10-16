@@ -323,23 +323,23 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     {
         $e = parent::toUnsignedXML($parent);
 
-        foreach ($this->AttributeServices as $ep) {
+        foreach ($this->getAttributeServices() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->AssertionIDRequestServices as $ep) {
+        foreach ($this->getAssertionIDRequestServices() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->NameIDFormats as $nidFormat) {
+        foreach ($this->getNameIDFormats() as $nidFormat) {
             $nidFormat->toXML($e);
         }
 
-        foreach ($this->AttributeProfiles as $ap) {
+        foreach ($this->getAttributeProfiles() as $ap) {
             $ap->toXML($e);
         }
 
-        foreach ($this->Attributes as $a) {
+        foreach ($this->getAttributes() as $a) {
             $a->toXML($e);
         }
 

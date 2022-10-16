@@ -167,17 +167,11 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     public function testUnmarshalling(): void
     {
         $aad = AuthnAuthorityDescriptor::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertCount(1, $aad->getAuthnQueryServices());
-        $this->assertEquals($this->aqs->getBinding(), $aad->getAuthnQueryServices()[0]->getBinding());
-        $this->assertEquals($this->aqs->getLocation(), $aad->getAuthnQueryServices()[0]->getLocation());
-        $this->assertCount(1, $aad->getAssertionIDRequestServices());
-        $this->assertEquals($this->aidrs->getBinding(), $aad->getAssertionIDRequestServices()[0]->getBinding());
-        $this->assertEquals($this->aidrs->getLocation(), $aad->getAssertionIDRequestServices()[0]->getLocation());
 
-        $nameIdFormats = $aad->getNameIDFormats();
-        $this->assertCount(2, $nameIdFormats);
-        $this->assertEquals(C::NAMEID_PERSISTENT, $nameIdFormats[0]->getContent());
-        $this->assertEquals(C::NAMEID_TRANSIENT, $nameIdFormats[1]->getContent());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($aad)
+        );
     }
 
 

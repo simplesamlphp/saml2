@@ -71,15 +71,6 @@ final class RequestInitiatorTest extends TestCase
     {
         $requestInitiator = RequestInitiator::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals($requestInitiator->getBinding(), RequestInitiator::NS);
-        $this->assertEquals($requestInitiator->getLocation(), C::LOCATION_A);
-        $this->assertEquals($requestInitiator->getResponseLocation(), C::LOCATION_B);
-
-        $this->assertTrue($requestInitiator->hasAttributeNS(C::NAMESPACE, 'attr'));
-        $this->assertEquals('value', $requestInitiator->getAttributeNS(C::NAMESPACE, 'attr'));
-        $this->assertFalse($requestInitiator->hasAttributeNS(C::NAMESPACE, 'invalid'));
-        $this->assertNull($requestInitiator->getAttributeNS(C::NAMESPACE, 'invalid'));
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($requestInitiator)

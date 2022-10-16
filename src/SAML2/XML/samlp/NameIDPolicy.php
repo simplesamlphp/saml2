@@ -148,16 +148,16 @@ final class NameIDPolicy extends AbstractSamlpElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        if (isset($this->Format)) {
-            $e->setAttribute('Format', $this->Format);
+        if ($this->getFormat()) {
+            $e->setAttribute('Format', $this->getFormat());
         }
 
-        if (isset($this->SPNameQualifier)) {
-            $e->setAttribute('SPNameQualifier', $this->SPNameQualifier);
+        if ($this->getSPNameQualifier()) {
+            $e->setAttribute('SPNameQualifier', $this->getSPNameQualifier());
         }
 
-        if (isset($this->AllowCreate)) {
-            $e->setAttribute('AllowCreate', var_export($this->AllowCreate, true));
+        if ($this->getAllowCreate() !== null) {
+            $e->setAttribute('AllowCreate', var_export($this->getAllowCreate(), true));
         }
 
         return $e;

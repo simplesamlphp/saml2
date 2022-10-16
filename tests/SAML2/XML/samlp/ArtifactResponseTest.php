@@ -102,15 +102,9 @@ final class ArtifactResponseTest extends TestCase
     {
         $ar = ArtifactResponse::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals(true, $ar->isSuccess());
-        $this->assertEquals("_d84a49e5958803dedcff4c984c2b0d95", $ar->getId());
-
-        $message = $ar->getMessage();
-        $this->assertInstanceOf(AuthnRequest::class, $message);
-        $this->assertEquals('_306f8ec5b618f361c70b6ffb1480eade', $message->getId());
         $this->assertEquals(
-            'https://sp.example.com/SAML2/SSO/Artifact',
-            $message->getAssertionConsumerServiceURL()
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($ar)
         );
     }
 }

@@ -31,8 +31,36 @@ final class RequestAuthenticated extends AbstractEcpElement
      *
      * @param int $mustUnderstand
      */
-    public function __construct(?int $mustUnderstand = null)
+    public function __construct(int $mustUnderstand)
     {
+        $this->setMustUnderstand($mustUnderstand);
+    }
+
+
+    /**
+     * Collect the value of the mustUnderstand-property
+     *
+     * @return int
+     */
+    public function getMustUnderstand(): int
+    {
+        return $this->mustUnderstand;
+    }
+
+
+    /**
+     * Set the value of the mustUnderstand-property
+     *
+     * @param int $mustUnderstand
+     */
+    private function setMustUnderstand(int $mustUnderstand): void
+    {
+        Assert::oneOf(
+            $mustUnderstand,
+            [0, 1],
+            'Invalid value of SOAP-ENV:mustUnderstand attribute in <ecp:Response>.',
+            ProtocolViolationException::class,
+        );
         $this->mustUnderstand = $mustUnderstand;
     }
 
@@ -74,7 +102,7 @@ final class RequestAuthenticated extends AbstractEcpElement
             ProtocolViolationException::class,
         );
 
-        $mustUnderstand = is_numeric($mustUnderstand) ? intval($mustUnderstand) : null;
+        $mustUnderstand = intval($mustUnderstand);
 
         return new static($mustUnderstand);
     }
@@ -90,9 +118,7 @@ final class RequestAuthenticated extends AbstractEcpElement
     {
         $response = $this->instantiateParentElement($parent);
 
-        if (!is_null($this->mustUnderstand)) {
-            $response->setAttributeNS(C::NS_SOAP, 'SOAP-ENV:mustUnderstand', strval($this->mustUnderstand));
-        }
+        $response->setAttributeNS(C::NS_SOAP, 'SOAP-ENV:mustUnderstand', strval($this->getMustUnderstand()));
         $response->setAttributeNS(C::NS_SOAP, 'SOAP-ENV:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
 
         return $response;

@@ -130,11 +130,11 @@ class AttributeStatement extends AbstractStatementType
     {
         $e = $this->instantiateParentElement($parent);
 
-        foreach ($this->attributes as $attribute) {
+        foreach ($this->getAttributes() as $attribute) {
             $attribute->toXML($e);
         }
 
-        foreach ($this->encryptedAttributes as $encryptedAttribute) {
+        foreach ($this->getEncryptedAttributes() as $encryptedAttribute) {
             $encryptedAttribute->toXML($e);
         }
 

@@ -120,24 +120,9 @@ final class StatusTest extends TestCase
     {
         $status = Status::fromXML($this->xmlRepresentation->documentElement);
 
-        $statusCode = $status->getStatusCode();
-        $this->assertEquals(C::STATUS_RESPONDER, $statusCode->getValue());
-
-        $subCodes = $status->getStatusCode()->getSubCodes();
-        $this->assertCount(1, $subCodes);
-
-        $this->assertEquals(C::STATUS_REQUEST_DENIED, $subCodes[0]->getValue());
-
-        $statusMessage = $status->getStatusMessage();
-        $this->assertEquals('Something went wrong', $statusMessage->getContent());
-
-        $statusDetails = $status->getStatusDetails();
-        $this->assertCount(1, $statusDetails);
-
-        $detailElement = $statusDetails[0]->getElements();
-        $detailElement = $detailElement[0]->getXML();
-
-        $this->assertEquals('Cause', $detailElement->localName);
-        $this->assertEquals('org.sourceid.websso.profiles.idp.FailedAuthnSsoException', $detailElement->textContent);
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($status)
+        );
     }
 }

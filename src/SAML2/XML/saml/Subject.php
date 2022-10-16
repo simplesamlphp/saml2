@@ -118,11 +118,9 @@ final class Subject extends AbstractSamlElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        if ($this->identifier !== null) {
-            $this->identifier->toXML($e);
-        }
+        $this->getIdentifier()?->toXML($e);
 
-        foreach ($this->SubjectConfirmation as $sc) {
+        foreach ($this->getSubjectConfirmation() as $sc) {
             $sc->toXML($e);
         }
 

@@ -59,7 +59,10 @@ final class RequesterIDTest extends TestCase
     {
         $requesterId = RequesterID::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('urn:some:requester', $requesterId->getContent());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($requesterId)
+        );
     }
 }
 

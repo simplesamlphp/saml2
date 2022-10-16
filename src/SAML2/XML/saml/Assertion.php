@@ -505,15 +505,9 @@ final class Assertion extends AbstractSamlElement implements
         $e->setAttribute('ID', $this->id);
         $e->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->issueInstant));
 
-        $issuer = $this->issuer->toXML($e);
-
-        if ($this->subject !== null) {
-            $this->subject->toXML($e);
-        }
-
-        if ($this->conditions !== null) {
-            $this->conditions->toXML($e);
-        }
+        $this->issuer->toXML($e);
+        $this->subject?->toXML($e);
+        $this->conditions?->toXML($e);
 
         foreach ($this->statements as $statement) {
             $statement->toXML($e);

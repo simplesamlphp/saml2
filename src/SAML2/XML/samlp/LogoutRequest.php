@@ -254,18 +254,18 @@ class LogoutRequest extends AbstractRequest
         /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = parent::toUnsignedXML($parent);
 
-        if ($this->notOnOrAfter !== null) {
-            $e->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->notOnOrAfter));
+        if ($this->getNotOnOrAfter() !== null) {
+            $e->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->getNotOnOrAfter()));
         }
 
-        if ($this->reason !== null) {
-            $e->setAttribute('Reason', $this->reason);
+        if ($this->getReason() !== null) {
+            $e->setAttribute('Reason', $this->getReason());
         }
 
         /** @var \SimpleSAML\SAML2\XML\saml\IdentifierInterface $this->identifier */
-        $this->identifier->toXML($e);
+        $this->getIdentifier()->toXML($e);
 
-        foreach ($this->sessionIndexes as $sessionIndex) {
+        foreach ($this->getSessionIndexes() as $sessionIndex) {
             $sessionIndex->toXML($e);
         }
 

@@ -154,20 +154,20 @@ class AttributeValue extends AbstractSamlElement
             case "integer":
                 // make sure that the xs namespace is available in the AttributeValue
                 $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xs', C::NS_XS);
-                $e->setAttributeNS(C::NS_XSI, "xsi:type", "xs:integer");
-                $e->textContent = strval($this->value);
+                $e->setAttributeNS(C::NS_XSI, 'xsi:type', 'xs:integer');
+                $e->textContent = strval($this->getValue());
                 break;
             case "NULL":
-                $e->setAttributeNS(C::NS_XSI, "xsi:nil", "1");
-                $e->textContent = "";
+                $e->setAttributeNS(C::NS_XSI, 'xsi:nil', '1');
+                $e->textContent = '';
                 break;
             case "array":
-                foreach ($this->value as $object) {
+                foreach ($this->getValue() as $object) {
                     $object->toXML($e);
                 }
                 break;
             default:
-                $e->textContent = $this->value;
+                $e->textContent = $this->getValue();
         }
 
         return $e;

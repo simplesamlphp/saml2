@@ -64,11 +64,10 @@ final class StatusCodeTest extends TestCase
     public function testUnmarshalling(): void
     {
         $statusCode = StatusCode::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals(C::STATUS_RESPONDER, $statusCode->getValue());
 
-        $subCodes = $statusCode->getSubCodes();
-        $this->assertCount(1, $subCodes);
-
-        $this->assertEquals(C::STATUS_REQUEST_DENIED, $subCodes[0]->getValue());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($statusCode)
+        );
     }
 }

@@ -70,14 +70,10 @@ final class DigestMethodTest extends TestCase
     {
         $digestMethod = DigestMethod::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals(C::DIGEST_SHA256, $digestMethod->getAlgorithm());
-
-        $elements = $digestMethod->getElements();
-        $this->assertCount(1, $elements);
-        $this->assertEquals('Chunk', $elements[0]->getLocalName());
-        $this->assertEquals('ssp', $elements[0]->getPrefix());
-        $this->assertEquals(C::NAMESPACE, $elements[0]->getNamespaceURI());
-        $this->assertEquals('Some', $elements[0]->getXML()->textContent);
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($digestMethod),
+        );
     }
 
 

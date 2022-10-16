@@ -219,15 +219,15 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     {
         $e = parent::toXML($parent);
 
-        foreach ($this->authzServiceEndpoints as $ep) {
+        foreach ($this->getAuthzServiceEndpoints() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->assertionIDRequestServiceEndpoints as $ep) {
+        foreach ($this->getAssertionIDRequestServices() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->NameIDFormats as $nidFormat) {
+        foreach ($this->getNameIDFormats() as $nidFormat) {
             $nidFormat->toXML($e);
         }
 

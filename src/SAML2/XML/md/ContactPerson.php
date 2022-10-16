@@ -314,32 +314,22 @@ final class ContactPerson extends AbstractMdElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        $e->setAttribute('contactType', $this->contactType);
+        $e->setAttribute('contactType', $this->getContactType());
 
         foreach ($this->getAttributesNS() as $attr) {
             $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
         }
 
-        if ($this->Extensions !== null) {
-            $this->Extensions->toXML($e);
-        }
+        $this->getExtensions()?->toXML($e);
+        $this->getCompany()?->toXML($e);
+        $this->getGivenName()?->toXML($e);
+        $this->getSurName()?->toXML($e);
 
-        if ($this->Company !== null) {
-            $this->Company->toXML($e);
-        }
-
-        if ($this->GivenName !== null) {
-            $this->GivenName->toXML($e);
-        }
-        if ($this->SurName !== null) {
-            $this->SurName->toXML($e);
-        }
-
-        foreach ($this->EmailAddresses as $mail) {
+        foreach ($this->getEmailAddresses() as $mail) {
             $mail->toXML($e);
         }
 
-        foreach ($this->TelephoneNumbers as $telephone) {
+        foreach ($this->getTelephoneNumbers() as $telephone) {
             $telephone->toXML($e);
         }
 

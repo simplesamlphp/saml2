@@ -74,6 +74,7 @@ final class OrganizationDisplayNameTest extends TestCase
     public function testUnmarshalling(): void
     {
         $name = OrganizationDisplayName::fromXML($this->xmlRepresentation->documentElement);
+
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($name)

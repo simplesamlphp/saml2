@@ -111,8 +111,8 @@ final class RequestedAttribute extends Attribute
     {
         $e = parent::toXML($parent);
 
-        if (is_bool($this->isRequired)) {
-            $e->setAttribute('isRequired', $this->isRequired ? 'true' : 'false');
+        if (is_bool($this->getIsRequired())) {
+            $e->setAttribute('isRequired', $this->getIsRequired() ? 'true' : 'false');
         }
 
         return $e;

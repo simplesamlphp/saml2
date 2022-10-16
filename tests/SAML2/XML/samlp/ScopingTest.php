@@ -109,22 +109,10 @@ final class ScopingTest extends TestCase
     public function testUnmarshalling(): void
     {
         $scoping = Scoping::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals(2, $scoping->getProxyCount());
 
-        $list = $scoping->getIDPList();
-        $this->assertInstanceOf(IDPList::class, $list);
-
-        $entries = $list->getIdpEntry();
-        $this->assertCount(1, $entries);
-
-        $this->assertEquals('urn:some:requester1', $entries[0]->getProviderID());
-        $this->assertEquals('testName1', $entries[0]->getName());
-        $this->assertEquals('urn:test:testLoc1', $entries[0]->getLoc());
-
-        $this->assertEquals('https://some/location', $list->getGetComplete()->getContent());
-
-        $requesterId = $scoping->getRequesterId();
-        $this->assertCount(1, $requesterId);
-        $this->assertEquals('urn:some:requester', $requesterId[0]->getContent());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($scoping)
+        );
     }
 }

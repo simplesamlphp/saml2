@@ -97,7 +97,7 @@ final class Action extends AbstractSamlElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        $e->setAttribute('Namespace', $this->namespace);
+        $e->setAttribute('Namespace', $this->getNamespace());
         $e->textContent = $this->getContent();
 
         return $e;

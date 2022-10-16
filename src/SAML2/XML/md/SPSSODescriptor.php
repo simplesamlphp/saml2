@@ -295,19 +295,19 @@ final class SPSSODescriptor extends AbstractSSODescriptor
     {
         $e = parent::toUnsignedXML($parent);
 
-        if (is_bool($this->authnRequestsSigned)) {
-            $e->setAttribute('AuthnRequestsSigned', $this->authnRequestsSigned ? 'true' : 'false');
+        if (is_bool($this->getAuthnRequestsSigned())) {
+            $e->setAttribute('AuthnRequestsSigned', $this->getAuthnRequestsSigned() ? 'true' : 'false');
         }
 
-        if (is_bool($this->wantAssertionsSigned)) {
-            $e->setAttribute('WantAssertionsSigned', $this->wantAssertionsSigned ? 'true' : 'false');
+        if (is_bool($this->getWantAssertionsSigned())) {
+            $e->setAttribute('WantAssertionsSigned', $this->getWantAssertionsSigned() ? 'true' : 'false');
         }
 
-        foreach ($this->assertionConsumerService as $ep) {
+        foreach ($this->getAssertionConsumerService() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->attributeConsumingService as $acs) {
+        foreach ($this->getAttributeConsumingService() as $acs) {
             $acs->toXML($e);
         }
 

@@ -146,11 +146,8 @@ final class Keywords extends AbstractMduiElement
     {
         /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('xml:lang', $this->lang);
-
-        $value = implode('+', $this->Keywords);
-
-        $e->appendChild($e->ownerDocument->createTextNode(rtrim($value)));
+        $e->setAttribute('xml:lang', $this->getLanguage());
+        $e->textContent = rtrim(implode('+', $this->getKeywords()));
 
         return $e;
     }

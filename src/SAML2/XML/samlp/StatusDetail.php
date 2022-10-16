@@ -83,8 +83,8 @@ final class StatusDetail extends AbstractSamlpElement
         /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
 
-        foreach ($this->elements as $detail) {
-            $e->appendChild($e->ownerDocument->importNode($detail->getXML(), true));
+        foreach ($this->getElements() as $detail) {
+            $detail->toXML($e);
         }
 
         return $e;

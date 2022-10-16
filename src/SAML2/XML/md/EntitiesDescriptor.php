@@ -204,11 +204,11 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             $e->setAttribute('Name', $this->Name);
         }
 
-        foreach ($this->entitiesDescriptors as $entitiesDescriptor) {
+        foreach ($this->getEntitiesDescriptors() as $entitiesDescriptor) {
             $entitiesDescriptor->toXML($e);
         }
 
-        foreach ($this->entityDescriptors as $entityDescriptor) {
+        foreach ($this->getEntityDescriptors() as $entityDescriptor) {
             $entityDescriptor->toXML($e);
         }
 

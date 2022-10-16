@@ -59,7 +59,11 @@ final class StatusMessageTest extends TestCase
     {
         $statusMessage = StatusMessage::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('Something went wrong', $statusMessage->getContent());
+
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($statusMessage)
+        );
     }
 }
 

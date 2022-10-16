@@ -128,12 +128,12 @@ final class SubjectLocality extends AbstractSamlElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        if ($this->address !== null) {
-            $e->setAttribute('Address', $this->address);
+        if ($this->getAddress() !== null) {
+            $e->setAttribute('Address', $this->getAddress());
         }
 
-        if ($this->dnsName !== null) {
-            $e->setAttribute('DNSName', $this->dnsName);
+        if ($this->getDnsName() !== null) {
+            $e->setAttribute('DNSName', $this->getDnsName());
         }
 
         return $e;

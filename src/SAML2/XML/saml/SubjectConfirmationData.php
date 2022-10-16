@@ -339,27 +339,27 @@ final class SubjectConfirmationData extends AbstractSamlElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        if ($this->NotBefore !== null) {
-            $e->setAttribute('NotBefore', gmdate('Y-m-d\TH:i:s\Z', $this->NotBefore));
+        if ($this->getNotBefore() !== null) {
+            $e->setAttribute('NotBefore', gmdate('Y-m-d\TH:i:s\Z', $this->getNotBefore()));
         }
-        if ($this->NotOnOrAfter !== null) {
-            $e->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->NotOnOrAfter));
+        if ($this->getNotOnOrAfter() !== null) {
+            $e->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->getNotOnOrAfter()));
         }
-        if ($this->Recipient !== null) {
-            $e->setAttribute('Recipient', $this->Recipient);
+        if ($this->getRecipient() !== null) {
+            $e->setAttribute('Recipient', $this->getRecipient());
         }
-        if ($this->InResponseTo !== null) {
-            $e->setAttribute('InResponseTo', $this->InResponseTo);
+        if ($this->getInResponseTo() !== null) {
+            $e->setAttribute('InResponseTo', $this->getInResponseTo());
         }
-        if ($this->Address !== null) {
-            $e->setAttribute('Address', $this->Address);
+        if ($this->getAddress() !== null) {
+            $e->setAttribute('Address', $this->getAddress());
         }
 
         foreach ($this->getAttributesNS() as $attr) {
             $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
         }
 
-        foreach ($this->info as $n) {
+        foreach ($this->getInfo() as $n) {
             $n->toXML($e);
         }
 

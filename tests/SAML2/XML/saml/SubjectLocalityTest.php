@@ -84,7 +84,9 @@ final class SubjectLocalityTest extends TestCase
     {
         $subjectLocality = SubjectLocality::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('1.1.1.1', $subjectLocality->getAddress());
-        $this->assertEquals('idp.example.org', $subjectLocality->getDnsName());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($subjectLocality)
+        );
     }
 }

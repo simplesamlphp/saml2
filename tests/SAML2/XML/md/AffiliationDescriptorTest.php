@@ -132,20 +132,12 @@ final class AffiliationDescriptorTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $affiliateDescriptor = AffiliationDescriptor::fromXML($this->xmlRepresentation->documentElement);
+        $affiliationDescriptor = AffiliationDescriptor::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals(C::ENTITY_IDP, $affiliateDescriptor->getAffiliationOwnerID());
-        $this->assertEquals('TheID', $affiliateDescriptor->getID());
-        $this->assertEquals(1234567890, $affiliateDescriptor->getValidUntil());
-        $this->assertEquals('PT5000S', $affiliateDescriptor->getCacheDuration());
-
-        $affiliateMember = $affiliateDescriptor->getAffiliateMembers();
-        $this->assertCount(2, $affiliateMember);
-        $this->assertEquals(C::ENTITY_SP, $affiliateMember[0]->getContent());
-        $this->assertEquals(C::ENTITY_OTHER, $affiliateMember[1]->getContent());
-
-        $keyDescriptors = $affiliateDescriptor->getKeyDescriptors();
-        $this->assertCount(1, $keyDescriptors);
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($affiliationDescriptor)
+        );
     }
 
 

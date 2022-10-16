@@ -187,13 +187,13 @@ final class RegistrationInfo extends AbstractMdrpiElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('registrationAuthority', $this->registrationAuthority);
+        $e->setAttribute('registrationAuthority', $this->getRegistrationAuthority());
 
-        if ($this->registrationInstant !== null) {
-            $e->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->registrationInstant));
+        if ($this->getRegistrationInstant() !== null) {
+            $e->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->getRegistrationInstant()));
         }
 
-        foreach ($this->RegistrationPolicy as $rp) {
+        foreach ($this->getRegistrationPolicy() as $rp) {
             $rp->toXML($e);
         }
 

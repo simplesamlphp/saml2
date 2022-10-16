@@ -186,7 +186,7 @@ final class EntityAttributes extends AbstractMdattrElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        foreach ($this->children as $child) {
+        foreach ($this->getChildren() as $child) {
             $child->toXML($e);
         }
 

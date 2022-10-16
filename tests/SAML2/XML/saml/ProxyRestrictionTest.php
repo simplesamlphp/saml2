@@ -70,13 +70,6 @@ final class ProxyRestrictionTest extends TestCase
     {
         $condition = ProxyRestriction::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals(2, $condition->getCount());
-
-        $audiences = $condition->getAudience();
-        $this->assertCount(2, $audiences);
-        $this->assertEquals('urn:test:audience1', $audiences[0]->getContent());
-        $this->assertEquals('urn:test:audience2', $audiences[1]->getContent());
-
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($condition)

@@ -113,11 +113,11 @@ final class ProxyRestriction extends AbstractConditionType
     {
         $e = $this->instantiateParentElement($parent);
 
-        if ($this->count !== null) {
-            $e->setAttribute('Count', strval($this->count));
+        if ($this->getCount() !== null) {
+            $e->setAttribute('Count', strval($this->getCount()));
         }
 
-        foreach ($this->audience as $audience) {
+        foreach ($this->getAudience() as $audience) {
             $audience->toXML($e);
         }
 

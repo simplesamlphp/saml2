@@ -148,16 +148,10 @@ final class PDPDescriptorTest extends TestCase
     public function testUnmarshalling(): void
     {
         $pdpd = PDPDescriptor::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertCount(1, $pdpd->getAuthzServiceEndpoints());
-        $this->assertCount(1, $pdpd->getAssertionIDRequestServices());
-        $this->assertCount(3, $pdpd->getNameIDFormats());
+
         $this->assertEquals(
-            [
-                new NameIDFormat(C::NAMEID_X509_SUBJECT_NAME),
-                new NameIDFormat(C::NAMEID_PERSISTENT),
-                new NameIDFormat(C::NAMEID_TRANSIENT),
-            ],
-            $pdpd->getNameIDFormats()
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($pdpd)
         );
     }
 

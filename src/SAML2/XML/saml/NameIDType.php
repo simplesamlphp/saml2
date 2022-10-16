@@ -153,23 +153,23 @@ abstract class NameIDType extends AbstractSamlElement implements BaseIdentifierI
         /** @psalm-var \DOMDocument $element->ownerDocument */
         $element = $this->instantiateParentElement($parent);
 
-        if ($this->NameQualifier !== null) {
-            $element->setAttribute('NameQualifier', $this->NameQualifier);
+        if ($this->getNameQualifier() !== null) {
+            $element->setAttribute('NameQualifier', $this->getNameQualifier());
         }
 
-        if ($this->SPNameQualifier !== null) {
-            $element->setAttribute('SPNameQualifier', $this->SPNameQualifier);
+        if ($this->getSPNameQualifier() !== null) {
+            $element->setAttribute('SPNameQualifier', $this->getSPNameQualifier());
         }
 
-        if ($this->Format !== null) {
-            $element->setAttribute('Format', $this->Format);
+        if ($this->getFormat() !== null) {
+            $element->setAttribute('Format', $this->getFormat());
         }
 
-        if ($this->SPProvidedID !== null) {
-            $element->setAttribute('SPProvidedID', $this->SPProvidedID);
+        if ($this->getSPProvidedID() !== null) {
+            $element->setAttribute('SPProvidedID', $this->getSPProvidedID());
         }
 
-        $element->textContent = $this->content;
+        $element->textContent = $this->getContent();
         return $element;
     }
 

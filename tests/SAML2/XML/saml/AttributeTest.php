@@ -92,30 +92,10 @@ final class AttributeTest extends TestCase
     {
         $attribute = Attribute::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('TheName', $attribute->getName());
-        $this->assertEquals(C::NAMEFORMAT_URI, $attribute->getNameFormat());
-        $this->assertEquals('TheFriendlyName', $attribute->getFriendlyName());
-        $this->assertCount(2, $attribute->getAttributeValues());
-        $this->assertEquals('FirstValue', $attribute->getAttributeValues()[0]->getValue());
-        $this->assertEquals('SecondValue', $attribute->getAttributeValues()[1]->getValue());
-
         $this->assertEquals(
-            [
-                '{urn:test:something}attr1' => [
-                    'qualifiedName' => 'test:attr1',
-                    'namespaceURI' => 'urn:test:something',
-                    'value' => 'testval1'
-                ],
-                '{urn:test:something}attr2' => [
-                    'qualifiedName' => 'test:attr2',
-                    'namespaceURI' => 'urn:test:something',
-                    'value' => 'testval2'
-                ]
-            ],
-            $attribute->getAttributesNS()
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($attribute)
         );
-        $this->assertEquals('testval1', $attribute->getAttributeNS('urn:test:something', 'attr1'));
-        $this->assertEquals('testval2', $attribute->getAttributeNS('urn:test:something', 'attr2'));
     }
 
 

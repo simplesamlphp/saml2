@@ -223,19 +223,19 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     {
         $e = parent::toUnsignedXML($parent);
 
-        foreach ($this->artifactResolutionServiceEndpoints as $ep) {
+        foreach ($this->getArtifactResolutionServices() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->sloServiceEndpoints as $ep) {
+        foreach ($this->getSingleLogoutServices() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->manageNameIDServiceEndpoints as $ep) {
+        foreach ($this->getManageNameIDServices() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->nameIDFormats as $nidFormat) {
+        foreach ($this->getNameIDFormats() as $nidFormat) {
             $nidFormat->toXML($e);
         }
 

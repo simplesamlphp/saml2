@@ -83,10 +83,8 @@ final class NameIDMappingServiceTest extends TestCase
     {
         $nidmsep = NameIDMappingService::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals(C::BINDING_HTTP_POST, $nidmsep->getBinding());
-        $this->assertEquals(C::LOCATION_A, $nidmsep->getLocation());
-        $this->assertEquals($this->xmlRepresentation->saveXML(
-            $this->xmlRepresentation->documentElement),
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($nidmsep)
         );
     }

@@ -236,19 +236,17 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
 
         $e->setAttribute('protocolSupportEnumeration', implode(' ', $this->protocolSupportEnumeration));
 
-        if ($this->errorURL !== null) {
-            $e->setAttribute('errorURL', $this->errorURL);
+        if ($this->getErrorURL() !== null) {
+            $e->setAttribute('errorURL', $this->getErrorURL());
         }
 
-        foreach ($this->KeyDescriptors as $kd) {
+        foreach ($this->getKeyDescriptors() as $kd) {
             $kd->toXML($e);
         }
 
-        if ($this->Organization !== null) {
-            $this->Organization->toXML($e);
-        }
+        $this->getOrganization()?->toXML($e);
 
-        foreach ($this->ContactPersons as $cp) {
+        foreach ($this->getContactPersons() as $cp) {
             $cp->toXML($e);
         }
 

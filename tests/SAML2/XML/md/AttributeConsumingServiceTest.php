@@ -181,14 +181,11 @@ final class AttributeConsumingServiceTest extends TestCase
     public function testUnmarshalling(): void
     {
         $acs = AttributeConsumingService::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals(2, $acs->getIndex());
-        $this->assertTrue($acs->getIsDefault());
-        $svcNames = $acs->getServiceNames();
-        $this->assertCount(1, $svcNames);
-        $svcDescr = $acs->getServiceDescriptions();
-        $this->assertCount(1, $svcDescr);
-        $reqAttr = $acs->getRequestedAttributes();
-        $this->assertCount(1, $reqAttr);
+
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($acs)
+        );
     }
 
 

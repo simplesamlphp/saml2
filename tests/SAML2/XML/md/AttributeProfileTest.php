@@ -69,6 +69,9 @@ final class AttributeProfileTest extends TestCase
     {
         $attributeProfile = AttributeProfile::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals(C::PROFILE_1, $attributeProfile->getContent());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($attributeProfile)
+        );
     }
 }

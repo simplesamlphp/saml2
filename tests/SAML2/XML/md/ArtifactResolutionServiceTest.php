@@ -82,8 +82,6 @@ final class ArtifactResolutionServiceTest extends TestCase
     public function testUnmarshalling(): void
     {
         $ars = ArtifactResolutionService::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertEquals(C::BINDING_HTTP_ARTIFACT, $ars->getBinding());
-        $this->assertEquals(C::LOCATION_A, $ars->getLocation());
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),

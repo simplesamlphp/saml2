@@ -83,7 +83,7 @@ final class AuthnContextDecl extends AbstractSamlElement
         /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
 
-        foreach ($this->decl as $node) {
+        foreach ($this->getDecl() as $node) {
             $e->appendChild($e->ownerDocument->importNode($node, true));
         }
 

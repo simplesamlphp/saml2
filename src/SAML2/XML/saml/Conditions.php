@@ -291,32 +291,30 @@ final class Conditions extends AbstractSamlElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        if ($this->notBefore !== null) {
-            $e->setAttribute('NotBefore', gmdate('Y-m-d\TH:i:s\Z', $this->notBefore));
+        if ($this->getNotBefore() !== null) {
+            $e->setAttribute('NotBefore', gmdate('Y-m-d\TH:i:s\Z', $this->getNotBefore()));
         }
 
-        if ($this->notOnOrAfter !== null) {
-            $e->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->notOnOrAfter));
+        if ($this->getNotOnOrAfter() !== null) {
+            $e->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->getNotOnOrAfter()));
         }
 
-        foreach ($this->condition as $condition) {
+        foreach ($this->getCondition() as $condition) {
             $condition->toXML($e);
         }
 
-        foreach ($this->audienceRestriction as $audienceRestriction) {
+        foreach ($this->getAudienceRestriction() as $audienceRestriction) {
             $audienceRestriction->toXML($e);
         }
 
-        if ($this->oneTimeUse !== false) {
+        if ($this->getOneTimeUse() !== false) {
             /** @psalm-suppress PossiblyNullReference */
             $e->appendChild(
                 $e->ownerDocument->createElementNS(AbstractSamlElement::NS, 'saml:OneTimeUse')
             );
         }
 
-        if ($this->proxyRestriction !== null) {
-            $this->proxyRestriction->toXML($e);
-        }
+        $this->getProxyRestriction()?->toXML($e);
 
         return $e;
     }

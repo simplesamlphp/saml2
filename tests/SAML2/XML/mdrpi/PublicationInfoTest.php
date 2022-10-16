@@ -78,16 +78,10 @@ final class PublicationInfoTest extends TestCase
     {
         $publicationInfo = PublicationInfo::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('SomePublisher', $publicationInfo->getPublisher());
-        $this->assertEquals(1293840000, $publicationInfo->getCreationInstant());
-        $this->assertEquals('SomePublicationId', $publicationInfo->getPublicationId());
-
-        $usagePolicy = $publicationInfo->getUsagePolicy();
-        $this->assertCount(2, $usagePolicy);
-        $this->assertEquals('http://TheEnglishUsagePolicy', $usagePolicy[0]->getContent());
-        $this->assertEquals('en', $usagePolicy[0]->getLanguage());
-        $this->assertEquals('http://TheNorwegianUsagePolicy', $usagePolicy[1]->getContent());
-        $this->assertEquals('no', $usagePolicy[1]->getLanguage());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($publicationInfo)
+        );
     }
 
 
