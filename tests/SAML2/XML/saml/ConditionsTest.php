@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -27,13 +28,15 @@ use function strval;
  */
 final class ConditionsTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
-
 
     /**
      */
     public function setup(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-assertion-2.0.xsd';
+
         $this->testedClass = Conditions::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(

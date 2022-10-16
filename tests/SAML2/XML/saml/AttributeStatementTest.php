@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeStatement;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\PEMCertificatesMock;
@@ -27,13 +28,15 @@ use function strval;
  */
 final class AttributeStatementTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
-
 
     /**
      */
     protected function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-assertion-2.0.xsd';
+
         $this->testedClass = AttributeStatement::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(

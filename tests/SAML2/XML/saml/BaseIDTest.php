@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\SAML2\XML\saml\UnknownID;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\CustomBaseID;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -29,13 +30,15 @@ use function strval;
  */
 final class BaseIDTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
-
 
     /**
      */
     public function setup(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/schemas/simplesamlphp.xsd';
+
         $this->testedClass = AbstractBaseID::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(

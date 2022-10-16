@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\Test\SAML2\CustomBaseID;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -31,8 +32,8 @@ use function strval;
  */
 final class SubjectTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
-
 
     /** @var \DOMDocument */
     private DOMDocument $subject;
@@ -49,6 +50,8 @@ final class SubjectTest extends TestCase
 
     public function setup(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-assertion-2.0.xsd';
+
         $this->testedClass = Subject::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(

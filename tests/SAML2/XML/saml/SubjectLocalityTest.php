@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\SubjectLocality;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -25,13 +26,15 @@ use function strval;
  */
 final class SubjectLocalityTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
-
 
     /**
      */
     protected function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-assertion-2.0.xsd';
+
         $this->testedClass = SubjectLocality::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(

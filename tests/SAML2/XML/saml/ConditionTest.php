@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\UnknownCondition;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\CustomCondition;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -22,7 +23,7 @@ use function strval;
  * Class \SAML2\XML\saml\ConditionTest
  *
  * @covers \SimpleSAML\Test\SAML2\CustomCondition
- * @covers \SimpleSAML\SAML2\XML\saml\Condition
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractCondition
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractConditionType
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  *
@@ -30,13 +31,15 @@ use function strval;
  */
 final class ConditionTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
-
 
     /**
      */
     public function setup(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/schemas/simplesamlphp.xsd';
+
         $this->testedClass = CustomCondition::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
