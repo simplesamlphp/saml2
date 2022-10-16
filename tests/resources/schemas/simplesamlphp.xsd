@@ -25,25 +25,6 @@
 <import namespace='urn:oasis:names:tc:SAML:2.0:assertion'
           schemaLocation='../../../schemas/saml-schema-assertion-2.0.xsd'/>
 
-<!-- Start ExtendableElement -->
-
-<element name="ExtendableElement" type="ssp:ExtendableElementType"/>
-<complexType name="ExtendableElementType">
-  <sequence> 
-    <element ref="ssp:Chunk"/> 
-    <any namespace="##other" processContents="lax"/>
-    <!-- (1,1) elements from (1,1) external namespace -->
-  </sequence>  
-</complexType>
-
-<!-- End ExtendableElement -->
-
-<!-- Start Chunk -->
-
-<element name="Chunk" type="string"/>
-
-<!-- End Chunk -->
-
 <!-- Start CustomRoleDescriptor -->
 
 <element name="CustomRoleDescriptor" type="ssp:CustomRoleDescriptorType"/>
