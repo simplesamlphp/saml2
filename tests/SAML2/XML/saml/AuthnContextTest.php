@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
@@ -18,6 +19,7 @@ use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use XMLReader;
 
 use function dirname;
 use function strval;
@@ -455,5 +457,33 @@ final class AuthnContextTest extends TestCase
             $this->xmlRepresentation->saveXML($document->documentElement),
             strval(unserialize(serialize(AuthnContext::fromXML($document->documentElement))))
         );
+    }
+
+
+    /**
+     * Test schema validation.
+     */
+    public function testSchemaValidation(): void
+    {
+        $document = $this->xmlRepresentation;
+        $document->documentElement->appendChild($document->importNode($this->classRef->documentElement, true));
+        $document->documentElement->appendChild($document->importNode($this->declRef->documentElement, true));
+        $document->documentElement->appendChild($document->importNode($this->authority->documentElement, true));
+
+        $predoc = XMLReader::XML($document->saveXML());
+        Assert::notFalse($predoc);
+
+        /** @psalm-var \XMLReader $predoc */
+        $pre = $this->validateDocument($predoc);
+        $this->assertTrue($pre);
+
+        $class = $this->testedClass::fromXML($document->documentElement);
+        $serializedClass = $class->toXML();
+
+        $postdoc = XMLReader::XML($serializedClass->ownerDocument->saveXML());
+        Assert::notFalse($postdoc);
+        /** @psalm-var \XMLReader $postdoc */
+        $post = $this->validateDocument($postdoc);
+        $this->assertTrue($post);
     }
 }
