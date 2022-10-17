@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\ecp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
@@ -22,6 +23,7 @@ use function strval;
  */
 final class RequestAuthenticatedTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
 
@@ -29,6 +31,8 @@ final class RequestAuthenticatedTest extends TestCase
      */
     public function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-ecp-2.0.xsd';
+
         $this->testedClass = RequestAuthenticated::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
