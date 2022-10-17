@@ -482,8 +482,9 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
                 return $this->xml;
             }
 
-            $node = $e->ownerDocument->importNode($this->xml, true);
-            return $e->appendChild($node);
+            $node = $parent->ownerDocument?->importNode($this->xml, true);
+            $parent->appendChild($node);
+            return $parent;
         }
 
         $e = $this->toUnsignedXML($parent);

@@ -533,8 +533,9 @@ final class Assertion extends AbstractSamlElement implements
                 return $this->xml;
             }
 
-            $node = $parent->ownerDocument->importNode($this->xml, true);
-            return $parent->appendChild($node);
+            $node = $parent->ownerDocument?->importNode($this->xml, true);
+            $parent->appendChild($node);
+            return $parent;
         }
 
         $e = $this->toUnsignedXML($parent);

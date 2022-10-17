@@ -44,8 +44,9 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements Sign
                 return $this->xml;
             }
 
-            $node = $e->ownerDocument->importNode($this->getXML(), true);
-            return $e->appendChild($node);
+            $node = $parent->ownerDocument?->importNode($this->getXML(), true);
+            $parent->appendChild($node);
+            return $parent;
         }
 
         $e = $this->toUnsignedXML($parent);
