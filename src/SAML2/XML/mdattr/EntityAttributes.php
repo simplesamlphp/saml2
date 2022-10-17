@@ -96,7 +96,7 @@ final class EntityAttributes extends AbstractMdattrElement
                 ProtocolViolationException::class
             );
             Assert::notNull(
-                $assertion->getSignature(),
+                Assertion::fromXML($assertion->toXML())->getSignature(),
                 'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must be individually signed',
                 ProtocolViolationException::class
             );
