@@ -13,6 +13,7 @@ use SimpleSAML\SAML2\XML\mdui\GeolocationHint;
 use SimpleSAML\SAML2\XML\mdui\IPHint;
 use SimpleSAML\SAML2\XML\mdui\Keywords;
 use SimpleSAML\Test\XML\ArrayizableElementTestTrait;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -30,6 +31,7 @@ use function strval;
 final class DiscoHintsTest extends TestCase
 {
     use ArrayizableElementTestTrait;
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
 
@@ -37,6 +39,8 @@ final class DiscoHintsTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+
         $this->testedClass = DiscoHints::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(

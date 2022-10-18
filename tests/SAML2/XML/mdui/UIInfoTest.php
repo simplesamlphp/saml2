@@ -18,6 +18,7 @@ use SimpleSAML\SAML2\XML\mdui\Logo;
 use SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL;
 use SimpleSAML\SAML2\XML\mdui\UIInfo;
 use SimpleSAML\Test\XML\ArrayizableElementTestTrait;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -35,6 +36,7 @@ use function strval;
 final class UIInfoTest extends TestCase
 {
     use ArrayizableElementTestTrait;
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
 
@@ -42,6 +44,8 @@ final class UIInfoTest extends TestCase
      */
     public function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+
         $this->testedClass = UIInfo::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
