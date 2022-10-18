@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy;
 use SimpleSAML\Test\XML\ArrayizableElementTestTrait;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -30,6 +31,7 @@ use function strval;
 final class RegistrationPolicyTest extends TestCase
 {
     use ArrayizableElementTestTrait;
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
 
@@ -37,6 +39,8 @@ final class RegistrationPolicyTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-metadata-rpi-v1.0.xsd';
+
         $this->testedClass = RegistrationPolicy::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
