@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
 use function dirname;
 use function strval;
@@ -50,14 +54,52 @@ final class SubjectConfirmationTest extends TestCase
      */
     public function testMarshalling(): void
     {
+        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
+        $attr1->value = 'testval1';
+        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr2');
+        $attr2->value = 'testval2';
+
         $subjectConfirmation = new SubjectConfirmation(
             'urn:test:SomeMethod',
             new NameID('SomeNameIDValue'),
-            new SubjectConfirmationData()
+            new SubjectConfirmationData(
+                987654321,
+                1234567890,
+                C::ENTITY_SP,
+                'SomeRequestID',
+                '127.0.0.1',
+                [
+                    new KeyInfo([new KeyName('SomeKey')]),
+                    new Chunk(DOMDocumentFactory::fromString('<some>Arbitrary Element</some>')->documentElement),
+                ],
+                [$attr1, $attr2]
+            ),
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($subjectConfirmation)
+        );
+    }
+
+
+    /**
+     */
+    public function testMarshallingEmptySubjectConfirmationData(): void
+    {
+        $subjectConfirmation = new SubjectConfirmation(
+            'urn:test:SomeMethod',
+            new NameID('SomeNameIDValue'),
+            new SubjectConfirmationData(),
+        );
+
+        $doc = DOMDocumentFactory::fromString('<saml:SubjectConfirmation xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Method="urn:test:SomeMethod">
+  <saml:NameID>SomeNameIDValue</saml:NameID>
+</saml:SubjectConfirmation>'
+        );
+
+        $this->assertEquals(
+            $doc->saveXML($doc->documentElement),
             strval($subjectConfirmation)
         );
     }

@@ -6,18 +6,21 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use simpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use simpleSAML\XMLSecurity\XML\ds\KeyName;
 
 use function dirname;
 use function strval;
@@ -80,6 +83,26 @@ XML
      */
     public function testMarshallingNameID(): void
     {
+        $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
+
+        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
+        $attr1->value = 'testval1';
+        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr2');
+        $attr2->value = 'testval2';
+
+        $subjectConfirmationData = new SubjectConfirmationData(
+            987654321,
+            1234567890,
+            C::ENTITY_SP,
+            'SomeRequestID',
+            '127.0.0.1',
+            [
+                new KeyInfo([new KeyName('SomeKey')]),
+                new Chunk($arbitrary->documentElement),
+            ],
+            [$attr1, $attr2]
+        );
+
         $subject = new Subject(
             new NameID(
                 'SomeNameIDValue',
@@ -98,12 +121,7 @@ XML
                         C::NAMEID_TRANSIENT,
                         null
                     ),
-                    new SubjectConfirmationData(
-                        null,
-                        1582802796,
-                        'https://sp.example.org/authentication/sp/consume-assertion',
-                        'def456'
-                    )
+                    $subjectConfirmationData,
                 )
             ]
         );
@@ -119,6 +137,26 @@ XML
      */
     public function testMarshallingElementOrdering(): void
     {
+        $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
+
+        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
+        $attr1->value = 'testval1';
+        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr2');
+        $attr2->value = 'testval2';
+
+        $subjectConfirmationData = new SubjectConfirmationData(
+            987654321,
+            1234567890,
+            C::ENTITY_SP,
+            'SomeRequestID',
+            '127.0.0.1',
+            [
+                new KeyInfo([new KeyName('SomeKey')]),
+                new Chunk($arbitrary->documentElement),
+            ],
+            [$attr1, $attr2]
+        );
+
         $subject = new Subject(
             new NameID(
                 'SomeNameIDValue',
@@ -137,12 +175,7 @@ XML
                         C::NAMEID_TRANSIENT,
                         null
                     ),
-                    new SubjectConfirmationData(
-                        null,
-                        1582802796,
-                        'https://sp.example.org/authentication/sp/consume-assertion',
-                        'def456'
-                    )
+                    $subjectConfirmationData,
                 )
             ]
         );
@@ -167,6 +200,26 @@ XML
      */
     public function testMarshallingBaseID(): void
     {
+        $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
+
+        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
+        $attr1->value = 'testval1';
+        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr2');
+        $attr2->value = 'testval2';
+
+        $subjectConfirmationData = new SubjectConfirmationData(
+            987654321,
+            1234567890,
+            C::ENTITY_SP,
+            'SomeRequestID',
+            '127.0.0.1',
+            [
+                new KeyInfo([new KeyName('SomeKey')]),
+                new Chunk($arbitrary->documentElement),
+            ],
+            [$attr1, $attr2]
+        );
+
         $subject = new Subject(
             new CustomBaseID(
                 [new Audience('urn:some:audience')],
@@ -182,12 +235,7 @@ XML
                         C::NAMEID_TRANSIENT,
                         null
                     ),
-                    new SubjectConfirmationData(
-                        null,
-                        1582802796,
-                        'https://sp.example.org/authentication/sp/consume-assertion',
-                        'def456'
-                    )
+                    $subjectConfirmationData,
                 )
             ]
         );
