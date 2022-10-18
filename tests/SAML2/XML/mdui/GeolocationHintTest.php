@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\mdui;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\mdui\GeolocationHint;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -22,6 +23,7 @@ use function strval;
  */
 final class GeolocationHintTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
 
@@ -29,6 +31,8 @@ final class GeolocationHintTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+
         $this->testedClass = GeolocationHint::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(

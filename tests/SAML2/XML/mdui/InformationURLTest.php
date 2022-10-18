@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\mdui\InformationURL;
 use SimpleSAML\Test\XML\ArrayizableElementTestTrait;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -30,6 +31,7 @@ use function strval;
 final class InformationURLTest extends TestCase
 {
     use ArrayizableElementTestTrait;
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
 
@@ -37,6 +39,8 @@ final class InformationURLTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+
         $this->testedClass = InformationURL::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
