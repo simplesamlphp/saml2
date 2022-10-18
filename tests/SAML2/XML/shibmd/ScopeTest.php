@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -23,6 +24,7 @@ use function strval;
  */
 final class ScopeTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
 
@@ -30,6 +32,8 @@ final class ScopeTest extends TestCase
      */
     public function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/shibboleth.xsd';
+
         $this->testedClass = Scope::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
