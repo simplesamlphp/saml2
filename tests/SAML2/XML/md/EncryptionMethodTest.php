@@ -15,6 +15,8 @@ use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XMLSecurity\XML\xenc\KeySize;
+use SimpleSAML\XMLSecurity\XML\xenc\OAEPparams;
 
 use function dirname;
 use function strval;
@@ -59,7 +61,7 @@ final class EncryptionMethodTest extends TestCase
         $chunkXml = DOMDocumentFactory::fromString('<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>');
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 
-        $encryptionMethod = new EncryptionMethod($alg, 10, '9lWu3Q==', [$chunk]);
+        $encryptionMethod = new EncryptionMethod($alg, new KeySize(10), new OAEPparams('9lWu3Q=='), [$chunk]);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
@@ -92,7 +94,7 @@ final class EncryptionMethodTest extends TestCase
         $chunkXml = DOMDocumentFactory::fromString('<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>');
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 
-        $em = new EncryptionMethod($alg, 10, '9lWu3Q==', [$chunk]);
+        $em = new EncryptionMethod($alg, new KeySize(10), new OAEPparams('9lWu3Q=='), [$chunk]);
 
         // Marshall it to a \DOMElement
         $emElement = $em->toXML();
