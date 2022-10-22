@@ -108,21 +108,6 @@ IMG;
 
 
     /**
-     * Unmarshalling of a logo tag with a language
-     */
-    public function testUnmarshallingWithoutLanguage(): void
-    {
-        $xmlRepresentation = $this->xmlRepresentation->documentElement;
-        $xmlRepresentation->removeAttribute('xml:lang');
-        $logo = Logo::fromXML($xmlRepresentation);
-        $this->assertNull($logo->getLanguage());
-        $this->assertEquals(200, $logo->getHeight());
-        $this->assertEquals(300, $logo->getWidth());
-        $this->assertEquals($this->url, $logo->getContent());
-    }
-
-
-    /**
      * Unmarshalling of a logo tag with a data: URL
      */
     public function testUnmarshallingDataURL(): void
