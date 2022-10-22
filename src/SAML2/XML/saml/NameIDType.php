@@ -147,14 +147,14 @@ abstract class NameIDType extends AbstractBaseIDType
         $e = parent::toXML($parent);
 
         if ($this->getFormat() !== null) {
-            $element->setAttribute('Format', $this->getFormat());
+            $e->setAttribute('Format', $this->getFormat());
         }
 
         if ($this->getSPProvidedID() !== null) {
-            $element->setAttribute('SPProvidedID', $this->getSPProvidedID());
+            $e->setAttribute('SPProvidedID', $this->getSPProvidedID());
         }
 
-        $element->textContent = $this->getContent();
-        return $element;
+        $e->textContent = $this->getContent();
+        return $e;
     }
 }
