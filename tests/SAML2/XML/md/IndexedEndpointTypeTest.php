@@ -149,7 +149,7 @@ final class IndexedEndpointTypeTest extends TestCase
     public function testUnmarshallingWithWrongIsDefault(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The \'isDefault\' attribute of md:AssertionConsumerService must be boolean.');
+        $this->expectExceptionMessage('The \'isDefault\' attribute of md:AssertionConsumerService must be a boolean.');
         $this->xmlRepresentation->documentElement->setAttribute('isDefault', 'non-bool');
         AssertionConsumerService::fromXML($this->xmlRepresentation->documentElement);
     }

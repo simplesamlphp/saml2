@@ -365,7 +365,7 @@ final class IDPSSODescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
-            'The \'WantAuthnRequestsSigned\' attribute of md:IDPSSODescriptor must be boolean.'
+            'The \'WantAuthnRequestsSigned\' attribute of md:IDPSSODescriptor must be a boolean.'
         );
         $this->xmlRepresentation->documentElement->setAttribute('WantAuthnRequestsSigned', 'not a boolean');
         IDPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);

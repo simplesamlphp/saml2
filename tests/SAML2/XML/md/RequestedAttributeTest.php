@@ -115,7 +115,7 @@ final class RequestedAttributeTest extends TestCase
     public function testUnmarshallingWithWrongIsRequired(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The \'isRequired\' attribute of md:RequestedAttribute must be boolean.');
+        $this->expectExceptionMessage('The \'isRequired\' attribute of md:RequestedAttribute must be a boolean.');
         $this->xmlRepresentation->documentElement->setAttribute('isRequired', 'wrong');
         RequestedAttribute::fromXML($this->xmlRepresentation->documentElement);
     }

@@ -356,13 +356,6 @@ final class SubjectConfirmationData extends AbstractSamlElement
         }
 
         foreach ($this->getAttributesNS() as $attr) {
-/**
-    $element->setAttributeNS(
-        'http://www.w3.org/2000/xmlns/', // xmlns namespace URI
-        'xmlns:mynamespace',
-        'example.com/mynamespace'
-    );
-*/
             $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
         }
 

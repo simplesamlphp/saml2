@@ -283,7 +283,7 @@ final class SPSSODescriptorTest extends TestCase
         $this->xmlRepresentation->documentElement->setAttribute('AuthnRequestsSigned', 'not a boolean');
 
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The \'AuthnRequestsSigned\' attribute of md:SPSSODescriptor must be boolean.');
+        $this->expectExceptionMessage('The \'AuthnRequestsSigned\' attribute of md:SPSSODescriptor must be a boolean.');
 
         SPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
     }
@@ -297,7 +297,7 @@ final class SPSSODescriptorTest extends TestCase
         $this->xmlRepresentation->documentElement->setAttribute('WantAssertionsSigned', 'not a boolean');
 
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The \'WantAssertionsSigned\' attribute of md:SPSSODescriptor must be boolean.');
+        $this->expectExceptionMessage('The \'WantAssertionsSigned\' attribute of md:SPSSODescriptor must be a boolean.');
 
         SPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
     }

@@ -219,7 +219,7 @@ final class AttributeConsumingServiceTest extends TestCase
     {
         $this->xmlRepresentation->documentElement->setAttribute('isDefault', 'xxx');
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage("The 'isDefault' attribute of md:AttributeConsumingService must be boolean.");
+        $this->expectExceptionMessage("The 'isDefault' attribute of md:AttributeConsumingService must be a boolean.");
         AttributeConsumingService::fromXML($this->xmlRepresentation->documentElement);
     }
 
