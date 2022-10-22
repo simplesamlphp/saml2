@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\Test\XML\ArrayizableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -29,6 +30,7 @@ use function strval;
 final class PublicationInfoTest extends TestCase
 {
     use ArrayizableElementTestTrait;
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
 
@@ -36,6 +38,8 @@ final class PublicationInfoTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-metadata-rpi-v1.0.xsd';
+
         $this->testedClass = PublicationInfo::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
