@@ -17,7 +17,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        operating-system: [ubuntu-latest, windows-latest]
+        operating-system: [ubuntu-latest]
         php-versions: ['8.0']
 
     steps:
@@ -62,8 +62,8 @@ jobs:
 
       - name: Download eduGAIN metadata & public key
         run: |
-            wget https://mds.edugain.org/edugain-v2.xml -O edugain.xml
-            wget https://technical.edugain.org/mds-v2.cer -O edugain-pub.crt
+            wget https://mds.edugain.org/edugain-v2.xml -O /tmp/edugain.xml
+            wget https://technical.edugain.org/mds-v2.cer -O /tmp/edugain-pub.crt
 
       - name: Run unit tests
         run: |
