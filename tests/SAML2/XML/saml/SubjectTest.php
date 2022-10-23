@@ -140,9 +140,10 @@ XML
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 
-        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
+        $doc = DOMDocumentFactory::fromString('<root/>');
+        $attr1 = $doc->createAttributeNS('urn:test:something', 'test:attr1');
         $attr1->value = 'testval1';
-        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr2');
+        $attr2 = $doc->createAttributeNS('urn:test:something', 'test:attr2');
         $attr2->value = 'testval2';
 
         $subjectConfirmationData = new SubjectConfirmationData(
@@ -203,9 +204,10 @@ XML
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 
-        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
+        $doc = DOMDocumentFactory::fromString('<root/>');
+        $attr1 = $doc->createAttributeNS('urn:test:something', 'test:attr1');
         $attr1->value = 'testval1';
-        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr2');
+        $attr2 = $doc->createAttributeNS('urn:test:something', 'test:attr2');
         $attr2->value = 'testval2';
 
         $subjectConfirmationData = new SubjectConfirmationData(
@@ -223,9 +225,7 @@ XML
 
         $subject = new Subject(
             new CustomBaseID(
-                new Chunk(DOMDocumentFactory::fromFile(
-                    dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Audience.xml',
-                )->documentElement),
+                [new Audience('urn:some:audience')],
                 'https://sp.example.org/authentication/sp/metadata',
             ),
             [

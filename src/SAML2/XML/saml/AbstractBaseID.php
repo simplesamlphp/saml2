@@ -128,8 +128,12 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
+
+        $xsiType = $e->ownerDocument->createAttributeNS(C::NS_XSI, 'xsi:type');
+        $xsiType->value = $this->getXsiType();
+        $e->setAttributeNodeNS($xsiType);
+
         $e->setAttribute('xmlns:' . static::getXsiTypePrefix(), static::getXsiTypeNamespaceURI());
-        $e->setAttributeNS(C::NS_XSI, 'xsi:type', $this->getXsiType());
 
         if ($this->getNameQualifier() !== null) {
             $e->setAttribute('NameQualifier', $this->getNameQualifier());

@@ -60,7 +60,7 @@ final class BaseIDTest extends TestCase
     public function testMarshalling(): void
     {
         $baseId = new CustomBaseID(
-            new Chunk($this->xmlRepresentation->documentElement),
+            [new Audience('urn:some:audience')],
             'TheNameQualifier',
             'TheSPNameQualifier',
         );

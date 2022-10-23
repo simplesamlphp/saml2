@@ -206,9 +206,7 @@ final class EncryptedIDTest extends TestCase
 
         // test a custom BaseID that's registered
         $customId = new CustomBaseID(
-            new Chunk(DOMDocumentFactory::fromFile(
-                dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_BaseID.xml',
-            )->documentElement),
+            [new Audience('urn:some:audience')],
             'TheNameQualifier',
             'TheSPNameQualifier',
         );
