@@ -103,7 +103,7 @@ class LogoutResponse extends AbstractStatusResponse
         if (!empty($signature)) {
             $response->setSignature($signature[0]);
             $response->messageContainedSignatureUponConstruction = true;
-            $this->setXML($xml);
+            $response->setXML($xml);
         }
 
         return $response;

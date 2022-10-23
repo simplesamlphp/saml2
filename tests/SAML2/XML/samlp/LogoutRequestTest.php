@@ -16,6 +16,7 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\samlp\LogoutRequest;
 use SimpleSAML\SAML2\XML\samlp\SessionIndex;
+use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -49,6 +50,7 @@ use function strval;
 final class LogoutRequestTest extends MockeryTestCase
 {
     use SerializableElementTestTrait;
+    use SignedElementTestTrait;
 
 
     /** @var \DOMElement */

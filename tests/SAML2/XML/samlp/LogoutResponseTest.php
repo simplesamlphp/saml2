@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\samlp\LogoutResponse;
+use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -25,6 +26,7 @@ use function strval;
 final class LogoutResponseTest extends TestCase
 {
     use SerializableElementTestTrait;
+    use SignedElementTestTrait;
 
 
     /**

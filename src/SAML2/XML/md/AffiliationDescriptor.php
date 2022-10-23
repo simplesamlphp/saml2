@@ -79,54 +79,6 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
 
 
     /**
-     * Initialize a AffiliationDescriptor.
-     *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return \SimpleSAML\SAML2\XML\md\AffiliationDescriptor
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
-     */
-    public static function fromXML(DOMElement $xml): static
-    {
-        Assert::same($xml->localName, 'AffiliationDescriptor', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, AffiliationDescriptor::NS, InvalidDOMElementException::class);
-
-        $owner = self::getAttribute($xml, 'affiliationOwnerID');
-        $members = AffiliateMember::getChildrenOfClass($xml);
-        $keyDescriptors = KeyDescriptor::getChildrenOfClass($xml);
-
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
-        $orgs = Organization::getChildrenOfClass($xml);
-        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor', TooManyElementsException::class);
-
-        $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
-
-        $signature = Signature::getChildrenOfClass($xml);
-        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
-
-        $afd = new static(
-            $owner,
-            $members,
-            self::getAttribute($xml, 'ID', null),
-            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
-            self::getAttribute($xml, 'cacheDuration', null),
-            !empty($extensions) ? $extensions[0] : null,
-            $keyDescriptors,
-            self::getAttributesNSFromXML($xml)
-        );
-
-        if (!empty($signature)) {
-            $afd->setSignature($signature[0]);
-        }
-
-        return $afd;
-    }
-
-
-    /**
      * Collect the value of the affiliationOwnerId-property
      *
      * @return string
@@ -214,6 +166,55 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
 
 
     /**
+     * Initialize a AffiliationDescriptor.
+     *
+     * @param \DOMElement $xml The XML element we should load.
+     * @return \SimpleSAML\SAML2\XML\md\AffiliationDescriptor
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
+     */
+    public static function fromXML(DOMElement $xml): static
+    {
+        Assert::same($xml->localName, 'AffiliationDescriptor', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, AffiliationDescriptor::NS, InvalidDOMElementException::class);
+
+        $owner = self::getAttribute($xml, 'affiliationOwnerID');
+        $members = AffiliateMember::getChildrenOfClass($xml);
+        $keyDescriptors = KeyDescriptor::getChildrenOfClass($xml);
+
+        $validUntil = self::getAttribute($xml, 'validUntil', null);
+        $orgs = Organization::getChildrenOfClass($xml);
+        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor', TooManyElementsException::class);
+
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
+
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
+
+        $afd = new static(
+            $owner,
+            $members,
+            self::getAttribute($xml, 'ID', null),
+            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
+            self::getAttribute($xml, 'cacheDuration', null),
+            !empty($extensions) ? $extensions[0] : null,
+            $keyDescriptors,
+            self::getAttributesNSFromXML($xml)
+        );
+
+        if (!empty($signature)) {
+            $afd->setSignature($signature[0]);
+            $afd->setXML($xml);
+        }
+
+        return $afd;
+    }
+
+
+    /**
      * Convert this assertion to an unsigned XML document.
      * This method does not sign the resulting XML document.
      *
@@ -222,7 +223,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toUnsignedXML($parent);
-        $e->setAttribute('affiliationOwnerID', $this->affiliationOwnerID);
+        $e->setAttribute('affiliationOwnerID', $this->getAffiliationOwnerID());
 
         foreach ($this->getAffiliateMembers() as $am) {
             $am->toXML($e);
