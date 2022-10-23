@@ -209,18 +209,17 @@ final class IDPSSODescriptorTest extends TestCase
 
 
     /**
-     * Test that creating an IDPSSODescriptor from scratch fails if the SAML 2.0 protocol
-     * is not on of the supported protocols.
+     * Test that creating an IDPSSODescriptor from scratch fails if no protocol is passed.
      */
     public function testMarshallingWithoutProtocolSupportThrowsException(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('At least SAML 2.0 must be one of supported protocols.');
+        $this->expectExceptionMessage('At least one protocol must be supported by this md:IDPSSODescriptor.');
 
         /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
             [new AssertionIDRequestService(C::BINDING_HTTP_POST, C::LOCATION_A)],
-            ['urn:saml:3.9']
+            []
         );
     }
 

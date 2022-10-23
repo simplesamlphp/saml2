@@ -55,7 +55,7 @@ SOAP;
             /** @var \DOMElement $header */
             $header = $doc->getElementsByTagNameNS(C::NS_SOAP, 'Header')->item(0);
 
-            $requestAuthenticated = new RequestAuthenticated();
+            $requestAuthenticated = new RequestAuthenticated(1);
             $header->appendChild($header->ownerDocument->importNode($requestAuthenticated->toXML(), true));
 
             $destination = $this->destination ?: $message->getDestination();

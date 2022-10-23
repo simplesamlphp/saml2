@@ -35,7 +35,6 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
-use SimpleSAML\XMLSecurity\XMLSecurityDSig;
 
 use function dirname;
 use function strval;

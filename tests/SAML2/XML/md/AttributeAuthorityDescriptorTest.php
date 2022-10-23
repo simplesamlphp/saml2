@@ -126,7 +126,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'At least one protocol must be supported by this SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor.'
+            'At least one protocol must be supported by this md:AttributeAuthorityDescriptor.'
         );
         new AttributeAuthorityDescriptor([$this->as], []);
     }
@@ -137,8 +137,8 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithEmptySupportedProtocols(): void
     {
-        $this->expectException(SchemaViolationException::class);
-        new AttributeAuthorityDescriptor([$this->as], ['']);
+        $this->expectException(AssertionFailedException::class);
+        new AttributeAuthorityDescriptor([$this->as], []);
     }
 
 

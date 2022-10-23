@@ -138,7 +138,7 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      */
     protected function setProtocolSupportEnumeration(array $protocols): void
     {
-        Assert::minCount($protocols, 1, 'At least one protocol must be supported by this ' . static::class . '.');
+        Assert::minCount($protocols, 1, 'At least one protocol must be supported by this md:' . static::getLocalName() . '.');
         Assert::allValidURI($protocols, SchemaViolationException::class);
 
         $this->protocolSupportEnumeration = $protocols;

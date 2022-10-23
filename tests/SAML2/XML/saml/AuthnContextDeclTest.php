@@ -64,8 +64,7 @@ final class AuthnContextDeclTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        /** @psalm-var \DOMNode $authnContextDecl[1] */
-        $authnContextDecl = AuthnContextDecl::fromXML($this->xmlRepresentation->documentElement)->getDecl();
+        $authnContextDecl = AuthnContextDecl::fromXML($this->xmlRepresentation->documentElement);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),

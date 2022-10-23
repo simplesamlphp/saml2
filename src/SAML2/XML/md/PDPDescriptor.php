@@ -44,7 +44,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     /**
      * PDPDescriptor constructor.
      *
-     * @param \SimpleSAML\SAML2\XML\md\AuthzService[] $authServiceEndpoints
+     * @param \SimpleSAML\SAML2\XML\md\AuthzService[] $authzServiceEndpoints
      * @param string[] $protocolSupportEnumeration
      * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
      * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormats
@@ -58,7 +58,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts
      */
     public function __construct(
-        array $authServiceEndpoints,
+        array $authzServiceEndpoints,
         array $protocolSupportEnumeration,
         array $assertionIDRequestService = [],
         array $nameIDFormats = [],
@@ -82,49 +82,10 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             $organization,
             $contacts
         );
-        $this->setAuthzServiceEndpoints($authServiceEndpoints);
+
+        $this->setAuthzServiceEndpoints($authzServiceEndpoints);
         $this->setAssertionIDRequestServices($assertionIDRequestService);
         $this->setNameIDFormats($nameIDFormats);
-    }
-
-
-    /**
-     * Initialize an IDPSSODescriptor from a given XML document.
-     *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return \SimpleSAML\SAML2\XML\md\PDPDescriptor
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
-     */
-    public static function fromXML(DOMElement $xml): static
-    {
-        Assert::same($xml->localName, 'PDPDescriptor', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, PDPDescriptor::NS, InvalidDOMElementException::class);
-
-        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
-        $orgs = Organization::getChildrenOfClass($xml);
-        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor', TooManyElementsException::class);
-
-        $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
-
-        return new static(
-            AuthzService::getChildrenOfClass($xml),
-            preg_split('/[\s]+/', trim($protocols)),
-            AssertionIDRequestService::getChildrenOfClass($xml),
-            NameIDFormat::getChildrenOfClass($xml),
-            self::getAttribute($xml, 'ID', null),
-            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
-            self::getAttribute($xml, 'cacheDuration', null),
-            !empty($extensions) ? $extensions[0] : null,
-            self::getAttribute($xml, 'errorURL', null),
-            !empty($orgs) ? $orgs[0] : null,
-            KeyDescriptor::getChildrenOfClass($xml),
-            ContactPerson::getChildrenOfClass($xml)
-        );
     }
 
 
@@ -209,15 +170,55 @@ final class PDPDescriptor extends AbstractRoleDescriptor
 
 
     /**
+     * Initialize an IDPSSODescriptor from a given XML document.
+     *
+     * @param \DOMElement $xml The XML element we should load.
+     * @return \SimpleSAML\SAML2\XML\md\PDPDescriptor
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
+     */
+    public static function fromXML(DOMElement $xml): static
+    {
+        Assert::same($xml->localName, 'PDPDescriptor', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, PDPDescriptor::NS, InvalidDOMElementException::class);
+
+        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
+        $validUntil = self::getAttribute($xml, 'validUntil', null);
+        $orgs = Organization::getChildrenOfClass($xml);
+        Assert::maxCount($orgs, 1, 'More than one Organization found in this descriptor', TooManyElementsException::class);
+
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
+
+        return new static(
+            AuthzService::getChildrenOfClass($xml),
+            preg_split('/[\s]+/', trim($protocols)),
+            AssertionIDRequestService::getChildrenOfClass($xml),
+            NameIDFormat::getChildrenOfClass($xml),
+            self::getAttribute($xml, 'ID', null),
+            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
+            self::getAttribute($xml, 'cacheDuration', null),
+            !empty($extensions) ? $extensions[0] : null,
+            self::getAttribute($xml, 'errorURL', null),
+            !empty($orgs) ? $orgs[0] : null,
+            KeyDescriptor::getChildrenOfClass($xml),
+            ContactPerson::getChildrenOfClass($xml)
+        );
+    }
+
+
+    /**
      * Add this PDPDescriptor to an EntityDescriptor.
      *
      * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      * @return \DOMElement
      * @throws \Exception
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
-        $e = parent::toXML($parent);
+        $e = parent::toUnsignedXML($parent);
 
         foreach ($this->getAuthzServiceEndpoints() as $ep) {
             $ep->toXML($e);
@@ -229,12 +230,6 @@ final class PDPDescriptor extends AbstractRoleDescriptor
 
         foreach ($this->getNameIDFormats() as $nidFormat) {
             $nidFormat->toXML($e);
-        }
-
-        if ($this->signer !== null) {
-            $signedXML = $this->doSign($e);
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
-            return $signedXML;
         }
 
         return $e;

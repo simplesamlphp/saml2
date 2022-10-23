@@ -33,7 +33,7 @@ trait SignedElementTestTrait
      *
      * @var \DOMDocument
      */
-    protected DOMDocument $xmlRepresentation;
+    protected DOMDocument $signedXmlRepresentation;
 
     /**
      * The name of the class we are testing.
@@ -48,49 +48,54 @@ trait SignedElementTestTrait
      */
     public function testSignatures(): void
     {
-        /** @psalm-var class-string|null */
-        $testedClass = $this->testedClass;
-
-        /** @psalm-var \DOMElement|null */
-        $xmlRepresentation = $this->xmlRepresentation;
-
-        $this->assertNotNull($xmlRepresentation);
-        $this->assertNotEmpty($testedClass);
-
-        $algorithms = array_keys(C::$RSA_DIGESTS);
-
-        foreach ($algorithms as $algorithm) {
-            // sign with two certificates
-            $signer = (new SignatureAlgorithmFactory([]))->getAlgorithm(
-                $algorithm,
-                PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY)
+        if (!class_exists($this->testedClass)) {
+            $this->markTestSkipped(
+                'Unable to run ' . self::class . '::testSignatures(). Please set ' . self::class
+                . ':$testedClass to a class-string representing the XML-class being tested',
             );
+        } elseif (empty($this->signedXmlRepresentation)) {
+            $this->markTestSkipped(
+                'Unable to run ' . self::class . '::testSignatures(). Please set ' . self::class
+                . ':$signedXmlRepresentation to a DOMDocument representing the XML-class being tested',
+            );
+        } else {
+            /** @psalm-var class-string|null */
+            $testedClass = $this->testedClass;
 
-            $cert = PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY);
-            $oldCert = PEMCertificatesMock::getPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY);
-            $keyInfo = new KeyInfo(
-                [
+            /** @psalm-var \DOMElement|null */
+            $xmlRepresentation = $this->signedXmlRepresentation;
+
+            $algorithms = array_keys(C::$RSA_DIGESTS);
+            foreach ($algorithms as $algorithm) {
+                // sign with two certificates
+                $signer = (new SignatureAlgorithmFactory([]))->getAlgorithm(
+                    $algorithm,
+                    PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY)
+                );
+
+                $cert = PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY);
+                $oldCert = PEMCertificatesMock::getPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY);
+                $keyInfo = new KeyInfo([
                     new X509Data([new X509Certificate(
                         PEMCertificatesMock::getPlainPublicKeyContents(PEMCertificatesMock::PUBLIC_KEY),
                     )]),
                     new X509Data([new X509Certificate(
                         PEMCertificatesMock::getPlainPublicKeyContents(PEMCertificatesMock::OTHER_PUBLIC_KEY),
                     )]),
-                ]
-            );
+                ]);
 
-            $pre = $testedClass::fromXML($xmlRepresentation->documentElement);
-            $pre->sign($signer, C::C14N_EXCLUSIVE_WITHOUT_COMMENTS, $keyInfo);
-            $signed = $this->testedClass::fromXML($pre->toXML());
+                $pre = $testedClass::fromXML($xmlRepresentation->documentElement);
+                $pre->sign($signer, C::C14N_EXCLUSIVE_WITHOUT_COMMENTS, $keyInfo);
+                $signed = $this->testedClass::fromXML($pre->toXML());
 
-            // verify signature
-            $verifier = (new SignatureAlgorithmFactory([]))->getAlgorithm(
-                $signed->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
-                PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY)
-            );
+                // verify signature
+                $verifier = (new SignatureAlgorithmFactory([]))->getAlgorithm(
+                    $signed->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+                    PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY)
+                );
 // @TODO: take it from here
-//            try {
-                $post = $signed->verify($verifier);
+//                try {
+                    $post = $signed->verify($verifier);
 
 //            $cert = new XMLSecurityKey($algorithm, ['type' => 'public']);
 //            $cert->loadKey(PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY));
@@ -98,7 +103,7 @@ trait SignedElementTestTrait
             /** @var \SimpleSAML\XMLSecurity\XML\SignedElementInterface $post */
 //            $post = $testedClass::fromXML($pre->toXML());
 //            try {
-                $this->assertInstanceOf($this->testedClass, $post);
+                    $this->assertInstanceOf($this->testedClass, $post);
 //            } catch (Exception $e) {
 //                $this->fail('Signature validation failed with algorithm: ' . $algorithm);
 //            }
@@ -146,6 +151,7 @@ trait SignedElementTestTrait
                 );
             }
 */
+            }
         }
     }
 }

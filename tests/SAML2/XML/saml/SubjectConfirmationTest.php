@@ -54,9 +54,10 @@ final class SubjectConfirmationTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
+        $doc = DOMDocumentFactory::fromString('<root/>');
+        $attr1 = $doc->createAttributeNS('urn:test:something', 'test:attr1');
         $attr1->value = 'testval1';
-        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr2');
+        $attr2 = $doc->createAttributeNS('urn:test:something', 'test:attr2');
         $attr2->value = 'testval2';
 
         $subjectConfirmation = new SubjectConfirmation(
@@ -112,7 +113,7 @@ final class SubjectConfirmationTest extends TestCase
         $subjectConfirmation = new SubjectConfirmation(
             'urn:test:SomeMethod',
             new NameID('SomeNameIDValue'),
-            new SubjectConfirmationData()
+            new SubjectConfirmationData(time())
         );
 
         // Marshall it to a \DOMElement
