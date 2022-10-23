@@ -7,12 +7,9 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
 use SimpleSAML\XML\StringElementTrait;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\Constants as C;
-use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
-use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
 
 /**
  * SAML NameIDType abstract data type.
@@ -20,11 +17,9 @@ use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
  * @package simplesamlphp/saml2
  */
 
-abstract class NameIDType extends AbstractSamlElement implements BaseIdentifierInterface, EncryptableElementInterface
+abstract class NameIDType extends AbstractBaseIDType
 {
-    use IDNameQualifiersTrait;
     use StringElementTrait;
-    use EncryptableElementTrait;
 
     /**
      * A URI reference representing the classification of string-based identifier information. See Section 8.3 for the
@@ -73,11 +68,10 @@ abstract class NameIDType extends AbstractSamlElement implements BaseIdentifierI
         ?string $Format = null,
         ?string $SPProvidedID = null
     ) {
+        parent::__construct($NameQualifier, $SPNameQualifier);
         $this->dataType = C::XMLENC_ELEMENT;
 
         $this->setContent($value);
-        $this->setNameQualifier($NameQualifier);
-        $this->setSPNameQualifier($SPNameQualifier);
         $this->setFormat($Format);
         $this->setSPProvidedID($SPProvidedID);
     }
@@ -150,41 +144,17 @@ abstract class NameIDType extends AbstractSamlElement implements BaseIdentifierI
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        /** @psalm-var \DOMDocument $element->ownerDocument */
-        $element = $this->instantiateParentElement($parent);
-
-        if ($this->getNameQualifier() !== null) {
-            $element->setAttribute('NameQualifier', $this->getNameQualifier());
-        }
-
-        if ($this->getSPNameQualifier() !== null) {
-            $element->setAttribute('SPNameQualifier', $this->getSPNameQualifier());
-        }
+        $e = parent::toXML($parent);
 
         if ($this->getFormat() !== null) {
-            $element->setAttribute('Format', $this->getFormat());
+            $e->setAttribute('Format', $this->getFormat());
         }
 
         if ($this->getSPProvidedID() !== null) {
-            $element->setAttribute('SPProvidedID', $this->getSPProvidedID());
+            $e->setAttribute('SPProvidedID', $this->getSPProvidedID());
         }
 
-        $element->textContent = $this->getContent();
-        return $element;
-    }
-
-
-    public function getBlacklistedAlgorithms(): ?array
-    {
-        $container = ContainerSingleton::getInstance();
-        return $container->getBlacklistedEncryptionAlgorithms();
-    }
-
-
-    public function getEncryptionBackend(): ?EncryptionBackend
-    {
-        // return the encryption backend you want to use,
-        // or null if you are fine with the default
-        return null;
+        $e->textContent = $this->getContent();
+        return $e;
     }
 }

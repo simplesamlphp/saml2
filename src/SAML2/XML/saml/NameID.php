@@ -6,15 +6,21 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
+use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
+use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
 
 /**
  * Class representing the saml:NameID element.
  *
  * @package simplesamlphp/saml2
  */
-final class NameID extends NameIDType
+final class NameID extends NameIDType implements EncryptableElementInterface
 {
+    use EncryptableElementTrait;
+
     /**
      * Initialize a saml:NameID
      *
@@ -55,5 +61,20 @@ final class NameID extends NameIDType
         $SPProvidedID = self::getAttribute($xml, 'SPProvidedID', null);
 
         return new static($xml->textContent, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
+    }
+
+
+    public function getBlacklistedAlgorithms(): ?array
+    {
+        $container = ContainerSingleton::getInstance();
+        return $container->getBlacklistedEncryptionAlgorithms();
+    }
+
+
+    public function getEncryptionBackend(): ?EncryptionBackend
+    {
+        // return the encryption backend you want to use,
+        // or null if you are fine with the default
+        return null;
     }
 }

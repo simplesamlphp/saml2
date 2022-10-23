@@ -11,7 +11,6 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 use SimpleSAML\SAML2\XML\ExtensionPointTrait;
-use SimpleSAML\SAML2\XML\IDNameQualifiersTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -27,14 +26,12 @@ use function explode;
  *
  * @package simplesamlphp/saml2
  */
-abstract class AbstractBaseID extends AbstractSamlElement implements
-     BaseIdentifierInterface,
+abstract class AbstractBaseID extends AbstractBaseIDType implements
      EncryptableElementInterface,
      ExtensionPointInterface
 {
     use EncryptableElementTrait;
     use ExtensionPointTrait;
-    use IDNameQualifiersTrait;
 
     /** @var string */
     public const LOCALNAME = 'BaseID';
@@ -55,9 +52,8 @@ abstract class AbstractBaseID extends AbstractSamlElement implements
         ?string $NameQualifier = null,
         ?string $SPNameQualifier = null
     ) {
+        parent::__construct($NameQualifier, $SPNameQualifier);
         $this->type = $type;
-        $this->setNameQualifier($NameQualifier);
-        $this->setSPNameQualifier($SPNameQualifier);
     }
 
 
@@ -67,21 +63,6 @@ abstract class AbstractBaseID extends AbstractSamlElement implements
     public function getXsiType(): string
     {
         return $this->type;
-    }
-
-
-    public function getBlacklistedAlgorithms(): ?array
-    {
-        $container = ContainerSingleton::getInstance();
-        return $container->getBlacklistedEncryptionAlgorithms();
-    }
-
-
-    public function getEncryptionBackend(): ?EncryptionBackend
-    {
-        // return the encryption backend you want to use,
-        // or null if you are fine with the default
-        return null;
     }
 
 
@@ -146,9 +127,13 @@ abstract class AbstractBaseID extends AbstractSamlElement implements
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $e = $this->instantiateParentElement($parent);
+        $e = parent::toXML($parent);
+
+        $xsiType = $e->ownerDocument->createAttributeNS(C::NS_XSI, 'xsi:type');
+        $xsiType->value = $this->getXsiType();
+        $e->setAttributeNodeNS($xsiType);
+
         $e->setAttribute('xmlns:' . static::getXsiTypePrefix(), static::getXsiTypeNamespaceURI());
-        $e->setAttributeNS(C::NS_XSI, 'xsi:type', $this->getXsiType());
 
         if ($this->getNameQualifier() !== null) {
             $e->setAttribute('NameQualifier', $this->getNameQualifier());
@@ -159,5 +144,19 @@ abstract class AbstractBaseID extends AbstractSamlElement implements
         }
 
         return $e;
+    }
+
+    public function getBlacklistedAlgorithms(): ?array
+    {
+        $container = ContainerSingleton::getInstance();
+        return $container->getBlacklistedEncryptionAlgorithms();
+    }
+
+
+    public function getEncryptionBackend(): ?EncryptionBackend
+    {
+        // return the encryption backend you want to use,
+        // or null if you are fine with the default
+        return null;
     }
 }

@@ -9,6 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
@@ -74,7 +75,6 @@ final class CustomBaseID extends AbstractBaseID
     public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'BaseID', InvalidDOMElementException::class);
-        Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AbstractBaseID::NS, InvalidDOMElementException::class);
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
@@ -88,9 +88,7 @@ final class CustomBaseID extends AbstractBaseID
         $nameQualifier = self::getAttribute($xml, 'NameQualifier', null);
         $spNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);
 
-        $audience = Audience::getChildrenOfClass($xml);
-
-        return new static($audience, $nameQualifier, $spNameQualifier);
+        return new static(Audience::getChildrenOfClass($xml), $nameQualifier, $spNameQualifier);
     }
 
 

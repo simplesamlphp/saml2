@@ -140,9 +140,10 @@ XML
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 
-        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
+        $doc = DOMDocumentFactory::fromString('<root/>');
+        $attr1 = $doc->createAttributeNS('urn:test:something', 'test:attr1');
         $attr1->value = 'testval1';
-        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr2');
+        $attr2 = $doc->createAttributeNS('urn:test:something', 'test:attr2');
         $attr2->value = 'testval2';
 
         $subjectConfirmationData = new SubjectConfirmationData(
@@ -203,9 +204,10 @@ XML
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 
-        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
+        $doc = DOMDocumentFactory::fromString('<root/>');
+        $attr1 = $doc->createAttributeNS('urn:test:something', 'test:attr1');
         $attr1->value = 'testval1';
-        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr2');
+        $attr2 = $doc->createAttributeNS('urn:test:something', 'test:attr2');
         $attr2->value = 'testval2';
 
         $subjectConfirmationData = new SubjectConfirmationData(
@@ -224,7 +226,7 @@ XML
         $subject = new Subject(
             new CustomBaseID(
                 [new Audience('urn:some:audience')],
-                'https://sp.example.org/authentication/sp/metadata'
+                'https://sp.example.org/authentication/sp/metadata',
             ),
             [
                 new SubjectConfirmation(

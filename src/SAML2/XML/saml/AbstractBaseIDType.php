@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2\XML;
+namespace SimpleSAML\SAML2\XML\saml;
 
+use DOMElement;
 use SimpleSAML\Assert\Assert;
 
 /**
- * Trait grouping common functionality for elements implementing BaseIDAbstractType and NameIDType.
+ * SAML BaseID data type.
  *
  * @package simplesamlphp/saml2
  */
-trait IDNameQualifiersTrait
+abstract class AbstractBaseIDType extends AbstractSamlElement implements BaseIdentifierInterface
 {
     /**
      * The security or administrative domain that qualifies the identifier.
@@ -32,6 +33,21 @@ trait IDNameQualifiersTrait
      * @var string|null
      */
     protected ?string $SPNameQualifier = null;
+
+
+    /**
+     * Initialize a saml:BaseIDAbstractType from scratch
+     *
+     * @param string|null $NameQualifier
+     * @param string|null $SPNameQualifier
+     */
+    protected function __construct(
+        ?string $NameQualifier = null,
+        ?string $SPNameQualifier = null
+    ) {
+        $this->setNameQualifier($NameQualifier);
+        $this->setSPNameQualifier($SPNameQualifier);
+    }
 
 
     /**
@@ -76,5 +92,27 @@ trait IDNameQualifiersTrait
     {
         Assert::nullOrNotWhitespaceOnly($spNameQualifier);
         $this->SPNameQualifier = $spNameQualifier;
+    }
+
+
+    /**
+     * Convert this BaseID to XML.
+     *
+     * @param \DOMElement $parent The element we are converting to XML.
+     * @return \DOMElement The XML element after adding the data corresponding to this BaseID.
+     */
+    public function toXML(DOMElement $parent = null): DOMElement
+    {
+        $e = $this->instantiateParentElement($parent);
+
+        if ($this->NameQualifier !== null) {
+            $e->setAttribute('NameQualifier', $this->NameQualifier);
+        }
+
+        if ($this->SPNameQualifier !== null) {
+            $e->setAttribute('SPNameQualifier', $this->SPNameQualifier);
+        }
+
+        return $e;
     }
 }
