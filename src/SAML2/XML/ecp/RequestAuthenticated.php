@@ -6,8 +6,8 @@ namespace SimpleSAML\SAML2\XML\ecp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
@@ -58,7 +58,7 @@ final class RequestAuthenticated extends AbstractEcpElement
         Assert::oneOf(
             $mustUnderstand,
             [0, 1],
-            'Invalid value of SOAP-ENV:mustUnderstand attribute in <ecp:Response>.',
+            'Invalid value of env:mustUnderstand attribute in <ecp:Response>.',
             ProtocolViolationException::class,
         );
         $this->mustUnderstand = $mustUnderstand;
@@ -81,24 +81,24 @@ final class RequestAuthenticated extends AbstractEcpElement
 
         // Assert required attributes
         Assert::true(
-            $xml->hasAttributeNS(C::NS_SOAP, 'actor'),
-            'Missing SOAP-ENV:actor attribute in <ecp:RequestAuthenticated>.',
+            $xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'actor'),
+            'Missing env:actor attribute in <ecp:RequestAuthenticated>.',
             MissingAttributeException::class
         );
 
-        $mustUnderstand = $xml->getAttributeNS(C::NS_SOAP, 'mustUnderstand');
-        $actor = $xml->getAttributeNS(C::NS_SOAP, 'actor');
+        $mustUnderstand = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand');
+        $actor = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'actor');
 
         Assert::oneOf(
             $mustUnderstand,
             ['', '0', '1'],
-            'Invalid value of SOAP-ENV:mustUnderstand attribute in <ecp:Response>.',
+            'Invalid value of env:mustUnderstand attribute in <ecp:Response>.',
             ProtocolViolationException::class,
         );
         Assert::same(
             $actor,
             'http://schemas.xmlsoap.org/soap/actor/next',
-            'Invalid value of SOAP-ENV:actor attribute in <ecp:Response>.',
+            'Invalid value of env:actor attribute in <ecp:Response>.',
             ProtocolViolationException::class,
         );
 
@@ -118,8 +118,8 @@ final class RequestAuthenticated extends AbstractEcpElement
     {
         $response = $this->instantiateParentElement($parent);
 
-        $response->setAttributeNS(C::NS_SOAP, 'SOAP-ENV:mustUnderstand', strval($this->getMustUnderstand()));
-        $response->setAttributeNS(C::NS_SOAP, 'SOAP-ENV:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
+        $response->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', strval($this->getMustUnderstand()));
+        $response->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
 
         return $response;
     }
