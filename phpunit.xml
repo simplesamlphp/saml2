@@ -10,8 +10,7 @@
   </coverage>
   <testsuites>
     <testsuite name="Test Suite">
-      <directory>./tests</directory>
-      <exclude>./tests/InterOperability/</exclude>
+      <directory>./tests/SAML2</directory>
     </testsuite>
   </testsuites>
   <listeners>
