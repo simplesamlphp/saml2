@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\XMLSecurity\Exception\NoSignatureFoundException;
 use SimpleSAML\XMLSecurity\Key\PublicKey;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignableElementTrait;
@@ -386,7 +387,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     protected function xmlSignatureValidatorWrapper(array $_, PublicKey $key): void
     {
         if ($this->validateEnvelopedXmlSignature($key) === false) {
-            throw new Exception('No enveloped signature found');
+            throw new NoSignatureFoundException('No enveloped signature found.');
         }
     }
 
