@@ -9,7 +9,6 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\XML\StringElementTrait;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
-use SimpleSAML\XMLSecurity\Constants as C;
 
 /**
  * SAML NameIDType abstract data type.
@@ -69,7 +68,6 @@ abstract class NameIDType extends AbstractBaseIDType
         ?string $SPProvidedID = null
     ) {
         parent::__construct($NameQualifier, $SPNameQualifier);
-        $this->dataType = C::XMLENC_ELEMENT;
 
         $this->setContent($value);
         $this->setFormat($Format);
