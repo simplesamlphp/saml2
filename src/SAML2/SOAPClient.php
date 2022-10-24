@@ -137,7 +137,7 @@ class SOAPClient
         }
 
         // Add soap-envelopes
-        $env = new Envelope(new Body([new Chunk($msg->toXML())]))->toXML();
+        $env = (new Envelope(new Body([new Chunk($msg->toXML())])))->toXML();
         $request = $env->ownerDocument->saveXML();
 
         $container->debugMessage($request, 'out');
