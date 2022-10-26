@@ -308,6 +308,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
 
         if (!empty($signature)) {
             $authority->setSignature($signature[0]);
+            $authority->setXML($xml);
         }
         return $authority;
     }

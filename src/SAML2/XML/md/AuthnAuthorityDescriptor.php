@@ -220,6 +220,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
         );
         if (!empty($signature)) {
             $authority->setSignature($signature[0]);
+            $authority->setXML($xml);
         }
         return $authority;
     }

@@ -280,6 +280,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
         );
         if (!empty($signature)) {
             $spssod->setSignature($signature[0]);
+            $spssod->setXML($xml);
         }
         return $spssod;
     }

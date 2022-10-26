@@ -28,6 +28,7 @@ use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
 use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
 use SimpleSAML\SAML2\XML\samlp\RequesterID;
 use SimpleSAML\SAML2\XML\samlp\Scoping;
+use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -54,6 +55,7 @@ use function strval;
 final class AuthnRequestTest extends TestCase
 {
     use SerializableElementTestTrait;
+    use SignedElementTestTrait;
 
 
     /**

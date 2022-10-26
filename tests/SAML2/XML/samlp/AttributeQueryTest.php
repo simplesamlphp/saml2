@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
+use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -36,6 +37,7 @@ use function strval;
 final class AttributeQueryTest extends TestCase
 {
     use SerializableElementTestTrait;
+    use SignedElementTestTrait;
 
 
     /**

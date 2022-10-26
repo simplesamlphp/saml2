@@ -333,8 +333,10 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
             ManageNameIDService::getChildrenOfClass($xml),
             NameIDFormat::getChildrenOfClass($xml)
         );
+
         if (!empty($signature)) {
             $idpssod->setSignature($signature[0]);
+            $idpssod->setXML($xml);
         }
         return $idpssod;
     }
