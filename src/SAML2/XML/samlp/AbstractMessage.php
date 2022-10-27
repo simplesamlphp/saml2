@@ -22,8 +22,6 @@ use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignedElementTrait;
 
 use function array_pop;
-use function call_user_func;
-use function count;
 use function gmdate;
 
 /**
@@ -102,13 +100,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     /** @var bool */
     protected bool $messageContainedSignatureUponConstruction = false;
 
-    /**
-     * Available methods for validating this message.
-     *
-     * @var array
-     */
-    private array $validators = [];
-
 
     /**
      * Initialize a message.
@@ -139,68 +130,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
         $this->setConsent($consent);
         $this->setExtensions($extensions);
         $this->setRelayState($relayState);
-        $this->addValidator([$this, 'xmlSignatureValidatorWrapper'], []);
-    }
-
-
-    /**
-     * Add a method for validating this message.
-     *
-     * This function is used by the HTTP-Redirect binding, to make it possible to
-     * check the signature against the one included in the query string.
-     *
-     * @param callable $function The function which should be called
-     * @param mixed $data The data that should be included as the first parameter to the function
-     */
-    public function addValidator(callable $function, $data): void
-    {
-        $this->validators[] = [
-            'Function' => $function,
-            'Data' => $data,
-        ];
-    }
-
-
-    /**
-     * Validate this message against a public key.
-     *
-     * true is returned on success, false is returned if we don't have any
-     * signature we can validate. An exception is thrown if the signature
-     * validation fails.
-     *
-     * @param \SimpleSAML\XMLSecurity\Key\PublicKey $key The key we should check against
-     * @throws \Exception
-     * @return bool true on success, false when we don't have a signature
-     */
-    public function validate(PublicKey $key): bool
-    {
-        if (count($this->validators) === 0) {
-            return false;
-        }
-
-        $exceptions = [];
-
-        foreach ($this->validators as $validator) {
-            $function = $validator['Function'];
-            $data = $validator['Data'];
-
-            try {
-                call_user_func($function, $data, $key);
-                /* We were able to validate the message with this validator. */
-
-                return true;
-            } catch (Exception $e) {
-                $exceptions[] = $e;
-            }
-        }
-
-        Assert::notEmpty($exceptions);
-
-        /**
-         * No validators were able to validate the message.
-         * @psalm-suppress InvalidThrow
-         */
-        throw array_pop($exceptions);
     }
 
 
@@ -373,22 +302,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
         Assert::nullOrNotWhitespaceOnly($relayState);
 
         $this->relayState = $relayState;
-    }
-
-
-    /**
-     * Wrapper method over SignedElementTrait to use as a validator for enveloped XML signatures.
-     *
-     * @param array $_
-     * @param \SimpleSAML\XMLSecurity\Key\PublicKey $key The key to use to verify the enveloped signature.
-     *
-     * @throws \Exception If there's no enveloped signature, or it fails to validate.
-     */
-    protected function xmlSignatureValidatorWrapper(array $_, PublicKey $key): void
-    {
-        if ($this->validateEnvelopedXmlSignature($key) === false) {
-            throw new NoSignatureFoundException('No enveloped signature found.');
-        }
     }
 
 

@@ -160,15 +160,6 @@ class HTTPRedirect extends Binding
         if (!array_key_exists('SigAlg', $query)) {
             throw new Exception('Missing signature algorithm.');
         }
-        $signedQuery .= '&SigAlg=' . urlencode($query['SigAlg']);
-
-        $signData = [
-            'Signature' => $query['Signature'],
-            'SigAlg'    => $query['SigAlg'],
-            'Query'     => $signedQuery,
-        ];
-
-        $message->addValidator([get_class($this), 'validateSignature'], $signData);
 
         return $message;
     }
