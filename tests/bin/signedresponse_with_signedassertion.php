@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-require_once(dirname(dirname(__FILE__)) . '/vendor/autoload.php');
+require_once(dirname(dirname(dirname(__FILE__))) . '/vendor/autoload.php');
 
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Assertion;
@@ -18,7 +18,7 @@ $assertionSigner = (new SignatureAlgorithmFactory())->getAlgorithm(
     PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),
 );
 
-$document = DOMDocumentFactory::fromFile(dirname(dirname(__FILE__)) . '/tests/resources/xml/saml_Assertion.xml');
+$document = DOMDocumentFactory::fromFile(dirname(dirname(__FILE__)) . '/resources/xml/saml_Assertion.xml');
 $unsignedAssertion = Assertion::fromXML($document->documentElement);
 $unsignedAssertion->sign($assertionSigner);
 
