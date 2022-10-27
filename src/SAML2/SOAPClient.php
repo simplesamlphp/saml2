@@ -154,7 +154,8 @@ class SOAPClient
 
         Utils::getContainer()->debugMessage($soapresponsexml, 'in');
 
-        $env = Envelope::fromXML($dom = DOMDocumentFactory::fromString($soapresponsexml)->documentElement);
+        $dom = DOMDocumentFactory::fromString($soapresponsexml);
+        $env = Envelope::fromXML($dom->documentElement);
         $container->debugMessage($env->toXML()->ownerDocument->saveXML(), 'in');
 
         $soapfault = $this->getSOAPFault($dom);
@@ -170,7 +171,7 @@ class SOAPClient
         }
 
         // Extract the message from the response
-        $samlresponse = MessageFactory::fromXML($env->getBody()->getChildren()[0]->toXML());
+        $samlresponse = MessageFactory::fromXML($env->getBody()->getElements()[0]->toXML());
 
         /* Add validator to message which uses the SSL context. */
         self::addSSLValidator($samlresponse, $context);
