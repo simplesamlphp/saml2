@@ -8,6 +8,7 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\SAML2\Assertion\Exception\NotDecryptedException;
 use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\XML\saml\Assertion;
@@ -82,9 +83,11 @@ class Decrypter
     public function decrypt(EncryptedAssertion $assertion): Assertion
     {
         $decryptionKeys = $this->privateKeyLoader->loadDecryptionKeys($this->identityProvider, $this->serviceProvider);
+
         $blacklistedKeys = $this->identityProvider->getBlacklistedAlgorithms();
         if (is_null($blacklistedKeys)) {
-            $blacklistedKeys = $this->serviceProvider->getBlacklistedAlgorithms();
+            $container = ContainerSingleton::getInstance();
+            $blacklistedKeys = $container->getBlacklistedEncryptionAlgorithms();
         }
 
         // reflects the simplesamlphp behaviour for BC, see
