@@ -86,7 +86,7 @@ abstract class AbstractStatement extends AbstractStatementType implements Extens
         $type = ($ns === null) ? $element : implode(':', [$ns, $element]);
 
         // now check if we have a handler registered for it
-        $handler = Utils::getContainer()->getExtensionHandler($ns, $element);
+        $handler = Utils::getContainer()->getExtensionHandler($type);
         if ($handler === null) {
             // we don't have a handler, proceed with unknown statement
             return new UnknownStatement(new Chunk($xml), $type);
