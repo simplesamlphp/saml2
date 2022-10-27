@@ -345,7 +345,7 @@ AUTHNREQUEST;
         $this->assertInstanceOf(EncryptedID::class, $identifier);
 
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $identifier->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
+            $identifier->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY)
         );
 

@@ -375,8 +375,9 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
         $this->getIssuer()?->toXML($root);
 
-        if ($this->getExtensions() !== null && !$this->getExtensions()->isEmptyElement()) {
-            $this->getExtensions()->toXML($root);
+        $extensions = $this->getExtensions();
+        if ($extensions !== null && !$extensions->isEmptyElement()) {
+            $extensions->toXML($root);
         }
 
         return $root;
@@ -411,7 +412,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
             $messageElements = XPath::xpQuery($signedXML, './saml_assertion:Issuer', XPath::getXPath($signedXML));
             $issuer = array_pop($messageElements);
 
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $issuer->nextSibling);
+            $signedXML->insertBefore($this->signature?->toXML($signedXML), $issuer->nextSibling);
             return $signedXML;
         }
 

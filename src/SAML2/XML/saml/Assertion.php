@@ -547,7 +547,7 @@ final class Assertion extends AbstractSamlElement implements
             $messageElements = XPath::xpQuery($signedXML, './saml_assertion:Issuer', XPath::getXPath($signedXML));
             $issuer = array_pop($messageElements);
 
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $issuer->nextSibling);
+            $signedXML->insertBefore($this->signature?->toXML($signedXML), $issuer->nextSibling);
             return $signedXML;
         }
 

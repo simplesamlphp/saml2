@@ -116,6 +116,6 @@ final class BaseIDTest extends TestCase
         $this->assertEquals('BaseID', $chunk->getLocalName());
         $this->assertEquals(C::NS_SAML, $chunk->getNamespaceURI());
 
-        $this->assertEquals($element->ownerDocument->saveXML($element), strval($chunk));
+        $this->assertEquals($element->ownerDocument?->saveXML($element), strval($chunk));
     }
 }

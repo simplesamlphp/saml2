@@ -198,8 +198,9 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
             $e->setAttribute('cacheDuration', $this->getCacheDuration());
         }
 
-        if ($this->getExtensions() !== null && !$this->getExtensions()->isEmptyElement()) {
-            $this->getExtensions()->toXML($e);
+        $extensions = $this->getExtensions();
+        if ($extensions !== null && !$extensions->isEmptyElement()) {
+            $extensions->toXML($e);
         }
 
         return $e;

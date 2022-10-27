@@ -152,7 +152,7 @@ XML;
         $status = $response->getStatus();
         $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:Responder", $status->getStatusCode()->getValue());
         $this->assertEmpty($status->getStatusCode()->getSubCodes());
-        $this->assertEquals("Something is wrong...", $status->getStatusMessage()->getContent());
+        $this->assertEquals("Something is wrong...", $status->getStatusMessage()?->getContent());
 
         $this->assertEquals("_bec424fa5103428909a30ff1e31168327f79474984", $response->getInResponseTo());
     }
@@ -221,7 +221,7 @@ XML;
         $status = $response->getStatus();
         $this->assertEquals(C::STATUS_REQUESTER, $status->getStatusCode()->getValue());
         $this->assertEquals(C::STATUS_REQUEST_DENIED, $status->getStatusCode()->getSubCodes()[0]->getValue());
-        $this->assertEquals("The AuthnRequest could not be validated", $status->getStatusMessage()->getContent());
+        $this->assertEquals("The AuthnRequest could not be validated", $status->getStatusMessage()?->getContent());
     }
 
 

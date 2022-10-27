@@ -107,13 +107,14 @@ final class EntityAttributes extends AbstractMdattrElement
                 'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must contain a Subject',
                 ProtocolViolationException::class
             );
+
             Assert::isEmpty(
-                $subject->getSubjectConfirmation(),
+                $subject?->getSubjectConfirmation(),
                 'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must NOT contain any SubjectConfirmation',
                 ProtocolViolationException::class
             );
 
-            $nameId = $subject->getIdentifier();
+            $nameId = $subject?->getIdentifier();
             Assert::isInstanceOf(
                 $nameId,
                 NameID::class,
@@ -121,7 +122,7 @@ final class EntityAttributes extends AbstractMdattrElement
                 ProtocolViolationException::class
             );
             Assert::same(
-                $nameId->getFormat(),
+                $nameId?->getFormat(),
                 C::NAMEID_ENTITY,
                 sprintf('The NameID format must be %s', C::NAMEID_ENTITY),
                 ProtocolViolationException::class

@@ -159,7 +159,7 @@ final class LogoutRequestTest extends MockeryTestCase
         $this->assertEquals('SomeSessionIndex2', $sessionIndexes[1]->getContent());
 
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encid->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
+            $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY)
         );
         $identifier = $encid->decrypt($decryptor);

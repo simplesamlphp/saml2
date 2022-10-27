@@ -46,7 +46,7 @@ class HTTPPost extends Binding
         $msgStr = $message->toXML();
 
         Utils::getContainer()->debugMessage($msgStr, 'out');
-        $msgStr = $msgStr->ownerDocument->saveXML($msgStr);
+        $msgStr = $msgStr->ownerDocument?->saveXML($msgStr);
 
         $msgStr = base64_encode($msgStr);
 

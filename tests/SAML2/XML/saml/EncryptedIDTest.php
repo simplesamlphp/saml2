@@ -198,7 +198,7 @@ final class EncryptedIDTest extends TestCase
 
         $encid = EncryptedID::fromXML($doc->documentElement);
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encid->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
+            $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
             $privKey
         );
         $id = $encid->decrypt($decryptor);
@@ -216,7 +216,7 @@ final class EncryptedIDTest extends TestCase
 
         $encid = EncryptedID::fromXML($doc->documentElement);
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encid->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
+            $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
             $privKey
         );
         $id = $encid->decrypt($decryptor);
@@ -236,7 +236,7 @@ final class EncryptedIDTest extends TestCase
 
         $encid = EncryptedID::fromXML($doc->documentElement);
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encid->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
+            $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
             $privKey
         );
         $id = $encid->decrypt($decryptor);

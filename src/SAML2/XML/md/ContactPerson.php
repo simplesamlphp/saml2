@@ -426,6 +426,7 @@ final class ContactPerson extends AbstractMdElement
             $data['TelephoneNumbers'] = array_merge($data['TelephoneNumbers'], $telephone->toArray());
         }
 
+        /** @psalm-suppress PossiblyNullReference */
         foreach ($this->getAttributesNS() as $a) {
             $data[$a['namespaceURI']] = [$a['qualifiedName'] => $a['value']];
         }

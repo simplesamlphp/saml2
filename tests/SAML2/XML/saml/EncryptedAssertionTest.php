@@ -126,7 +126,7 @@ final class EncryptedAssertionTest extends TestCase
 
         $encAssertion = EncryptedAssertion::fromXML($doc->documentElement);
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encAssertion->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
+            $encAssertion->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),
         );
 

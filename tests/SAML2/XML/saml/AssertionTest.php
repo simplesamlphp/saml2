@@ -277,7 +277,7 @@ XML;
         $statements = [$authnStatement, $attributeStatement];
         $assertion = new Assertion($issuer, '_123abc', 1234567890, null, $conditions, $statements);
 
-        $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
+        $assertionElement = $assertion->toXML()->ownerDocument?->saveXML();
 
         $assertionToVerify = Assertion::fromXML(DOMDocumentFactory::fromString($assertionElement)->documentElement);
         $conditions = $assertionToVerify->getConditions();
@@ -289,7 +289,7 @@ XML;
         $authnStatement = $authnStatements[0];
         $this->assertEquals(
             'https://example.org/relative/path/to/document.xml',
-            $authnStatement->getAuthnContext()->getAuthnContextDeclRef()->getContent()
+            $authnStatement->getAuthnContext()->getAuthnContextDeclRef()?->getContent()
         );
         $this->assertEquals('_123abc', $assertionToVerify->getId());
         $this->assertEquals(1234567890, $assertionToVerify->getIssueInstant());
@@ -298,8 +298,8 @@ XML;
         $this->assertEquals('idx1', $authnStatement->getSessionIndex());
 
         $subjectLocality = $authnStatement->getSubjectLocality();
-        $this->assertEquals('127.0.0.1', $subjectLocality->getAddress());
-        $this->assertEquals('no.place.like.home', $subjectLocality->getDnsName());
+        $this->assertEquals('127.0.0.1', $subjectLocality?->getAddress());
+        $this->assertEquals('no.place.like.home', $subjectLocality?->getDnsName());
 
         $authauth = $authnStatement->getAuthnContext()->getAuthenticatingAuthorities();
         $this->assertCount(2, $authauth);
@@ -474,7 +474,10 @@ XML
         $unsignedAssertion->sign($signer, C::C14N_EXCLUSIVE_WITHOUT_COMMENTS, $keyInfo);
         $signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
 
-        $this->assertEquals(C::SIG_RSA_SHA256, $signedAssertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm());
+        $this->assertEquals(
+            C::SIG_RSA_SHA256,
+            $signedAssertion->getSignature()?->getSignedInfo()->getSignatureMethod()?->getAlgorithm()
+        );
         $this->assertTrue($signedAssertion->wasSignedAtConstruction());
     }
 
@@ -526,7 +529,7 @@ XML;
         $this->assertEquals('abcd-some-value-xyz', $oValue[0]->getContent());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $mValue[0]->getFormat());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $oValue[0]->getFormat());
-        $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
+        $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument?->saveXML());
     }
 
 
@@ -621,7 +624,7 @@ XML;
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $firstValue[0]->getFormat());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $secondValue[0]->getFormat());
 
-        $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
+        $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument?->saveXML());
     }
 
 
@@ -634,7 +637,7 @@ XML;
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $assertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()?->getAlgorithm(),
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
@@ -660,7 +663,7 @@ XML;
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $assertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()?->getAlgorithm(),
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
@@ -683,7 +686,7 @@ XML;
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $assertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()?->getAlgorithm(),
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
@@ -725,7 +728,7 @@ XML;
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $assertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()?->getAlgorithm(),
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY),
         );
 
@@ -1059,15 +1062,15 @@ XML;
         );
 
         // Marshall it to a \DOMElement
-        $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
+        $assertionElement = $assertion->toXML()->ownerDocument?->saveXML();
 
         $assertionToVerify = Assertion::fromXML(DOMDocumentFactory::fromString($assertionElement)->documentElement);
 
-        $identifier = $assertionToVerify->getSubject()->getIdentifier();
+        $identifier = $assertionToVerify->getSubject()?->getIdentifier();
         $this->assertInstanceOf(EncryptedID::class, $identifier);
 
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $identifier->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
+            $identifier->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
         $nameID = $identifier->decrypt($decryptor);
@@ -1201,7 +1204,7 @@ XML;
         $doc = DOMDocumentFactory::fromString(strval($encass));
 
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encass->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
+            $encass->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::OTHER_PRIVATE_KEY)
         );
 

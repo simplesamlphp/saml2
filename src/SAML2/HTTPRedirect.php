@@ -58,7 +58,7 @@ class HTTPRedirect extends Binding
         $msgStr = $message->toXML();
 
         Utils::getContainer()->debugMessage($msgStr, 'out');
-        $msgStr = $msgStr->ownerDocument->saveXML($msgStr);
+        $msgStr = $msgStr->ownerDocument?->saveXML($msgStr);
 
         $msgStr = gzdeflate($msgStr);
         $msgStr = base64_encode($msgStr);

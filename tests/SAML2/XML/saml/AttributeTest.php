@@ -134,7 +134,7 @@ final class AttributeTest extends TestCase
         $encattr = EncryptedAttribute::fromXML($doc->documentElement);
 
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encattr->getEncryptedKey()->getEncryptionMethod()->getAlgorithm(),
+            $encattr->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
 

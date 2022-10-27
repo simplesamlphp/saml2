@@ -54,7 +54,7 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements Sign
 
         if ($this->signer !== null) {
             $signedXML = $this->doSign($e);
-            $signedXML->insertBefore($this->signature->toXML($signedXML), $signedXML->firstChild);
+            $signedXML->insertBefore($this->signature?->toXML($signedXML), $signedXML->firstChild);
             return $signedXML;
         }
 

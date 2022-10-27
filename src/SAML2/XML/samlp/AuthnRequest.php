@@ -557,18 +557,21 @@ class AuthnRequest extends AbstractRequest
 
         $this->getSubject()?->toXML($e);
 
-        if ($this->getNameIdPolicy() !== null && !$this->getNameIdPolicy()->isEmptyElement()) {
-            $this->getNameIdPolicy()->toXML($e);
+        $nameIdPolicy = $this->getNameIdPolicy();
+        if ($nameIdPolicy !== null && !$nameIdPolicy->isEmptyElement()) {
+            $nameIdPolicy->toXML($e);
         }
 
-        if ($this->getConditions() !== null && !$this->getConditions()->isEmptyElement()) {
-            $this->getConditions()->toXML($e);
+        $conditions = $this->getConditions();
+        if ($conditions !== null && !$conditions->isEmptyElement()) {
+            $conditions->toXML($e);
         }
 
         $this->getRequestedAuthnContext()?->toXML($e);
 
-        if ($this->getScoping() !== null && !$this->getScoping()->isEmptyElement()) {
-            $this->getScoping()->toXML($e);
+        $scoping = $this->getScoping();
+        if ($scoping !== null && !$scoping->isEmptyElement()) {
+            $scoping->toXML($e);
         }
 
         return $e;

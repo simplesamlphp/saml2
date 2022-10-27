@@ -130,6 +130,7 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
     {
         $e = parent::toXML($parent);
 
+        /** @psalm-var \DOMDocument $e->ownerDocument */
         $xsiType = $e->ownerDocument->createAttributeNS(C::NS_XSI, 'xsi:type');
         $xsiType->value = $this->getXsiType();
         $e->setAttributeNodeNS($xsiType);

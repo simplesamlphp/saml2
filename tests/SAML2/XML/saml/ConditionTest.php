@@ -110,6 +110,6 @@ final class ConditionTest extends TestCase
         $this->assertEquals('Condition', $chunk->getLocalName());
         $this->assertEquals(C::NS_SAML, $chunk->getNamespaceURI());
 
-        $this->assertEquals($element->ownerDocument->saveXML($element), strval($chunk));
+        $this->assertEquals($element->ownerDocument?->saveXML($element), strval($chunk));
     }
 }

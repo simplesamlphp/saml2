@@ -120,7 +120,7 @@ class SOAPClient
         $context = stream_context_create($ctxOpts);
 
         $options = [
-            'uri' => $issuer->getContent(),
+            'uri' => $issuer?->getContent(),
             'location' => $msg->getDestination(),
             'stream_context' => $context,
         ];
@@ -140,7 +140,7 @@ class SOAPClient
 
         // Add soap-envelopes
         $env = (new Envelope(new Body([new Chunk($msg->toXML())])))->toXML();
-        $request = $env->ownerDocument->saveXML();
+        $request = $env->ownerDocument?->saveXML();
 
         $container->debugMessage($request, 'out');
 
@@ -156,14 +156,14 @@ class SOAPClient
 
         $dom = DOMDocumentFactory::fromString($soapresponsexml);
         $env = Envelope::fromXML($dom->documentElement);
-        $container->debugMessage($env->toXML()->ownerDocument->saveXML(), 'in');
+        $container->debugMessage($env->toXML()->ownerDocument?->saveXML(), 'in');
 
         $soapfault = $this->getSOAPFault($dom);
         if ($soapfault !== null) {
             throw new Exception(
                 sprintf(
                     "Actor: '%s';  Message: '%s';  Code: '%s'",
-                    $soapfault->getFaultActor()->getContent(),
+                    $soapfault->getFaultActor()?->getContent(),
                     $soapfault->getFaultString()->getContent(),
                     $soapfault->getFaultCode()->getContent(),
                 ),

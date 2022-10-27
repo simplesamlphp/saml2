@@ -67,7 +67,7 @@ class HTTPArtifact extends Binding
         }
         $artifact = base64_encode("\x00\x04\x00\x00" . sha1($issuer->getContent(), true) . $generatedId);
         $artifactData = $message->toXML();
-        $artifactDataString = $artifactData->ownerDocument->saveXML($artifactData);
+        $artifactDataString = $artifactData->ownerDocument?->saveXML($artifactData);
 
         $store->set('artifact', $artifact, $artifactDataString, Temporal::getTime() + 15 * 60);
 

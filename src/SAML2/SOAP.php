@@ -59,7 +59,7 @@ class SOAP extends Binding
             new Body([$message]),
             $header,
         );
-        return $env->toXML()->ownerDocument->saveXML();
+        return $env->toXML()->ownerDocument?->saveXML();
     }
 
 
