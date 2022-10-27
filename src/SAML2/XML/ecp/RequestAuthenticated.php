@@ -29,9 +29,9 @@ final class RequestAuthenticated extends AbstractEcpElement
     /**
      * Create a ECP RequestAuthenticated element.
      *
-     * @param int $mustUnderstand
+     * @param int|null $mustUnderstand
      */
-    public function __construct(int $mustUnderstand)
+    public function __construct(?int $mustUnderstand)
     {
         $this->setMustUnderstand($mustUnderstand);
     }
@@ -40,9 +40,9 @@ final class RequestAuthenticated extends AbstractEcpElement
     /**
      * Collect the value of the mustUnderstand-property
      *
-     * @return int
+     * @return int|null
      */
-    public function getMustUnderstand(): int
+    public function getMustUnderstand(): ?int
     {
         return $this->mustUnderstand;
     }
@@ -51,13 +51,13 @@ final class RequestAuthenticated extends AbstractEcpElement
     /**
      * Set the value of the mustUnderstand-property
      *
-     * @param int $mustUnderstand
+     * @param int|null $mustUnderstand
      */
-    private function setMustUnderstand(int $mustUnderstand): void
+    private function setMustUnderstand(?int $mustUnderstand): void
     {
         Assert::oneOf(
             $mustUnderstand,
-            [0, 1],
+            [null, 0, 1],
             'Invalid value of env:mustUnderstand attribute in <ecp:Response>.',
             ProtocolViolationException::class,
         );
@@ -102,7 +102,7 @@ final class RequestAuthenticated extends AbstractEcpElement
             ProtocolViolationException::class,
         );
 
-        $mustUnderstand = intval($mustUnderstand);
+        $mustUnderstand = ($mustUnderstand === '') ? null : intval($mustUnderstand);
 
         return new static($mustUnderstand);
     }
@@ -118,7 +118,9 @@ final class RequestAuthenticated extends AbstractEcpElement
     {
         $response = $this->instantiateParentElement($parent);
 
-        $response->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', strval($this->getMustUnderstand()));
+        if ($this->getMustUnderstand() !== null) {
+            $response->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', strval($this->getMustUnderstand()));
+        }
         $response->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
 
         return $response;
