@@ -15,7 +15,7 @@ use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 $assertionSigner = (new SignatureAlgorithmFactory())->getAlgorithm(
     C::SIG_RSA_SHA256,
-    PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),
+    PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::OTHER_PRIVATE_KEY),
 );
 
 $document = DOMDocumentFactory::fromFile(dirname(dirname(__FILE__)) . '/resources/xml/saml_Assertion.xml');
@@ -37,7 +37,7 @@ $unsignedResponse = new Response(
 
 $responseSigner = (new SignatureAlgorithmFactory())->getAlgorithm(
     C::SIG_RSA_SHA512,
-    PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::OTHER_PRIVATE_KEY),
+    PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
 );
 
 $unsignedResponse->sign($responseSigner);

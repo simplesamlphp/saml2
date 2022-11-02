@@ -31,7 +31,7 @@ $unsignedResponse = new Response(
 
 $responseSigner = (new SignatureAlgorithmFactory())->getAlgorithm(
     C::SIG_RSA_SHA512,
-    PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::OTHER_PRIVATE_KEY),
+    PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
 );
 
 $unsignedResponse->sign($responseSigner);
