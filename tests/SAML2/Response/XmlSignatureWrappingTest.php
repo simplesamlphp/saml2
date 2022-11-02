@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Response;
 
-use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XMLSecurity\Utils\Certificate;
+use SimpleSAML\XMLSecurity\Exception\ReferenceValidationFailedException;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\Utils\Certificate;
 
 use function preg_match;
 
@@ -35,13 +36,10 @@ final class XmlSignatureWrappingTest extends MockeryTestCase
      */
     public function setUp(): void
     {
-        $this->signatureValidator = new Validator(new \Psr\Log\NullLogger());
-
-        $pattern = Certificate::PUBLIC_KEY_PATTERN;
-        preg_match($pattern, PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::PUBLIC_KEY), $matches);
+        $this->signatureValidator = new Validator(new NullLogger());
 
         $this->identityProviderConfiguration = new IdentityProvider(
-            ['certificateData' => $matches[1]]
+            ['certificateData' => PEMCertificatesMock::getPlainPublicKeyContents(PEMCertificatesMock::PUBLIC_KEY)],
         );
     }
 
@@ -50,8 +48,8 @@ final class XmlSignatureWrappingTest extends MockeryTestCase
      */
     public function testThatASignatureReferencingAnEmbeddedAssertionIsNotValid(): void
     {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Reference validation failed');
+        $this->expectException(ReferenceValidationFailedException::class);
+        $this->expectExceptionMessage('Reference does not point to given element.');
 
         $assertion = $this->getSignedAssertionWithEmbeddedAssertionReferencedInSignature();
         $this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration);
@@ -62,8 +60,8 @@ final class XmlSignatureWrappingTest extends MockeryTestCase
      */
     public function testThatASignatureReferencingAnotherAssertionIsNotValid(): void
     {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Reference validation failed');
+        $this->expectException(ReferenceValidationFailedException::class);
+        $this->expectExceptionMessage('Reference does not point to given element.');
 
         $assertion = $this->getSignedAssertionWithSignatureThatReferencesAnotherAssertion();
         $this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration);
