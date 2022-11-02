@@ -40,9 +40,10 @@ $unsignedAssertion = new Assertion(
     ])],
 );
 $unsignedAssertion->sign($signer);
+$signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
 $entityAttributes = new EntityAttributes([
     new Attribute('attrib1', C::NAMEFORMAT_URI, null, [new AttributeValue('is'), new AttributeValue('really'), new AttributeValue('cool')]),
-    $unsignedAssertion,
+    $signedAssertion,
     new Attribute('foo', 'urn:simplesamlphp:v1:simplesamlphp', null, [new AttributeValue('is'), new AttributeValue('really'), new AttributeValue('cool')]),
 ]);
 

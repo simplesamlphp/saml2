@@ -21,6 +21,7 @@ $assertionSigner = (new SignatureAlgorithmFactory())->getAlgorithm(
 $document = DOMDocumentFactory::fromFile(dirname(dirname(__FILE__)) . '/resources/xml/saml_Assertion.xml');
 $unsignedAssertion = Assertion::fromXML($document->documentElement);
 $unsignedAssertion->sign($assertionSigner);
+$signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
 
 $unsignedResponse = new Response(
     new Status(new StatusCode(C::STATUS_SUCCESS)),
@@ -31,7 +32,7 @@ $unsignedResponse = new Response(
     C::ENTITY_OTHER,
     C::ENTITY_SP,
     null,
-    [$unsignedAssertion]
+    [$signedAssertion]
 );
 
 $responseSigner = (new SignatureAlgorithmFactory())->getAlgorithm(
