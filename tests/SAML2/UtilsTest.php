@@ -251,7 +251,7 @@ final class UtilsTest extends TestCase
      */
     public function testCreateKeyDescriptor(): void
     {
-        $X509Data = PEMCertificatesMock::getPlainPrivateKeyContents();
+        $X509Data = PEMCertificatesMock::getPlainPublicKeyContents(PEMCertificatesMock::PUBLIC_KEY);
         $keyDescriptor = Utils::createKeyDescriptor($X509Data);
 
         $this->assertInstanceOf(X509Data::class, $keyDescriptor->getKeyInfo()->getInfo()[0]);
