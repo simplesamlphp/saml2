@@ -9,6 +9,8 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\Error\Warning;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\HTTPRedirect;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
@@ -19,12 +21,24 @@ use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
+use function urldecode;
+
 /**
  * @covers \SimpleSAML\SAML2\HTTPRedirect
  * @package simplesamlphp\saml2
  */
 final class HTTPRedirectTest extends MockeryTestCase
 {
+    /**
+     */
+    public function setUp(): void
+    {
+        $container = new MockContainer();
+        $container->setBlacklistedAlgorithms([]);
+        ContainerSingleton::setContainer($container);
+    }
+
+
     /**
      * test parsing of basic query string with authnrequest and
      * verify that the correct issuer is found.
@@ -95,10 +109,10 @@ final class HTTPRedirectTest extends MockeryTestCase
     public function testSignedRequestParsing(): void
     {
         $q = [
-            'SAMLRequest' => 'nVLBauMwEP0Vo7sjW7FpKpJA2rBsoNuGOruHXhZFHm8EsuRqxtv27yvbWWgvYelFgjfvzbx5zBJVazu56enkHuG5B6TktbUO5VhYsT446RUalE61gJK0rDY/7qSYZbILnrz2ln2QXFYoRAhkvGPJbrtiv7VoygJEoTJ9LOusXDSFuJ4vdH6cxwoIEGUjsrqoFUt+QcCoXLHYKMoRe9g5JOUoQlleprlI8/yQz6W4ksXiiSXbuI1xikbViahDyfkRSM2wD40DmjnL0bSdhcE6Hx7BTd3xqnqoIPw1GmbdqWPJNx80jCGtGIUeWLL5t8mtd9i3EM78n493/zWr9XVvx+58mj39IlUaR/QmKOPq4Dtkyf4c9E1EjPtzOePjREL5/XDYp/uH6sDWy6G3HDML66+5ayO7VlHx2dySf2y9nM7pPprabffeGv02ZNcquux5QEydNiNVUlAODTiKMVvrX24DKIJz8nw9jfx8tOt3',
-            'RelayState' => 'https://beta.surfnet.nl/simplesaml/module.php/core/authenticate.php?as=Braindrops',
-            'SigAlg' =>  'http://www.w3.org/2000/09/xmldsig#sha1',
-            'Signature' => 'b%2Bqe%2FXGgICOrEL1v9dwuoy0RJtJ%2FGNAr7gJGYSJzLG0riPKwo7v5CH8GPC2P9IRikaeaNeQrnhBAaf8FCWrO0cLFw4qR6msK9bxRBGk%2BhIaTUYCh54ETrVCyGlmBneMgC5%2FiCRvtEW3ESPXCCqt8Ncu98yZmv9LIVyHSl67Se%2BfbB9sDw3%2FfzwYIHRMqK2aS8jnsnqlgnBGGOXqIqN3%2Bd%2F2dwtCfz14s%2F9odoYzSUv32qfNPiPez6PSNqwhwH7dWE3TlO%2FjZmz0DnOeQ2ft6qdZEi5ZN5KCV6VmNKpkrLMq6DDPnuwPm%2F8oCAoT88R2jG7uf9QZB%2BArWJKMEhDLsCA%3D%3D',
+            'SAMLRequest' => 'fZJRb8IgFIX/SsN7W4qsXYg1cfNhJi4a2+1hLwsCriQFOi41+/mrVTPng0+EezjfvfeEKXDTdmzeh8Zu1XevIEQ/prXARqFEvbfMcdDALDcKWBCsmr+uGEkw67wLTrgWXVnuOziA8kE7i6LlokSfOcUU73P6kHOSUfpY7CZCEiryolC5ollGOOa4oEKi6F15GJwlGkCDHaBXSwuB2zCUMCFxlsV4UhPMsgkjxQeKFsM22vIwupoQOmBpqmWXGOdi7kWjDyqxbXqcmxyFtKrWlfIHLVTSNR2K5pd5n52F3ih/Vt+2qz+iVMbdIo2TfTtCRnoKp5PEXMBYlWrP+zbEMHTZnHN80lZq+3U/wt3pEbCXut7Em3VVo9n0yGZjJH52Get2yS41KnDJA79qPk2vrafb/+8w+wU=',
+            'RelayState' => 'https://demo.moo-archive.nl/module.php/admin/test/default-sp',
+            'SigAlg' => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
+            'Signature' => 'Tp/AVn5TblVDZ6qfYLj8Ltk2ZX06kXtMWo5W3oL5WxkoBI/xK/dcTpxjBFMAO3V7g6u2zF4c26gUXdDhAQmrvqTK2oXSmTGdRNYcvwJ0Nkg5i4POcJOaTfZO3p4to8y06RVsmDgvHG0iC3gqhkwu4GjDt1DpPG5AEpk+qZfCm4M=',
         ];
         $request = new ServerRequest('GET', 'http://tnyholm.se');
         $request = $request->withQueryParams($q);
@@ -108,7 +122,7 @@ final class HTTPRedirectTest extends MockeryTestCase
         $this->assertInstanceOf(AbstractRequest::class, $samlrequest);
         $relaystate = $samlrequest->getRelayState();
         $this->assertEquals(
-            'https://beta.surfnet.nl/simplesaml/module.php/core/authenticate.php?as=Braindrops',
+            'https://demo.moo-archive.nl/module.php/admin/test/default-sp',
             $relaystate
         );
     }
@@ -120,10 +134,10 @@ final class HTTPRedirectTest extends MockeryTestCase
     public function testSignedRequestValidation(): void
     {
         $q = [
-            'SAMLRequest' => 'fZJPi9swEMW/itHdlhXnn0UcCBsKgd1SuqWHXoqQJolAGrma8Tb99lW8LGx72OtIv3nz3syOTAyjPkx8xa/wawLi6hYDkp4fBjFl1MmQJ40mAmm2+vnw9KgXTavHnDjZFMQ75GPCEEFmn1BUp+Mgftp+69ZtZ9Yb0y/dduVsd+7XqlOd6zdKtctF36nWrrYbUX2HTIUcRGlUcKIJTkhskEupXbR1u63V6ptaatXp5eqHqI7FjUfDM3VlHklLCXjxCE0aAW1CuHETU6pNtlf/Ag0GaUoWgOztDErvRkkeLwFq8hes77Mf3mw8JKQpQn6G/OJtmcfBbRCqFfvdPQw9T5n3b9oOYvpfLiY3BWjGa5EpiKRRRmDjDJu56OBspsA1jTv5vufudXOfS8an45cUvP1TfUo5Gv54BfeKd/V5/qo5GyRf7BZTIaTfDxkMwyA4TyDk/lXy3/vY/wU=',
-            'RelayState' => 'https://demo.moo-archive.nl/module.php/core/login/default-sp',
+            'SAMLRequest' => 'fZJRb8IgFIX/SsN7W4qsXYg1cfNhJi4a2+1hLwsCriQFOi41+/mrVTPng0+EezjfvfeEKXDTdmzeh8Zu1XevIEQ/prXARqFEvbfMcdDALDcKWBCsmr+uGEkw67wLTrgWXVnuOziA8kE7i6LlokSfOcUU73P6kHOSUfpY7CZCEiryolC5ollGOOa4oEKi6F15GJwlGkCDHaBXSwuB2zCUMCFxlsV4UhPMsgkjxQeKFsM22vIwupoQOmBpqmWXGOdi7kWjDyqxbXqcmxyFtKrWlfIHLVTSNR2K5pd5n52F3ih/Vt+2qz+iVMbdIo2TfTtCRnoKp5PEXMBYlWrP+zbEMHTZnHN80lZq+3U/wt3pEbCXut7Em3VVo9n0yGZjJH52Get2yS41KnDJA79qPk2vrafb/+8w+wU=',
+            'RelayState' => 'https://demo.moo-archive.nl/module.php/admin/test/default-sp',
             'SigAlg' => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
-            'Signature' => 'u812YO4zCcw4EdfxxnYgS51AuPX+uMl0IZvAxHhk5FJj5+AbF5krHG+CXMSqd/WD6OWM2Q5pvnKinHL7h2gjT/xlZDAKVfKk4rxh5b67Vo5z0/qvJjASTNj4jp9qsDjFdgVgZoLR4lJoJhueRDWviSSC4t5T+sE2G/XvDjXL5OI=',
+            'Signature' => 'Tp/AVn5TblVDZ6qfYLj8Ltk2ZX06kXtMWo5W3oL5WxkoBI/xK/dcTpxjBFMAO3V7g6u2zF4c26gUXdDhAQmrvqTK2oXSmTGdRNYcvwJ0Nkg5i4POcJOaTfZO3p4to8y06RVsmDgvHG0iC3gqhkwu4GjDt1DpPG5AEpk+qZfCm4M=',
         ];
         $request = new ServerRequest('GET', 'http://tnyholm.se');
         $request = $request->withQueryParams($q);
@@ -133,21 +147,25 @@ final class HTTPRedirectTest extends MockeryTestCase
 
         // validate with the correct certificate, should verify
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $samlrequest->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            $q['SigAlg'],
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
-        $samlrequest->verify($verifier);
+        $signedQuery = 'SAMLRequest=' . urlencode($q['SAMLRequest']);
+        $signedQuery .= '&RelayState=' . urlencode($q['RelayState']);
+        $signedQuery .= '&SigAlg=' . urlencode($q['SigAlg']);
+        $this->assertTrue($verifier->verify($signedQuery, base64_decode($q['Signature'])));
 
         // validate with another cert, should fail
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unable to validate signature');
-
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $myObject->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            $q['SigAlg'],
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY),
         );
-        $samlrequest->verified(PEMCertificatesMock::getPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY));
+
+        $signedQuery = 'SAMLRequest=' . urlencode($q['SAMLRequest']);
+        $signedQuery .= '&RelayState=' . urlencode($q['RelayState']);
+        $signedQuery .= '&SigAlg=' . urlencode($q['SigAlg']);
+        $this->assertFalse($verifier->verify($signedQuery, base64_decode($q['Signature'])));
     }
 
 
@@ -157,10 +175,10 @@ final class HTTPRedirectTest extends MockeryTestCase
     public function testSignedRequestValidationWrongKeytype(): void
     {
         $q = [
-            'SAMLRequest' => 'nVLBauMwEP0Vo7sjW7FpKpJA2rBsoNuGOruHXhZFHm8EsuRqxtv27yvbWWgvYelFgjfvzbx5zBJVazu56enkHuG5B6TktbUO5VhYsT446RUalE61gJK0rDY/7qSYZbILnrz2ln2QXFYoRAhkvGPJbrtiv7VoygJEoTJ9LOusXDSFuJ4vdH6cxwoIEGUjsrqoFUt+QcCoXLHYKMoRe9g5JOUoQlleprlI8/yQz6W4ksXiiSXbuI1xikbViahDyfkRSM2wD40DmjnL0bSdhcE6Hx7BTd3xqnqoIPw1GmbdqWPJNx80jCGtGIUeWLL5t8mtd9i3EM78n493/zWr9XVvx+58mj39IlUaR/QmKOPq4Dtkyf4c9E1EjPtzOePjREL5/XDYp/uH6sDWy6G3HDML66+5ayO7VlHx2dySf2y9nM7pPprabffeGv02ZNcquux5QEydNiNVUlAODTiKMVvrX24DKIJz8nw9jfx8tOt3',
-            'RelayState' => 'https://beta.surfnet.nl/simplesaml/module.php/core/authenticate.php?as=Braindrops',
-            'SigAlg' => 'http://www.w3.org/2000/09/xmldsig#sha1',
-            'Signature' => 'b+qe/XGgICOrEL1v9dwuoy0RJtJ/GNAr7gJGYSJzLG0riPKwo7v5CH8GPC2P9IRikaeaNeQrnhBAaf8FCWrO0cLFw4qR6msK9bxRBGk+hIaTUYCh54ETrVCyGlmBneMgC5/iCRvtEW3ESPXCCqt8Ncu98yZmv9LIVyHSl67Se+fbB9sDw3/fzwYIHRMqK2aS8jnsnqlgnBGGOXqIqN3+d/2dwtCfz14s/9odoYzSUv32qfNPiPez6PSNqwhwH7dWE3TlO/jZmz0DnOeQ2ft6qdZEi5ZN5KCV6VmNKpkrLMq6DDPnuwPm/8oCAoT88R2jG7uf9QZB+ArWJKMEhDLsCA==',
+            'SAMLRequest' => 'fZJRb8IgFIX/SsN7W4qsXYg1cfNhJi4a2+1hLwsCriQFOi41+/mrVTPng0+EezjfvfeEKXDTdmzeh8Zu1XevIEQ/prXARqFEvbfMcdDALDcKWBCsmr+uGEkw67wLTrgWXVnuOziA8kE7i6LlokSfOcUU73P6kHOSUfpY7CZCEiryolC5ollGOOa4oEKi6F15GJwlGkCDHaBXSwuB2zCUMCFxlsV4UhPMsgkjxQeKFsM22vIwupoQOmBpqmWXGOdi7kWjDyqxbXqcmxyFtKrWlfIHLVTSNR2K5pd5n52F3ih/Vt+2qz+iVMbdIo2TfTtCRnoKp5PEXMBYlWrP+zbEMHTZnHN80lZq+3U/wt3pEbCXut7Em3VVo9n0yGZjJH52Get2yS41KnDJA79qPk2vrafb/+8w+wU=',
+            'RelayState' => 'https://demo.moo-archive.nl/module.php/admin/test/default-sp',
+            'SigAlg' => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
+            'Signature' => 'Tp/AVn5TblVDZ6qfYLj8Ltk2ZX06kXtMWo5W3oL5WxkoBI/xK/dcTpxjBFMAO3V7g6u2zF4c26gUXdDhAQmrvqTK2oXSmTGdRNYcvwJ0Nkg5i4POcJOaTfZO3p4to8y06RVsmDgvHG0iC3gqhkwu4GjDt1DpPG5AEpk+qZfCm4M=',
         ];
         $request = new ServerRequest('GET', 'http://tnyholm.se');
         $request = $request->withQueryParams($q);

@@ -8,27 +8,29 @@ use DOMElement;
 use Exception;
 use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Key\AbstractKey;
+use SimpleSAML\XMLSecurity\Key\PublicKey;
 use SimpleSAML\XMLSecurity\Utils\Security;
+
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 
 use function array_key_exists;
 use function base64_decode;
 use function base64_encode;
-use function count;
-use function explode;
-use function get_class;
 use function gzdeflate;
 use function gzinflate;
+use function sprintf;
 use function strlen;
 use function strpos;
 use function urlencode;
-use function urldecode;
-use function var_export;
 
 /**
  * Class which implements the HTTP-Redirect binding.
@@ -120,6 +122,7 @@ class HTTPRedirect extends Binding
     public function receive(ServerRequestInterface $request): AbstractMessage
     {
         $query = $request->getQueryParams();
+
         if (array_key_exists('SAMLRequest', $query)) {
             $message = $query['SAMLRequest'];
             $signedQuery = 'SAMLRequest=' . urlencode($query['SAMLRequest']);
@@ -131,7 +134,7 @@ class HTTPRedirect extends Binding
         }
 
         if (isset($query['SAMLEncoding']) && $query['SAMLEncoding'] !== C::BINDING_HTTP_REDIRECT_DEFLATE) {
-            throw new Exception('Unknown SAMLEncoding: ' . var_export($query['SAMLEncoding'], true));
+            throw new Exception(sprintf('Unknown SAMLEncoding: %s', $query['SAMLEncoding']));
         }
 
         $message = base64_decode($message);
@@ -159,41 +162,22 @@ class HTTPRedirect extends Binding
 
         if (!array_key_exists('SigAlg', $query)) {
             throw new Exception('Missing signature algorithm.');
+        } else {
+            $signedQuery .= '&SigAlg=' . urlencode($query['SigAlg']);
+        }
+
+        $container = ContainerSingleton::getInstance();
+        $blacklist = $container->getBlacklistedEncryptionAlgorithms();
+        $verifier = (new SignatureAlgorithmFactory($blacklist))->getAlgorithm(
+            $query['SigAlg'],
+            // TODO:  Need to use the key from the metadata
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
+        );
+
+        if ($verifier->verify($signedQuery, base64_decode($query['Signature'])) === false) {
+            throw new SignatureVerificationFailedException('Failed to verify signature.');
         }
 
         return $message;
-    }
-
-
-    /**
-     * Validate the signature on a HTTP-Redirect message.
-     *
-     * Throws an exception if we are unable to validate the signature.
-     *
-     * @param array $data The data we need to validate the query string.
-     * @param \SimpleSAML\XMLSecurity\Key\AbstractKey $key  The key we should validate the query against.
-     *
-     * @throws \Exception
-     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
-     */
-    public static function validateSignature(array $data, AbstractKey $key): void
-    {
-        Assert::keyExists($data, "Query");
-        Assert::keyExists($data, "SigAlg");
-        Assert::keyExists($data, "Signature");
-
-        $query = $data['Query'];
-        $sigAlg = $data['SigAlg'];
-        $signature = $data['Signature'];
-
-        $signature = base64_decode($signature);
-
-        if ($key->type !== $sigAlg) {
-            $key = Security::castKey($key, $sigAlg);
-        }
-
-        if ($key->verifySignature($query, $signature) !== 1) {
-            throw new Exception('Unable to validate signature on query string.');
-        }
     }
 }
