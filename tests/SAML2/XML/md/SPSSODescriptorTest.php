@@ -43,9 +43,10 @@ use function strval;
  * Tests for the md:SPSSODescriptor element.
  *
  * @covers \SimpleSAML\SAML2\XML\md\SPSSODescriptor
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
  * @covers \SimpleSAML\SAML2\XML\md\AbstractSSODescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */

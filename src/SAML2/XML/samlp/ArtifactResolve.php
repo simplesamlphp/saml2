@@ -168,7 +168,7 @@ class ArtifactResolve extends AbstractRequest
 
         /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = parent::toUnsignedXML($parent);
-        $artifactelement = $e->ownerDocument->createElementNS(C::NS_SAMLP, 'Artifact', $this->artifact);
+        $artifactelement = $e->ownerDocument->createElementNS(C::NS_SAMLP, 'Artifact', $this->getArtifact());
         $e->appendChild($artifactelement);
 
         return $e;

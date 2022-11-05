@@ -26,8 +26,9 @@ use function strval;
  * Tests for the md:EntitiesDescriptor element.
  *
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\EntitiesDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
+ * @covers \SimpleSAML\SAML2\XML\md\EntitiesDescriptor
  * @package simplesamlphp/saml2
  */
 final class EntitiesDescriptorTest extends TestCase

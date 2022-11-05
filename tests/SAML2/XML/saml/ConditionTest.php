@@ -22,7 +22,6 @@ use function strval;
 /**
  * Class \SAML2\XML\saml\ConditionTest
  *
- * @covers \SimpleSAML\Test\SAML2\CustomCondition
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractCondition
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractConditionType
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement

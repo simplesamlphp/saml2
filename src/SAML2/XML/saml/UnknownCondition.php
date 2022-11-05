@@ -50,6 +50,6 @@ final class UnknownCondition extends AbstractCondition
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        return $this->chunk->toXML($parent);
+        return $this->getRawCondition()->toXML($parent);
     }
 }

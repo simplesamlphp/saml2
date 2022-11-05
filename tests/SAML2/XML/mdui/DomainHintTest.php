@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\mdui;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\SAML2\XML\mdui\DomainHint;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
@@ -73,5 +74,18 @@ final class DomainHintTest extends TestCase
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($hint)
         );
+    }
+
+
+    /**
+     * Test creating a DomainHint from XML with false domain
+     */
+    public function testUnmarshallingFalseDomain(): void
+    {
+        $xmlRepresentation = $this->xmlRepresentation;
+        $xmlRepresentation->documentElement->textContent = 'Not`@#%$&*()!ADo><$#mainName';
+
+        $this->expectException(InvalidArgumentException::class);
+        DomainHint::fromXML($xmlRepresentation->documentElement);
     }
 }

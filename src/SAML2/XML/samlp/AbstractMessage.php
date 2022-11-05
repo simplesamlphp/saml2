@@ -101,6 +101,13 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     /** @var bool */
     protected bool $messageContainedSignatureUponConstruction = false;
 
+    /**
+     * The original signed XML
+     *
+     * @var \DOMElement
+     */
+    protected DOMElement $xml;
+
 
     /**
      * Initialize a message.
@@ -398,7 +405,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
                 return $this->xml;
             }
 
-            $node = $parent->ownerDocument?->importNode($this->xml, true);
+            $node = $parent->ownerDocument?->importNode($this->getXML(), true);
             $parent->appendChild($node);
             return $parent;
         }

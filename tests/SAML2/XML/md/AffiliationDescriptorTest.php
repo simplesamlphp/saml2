@@ -28,6 +28,7 @@ use function strval;
  * Tests for the AffiliationDescriptor class.
  *
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @covers \SimpleSAML\SAML2\XML\md\AffiliationDescriptor
  * @package simplesamlphp/saml2

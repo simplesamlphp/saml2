@@ -162,16 +162,18 @@ final class EntityAttributes extends AbstractMdattrElement
         Assert::same($xml->namespaceURI, EntityAttributes::NS, InvalidDOMElementException::class);
 
         $children = [];
-        $xpCache = XPath::getXPath($xml);
-
-        /** @var \DOMElement $node */
-        foreach (XPath::xpQuery($xml, './saml_assertion:Attribute|./saml_assertion:Assertion', $xpCache) as $node) {
-            if ($node->localName === 'Attribute') {
-                $children[] = Attribute::fromXML($node);
-            } elseif ($node->localName === 'Assertion') {
-                $children[] = Assertion::fromXML($node);
-            } else {
-                throw new ProtocolViolationException('Illegal content in mdattr:EntityAttributes message.');
+        foreach ($xml->childNodes as $node) {
+            if ($node instanceof DOMElement && $node->namespaceURI === C::NS_SAML) {
+                switch ($node->localName) {
+                    case 'Assertion':
+                        $children[] = Assertion::fromXML($node);
+                        break;
+                    case 'Attribute':
+                        $children[] = Attribute::fromXML($node);
+                        break;
+                    default:
+                        continue 2;
+                }
             }
         }
 

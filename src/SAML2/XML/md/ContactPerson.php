@@ -411,9 +411,9 @@ final class ContactPerson extends AbstractMdElement
     {
         $data = [
             'ContactType' => $this->contactType,
-            'Company' => $this?->Company->getContent(),
-            'GivenName' => $this?->GivenName->getContent(),
-            'SurName' => $this?->SurName->getContent(),
+            'Company' => $this?->Company?->getContent(),
+            'GivenName' => $this?->GivenName?->getContent(),
+            'SurName' => $this?->SurName?->getContent(),
             'EmailAddresses' => $this->EmailAddresses,
             'TelephoneNumbers' => $this->TelephoneNumbers,
             'EmailAddresses' => [],

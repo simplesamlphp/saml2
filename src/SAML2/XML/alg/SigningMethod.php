@@ -187,7 +187,7 @@ final class SigningMethod extends AbstractAlgElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        $e->setAttribute('Algorithm', $this->Algorithm);
+        $e->setAttribute('Algorithm', $this->getAlgorithm());
 
         if ($this->getMinKeySize() !== null) {
             $e->setAttribute('MinKeySize', strval($this->getMinKeySize()));

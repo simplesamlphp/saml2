@@ -50,6 +50,6 @@ final class UnknownStatement extends AbstractStatement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        return $this->chunk->toXML($parent);
+        return $this->getRawStatement()->toXML($parent);
     }
 }

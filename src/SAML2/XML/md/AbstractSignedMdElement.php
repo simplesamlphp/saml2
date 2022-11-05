@@ -44,7 +44,7 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements
         if ($this->isSigned() === true && $this->signer === null) {
             // We already have a signed document and no signer was set to re-sign it
             if ($parent === null) {
-                return $this->xml;
+                return $this->getXML();
             }
 
             $node = $parent->ownerDocument?->importNode($this->getXML(), true);

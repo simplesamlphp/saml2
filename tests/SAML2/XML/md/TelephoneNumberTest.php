@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\TelephoneNumber;
+use SimpleSAML\Test\XML\ArrayizableElementTestTrait;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -21,6 +22,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class TelephoneNumberTest extends TestCase
 {
+    use ArrayizableElementTestTrait;
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
@@ -32,6 +34,8 @@ final class TelephoneNumberTest extends TestCase
         $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-metadata-2.0.xsd';
 
         $this->testedClass = TelephoneNumber::class;
+
+        $this->arrayRepresentation = ['+1234567890'];
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_TelephoneNumber.xml'

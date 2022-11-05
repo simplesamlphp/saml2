@@ -53,6 +53,6 @@ final class UnknownID extends AbstractBaseID
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        return $this->chunk->toXML($parent);
+        return $this->getRawIdentifier()->toXML($parent);
     }
 }

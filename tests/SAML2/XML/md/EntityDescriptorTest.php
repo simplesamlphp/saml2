@@ -48,9 +48,10 @@ use function strval;
  * Class \SAML2\XML\md\EntityDescriptorTest
  *
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\EntityDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\EntityDescriptor
  *
  * @package simplesamlphp/saml2
  */

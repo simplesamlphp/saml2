@@ -24,7 +24,7 @@ use function strval;
 /**
  * Class \SAML2\XML\saml\StatementTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\Statement
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractStatement
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractStatementType
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2

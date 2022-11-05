@@ -30,6 +30,7 @@ use function strval;
  * Tests for the AttributeAuthorityDescriptor class.
  *
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
  * @covers \SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor

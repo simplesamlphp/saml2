@@ -176,7 +176,7 @@ final class Status extends AbstractSamlpElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        $this->statusCode->toXML($e);
+        $this->getStatusCode()->toXML($e);
 
         $this->getStatusMessage()?->toXML($e);
 

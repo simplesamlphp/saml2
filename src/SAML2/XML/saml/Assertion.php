@@ -350,19 +350,6 @@ final class Assertion extends AbstractSamlElement implements
 
 
     /**
-     * Set the SubjectConfirmation elements that should be included in the assertion.
-     *
-     * @param array $SubjectConfirmation Array of \SimpleSAML\SAML2\XML\saml\SubjectConfirmation elements.
-     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
-     */
-    private function setSubjectConfirmation(array $SubjectConfirmation): void
-    {
-        Assert::allIsInstanceOf($SubjectConfirmation, SubjectConfirmation::class);
-        $this->SubjectConfirmation = $SubjectConfirmation;
-    }
-
-
-    /**
      * @return bool
      */
     public function wasSignedAtConstruction(): bool
@@ -502,12 +489,12 @@ final class Assertion extends AbstractSamlElement implements
         $e = $this->instantiateParentElement($parent);
 
         $e->setAttribute('Version', '2.0');
-        $e->setAttribute('ID', $this->id);
-        $e->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->issueInstant));
+        $e->setAttribute('ID', $this->getId());
+        $e->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->getIssueInstant()));
 
-        $this->issuer->toXML($e);
-        $this->subject?->toXML($e);
-        $this->conditions?->toXML($e);
+        $this->getIssuer()->toXML($e);
+        $this->getSubject()?->toXML($e);
+        $this->getConditions()?->toXML($e);
 
         foreach ($this->statements as $statement) {
             $statement->toXML($e);
@@ -530,10 +517,10 @@ final class Assertion extends AbstractSamlElement implements
         if ($this->isSigned() === true && $this->signer === null) {
             // We already have a signed document and no signer was set to re-sign it
             if ($parent === null) {
-                return $this->xml;
+                return $this->getXML();
             }
 
-            $node = $parent->ownerDocument?->importNode($this->xml, true);
+            $node = $parent->ownerDocument?->importNode($this->getXML(), true);
             $parent->appendChild($node);
             return $parent;
         }

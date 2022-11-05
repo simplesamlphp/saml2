@@ -32,8 +32,9 @@ use function strval;
  * would know what object is this and we can model it properly.
  *
  * @covers \SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  *
  * @package simplesamlphp/saml2
