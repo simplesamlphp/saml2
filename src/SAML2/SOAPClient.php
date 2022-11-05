@@ -50,8 +50,11 @@ class SOAPClient
      *
      * @psalm-suppress UndefinedClass
      */
-    public function send(AbstractMessage $msg, Configuration $srcMetadata, Configuration $dstMetadata = null): AbstractMessage
-    {
+    public function send(
+        AbstractMessage $msg,
+        Configuration $srcMetadata,
+        Configuration $dstMetadata = null
+    ): AbstractMessage {
         $issuer = $msg->getIssuer();
 
         $ctxOpts = [
@@ -258,9 +261,12 @@ class SOAPClient
      */
     private function getSOAPFault(DOMDocument $soapMessage): ?Fault
     {
-        $xpCache = XPath::getXPath($soapMessage->firstChild);
         /** @psalm-suppress PossiblyNullArgument */
-        $soapFault = XPath::xpQuery($soapMessage->firstChild, '/soap-env:Envelope/soap-env:Body/soap-env:Fault', $xpCache);
+        $soapFault = XPath::xpQuery(
+            $soapMessage->firstChild,
+            '/soap-env:Envelope/soap-env:Body/soap-env:Fault',
+            XPath::getXPath($soapMessage->firstChild)
+        );
 
         if (empty($soapFault)) {
             /* No fault. */

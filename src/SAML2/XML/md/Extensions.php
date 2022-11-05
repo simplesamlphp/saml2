@@ -39,13 +39,14 @@ final class Extensions extends AbstractMdElement
     /**
      * Create an Extensions object from its md:Extensions XML representation.
      *
-     * For those supported extensions, an object of the corresponding class will be created. The rest will be added
-     * as a \SimpleSAML\XML\Chunk object.
+     * For those supported extensions, an object of the corresponding class will be created.
+     * The rest will be added as a \SimpleSAML\XML\Chunk object.
      *
      * @param \DOMElement $xml
      * @return \SimpleSAML\SAML2\XML\md\Extensions
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
     {

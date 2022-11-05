@@ -76,7 +76,10 @@ AUTHNREQUEST
         $signature = $signedMessage->getSignature();
 
         $this->assertInstanceOf(Signature::class, $signature);
-        $this->assertEquals($signer->getAlgorithmId(), $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm());
+        $this->assertEquals(
+            $signer->getAlgorithmId(),
+            $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm()
+        );
     }
 
 
@@ -86,7 +89,7 @@ AUTHNREQUEST
     public function testIssuerParsedAsNameID(): void
     {
         $authnRequest = new DOMDocument();
-        $authnRequest->loadXML(<<<'AUTHNREQUEST'
+        $authnRequest->loadXML(<<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -98,9 +101,10 @@ AUTHNREQUEST
   <saml:Issuer NameQualifier="https://gateway.stepup.org/saml20/sp/metadata"
     SPNameQualifier="https://spnamequalifier.com"
     SPProvidedID="ProviderID"
-    Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">https://gateway.stepup.org/saml20/sp/metadata</saml:Issuer>
+    Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified"
+>https://gateway.stepup.org/saml20/sp/metadata</saml:Issuer>
   <saml:Subject>
-        <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
+    <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
   </saml:Subject>
 </samlp:AuthnRequest>
 AUTHNREQUEST
@@ -186,7 +190,10 @@ AUTHNREQUEST
 
         $signature = $signedMessage->getSignature();
         $this->assertInstanceOf(Signature::class, $signature);
-        $this->assertEquals($signer->getAlgorithmId(), $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm());
+        $this->assertEquals(
+            $signer->getAlgorithmId(),
+            $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm()
+        );
     }
 
 

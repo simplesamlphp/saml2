@@ -45,7 +45,11 @@ final class PublicationTest extends TestCase
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdrpi_Publication.xml'
         );
 
-        $this->arrayRepresentation = ['publisher' => 'SomePublisher', 'creationInstant' => 1234567890, 'publicationId' => 'SomePublicationId'];
+        $this->arrayRepresentation = [
+            'publisher' => 'SomePublisher',
+            'creationInstant' => 1234567890,
+            'publicationId' => 'SomePublicationId'
+        ];
     }
 
 

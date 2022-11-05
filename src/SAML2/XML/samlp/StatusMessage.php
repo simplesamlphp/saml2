@@ -58,4 +58,3 @@ final class StatusMessage extends AbstractSamlpElement
         return new static($xml->textContent);
     }
 }
-

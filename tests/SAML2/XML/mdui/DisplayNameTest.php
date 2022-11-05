@@ -36,7 +36,8 @@ final class DisplayNameTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+            . '/schemas/sstc-saml-metadata-ui-v1.0.xsd';
 
         $this->testedClass = DisplayName::class;
 

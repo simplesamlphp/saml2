@@ -119,7 +119,8 @@ final class Status extends AbstractSamlpElement
      * Set the value of the statusDetails property
      *
      * @param \SimpleSAML\SAML2\XML\samlp\StatusDetail[] $statusDetails
-     * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied array contains anything other than StatusDetail objects
+     * @throws \SimpleSAML\Assert\AssertionFailedException
+     *   if the supplied array contains anything other than StatusDetail objects
      */
     private function setStatusDetails(array $statusDetails): void
     {
@@ -136,9 +137,12 @@ final class Status extends AbstractSamlpElement
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\samlp\Status
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
-     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     *   if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     *   if one of the mandatory child-elements is missing
      */
     public static function fromXML(DOMElement $xml): static
     {

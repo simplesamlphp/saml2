@@ -115,5 +115,4 @@ final class ExtensionsTest extends TestCase
 
         new Extensions([new AttributeValue('something')]);
     }
-
 }

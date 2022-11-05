@@ -58,7 +58,9 @@ final class EncryptionMethodTest extends TestCase
     public function testMarshalling(): void
     {
         $alg = C::KEY_TRANSPORT_OAEP_MGF1P;
-        $chunkXml = DOMDocumentFactory::fromString('<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>');
+        $chunkXml = DOMDocumentFactory::fromString(
+            '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>'
+        );
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 
         $encryptionMethod = new EncryptionMethod($alg, new KeySize(10), new OAEPparams('9lWu3Q=='), [$chunk]);
@@ -91,7 +93,9 @@ final class EncryptionMethodTest extends TestCase
     public function testMarshallingElementOrdering(): void
     {
         $alg = C::KEY_TRANSPORT_OAEP_MGF1P;
-        $chunkXml = DOMDocumentFactory::fromString('<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>');
+        $chunkXml = DOMDocumentFactory::fromString(
+            '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>'
+        );
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 
         $em = new EncryptionMethod($alg, new KeySize(10), new OAEPparams('9lWu3Q=='), [$chunk]);

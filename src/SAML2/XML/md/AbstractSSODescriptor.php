@@ -58,7 +58,8 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      * @param string|null $errorURL An URI where to redirect users for support. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors An array of KeyDescriptor elements.
      *   Defaults to an empty array.
-     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization The organization running this entity. Defaults to null.
+     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
+     *   The organization running this entity. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts An array of contacts for this entity.
      *   Defaults to an empty array.
      * @param \SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType[] $artifactResolutionService An array of

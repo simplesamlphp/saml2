@@ -173,7 +173,8 @@ final class DiscoHints extends AbstractMduiElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
     {
@@ -185,8 +186,9 @@ final class DiscoHints extends AbstractMduiElement
         $GeolocationHint = GeolocationHint::getChildrenOfClass($xml);
         $children = [];
 
-        /** @var \DOMElement $node */
-        foreach (XPath::xpQuery($xml, "./*[namespace-uri()!='" . DiscoHints::NS . "']", XPath::getXPath($xml)) as $node) {
+        /** @var \DOMElement[] $nodes */
+        $nodes = XPath::xpQuery($xml, "./*[namespace-uri()!='" . DiscoHints::NS . "']", XPath::getXPath($xml));
+        foreach ($nodes as $node) {
             $children[] = new Chunk($node);
         }
 

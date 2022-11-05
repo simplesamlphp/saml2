@@ -1176,7 +1176,8 @@ AUTHNREQUEST;
 
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage(
-            'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
+            'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide '
+            . 'exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
         );
         AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
     }

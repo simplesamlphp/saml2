@@ -59,4 +59,3 @@ final class AuthenticatingAuthority extends AbstractSamlElement
         return new static($xml->textContent);
     }
 }
-

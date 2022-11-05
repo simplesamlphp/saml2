@@ -131,7 +131,14 @@ final class EntityAttributesTest extends TestCase
         $subject = new Subject(new NameID('some:entity', null, null, C::NAMEID_ENTITY));
 
         // Create an assertion
-        $unsignedAssertion = new Assertion($issuer, '_93af655219464fb403b34436cfb0c5cb1d9a5502', 1665960678, $subject, $conditions, [$attrStatement]);
+        $unsignedAssertion = new Assertion(
+            $issuer,
+            '_93af655219464fb403b34436cfb0c5cb1d9a5502',
+            1665960678,
+            $subject,
+            $conditions,
+            [$attrStatement]
+        );
 
         // Sign the assertion
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
@@ -175,4 +182,3 @@ final class EntityAttributesTest extends TestCase
         );
     }
 }
-

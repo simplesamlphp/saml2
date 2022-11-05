@@ -74,7 +74,12 @@ class AttributeValue extends AbstractSamlElement
                 return "xs:nil";
             case "object":
                 /** @var \SimpleSAML\XML\AbstractElement $this->value */
-                return $this->value::getNamespacePrefix() . ":" . AbstractElement::getClassName(get_class($this->value));
+                return sprintf(
+                    '%s:%s',
+                    $this->value::getNamespacePrefix(),
+                    ":",
+                    AbstractElement::getClassName(get_class($this->value))
+                );
             default:
                 return "xs:string";
         }
@@ -98,7 +103,8 @@ class AttributeValue extends AbstractSamlElement
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\saml\AttributeValue
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
     {

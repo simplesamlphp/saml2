@@ -91,7 +91,8 @@ class Response extends AbstractStatusResponse
     /**
      * Set the assertions that should be included in this response.
      *
-     * @param (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\EncryptedAssertion)[] $assertions The assertions.
+     * @param (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\EncryptedAssertion)[] $assertions
+     *   The assertions.
      */
     protected function setAssertions(array $assertions): void
     {
@@ -107,17 +108,26 @@ class Response extends AbstractStatusResponse
      * @param \DOMElement $xml The input message.
      * @return self
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     *   if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     *   if one of the mandatory child-elements is missing
      */
     public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'Response', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Response::NS, InvalidDOMElementException::class);
 
-        Assert::true(version_compare('2.0', self::getAttribute($xml, 'Version'), '<='), RequestVersionTooLowException::class);
-        Assert::true(version_compare('2.0', self::getAttribute($xml, 'Version'), '>='), RequestVersionTooHighException::class);
+        Assert::true(
+            version_compare('2.0', self::getAttribute($xml, 'Version'), '<='),
+            RequestVersionTooLowException::class
+        );
+        Assert::true(
+            version_compare('2.0', self::getAttribute($xml, 'Version'), '>='),
+            RequestVersionTooHighException::class
+        );
 
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
@@ -142,7 +152,12 @@ class Response extends AbstractStatusResponse
         Assert::maxCount($status, 1, TooManyElementsException::class);
 
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.', TooManyElementsException::class);
+        Assert::maxCount(
+            $extensions,
+            1,
+            'Only one saml:Extensions element is allowed.',
+            TooManyElementsException::class
+        );
 
         $assertions = [];
         foreach ($xml->childNodes as $node) {

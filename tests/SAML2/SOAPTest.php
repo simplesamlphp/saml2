@@ -88,7 +88,7 @@ SOAP
         $doc = DOMDocumentFactory::fromString(<<<SOAP
 <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"><env:Body /></env:Envelope>
 SOAP
-);
+        );
 
         /** @var \DOMElement $body */
         $body = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV_11, 'Body')->item(0);
@@ -113,7 +113,7 @@ SOAP
         $doc = DOMDocumentFactory::fromString(<<<SOAP
 <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"><env:Header /><env:Body /></env:Envelope>
 SOAP
-);
+        );
         $requestAuthenticated = new RequestAuthenticated(1);
         $ecpResponse = new Response('https://example.org/metadata');
 

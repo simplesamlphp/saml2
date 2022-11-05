@@ -62,8 +62,12 @@ final class SigningMethod extends AbstractAlgElement
      * @param int|null $MaxKeySize
      * @param \SimpleSAML\XML\Chunk[] $elements
      */
-    public function __construct(string $Algorithm, ?int $MinKeySize = null, ?int $MaxKeySize = null, array $elements = [])
-    {
+    public function __construct(
+        string $Algorithm,
+        ?int $MinKeySize = null,
+        ?int $MaxKeySize = null,
+        array $elements = []
+    ) {
         $this->setAlgorithm($Algorithm);
         $this->setMinKeySize($MinKeySize);
         $this->setMaxKeySize($MaxKeySize);
@@ -146,8 +150,10 @@ final class SigningMethod extends AbstractAlgElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied argument is missing the Algorithm attribute
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     *   if the supplied argument is missing the Algorithm attribute
      */
     public static function fromXML(DOMElement $xml): static
     {

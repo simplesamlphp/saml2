@@ -70,8 +70,8 @@ final class IndexedEndpointTypeTest extends TestCase
     {
         $idxep = new AssertionConsumerService(42, C::BINDING_HTTP_POST, C::LOCATION_A);
         $this->xmlRepresentation->documentElement->removeAttribute('isDefault');
-        $this->assertEquals($this->xmlRepresentation->saveXML(
-            $this->xmlRepresentation->documentElement),
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($idxep)
         );
         $this->assertNull($idxep->getIsDefault());

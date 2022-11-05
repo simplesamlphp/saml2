@@ -65,4 +65,3 @@ final class SessionIndexTest extends TestCase
         );
     }
 }
-

@@ -20,4 +20,8 @@ $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
 
 $unsignedAssertion = Assertion::fromXML($document->documentElement);
 $unsignedAssertion->sign($signer);
-echo str_replace('SomeNameIDValue', 'SomeNameID<!-- some random comment-->Value', strval($unsignedAssertion->toXML()->ownerDocument->saveXML()));
+echo str_replace(
+    'SomeNameIDValue',
+    'SomeNameID<!-- some random comment-->Value',
+    strval($unsignedAssertion->toXML()->ownerDocument->saveXML())
+);

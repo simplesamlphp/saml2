@@ -36,7 +36,8 @@ final class DigestMethodTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/sstc-saml-metadata-algsupport-v1.0.xsd';
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+            . '/schemas/sstc-saml-metadata-algsupport-v1.0.xsd';
 
         $this->testedClass = DigestMethod::class;
 
@@ -52,8 +53,10 @@ final class DigestMethodTest extends TestCase
     {
         $digestMethod = new DigestMethod(
             C::DIGEST_SHA256,
-            [new Chunk(DOMDocumentFactory::fromString(
-                '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>')->documentElement)
+            [
+                new Chunk(DOMDocumentFactory::fromString(
+                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>'
+                )->documentElement)
             ],
         );
 

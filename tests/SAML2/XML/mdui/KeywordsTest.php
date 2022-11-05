@@ -36,7 +36,8 @@ final class KeywordsTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+            . '/schemas/sstc-saml-metadata-ui-v1.0.xsd';
 
         $this->testedClass = Keywords::class;
 

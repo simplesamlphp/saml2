@@ -120,18 +120,28 @@ class AttributeQuery extends AbstractSubjectQuery
      * @param \DOMElement $xml
      * @return self
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     *   if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     *   if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'AttributeQuery', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AttributeQuery::NS, InvalidDOMElementException::class);
 
-        Assert::true(version_compare('2.0', self::getAttribute($xml, 'Version'), '<='), RequestVersionTooLowException::class);
-        Assert::true(version_compare('2.0', self::getAttribute($xml, 'Version'), '>='), RequestVersionTooHighException::class);
+        Assert::true(
+            version_compare('2.0', self::getAttribute($xml, 'Version'), '<='),
+            RequestVersionTooLowException::class
+        );
+        Assert::true(
+            version_compare('2.0', self::getAttribute($xml, 'Version'), '>='),
+            RequestVersionTooHighException::class
+        );
 
         $id = self::getAttribute($xml, 'ID');
         $destination = self::getAttribute($xml, 'Destination', null);
@@ -148,11 +158,21 @@ class AttributeQuery extends AbstractSubjectQuery
         Assert::countBetween($issuer, 0, 1);
 
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.', TooManyElementsException::class);
+        Assert::maxCount(
+            $extensions,
+            1,
+            'Only one saml:Extensions element is allowed.',
+            TooManyElementsException::class
+        );
 
         $subject = Subject::getChildrenOfClass($xml);
         Assert::notEmpty($subject, 'Missing subject in subject query.', MissingElementException::class);
-        Assert::maxCount($subject, 1, 'More than one <saml:Subject> in AttributeQuery', TooManyElementsException::class);
+        Assert::maxCount(
+            $subject,
+            1,
+            'More than one <saml:Subject> in AttributeQuery',
+            TooManyElementsException::class
+        );
 
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);

@@ -16,7 +16,9 @@ use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
  *
  * @package simplesamlphp/saml2
  */
-abstract class AbstractSignedMdElement extends AbstractMdElement implements SignableElementInterface, SignedElementInterface
+abstract class AbstractSignedMdElement extends AbstractMdElement implements
+    SignableElementInterface,
+    SignedElementInterface
 {
     use SignableElementTrait;
     use SignedElementTrait;

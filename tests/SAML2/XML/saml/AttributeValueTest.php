@@ -32,7 +32,8 @@ final class AttributeValueTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-assertion-2.0.xsd';
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+            . '/schemas/saml-schema-assertion-2.0.xsd';
 
         $this->testedClass = AttributeValue::class;
 
@@ -82,10 +83,11 @@ final class AttributeValueTest extends TestCase
         $this->assertEquals('xs:nil', $av->getXsiType());
         $nssaml = C::NS_SAML;
         $nsxsi = C::NS_XSI;
-        $this->assertEquals(<<<XML
-<saml:AttributeValue xmlns:saml="$nssaml" xmlns:xsi="$nsxsi" xsi:nil="1"/>
-XML
-            ,
+        $xml = <<<XML
+<saml:AttributeValue xmlns:saml="{$nssaml}" xmlns:xsi="{$nsxsi}" xsi:nil="1"/>
+XML;
+        $this->assertEquals(
+            $xml,
             strval($av)
         );
     }

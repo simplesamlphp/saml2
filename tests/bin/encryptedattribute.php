@@ -21,6 +21,6 @@ $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
     PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY)
 );
 $attribute = new Attribute('urn:encrypted:attribute', null, null, [new AttributeValue('very secret data')]);
-$encAttribute= new EncryptedAttribute($attribute->encrypt($encryptor));
+$encAttribute = new EncryptedAttribute($attribute->encrypt($encryptor));
 
 echo $encAttribute->toXML()->ownerDocument->saveXML();

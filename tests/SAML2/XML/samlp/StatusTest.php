@@ -67,7 +67,9 @@ final class StatusTest extends TestCase
             new StatusMessage('Something went wrong'),
             [
                 StatusDetail::fromXML(
-                    DOMDocumentFactory::fromFile(dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_StatusDetail.xml')->documentElement
+                    DOMDocumentFactory::fromFile(
+                        dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_StatusDetail.xml'
+                    )->documentElement
                 )
             ]
         );

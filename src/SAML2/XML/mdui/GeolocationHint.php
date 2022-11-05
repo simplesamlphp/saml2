@@ -66,7 +66,11 @@ final class GeolocationHint extends AbstractMduiElement
     protected function validateContent(string $content): void
     {
         Assert::notEmpty($content, 'GeolocationHint cannot be empty');
-        // Assert::regex($content, '/^geo:([-+]?\d+(?:\.\d+)?),([-+]?\d+(?:\.\d+)?)(?:\?z=(\d{1,2}))?$/', 'Content is not a valid geolocation:  %s');
+        // Assert::regex(
+        //     $content,
+        //     '/^geo:([-+]?\d+(?:\.\d+)?),([-+]?\d+(?:\.\d+)?)(?:\?z=(\d{1,2}))?$/',
+        //     'Content is not a valid geolocation:  %s'
+        // );
         // The regex above is incomplete, so for now we only test for a valid URI (according to the schema, anyURI)
         Assert::validURI($content, SchemaViolationException::class);
     }

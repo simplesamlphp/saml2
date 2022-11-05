@@ -36,7 +36,8 @@ final class SigningMethodTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/sstc-saml-metadata-algsupport-v1.0.xsd';
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+            . '/schemas/sstc-saml-metadata-algsupport-v1.0.xsd';
 
         $this->testedClass = SigningMethod::class;
 
@@ -54,8 +55,10 @@ final class SigningMethodTest extends TestCase
             C::SIG_RSA_SHA256,
             1024,
             4096,
-            [new Chunk(DOMDocumentFactory::fromString(
-                '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>')->documentElement)
+            [
+                new Chunk(DOMDocumentFactory::fromString(
+                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>'
+                )->documentElement)
             ],
         );
 

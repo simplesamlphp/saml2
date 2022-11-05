@@ -30,7 +30,10 @@ final class RequestedAuthnContext extends AbstractSamlpElement
     /**
      * Initialize a RequestedAuthnContext.
      *
-     * @param (\SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|\SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef)[] $requestedAuthnContexts
+     * @param (
+     *    \SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|
+     *    \SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef
+     * )[] $requestedAuthnContexts
      * @param string $Comparison
      */
     public function __construct(
@@ -56,10 +59,15 @@ final class RequestedAuthnContext extends AbstractSamlpElement
     /**
      * Set the value of the requestedAuthnContexts-property
      *
-     * @param (\SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|\SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef)[] $requestedAuthnContexts
+     * @param (
+     *    \SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|
+     *    \SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef
+     * )[] $requestedAuthnContexts
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the supplied element is missing the Algorithm attribute
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the supplied element is missing the Algorithm attribute
      */
     private function setRequestedAuthnContexts(array $requestedAuthnContexts): void
     {
@@ -113,7 +121,8 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
     {

@@ -37,7 +37,8 @@ final class SubjectConfirmationTest extends TestCase
 
     public function setup(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-assertion-2.0.xsd';
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+            . '/schemas/saml-schema-assertion-2.0.xsd';
 
         $this->testedClass = SubjectConfirmation::class;
 
@@ -93,10 +94,13 @@ final class SubjectConfirmationTest extends TestCase
             new NameID('SomeNameIDValue'),
             new SubjectConfirmationData(),
         );
+        $ns_saml = C::NS_SAML;
 
-        $doc = DOMDocumentFactory::fromString('<saml:SubjectConfirmation xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Method="urn:test:SomeMethod">
+        $doc = DOMDocumentFactory::fromString(<<<XML
+<saml:SubjectConfirmation xmlns:saml="{$ns_saml}" Method="urn:test:SomeMethod">
   <saml:NameID>SomeNameIDValue</saml:NameID>
-</saml:SubjectConfirmation>'
+</saml:SubjectConfirmation>
+XML
         );
 
         $this->assertEquals(
@@ -203,7 +207,8 @@ XML
 
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage(
-            'A <saml:SubjectConfirmation> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.'
+            'A <saml:SubjectConfirmation> can contain exactly one '
+            . 'of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.'
         );
         SubjectConfirmation::fromXML($document->documentElement);
     }

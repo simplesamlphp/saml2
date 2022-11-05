@@ -59,4 +59,3 @@ final class NameIDFormat extends AbstractMdElement
         return new static($xml->textContent);
     }
 }
-

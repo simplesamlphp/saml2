@@ -68,7 +68,8 @@ final class AssertionTest extends MockeryTestCase
      */
     public function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-assertion-2.0.xsd';
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+            . '/schemas/saml-schema-assertion-2.0.xsd';
 
         $this->testedClass = Assertion::class;
 
@@ -220,7 +221,8 @@ XML;
         $this->assertEquals($entity_other, $audience[1]->getContent());
 
         // Test for Authenticating Authorities
-        $assertionAuthenticatingAuthorities = $assertion->getAuthnStatements()[0]->getAuthnContext()->getAuthenticatingAuthorities();
+        $authnStatements = $assertion->getAuthnStatements();
+        $assertionAuthenticatingAuthorities = $authnStatements[0]->getAuthnContext()->getAuthenticatingAuthorities();
         $this->assertCount(2, $assertionAuthenticatingAuthorities);
         $this->assertEquals($entity_idp, $assertionAuthenticatingAuthorities[0]->getContent());
         $this->assertEquals($entity_other, $assertionAuthenticatingAuthorities[1]->getContent());
@@ -359,7 +361,12 @@ XML;
         $attributeStatement = new AttributeStatement(
             // Attribute
             [
-                new Attribute('name1', null, null, [new AttributeValue('value1'), new AttributeValue(123), new AttributeValue('2017-31-12')]),
+                new Attribute(
+                    'name1',
+                    null,
+                    null,
+                    [new AttributeValue('value1'), new AttributeValue(123), new AttributeValue('2017-31-12')]
+                ),
                 new Attribute('name2', null, null, [new AttributeValue(2)]),
                 new Attribute('name3', null, null, [new AttributeValue(1234), new AttributeValue('+2345')])
             ],
@@ -493,17 +500,17 @@ XML
       <saml:Conditions/>
       <saml:AttributeStatement>
         <saml:Attribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.10" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
-            <saml:AttributeValue>
-                <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">abcd-some-value-xyz</saml:NameID>
-            </saml:AttributeValue>
+          <saml:AttributeValue>
+            <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">abcd-some-value-xyz</saml:NameID>
+          </saml:AttributeValue>
         </saml:Attribute>
         <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonTargetedID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
-            <saml:AttributeValue>
-                <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">abcd-some-value-xyz</saml:NameID>
-            </saml:AttributeValue>
+          <saml:AttributeValue>
+            <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">abcd-some-value-xyz</saml:NameID>
+          </saml:AttributeValue>
         </saml:Attribute>
         <saml:Attribute Name="urn:test:EntityConcernedSubID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
-            <saml:AttributeValue>string</saml:AttributeValue>
+          <saml:AttributeValue>string</saml:AttributeValue>
         </saml:Attribute>
       </saml:AttributeStatement>
     </saml:Assertion>
@@ -554,7 +561,7 @@ XML;
           <saml:AttributeValue xsi:type="xs:string">string-23</saml:AttributeValue>
         </saml:Attribute>
         <saml:Attribute Name="urn:test:EntityConcernedSubID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
-            <saml:AttributeValue xsi:type="xs:string">string</saml:AttributeValue>
+          <saml:AttributeValue xsi:type="xs:string">string</saml:AttributeValue>
         </saml:Attribute>
       </saml:AttributeStatement>
     </saml:Assertion>
@@ -587,15 +594,15 @@ XML;
       <saml:Conditions/>
       <saml:AttributeStatement>
         <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonTargetedID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
-            <saml:AttributeValue>
-                <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">abcd-some-value-xyz</saml:NameID>
-            </saml:AttributeValue>
-            <saml:AttributeValue>
-                <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">xyz-some-value-abcd</saml:NameID>
-            </saml:AttributeValue>
+          <saml:AttributeValue>
+            <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">abcd-some-value-xyz</saml:NameID>
+          </saml:AttributeValue>
+          <saml:AttributeValue>
+            <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">xyz-some-value-abcd</saml:NameID>
+          </saml:AttributeValue>
         </saml:Attribute>
         <saml:Attribute Name="urn:test:EntityConcernedSubID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
-            <saml:AttributeValue>string</saml:AttributeValue>
+          <saml:AttributeValue>string</saml:AttributeValue>
         </saml:Attribute>
       </saml:AttributeStatement>
     </saml:Assertion>
@@ -897,7 +904,10 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>');
+        $this->expectExceptionMessage(
+            'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide '
+            . 'exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
+        );
         Assertion::fromXML($document->documentElement);
     }
 

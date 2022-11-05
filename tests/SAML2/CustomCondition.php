@@ -73,7 +73,8 @@ final class CustomCondition extends AbstractCondition
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\saml\AbstractCondition
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
     {
@@ -111,5 +112,4 @@ final class CustomCondition extends AbstractCondition
 
         return $e;
     }
-
 }

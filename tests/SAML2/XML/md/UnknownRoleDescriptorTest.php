@@ -96,8 +96,8 @@ final class UnknownRoleDescriptorTest extends TestCase
         $this->assertEquals('urn:x-simplesamlphp:namespace', $extensions[0]->getNamespaceURI());
         $this->assertEquals('Chunk', $extensions[0]->getLocalName());
 
-        $this->assertEquals($this->xmlRepresentation->saveXML(
-            $this->xmlRepresentation->documentElement),
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($descriptor)
         );
     }

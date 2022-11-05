@@ -106,7 +106,8 @@ class AttributeStatement extends AbstractStatementType
      * @param \DOMElement $xml
      * @return \SimpleSAML\SAML2\XML\saml\AttributeStatement
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
     {

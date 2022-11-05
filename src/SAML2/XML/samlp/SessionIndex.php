@@ -58,4 +58,3 @@ final class SessionIndex extends AbstractSamlpElement
         return new static($xml->textContent);
     }
 }
-

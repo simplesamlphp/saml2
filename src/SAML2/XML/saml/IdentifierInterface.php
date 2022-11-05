@@ -11,5 +11,4 @@ namespace SimpleSAML\SAML2\XML\saml;
  */
 interface IdentifierInterface
 {
-
 }

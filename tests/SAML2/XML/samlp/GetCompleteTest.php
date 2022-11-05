@@ -65,4 +65,3 @@ final class GetCompleteTest extends TestCase
         );
     }
 }
-

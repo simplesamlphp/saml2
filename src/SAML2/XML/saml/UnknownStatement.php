@@ -53,4 +53,3 @@ final class UnknownStatement extends AbstractStatement
         return $this->chunk->toXML($parent);
     }
 }
-

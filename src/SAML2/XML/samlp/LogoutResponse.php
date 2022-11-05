@@ -49,7 +49,17 @@ class LogoutResponse extends AbstractStatusResponse
         ?Extensions $extensions = null,
         ?string $relayState = null
     ) {
-        parent::__construct($status, $issuer, $id, $issueInstant, $inResponseTo, $destination, $consent, $extensions, $relayState);
+        parent::__construct(
+            $status,
+            $issuer,
+            $id,
+            $issueInstant,
+            $inResponseTo,
+            $destination,
+            $consent,
+            $extensions,
+            $relayState
+        );
     }
 
 
@@ -59,16 +69,24 @@ class LogoutResponse extends AbstractStatusResponse
      * @param \DOMElement $xml
      * @return self
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     *   if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'LogoutResponse', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, LogoutResponse::NS, InvalidDOMElementException::class);
 
-        Assert::true(version_compare('2.0', self::getAttribute($xml, 'Version'), '<='), RequestVersionTooLowException::class);
-        Assert::true(version_compare('2.0', self::getAttribute($xml, 'Version'), '>='), RequestVersionTooHighException::class);
+        Assert::true(
+            version_compare('2.0', self::getAttribute($xml, 'Version'), '<='),
+            RequestVersionTooLowException::class
+        );
+        Assert::true(
+            version_compare('2.0', self::getAttribute($xml, 'Version'), '>='),
+            RequestVersionTooHighException::class
+        );
 
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications

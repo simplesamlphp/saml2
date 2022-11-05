@@ -64,7 +64,9 @@ final class MessageFactoryTest extends TestCase
      */
     public function testMessageFactoryWithOtherNamespace(): void
     {
-        $document = DOMDocumentFactory::fromFile(dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Attribute.xml');
+        $document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Attribute.xml'
+        );
 
         $this->expectException(InvalidDOMElementException::class);
         $this->expectExceptionMessage('Unknown namespace of SAML message: \'' . Attribute::NS . '\'');
@@ -77,7 +79,9 @@ final class MessageFactoryTest extends TestCase
      */
     public function testMessageFactoryWithSameNamespaceButNotMessage(): void
     {
-        $document = DOMDocumentFactory::fromFile(dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_Status.xml');
+        $document = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_Status.xml'
+        );
 
         $this->expectException(InvalidDOMElementException::class);
         $this->expectExceptionMessage('Unknown SAML message: \'Status\'');

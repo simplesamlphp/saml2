@@ -74,4 +74,3 @@ final class Audience extends AbstractSamlElement
         return $element;
     }
 }
-

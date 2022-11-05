@@ -18,8 +18,9 @@ use SimpleSAML\XML\ExtendableElementTrait;
  *
  * This class can be used in two different ways:
  *
- *   - You can extend the class without extending the constructor. Then you can use the methods available and the
- *     class will generate an element with the same name as the extending class (e.g. \SimpleSAML\SAML2\XML\md\AttributeService).
+ *   - You can extend the class without extending the constructor. Then you can use the methods available and the class
+ *     will generate an element with the same name as the extending class
+ *     (e.g. \SimpleSAML\SAML2\XML\md\AttributeService).
  *
  *   - Alternatively, you may want to extend the type to add new attributes (e.g look at IndexedEndpointType). In that
  *     case, you cannot use this class normally, as if you change the signature of the constructor, you cannot call
@@ -165,8 +166,10 @@ abstract class AbstractEndpointType extends AbstractMdElement
      * @param \DOMElement $xml The XML element we should load.
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing any of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     *   if the supplied element is missing any of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static
     {

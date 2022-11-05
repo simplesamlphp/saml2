@@ -17,6 +17,8 @@ use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
+use function preg_replace;
+use function version_compare;
 
 /**
  * The \SimpleSAML\SAML2\XML\samlp\ArtifactResponse,
@@ -97,16 +99,24 @@ class ArtifactResponse extends AbstractStatusResponse
      * @param \DOMElement $xml
      * @return self
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     *   if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'ArtifactResponse', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ArtifactResponse::NS, InvalidDOMElementException::class);
 
-        Assert::true(version_compare('2.0', self::getAttribute($xml, 'Version'), '<='), RequestVersionTooLowException::class);
-        Assert::true(version_compare('2.0', self::getAttribute($xml, 'Version'), '>='), RequestVersionTooHighException::class);
+        Assert::true(
+            version_compare('2.0', self::getAttribute($xml, 'Version'), '<='),
+            RequestVersionTooLowException::class
+        );
+        Assert::true(
+            version_compare('2.0', self::getAttribute($xml, 'Version'), '>='),
+            RequestVersionTooHighException::class
+        );
 
         $id = self::getAttribute($xml, 'ID');
         $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
@@ -141,10 +151,20 @@ class ArtifactResponse extends AbstractStatusResponse
         Assert::count($status, 1);
 
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one saml:Extensions element is allowed.', TooManyElementsException::class);
+        Assert::maxCount(
+            $extensions,
+            1,
+            'Only one saml:Extensions element is allowed.',
+            TooManyElementsException::class
+        );
 
         $signature = Signature::getChildrenOfClass($xml);
-        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
+        Assert::maxCount(
+            $signature,
+            1,
+            'Only one ds:Signature element is allowed.',
+            TooManyElementsException::class
+        );
 
         $response = new static(
             array_pop($status),

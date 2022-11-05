@@ -48,8 +48,16 @@ final class PublicationPathTest extends TestCase
         );
 
         $this->arrayRepresentation = [
-            ['publisher' => 'SomePublisher', 'creationInstant' => 1293840000, 'publicationId' => 'SomePublicationId'],
-            ['publisher' => 'SomeOtherPublisher', 'creationInstant' => 1293840000, 'publicationId' => 'SomeOtherPublicationId'],
+            [
+                'publisher' => 'SomePublisher',
+                'creationInstant' => 1293840000,
+                'publicationId' => 'SomePublicationId'
+            ],
+            [
+                'publisher' => 'SomeOtherPublisher',
+                'creationInstant' => 1293840000,
+                'publicationId' => 'SomeOtherPublicationId'
+            ],
         ];
     }
 

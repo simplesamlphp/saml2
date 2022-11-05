@@ -24,7 +24,8 @@ abstract class MessageFactory
      * @param \DOMElement $xml The root XML element
      * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The message
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): AbstractMessage
     {

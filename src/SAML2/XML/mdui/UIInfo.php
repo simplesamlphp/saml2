@@ -338,7 +338,8 @@ final class UIInfo extends AbstractMduiElement
      *         \SimpleSAML\XML\SAML2\mdui\Keywords)[] $items
      * @return void
      */
-    private function testLocalizedElements(array $elements) {
+    private function testLocalizedElements(array $elements)
+    {
         if (!empty($elements)) {
             $types = array_map('get_class', $elements);
             Assert::maxCount(array_unique($types), 1, 'Multiple class types cannot be used.');
@@ -365,7 +366,8 @@ final class UIInfo extends AbstractMduiElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
     {

@@ -93,7 +93,10 @@ trait SignedElementTestTrait
                 $unsigned = $testedClass::fromXML($xmlRepresentation->documentElement);
                 $unsigned->sign($signer, C::C14N_EXCLUSIVE_WITHOUT_COMMENTS, $keyInfo);
                 $signed = $this->testedClass::fromXML($unsigned->toXML());
-                $this->assertEquals($algorithm, $signed->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm());
+                $this->assertEquals(
+                    $algorithm,
+                    $signed->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm()
+                );
 
                 // verify signature
                 $verifier = (new SignatureAlgorithmFactory([]))->getAlgorithm(
@@ -103,7 +106,11 @@ trait SignedElementTestTrait
 
                 try {
                     $verified = $signed->verify($verifier);
-                } catch (NoSignatureFoundException|InvalidArgumentException|SignatureVerificationFailedException $e) {
+                } catch (
+                    NoSignatureFoundException |
+                    InvalidArgumentException |
+                    SignatureVerificationFailedException $s
+                ) {
                     $this->fail(sprintf('%s:  %s', $algorithm, $e->getMessage()));
                 }
                 $this->assertInstanceOf($this->testedClass, $verified);
@@ -123,7 +130,11 @@ trait SignedElementTestTrait
                 // verify signature
                 try {
                     $verified = $signed->verify($verifier);
-                } catch (NoSignatureFoundException|InvalidArgumentException|SignatureVerificationFailedException $e) {
+                } catch (
+                    NoSignatureFoundException |
+                    InvalidArgumentException |
+                    SignatureVerificationFailedException $e
+                ) {
                     $this->fail(sprintf('%s:  %s', $algorithm, $e->getMessage()));
                 }
                 $this->assertInstanceOf($this->testedClass, $verified);
@@ -148,7 +159,11 @@ trait SignedElementTestTrait
                 try {
                     $verified = $signed->verify($verifier);
                     $this->fail('Signature validated correctly with wrong certificate.');
-                } catch (NoSignatureFoundException|InvalidArgumentException|SignatureVerificationFailedException $e) {
+                } catch (
+                    NoSignatureFoundException |
+                    InvalidArgumentException |
+                    SignatureVerificationFailedException $e
+                ) {
                     $this->assertEquals('Failed to verify signature.', $e->getMessage());
                 }
                 $this->assertInstanceOf($this->testedClass, $verified);

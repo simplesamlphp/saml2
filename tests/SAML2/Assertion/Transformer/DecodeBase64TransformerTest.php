@@ -209,7 +209,12 @@ XML
             XPath::getXPath($this->document->documentElement)
         );
 
-        $attribute = new Attribute('broken:encoding', C::NAMEFORMAT_URI, null, [new AttributeValue('SWVtYW5.IEFuZGVycw==')]);
+        $attribute = new Attribute(
+            'broken:encoding',
+            C::NAMEFORMAT_URI,
+            null,
+            [new AttributeValue('SWVtYW5.IEFuZGVycw==')]
+        );
         $attribute->toXML($attributeStatement[0]);
 
         $assertion = Assertion::fromXML($this->document->firstChild);

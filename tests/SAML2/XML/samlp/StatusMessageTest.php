@@ -66,4 +66,3 @@ final class StatusMessageTest extends TestCase
         );
     }
 }
-

@@ -44,7 +44,8 @@ final class UIInfoTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+            . '/schemas/sstc-saml-metadata-ui-v1.0.xsd';
 
         $this->testedClass = UIInfo::class;
 
@@ -88,8 +89,12 @@ final class UIInfoTest extends TestCase
             [],
             [],
             [
-                new Chunk(DOMDocumentFactory::fromString('<ssp:child1 xmlns:ssp="urn:custom:ssp" />')->documentElement),
-                new Chunk(DOMDocumentFactory::fromString('<myns:child2 xmlns:myns="urn:test:mynamespace" />')->documentElement)
+                new Chunk(DOMDocumentFactory::fromString(
+                    '<ssp:child1 xmlns:ssp="urn:custom:ssp" />'
+                )->documentElement),
+                new Chunk(DOMDocumentFactory::fromString(
+                    '<myns:child2 xmlns:myns="urn:test:mynamespace" />'
+                )->documentElement)
             ]
         );
 

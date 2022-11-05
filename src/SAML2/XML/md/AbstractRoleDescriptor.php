@@ -67,9 +67,12 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An Extensions object. Defaults to null.
      * @param string|null $errorURL An URI where to redirect users for support. Defaults to null.
-     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors An array of KeyDescriptor elements. Defaults to an empty array.
-     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization The organization running this entity. Defaults to null.
-     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts An array of contacts for this entity. Defaults to an empty array.
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors
+     *   An array of KeyDescriptor elements. Defaults to an empty array.
+     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
+     *   The organization running this entity. Defaults to null.
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts
+     *   An array of contacts for this entity. Defaults to an empty array.
      * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
@@ -138,7 +141,11 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      */
     protected function setProtocolSupportEnumeration(array $protocols): void
     {
-        Assert::minCount($protocols, 1, 'At least one protocol must be supported by this md:' . static::getLocalName() . '.');
+        Assert::minCount(
+            $protocols,
+            1,
+            'At least one protocol must be supported by this md:' . static::getLocalName() . '.'
+        );
         Assert::allValidURI($protocols, SchemaViolationException::class);
 
         $this->protocolSupportEnumeration = $protocols;

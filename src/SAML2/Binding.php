@@ -114,7 +114,11 @@ abstract class Binding
         $logger->warning('Unable to find the SAML 2 binding used for this request.');
         $logger->warning('Request method: ' . var_export($method, true));
         if (!empty($query)) {
-            $logger->warning($method . " parameters: '" . implode("', '", array_map('addslashes', array_keys($query))) . "'");
+            $logger->warning(sprintf(
+                '%s parameters: \'%s\'',
+                $method,
+                implode("', '", array_map('addslashes', array_keys($query))),
+            ));
         }
         if (isset($headers['CONTENT_TYPE'])) {
             $logger->warning('Content-Type: ' . var_export($headers['CONTENT_TYPE'], true));

@@ -59,4 +59,3 @@ final class RequesterID extends AbstractSamlpElement
         return new static($xml->textContent);
     }
 }
-

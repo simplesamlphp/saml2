@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Utilities;
 
+use ArrayIterator;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\Exception\RuntimeException;
@@ -121,9 +122,10 @@ final class ArrayCollectionTest extends TestCase
     public function testOnlyElementFail(): void
     {
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage(
-            'SAML2\Utilities\ArrayCollection::getOnlyElement requires that the collection has exactly one element, "2" elements found'
-        );
+        $this->expectExceptionMessage(sprintf(
+            '%s::getOnlyElement requires that the collection has exactly one element, "2" elements found',
+            ArrayCollection::class
+        ));
         $arc = new ArrayCollection(['aap', 'noot']);
         $arc->getOnlyElement();
     }
@@ -134,7 +136,7 @@ final class ArrayCollectionTest extends TestCase
     public function testGetiterator(): void
     {
         $arc = new ArrayCollection(['aap', 'noot']);
-        $this->assertInstanceOf(\ArrayIterator::class, $arc->getIterator());
+        $this->assertInstanceOf(ArrayIterator::class, $arc->getIterator());
     }
 
 

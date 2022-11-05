@@ -27,8 +27,8 @@ use function explode;
  * @package simplesamlphp/saml2
  */
 abstract class AbstractBaseID extends AbstractBaseIDType implements
-     EncryptableElementInterface,
-     ExtensionPointInterface
+    EncryptableElementInterface,
+    ExtensionPointInterface
 {
     use EncryptableElementTrait;
     use ExtensionPointTrait;
@@ -73,7 +73,8 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\saml\BaseIdentifierInterface
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
     {

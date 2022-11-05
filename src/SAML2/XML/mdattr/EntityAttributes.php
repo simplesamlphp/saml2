@@ -92,7 +92,8 @@ final class EntityAttributes extends AbstractMdattrElement
             Assert::count(
                 $statements,
                 1,
-                'One (and only one) <saml:AttributeStatement> MUST be included in a <saml:Assertion> inside a <mdattr:EntityAttribute>',
+                'One (and only one) <saml:AttributeStatement> MUST be included '
+                . 'in a <saml:Assertion> inside a <mdattr:EntityAttribute>',
                 ProtocolViolationException::class
             );
             Assert::notNull(
@@ -152,7 +153,8 @@ final class EntityAttributes extends AbstractMdattrElement
      * @param \DOMElement $xml The XML element we should load
      * @return self
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
     {

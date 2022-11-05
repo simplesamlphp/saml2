@@ -53,7 +53,8 @@ final class SubjectTest extends TestCase
 
     public function setup(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-assertion-2.0.xsd';
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+            . '/schemas/saml-schema-assertion-2.0.xsd';
 
         $this->testedClass = Subject::class;
 
@@ -288,7 +289,8 @@ XML
 
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage(
-            'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
+            'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide '
+            . 'exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
         );
 
         Subject::fromXML($document->documentElement);

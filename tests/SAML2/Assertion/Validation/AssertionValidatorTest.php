@@ -84,6 +84,7 @@ final class AssertionValidatorTest extends TestCase
         );
 
         $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
+        $nid_transient = C::NAMEID_TRANSIENT;
 
         $this->document = DOMDocumentFactory::fromString(<<<XML
     <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -95,7 +96,7 @@ final class AssertionValidatorTest extends TestCase
                     >
         <saml:Issuer>{$idpentity}</saml:Issuer>
         <saml:Subject>
-          <saml:NameID SPNameQualifier="https://sp.example.org/authentication/sp/metadata" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">SomeOtherNameIDValue</saml:NameID>
+          <saml:NameID SPNameQualifier="https://sp.example.org/authentication/sp/metadata" Format="{$nid_transient}">SomeOtherNameIDValue</saml:NameID>
         </saml:Subject>
         <saml:Conditions>
           <saml:AudienceRestriction>
@@ -138,6 +139,7 @@ XML
     {
         $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
         $entity_idp = C::ENTITY_IDP;
+        $nid_transient = C::NAMEID_TRANSIENT;
 
         $document = DOMDocumentFactory::fromString(<<<XML
     <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -149,7 +151,7 @@ XML
                     >
         <saml:Issuer>{$entity_idp}</saml:Issuer>
         <saml:Subject>
-          <saml:NameID SPNameQualifier="https://sp.example.org/authentication/sp/metadata" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">SomeOtherNameIDValue</saml:NameID>
+          <saml:NameID SPNameQualifier="https://sp.example.org/authentication/sp/metadata" Format="{$nid_transient}">SomeOtherNameIDValue</saml:NameID>
         </saml:Subject>
         <saml:Conditions>
           <saml:AudienceRestriction>
@@ -169,7 +171,8 @@ XML
 
         $this->expectException(InvalidAssertionException::class);
         $this->expectExceptionMessage(
-            'The configured Service Provider [https://simplesamlphp.org/idp/metadata] is not a valid audience for the assertion. Audiences: [https://example.edu/not-the-sp-entity-id]"'
+            'The configured Service Provider [https://simplesamlphp.org/idp/metadata] is not a valid audience '
+            . 'for the assertion. Audiences: [https://example.edu/not-the-sp-entity-id]"'
         );
         $result = $this->assertionProcessor->validateAssertion($assertion);
     }

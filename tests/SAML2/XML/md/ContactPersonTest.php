@@ -187,7 +187,6 @@ final class ContactPersonTest extends TestCase
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('More than one GivenName in md:ContactPerson');
         ContactPerson::fromXML($this->xmlRepresentation->documentElement);
-
     }
 
 

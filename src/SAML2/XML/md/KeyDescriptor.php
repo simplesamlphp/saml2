@@ -140,9 +140,12 @@ final class KeyDescriptor extends AbstractMdElement
      * @param \DOMElement $xml The XML element we should load.
      * @return \SimpleSAML\SAML2\XML\md\KeyDescriptor
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     *   if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static
     {
@@ -150,8 +153,18 @@ final class KeyDescriptor extends AbstractMdElement
         Assert::same($xml->namespaceURI, KeyDescriptor::NS, InvalidDOMElementException::class);
 
         $keyInfoElements = KeyInfo::getChildrenOfClass($xml);
-        Assert::minCount($keyInfoElements, 1, 'No ds:KeyInfo in the KeyDescriptor.', MissingElementException::class);
-        Assert::maxCount($keyInfoElements, 1, 'More than one ds:KeyInfo in the KeyDescriptor.', TooManyElementsException::class);
+        Assert::minCount(
+            $keyInfoElements,
+            1,
+            'No ds:KeyInfo in the KeyDescriptor.',
+            MissingElementException::class
+        );
+        Assert::maxCount(
+            $keyInfoElements,
+            1,
+            'More than one ds:KeyInfo in the KeyDescriptor.',
+            TooManyElementsException::class
+        );
 
         return new static(
             $keyInfoElements[0],

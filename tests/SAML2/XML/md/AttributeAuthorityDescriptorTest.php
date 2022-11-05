@@ -261,7 +261,9 @@ final class AttributeAuthorityDescriptorTest extends TestCase
             [C::NS_SAMLP],
             [$this->aidrs],
             [new NameIDFormat(C::NAMEID_PERSISTENT)],
-            [new AttributeProfile(C::PROFILE_1)], ['x']);
+            [new AttributeProfile(C::PROFILE_1)],
+            ['x']
+        );
     }
 
 

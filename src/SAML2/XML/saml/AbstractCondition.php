@@ -59,7 +59,8 @@ abstract class AbstractCondition extends AbstractConditionType implements Extens
      * @param \DOMElement $xml The root XML element
      * @return \SimpleSAML\SAML2\XML\saml\AbstractCondition The condition
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
     {

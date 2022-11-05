@@ -59,7 +59,11 @@ final class EndpointTypeTest extends TestCase
         $attr = $this->xmlRepresentation->createAttributeNS(C::NAMESPACE, 'test:attr');
         $attr->value = 'value';
 
-        $child = new Chunk(DOMDocumentFactory::fromString('<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>')->documentElement);
+        $child = new Chunk(
+            DOMDocumentFactory::fromString(
+                '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>'
+            )->documentElement
+        );
 
         $endpointType = new AttributeService(
             C::BINDING_HTTP_POST,
@@ -188,8 +192,12 @@ final class EndpointTypeTest extends TestCase
      */
     public function testUnmarshallingWithoutOptionalAttributes(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<md:AttributeService xmlns:md="{$mdNamespace}" Binding="urn:x-simplesamlphp:namespace" Location="https://whatever/" />'
+        $mdNamespace = C::NS_MD;
+        $location = C::LOCATION_A;
+
+        $document = DOMDocumentFactory::fromString(<<<XML
+<md:AttributeService xmlns:md="{$mdNamespace}" Binding="urn:x-simplesamlphp:namespace" Location="{$location}" />
+XML
         );
         $as = AttributeService::fromXML($document->documentElement);
         $this->assertNull($as->getResponseLocation());

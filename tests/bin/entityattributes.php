@@ -31,20 +31,63 @@ $unsignedAssertion = new Assertion(
     '_93af655219464fb403b34436cfb0c5cb1d9a5502',
     null,
     new Subject(new NameID('some:entity', null, null, C::NAMEID_ENTITY)),
-    new Conditions(null, null, [], [new AudienceRestriction([new Audience('https://simplesamlphp.org/idp/metadata'), new Audience('urn:x-simplesamlphp:phpunit:entity')])]),
+    new Conditions(
+        null,
+        null,
+        [],
+        [
+            new AudienceRestriction([
+                new Audience('https://simplesamlphp.org/idp/metadata'),
+                new Audience('urn:x-simplesamlphp:phpunit:entity')
+            ]),
+        ]
+    ),
     [new AttributeStatement([
-        new Attribute('urn:mace:dir:attribute-def:uid', C::NAMEFORMAT_URI, null, [new AttributeValue('student2')]),
-        new Attribute('urn:mace:terena.org:attribute-def:schacHomeOrganization', C::NAMEFORMAT_URI, null, [new AttributeValue('university.example.org'), new AttributeValue('bbb.cc')]),
-        new Attribute('urn:schac:attribute-def:schacPersonalUniqueCode', C::NAMEFORMAT_URI, null, [new AttributeValue('urn:schac:personalUniqueCode:nl:local:uvt.nl:memberid:524020'), new AttributeValue('urn:schac:personalUniqueCode:nl:local:surfnet.nl:studentid:12345')]),
-        new Attribute('urn:mace:dir:attribute-def:eduPersonAffiliation', C::NAMEFORMAT_URI, null, [new AttributeValue('member'), new AttributeValue('student')]),
+        new Attribute(
+            'urn:mace:dir:attribute-def:uid',
+            C::NAMEFORMAT_URI,
+            null,
+            [new AttributeValue('student2')]
+        ),
+        new Attribute(
+            'urn:mace:terena.org:attribute-def:schacHomeOrganization',
+            C::NAMEFORMAT_URI,
+            null,
+            [new AttributeValue('university.example.org'), new AttributeValue('bbb.cc')]
+        ),
+        new Attribute(
+            'urn:schac:attribute-def:schacPersonalUniqueCode',
+            C::NAMEFORMAT_URI,
+            null,
+            [
+                new AttributeValue('urn:schac:personalUniqueCode:nl:local:uvt.nl:memberid:524020'),
+                new AttributeValue('urn:schac:personalUniqueCode:nl:local:surfnet.nl:studentid:12345')
+            ]
+        ),
+        new Attribute(
+            'urn:mace:dir:attribute-def:eduPersonAffiliation',
+            C::NAMEFORMAT_URI,
+            null,
+            [new AttributeValue('member'), new AttributeValue('student')]
+        ),
     ])],
 );
 $unsignedAssertion->sign($signer);
 $signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
 $entityAttributes = new EntityAttributes([
-    new Attribute('attrib1', C::NAMEFORMAT_URI, null, [new AttributeValue('is'), new AttributeValue('really'), new AttributeValue('cool')]),
+    new Attribute(
+        'attrib1',
+        C::NAMEFORMAT_URI,
+        null,
+        [new AttributeValue('is'), new AttributeValue('really'), new AttributeValue('cool')]
+    ),
     $signedAssertion,
-    new Attribute('foo', 'urn:simplesamlphp:v1:simplesamlphp', null, [new AttributeValue('is'), new AttributeValue('really'), new AttributeValue('cool')]),
+    new Attribute(
+        'foo',
+        'urn:simplesamlphp:v1:simplesamlphp',
+        null,
+        [new AttributeValue('is'), new AttributeValue('really'), new AttributeValue('cool')]
+    ),
 ]);
 
 echo $entityAttributes->toXML()->ownerDocument?->saveXML();

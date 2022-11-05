@@ -438,9 +438,11 @@ XML
     public function testUnmarshallingWithoutDescriptors(): void
     {
         $entity_idp = C::ENTITY_IDP;
+        $saml_md = C::NS_MD;
 
-        $document = DOMDocumentFactory::fromString(
-            '<EntityDescriptor entityID="{$entity_idp}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"></EntityDescriptor>'
+        $document = DOMDocumentFactory::fromString(<<<XML
+<EntityDescriptor entityID="{$entity_idp}" xmlns="{$saml_md}"></EntityDescriptor>
+XML
         );
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(

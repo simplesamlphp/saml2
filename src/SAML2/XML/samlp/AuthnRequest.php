@@ -436,17 +436,26 @@ class AuthnRequest extends AbstractRequest
      * @param \DOMElement $xml The XML element we should load
      * @return \SimpleSAML\SAML2\XML\samlp\AuthnRequest
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     *   if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'AuthnRequest', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AuthnRequest::NS, InvalidDOMElementException::class);
 
-        Assert::true(version_compare('2.0', self::getAttribute($xml, 'Version'), '<='), RequestVersionTooLowException::class);
-        Assert::true(version_compare('2.0', self::getAttribute($xml, 'Version'), '>='), RequestVersionTooHighException::class);
+        Assert::true(
+            version_compare('2.0', self::getAttribute($xml, 'Version'), '<='),
+            RequestVersionTooLowException::class
+        );
+        Assert::true(
+            version_compare('2.0', self::getAttribute($xml, 'Version'), '>='),
+            RequestVersionTooHighException::class
+        );
 
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
@@ -459,10 +468,20 @@ class AuthnRequest extends AbstractRequest
         $assertionConsumerServiceIndex = self::getIntegerAttribute($xml, 'AssertionConsumerServiceIndex', null);
 
         $conditions = Conditions::getChildrenOfClass($xml);
-        Assert::maxCount($conditions, 1, 'Only one <saml:Conditions> element is allowed.', TooManyElementsException::class);
+        Assert::maxCount(
+            $conditions,
+            1,
+            'Only one <saml:Conditions> element is allowed.',
+            TooManyElementsException::class
+        );
 
         $nameIdPolicy = NameIDPolicy::getChildrenOfClass($xml);
-        Assert::maxCount($nameIdPolicy, 1, 'Only one <samlp:NameIDPolicy> element is allowed.', TooManyElementsException::class);
+        Assert::maxCount(
+            $nameIdPolicy,
+            1,
+            'Only one <samlp:NameIDPolicy> element is allowed.',
+            TooManyElementsException::class
+        );
 
         $subject = Subject::getChildrenOfClass($xml);
         Assert::maxCount($subject, 1, 'Only one <saml:Subject> element is allowed.', TooManyElementsException::class);
@@ -479,10 +498,20 @@ class AuthnRequest extends AbstractRequest
         );
 
         $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount($extensions, 1, 'Only one <samlp:Extensions> element is allowed.', TooManyElementsException::class);
+        Assert::maxCount(
+            $extensions,
+            1,
+            'Only one <samlp:Extensions> element is allowed.',
+            TooManyElementsException::class
+        );
 
         $signature = Signature::getChildrenOfClass($xml);
-        Assert::maxCount($signature, 1, 'Only one <ds:Signature> element is allowed.', TooManyElementsException::class);
+        Assert::maxCount(
+            $signature,
+            1,
+            'Only one <ds:Signature> element is allowed.',
+            TooManyElementsException::class
+        );
 
         $scoping = Scoping::getChildrenOfClass($xml);
         Assert::maxCount($scoping, 1, 'Only one <samlp:Scoping> element is allowed.', TooManyElementsException::class);

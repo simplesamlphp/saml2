@@ -33,7 +33,8 @@ final class SubjectLocalityTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-assertion-2.0.xsd';
+        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+            . '/schemas/saml-schema-assertion-2.0.xsd';
 
         $this->testedClass = SubjectLocality::class;
 
