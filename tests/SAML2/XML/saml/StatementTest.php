@@ -110,6 +110,6 @@ final class StatementTest extends TestCase
         $this->assertEquals('Statement', $chunk->getLocalName());
         $this->assertEquals(C::NS_SAML, $chunk->getNamespaceURI());
 
-        $this->assertEquals($element->ownerDocument?->saveXML($element), strval($chunk));
+        $this->assertEquals($element->ownerDocument?->saveXML($element), strval($statement));
     }
 }
