@@ -24,7 +24,7 @@ class AttributeValue implements Serializable
      *
      * @var \DOMElement
      */
-    private $element;
+    private DOMElement $element;
 
 
     /**
@@ -51,12 +51,13 @@ class AttributeValue implements Serializable
             return;
         }
 
+        $doc = DOMDocumentFactory::create();
         if ($value->namespaceURI === Constants::NS_SAML && $value->localName === 'AttributeValue') {
-            $this->element = Utils::copyElement($value);
+            $doc->appendChild($doc->importNode($value, true));
+            $this->element = $doc->documentElement;
             return;
         }
 
-        $doc = DOMDocumentFactory::create();
         $this->element = $doc->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
         Utils::copyElement($value, $this->element);
     }
@@ -96,7 +97,7 @@ class AttributeValue implements Serializable
         Assert::same($this->getElement()->namespaceURI, Constants::NS_SAML);
         Assert::same($this->getElement()->localName, "AttributeValue");
 
-        return Utils::copyElement($this->element, $parent);
+        return $parent->appendChild($parent->ownerDocument->importNode($this->element, true));
     }
 
 
@@ -136,9 +137,9 @@ class AttributeValue implements Serializable
      *
      * @return string The AttributeValue serialized.
      */
-    public function serialize() : string
+    public function serialize() : array
     {
-        return serialize($this->element->ownerDocument->saveXML($this->element));
+        return $this->__serialize();
     }
 
 
@@ -152,8 +153,7 @@ class AttributeValue implements Serializable
      */
     public function unserialize($serialized) : void
     {
-        $doc = DOMDocumentFactory::fromString(unserialize($serialized));
-        $this->element = $doc->documentElement;
+        $this->__unserialize($serialized);
     }
 
 
@@ -167,7 +167,7 @@ class AttributeValue implements Serializable
      */
     public function __serialize(): array
     {
-        return [$this->element->ownerDocument->saveXML($this->element)];
+        return [serialize($this->element->ownerDocument->saveXML($this->element))];
     }
 
 
@@ -181,13 +181,7 @@ class AttributeValue implements Serializable
      */
     public function __unserialize(array $serialized): void
     {
-        $xml = new self(
-            DOMDocumentFactory::fromString(array_pop($serialized))->documentElement
-        );
-
-        $vars = get_object_vars($xml);
-        foreach ($vars as $k => $v) {
-            $this->$k = $v;
-        }
+        $element = DOMDocumentFactory::fromString(unserialize(array_pop($serialized)));
+        $this->setElement($element->documentElement);
     }
 }
