@@ -23,6 +23,7 @@ use function strval;
 /**
  * Class \SAML2\XML\saml\BaseIDTest
  *
+ * @covers \SimpleSAML\SAML2\XML\saml\UnknownID
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractBaseID
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractBaseIDType
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement

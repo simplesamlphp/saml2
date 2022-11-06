@@ -24,6 +24,7 @@ use function strval;
 /**
  * Class \SAML2\XML\saml\StatementTest
  *
+ * @covers \SimpleSAML\SAML2\XML\saml\UnknownStatement
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractStatement
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractStatementType
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
