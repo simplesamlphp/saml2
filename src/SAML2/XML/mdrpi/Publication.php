@@ -212,14 +212,14 @@ final class Publication extends AbstractMdrpiElement
     public function toArray(): array
     {
         $data = [];
-        $data['publisher'] = $this->publisher;
+        $data['publisher'] = $this->getPublisher();
 
-        if ($this->creationInstant !== null) {
-            $data['creationInstant'] = $this->creationInstant;
+        if ($this->getCreationInstant() !== null) {
+            $data['creationInstant'] = $this->getCreationInstant();
         }
 
-        if ($this->publicationId !== null) {
-            $data['publicationId'] = $this->publicationId;
+        if ($this->getPublicationId() !== null) {
+            $data['publicationId'] = $this->getPublicationId();
         }
 
         return $data;

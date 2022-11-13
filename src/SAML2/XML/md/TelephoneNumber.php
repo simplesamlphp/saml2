@@ -63,6 +63,6 @@ final class TelephoneNumber extends AbstractMdElement
      */
     public function toArray(): array
     {
-        return [$this->content];
+        return [$this->getContent()];
     }
 }

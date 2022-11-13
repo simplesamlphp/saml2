@@ -237,15 +237,15 @@ final class RegistrationInfo extends AbstractMdrpiElement
     public function toArray(): array
     {
         $data = [];
-        $data['registrationAuthority'] = $this->registrationAuthority;
+        $data['registrationAuthority'] = $this->getRegistrationAuthority();
 
-        if ($this->registrationInstant !== null) {
-            $data['registrationInstant'] = $this->registrationInstant;
+        if ($this->getRegistrationInstant() !== null) {
+            $data['registrationInstant'] = $this->getRegistrationInstant();
         }
 
-        if (!empty($this->RegistrationPolicy)) {
+        if (!empty($this->getRegistrationPolicy())) {
             $data['registrationPolicy'] = [];
-            foreach ($this->RegistrationPolicy as $rp) {
+            foreach ($this->getRegistrationPolicy() as $rp) {
                 $data['registrationPolicy'] = array_merge($data['registrationPolicy'], $rp->toArray());
             }
         }

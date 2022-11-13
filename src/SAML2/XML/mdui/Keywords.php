@@ -180,6 +180,6 @@ final class Keywords extends AbstractMduiElement
      */
     public function toArray(): array
     {
-        return [$this->lang => $this->Keywords];
+        return [$this->getLanguage() => $this->getKeywords()];
     }
 }

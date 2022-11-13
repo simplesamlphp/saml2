@@ -516,32 +516,32 @@ final class UIInfo extends AbstractMduiElement
     public function toArray(): array
     {
         $displayName = [];
-        foreach ($this->DisplayName as $child) {
+        foreach ($this->getDisplayName() as $child) {
             $displayName = array_merge($displayName, $child->toArray());
         }
 
         $description = [];
-        foreach ($this->Description as $child) {
+        foreach ($this->getDescription() as $child) {
             $description = array_merge($description, $child->toArray());
         }
 
         $infoUrl = [];
-        foreach ($this->InformationURL as $child) {
+        foreach ($this->getInformationURL() as $child) {
             $infoUrl = array_merge($infoUrl, $child->toArray());
         }
 
         $privacyUrl = [];
-        foreach ($this->PrivacyStatementURL as $child) {
+        foreach ($this->getPrivacyStatementURL() as $child) {
             $privacyUrl = array_merge($privacyUrl, $child->toArray());
         }
 
         $keywords = [];
-        foreach ($this->Keywords as $child) {
+        foreach ($this->getKeywords() as $child) {
             $keywords = array_merge($keywords, $child->toArray());
         }
 
         $logo = [];
-        foreach ($this->Logo as $child) {
+        foreach ($this->getLogo() as $child) {
             $logo[] = $child->toArray();
         }
 

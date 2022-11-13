@@ -223,6 +223,11 @@ final class Logo extends AbstractMduiElement
      */
     public function toArray(): array
     {
-        return ['url' => $this->content, 'width' => $this->width, 'height' => $this->height, 'lang' => $this->lang];
+        return [
+            'url' => $this->getContent(),
+            'width' => $this->getWidth(),
+            'height' => $this->getHeight(),
+            'lang' => $this->getLanguage(),
+        ];
     }
 }

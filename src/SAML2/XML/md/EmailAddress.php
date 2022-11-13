@@ -103,6 +103,6 @@ final class EmailAddress extends AbstractMdElement
      */
     public function toArray(): array
     {
-        return [$this->content];
+        return [$this->getContent()];
     }
 }

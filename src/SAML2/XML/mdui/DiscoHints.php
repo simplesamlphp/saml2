@@ -266,15 +266,15 @@ final class DiscoHints extends AbstractMduiElement
             'GeolocationHint' => [],
         ];
 
-        foreach ($this->IPHint as $hint) {
+        foreach ($this->getIPHint() as $hint) {
             $data['IPHint'][] = $hint->getContent();
         }
 
-        foreach ($this->DomainHint as $hint) {
+        foreach ($this->getDomainHint() as $hint) {
             $data['DomainHint'][] = $hint->getContent();
         }
 
-        foreach ($this->GeolocationHint as $hint) {
+        foreach ($this->getGeolocationHint() as $hint) {
             $data['GeolocationHint'][] = $hint->getContent();
         }
 

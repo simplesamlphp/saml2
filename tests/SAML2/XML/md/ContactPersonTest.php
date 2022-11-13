@@ -59,7 +59,7 @@ final class ContactPersonTest extends TestCase
             'GivenName' => 'Lead',
             'SurName' => 'Developer',
             'Extensions' => null,
-            'EmailAddresses' => ['lead.developer@example.org'],
+            'EmailAddresses' => ['mailto:lead.developer@example.org'],
             'TelephoneNumbers' => ['+1234567890'],
             'urn:test:something' => ['test:attr' => 'value'],
         ];

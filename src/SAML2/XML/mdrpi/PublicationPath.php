@@ -138,7 +138,7 @@ final class PublicationPath extends AbstractMdrpiElement
     public function toArray(): array
     {
         $data = [];
-        foreach ($this->Publication as $p) {
+        foreach ($this->getPublication() as $p) {
             $data[] = $p->toArray();
         }
 
