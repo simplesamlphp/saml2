@@ -10,6 +10,9 @@ use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\XML\StringElementTrait;
 
 use function filter_var;
+use function preg_replace;
+use function rtrim;
+use function sprintf;
 
 /**
  * Class implementing DomainHint.
@@ -31,6 +34,20 @@ final class DomainHint extends AbstractMduiElement
 
 
     /**
+     * Sanitize the content of the element.
+     *
+     * @param string $content  The unsanitized textContent
+     * @throws \Exception on failure
+     * @return string
+     */
+    protected function sanitizeContent(string $content): string
+    {
+        // Remove prefixed schema and/or trailing whitespace + forward slashes
+        return rtrim(preg_replace('#^http[s]?://#i', '', $content), " \n\r\t\v\x00/");
+    }
+
+
+    /**
      * Validate the content of the element.
      *
      * @param string $content  The value to go in the XML textContent
@@ -39,9 +56,11 @@ final class DomainHint extends AbstractMduiElement
      */
     protected function validateContent(string $content): void
     {
-        Assert::notEmpty($content, 'DomainHint cannot be empty');
-        if (!filter_var($content, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
-            throw new InvalidArgumentException(sprintf('DomainHint is not a valid hostname;  %s', $content));
+        $sanitizedContent = $this->sanitizeContent($content);
+        Assert::notEmpty($sanitizedContent, 'DomainHint cannot be empty');
+
+        if (!filter_var($sanitizedContent, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
+            throw new InvalidArgumentException(sprintf('DomainHint is not a valid hostname;  %s', $sanitizedContent));
         }
     }
 }
