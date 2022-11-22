@@ -87,7 +87,15 @@ abstract class Binding
                     return new HTTPPost();
                 } elseif (array_key_exists('SAMLart', $_POST)) {
                     return new HTTPArtifact();
-                } elseif ($contentType === 'text/xml' || $contentType === 'application/soap+xml') {
+                } elseif (
+                    /**
+                     * The registration information for text/xml is in all respects the same
+                     * as that given for application/xml (RFC 7303 - Section 9.1)
+                     */
+                    ($contentType === 'text/xml' || $contentType === 'application/xml')
+                    // See paragraph 3.2.3 of Binding for SAML2 (OASIS)
+                    || $_SERVER['SOAPAction'] === 'http://www.oasis-open.org/committees/security')
+                {
                     return new SOAP();
                 }
                 break;
