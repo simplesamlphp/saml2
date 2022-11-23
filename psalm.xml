@@ -32,10 +32,4 @@
     <PropertyNotSetInConstructor errorLevel="suppress" />
     <MissingClosureReturnType errorLevel="suppress" />
   </issueHandlers>
-
-<!--
-  <stubs>
-    <file name="tests/resources/stubs/soap.php" />
-  </stubs>
--->
 </psalm>
