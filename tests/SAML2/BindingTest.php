@@ -111,6 +111,16 @@ final class BindingTest extends TestCase
         $this->expectException(UnsupportedBindingException::class);
         $this->expectExceptionMessage('Unable to find the SAML 2 binding used for this request.');
         $bind = Binding::getCurrentBinding($request);
+
+        $_SERVER['CONTENT_TYPE'] = 'application/xml';
+        $bind = Binding::getCurrentBinding();
+        $this->assertInstanceOf(SOAP::class, $bind);
+        unset($_SERVER['CONTENT_TYPE']);
+
+        $_SERVER['HTTP_SOAPACTION'] = 'http://www.oasis-open.org/committees/security';
+        $bind = Binding::getCurrentBinding();
+        $this->assertInstanceOf(SOAP::class, $bind);
+        unset($_SERVER['HTTP_SOAPACTION']);
     }
 
 
