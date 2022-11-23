@@ -78,12 +78,21 @@ class BindingTest extends \PHPUnit\Framework\TestCase
         $bind = Binding::getCurrentBinding();
         $this->assertInstanceOf(SOAP::class, $bind);
 
+        $_SERVER['CONTENT_TYPE'] = 'application/xml';
+        $bind = Binding::getCurrentBinding();
+        $this->assertInstanceOf(SOAP::class, $bind);
+
+        unset($_SERVER['CONTENT_TYPE']);
+        $_SERVER['HTTP_SOAPACTION'] = 'http://www.oasis-open.org/committees/security';
+        $bind = Binding::getCurrentBinding();
+        $this->assertInstanceOf(SOAP::class, $bind);
+        unset($_SERVER['HTTP_SOAPACTION']);
+
         $_POST = ['SAMLart' => 'AAQAAI4sWYpfoDDYJrHzsMnG+jyNM94p5ejn49a+nZ0s3ylY7knQ6tkLMDE='];
         $bind = Binding::getCurrentBinding();
         $this->assertInstanceOf(HTTPArtifact::class, $bind);
 
         $_POST = ['AAP' => 'Noot'];
-        unset($_SERVER['CONTENT_TYPE']);
         $this->expectException(UnsupportedBindingException::class, 'Unable to find the current binding.');
         $bind = Binding::getCurrentBinding();
     }
