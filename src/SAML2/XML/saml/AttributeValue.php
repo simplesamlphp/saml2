@@ -137,9 +137,9 @@ class AttributeValue implements Serializable
      *
      * @return string The AttributeValue serialized.
      */
-    public function serialize() : array
+    public function serialize() : string
     {
-        return $this->__serialize();
+        return serialize($this->element->ownerDocument->saveXML($this->element));
     }
 
 
@@ -153,7 +153,8 @@ class AttributeValue implements Serializable
      */
     public function unserialize($serialized) : void
     {
-        $this->__unserialize($serialized);
+        $element = DOMDocumentFactory::fromString(unserialize($serialized));
+        $this->setElement($element->documentElement);
     }
 
 
