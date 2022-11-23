@@ -94,7 +94,7 @@ abstract class Binding
                      */
                     ($contentType === 'text/xml' || $contentType === 'application/xml')
                     // See paragraph 3.2.3 of Binding for SAML2 (OASIS)
-                    || $_SERVER['HTTP_SOAPACTION'] === 'http://www.oasis-open.org/committees/security')
+                    || (isset($_SERVER['HTTP_SOAPACTION']) && $_SERVER['HTTP_SOAPACTION'] === 'http://www.oasis-open.org/committees/security'))
                 {
                     return new SOAP();
                 }
