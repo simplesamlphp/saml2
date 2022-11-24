@@ -25,20 +25,20 @@ change, see: [e6c01fa](https://github.com/simplesamlphp/saml2/commit/e6c01fa9b0e
 In pre 4.0 releases we allowed both objects and arrays to be used for Issuers and nameID's. We know only support objects.
 If in your code you use something like this:
 
-``
+```php
 $assertion = new \SAML2\Assertion();
 $assertion->setIssuer('someissuer');
-``
+```
 
 You would now replace that with:
 
-``
+```php
 $issuer = new \SAML2\XML\saml\Issuer();
 $issuer->setValue('someissuer');
 
 $assertion = new \SAML2\Assertion();
 $assertion->setIssuer($issuer);
-``
+```
 
 **Class properties**
 All public properies have been replaced by either protected or private properties.
