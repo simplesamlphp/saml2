@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Assertion;
 
 use Psr\Log\LoggerInterface;
-use SimpleSAML\SAML2\Assertion\Transformer\DecodeBase64Transformer;
 use SimpleSAML\SAML2\Assertion\Transformer\NameIdDecryptionTransformer;
 use SimpleSAML\SAML2\Assertion\Transformer\TransformerChain;
 use SimpleSAML\SAML2\Assertion\Validation\AssertionValidator;
@@ -149,7 +148,6 @@ class ProcessorBuilder
         ServiceProvider $serviceProvider
     ): TransformerChain {
         $chain = new TransformerChain($identityProvider, $serviceProvider);
-        $chain->addTransformerStep(new DecodeBase64Transformer());
         $chain->addTransformerStep(
             new NameIdDecryptionTransformer($logger, $keyloader)
         );

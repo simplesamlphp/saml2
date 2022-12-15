@@ -100,7 +100,6 @@ class SimpleSAMLConverter
      */
     protected static function enrichForIdentityProvider(Configuration $configuration, array &$baseConfiguration): void
     {
-        $baseConfiguration['base64EncodedAttributes'] = $configuration->getBoolean('base64attributes', false);
         $baseConfiguration['entityId'] = $configuration->getString('entityid');
     }
 
