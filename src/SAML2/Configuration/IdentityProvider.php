@@ -69,16 +69,6 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
         return $this->get('sharedKey');
     }
 
-
-    /**
-     * @return bool|null
-     */
-    public function hasBase64EncodedAttributes(): ?bool
-    {
-        return $this->get('base64EncodedAttributes');
-    }
-
-
     /**
      * @param string $name
      * @param bool $required
