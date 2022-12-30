@@ -28,7 +28,7 @@ use function gzdeflate;
 use function gzinflate;
 use function sprintf;
 use function strlen;
-use function strpos;
+use function str_contains;
 use function urlencode;
 
 /**
@@ -83,10 +83,10 @@ class HTTPRedirect extends Binding
             $msg .= '&Signature=' . urlencode($signature->getSignatureValue()->getContent());
         }
 
-        if (strpos($destination, '?') === false) {
-            $destination .= '?' . $msg;
-        } else {
+        if (str_contains($destination, '?')) {
             $destination .= '&' . $msg;
+        } else {
+            $destination .= '?' . $msg;
         }
 
         return $destination;

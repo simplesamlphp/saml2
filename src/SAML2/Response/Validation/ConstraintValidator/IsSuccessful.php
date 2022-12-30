@@ -13,7 +13,7 @@ use SimpleSAML\SAML2\XML\samlp\Status;
 use function implode;
 use function sprintf;
 use function strlen;
-use function strpos;
+use function str_contains;
 use function substr;
 
 class IsSuccessful implements ConstraintValidator
@@ -67,11 +67,11 @@ class IsSuccessful implements ConstraintValidator
      */
     private function truncateStatus(string $status): string
     {
-        $prefixLength = strlen(C::STATUS_PREFIX);
-        if (strpos($status, C::STATUS_PREFIX) !== 0) {
+        if (!str_starts_with($status, C::STATUS_PREFIX)) {
             return $status;
         }
 
+        $prefixLength = strlen(C::STATUS_PREFIX);
         return substr($status, $prefixLength);
     }
 }
