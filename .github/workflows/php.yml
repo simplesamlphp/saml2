@@ -72,6 +72,9 @@ jobs:
         run: |
           echo "NO_COVERAGE=--no-coverage" >> $GITHUB_ENV
 
+      - name: Display OpenSSL version
+        run: echo `openssl version`
+
       - name: Run unit tests
         run: |
           echo $NO_COVERAGE
