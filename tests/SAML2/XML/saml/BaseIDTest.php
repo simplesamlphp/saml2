@@ -39,12 +39,12 @@ final class BaseIDTest extends TestCase
      */
     public function setup(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/schemas/simplesamlphp.xsd';
+        $this->schema = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
 
         $this->testedClass = AbstractBaseID::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_BaseID.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_BaseID.xml'
         );
 
         $container = new MockContainer();

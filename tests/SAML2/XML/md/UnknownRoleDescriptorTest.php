@@ -49,12 +49,12 @@ final class UnknownRoleDescriptorTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/schemas/simplesamlphp.xsd';
+        $this->schema = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
 
         $this->testedClass = UnknownRoleDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_UnknownRoleDescriptor.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_UnknownRoleDescriptor.xml'
         );
     }
 

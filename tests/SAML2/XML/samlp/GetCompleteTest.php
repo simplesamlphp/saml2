@@ -32,7 +32,7 @@ final class GetCompleteTest extends TestCase
         $this->testedClass = GetComplete::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_GetComplete.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_GetComplete.xml'
         );
     }
 

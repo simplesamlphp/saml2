@@ -37,7 +37,7 @@ final class IDPListTest extends TestCase
         $this->testedClass = IDPList::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_IDPList.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_IDPList.xml'
         );
     }
 

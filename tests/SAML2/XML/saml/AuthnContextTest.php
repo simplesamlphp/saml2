@@ -53,29 +53,28 @@ final class AuthnContextTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__)))))
-            . '/schemas/saml-schema-assertion-2.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-assertion-2.0.xsd';
 
         $this->testedClass = AuthnContext::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AuthnContext.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContext.xml'
         );
 
         $this->classRef = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AuthnContextClassRef.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextClassRef.xml'
         );
 
         $this->declRef = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AuthnContextDeclRef.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextDeclRef.xml'
         );
 
         $this->decl = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AuthnContextDecl.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextDecl.xml'
         );
 
         $this->authority = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_AuthenticatingAuthority.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthenticatingAuthority.xml'
         );
     }
 

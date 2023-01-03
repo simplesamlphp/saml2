@@ -38,12 +38,12 @@ final class ConditionTest extends TestCase
      */
     public function setup(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/schemas/simplesamlphp.xsd';
+        $this->schema = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
 
         $this->testedClass = CustomCondition::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Condition.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_Condition.xml'
         );
 
         $container = new MockContainer();

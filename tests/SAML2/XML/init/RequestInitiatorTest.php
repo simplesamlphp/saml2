@@ -35,12 +35,12 @@ final class RequestInitiatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/sstc-request-initiation.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/schemas/sstc-request-initiation.xsd';
 
         $this->testedClass = RequestInitiator::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/init_RequestInitiator.xml'
+            dirname(__FILE__, 4) . '/resources/xml/init_RequestInitiator.xml'
         );
     }
 

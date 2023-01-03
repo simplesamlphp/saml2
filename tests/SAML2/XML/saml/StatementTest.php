@@ -39,12 +39,12 @@ final class StatementTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/schemas/simplesamlphp.xsd';
+        $this->schema = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
 
         $this->testedClass = CustomStatement::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Statement.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_Statement.xml'
         );
 
         $container = new MockContainer();

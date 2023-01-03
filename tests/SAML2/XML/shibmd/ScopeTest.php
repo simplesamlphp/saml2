@@ -32,13 +32,12 @@ final class ScopeTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__)))))
-            . '/schemas/sstc-saml-metadata-shibmd-v1.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/schemas/sstc-saml-metadata-shibmd-v1.0.xsd';
 
         $this->testedClass = Scope::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/shibmd_Scope.xml'
+            dirname(__FILE__, 4) . '/resources/xml/shibmd_Scope.xml'
         );
     }
 

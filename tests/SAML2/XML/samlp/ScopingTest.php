@@ -39,7 +39,7 @@ final class ScopingTest extends TestCase
         $this->testedClass = Scoping::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_Scoping.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_Scoping.xml'
         );
     }
 

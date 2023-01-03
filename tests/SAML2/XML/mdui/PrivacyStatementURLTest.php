@@ -38,13 +38,12 @@ final class PrivacyStatementURLTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__)))))
-            . '/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/schemas/sstc-saml-metadata-ui-v1.0.xsd';
 
         $this->testedClass = PrivacyStatementURL::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdui_PrivacyStatementURL.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdui_PrivacyStatementURL.xml'
         );
 
         $this->arrayRepresentation = ['en' => 'https://example.org/privacy'];

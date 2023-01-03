@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-require_once(dirname(dirname(dirname(__FILE__))) . '/vendor/autoload.php');
+require_once(dirname(__FILE__, 3) . '/vendor/autoload.php');
 
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;

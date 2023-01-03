@@ -65,7 +65,7 @@ final class AuthnRequestTest extends TestCase
         $this->testedClass = AuthnRequest::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_AuthnRequest.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_AuthnRequest.xml'
         );
     }
 

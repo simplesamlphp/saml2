@@ -51,12 +51,12 @@ final class EntityAttributesTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/sstc-metadata-attr.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/schemas/sstc-metadata-attr.xsd';
 
         $this->testedClass = EntityAttributes::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdattr_EntityAttributes.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdattr_EntityAttributes.xml'
         );
     }
 

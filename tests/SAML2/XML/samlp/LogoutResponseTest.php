@@ -36,7 +36,7 @@ final class LogoutResponseTest extends TestCase
         $this->testedClass = LogoutResponse::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_LogoutResponse.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_LogoutResponse.xml'
         );
     }
 

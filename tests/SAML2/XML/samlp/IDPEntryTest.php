@@ -33,7 +33,7 @@ final class IDPEntryTest extends TestCase
         $this->testedClass = IDPentry::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_IDPEntry.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_IDPEntry.xml'
         );
     }
 

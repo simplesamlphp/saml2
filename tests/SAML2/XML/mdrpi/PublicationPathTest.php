@@ -39,12 +39,12 @@ final class PublicationPathTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-metadata-rpi-v1.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-metadata-rpi-v1.0.xsd';
 
         $this->testedClass = PublicationPath::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdrpi_PublicationPath.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdrpi_PublicationPath.xml'
         );
 
         $this->arrayRepresentation = [

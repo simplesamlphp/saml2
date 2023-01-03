@@ -31,12 +31,12 @@ final class RequestAuthenticatedTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-ecp-2.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-ecp-2.0.xsd';
 
         $this->testedClass = RequestAuthenticated::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/ecp_RequestAuthenticated.xml'
+            dirname(__FILE__, 4) . '/resources/xml/ecp_RequestAuthenticated.xml'
         );
     }
 

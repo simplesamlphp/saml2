@@ -65,7 +65,7 @@ final class LogoutRequestTest extends MockeryTestCase
         $this->testedClass = LogoutRequest::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_LogoutRequest.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_LogoutRequest.xml'
         );
     }
 
@@ -173,7 +173,7 @@ final class LogoutRequestTest extends MockeryTestCase
     public function testEncryptedNameId(): void
     {
         $eid = EncryptedID::fromXML(DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_EncryptedID.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedID.xml'
         )->documentElement);
 
         $logoutRequest = new LogoutRequest($eid);

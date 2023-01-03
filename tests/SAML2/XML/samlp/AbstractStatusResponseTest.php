@@ -25,9 +25,6 @@ use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
-use function dirname;
-use function strval;
-
 /**
  * Class \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponseTest
  *

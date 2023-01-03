@@ -19,7 +19,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
-require_once(dirname(dirname(dirname(__FILE__))) . '/vendor/autoload.php');
+require_once(dirname(__FILE__, 3) . '/vendor/autoload.php');
 
 $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
     C::SIG_RSA_SHA256,

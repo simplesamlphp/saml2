@@ -54,12 +54,12 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-metadata-2.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-metadata-2.0.xsd';
 
         $this->testedClass = AttributeAuthorityDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_AttributeAuthorityDescriptor.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_AttributeAuthorityDescriptor.xml'
         );
         $this->as = new AttributeService(
             C::BINDING_SOAP,

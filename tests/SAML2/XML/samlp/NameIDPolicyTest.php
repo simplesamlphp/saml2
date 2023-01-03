@@ -34,7 +34,7 @@ final class NameIDPolicyTest extends TestCase
         $this->testedClass = NameIDPolicy::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_NameIDPolicy.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_NameIDPolicy.xml'
         );
     }
 

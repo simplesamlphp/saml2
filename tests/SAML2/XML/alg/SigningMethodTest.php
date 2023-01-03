@@ -36,13 +36,13 @@ final class SigningMethodTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__)))))
+        $this->schema = dirname(__FILE__, 5)
             . '/schemas/sstc-saml-metadata-algsupport-v1.0.xsd';
 
         $this->testedClass = SigningMethod::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/alg_SigningMethod.xml'
+            dirname(__FILE__, 4) . '/resources/xml/alg_SigningMethod.xml'
         );
     }
 

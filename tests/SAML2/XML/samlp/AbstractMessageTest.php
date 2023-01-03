@@ -29,9 +29,6 @@ use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
-use function dirname;
-use function strval;
-
 /**
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement

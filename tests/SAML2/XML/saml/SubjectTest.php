@@ -53,26 +53,26 @@ final class SubjectTest extends TestCase
 
     public function setup(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__)))))
-            . '/schemas/saml-schema-assertion-2.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-assertion-2.0.xsd';
 
         $this->testedClass = Subject::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Subject.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_Subject.xml'
         );
+
         $this->subject = DOMDocumentFactory::fromString(<<<XML
 <saml:Subject xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"></saml:Subject>
 XML
         );
         $this->baseId = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_BaseID.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_BaseID.xml'
         );
         $this->nameId = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_NameID.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_NameID.xml'
         );
         $this->subjectConfirmation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_SubjectConfirmation.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_SubjectConfirmation.xml'
         );
     }
 

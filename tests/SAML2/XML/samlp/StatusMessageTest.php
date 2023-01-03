@@ -32,7 +32,7 @@ final class StatusMessageTest extends TestCase
         $this->testedClass = StatusMessage::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_StatusMessage.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_StatusMessage.xml'
         );
     }
 

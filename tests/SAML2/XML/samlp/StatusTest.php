@@ -42,11 +42,11 @@ final class StatusTest extends TestCase
         $this->testedClass = Status::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_Status.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_Status.xml'
         );
 
         $this->detail = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_StatusDetail.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_StatusDetail.xml'
         );
     }
 
@@ -68,7 +68,7 @@ final class StatusTest extends TestCase
             [
                 StatusDetail::fromXML(
                     DOMDocumentFactory::fromFile(
-                        dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_StatusDetail.xml'
+                        dirname(__FILE__, 4) . '/resources/xml/samlp_StatusDetail.xml'
                     )->documentElement
                 )
             ]

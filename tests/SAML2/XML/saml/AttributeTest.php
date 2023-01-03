@@ -40,13 +40,12 @@ final class AttributeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__)))))
-            . '/schemas/saml-schema-assertion-2.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-assertion-2.0.xsd';
 
         $this->testedClass = Attribute::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/saml_Attribute.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_Attribute.xml'
         );
 
         $container = new MockContainer();

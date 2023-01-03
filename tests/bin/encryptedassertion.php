@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 
-require_once(dirname(dirname(dirname(__FILE__))) . '/vendor/autoload.php');
+require_once(dirname(__FILE__, 3) . '/vendor/autoload.php');
 
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
@@ -21,7 +21,7 @@ $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
     PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)
 );
 
-$document = DOMDocumentFactory::fromFile(dirname(dirname(__FILE__)) . '/resources/xml/saml_Assertion.xml');
+$document = DOMDocumentFactory::fromFile(dirname(__FILE__, 2) . '/resources/xml/saml_Assertion.xml');
 $assertion = Assertion::fromXML($document->documentElement);
 $eassertion = new EncryptedAssertion($assertion->encrypt($encryptor));
 

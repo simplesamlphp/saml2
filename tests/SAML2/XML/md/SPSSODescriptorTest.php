@@ -61,12 +61,12 @@ final class SPSSODescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-schema-metadata-2.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-metadata-2.0.xsd';
 
         $this->testedClass = SPSSODescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_SPSSODescriptor.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_SPSSODescriptor.xml'
         );
     }
 

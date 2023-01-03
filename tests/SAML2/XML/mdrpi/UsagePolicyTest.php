@@ -39,12 +39,12 @@ final class UsagePolicyTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/schemas/saml-metadata-rpi-v1.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-metadata-rpi-v1.0.xsd';
 
         $this->testedClass = UsagePolicy::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/mdrpi_UsagePolicy.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdrpi_UsagePolicy.xml'
         );
 
         $this->arrayRepresentation = ['en' => 'http://www.example.edu/en/'];

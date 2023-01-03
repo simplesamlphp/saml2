@@ -47,7 +47,7 @@ final class AttributeQueryTest extends TestCase
         $this->testedClass = AttributeQuery::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/samlp_AttributeQuery.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_AttributeQuery.xml'
         );
     }
 
