@@ -75,9 +75,9 @@ trait SignedElementTestTrait
             foreach ($algorithms as $algorithm) {
                 if (
                     boolval(OPENSSL_VERSION_NUMBER >= hexdec('0x30000000')) === true
-                    && $algorithm === C::SIG_RSA_SHA1
+                    && ($algorithm === C::SIG_RSA_SHA1 || $algorithm === C::SIG_RSA_RIPEMD160)
                 ) {
-                    // OpenSSL 3.0 disabled SHA1 support
+                    // OpenSSL 3.0 disabled SHA1 and RIPEMD160 support
                     continue;
                 }
 
