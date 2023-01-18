@@ -8,6 +8,7 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\CryptoEncoding\PEM;
 use SimpleSAML\XMLSecurity\Key\X509Certificate as X509;
 use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
@@ -49,10 +50,10 @@ abstract class AbstractChainedValidator implements ChainedValidator
     ): bool {
         $lastException = null;
         foreach ($pemCandidates as $index => $candidateKey) {
-            $cert = new X509($candidateKey->getCertificate());
+            $cert = new X509(PEM::fromString($candidateKey->getCertificate()));
             $verifier = (new SignatureAlgorithmFactory([]))->getAlgorithm(
                 $element->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
-                $cert,
+                $cert->getPublicKey(),
             );
 
             try {
