@@ -134,7 +134,6 @@ class KeyLoader
     public function loadCertificateFile(string $certificateFile): void
     {
         $certificate = File::getFileContents($certificateFile);
-
         if (!Certificate::hasValidStructure($certificate)) {
             throw new InvalidCertificateStructureException(sprintf(
                 'Could not find PEM encoded certificate in "%s"',

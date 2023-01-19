@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\Certificate\KeyLoader;
 use SimpleSAML\SAML2\Certificate\X509;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
 use SimpleSAML\XMLSecurity\Utils\Certificate;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 use function dirname;
 use function file_get_contents;
@@ -30,13 +31,6 @@ final class KeyLoaderTest extends MockeryTestCase
      * @var \SimpleSAML\SAML2\Certificate\KeyLoader
      */
     private KeyLoader $keyLoader;
-
-    /**
-     * Known to be valid certificate string
-     *
-     * @var string
-     */
-    private string $certificate = "-----BEGIN CERTIFICATE-----\nMIICgTCCAeoCCQCbOlrWDdX7FTANBgkqhkiG9w0BAQUFADCBhDELMAkGA1UEBhMC\nTk8xGDAWBgNVBAgTD0FuZHJlYXMgU29sYmVyZzEMMAoGA1UEBxMDRm9vMRAwDgYD\nVQQKEwdVTklORVRUMRgwFgYDVQQDEw9mZWlkZS5lcmxhbmcubm8xITAfBgkqhkiG\n9w0BCQEWEmFuZHJlYXNAdW5pbmV0dC5ubzAeFw0wNzA2MTUxMjAxMzVaFw0wNzA4\nMTQxMjAxMzVaMIGEMQswCQYDVQQGEwJOTzEYMBYGA1UECBMPQW5kcmVhcyBTb2xi\nZXJnMQwwCgYDVQQHEwNGb28xEDAOBgNVBAoTB1VOSU5FVFQxGDAWBgNVBAMTD2Zl\naWRlLmVybGFuZy5ubzEhMB8GCSqGSIb3DQEJARYSYW5kcmVhc0B1bmluZXR0Lm5v\nMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDivbhR7P516x/S3BqKxupQe0LO\nNoliupiBOesCO3SHbDrl3+q9IbfnfmE04rNuMcPsIxB161TdDpIesLCn7c8aPHIS\nKOtPlAeTZSnb8QAu7aRjZq3+PbrP5uW3TcfCGPtKTytHOge/OlJbo078dVhXQ14d\n1EDwXJW1rRXuUt4C8QIDAQABMA0GCSqGSIb3DQEBBQUAA4GBACDVfp86HObqY+e8\nBUoWQ9+VMQx1ASDohBjwOsg2WykUqRXF+dLfcUH9dWR63CtZIKFDbStNomPnQz7n\nbK+onygwBspVEbnHuUihZq3ZUdmumQqCw4Uvs/1Uvq3orOo/WJVhTyvLgFVK2Qar\nQ4/67OZfHd7R+POBXhophSMv1ZOo\n-----END CERTIFICATE-----\n";
 
     /**
      * @var \Mockery\MockInterface
@@ -79,7 +73,7 @@ final class KeyLoaderTest extends MockeryTestCase
     public function loadKeysConstructsX509Certificate(): void
     {
         $keys = [[
-            'X509Certificate' => $this->certificate
+            'X509Certificate' => PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE),
         ]];
 
         $this->keyLoader->loadKeys($keys, null);
@@ -96,7 +90,9 @@ final class KeyLoaderTest extends MockeryTestCase
      */
     public function certificateDataIsLoadedAsKey(): void
     {
-        $this->keyLoader->loadCertificateData($this->certificate);
+        $this->keyLoader->loadCertificateData(
+            PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE)
+        );
 
         $loadedKeys = $this->keyLoader->getKeys();
         $loadedKey = $loadedKeys->get(0);
@@ -104,7 +100,14 @@ final class KeyLoaderTest extends MockeryTestCase
         $this->assertTrue($this->keyLoader->hasKeys());
         $this->assertCount(1, $loadedKeys);
 
-        $this->assertEquals(preg_replace('~\s+~', '', $this->certificate), $loadedKey['X509Certificate']);
+        $this->assertEquals(
+            preg_replace(
+                '~\s+~',
+                '',
+                PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE)
+            ),
+            $loadedKey['X509Certificate']
+        );
     }
 
 
@@ -114,9 +117,10 @@ final class KeyLoaderTest extends MockeryTestCase
      */
     public function loadingAFileWithTheWrongFormatThrowsAnException(): void
     {
-        $filePath = dirname(__FILE__) . '/File/';
         $this->expectException(InvalidCertificateStructureException::class);
-        $this->keyLoader->loadCertificateFile($filePath . 'not_a_key.crt');
+        $this->keyLoader->loadCertificateFile(
+            PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::BROKEN_PUBLIC_KEY)
+        );
     }
 
 
@@ -126,18 +130,20 @@ final class KeyLoaderTest extends MockeryTestCase
      */
     public function loadingACertificateFromFileCreatesAKey(): void
     {
-        $file = dirname(__FILE__) . '/File/example.org.crt';
-        $this->keyLoader->loadCertificateFile($file);
+        $this->keyLoader->loadCertificateFile(
+            PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::PUBLIC_KEY)
+        );
 
         $loadedKeys = $this->keyLoader->getKeys();
         $loadedKey = $loadedKeys->get(0);
-        $fileContents = file_get_contents($file);
-        preg_match(Certificate::PUBLIC_KEY_PATTERN, $fileContents, $matches);
-        $expected = preg_replace('~\s+~', '', $matches[1]);
+
 
         $this->assertTrue($this->keyLoader->hasKeys());
         $this->assertCount(1, $loadedKeys);
-        $this->assertEquals($expected, $loadedKey['X509Certificate']);
+        $this->assertEquals(
+            PEMCertificatesMock::getPlainPublicKeyContents(PEMCertificatesMock::PUBLIC_KEY),
+            $loadedKey['X509Certificate'],
+        );
     }
 
 
@@ -169,7 +175,7 @@ final class KeyLoaderTest extends MockeryTestCase
      */
     public function loadingACertificateFileFromConfigurationCreatesKey(): void
     {
-        $file = dirname(__FILE__) . '/File/example.org.crt';
+        $file = PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::PUBLIC_KEY);
         $this->configurationMock
             ->shouldReceive('getKeys')
             ->atMost()
@@ -195,7 +201,7 @@ final class KeyLoaderTest extends MockeryTestCase
      */
     public function loadingAnInvalidCertificateFileFromConfigurationThrowsException(): void
     {
-        $file = dirname(__FILE__) . '/File/not_a_key.crt';
+        $file = PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::BROKEN_PUBLIC_KEY);
         $this->configurationMock
             ->shouldReceive('getKeys')
             ->atMost()
