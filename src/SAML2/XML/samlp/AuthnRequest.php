@@ -162,8 +162,17 @@ class AuthnRequest extends AbstractRequest
 
         $this->setForceAuthn($forceAuthn);
         $this->setIsPassive($isPassive);
+
+        Assert::oneOf(
+            null,
+            [$assertionConsumerServiceUrl, $assertionConsumerServiceIndex],
+            'The AssertionConsumerServiceURL and AssertionConsumerServiceIndex are mutually exclusive;'
+            . ' please specify one or the other.',
+            ProtocolViolationException::class,
+        );
         $this->setAssertionConsumerServiceUrl($assertionConsumerServiceUrl);
         $this->setAssertionConsumerServiceIndex($assertionConsumerServiceIndex);
+
         $this->setProtocolBinding($protocolBinding);
         $this->setAttributeConsumingServiceIndex($attributeConsumingServiceIndex);
         $this->setProviderName($providerName);
