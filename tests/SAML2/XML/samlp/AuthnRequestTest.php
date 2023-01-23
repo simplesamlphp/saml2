@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
@@ -1033,6 +1034,74 @@ AUTHNREQUEST;
         $authnRequest = AuthnRequest::fromXML($document->documentElement);
 
         $this->assertEquals("Example SP", $authnRequest->getProviderName());
+    }
+
+
+    /**
+     * Test setting ProtocolBinding and AssertionConsumerServiceIndex
+     * throws a ProtocolViolationException.
+     */
+    public function testSettingProtocolBindingAndACSIndex(): void
+    {
+        // the Issuer
+        $issuer = new Issuer('https://sp.example.org/saml20/sp/metadata');
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
+        $destination = 'https://idp.example.org/idp/profile/saml2/Redirect/SSO';
+        $protocolBinding = C::BINDING_HTTP_POST;
+        $assertionConsumerServiceIndex = 1;
+
+        $this->expectException(ProtocolViolationException::class);
+        new AuthnRequest(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            $assertionConsumerServiceIndex,
+            $protocolBinding,
+            null,
+            null,
+            $issuer,
+            null,
+            $issueInstant,
+            $destination
+        );
+    }
+
+
+    /**
+     * Test setting AssertionConsumerServiceURL and AssertionConsumerServiceIndex
+     * throws a ProtocolViolationException.
+     */
+    public function testSettingACSUrlAndACSIndex(): void
+    {
+        // the Issuer
+        $issuer = new Issuer('https://sp.example.org/saml20/sp/metadata');
+        $issueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
+        $destination = 'https://idp.example.org/idp/profile/saml2/Redirect/SSO';
+        $assertionConsumerServiceIndex = 1;
+        $assertionConsumerServiceURL = "https://sp.example.org/authentication/sp/consume-assertion";
+
+        $this->expectException(ProtocolViolationException::class);
+        new AuthnRequest(
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            $assertionConsumerServiceURL,
+            $assertionConsumerServiceIndex,
+            null,
+            null,
+            null,
+            $issuer,
+            null,
+            $issueInstant,
+            $destination
+        );
     }
 
 
