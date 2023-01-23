@@ -148,7 +148,7 @@ final class LogoutRequestTest extends MockeryTestCase
         $issuer = $logoutRequest->getIssuer();
 
         $this->assertInstanceOf(Issuer::class, $issuer);
-        $this->assertEquals('TheIssuer', $issuer->getContent());
+        $this->assertEquals('urn:test:TheIssuer', $issuer->getContent());
 
         $encid = $logoutRequest->getIdentifier();
         $this->assertInstanceOf(EncryptedID::class, $encid);

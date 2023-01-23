@@ -70,7 +70,7 @@ final class SignatureValidationTest extends MockeryTestCase
             ->andReturn($this->assertionProcessor);
 
         $this->identityProviderConfiguration = new IdentityProvider(
-            ['certificateData' => PEMCertificatesMock::getPlainPublicKeyContents(PEMCertificatesMock::PUBLIC_KEY)]
+            ['certificateData' => PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE)]
         );
         $this->serviceProviderConfiguration
             = new ServiceProvider(['entityId' => C::ENTITY_URN]);

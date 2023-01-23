@@ -14,7 +14,9 @@ use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 
-ContainerSingleton::setContainer(new MockContainer());
+$container = new MockContainer();
+$container->setBlacklistedAlgorithms(null);
+ContainerSingleton::setContainer($container);
 
 $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
     C::KEY_TRANSPORT_OAEP,
@@ -22,7 +24,7 @@ $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
 );
 
 $nid = new NameID('very secret');
-$eid = $nid->encrypt($encryptor);
+$eid = new EncryptedID($nid->encrypt($encryptor));
 
 $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
 $subject = new Subject($eid);

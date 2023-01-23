@@ -1,18 +1,18 @@
-<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Version="2.0" ID="_f987e7436c1103bcf89296303f780d853d7713a8ef" IssueInstant="2020-08-15T15:53:24Z">
-  <saml:Issuer>TheIssuer</saml:Issuer>
+<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Version="2.0" ID="123" IssueInstant="2023-01-23T21:39:20Z">
+  <saml:Issuer>urn:test:TheIssuer</saml:Issuer>
   <saml:EncryptedID>
     <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Element">
-      <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
+      <xenc:EncryptionMethod Algorithm="http://www.w3.org/2009xmlenc11#aes256-gcm"/>
       <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
         <xenc:EncryptedKey>
-          <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>
+          <xenc:EncryptionMethod Algorithm="http://www.w3.org/2009/xmlenc11#rsa-oaep"/>
           <xenc:CipherData>
-            <xenc:CipherValue>QMYbOZfUgJmvzmTeSDqvA8MKzt4M2K9kb0BQtIqMgyn+OlBmRVvebZEkW/5k5E9qPtMUBCPiTatJ8aNb7Z4DuPqTRODgGzR7LEyOxe8JTPbzn/xwkVHRwzMkodDUkTDDIkJr7Tzyseg1crGZf21q8pBJfGXSaPamIC2ncjuOcs0=</xenc:CipherValue>
+            <xenc:CipherValue>grf3DVcVDV8EVCbfl9+jf6XX6gNjGSTenPqCAQhztFP6YJ3o6BS3XVbilA08CEBx0ci9PDfAsQKDl6fyBMgVSoL17zvJhNpyC7XCniIyCskUv0WmT9xCuIDNzEMZy5InunKf3KRtCRJGQzdjkoxRY3Q8Qczm2x2UoEVfzlpj2n8=</xenc:CipherValue>
           </xenc:CipherData>
         </xenc:EncryptedKey>
       </ds:KeyInfo>
       <xenc:CipherData>
-        <xenc:CipherValue>U0czb6qGEvLTQaVcJDNjuAJvMAV4CcRQYvxUoBgfCP1T1xh14Kez8k0VHyEtgf6TYG7dK87SBzZccsn7MlLDLFbWH807bJ+cnXSQ9+8dXB/aohfXnmNSZUcIQiPLr5oNq1g6GYhgiNShDnYZUG3ffQ==</xenc:CipherValue>
+        <xenc:CipherValue>MN9qX/dEA1oXIS9Dowjhax2cWTZ88ADKpnZ7zI/okqlqpu7okUf/HACkh+hwo5r+BZSyE06RITOAhFBczwjJsZVBwbf/cUb7JjD0pMvywWkEhNoak4OTA5RVXo96bqoRL6co6Bz3GOJBmTUEnXUZATyWcazf</xenc:CipherValue>
       </xenc:CipherData>
     </xenc:EncryptedData>
   </saml:EncryptedID>

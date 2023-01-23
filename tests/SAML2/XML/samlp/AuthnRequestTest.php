@@ -307,37 +307,10 @@ AUTHNREQUEST;
         $container = ContainerSingleton::getInstance();
         $container->setBlacklistedAlgorithms(null);
 
-        $xml = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    Version="2.0"
-    ID="123"
-    IssueInstant="2020-08-15T16:09:56Z"
-    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
-  <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
-  <saml:Subject>
-    <saml:EncryptedID>
-      <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#">
-        <xenc:EncryptionMethod Algorithm="http://www.w3.org/2009xmlenc11#aes256-gcm"/>
-        <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
-          <xenc:EncryptedKey>
-            <xenc:EncryptionMethod Algorithm="http://www.w3.org/2009/xmlenc11#rsa-oaep"/>
-            <xenc:CipherData>
-              <xenc:CipherValue>GMhpk09X+quNC/SsnxcDglZU/DCLAu9bMJ5bPcgaBK4s3F1eXciU8hlOYNaskSwP86HmA704NbzSDOHAgN6ckR+iCssxA7XCBjz0hltsgfn5p9Rh8qKtKltiXvxo/xXTcSXXZXNcE0R2KTya0P4DjZvYYgbIls/AH8ZyDV07ntI=</xenc:CipherValue>
-            </xenc:CipherData>
-          </xenc:EncryptedKey>
-        </ds:KeyInfo>
-        <xenc:CipherData>
-          <xenc:CipherValue>iFz/8KASJCLCAHqaAKhZXWOG/TPZlgTxcQ25lTGxdSdEsGYz7cg5lfZAbcN3UITCP9MkJsyjMlRsQouIqBkoPCGZz8NXibDkQ8OUeE7JdkFgKvgUMXawp+uDL4gHR8L7l6SPAmWZU3Hx/Wg9pTJBOpTjwoS0</xenc:CipherValue>
-        </xenc:CipherData>
-      </xenc:EncryptedData>
-    </saml:EncryptedID>
-  </saml:Subject>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
+        $xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/authnrequest/authnrequest_encryptedid.xml'
+        );
+        $authnRequest = AuthnRequest::fromXML($xmlRepresentation->documentElement);
 
         $subject = $authnRequest->getSubject();
         $this->assertInstanceOf(Subject::class, $subject);

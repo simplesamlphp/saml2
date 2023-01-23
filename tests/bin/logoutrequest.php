@@ -9,15 +9,18 @@ use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\samlp\LogoutRequest;
+use SimpleSAML\SAML2\XML\samlp\SessionIndex;
 use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
-ContainerSingleton::setContainer(new MockContainer());
+$container = new MockContainer();
+$container->setBlacklistedAlgorithms(null);
+ContainerSingleton::setContainer($container);
 
 $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
     C::KEY_TRANSPORT_OAEP,
-    PEMCertificateMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)
+    PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)
 );
 $nid = new NameID('very secret');
 $eid = new EncryptedID($nid->encrypt($encryptor));
@@ -26,7 +29,7 @@ $logoutRequest = new LogoutRequest(
     $eid,
     null,
     null,
-    ['SomeSessionIndex1', 'SomeSessionIndex2'],
+    [new SessionIndex('SomeSessionIndex1'), new SessionIndex('SomeSessionIndex2')],
     new Issuer('urn:test:TheIssuer')
 );
 
