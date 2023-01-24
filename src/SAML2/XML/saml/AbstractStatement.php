@@ -29,18 +29,15 @@ abstract class AbstractStatement extends AbstractStatementType implements Extens
     /** @var string */
     public const LOCALNAME = 'Statement';
 
-    /** @var string */
-    protected string $type;
-
 
     /**
      * Initialize a custom saml:Statement element.
      *
      * @param string $type
      */
-    protected function __construct(string $type)
-    {
-        $this->type = $type;
+    protected function __construct(
+        protected string $type,
+    ) {
     }
 
 

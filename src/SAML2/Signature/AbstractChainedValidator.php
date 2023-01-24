@@ -18,19 +18,13 @@ use function sprintf;
 abstract class AbstractChainedValidator implements ChainedValidator
 {
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected LoggerInterface $logger;
-
-
-    /**
      * Constructor for AbstractChainedValidator
      *
      * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
+    public function __construct(
+        protected LoggerInterface $logger,
+    ) {
     }
 
 

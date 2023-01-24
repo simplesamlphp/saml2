@@ -133,6 +133,7 @@ final class HTTPPostTest extends MockeryTestCase
             null,
             null,
             null,
+            '2.0',
             null,
             'https://example.org'
         );
@@ -155,6 +156,7 @@ final class HTTPPostTest extends MockeryTestCase
             $status,
             $issuer,
             null,
+            '2.0',
             null,
             null,
             'http://example.org/login?success=yes',

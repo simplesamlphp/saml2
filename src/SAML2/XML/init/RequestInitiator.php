@@ -38,7 +38,7 @@ final class RequestInitiator extends AbstractEndpointType
     public function __construct(
         string $location,
         ?string $responseLocation = null,
-        array $attributes = []
+        array $attributes = [],
     ) {
         parent::__construct(self::NS, $location, $responseLocation, $attributes);
     }

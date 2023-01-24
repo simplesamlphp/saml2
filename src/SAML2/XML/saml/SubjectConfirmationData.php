@@ -28,51 +28,6 @@ final class SubjectConfirmationData extends AbstractSamlElement
 {
     use ExtendableAttributesTrait;
 
-    /**
-     * The time before this element is valid, as an unix timestamp.
-     *
-     * @var int|null
-     */
-    protected ?int $NotBefore = null;
-
-    /**
-     * The time after which this element is invalid, as an unix timestamp.
-     *
-     * @var int|null
-     */
-    protected ?int $NotOnOrAfter = null;
-
-    /**
-     * The Recipient this Subject is valid for. Either an entity or a location.
-     *
-     * @var string|null
-     */
-    protected ?string $Recipient = null;
-
-    /**
-     * The ID of the AuthnRequest this is a response to.
-     *
-     * @var string|null
-     */
-    protected ?string $InResponseTo = null;
-
-    /**
-     * The IP(v6) address of the user.
-     *
-     * @var string|null
-     */
-    protected ?string $Address = null;
-
-    /**
-     * The various key information elements.
-     *
-     * Array with various elements describing this key.
-     * Unknown elements will be represented by \SimpleSAML\XML\Chunk.
-     *
-     * @var (\SimpleSAML\XMLSecurity\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
-     */
-    protected array $info = [];
-
 
     /**
      * Initialize (and parse) a SubjectConfirmationData element.
@@ -86,21 +41,26 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
-        ?int $notBefore = null,
-        ?int $notOnOrAfter = null,
-        ?string $recipient = null,
-        ?string $inResponseTo = null,
-        ?string $address = null,
-        array $info = [],
-        array $namespacedAttributes = []
+        protected ?int $notBefore = null,
+        protected ?int $notOnOrAfter = null,
+        protected ?string $recipient = null,
+        protected ?string $inResponseTo = null,
+        protected ?string $address = null,
+        protected array $info = [],
+        array $namespacedAttribute = []
     ) {
-        $this->setNotBefore($notBefore);
-        $this->setNotOnOrAfter($notOnOrAfter);
-        $this->setRecipient($recipient);
-        $this->setInResponseTo($inResponseTo);
-        $this->setAddress($address);
-        $this->setInfo($info);
-        $this->setAttributesNS($namespacedAttributes);
+        Assert::nullOrNotWhitespaceOnly($recipient);
+        Assert::nullOrValidNCName($inResponseTo); // Covers the empty string
+
+        if (!is_null($address) && !filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)) {
+            Utils::getContainer()->getLogger()->warning(
+                sprintf('Provided argument (%s) is not a valid IP address.', $address)
+            );
+        }
+
+        Assert::allIsInstanceOfAny($info, [Chunk::class, KeyInfo::class]);
+
+        $this->setAttributesNS($namespacedAttribute);
     }
 
 
@@ -111,18 +71,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      */
     public function getNotBefore(): ?int
     {
-        return $this->NotBefore;
-    }
-
-
-    /**
-     * Set the value of the NotBefore-property
-     *
-     * @param int|null $notBefore
-     */
-    private function setNotBefore(?int $notBefore): void
-    {
-        $this->NotBefore = $notBefore;
+        return $this->notBefore;
     }
 
 
@@ -133,18 +82,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      */
     public function getNotOnOrAfter(): ?int
     {
-        return $this->NotOnOrAfter;
-    }
-
-
-    /**
-     * Set the value of the NotOnOrAfter-property
-     *
-     * @param int|null $notOnOrAfter
-     */
-    private function setNotOnOrAfter(?int $notOnOrAfter): void
-    {
-        $this->NotOnOrAfter = $notOnOrAfter;
+        return $this->notOnOrAfter;
     }
 
 
@@ -155,19 +93,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      */
     public function getRecipient(): ?string
     {
-        return $this->Recipient;
-    }
-
-
-    /**
-     * Set the value of the Recipient-property
-     *
-     * @param string|null $recipient
-     */
-    private function setRecipient(?string $recipient): void
-    {
-        Assert::nullOrNotWhitespaceOnly($recipient);
-        $this->Recipient = $recipient;
+        return $this->recipient;
     }
 
 
@@ -178,19 +104,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      */
     public function getInResponseTo(): ?string
     {
-        return $this->InResponseTo;
-    }
-
-
-    /**
-     * Set the value of the InResponseTo-property
-     *
-     * @param string|null $inResponseTo
-     */
-    private function setInResponseTo(?string $inResponseTo): void
-    {
-        Assert::nullOrValidNCName($inResponseTo); // Covers the empty string
-        $this->InResponseTo = $inResponseTo;
+        return $this->inResponseTo;
     }
 
 
@@ -201,23 +115,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      */
     public function getAddress(): ?string
     {
-        return $this->Address;
-    }
-
-
-    /**
-     * Set the value of the Address-property
-     *
-     * @param string|null $address
-     */
-    private function setAddress(?string $address): void
-    {
-        if (!is_null($address) && !filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)) {
-            Utils::getContainer()->getLogger()->warning(
-                sprintf('Provided argument (%s) is not a valid IP address.', $address)
-            );
-        }
-        $this->Address = $address;
+        return $this->address;
     }
 
 
@@ -233,19 +131,6 @@ final class SubjectConfirmationData extends AbstractSamlElement
 
 
     /**
-     * Set the value of the info-property
-     *
-     * @param (\SimpleSAML\XMLSecurity\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[] $info
-     */
-    private function setInfo(array $info): void
-    {
-        Assert::allIsInstanceOfAny($info, [Chunk::class, KeyInfo::class]);
-
-        $this->info = $info;
-    }
-
-
-    /**
      * Test if an object, at the state it's in, would produce an empty XML-element
      *
      * @return bool
@@ -253,13 +138,13 @@ final class SubjectConfirmationData extends AbstractSamlElement
     public function isEmptyElement(): bool
     {
         return (
-            empty($this->NotBefore)
-            && empty($this->NotOnOrAfter)
-            && empty($this->Recipient)
-            && empty($this->InResponseTo)
-            && empty($this->Address)
+            empty($this->notBefore)
+            && empty($this->notOnOrAfter)
+            && empty($this->recipient)
+            && empty($this->inResponseTo)
+            && empty($this->address)
             && empty($this->info)
-            && empty($this->namespacedAttributes)
+            && empty($this->namespacedAttribute)
         );
     }
 

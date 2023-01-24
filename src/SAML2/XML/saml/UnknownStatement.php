@@ -14,20 +14,15 @@ use SimpleSAML\XML\Chunk;
  */
 final class UnknownStatement extends AbstractStatement
 {
-    /** @var \SimpleSAML\XML\Chunk */
-    protected Chunk $chunk;
-
-
     /**
      * @param \SimpleSAML\XML\Chunk $chunk The whole Statement element as a chunk object.
      * @param string $type The xsi:type of this statement
      */
     public function __construct(
-        Chunk $chunk,
+        protected Chunk $chunk,
         string $type
     ) {
         parent::__construct($type);
-        $this->chunk = $chunk;
     }
 
 

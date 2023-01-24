@@ -14,11 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class RequestDeniedException extends ProtocolViolationException
 {
-    /**
-     * @param string $message
-     */
-    public function __construct(string $message = 'Request denied.')
-    {
-        parent::__construct($message);
-    }
+    public const DEFAULT_MESSAGE = 'Request denied.';
 }

@@ -22,18 +22,20 @@ use function strval;
  */
 final class RequestAuthenticated extends AbstractEcpElement
 {
-    /** @var int|null $mustUnderstand */
-    protected $mustUnderstand = null;
-
-
     /**
      * Create a ECP RequestAuthenticated element.
      *
      * @param int|null $mustUnderstand
      */
-    public function __construct(?int $mustUnderstand)
-    {
-        $this->setMustUnderstand($mustUnderstand);
+    public function __construct(
+        protected ?int $mustUnderstand,
+    ) {
+        Assert::oneOf(
+            $mustUnderstand,
+            [null, 0, 1],
+            'Invalid value of env:mustUnderstand attribute in <ecp:Response>.',
+            ProtocolViolationException::class,
+        );
     }
 
 
@@ -45,23 +47,6 @@ final class RequestAuthenticated extends AbstractEcpElement
     public function getMustUnderstand(): ?int
     {
         return $this->mustUnderstand;
-    }
-
-
-    /**
-     * Set the value of the mustUnderstand-property
-     *
-     * @param int|null $mustUnderstand
-     */
-    private function setMustUnderstand(?int $mustUnderstand): void
-    {
-        Assert::oneOf(
-            $mustUnderstand,
-            [null, 0, 1],
-            'Invalid value of env:mustUnderstand attribute in <ecp:Response>.',
-            ProtocolViolationException::class,
-        );
-        $this->mustUnderstand = $mustUnderstand;
     }
 
 

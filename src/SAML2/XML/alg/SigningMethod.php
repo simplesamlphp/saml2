@@ -30,47 +30,25 @@ final class SigningMethod extends AbstractAlgElement
     /** The namespace-attribute for the xs:any element */
     public const NAMESPACE = C::XS_ANY_NS_ANY;
 
-    /**
-     * An URI identifying the algorithm supported for XML signature operations.
-     *
-     * @var string
-     */
-    protected string $Algorithm;
-
-    /**
-     * The smallest key size, in bits, that the entity supports in conjunction with the algorithm. If omitted, no
-     * minimum is implied.
-     *
-     * @var int|null
-     */
-    protected ?int $MinKeySize = null;
-
-    /**
-     * The largest key size, in bits, that the entity supports in conjunction with the algorithm. If omitted, no
-     * maximum is implied.
-     *
-     * @var int|null
-     */
-    protected ?int $MaxKeySize = null;
-
 
     /**
      * Create/parse an alg:SigningMethod element.
      *
-     * @param string $Algorithm
-     * @param int|null $MinKeySize
-     * @param int|null $MaxKeySize
+     * @param string $algorithm
+     * @param int|null $minKeySize
+     * @param int|null $maxKeySize
      * @param \SimpleSAML\XML\Chunk[] $elements
      */
     public function __construct(
-        string $Algorithm,
-        ?int $MinKeySize = null,
-        ?int $MaxKeySize = null,
+        protected string $algorithm,
+        protected ?int $minKeySize = null,
+        protected ?int $maxKeySize = null,
         array $elements = []
     ) {
-        $this->setAlgorithm($Algorithm);
-        $this->setMinKeySize($MinKeySize);
-        $this->setMaxKeySize($MaxKeySize);
+        Assert::validURI($algorithm, SchemaViolationException::class); // Covers the empty string
+        Assert::nullOrPositiveInteger($minKeySize);
+        Assert::nullOrPositiveInteger($maxKeySize);
+
         $this->setElements($elements);
     }
 
@@ -82,19 +60,7 @@ final class SigningMethod extends AbstractAlgElement
      */
     public function getAlgorithm(): string
     {
-        return $this->Algorithm;
-    }
-
-
-    /**
-     * Set the value of the Algorithm-property
-     *
-     * @param string $algorithm
-     */
-    private function setAlgorithm(string $algorithm): void
-    {
-        Assert::validURI($algorithm, SchemaViolationException::class); // Covers the empty string
-        $this->Algorithm = $algorithm;
+        return $this->algorithm;
     }
 
 
@@ -105,19 +71,7 @@ final class SigningMethod extends AbstractAlgElement
      */
     public function getMinKeySize(): ?int
     {
-        return $this->MinKeySize;
-    }
-
-
-    /**
-     * Set the value of the MinKeySize-property
-     *
-     * @param int|null $minKeySize
-     */
-    private function setMinKeySize(?int $minKeySize): void
-    {
-        Assert::nullOrPositiveInteger($minKeySize);
-        $this->MinKeySize = $minKeySize;
+        return $this->minKeySize;
     }
 
 
@@ -128,19 +82,7 @@ final class SigningMethod extends AbstractAlgElement
      */
     public function getMaxKeySize(): ?int
     {
-        return $this->MaxKeySize;
-    }
-
-
-    /**
-     * Set the value of the MaxKeySize-property
-     *
-     * @param int|null $maxKeySize
-     */
-    private function setMaxKeySize(?int $maxKeySize): void
-    {
-        Assert::nullOrPositiveInteger($maxKeySize);
-        $this->MaxKeySize = $maxKeySize;
+        return $this->maxKeySize;
     }
 
 

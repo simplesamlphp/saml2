@@ -22,48 +22,51 @@ final class AttributeConsumingService extends AbstractMdElement
     use IndexedElementTrait;
 
     /**
-     * The ServiceName of this AttributeConsumingService.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\ServiceName[]
-     */
-    protected array $serviceNames = [];
-
-    /**
-     * The ServiceDescription of this AttributeConsumingService.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\ServiceDescription[]
-     */
-    protected array $serviceDescriptions = [];
-
-    /**
-     * The RequestedAttribute elements.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\RequestedAttribute[]
-     */
-    protected array $requestedAttributes = [];
-
-
-    /**
      * AttributeConsumingService constructor.
      *
      * @param int $index
-     * @param \SimpleSAML\SAML2\XML\md\ServiceName[] $name
-     * @param \SimpleSAML\SAML2\XML\md\RequestedAttribute[] $requestedAttributes
+     * @param \SimpleSAML\SAML2\XML\md\ServiceName[] $serviceName
+     * @param \SimpleSAML\SAML2\XML\md\RequestedAttribute[] $requestedAttribute
      * @param bool|null $isDefault
-     * @param \SimpleSAML\SAML2\XML\md\ServiceDescription[] $description
+     * @param \SimpleSAML\SAML2\XML\md\ServiceDescription[] $serviceDescription
      */
     public function __construct(
         int $index,
-        array $name,
-        array $requestedAttributes,
+        protected array $serviceName,
+        protected array $requestedAttribute,
         ?bool $isDefault = null,
-        array $description = []
+        protected array $serviceDescription = []
     ) {
+        Assert::minCount(
+            $serviceName,
+            1,
+            'Missing at least one ServiceName in AttributeConsumingService.',
+            MissingElementException::class,
+        );
+        Assert::allIsInstanceOf(
+            $serviceName,
+            ServiceName::class,
+            'Service names must be specified as ServiceName objects.',
+        );
+        Assert::allIsInstanceOf(
+            $serviceDescription,
+            ServiceDescription::class,
+            'Service descriptions must be specified as ServiceDescription objects.'
+        );
+        Assert::allIsInstanceOf(
+            $requestedAttribute,
+            RequestedAttribute::class,
+            'Requested attributes must be specified as RequestedAttribute objects.'
+        );
+        Assert::minCount(
+            $requestedAttribute,
+            1,
+            'Missing at least one RequestedAttribute in AttributeConsumingService.',
+            MissingElementException::class
+        );
+
         $this->setIndex($index);
-        $this->setServiceNames($name);
-        $this->setRequestedAttributes($requestedAttributes);
         $this->setIsDefault($isDefault);
-        $this->setServiceDescriptions($description);
     }
 
 
@@ -111,32 +114,9 @@ final class AttributeConsumingService extends AbstractMdElement
      *
      * @return \SimpleSAML\SAML2\XML\md\ServiceName[]
      */
-    public function getServiceNames(): array
+    public function getServiceName(): array
     {
-        return $this->serviceNames;
-    }
-
-
-    /**
-     * Set the localized names of this service.
-     *
-     * @param \SimpleSAML\SAML2\XML\md\ServiceName[] $serviceNames
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setServiceNames(array $serviceNames): void
-    {
-        Assert::minCount(
-            $serviceNames,
-            1,
-            'Missing at least one ServiceName in AttributeConsumingService.',
-            MissingElementException::class,
-        );
-        Assert::allIsInstanceOf(
-            $serviceNames,
-            ServiceName::class,
-            'Service names must be specified as ServiceName objects.',
-        );
-        $this->serviceNames = $serviceNames;
+        return $this->serviceName;
     }
 
 
@@ -145,26 +125,9 @@ final class AttributeConsumingService extends AbstractMdElement
      *
      * @return \SimpleSAML\SAML2\XML\md\ServiceDescription[]
      */
-    public function getServiceDescriptions(): array
+    public function getServiceDescription(): array
     {
-        return $this->serviceDescriptions;
-    }
-
-
-    /**
-     * Set the value of the ServiceDescription-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\ServiceDescription[] $serviceDescriptions
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setServiceDescriptions(array $serviceDescriptions): void
-    {
-        Assert::allIsInstanceOf(
-            $serviceDescriptions,
-            ServiceDescription::class,
-            'Service descriptions must be specified as ServiceDescription objects.'
-        );
-        $this->serviceDescriptions = $serviceDescriptions;
+        return $this->serviceDescription;
     }
 
 
@@ -173,32 +136,9 @@ final class AttributeConsumingService extends AbstractMdElement
      *
      * @return \SimpleSAML\SAML2\XML\md\RequestedAttribute[]
      */
-    public function getRequestedAttributes(): array
+    public function getRequestedAttribute(): array
     {
-        return $this->requestedAttributes;
-    }
-
-
-    /**
-     * Set the value of the RequestedAttribute-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\RequestedAttribute[] $requestedAttributes
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setRequestedAttributes(array $requestedAttributes): void
-    {
-        Assert::allIsInstanceOf(
-            $requestedAttributes,
-            RequestedAttribute::class,
-            'Requested attributes must be specified as RequestedAttribute objects.'
-        );
-        Assert::minCount(
-            $requestedAttributes,
-            1,
-            'Missing at least one RequestedAttribute in AttributeConsumingService.',
-            MissingElementException::class
-        );
-        $this->requestedAttributes = $requestedAttributes;
+        return $this->requestedAttribute;
     }
 
 
@@ -211,7 +151,7 @@ final class AttributeConsumingService extends AbstractMdElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('index', strval($this->index));
+        $e->setAttribute('index', strval($this->getIndex()));
 
         if ($this->getIsDefault() === true) {
             $e->setAttribute('isDefault', 'true');
@@ -219,13 +159,13 @@ final class AttributeConsumingService extends AbstractMdElement
             $e->setAttribute('isDefault', 'false');
         }
 
-        foreach ($this->getServiceNames() as $name) {
+        foreach ($this->getServiceName() as $name) {
             $name->toXML($e);
         }
-        foreach ($this->getServiceDescriptions() as $description) {
+        foreach ($this->getServiceDescription() as $description) {
             $description->toXML($e);
         }
-        foreach ($this->getRequestedAttributes() as $ra) {
+        foreach ($this->getRequestedAttribute() as $ra) {
             $ra->toXML($e);
         }
 

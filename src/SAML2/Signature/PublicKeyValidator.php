@@ -23,11 +23,6 @@ class PublicKeyValidator extends AbstractChainedValidator
      */
     private KeyCollection $configuredKeys;
 
-    /**
-     * @var \SimpleSAML\SAML2\Certificate\KeyLoader
-     */
-    private KeyLoader $keyLoader;
-
 
     /**
      * Constructor for PublicKeyValidator
@@ -35,10 +30,10 @@ class PublicKeyValidator extends AbstractChainedValidator
      * @param \Psr\Log\LoggerInterface $logger
      * @param \SimpleSAML\SAML2\Certificate\KeyLoader $keyLoader
      */
-    public function __construct(LoggerInterface $logger, KeyLoader $keyLoader)
-    {
-        $this->keyLoader = $keyLoader;
-
+    public function __construct(
+        LoggerInterface $logger,
+        private KeyLoader $keyLoader,
+    ) {
         parent::__construct($logger);
     }
 
@@ -51,7 +46,7 @@ class PublicKeyValidator extends AbstractChainedValidator
      */
     public function canValidate(
         SignedElementInterface $signedElement,
-        CertificateProvider $configuration
+        CertificateProvider $configuration,
     ): bool {
         $this->configuredKeys = $this->keyLoader->extractPublicKeys($configuration);
 
@@ -69,7 +64,7 @@ class PublicKeyValidator extends AbstractChainedValidator
      */
     public function hasValidSignature(
         SignedElementInterface $signedElement,
-        CertificateProvider $configuration
+        CertificateProvider $configuration,
     ): bool {
         Assert::notEmpty($this->configuredKeys);
 

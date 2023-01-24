@@ -14,6 +14,6 @@ interface SubjectConfirmationConstraintValidator
      */
     public function validate(
         SubjectConfirmation $subjectConfirmation,
-        Result $result
+        Result $result,
     ): void;
 }

@@ -47,7 +47,7 @@ class ProcessorBuilder
         Destination $currentDestination,
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider,
-        Response $response
+        Response $response,
     ): Processor {
         $keyloader = new PrivateKeyLoader();
         $decrypter = new Decrypter($logger, $identityProvider, $serviceProvider, $keyloader);
@@ -85,7 +85,7 @@ class ProcessorBuilder
      */
     private static function createAssertionValidator(
         IdentityProvider $identityProvider,
-        ServiceProvider $serviceProvider
+        ServiceProvider $serviceProvider,
     ): AssertionValidator {
         $validator = new AssertionValidator($identityProvider, $serviceProvider);
         $validator->addConstraintValidator(new NotBefore());
@@ -108,7 +108,7 @@ class ProcessorBuilder
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider,
         Destination $currentDestination,
-        Response $response
+        Response $response,
     ): SubjectConfirmationValidator {
         $validator = new SubjectConfirmationValidator($identityProvider, $serviceProvider);
         $validator->addConstraintValidator(
@@ -145,7 +145,7 @@ class ProcessorBuilder
         LoggerInterface $logger,
         PrivateKeyLoader $keyloader,
         IdentityProvider $identityProvider,
-        ServiceProvider $serviceProvider
+        ServiceProvider $serviceProvider,
     ): TransformerChain {
         $chain = new TransformerChain($identityProvider, $serviceProvider);
         $chain->addTransformerStep(

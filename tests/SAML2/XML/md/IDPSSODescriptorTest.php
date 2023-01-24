@@ -219,7 +219,7 @@ final class IDPSSODescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
-            [new AssertionIDRequestService(C::BINDING_HTTP_POST, C::LOCATION_A)],
+            [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A)],
             []
         );
     }
@@ -319,9 +319,9 @@ final class IDPSSODescriptorTest extends TestCase
             [C::NS_SAMLP, C::PROTOCOL]
         );
         $this->assertNull($idpssod->wantAuthnRequestsSigned());
-        $this->assertEquals([], $idpssod->getNameIDMappingServices());
-        $this->assertEquals([], $idpssod->getAssertionIDRequestServices());
-        $this->assertEquals([], $idpssod->getSupportedAttributes());
+        $this->assertEquals([], $idpssod->getNameIDMappingService());
+        $this->assertEquals([], $idpssod->getAssertionIDRequestService());
+        $this->assertEquals([], $idpssod->getSupportedAttribute());
     }
 
 
@@ -399,12 +399,12 @@ final class IDPSSODescriptorTest extends TestCase
 XML
         );
         $idpssod = IDPSSODescriptor::fromXML($document->documentElement);
-        $this->assertCount(1, $idpssod->getSingleSignOnServices());
-        $this->assertInstanceOf(SingleSignOnService::class, $idpssod->getSingleSignOnServices()[0]);
+        $this->assertCount(1, $idpssod->getSingleSignOnService());
+        $this->assertInstanceOf(SingleSignOnService::class, $idpssod->getSingleSignOnService()[0]);
         $this->assertNull($idpssod->wantAuthnRequestsSigned());
-        $this->assertEquals([], $idpssod->getNameIDMappingServices());
-        $this->assertEquals([], $idpssod->getAssertionIDRequestServices());
-        $this->assertEquals([], $idpssod->getAttributeProfiles());
-        $this->assertEquals([], $idpssod->getSupportedAttributes());
+        $this->assertEquals([], $idpssod->getNameIDMappingService());
+        $this->assertEquals([], $idpssod->getAssertionIDRequestService());
+        $this->assertEquals([], $idpssod->getAttributeProfile());
+        $this->assertEquals([], $idpssod->getSupportedAttribute());
     }
 }

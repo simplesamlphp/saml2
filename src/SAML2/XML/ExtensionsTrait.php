@@ -30,17 +30,6 @@ trait ExtensionsTrait
      */
     public function __construct(array $extensions)
     {
-        $this->setList($extensions);
-    }
-
-
-    /**
-     * Set an array with all extensions present.
-     *
-     * @param array \SimpleSAML\XML\ElementInterface[] $extensions
-     */
-    protected function setList(array $extensions): void
-    {
         Assert::allIsInstanceOf($extensions, ElementInterface::class);
 
         foreach ($extensions as $extension) {
@@ -58,6 +47,9 @@ trait ExtensionsTrait
             );
         }
 
+        /**
+         * Set an array with all extensions present.
+         */
         $this->extensions = $extensions;
     }
 

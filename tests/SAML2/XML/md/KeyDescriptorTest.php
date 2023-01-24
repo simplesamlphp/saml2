@@ -90,7 +90,7 @@ final class KeyDescriptorTest extends TestCase
         $kd = new KeyDescriptor(new KeyInfo([new KeyName('IdentityProvider.com SSO Key')]));
 
         $this->assertNull($kd->getUse());
-        $this->assertEmpty($kd->getEncryptionMethods());
+        $this->assertEmpty($kd->getEncryptionMethod());
 
         $this->assertEquals(
             <<<XML
@@ -153,6 +153,6 @@ XML
 
         $kd = KeyDescriptor::fromXML($document->documentElement);
         $this->assertNull($kd->getUse());
-        $this->assertEmpty($kd->getEncryptionMethods());
+        $this->assertEmpty($kd->getEncryptionMethod());
     }
 }

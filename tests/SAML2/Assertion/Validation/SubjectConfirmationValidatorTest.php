@@ -105,7 +105,7 @@ final class SubjectConfirmationValidatorTest extends TestCase
                          >e0f2ba563f02531ece353dc389edf769ce991190</saml:NameID>
             <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
                 <saml:SubjectConfirmationData NotOnOrAfter="2080-02-26T15:26:40Z"
-                                              Recipient="{$entity_other}"
+                                              Recipient="{$entity_sp}"
                                               InResponseTo="CORTO2278b437b23dfe5f13843c06dd47efc25f9e4574"
                                               />
             </saml:SubjectConfirmation>
@@ -122,9 +122,6 @@ XML
 
     /**
      * Verifies that the assertion validator works
-     *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
     public function testBasicValidation(): void
     {
@@ -136,33 +133,20 @@ XML
 
     /**
      * Verifies that SubjectConfirmation violations are caught
-     *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
+     */
     public function testSubjectConfirmationNonValidation(): void
     {
-        $assertion = Assertion::fromXML($this->document->documentElement);
-
-        $sc = $assertion->getSubject()->getSubjectConfirmation()[0];
-        $scd = $sc->getSubjectConfirmationData();
-        $newscd = new SubjectConfirmationData(
-            $scd->getNotBefore(),
-            $scd->getNotOnOrAfter(),
-            'https://elsewhere.example.edu',
-            $scd->getInResponseTo(),
-            $scd->getAddress(),
-            $scd->getInfo()
-        );
-        $newsc = new SubjectConfirmation($sc->getMethod(), $sc->getIdentifier(), $newscd);
-        $assertion->setSubjectConfirmation([$newsc]);
+        $xml = $this->document->saveXML();
+        $manipulated = str_replace(C::ENTITY_SP, C::ENTITY_OTHER, $xml);
+        $document = DOMDocumentFactory::fromString($manipulated);
+        $assertion = Assertion::fromXML($document->documentElement);
 
         $this->expectException(InvalidSubjectConfirmationException::class);
         $this->expectExceptionMessage(
             'Invalid SubjectConfirmation in Assertion, errors: "Recipient in SubjectConfirmationData ' .
-            '("https://elsewhere.example.edu") does not match the current destination ' .
+            '("https://example.org/metadata") does not match the current destination ' .
             '("https://simplesamlphp.org/sp/metadata")'
         );
         $this->assertionProcessor->validateAssertion($assertion);
     }
-     */
 }

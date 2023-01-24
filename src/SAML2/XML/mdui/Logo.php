@@ -25,27 +25,6 @@ final class Logo extends AbstractMduiElement
 {
     use StringElementTrait;
 
-    /**
-     * The width of this logo.
-     *
-     * @var int
-     */
-    protected int $width;
-
-    /**
-     * The height of this logo.
-     *
-     * @var int
-     */
-    protected int $height;
-
-    /**
-     * The language of this item.
-     *
-     * @var string|null
-     */
-    protected ?string $lang = null;
-
 
     /**
      * Initialize a Logo.
@@ -55,12 +34,13 @@ final class Logo extends AbstractMduiElement
      * @param int $width
      * @param string|null $lang
      */
-    public function __construct($url, $height, $width, $lang = null)
-    {
+    public function __construct(
+        protected string $url,
+        protected int $height,
+        protected int $width,
+        protected ?string $lang = null
+    ) {
         $this->setContent($url);
-        $this->setHeight($height);
-        $this->setWidth($width);
-        $this->setLanguage($lang);
     }
 
 
@@ -93,17 +73,6 @@ final class Logo extends AbstractMduiElement
 
 
     /**
-     * Set the value of the lang-property
-     *
-     * @param string|null $lang
-     */
-    private function setLanguage(?string $lang): void
-    {
-        $this->lang = $lang;
-    }
-
-
-    /**
      * Collect the value of the height-property
      *
      * @return int
@@ -115,17 +84,6 @@ final class Logo extends AbstractMduiElement
 
 
     /**
-     * Set the value of the height-property
-     *
-     * @param int $height
-     */
-    private function setHeight(int $height): void
-    {
-        $this->height = $height;
-    }
-
-
-    /**
      * Collect the value of the width-property
      *
      * @return int
@@ -133,17 +91,6 @@ final class Logo extends AbstractMduiElement
     public function getWidth(): int
     {
         return $this->width;
-    }
-
-
-    /**
-     * Set the value of the width-property
-     *
-     * @param int $width
-     */
-    private function setWidth(int $width): void
-    {
-        $this->width = $width;
     }
 
 

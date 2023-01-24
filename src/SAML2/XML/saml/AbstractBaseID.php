@@ -36,9 +36,6 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
     /** @var string */
     public const LOCALNAME = 'BaseID';
 
-    /** @var string */
-    protected string $type;
-
 
     /**
      * Initialize a saml:BaseID from scratch
@@ -48,12 +45,12 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
      * @param string|null $SPNameQualifier
      */
     protected function __construct(
-        string $type,
+        protected string $type,
         ?string $NameQualifier = null,
         ?string $SPNameQualifier = null
     ) {
         parent::__construct($NameQualifier, $SPNameQualifier);
-        $this->type = $type;
+
         $this->dataType = C::XMLENC_ELEMENT;
     }
 

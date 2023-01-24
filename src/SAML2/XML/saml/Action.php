@@ -22,24 +22,17 @@ final class Action extends AbstractSamlElement
 
 
     /**
-     * NOTE: This attribute was marked REQUIRED in the 2012 SAML errata (E36)
-     *
-     * @var string
-     */
-    protected string $namespace;
-
-
-    /**
      * Initialize an Action.
      *
-     * @param string $namespace
+     * @param string $namespace  This attribute was marked REQUIRED in the 2012 SAML errata (E36)
      * @param string $content
      */
     public function __construct(
-        string $namespace,
+        protected string $namespace,
         string $content
     ) {
-        $this->setNamespace($namespace);
+        Assert::validURI($namespace, SchemaViolationException::class); // Covers the empty string
+
         $this->setContent($content);
     }
 
@@ -52,18 +45,6 @@ final class Action extends AbstractSamlElement
     public function getNamespace(): string
     {
         return $this->namespace;
-    }
-
-
-    /**
-     * Set the value of the namespace-property
-     *
-     * @param string $namespace
-     */
-    private function setNamespace(string $namespace): void
-    {
-        Assert::validURI($namespace, SchemaViolationException::class); // Covers the empty string
-        $this->namespace = $namespace;
     }
 
 

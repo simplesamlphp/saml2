@@ -24,7 +24,7 @@ class IsSuccessful implements ConstraintValidator
      */
     public function validate(
         Response $response,
-        Result $result
+        Result $result,
     ): void {
         if (!$response->isSuccess()) {
             $result->addError($this->buildMessage($response->getStatus()));

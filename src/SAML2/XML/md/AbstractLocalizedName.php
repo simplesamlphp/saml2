@@ -22,13 +22,6 @@ abstract class AbstractLocalizedName extends AbstractMdElement
 {
     use StringElementTrait;
 
-    /**
-     * The language this string is on.
-     *
-     * @var string
-     */
-    protected string $language;
-
 
     /**
      * LocalizedNameType constructor.
@@ -36,9 +29,12 @@ abstract class AbstractLocalizedName extends AbstractMdElement
      * @param string $language The language this string is localized in.
      * @param string $value The localized string.
      */
-    final public function __construct(string $language, string $value)
-    {
-        $this->setLanguage($language);
+    final public function __construct(
+        protected string $language,
+        string $value,
+    ) {
+        Assert::notEmpty($language, 'xml:lang cannot be empty.');
+
         $this->setContent($value);
     }
 
@@ -64,18 +60,6 @@ abstract class AbstractLocalizedName extends AbstractMdElement
     public function getLanguage(): string
     {
         return $this->language;
-    }
-
-
-    /**
-     * Set the language this string is localized in.
-     *
-     * @param string $language
-     */
-    protected function setLanguage(string $language): void
-    {
-        Assert::notEmpty($language, 'xml:lang cannot be empty.');
-        $this->language = $language;
     }
 
 

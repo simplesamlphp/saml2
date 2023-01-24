@@ -17,16 +17,6 @@ use function var_export;
  */
 final class NameIDPolicy extends AbstractSamlpElement
 {
-    /** @var string|null */
-    protected ?string $Format = null;
-
-    /** @var string|null */
-    protected ?string $SPNameQualifier = null;
-
-    /** @var bool|null */
-    protected ?bool $AllowCreate = null;
-
-
     /**
      * Initialize a NameIDPolicy.
      *
@@ -34,11 +24,13 @@ final class NameIDPolicy extends AbstractSamlpElement
      * @param string|null $SPNameQualifier
      * @param bool|null $AllowCreate
      */
-    public function __construct(?string $Format = null, ?string $SPNameQualifier = null, ?bool $AllowCreate = null)
-    {
-        $this->setFormat($Format);
-        $this->setSPNameQualifier($SPNameQualifier);
-        $this->setAllowCreate($AllowCreate);
+    public function __construct(
+        protected ?string $Format = null,
+        protected ?string $SPNameQualifier = null,
+        protected ?bool $AllowCreate = null
+    ) {
+        Assert::nullOrValidURI($Format); // Covers the empty string
+        Assert::nullOrNotWhitespaceOnly($SPNameQualifier);
     }
 
 
@@ -52,16 +44,6 @@ final class NameIDPolicy extends AbstractSamlpElement
 
 
     /**
-     * @param string|null $Format
-     */
-    private function setFormat(?string $Format): void
-    {
-        Assert::nullOrValidURI($Format); // Covers the empty string
-        $this->Format = $Format;
-    }
-
-
-    /**
      * @return string|null
      */
     public function getSPNameQualifier(): ?string
@@ -71,30 +53,11 @@ final class NameIDPolicy extends AbstractSamlpElement
 
 
     /**
-     * @param string|null $SPNameQualifier
-     */
-    private function setSPNameQualifier(?string $SPNameQualifier): void
-    {
-        Assert::nullOrNotWhitespaceOnly($SPNameQualifier);
-        $this->SPNameQualifier = $SPNameQualifier;
-    }
-
-
-    /**
      * @return bool|null
      */
     public function getAllowCreate(): ?bool
     {
         return $this->AllowCreate;
-    }
-
-
-    /**
-     * @param bool|null $AllowCreate
-     */
-    private function setAllowCreate(?bool $AllowCreate): void
-    {
-        $this->AllowCreate = $AllowCreate;
     }
 
 

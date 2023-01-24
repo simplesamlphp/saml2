@@ -23,16 +23,6 @@ final class KeyAuthority extends AbstractShibmdElement
 {
     use ExtendableAttributesTrait;
 
-    /**
-     * @var \SimpleSAML\XMLSecurity\XML\ds\KeyInfo[]
-     */
-    protected array $keys;
-
-    /**
-     * @var int|null
-     */
-    protected ?int $VerifyDepth;
-
 
     /**
      * Create a KeyAuthority.
@@ -41,10 +31,13 @@ final class KeyAuthority extends AbstractShibmdElement
      * @param int|null $verifyDepth
      * @param \DOMAttr[] $namespacedAttributes
      */
-    public function __construct(array $keys, ?int $verifyDepth = null, array $namespacedAttributes = [])
-    {
-        $this->setKeys($keys);
-        $this->setVerifyDepth($verifyDepth);
+    public function __construct(
+        protected array $keys,
+        protected ?int $VerifyDepth = null,
+        array $namespacedAttributes = [],
+    ) {
+        Assert::nullOrRange($VerifyDepth, 0, 255);
+
         $this->setAttributesNS($namespacedAttributes);
     }
 
@@ -61,18 +54,6 @@ final class KeyAuthority extends AbstractShibmdElement
 
 
     /**
-     * Set the value of the VerifyDepth-property
-     *
-     * @param int|null $verifyDepth
-     */
-    private function setVerifyDepth(?int $verifyDepth): void
-    {
-        Assert::nullOrRange($verifyDepth, 0, 255);
-        $this->VerifyDepth = $verifyDepth;
-    }
-
-
-    /**
      * Collect the value of the keys-property
      *
      * @return \SimpleSAML\XMLSecurity\XML\ds\KeyInfo[]
@@ -80,17 +61,6 @@ final class KeyAuthority extends AbstractShibmdElement
     public function getKeys(): array
     {
         return $this->keys;
-    }
-
-
-    /**
-     * Set the value of the keys-property
-     *
-     * @param \SimpleSAML\XMLSecurity\XML\ds\KeyInfo[] $keys
-     */
-    private function setKeys(array $keys): void
-    {
-        $this->keys = $keys;
     }
 
 

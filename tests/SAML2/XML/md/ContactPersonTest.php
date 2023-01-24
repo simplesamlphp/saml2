@@ -59,8 +59,8 @@ final class ContactPersonTest extends TestCase
             'GivenName' => 'Lead',
             'SurName' => 'Developer',
             'Extensions' => null,
-            'EmailAddresses' => ['mailto:lead.developer@example.org'],
-            'TelephoneNumbers' => ['+1234567890'],
+            'EmailAddress' => ['mailto:lead.developer@example.org'],
+            'TelephoneNumber' => ['+1234567890'],
             'urn:test:something' => ['test:attr' => 'value'],
         ];
     }
@@ -220,8 +220,8 @@ XML
         $this->assertNull($cp->getCompany());
         $this->assertNull($cp->getGivenName());
         $this->assertNull($cp->getSurName());
-        $this->assertEquals([], $cp->getEmailAddresses());
-        $this->assertEquals([], $cp->getTelephoneNumbers());
+        $this->assertEquals([], $cp->getEmailAddress());
+        $this->assertEquals([], $cp->getTelephoneNumber());
         $this->assertEquals([], $cp->getAttributesNS());
     }
 }

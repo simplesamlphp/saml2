@@ -17,23 +17,18 @@ use SimpleSAML\XML\Exception\SchemaViolationException;
  */
 final class StatusCode extends AbstractSamlpElement
 {
-    /** @var string */
-    protected string $Value;
-
-    /** @var \SimpleSAML\SAML2\XML\samlp\StatusCode[] */
-    protected array $subCodes = [];
-
-
     /**
      * Initialize a samlp:StatusCode
      *
      * @param string $Value
      * @param \SimpleSAML\SAML2\XML\samlp\StatusCode[] $subCodes
      */
-    public function __construct(string $Value = C::STATUS_SUCCESS, array $subCodes = [])
-    {
-        $this->setValue($Value);
-        $this->setSubCodes($subCodes);
+    public function __construct(
+        protected string $Value = C::STATUS_SUCCESS,
+        protected array $subCodes = [],
+    ) {
+        Assert::validURI($Value, SchemaViolationException::class); // Covers the empty string
+        Assert::allIsInstanceOf($subCodes, StatusCode::class);
     }
 
 
@@ -49,19 +44,6 @@ final class StatusCode extends AbstractSamlpElement
 
 
     /**
-     * Set the value of the Value-property
-     *
-     * @param string $Value
-     * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied $Value is empty
-     */
-    private function setValue(string $Value): void
-    {
-        Assert::validURI($Value, SchemaViolationException::class); // Covers the empty string
-        $this->Value = $Value;
-    }
-
-
-    /**
      * Collect the subcodes
      *
      * @return \SimpleSAML\SAML2\XML\samlp\StatusCode[]
@@ -69,21 +51,6 @@ final class StatusCode extends AbstractSamlpElement
     public function getSubCodes(): array
     {
         return $this->subCodes;
-    }
-
-
-    /**
-     * Set the value of the subCodes-property
-     *
-     * @param \SimpleSAML\SAML2\XML\samlp\StatusCode[] $subCodes
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     *   if the supplied array contains anything other than StatusCode objects
-     */
-    private function setSubCodes(array $subCodes): void
-    {
-        Assert::allIsInstanceOf($subCodes, StatusCode::class);
-
-        $this->subCodes = $subCodes;
     }
 
 

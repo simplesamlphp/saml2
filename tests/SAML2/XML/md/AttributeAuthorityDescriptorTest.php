@@ -173,16 +173,16 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     public function testMarshallingWithoutOptionalParameters(): void
     {
         $aad = new AttributeAuthorityDescriptor([$this->as], [C::NS_SAMLP]);
-        $this->assertEmpty($aad->getAssertionIDRequestServices());
-        $this->assertEmpty($aad->getNameIDFormats());
+        $this->assertEmpty($aad->getAssertionIDRequestService());
+        $this->assertEmpty($aad->getNameIDFormat());
         $this->assertEmpty($aad->getID());
         $this->assertEmpty($aad->getValidUntil());
         $this->assertEmpty($aad->getCacheDuration());
         $this->assertEmpty($aad->getExtensions());
         $this->assertEmpty($aad->getErrorURL());
         $this->assertEmpty($aad->getOrganization());
-        $this->assertEmpty($aad->getKeyDescriptors());
-        $this->assertEmpty($aad->getContactPersons());
+        $this->assertEmpty($aad->getKeyDescriptor());
+        $this->assertEmpty($aad->getContactPerson());
     }
 
 
@@ -192,16 +192,16 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     public function testMarshallingWithEmptyAssertionIDRequestService(): void
     {
         $aad = new AttributeAuthorityDescriptor([$this->as], [C::NS_SAMLP], []);
-        $this->assertEmpty($aad->getAssertionIDRequestServices());
-        $this->assertEmpty($aad->getNameIDFormats());
+        $this->assertEmpty($aad->getAssertionIDRequestService());
+        $this->assertEmpty($aad->getNameIDFormat());
         $this->assertEmpty($aad->getID());
         $this->assertEmpty($aad->getValidUntil());
         $this->assertEmpty($aad->getCacheDuration());
         $this->assertEmpty($aad->getExtensions());
         $this->assertEmpty($aad->getErrorURL());
         $this->assertEmpty($aad->getOrganization());
-        $this->assertEmpty($aad->getKeyDescriptors());
-        $this->assertEmpty($aad->getContactPersons());
+        $this->assertEmpty($aad->getKeyDescriptor());
+        $this->assertEmpty($aad->getContactPerson());
     }
 
 
@@ -300,16 +300,16 @@ XML
         );
 
         $aad = AttributeAuthorityDescriptor::fromXML($document->documentElement);
-        $this->assertEmpty($aad->getAssertionIDRequestServices());
-        $this->assertEmpty($aad->getNameIDFormats());
+        $this->assertEmpty($aad->getAssertionIDRequestService());
+        $this->assertEmpty($aad->getNameIDFormat());
         $this->assertEmpty($aad->getID());
         $this->assertEmpty($aad->getValidUntil());
         $this->assertEmpty($aad->getCacheDuration());
         $this->assertEmpty($aad->getExtensions());
         $this->assertEmpty($aad->getErrorURL());
         $this->assertEmpty($aad->getOrganization());
-        $this->assertEmpty($aad->getKeyDescriptors());
-        $this->assertEmpty($aad->getContactPersons());
+        $this->assertEmpty($aad->getKeyDescriptor());
+        $this->assertEmpty($aad->getContactPerson());
     }
 
 

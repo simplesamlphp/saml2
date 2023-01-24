@@ -94,6 +94,7 @@ final class AuthnRequestTest extends TestCase
             null,
             new Issuer('https://gateway.stepup.org/saml20/sp/metadata'),
             '_2b0226190ca1c22de6f66e85f5c95158',
+            '2.0',
             1411393320,
             'https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO'
         );
@@ -170,6 +171,7 @@ final class AuthnRequestTest extends TestCase
             null,
             new Issuer('https://gateway.stepup.org/saml20/sp/metadata'),
             null,
+            '2.0',
             null,
             null,
             null,
@@ -365,6 +367,7 @@ AUTHNREQUEST;
             null,
             $issuer,
             null,
+            '2.0',
             null,
             $destination
         );
@@ -445,6 +448,7 @@ AUTHNREQUEST;
             null,
             $issuer,
             null,
+            '2.0',
             null,
             $destination,
             null,
@@ -614,6 +618,7 @@ AUTHNREQUEST;
             null,
             $issuer,
             null,
+            '2.0',
             $issueInstant,
             $destination
         );
@@ -674,6 +679,7 @@ AUTHNREQUEST;
             null,
             $issuer,
             null,
+            '2.0',
             $issueInstant,
             $destination
         );
@@ -776,6 +782,7 @@ AUTHNREQUEST;
             null,
             $issuer,
             null,
+            '2.0',
             $issueInstant,
             $destination
         );
@@ -895,6 +902,7 @@ AUTHNREQUEST;
             null,
             $issuer,
             null,
+            '2.0',
             $issueInstant,
             $destination
         );
@@ -952,6 +960,7 @@ AUTHNREQUEST;
             $providerName,
             $issuer,
             null,
+            '2.0',
             $issueInstant,
             $destination
         );
@@ -1038,6 +1047,7 @@ AUTHNREQUEST;
             null,
             $issuer,
             null,
+            '2.0',
             $issueInstant,
             $destination
         );
@@ -1072,6 +1082,7 @@ AUTHNREQUEST;
             null,
             $issuer,
             null,
+            '2.0',
             $issueInstant,
             $destination
         );
@@ -1105,6 +1116,7 @@ AUTHNREQUEST;
             null,
             $issuer,
             null,
+            '2.0',
             $issueInstant,
             $destination
         );
@@ -1261,6 +1273,7 @@ AUTHNREQUEST;
             null,
             $issuer,
             null,
+            '2.0',
             null,
             $destination
         );

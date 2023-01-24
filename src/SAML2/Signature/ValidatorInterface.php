@@ -12,13 +12,13 @@ interface ValidatorInterface
     /**
      * Validate the signature of the signed Element based on the configuration
      *
-     * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface        $signedElement
+     * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface $signedElement
      * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
      */
     public function hasValidSignature(
         SignedElementInterface $signedElement,
-        CertificateProvider $configuration
+        CertificateProvider $configuration,
     ): bool;
 }

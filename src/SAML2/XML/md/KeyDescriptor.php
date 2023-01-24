@@ -19,30 +19,6 @@ use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 final class KeyDescriptor extends AbstractMdElement
 {
     /**
-     * What this key can be used for.
-     *
-     * One of 'encryption', 'signing' or null.
-     *
-     * @var string|null
-     */
-    protected ?string $use = null;
-
-    /**
-     * The KeyInfo for this key.
-     *
-     * @var \SimpleSAML\XMLSecurity\XML\ds\KeyInfo
-     */
-    protected KeyInfo $KeyInfo;
-
-    /**
-     * Supported EncryptionMethods.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\EncryptionMethod[]
-     */
-    protected array $EncryptionMethods = [];
-
-
-    /**
      * KeyDescriptor constructor.
      *
      * @param \SimpleSAML\XMLSecurity\XML\ds\KeyInfo $keyInfo
@@ -50,13 +26,16 @@ final class KeyDescriptor extends AbstractMdElement
      * @param \SimpleSAML\SAML2\XML\md\EncryptionMethod[] $encryptionMethod
      */
     public function __construct(
-        KeyInfo $keyInfo,
-        ?string $use = null,
-        array $encryptionMethod = []
+        protected KeyInfo $keyInfo,
+        protected ?string $use = null,
+        protected array $encryptionMethod = []
     ) {
-        $this->setKeyInfo($keyInfo);
-        $this->setUse($use);
-        $this->setEncryptionMethods($encryptionMethod);
+        Assert::nullOrOneOf(
+            $use,
+            ['encryption', 'signing'],
+            'The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".'
+        );
+        Assert::allIsInstanceOf($encryptionMethod, EncryptionMethod::class);
     }
 
 
@@ -72,41 +51,13 @@ final class KeyDescriptor extends AbstractMdElement
 
 
     /**
-     * Set the value of the use property.
-     *
-     * @param string|null $use
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setUse(?string $use): void
-    {
-        Assert::nullOrOneOf(
-            $use,
-            ['encryption', 'signing'],
-            'The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".'
-        );
-        $this->use = $use;
-    }
-
-
-    /**
      * Collect the value of the KeyInfo property.
      *
      * @return \SimpleSAML\XMLSecurity\XML\ds\KeyInfo
      */
     public function getKeyInfo(): KeyInfo
     {
-        return $this->KeyInfo;
-    }
-
-
-    /**
-     * Set the value of the KeyInfo property.
-     *
-     * @param \SimpleSAML\XMLSecurity\XML\ds\KeyInfo $keyInfo
-     */
-    protected function setKeyInfo(KeyInfo $keyInfo): void
-    {
-        $this->KeyInfo = $keyInfo;
+        return $this->keyInfo;
     }
 
 
@@ -115,22 +66,9 @@ final class KeyDescriptor extends AbstractMdElement
      *
      * @return \SimpleSAML\SAML2\XML\md\EncryptionMethod[]
      */
-    public function getEncryptionMethods(): array
+    public function getEncryptionMethod(): array
     {
-        return $this->EncryptionMethods;
-    }
-
-
-    /**
-     * Set the value of the EncryptionMethod property.
-     *
-     * @param \SimpleSAML\SAML2\XML\md\EncryptionMethod[] $encryptionMethods
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setEncryptionMethods(array $encryptionMethods): void
-    {
-        Assert::allIsInstanceOf($encryptionMethods, EncryptionMethod::class);
-        $this->EncryptionMethods = $encryptionMethods;
+        return $this->encryptionMethod;
     }
 
 
@@ -190,7 +128,7 @@ final class KeyDescriptor extends AbstractMdElement
 
         $this->getKeyInfo()->toXML($e);
 
-        foreach ($this->getEncryptionMethods() as $em) {
+        foreach ($this->getEncryptionMethod() as $em) {
             $em->toXML($e);
         }
 

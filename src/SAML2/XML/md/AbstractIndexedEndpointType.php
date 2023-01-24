@@ -41,9 +41,10 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
         string $location,
         ?bool $isDefault = null,
         ?string $responseLocation = null,
-        array $attributes = []
+        array $attributes = [],
     ) {
         parent::__construct($binding, $location, $responseLocation, $attributes);
+
         $this->setIndex($index);
         $this->setIsDefault($isDefault);
     }

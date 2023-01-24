@@ -102,7 +102,7 @@ final class AbstractStatusResponseTest extends TestCase
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
 
-        $response = new Response($status, $issuer, null, null, null, null, null, $extensions);
+        $response = new Response($status, $issuer, null, '2.0', null, null, null, null, $extensions);
         $response->sign($signer);
         $responseElement = $response->toXML();
 
@@ -231,7 +231,7 @@ XML;
             new StatusCode(C::STATUS_REQUESTER)
         );
 
-        $response = new Response($status, null, null, 1453323439, 'aabb12234');
+        $response = new Response($status, null, null, '2.0', 1453323439, 'aabb12234');
 
         $responseElement = $response->toXML();
 

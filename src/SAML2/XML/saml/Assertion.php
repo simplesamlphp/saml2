@@ -47,96 +47,11 @@ final class Assertion extends AbstractSamlElement implements
     use SignableElementTrait;
     use SignedElementTrait;
 
-    /**
-     * The identifier of this assertion.
-     *
-     * @var string
-     */
-    protected string $id;
-
-    /**
-     * The issue timestamp of this assertion, as an UNIX timestamp.
-     *
-     * @var int
-     */
-    protected int $issueInstant;
-
-    /**
-     * The issuer of this assertion.
-     *
-     * If the issuer's format is \SAML2\Constants::NAMEID_ENTITY, this property will just take the issuer's string
-     * value.
-     *
-     * @var \SimpleSAML\SAML2\XML\saml\Issuer
-     */
-    protected Issuer $issuer;
-
-    /**
-     * The subject of this assertion
-     *
-     * @var \SimpleSAML\SAML2\XML\saml\Subject|null
-     */
-    protected ?Subject $subject;
-
-    /**
-     * The subject of this assertion
-     *
-     * If the NameId is null, no subject was included in the assertion.
-     *
-     * @var \SimpleSAML\SAML2\XML\saml\NameID|null
-     */
-    protected ?NameID $nameId = null;
-
-    /**
-     * The encrypted NameId of the subject.
-     *
-     * If this is not null, the NameId needs decryption before it can be accessed.
-     *
-     * @var \DOMElement|null
-     */
-    protected ?DOMElement $encryptedNameId = null;
-
-    /**
-     * The statements made by this assertion.
-     *
-     * @var \SimpleSAML\SAML2\XML\saml\AbstractStatementType[]
-     */
-    protected array $statements = [];
-
-    /**
-     * The attributes, as an associative array, indexed by attribute name
-     *
-     * To ease handling, all attribute values are represented as an array of values, also for values with a multiplicity
-     * of single. There are 5 possible variants of datatypes for the values: a string, an integer, an array, a
-     * DOMNodeList or a \SimpleSAML\SAML2\XML\saml\NameID object.
-     *
-     * If the attribute is an eduPersonTargetedID, the values will be SAML2\XML\saml\NameID objects.
-     * If the attribute value has an type-definition (xsi:string or xsi:int), the values will be of that type.
-     * If the attribute value contains a nested XML structure, the values will be a DOMNodeList
-     * In all other cases the values are treated as strings
-     *
-     * **WARNING** a DOMNodeList cannot be serialized without data-loss and should be handled explicitly
-     *
-     * @var array multi-dimensional array of \DOMNodeList|\SimpleSAML\SAML2\XML\saml\NameID|string|int|array
-     */
-    protected array $attributes = [];
-
-    /**
-     * The SubjectConfirmation elements of the Subject in the assertion.
-     *
-     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
-     */
-    protected array $SubjectConfirmation = [];
 
     /**
      * @var bool
      */
     protected bool $wasSignedAtConstruction = false;
-
-    /**
-     * @var \SimpleSAML\SAML2\XML\saml\Conditions|null
-     */
-    protected ?Conditions $conditions;
 
 
     /**
@@ -150,12 +65,12 @@ final class Assertion extends AbstractSamlElement implements
      * @param \SimpleSAML\SAML2\XML\saml\AbstractStatementType[] $statements
      */
     public function __construct(
-        Issuer $issuer,
-        ?string $id = null,
-        ?int $issueInstant = null,
-        ?Subject $subject = null,
-        ?Conditions $conditions = null,
-        array $statements = []
+        protected Issuer $issuer,
+        protected ?string $id = null,
+        protected ?int $issueInstant = null,
+        protected ?Subject $subject = null,
+        protected ?Conditions $conditions = null,
+        protected array $statements = []
     ) {
         $this->dataType = C::XMLENC_ELEMENT;
 
@@ -163,12 +78,8 @@ final class Assertion extends AbstractSamlElement implements
             $subject || !empty($statements),
             "Either a <saml:Subject> or some statement must be present in a <saml:Assertion>"
         );
-        $this->setIssuer($issuer);
-        $this->setId($id);
-        $this->setIssueInstant($issueInstant);
-        $this->setSubject($subject);
-        $this->setConditions($conditions);
-        $this->setStatements($statements);
+        Assert::allIsInstanceOf($statements, AbstractStatementType::class);
+        Assert::nullOrNotWhitespaceOnly($id);
     }
 
 
@@ -184,17 +95,6 @@ final class Assertion extends AbstractSamlElement implements
 
 
     /**
-     * Set the value of the subject-property
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\Subject|null $subject
-     */
-    protected function setSubject(?Subject $subject): void
-    {
-        $this->subject = $subject;
-    }
-
-
-    /**
      * Collect the value of the conditions-property
      *
      * @return \SimpleSAML\SAML2\XML\saml\Conditions|null
@@ -202,17 +102,6 @@ final class Assertion extends AbstractSamlElement implements
     public function getConditions(): ?Conditions
     {
         return $this->conditions;
-    }
-
-
-    /**
-     * Set the value of the conditions-property
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\Conditions|null $conditions
-     */
-    protected function setConditions(?Conditions $conditions): void
-    {
-        $this->conditions = $conditions;
     }
 
 
@@ -250,43 +139,18 @@ final class Assertion extends AbstractSamlElement implements
 
 
     /**
-     * Set the statements in this assertion
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\AbstractStatementType[] $statements
-     */
-    protected function setStatements(array $statements): void
-    {
-        Assert::allIsInstanceOf($statements, AbstractStatementType::class);
-
-        $this->statements = $statements;
-    }
-
-
-    /**
      * Retrieve the identifier of this assertion.
      *
      * @return string The identifier of this assertion.
      */
     public function getId(): string
     {
-        return $this->id;
-    }
-
-
-    /**
-     * Set the identifier of this assertion.
-     *
-     * @param string|null $id The new identifier of this assertion.
-     */
-    private function setId(?string $id): void
-    {
-        Assert::nullOrNotWhitespaceOnly($id);
-
-        if ($id === null) {
+        if ($this->id === null) {
             $container = ContainerSingleton::getInstance();
-            $id = $container->generateId();
+            return $container->generateId();
         }
-        $this->id = $id;
+
+        return $this->id;
     }
 
 
@@ -297,22 +161,11 @@ final class Assertion extends AbstractSamlElement implements
      */
     public function getIssueInstant(): int
     {
-        return $this->issueInstant;
-    }
-
-
-    /**
-     * Set the issue timestamp of this assertion.
-     *
-     * @param int|null $issueInstant The new issue timestamp of this assertion, as an UNIX timestamp.
-     */
-    private function setIssueInstant(?int $issueInstant): void
-    {
-        if ($issueInstant === null) {
-            $issueInstant = Temporal::getTime();
+        if ($this->issueInstant === null) {
+            return Temporal::getTime();
         }
 
-        $this->issueInstant = $issueInstant;
+        return $this->issueInstant;
     }
 
 
@@ -324,28 +177,6 @@ final class Assertion extends AbstractSamlElement implements
     public function getIssuer(): Issuer
     {
         return $this->issuer;
-    }
-
-
-    /**
-     * Set the issuer of this message.
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer The new issuer of this assertion.
-     */
-    private function setIssuer(Issuer $issuer): void
-    {
-        $this->issuer = $issuer;
-    }
-
-
-    /**
-     * Retrieve the SubjectConfirmation elements we have in our Subject element.
-     *
-     * @return array Array of \SimpleSAML\SAML2\XML\saml\SubjectConfirmation elements.
-     */
-    public function getSubjectConfirmation(): array
-    {
-        return $this->SubjectConfirmation;
     }
 
 

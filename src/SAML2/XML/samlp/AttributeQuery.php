@@ -39,20 +39,13 @@ use function in_array;
 class AttributeQuery extends AbstractSubjectQuery
 {
     /**
-     * The attributes, as an associative array.
-     *
-     * @var \SimpleSAML\SAML2\XML\saml\Attribute[]
-     */
-    protected array $attributes = [];
-
-
-    /**
      * Constructor for SAML 2 AttributeQuery.
      *
      * @param \SimpleSAML\SAML2\XML\saml\Subject $subject
      * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
-     * @param string $id
+     * @param string|null $id
+     * @param string $version
      * @param int $issueInstant
      * @param string|null $destination
      * @param string|null $consent
@@ -60,38 +53,15 @@ class AttributeQuery extends AbstractSubjectQuery
      */
     public function __construct(
         Subject $subject,
-        array $attributes = [],
+        protected array $attributes = [],
         ?Issuer $issuer = null,
         ?string $id = null,
+        string $version = '2.0',
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null
     ) {
-        parent::__construct($subject, $issuer, $id, $issueInstant, $destination, $consent, $extensions);
-
-        $this->setAttributes($attributes);
-    }
-
-
-    /**
-     * Retrieve all requested attributes.
-     *
-     * @return \SimpleSAML\SAML2\XML\saml\Attribute[] All requested attributes, as an associative array.
-     */
-    public function getAttributes(): array
-    {
-        return $this->attributes;
-    }
-
-
-    /**
-     * Set all requested attributes.
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes All requested attributes, as an associative array.
-     */
-    private function setAttributes(array $attributes): void
-    {
         Assert::allIsInstanceOf($attributes, Attribute::class);
 
         $cache = [];
@@ -110,7 +80,18 @@ class AttributeQuery extends AbstractSubjectQuery
         }
         unset($cache);
 
-        $this->attributes = $attributes;
+        parent::__construct($subject, $issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
+    }
+
+
+    /**
+     * Retrieve all requested attributes.
+     *
+     * @return \SimpleSAML\SAML2\XML\saml\Attribute[] All requested attributes, as an associative array.
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
     }
 
 
@@ -134,14 +115,9 @@ class AttributeQuery extends AbstractSubjectQuery
         Assert::same($xml->localName, 'AttributeQuery', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AttributeQuery::NS, InvalidDOMElementException::class);
 
-        Assert::true(
-            version_compare('2.0', self::getAttribute($xml, 'Version'), '<='),
-            RequestVersionTooLowException::class
-        );
-        Assert::true(
-            version_compare('2.0', self::getAttribute($xml, 'Version'), '>='),
-            RequestVersionTooHighException::class
-        );
+        $version = self::getAttribute($xml, 'Version');
+        Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
 
         $id = self::getAttribute($xml, 'ID');
         $destination = self::getAttribute($xml, 'Destination', null);
@@ -182,6 +158,7 @@ class AttributeQuery extends AbstractSubjectQuery
             Attribute::getChildrenOfClass($xml),
             array_pop($issuer),
             $id,
+            $version,
             $issueInstant,
             $destination,
             $consent,

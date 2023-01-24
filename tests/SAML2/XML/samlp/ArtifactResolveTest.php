@@ -48,7 +48,7 @@ final class ArtifactResolveTest extends TestCase
         $issuer = new Issuer('https://ServiceProvider.com/SAML');
         $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
 
-        $artifactResolve = new ArtifactResolve($artifact, $issuer, '_6c3a4f8b9c2d', 1074711649);
+        $artifactResolve = new ArtifactResolve($artifact, $issuer, '_6c3a4f8b9c2d', '2.0', 1074711649);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),

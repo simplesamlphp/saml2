@@ -23,85 +23,56 @@ use function preg_split;
 final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
 {
     /**
-     * List of AttributeService endpoints.
-     *
-     * Array with EndpointType objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AttributeService[]
-     */
-    protected array $AttributeServices = [];
-
-    /**
-     * List of AssertionIDRequestService endpoints.
-     *
-     * Array with EndpointType objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
-     */
-    protected array $AssertionIDRequestServices = [];
-
-    /**
-     * List of supported NameID formats.
-     *
-     * Array of strings.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\NameIDFormat[]
-     */
-    protected array $NameIDFormats = [];
-
-    /**
-     * List of supported attribute profiles.
-     *
-     * Array with strings.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AttributeProfile[]
-     */
-    protected array $AttributeProfiles = [];
-
-    /**
-     * List of supported attributes.
-     *
-     * Array with \SimpleSAML\SAML2\XML\saml\Attribute objects.
-     *
-     * @var Attribute[]
-     */
-    protected array $Attributes = [];
-
-
-    /**
      * AttributeAuthorityDescriptor constructor.
      *
-     * @param \SimpleSAML\SAML2\XML\md\AttributeService[] $attributeServices
+     * @param \SimpleSAML\SAML2\XML\md\AttributeService[] $attributeService
      * @param string[] $protocolSupportEnumeration
-     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
-     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormats
-     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfiles
-     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes
+     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $sssertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
+     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $sttributeProfile
+     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $sttribute
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @param string|null $errorURL
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
-     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors
-     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contact
      */
     public function __construct(
-        array $attributeServices,
+        protected array $attributeService,
         array $protocolSupportEnumeration,
-        array $assertionIDRequestService = [],
-        array $nameIDFormats = [],
-        array $attributeProfiles = [],
-        array $attributes = [],
+        protected array $assertionIDRequestService = [],
+        protected array $nameIDFormat = [],
+        protected array $attributeProfile = [],
+        protected array $attribute = [],
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         ?string $errorURL = null,
         ?Organization $organization = null,
-        array $keyDescriptors = [],
-        array $contacts = []
+        array $keyDescriptor = [],
+        array $contact = []
     ) {
+        Assert::minCount(
+            $attributeService,
+            1,
+            'AttributeAuthorityDescriptor must contain at least one AttributeService.',
+            MissingElementException::class,
+        );
+        Assert::allIsInstanceOf(
+            $attributeService,
+            AttributeService::class,
+            'AttributeService is not an instance of EndpointType.',
+            InvalidDOMElementException::class,
+        );
+        Assert::allIsInstanceOf($nameIDFormat, NameIDFormat::class);
+        Assert::allIsInstanceOf($assertionIDRequestService, AssertionIDRequestService::class);
+        Assert::allIsInstanceOf($attributeProfile, AttributeProfile::class);
+        Assert::allIsInstanceOf($attribute, Attribute::class);
+
         parent::__construct(
             $protocolSupportEnumeration,
             $ID,
@@ -109,16 +80,10 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
             $cacheDuration,
             $extensions,
             $errorURL,
-            $keyDescriptors,
+            $keyDescriptor,
             $organization,
-            $contacts
+            $contact
         );
-
-        $this->setAttributeServices($attributeServices);
-        $this->setAssertionIDRequestServices($assertionIDRequestService);
-        $this->setNameIDFormats($nameIDFormats);
-        $this->setAttributeProfiles($attributeProfiles);
-        $this->setAttributes($attributes);
     }
 
 
@@ -127,32 +92,9 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\AttributeService[]
      */
-    public function getAttributeServices(): array
+    public function getAttributeService(): array
     {
-        return $this->AttributeServices;
-    }
-
-
-    /**
-     * Set the value of the AttributeService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AttributeService[] $attributeServices
-     */
-    protected function setAttributeServices(array $attributeServices): void
-    {
-        Assert::minCount(
-            $attributeServices,
-            1,
-            'AttributeAuthorityDescriptor must contain at least one AttributeService.',
-            MissingElementException::class,
-        );
-        Assert::allIsInstanceOf(
-            $attributeServices,
-            AttributeService::class,
-            'AttributeService is not an instance of EndpointType.',
-            InvalidDOMElementException::class,
-        );
-        $this->AttributeServices = $attributeServices;
+        return $this->attributeService;
     }
 
 
@@ -161,21 +103,9 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
-    public function getNameIDFormats(): array
+    public function getNameIDFormat(): array
     {
-        return $this->NameIDFormats;
-    }
-
-
-    /**
-     * Set the value of the NameIDFormat-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormats
-     */
-    protected function setNameIDFormats(array $nameIDFormats): void
-    {
-        Assert::allIsInstanceOf($nameIDFormats, NameIDFormat::class);
-        $this->NameIDFormats = $nameIDFormats;
+        return $this->nameIDFormat;
     }
 
 
@@ -184,22 +114,9 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
-    public function getAssertionIDRequestServices(): array
+    public function getAssertionIDRequestService(): array
     {
-        return $this->AssertionIDRequestServices;
-    }
-
-
-    /**
-     * Set the value of the AssertionIDRequestService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServices
-     */
-    protected function setAssertionIDRequestServices(array $assertionIDRequestServices): void
-    {
-        Assert::allIsInstanceOf($assertionIDRequestServices, AssertionIDRequestService::class);
-
-        $this->AssertionIDRequestServices = $assertionIDRequestServices;
+        return $this->assertionIDRequestService;
     }
 
 
@@ -208,44 +125,20 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\AttributeProfile[]
      */
-    public function getAttributeProfiles(): array
+    public function getAttributeProfile(): array
     {
-        return $this->AttributeProfiles;
-    }
-
-
-    /**
-     * Set the value of the AttributeProfile-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfiles
-     */
-    protected function setAttributeProfiles(array $attributeProfiles): void
-    {
-        Assert::allIsInstanceOf($attributeProfiles, AttributeProfile::class);
-        $this->AttributeProfiles = $attributeProfiles;
+        return $this->attributeProfile;
     }
 
 
     /**
      * Collect the value of the Attribute-property
      *
-     * @return Attribute[]
+     * @return \SimpleSAML\SAML2\XML\saml\Attribute[]
      */
     public function getAttributes(): array
     {
-        return $this->Attributes;
-    }
-
-
-    /**
-     * Set the value of the Attribute-property
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes
-     */
-    protected function setAttributes(?array $attributes): void
-    {
-        Assert::allIsInstanceOf($attributes, Attribute::class);
-        $this->Attributes = $attributes;
+        return $this->attribute;
     }
 
 
@@ -343,19 +236,19 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
     {
         $e = parent::toUnsignedXML($parent);
 
-        foreach ($this->getAttributeServices() as $ep) {
+        foreach ($this->getAttributeService() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->getAssertionIDRequestServices() as $ep) {
+        foreach ($this->getAssertionIDRequestService() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->getNameIDFormats() as $nidFormat) {
+        foreach ($this->getNameIDFormat() as $nidFormat) {
             $nidFormat->toXML($e);
         }
 
-        foreach ($this->getAttributeProfiles() as $ap) {
+        foreach ($this->getAttributeProfile() as $ap) {
             $ap->toXML($e);
         }
 

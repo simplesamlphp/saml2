@@ -22,27 +22,12 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 abstract class AbstractStatusResponse extends AbstractMessage
 {
     /**
-     * The ID of the request this is a response to, or null if this is an unsolicited response.
-     *
-     * @var string|null
-     */
-    protected ?string $inResponseTo;
-
-
-    /**
-     * The status code of the response.
-     *
-     * @var \SimpleSAML\SAML2\XML\samlp\Status
-     */
-    protected Status $status;
-
-
-    /**
      * Constructor for SAML 2 response messages.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\Status $status
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
+     * @param string $version
      * @param int|null $issueInstant
      * @param string|null $inResponseTo
      * @param string|null $destination
@@ -53,20 +38,20 @@ abstract class AbstractStatusResponse extends AbstractMessage
      * @throws \Exception
      */
     protected function __construct(
-        Status $status,
+        protected Status $status,
         ?Issuer $issuer = null,
         ?string $id = null,
+        string $version = '2.0',
         ?int $issueInstant = null,
-        ?string $inResponseTo = null,
+        protected ?string $inResponseTo = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
         ?string $relayState = null
     ) {
-        parent::__construct($issuer, $id, $issueInstant, $destination, $consent, $extensions, $relayState);
+        Assert::nullOrValidNCName($inResponseTo); // Covers the empty string
 
-        $this->setStatus($status);
-        $this->setInResponseTo($inResponseTo);
+        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions, $relayState);
     }
 
 
@@ -93,19 +78,6 @@ abstract class AbstractStatusResponse extends AbstractMessage
 
 
     /**
-     * Set the ID of the request this is a response to.
-     *
-     * @param string|null $inResponseTo The ID of the request.
-     */
-    protected function setInResponseTo(?string $inResponseTo): void
-    {
-        Assert::nullOrValidNCName($inResponseTo); // Covers the empty string
-
-        $this->inResponseTo = $inResponseTo;
-    }
-
-
-    /**
      * Retrieve the status code.
      *
      * @return \SimpleSAML\SAML2\XML\samlp\Status The status code.
@@ -113,17 +85,6 @@ abstract class AbstractStatusResponse extends AbstractMessage
     public function getStatus(): Status
     {
         return $this->status;
-    }
-
-
-    /**
-     * Set the status code.
-     *
-     * @param \SimpleSAML\SAML2\XML\samlp\Status $status The status code.
-     */
-    protected function setStatus(Status $status): void
-    {
-        $this->status = $status;
     }
 
 

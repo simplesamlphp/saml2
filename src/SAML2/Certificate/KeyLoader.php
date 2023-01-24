@@ -48,7 +48,7 @@ class KeyLoader
     public static function extractPublicKeys(
         CertificateProvider $config,
         string $usage = null,
-        bool $required = false
+        bool $required = false,
     ): KeyCollection {
         $keyLoader = new self();
 
@@ -65,7 +65,7 @@ class KeyLoader
     public function loadKeysFromConfiguration(
         CertificateProvider $config,
         string $usage = null,
-        bool $required = false
+        bool $required = false,
     ): KeyCollection {
         $keys = $config->getKeys();
         $certificateData = $config->getCertificateData();

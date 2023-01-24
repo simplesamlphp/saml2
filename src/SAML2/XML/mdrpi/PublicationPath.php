@@ -19,22 +19,14 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class PublicationPath extends AbstractMdrpiElement
 {
     /**
-     * This is array of Publication objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\mdrpi\Publication[]
-     */
-    protected array $Publication = [];
-
-
-    /**
      * Create/parse a mdrpi:PublicationPath element.
      *
-     * @param \SimpleSAML\SAML2\XML\mdrpi\Publication[] $Publication
+     * @param \SimpleSAML\SAML2\XML\mdrpi\Publication[] $publication
      */
     public function __construct(
-        array $Publication = []
+        protected array $publication = []
     ) {
-        $this->setPublication($Publication);
+        Assert::allIsInstanceOf($publication, Publication::class);
     }
 
 
@@ -45,20 +37,7 @@ final class PublicationPath extends AbstractMdrpiElement
      */
     public function getPublication(): array
     {
-        return $this->Publication;
-    }
-
-
-    /**
-     * Set the value of the Publication-property
-     *
-     * @param \SimpleSAML\SAML2\XML\mdrpi\Publication[] $Publication
-     */
-    private function setPublication(array $Publication): void
-    {
-        Assert::allIsInstanceOf($Publication, Publication::class);
-
-        $this->Publication = $Publication;
+        return $this->publication;
     }
 
 
@@ -69,7 +48,7 @@ final class PublicationPath extends AbstractMdrpiElement
      */
     public function isEmptyElement(): bool
     {
-        return empty($this->Publication);
+        return empty($this->publication);
     }
 
 

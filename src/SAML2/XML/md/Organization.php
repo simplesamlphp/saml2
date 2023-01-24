@@ -24,27 +24,6 @@ final class Organization extends AbstractMdElement
     use ExtendableAttributesTrait;
     use ExtendableElementTrait;
 
-    /**
-     * The OrganizationName, as an array of OrganizationName objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\OrganizationName[]
-     */
-    protected array $OrganizationName = [];
-
-    /**
-     * The OrganizationDisplayName, as an array of OrganizationDisplayName objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\OrganizationDisplayName[]
-     */
-    protected array $OrganizationDisplayName = [];
-
-    /**
-     * The OrganizationURL, as an array of OrganizationURL objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\OrganizationURL[]
-     */
-    protected array $OrganizationURL = [];
-
 
     /**
      * Organization constructor.
@@ -56,15 +35,16 @@ final class Organization extends AbstractMdElement
      * @param \DOMAttr[]                     $namespacedAttributes
      */
     public function __construct(
-        array $organizationName,
-        array $organizationDisplayName,
-        array $organizationURL,
+        protected array $organizationName,
+        protected array $organizationDisplayName,
+        protected array $organizationURL,
         ?Extensions $extensions = null,
         array $namespacedAttributes = []
     ) {
-        $this->setOrganizationName($organizationName);
-        $this->setOrganizationDisplayName($organizationDisplayName);
-        $this->setOrganizationURL($organizationURL);
+        Assert::allIsInstanceOf($organizationName, OrganizationName::class);
+        Assert::allIsInstanceOf($organizationDisplayName, OrganizationDisplayName::class);
+        Assert::allIsInstanceOf($organizationURL, OrganizationURL::class);
+
         $this->setExtensions($extensions);
         $this->setAttributesNS($namespacedAttributes);
     }
@@ -77,20 +57,7 @@ final class Organization extends AbstractMdElement
      */
     public function getOrganizationName(): array
     {
-        return $this->OrganizationName;
-    }
-
-
-    /**
-     * Set the value of the OrganizationName property.
-     *
-     * @param \SimpleSAML\SAML2\XML\md\OrganizationName[] $organizationName
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setOrganizationName(array $organizationName): void
-    {
-        Assert::allIsInstanceOf($organizationName, OrganizationName::class);
-        $this->OrganizationName = $organizationName;
+        return $this->organizationName;
     }
 
 
@@ -101,20 +68,7 @@ final class Organization extends AbstractMdElement
      */
     public function getOrganizationDisplayName(): array
     {
-        return $this->OrganizationDisplayName;
-    }
-
-
-    /**
-     * Set the value of the OrganizationDisplayName property.
-     *
-     * @param \SimpleSAML\SAML2\XML\md\OrganizationDisplayName[] $organizationDisplayName
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setOrganizationDisplayName(array $organizationDisplayName): void
-    {
-        Assert::allIsInstanceOf($organizationDisplayName, OrganizationDisplayName::class);
-        $this->OrganizationDisplayName = $organizationDisplayName;
+        return $this->organizationDisplayName;
     }
 
 
@@ -125,20 +79,7 @@ final class Organization extends AbstractMdElement
      */
     public function getOrganizationURL(): array
     {
-        return $this->OrganizationURL;
-    }
-
-
-    /**
-     * Set the value of the OrganizationURL property.
-     *
-     * @param \SimpleSAML\SAML2\XML\md\OrganizationURL[] $organizationURL
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setOrganizationURL(array $organizationURL): void
-    {
-        Assert::allIsInstanceOf($organizationURL, OrganizationURL::class);
-        $this->OrganizationURL = $organizationURL;
+        return $this->organizationURL;
     }
 
 

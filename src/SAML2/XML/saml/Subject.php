@@ -22,14 +22,6 @@ final class Subject extends AbstractSamlElement
     use IdentifierTrait;
 
     /**
-     * SubjectConfirmation element with extra data for verification of the Subject.
-     *
-     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
-     */
-    protected array $SubjectConfirmation;
-
-
-    /**
      * Initialize a Subject element.
      *
      * @param \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null $identifier
@@ -37,18 +29,18 @@ final class Subject extends AbstractSamlElement
      */
     public function __construct(
         ?IdentifierInterface $identifier,
-        array $SubjectConfirmation = []
+        protected array $subjectConfirmation = []
     ) {
-        if (empty($SubjectConfirmation)) {
+        if (empty($subjectConfirmation)) {
             Assert::notNull(
                 $identifier,
                 'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of '
                     . '<saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
             );
         }
+        Assert::allIsInstanceOf($subjectConfirmation, SubjectConfirmation::class);
 
         $this->setIdentifier($identifier);
-        $this->setSubjectConfirmation($SubjectConfirmation);
     }
 
 
@@ -59,20 +51,7 @@ final class Subject extends AbstractSamlElement
      */
     public function getSubjectConfirmation(): array
     {
-        return $this->SubjectConfirmation;
-    }
-
-
-    /**
-     * Set the value of the SubjectConfirmation-property
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[] $subjectConfirmation
-     */
-    private function setSubjectConfirmation(array $subjectConfirmation): void
-    {
-        Assert::allIsInstanceOf($subjectConfirmation, SubjectConfirmation::class);
-
-        $this->SubjectConfirmation = $subjectConfirmation;
+        return $this->subjectConfirmation;
     }
 
 

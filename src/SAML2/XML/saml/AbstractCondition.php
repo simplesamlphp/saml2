@@ -29,18 +29,15 @@ abstract class AbstractCondition extends AbstractConditionType implements Extens
     /** @var string */
     public const LOCALNAME = 'Condition';
 
-    /** @var string */
-    protected string $type;
-
 
     /**
      * Initialize a custom saml:Condition element.
      *
      * @param string $type
      */
-    protected function __construct(string $type)
-    {
-        $this->type = $type;
+    protected function __construct(
+        protected string $type,
+    ) {
     }
 
 

@@ -39,28 +39,6 @@ abstract class AbstractEndpointType extends AbstractMdElement
 
 
     /**
-     * The binding for this endpoint.
-     *
-     * @var string
-     */
-    protected string $Binding;
-
-    /**
-     * The URI to this endpoint.
-     *
-     * @var string
-     */
-    protected string $Location;
-
-    /**
-     * The URI where responses can be delivered.
-     *
-     * @var string|null
-     */
-    protected ?string $ResponseLocation = null;
-
-
-    /**
      * EndpointType constructor.
      *
      * @param string      $binding
@@ -72,15 +50,16 @@ abstract class AbstractEndpointType extends AbstractMdElement
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function __construct(
-        string $binding,
-        string $location,
-        ?string $responseLocation = null,
+        protected string $binding,
+        protected string $location,
+        protected ?string $responseLocation = null,
         array $attributes = [],
-        array $children = []
+        array $children = [],
     ) {
-        $this->setBinding($binding);
-        $this->setLocation($location);
-        $this->setResponseLocation($responseLocation);
+        Assert::validURI($binding, SchemaViolationException::class); // Covers the empty string
+        Assert::validURI($location, SchemaViolationException::class); // Covers the empty string
+        Assert::nullOrValidURI($responseLocation, SchemaViolationException::class); // Covers the empty string
+
         $this->setAttributesNS($attributes);
         $this->setElements($children);
     }
@@ -93,20 +72,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      */
     public function getBinding(): string
     {
-        return $this->Binding;
-    }
-
-
-    /**
-     * Set the value of the Binding property.
-     *
-     * @param string $binding
-     * @throws \SimpleSAML\Assert\AssertionFailedException if the Binding is empty
-     */
-    protected function setBinding(string $binding): void
-    {
-        Assert::validURI($binding, SchemaViolationException::class); // Covers the empty string
-        $this->Binding = $binding;
+        return $this->binding;
     }
 
 
@@ -117,20 +83,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      */
     public function getLocation(): string
     {
-        return $this->Location;
-    }
-
-
-    /**
-     * Set the value of the Location property.
-     *
-     * @param string $location
-     * @throws \SimpleSAML\Assert\AssertionFailedException if the Location is empty
-     */
-    protected function setLocation(string $location): void
-    {
-        Assert::validURI($location, SchemaViolationException::class); // Covers the empty string
-        $this->Location = $location;
+        return $this->location;
     }
 
 
@@ -141,20 +94,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
      */
     public function getResponseLocation(): ?string
     {
-        return $this->ResponseLocation;
-    }
-
-
-    /**
-     * Set the value of the ResponseLocation property.
-     *
-     * @param string|null $responseLocation
-     * @throws \SimpleSAML\Assert\AssertionFailedException if the ResponseLocation is empty
-     */
-    protected function setResponseLocation(?string $responseLocation = null): void
-    {
-        Assert::nullOrValidURI($responseLocation, SchemaViolationException::class); // Covers the empty string
-        $this->ResponseLocation = $responseLocation;
+        return $this->responseLocation;
     }
 
 

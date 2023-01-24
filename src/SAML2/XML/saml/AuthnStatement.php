@@ -22,22 +22,6 @@ use function gmdate;
  */
 final class AuthnStatement extends AbstractStatementType
 {
-    /** @var \SimpleSAML\SAML2\XML\saml\AuthnContext */
-    protected AuthnContext $authnContext;
-
-    /** @var int */
-    protected int $authnInstant;
-
-    /** @var int|null */
-    protected ?int $sessionNotOnOrAfter;
-
-    /** @var string|null */
-    protected ?string $sessionIndex = null;
-
-    /** @var \SimpleSAML\SAML2\XML\saml\SubjectLocality|null */
-    protected ?SubjectLocality $subjectLocality = null;
-
-
     /**
      * Initialize an AuthnContext.
      *
@@ -48,17 +32,13 @@ final class AuthnStatement extends AbstractStatementType
      * @param \SimpleSAML\SAML2\XML\saml\SubjectLocality|null $subjectLocality
      */
     public function __construct(
-        AuthnContext $authnContext,
-        int $authnInstant,
-        ?int $sessionNotOnOrAfter = null,
-        ?string $sessionIndex = null,
-        SubjectLocality $subjectLocality = null
+        protected AuthnContext $authnContext,
+        protected int $authnInstant,
+        protected ?int $sessionNotOnOrAfter = null,
+        protected ?string $sessionIndex = null,
+        protected ?SubjectLocality $subjectLocality = null
     ) {
-        $this->setAuthnContext($authnContext);
-        $this->setAuthnInstant($authnInstant);
-        $this->setSessionNotOnOrAfter($sessionNotOnOrAfter);
-        $this->setSessionIndex($sessionIndex);
-        $this->setSubjectLocality($subjectLocality);
+        Assert::nullOrNotWhitespaceOnly($sessionIndex);
     }
 
 
@@ -74,17 +54,6 @@ final class AuthnStatement extends AbstractStatementType
 
 
     /**
-     * Set the value of the authnContext-property
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\AuthnContext $authnContext
-     */
-    private function setAuthnContext(AuthnContext $authnContext): void
-    {
-        $this->authnContext = $authnContext;
-    }
-
-
-    /**
      * Collect the value of the AuthnInstant-property
      *
      * @return int
@@ -92,17 +61,6 @@ final class AuthnStatement extends AbstractStatementType
     public function getAuthnInstant(): int
     {
         return $this->authnInstant;
-    }
-
-
-    /**
-     * Set the value of the authnInstant-property
-     *
-     * @param int $authnInstant
-     */
-    private function setAuthnInstant(int $authnInstant): void
-    {
-        $this->authnInstant = $authnInstant;
     }
 
 
@@ -118,17 +76,6 @@ final class AuthnStatement extends AbstractStatementType
 
 
     /**
-     * Set the value of the sessionNotOnOrAfter-property
-     *
-     * @param int|null $sessionNotOnOrAfter
-     */
-    private function setSessionNotOnOrAfter(?int $sessionNotOnOrAfter): void
-    {
-        $this->sessionNotOnOrAfter = $sessionNotOnOrAfter;
-    }
-
-
-    /**
      * Collect the value of the sessionIndex-property
      *
      * @return ?string
@@ -140,19 +87,6 @@ final class AuthnStatement extends AbstractStatementType
 
 
     /**
-     * Set the value of the sessionIndex-property
-     *
-     * @param string|null $sessionIndex
-     */
-    private function setSessionIndex(?string $sessionIndex): void
-    {
-        Assert::nullOrNotWhitespaceOnly($sessionIndex);
-
-        $this->sessionIndex = $sessionIndex;
-    }
-
-
-    /**
      * Collect the value of the subjectLocality-property
      *
      * @return \SimpleSAML\SAML2\XML\saml\SubjectLocality|null
@@ -160,17 +94,6 @@ final class AuthnStatement extends AbstractStatementType
     public function getSubjectLocality(): ?SubjectLocality
     {
         return $this->subjectLocality;
-    }
-
-
-    /**
-     * Set the value of the subjectLocality-property
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\SubjectLocality|null $subjectLocality
-     */
-    private function setSubjectLocality(?SubjectLocality $subjectLocality): void
-    {
-        $this->subjectLocality = $subjectLocality;
     }
 
 

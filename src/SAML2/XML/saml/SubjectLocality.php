@@ -16,13 +16,6 @@ use SimpleSAML\Assert\Assert;
  */
 final class SubjectLocality extends AbstractSamlElement
 {
-    /** @var string|null */
-    protected ?string $address;
-
-    /** @var string|null */
-    protected ?string $dnsName;
-
-
     /**
      * Initialize an SubjectLocality.
      *
@@ -30,11 +23,11 @@ final class SubjectLocality extends AbstractSamlElement
      * @param string|null $dnsName
      */
     public function __construct(
-        ?string $address = null,
-        ?string $dnsName = null
+        protected ?string $address = null,
+        protected ?string $dnsName = null
     ) {
-        $this->setAddress($address);
-        $this->setDnsName($dnsName);
+        Assert::nullOrIp($address, 'Invalid IP address');
+        Assert::nullOrnotWhitespaceOnly($dnsName, 'Invalid DNS name');
     }
 
 
@@ -50,18 +43,6 @@ final class SubjectLocality extends AbstractSamlElement
 
 
     /**
-     * Set the value of the address-property
-     *
-     * @param string|null $address
-     */
-    private function setAddress(?string $address): void
-    {
-        Assert::nullOrIp($address, 'Invalid IP address');
-        $this->address = $address;
-    }
-
-
-    /**
      * Collect the value of the dnsName-property
      *
      * @return string|null
@@ -69,18 +50,6 @@ final class SubjectLocality extends AbstractSamlElement
     public function getDnsName(): ?string
     {
         return $this->dnsName;
-    }
-
-
-    /**
-     * Set the value of the dnsName-property
-     *
-     * @param string|null $dnsName
-     */
-    private function setDnsName(?string $dnsName): void
-    {
-        Assert::nullOrnotWhitespaceOnly($dnsName, 'Invalid DNS name');
-        $this->dnsName = $dnsName;
     }
 
 

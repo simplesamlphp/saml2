@@ -24,22 +24,17 @@ final class AdditionalMetadataLocation extends AbstractMdElement
 
 
     /**
-     * The namespace of this metadata.
-     *
-     * @var string
-     */
-    protected string $namespace;
-
-
-    /**
      * Create a new instance of AdditionalMetadataLocation
      *
      * @param string $namespace
      * @param string $location
      */
-    public function __construct(string $namespace, string $location)
-    {
-        $this->setNamespace($namespace);
+    public function __construct(
+        protected string $namespace,
+        string $location,
+    ) {
+        Assert::validURI($namespace, SchemaViolationException::class); // Covers the empty string
+
         $this->setContent($location);
     }
 
@@ -52,19 +47,6 @@ final class AdditionalMetadataLocation extends AbstractMdElement
     public function getNamespace(): string
     {
         return $this->namespace;
-    }
-
-
-    /**
-     * Set the value of the namespace-property
-     *
-     * @param string $namespace
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setNamespace(string $namespace): void
-    {
-        Assert::validURI($namespace, SchemaViolationException::class); // Covers the empty string
-        $this->namespace = $namespace;
     }
 
 

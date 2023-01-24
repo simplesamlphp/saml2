@@ -14,30 +14,10 @@ use SimpleSAML\SAML2\Exception\RuntimeException;
 class PrivateKey extends ArrayAdapter
 {
     /** @var string */
-    public const NAME_NEW     = 'new';
+    public const NAME_NEW = 'new';
 
     /** @var string */
     public const NAME_DEFAULT = 'default';
-
-    /**
-     * @var string
-     */
-    private string $filePathOrContents;
-
-    /**
-     * @var string
-     */
-    private string $passphrase;
-
-    /**
-     * @var string
-     */
-    private string $name;
-
-    /**
-     * @var bool
-     */
-    private bool $isFile;
 
 
     /**
@@ -48,12 +28,12 @@ class PrivateKey extends ArrayAdapter
      * @param string $passphrase
      * @param bool $isFile
      */
-    public function __construct(string $filePathOrContents, string $name, string $passphrase = '', bool $isFile = true)
-    {
-        $this->filePathOrContents = $filePathOrContents;
-        $this->passphrase = $passphrase;
-        $this->name = $name;
-        $this->isFile = $isFile;
+    public function __construct(
+        private string $filePathOrContents,
+        private string $name,
+        private string $passphrase = '',
+        private bool $isFile = true
+    ) {
     }
 
 

@@ -19,37 +19,6 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class PublicationInfo extends AbstractMdrpiElement
 {
     /**
-     * The identifier of the metadata publisher.
-     *
-     * @var string
-     */
-    protected string $publisher;
-
-    /**
-     * The creation timestamp for the metadata, as a UNIX timestamp.
-     *
-     * @var int|null
-     */
-    protected ?int $creationInstant = null;
-
-    /**
-     * Identifier for this metadata publication.
-     *
-     * @var string|null
-     */
-    protected ?string $publicationId = null;
-
-    /**
-     * Link to usage policy for this metadata.
-     *
-     * This is array of UsagePolicy objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\mdrpi\UsagePolicy[]
-     */
-    protected array $UsagePolicy = [];
-
-
-    /**
      * Create/parse a mdrpi:PublicationInfo element.
      *
      * @param string $publisher
@@ -58,15 +27,29 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @param \SimpleSAML\SAML2\XML\mdrpi\UsagePolicy[] $UsagePolicy
      */
     public function __construct(
-        string $publisher,
-        int $creationInstant = null,
-        string $publicationId = null,
-        array $UsagePolicy = []
+        protected string $publisher,
+        protected ?int $creationInstant = null,
+        protected ?string $publicationId = null,
+        protected array $usagePolicy = []
     ) {
-        $this->setPublisher($publisher);
-        $this->setCreationInstant($creationInstant);
-        $this->setPublicationId($publicationId);
-        $this->setUsagePolicy($UsagePolicy);
+        Assert::allIsInstanceOf($usagePolicy, UsagePolicy::class);
+
+        /**
+         * 2.2.1:  There MUST NOT be more than one <mdrpi:UsagePolicy>,
+         *         within a given <mdrpi:UsageInfo>, for a given language
+         */
+        $languages = array_map(
+            function ($up) {
+                return $up->getLanguage();
+            },
+            $usagePolicy
+        );
+        Assert::uniqueValues(
+            $languages,
+            'There MUST NOT be more than one <mdrpi:UsagePolicy>,'
+            . ' within a given <mdrpi:PublicationInfo>, for a given language',
+            ProtocolViolationException::class
+        );
     }
 
 
@@ -110,70 +93,7 @@ final class PublicationInfo extends AbstractMdrpiElement
      */
     public function getUsagePolicy(): array
     {
-        return $this->UsagePolicy;
-    }
-
-
-    /**
-     * Set the value of the publisher-property
-     *
-     * @param string $publisher
-     */
-    private function setPublisher(string $publisher): void
-    {
-        $this->publisher = $publisher;
-    }
-
-
-    /**
-     * Set the value of the creationInstant-property
-     *
-     * @param int|null $creationInstant
-     */
-    private function setCreationInstant(?int $creationInstant): void
-    {
-        $this->creationInstant = $creationInstant;
-    }
-
-
-    /**
-     * Set the value of the publicationId-property
-     *
-     * @param string|null $publicationId
-     */
-    private function setPublicationId(?string $publicationId): void
-    {
-        $this->publicationId = $publicationId;
-    }
-
-
-    /**
-     * Set the value of the UsagePolicy-property
-     *
-     * @param \SimpleSAML\SAML2\XML\mdrpi\UsagePolicy[] $usagePolicy
-     */
-    private function setUsagePolicy(array $usagePolicy): void
-    {
-        Assert::allIsInstanceOf($usagePolicy, UsagePolicy::class);
-
-        /**
-         * 2.2.1:  There MUST NOT be more than one <mdrpi:UsagePolicy>,
-         *         within a given <mdrpi:UsageInfo>, for a given language
-         */
-        $languages = array_map(
-            function ($up) {
-                return $up->getLanguage();
-            },
-            $usagePolicy
-        );
-        Assert::uniqueValues(
-            $languages,
-            'There MUST NOT be more than one <mdrpi:UsagePolicy>,'
-            . ' within a given <mdrpi:PublicationInfo>, for a given language',
-            ProtocolViolationException::class
-        );
-
-        $this->UsagePolicy = $usagePolicy;
+        return $this->usagePolicy;
     }
 
 

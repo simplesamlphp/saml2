@@ -27,19 +27,18 @@ final class CustomStatement extends AbstractStatement
     /** @var string */
     protected const XSI_TYPE_PREFIX = 'ssp';
 
-    /** @var \SimpleSAML\SAML2\XML\saml\Audience[] $audience */
-    protected array $audience = [];
-
 
     /**
      * CustomStatement constructor.
      *
      * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
      */
-    public function __construct(array $audience)
-    {
+    public function __construct(
+        protected array $audience,
+    ) {
+        Assert::allIsInstanceOf($audience, Audience::class);
+
         parent::__construct(self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME);
-        $this->setAudience($audience);
     }
 
 
@@ -51,18 +50,6 @@ final class CustomStatement extends AbstractStatement
     public function getAudience(): array
     {
         return $this->audience;
-    }
-
-
-    /**
-     * Set the value of the audience-attribute
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
-     */
-    protected function setAudience(array $audience): void
-    {
-        Assert::allIsInstanceOf($audience, Audience::class);
-        $this->audience = $audience;
     }
 
 

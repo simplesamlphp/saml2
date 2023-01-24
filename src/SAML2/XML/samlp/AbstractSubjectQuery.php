@@ -22,33 +22,29 @@ use SimpleSAML\Assert\Assert;
  */
 abstract class AbstractSubjectQuery extends AbstractRequest
 {
-    /** @var \SimpleSAML\SAML2\XML\saml\Subject */
-    protected Subject $subject;
-
-
     /**
      * Constructor for SAML 2 response messages.
      *
      * @param \SimpleSAML\SAML2\XML\saml\Subject $subject
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
-     * @param string $id
+     * @param string|null $id
+     * @param string $version
      * @param int $issueInstant
      * @param string|null $destination
      * @param string|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      */
     protected function __construct(
-        Subject $subject,
+        protected Subject $subject,
         ?Issuer $issuer = null,
         ?string $id = null,
+        string $version = '2.0',
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null
     ) {
-        parent::__construct($issuer, $id, $issueInstant, $destination, $consent, $extensions);
-
-        $this->setSubject($subject);
+        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
     }
 
 
@@ -60,17 +56,6 @@ abstract class AbstractSubjectQuery extends AbstractRequest
     public function getSubject(): Subject
     {
         return $this->subject;
-    }
-
-
-    /**
-     * Set the value of the subject-property
-     * @param \SimpleSAML\SAML2\XML\saml\Subject $subject
-     *
-     */
-    private function setSubject(Subject $subject): void
-    {
-        $this->subject = $subject;
     }
 
 

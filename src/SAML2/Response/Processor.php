@@ -23,11 +23,6 @@ use function sprintf;
 class Processor
 {
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private LoggerInterface $logger;
-
-    /**
      * @var \SimpleSAML\SAML2\Response\Validation\PreconditionValidator
      */
     private PreconditionValidator $preconditionValidator;
@@ -53,11 +48,10 @@ class Processor
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
-     *
      */
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
+    public function __construct(
+        private LoggerInterface $logger,
+    ) {
         $this->signatureValidator = new Validator($logger);
     }
 
@@ -74,7 +68,7 @@ class Processor
         ServiceProvider $serviceProviderConfiguration,
         IdentityProvider $identityProviderConfiguration,
         Destination $currentDestination,
-        Response $response
+        Response $response,
     ): ArrayCollection {
         $this->preconditionValidator = new PreconditionValidator($currentDestination);
         $this->assertionProcessor = ProcessorBuilder::build(

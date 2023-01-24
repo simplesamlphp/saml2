@@ -30,46 +30,13 @@ use function sprintf;
 final class EntityAttributes extends AbstractMdattrElement
 {
     /**
-     * Array with child elements.
-     *
-     * The elements can be \SimpleSAML\SAML2\XML\saml\Attribute or \SimpleSAML\SAML2\XML\saml\Assertion elements.
-     *
-     * @var (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\Attribute)[]
-     */
-    protected array $children = [];
-
-
-    /**
      * Create a EntityAttributes element.
      *
      * @param (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\Attribute)[] $children
      */
-    public function __construct(array $children)
-    {
-        $this->setChildren($children);
-    }
-
-
-    /**
-     * Collect the value of the children-property
-     *
-     * @return (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\Attribute)[]
-     */
-    public function getChildren(): array
-    {
-        return $this->children;
-    }
-
-
-    /**
-     * Set the value of the childen-property
-     *
-     * @param (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\Attribute)[] $children
-     * @return void
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    private function setChildren(array $children): void
-    {
+    public function __construct(
+        protected array $children,
+    ) {
         Assert::allIsInstanceOfAny($children, [Assertion::class, Attribute::class]);
 
         $assertions = array_filter($children, function ($child) {
@@ -129,8 +96,17 @@ final class EntityAttributes extends AbstractMdattrElement
                 ProtocolViolationException::class
             );
         }
+    }
 
-        $this->children = $children;
+
+    /**
+     * Collect the value of the children-property
+     *
+     * @return (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\Attribute)[]
+     */
+    public function getChildren(): array
+    {
+        return $this->children;
     }
 
 
@@ -143,7 +119,7 @@ final class EntityAttributes extends AbstractMdattrElement
      */
     public function addChild($child): void
     {
-        $this->setChildren(array_merge($this->children, [$child]));
+        $this->children = array_merge($this->children, [$child]);
     }
 
 

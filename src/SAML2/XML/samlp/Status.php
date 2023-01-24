@@ -23,16 +23,6 @@ use function is_null;
  */
 final class Status extends AbstractSamlpElement
 {
-    /** @var \SimpleSAML\SAML2\XML\samlp\StatusCode */
-    protected StatusCode $statusCode;
-
-    /** @var \SimpleSAML\SAML2\XML\samlp\StatusMessage|null */
-    protected ?StatusMessage $statusMessage;
-
-    /** @var \SimpleSAML\SAML2\XML\samlp\StatusDetail[] */
-    protected array $statusDetails = [];
-
-
     /**
      * Initialize a samlp:Status
      *
@@ -40,11 +30,23 @@ final class Status extends AbstractSamlpElement
      * @param \SimpleSAML\SAML2\XML\samlp\StatusMessage|null $statusMessage
      * @param \SimpleSAML\SAML2\XML\samlp\StatusDetail[] $statusDetails
      */
-    public function __construct(StatusCode $statusCode, ?StatusMessage $statusMessage = null, array $statusDetails = [])
-    {
-        $this->setStatusCode($statusCode);
-        $this->setStatusMessage($statusMessage);
-        $this->setStatusDetails($statusDetails);
+    public function __construct(
+        protected StatusCode $statusCode,
+        protected ?StatusMessage $statusMessage = null,
+        protected array $statusDetails = [],
+    ) {
+        Assert::oneOf(
+            $statusCode->getValue(),
+            [
+                C::STATUS_SUCCESS,
+                C::STATUS_REQUESTER,
+                C::STATUS_RESPONDER,
+                C::STATUS_VERSION_MISMATCH,
+            ],
+            'Invalid top-level status code:  %s',
+            ProtocolViolationException::class
+        );
+        Assert::allIsInstanceOf($statusDetails, StatusDetail::class);
     }
 
 
@@ -60,29 +62,6 @@ final class Status extends AbstractSamlpElement
 
 
     /**
-     * Set the value of the StatusCode-property
-     *
-     * @param \SimpleSAML\SAML2\XML\samlp\StatusCode $statusCode
-     */
-    private function setStatusCode(StatusCode $statusCode): void
-    {
-        Assert::oneOf(
-            $statusCode->getValue(),
-            [
-                C::STATUS_SUCCESS,
-                C::STATUS_REQUESTER,
-                C::STATUS_RESPONDER,
-                C::STATUS_VERSION_MISMATCH,
-            ],
-            'Invalid top-level status code:  %s',
-            ProtocolViolationException::class
-        );
-
-        $this->statusCode = $statusCode;
-    }
-
-
-    /**
      * Collect the value of the statusMessage
      *
      * @return \SimpleSAML\SAML2\XML\samlp\StatusMessage|null
@@ -90,17 +69,6 @@ final class Status extends AbstractSamlpElement
     public function getStatusMessage(): ?StatusMessage
     {
         return $this->statusMessage;
-    }
-
-
-    /**
-     * Set the value of the statusMessage property
-     * @param \SimpleSAML\SAML2\XML\samlp\StatusMessage|null $statusMessage
-     *
-     */
-    private function setStatusMessage(?StatusMessage $statusMessage): void
-    {
-        $this->statusMessage = $statusMessage;
     }
 
 
@@ -113,22 +81,6 @@ final class Status extends AbstractSamlpElement
     {
         return $this->statusDetails;
     }
-
-
-    /**
-     * Set the value of the statusDetails property
-     *
-     * @param \SimpleSAML\SAML2\XML\samlp\StatusDetail[] $statusDetails
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     *   if the supplied array contains anything other than StatusDetail objects
-     */
-    private function setStatusDetails(array $statusDetails): void
-    {
-        Assert::allIsInstanceOf($statusDetails, StatusDetail::class);
-
-        $this->statusDetails = $statusDetails;
-    }
-
 
 
     /**

@@ -19,46 +19,6 @@ use function implode;
 abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
 {
     /**
-     * List of supported protocols.
-     *
-     * @var string[]
-     */
-    protected array $protocolSupportEnumeration = [];
-
-    /**
-     * Error URL for this role.
-     *
-     * @var string|null
-     */
-    protected ?string $errorURL = null;
-
-    /**
-     * KeyDescriptor elements.
-     *
-     * Array of \SimpleSAML\SAML2\XML\md\KeyDescriptor elements.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\KeyDescriptor[]
-     */
-    protected array $KeyDescriptors = [];
-
-    /**
-     * Organization of this role.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\Organization|null
-     */
-    protected ?Organization $Organization = null;
-
-    /**
-     * ContactPerson elements for this role.
-     *
-     * Array of \SimpleSAML\SAML2\XML\md\ContactPerson objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\ContactPerson[]
-     */
-    protected array $ContactPersons = [];
-
-
-    /**
      * Initialize a RoleDescriptor.
      *
      * @param string[] $protocolSupportEnumeration A set of URI specifying the protocols supported.
@@ -67,33 +27,45 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An Extensions object. Defaults to null.
      * @param string|null $errorURL An URI where to redirect users for support. Defaults to null.
-     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor
      *   An array of KeyDescriptor elements. Defaults to an empty array.
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
      *   The organization running this entity. Defaults to null.
-     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contactPerson
      *   An array of contacts for this entity. Defaults to an empty array.
      * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
-        array $protocolSupportEnumeration,
+        protected array $protocolSupportEnumeration,
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
-        ?string $errorURL = null,
-        array $keyDescriptors = [],
-        ?Organization $organization = null,
-        array $contacts = [],
+        protected ?string $errorURL = null,
+        protected array $keyDescriptor = [],
+        protected ?Organization $organization = null,
+        protected array $contactPerson = [],
         array $namespacedAttributes = []
     ) {
-        parent::__construct($ID, $validUntil, $cacheDuration, $extensions, $namespacedAttributes);
+        Assert::nullOrValidURI($errorURL, SchemaViolationException::class); // Covers the empty string
+        Assert::minCount(
+            $protocolSupportEnumeration,
+            1,
+            'At least one protocol must be supported by this md:' . static::getLocalName() . '.'
+        );
+        Assert::allValidURI($protocolSupportEnumeration, SchemaViolationException::class);
+        Assert::allIsInstanceOf(
+            $contactPerson,
+            ContactPerson::class,
+            'All contacts must be an instance of md:ContactPerson',
+        );
+        Assert::allIsInstanceOf(
+            $keyDescriptor,
+            KeyDescriptor::class,
+            'All key descriptors must be an instance of md:KeyDescriptor',
+        );
 
-        $this->setProtocolSupportEnumeration($protocolSupportEnumeration);
-        $this->setErrorURL($errorURL);
-        $this->setKeyDescriptors($keyDescriptors);
-        $this->setOrganization($organization);
-        $this->setContactPersons($contacts);
+        parent::__construct($ID, $validUntil, $cacheDuration, $extensions, $namespacedAttributes);
     }
 
 
@@ -109,19 +81,6 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
 
 
     /**
-     * Set the value of the errorURL property.
-     *
-     * @param string|null $errorURL
-     * @throws \SimpleSAML\SAML2\Exception\SchemaViolationException
-     */
-    protected function setErrorURL(?string $errorURL = null): void
-    {
-        Assert::nullOrValidURI($errorURL, SchemaViolationException::class); // Covers the empty string
-        $this->errorURL = $errorURL;
-    }
-
-
-    /**
      * Collect the value of the protocolSupportEnumeration property.
      *
      * @return string[]
@@ -133,44 +92,13 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
 
 
     /**
-     * Set the value of the ProtocolSupportEnumeration property.
-     *
-     * @param string[] $protocols
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     * @throws \SimpleSAML\XML\Exception\SchemaViolationException
-     */
-    protected function setProtocolSupportEnumeration(array $protocols): void
-    {
-        Assert::minCount(
-            $protocols,
-            1,
-            'At least one protocol must be supported by this md:' . static::getLocalName() . '.'
-        );
-        Assert::allValidURI($protocols, SchemaViolationException::class);
-
-        $this->protocolSupportEnumeration = $protocols;
-    }
-
-
-    /**
      * Collect the value of the Organization property.
      *
      * @return \SimpleSAML\SAML2\XML\md\Organization|null
      */
     public function getOrganization()
     {
-        return $this->Organization;
-    }
-
-
-    /**
-     * Set the value of the Organization property.
-     *
-     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
-     */
-    protected function setOrganization(?Organization $organization = null): void
-    {
-        $this->Organization = $organization;
+        return $this->organization;
     }
 
 
@@ -179,27 +107,9 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      *
      * @return \SimpleSAML\SAML2\XML\md\ContactPerson[]
      */
-    public function getContactPersons()
+    public function getContactPerson()
     {
-        return $this->ContactPersons;
-    }
-
-
-    /**
-     * Set the value of the ContactPerson property.
-     *
-     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contactPersons
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setContactPersons(array $contactPersons): void
-    {
-        Assert::allIsInstanceOf(
-            $contactPersons,
-            ContactPerson::class,
-            'All contacts must be an instance of md:ContactPerson',
-        );
-
-        $this->ContactPersons = $contactPersons;
+        return $this->contactPerson;
     }
 
 
@@ -208,26 +118,9 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      *
      * @return \SimpleSAML\SAML2\XML\md\KeyDescriptor[]
      */
-    public function getKeyDescriptors()
+    public function getKeyDescriptor()
     {
-        return $this->KeyDescriptors;
-    }
-
-
-    /**
-     * Set the value of the KeyDescriptor property.
-     *
-     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor
-     */
-    protected function setKeyDescriptors(array $keyDescriptor): void
-    {
-        Assert::allIsInstanceOf(
-            $keyDescriptor,
-            KeyDescriptor::class,
-            'All key descriptors must be an instance of md:KeyDescriptor',
-        );
-
-        $this->KeyDescriptors = $keyDescriptor;
+        return $this->keyDescriptor;
     }
 
 
@@ -247,13 +140,13 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
             $e->setAttribute('errorURL', $this->getErrorURL());
         }
 
-        foreach ($this->getKeyDescriptors() as $kd) {
+        foreach ($this->getKeyDescriptor() as $kd) {
             $kd->toXML($e);
         }
 
         $this->getOrganization()?->toXML($e);
 
-        foreach ($this->getContactPersons() as $cp) {
+        foreach ($this->getContactPerson() as $cp) {
             $cp->toXML($e);
         }
 

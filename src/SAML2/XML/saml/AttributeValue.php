@@ -25,12 +25,6 @@ use function is_string;
 class AttributeValue extends AbstractSamlElement
 {
     /**
-     * @var string|int|\SimpleSAML\XML\AbstractElement|null
-     */
-    protected $value;
-
-
-    /**
      * Create an AttributeValue.
      *
      * @param mixed $value The value of this element. Can be one of:
@@ -41,12 +35,14 @@ class AttributeValue extends AbstractSamlElement
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied value is neither a string or a DOMElement
      */
-    public function __construct($value)
-    {
+    public function __construct(
+        protected $value,
+    ) {
         Assert::true(
             is_string($value) || is_int($value) || is_null($value) || is_array($value),
             'Value must be of type "string", "int", "null", or an array of "AbstractElement".'
         );
+
         if (is_array($value)) {
             Assert::allIsInstanceOf(
                 $value,
@@ -54,7 +50,6 @@ class AttributeValue extends AbstractSamlElement
                 'All values passed as an array must be an instance of "AbstractElement".'
             );
         }
-        $this->value = $value;
     }
 
 

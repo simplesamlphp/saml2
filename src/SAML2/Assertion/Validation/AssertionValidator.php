@@ -17,27 +17,15 @@ class AssertionValidator
      */
     protected array $constraints;
 
-    /**
-     * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
-     */
-    private IdentityProvider $identityProvider;
-
-    /**
-     * @var \SimpleSAML\SAML2\Configuration\ServiceProvider
-     */
-    private ServiceProvider $serviceProvider;
-
 
     /**
      * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProvider
      * @param \SimpleSAML\SAML2\Configuration\ServiceProvider  $serviceProvider
      */
     public function __construct(
-        IdentityProvider $identityProvider,
-        ServiceProvider $serviceProvider
+        private IdentityProvider $identityProvider,
+        private ServiceProvider $serviceProvider
     ) {
-        $this->identityProvider = $identityProvider;
-        $this->serviceProvider = $serviceProvider;
     }
 
 

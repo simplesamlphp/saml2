@@ -20,20 +20,6 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
 final class EntitiesDescriptor extends AbstractMetadataDocument
 {
     /**
-     * The name of this entity collection.
-     *
-     * @var string|null
-     */
-    protected ?string $Name = null;
-
-    /** @var \SimpleSAML\SAML2\XML\md\EntityDescriptor[] */
-    protected array $entityDescriptors = [];
-
-    /** @var \SimpleSAML\SAML2\XML\md\EntitiesDescriptor[] */
-    protected array $entitiesDescriptors = [];
-
-
-    /**
      * EntitiesDescriptor constructor.
      *
      * @param \SimpleSAML\SAML2\XML\md\EntityDescriptor[] $entityDescriptors
@@ -46,9 +32,9 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
      * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
-        array $entityDescriptors = [],
-        array $entitiesDescriptors = [],
-        ?string $name = null,
+        protected array $entityDescriptors = [],
+        protected array $entitiesDescriptors = [],
+        protected ?string $Name = null,
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
@@ -60,12 +46,43 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.',
             ProtocolViolationException::class,
         );
+        Assert::allIsInstanceOf($entitiesDescriptors, EntitiesDescriptor::class);
+        Assert::allIsInstanceOf($entityDescriptors, EntityDescriptor::class);
 
         parent::__construct($ID, $validUntil, $cacheDuration, $extensions, $namespacedAttributes);
+    }
 
-        $this->setName($name);
-        $this->setEntityDescriptors($entityDescriptors);
-        $this->setEntitiesDescriptors($entitiesDescriptors);
+
+    /**
+     * Get the EntitiesDescriptor children objects
+     *
+     * @return \SimpleSAML\SAML2\XML\md\EntitiesDescriptor[]
+     */
+    public function getEntitiesDescriptors(): array
+    {
+        return $this->entitiesDescriptors;
+    }
+
+
+    /**
+     * Get the EntityDescriptor children objects
+     *
+     * @return \SimpleSAML\SAML2\XML\md\EntityDescriptor[]
+     */
+    public function getEntityDescriptors(): array
+    {
+        return $this->entityDescriptors;
+    }
+
+
+    /**
+     * Collect the value of the Name property.
+     *
+     * @return string|null
+     */
+    public function getName(): ?string
+    {
+        return $this->Name;
     }
 
 
@@ -127,79 +144,6 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         }
 
         return $entities;
-    }
-
-
-    /**
-     * Get the EntitiesDescriptor children objects
-     *
-     * @return \SimpleSAML\SAML2\XML\md\EntitiesDescriptor[]
-     */
-    public function getEntitiesDescriptors(): array
-    {
-        return $this->entitiesDescriptors;
-    }
-
-
-    /**
-     * Set the EntitiesDescriptor children objects
-     *
-     * @param \SimpleSAML\SAML2\XML\md\EntitiesDescriptor[] $entitiesDescriptors
-     */
-    protected function setEntitiesDescriptors(array $entitiesDescriptors): void
-    {
-        Assert::allIsInstanceOf($entitiesDescriptors, EntitiesDescriptor::class);
-        $this->entitiesDescriptors = $entitiesDescriptors;
-    }
-
-
-    /**
-     * Get the EntityDescriptor children objects
-     *
-     * @return \SimpleSAML\SAML2\XML\md\EntityDescriptor[]
-     */
-    public function getEntityDescriptors(): array
-    {
-        return $this->entityDescriptors;
-    }
-
-
-
-    /**
-     * Set the EntityDescriptor children objects
-     *
-     * @param \SimpleSAML\SAML2\XML\md\EntityDescriptor[] $entityDescriptors
-     */
-    protected function setEntityDescriptors(array $entityDescriptors): void
-    {
-        Assert::allIsInstanceOf($entityDescriptors, EntityDescriptor::class);
-        $this->entityDescriptors = $entityDescriptors;
-    }
-
-
-
-    /**
-     * Collect the value of the Name property.
-     *
-     * @return string|null
-     */
-    public function getName(): ?string
-    {
-        return $this->Name;
-    }
-
-
-    /**
-     * Set the value of the Name property.
-     *
-     * @param string|null $name
-     */
-    protected function setName(?string $name = null): void
-    {
-        if ($name === null) {
-            return;
-        }
-        $this->Name = $name;
     }
 
 

@@ -135,8 +135,8 @@ final class PDPDescriptorTest extends TestCase
             [$this->authzService],
             ["urn:oasis:names:tc:SAML:2.0:protocol"]
         );
-        $this->assertEmpty($pdpd->getAssertionIDRequestServices());
-        $this->assertEmpty($pdpd->getNameIDFormats());
+        $this->assertEmpty($pdpd->getAssertionIDRequestService());
+        $this->assertEmpty($pdpd->getNameIDFormat());
     }
 
 
@@ -191,7 +191,7 @@ final class PDPDescriptorTest extends TestCase
 XML
         );
         $pdpd = PDPDescriptor::fromXML($document->documentElement);
-        $this->assertEmpty($pdpd->getAssertionIDRequestServices());
-        $this->assertEmpty($pdpd->getNameIDFormats());
+        $this->assertEmpty($pdpd->getAssertionIDRequestService());
+        $this->assertEmpty($pdpd->getNameIDFormat());
     }
 }

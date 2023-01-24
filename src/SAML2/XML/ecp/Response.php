@@ -22,21 +22,14 @@ use function filter_var;
 final class Response extends AbstractEcpElement
 {
     /**
-     * The AssertionConsumerServiceURL.
-     *
-     * @var string
-     */
-    protected string $AssertionConsumerServiceURL;
-
-
-    /**
      * Create a ECP Response element.
      *
      * @param string $assertionConsumerServiceURL
      */
-    public function __construct(string $assertionConsumerServiceURL)
-    {
-        $this->setAssertionConsumerServiceURL($assertionConsumerServiceURL);
+    public function __construct(
+        protected string $assertionConsumerServiceURL,
+    ) {
+        Assert::validURI($assertionConsumerServiceURL, SchemaViolationException::class); // Covers the empty string
     }
 
 
@@ -47,21 +40,7 @@ final class Response extends AbstractEcpElement
      */
     public function getAssertionConsumerServiceURL(): string
     {
-        return $this->AssertionConsumerServiceURL;
-    }
-
-
-    /**
-     * Set the value of the AssertionConsumerServiceURL-property
-     *
-     * @param string $assertionConsumerServiceURL
-     * @throws \InvalidArgumentException if provided string is not a valid URL
-     */
-    private function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL): void
-    {
-        Assert::validURI($assertionConsumerServiceURL, SchemaViolationException::class); // Covers the empty string
-
-        $this->AssertionConsumerServiceURL = $assertionConsumerServiceURL;
+        return $this->assertionConsumerServiceURL;
     }
 
 

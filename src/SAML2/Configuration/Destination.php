@@ -5,24 +5,19 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Configuration;
 
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
+use Stringable;
 
 /**
  * Value Object representing the current destination
  */
-class Destination
+class Destination implements Stringable
 {
-    /**
-     * @var string
-     */
-    private string $destination;
-
-
     /**
      * @param string $destination
      */
-    public function __construct(string $destination)
-    {
-        $this->destination = $destination;
+    public function __construct(
+        private string $destination,
+    ) {
     }
 
 

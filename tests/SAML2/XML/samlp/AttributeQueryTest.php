@@ -95,6 +95,7 @@ final class AttributeQueryTest extends TestCase
             ],
             new Issuer('https://example.org/', null, null, C::NAMEID_ENTITY),
             'aaf23196-1773-2113-474a-fe114412ab72',
+            '2.0',
             1504698567
         );
 

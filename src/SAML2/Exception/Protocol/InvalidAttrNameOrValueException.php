@@ -14,11 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class InvalidAttrNameOrValueException extends ProtocolViolationException
 {
-    /**
-     * @param string $message
-     */
-    public function __construct(string $message = 'Invalid attribute name or value.')
-    {
-        parent::__construct($message);
-    }
+    public const DEFAULT_MESSAGE = 'Invalid attribute name or value.';
 }

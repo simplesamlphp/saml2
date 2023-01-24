@@ -263,7 +263,7 @@ XML
         $this->assertEquals($id, $ed->getID());
         $this->assertEquals($now, $ed->getValidUntil());
         $this->assertEquals($duration, $ed->getCacheDuration());
-        $this->assertEmpty($ed->getRoleDescriptors());
+        $this->assertEmpty($ed->getRoleDescriptor());
         $this->assertInstanceOf(AffiliationDescriptor::class, $ed->getAffiliationDescriptor());
         $this->assertEquals(
             $document->saveXML($document->documentElement),
@@ -377,7 +377,7 @@ XML
         $this->assertEquals(1580895565, $entityDescriptor->getValidUntil());
         $this->assertEquals('P2Y6M5DT12H35M30S', $entityDescriptor->getCacheDuration());
 
-        $roleDescriptors = $entityDescriptor->getRoleDescriptors();
+        $roleDescriptors = $entityDescriptor->getRoleDescriptor();
         $this->assertCount(5, $roleDescriptors);
         $this->assertInstanceOf(IDPSSODescriptor::class, $roleDescriptors[0]);
         $this->assertInstanceOf(AttributeAuthorityDescriptor::class, $roleDescriptors[1]);
@@ -390,19 +390,19 @@ XML
 
         $this->assertInstanceOf(Organization::class, $entityDescriptor->getOrganization());
 
-        $this->assertCount(3, $entityDescriptor->getContactPersons());
-        $this->assertInstanceOf(ContactPerson::class, $entityDescriptor->getContactPersons()[0]);
-        $this->assertInstanceOf(ContactPerson::class, $entityDescriptor->getContactPersons()[1]);
-        $this->assertInstanceOf(ContactPerson::class, $entityDescriptor->getContactPersons()[2]);
+        $this->assertCount(3, $entityDescriptor->getContactPerson());
+        $this->assertInstanceOf(ContactPerson::class, $entityDescriptor->getContactPerson()[0]);
+        $this->assertInstanceOf(ContactPerson::class, $entityDescriptor->getContactPerson()[1]);
+        $this->assertInstanceOf(ContactPerson::class, $entityDescriptor->getContactPerson()[2]);
 
-        $this->assertCount(2, $entityDescriptor->getAdditionalMetadataLocations());
+        $this->assertCount(2, $entityDescriptor->getAdditionalMetadataLocation());
         $this->assertInstanceOf(
             AdditionalMetadataLocation::class,
-            $entityDescriptor->getAdditionalMetadataLocations()[0]
+            $entityDescriptor->getAdditionalMetadataLocation()[0]
         );
         $this->assertInstanceOf(
             AdditionalMetadataLocation::class,
-            $entityDescriptor->getAdditionalMetadataLocations()[1]
+            $entityDescriptor->getAdditionalMetadataLocation()[1]
         );
 
         $this->assertEquals(
@@ -496,7 +496,7 @@ XML
 XML
         );
         $entityDescriptor = EntityDescriptor::fromXML($document->documentElement);
-        $this->assertEquals([], $entityDescriptor->getRoleDescriptors());
+        $this->assertEquals([], $entityDescriptor->getRoleDescriptor());
         $this->assertInstanceOf(AffiliationDescriptor::class, $entityDescriptor->getAffiliationDescriptor());
     }
 

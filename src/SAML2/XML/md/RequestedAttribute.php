@@ -26,13 +26,6 @@ final class RequestedAttribute extends Attribute
     /** @var string */
     public const NS_PREFIX = 'md';
 
-    /**
-     * Whether this attribute is required.
-     *
-     * @var bool|null
-     */
-    protected ?bool $isRequired = null;
-
 
     /**
      * RequestedAttribute constructor.
@@ -45,13 +38,12 @@ final class RequestedAttribute extends Attribute
      */
     public function __construct(
         string $Name,
-        ?bool $isRequired = null,
+        protected ?bool $isRequired = null,
         ?string $NameFormat = null,
         ?string $FriendlyName = null,
         array $AttributeValues = []
     ) {
         parent::__construct($Name, $NameFormat, $FriendlyName, $AttributeValues);
-        $this->setIsRequired($isRequired);
     }
 
 
@@ -63,17 +55,6 @@ final class RequestedAttribute extends Attribute
     public function getIsRequired(): ?bool
     {
         return $this->isRequired;
-    }
-
-
-    /**
-     * Set the value of the isRequired-property
-     *
-     * @param bool|null $flag
-     */
-    protected function setIsRequired(?bool $flag): void
-    {
-        $this->isRequired = $flag;
     }
 
 

@@ -35,31 +35,6 @@ class LogoutRequest extends AbstractRequest
 {
     use IdentifierTrait;
 
-    /**
-     * The expiration time of this request.
-     *
-     * @var int|null
-     */
-    protected ?int $notOnOrAfter = null;
-
-    /**
-     * The SessionIndexes of the sessions that should be terminated.
-     *
-     * @var \SimpleSAML\SAML2\XML\samlp\SessionIndex[]
-     */
-    protected array $sessionIndexes = [];
-
-    /**
-     * The optional reason for the logout, typically a URN
-     * See \SimpleSAML\SAML2\Constants::LOGOUT_REASON_*
-     * From the standard section 3.7.3: "other values MAY be agreed on between participants"
-     *
-     * NOTE:  This attribute was marked anyURI in the 2012 SAML errata (E10).
-     *
-     * @var string|null
-     */
-    protected ?string $reason = null;
-
 
     /**
      * Constructor for SAML 2 AttributeQuery.
@@ -70,6 +45,7 @@ class LogoutRequest extends AbstractRequest
      * @param \SimpleSAML\SAML2\XML\samlp\SessionIndex[] $sessionIndexes
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
+     * @param string $version
      * @param int|null $issueInstant
      * @param string|null $destination
      * @param string|null $consent
@@ -78,22 +54,23 @@ class LogoutRequest extends AbstractRequest
      */
     public function __construct(
         IdentifierInterface $identifier,
-        ?int $notOnOrAfter = null,
-        ?string $reason = null,
-        array $sessionIndexes = [],
+        protected ?int $notOnOrAfter = null,
+        protected ?string $reason = null,
+        protected array $sessionIndexes = [],
         ?Issuer $issuer = null,
         ?string $id = null,
+        string $version = '2.0',
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null
     ) {
-        parent::__construct($issuer, $id, $issueInstant, $destination, $consent, $extensions);
+        Assert::nullOrValidURI($reason, SchemaViolationException::class);
+        Assert::allIsInstanceOf($sessionIndexes, SessionIndex::class);
+
+        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
 
         $this->setIdentifier($identifier);
-        $this->setNotOnOrAfter($notOnOrAfter);
-        $this->setReason($reason);
-        $this->setSessionIndexes($sessionIndexes);
     }
 
 
@@ -109,16 +86,6 @@ class LogoutRequest extends AbstractRequest
 
 
     /**
-     * Set the expiration time of this request.
-     *
-     * @param int|null $notOnOrAfter The expiration time of this request.
-     */
-    private function setNotOnOrAfter(?int $notOnOrAfter = null): void
-    {
-        $this->notOnOrAfter = $notOnOrAfter;
-    }
-
-    /**
      * Retrieve the reason for this request.
      *
      * @return string|null The reason for this request.
@@ -126,20 +93,6 @@ class LogoutRequest extends AbstractRequest
     public function getReason(): ?string
     {
         return $this->reason;
-    }
-
-
-    /**
-     * Set the reason for this request.
-     *
-     * NOTE:  This attribute was marked anyURI in the 2012 SAML errata (E10).
-     *
-     * @param string|null $reason The optional reason for this request in URN format
-     */
-    private function setReason(?string $reason = null): void
-    {
-        Assert::nullOrValidURI($reason, SchemaViolationException::class);
-        $this->reason = $reason;
     }
 
 
@@ -152,19 +105,6 @@ class LogoutRequest extends AbstractRequest
     public function getSessionIndexes(): array
     {
         return $this->sessionIndexes;
-    }
-
-
-    /**
-     * Set the SessionIndexes of the sessions that should be terminated.
-     *
-     * @param \SimpleSAML\SAML2\XML\samlp\SessionIndex[] $sessionIndexes
-     *   The SessionIndexes, or an empty array if all sessions should be terminated.
-     */
-    private function setSessionIndexes(array $sessionIndexes): void
-    {
-        Assert::allIsInstanceOf($sessionIndexes, SessionIndex::class);
-        $this->sessionIndexes = $sessionIndexes;
     }
 
 
@@ -239,6 +179,7 @@ class LogoutRequest extends AbstractRequest
             $sessionIndex,
             array_pop($issuer),
             self::getAttribute($xml, 'ID'),
+            $version,
             $issueInstant,
             self::getAttribute($xml, 'Destination', null),
             self::getAttribute($xml, 'Consent', null),

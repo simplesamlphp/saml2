@@ -22,27 +22,6 @@ use function sprintf;
 class Decrypter
 {
     /**
-     * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
-     */
-    private IdentityProvider $identityProvider;
-
-    /**
-     * @var \SimpleSAML\SAML2\Configuration\ServiceProvider
-     */
-    private ServiceProvider $serviceProvider;
-
-    /**
-     * @var \SimpleSAML\SAML2\Certificate\PrivateKeyLoader
-     */
-    private PrivateKeyLoader $privateKeyLoader;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private LoggerInterface $logger;
-
-
-    /**
      * Constructor for Decrypter.
      *
      * @param \Psr\Log\LoggerInterface $logger
@@ -51,15 +30,11 @@ class Decrypter
      * @param \SimpleSAML\SAML2\Certificate\PrivateKeyLoader $privateKeyLoader
      */
     public function __construct(
-        LoggerInterface $logger,
-        IdentityProvider $identityProvider,
-        ServiceProvider $serviceProvider,
-        PrivateKeyLoader $privateKeyLoader
+        private LoggerInterface $logger,
+        private IdentityProvider $identityProvider,
+        private ServiceProvider $serviceProvider,
+        private PrivateKeyLoader $privateKeyLoader,
     ) {
-        $this->logger = $logger;
-        $this->identityProvider = $identityProvider;
-        $this->serviceProvider = $serviceProvider;
-        $this->privateKeyLoader = $privateKeyLoader;
     }
 
 

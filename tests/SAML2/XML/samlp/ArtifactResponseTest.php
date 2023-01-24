@@ -73,6 +73,7 @@ final class ArtifactResponseTest extends TestCase
             null,
             $issuer2,
             $id,
+            '2.0',
             $issueInstant,
             $destination
         );
@@ -83,6 +84,7 @@ final class ArtifactResponseTest extends TestCase
             $status,
             $issuer1,
             '_d84a49e5958803dedcff4c984c2b0d95',
+            '2.0',
             1102238519,
             '_cce4ee769ed970b501d680f697989d14',
             null,

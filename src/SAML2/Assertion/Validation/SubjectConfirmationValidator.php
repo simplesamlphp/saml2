@@ -15,12 +15,6 @@ class SubjectConfirmationValidator
     /** @var \SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator[] */
     protected array $constraints;
 
-    /** @var \SimpleSAML\SAML2\Configuration\IdentityProvider */
-    protected IdentityProvider $identityProvider;
-
-    /** @var \SimpleSAML\SAML2\Configuration\ServiceProvider */
-    protected ServiceProvider $serviceProvider;
-
 
     /**
      * Constructor for SubjectConfirmationValidator
@@ -29,11 +23,9 @@ class SubjectConfirmationValidator
      * @param \SimpleSAML\SAML2\Configuration\ServiceProvider $serviceProvider
      */
     public function __construct(
-        IdentityProvider $identityProvider,
-        ServiceProvider $serviceProvider
+        private IdentityProvider $identityProvider,
+        private ServiceProvider $serviceProvider
     ) {
-        $this->identityProvider = $identityProvider;
-        $this->serviceProvider = $serviceProvider;
     }
 
 
@@ -41,7 +33,7 @@ class SubjectConfirmationValidator
      * @param \SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator $constraint
      */
     public function addConstraintValidator(
-        SubjectConfirmationConstraintValidator $constraint
+        SubjectConfirmationConstraintValidator $constraint,
     ): void {
         if ($constraint instanceof IdentityProviderAware) {
             $constraint->setIdentityProvider($this->identityProvider);

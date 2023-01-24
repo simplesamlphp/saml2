@@ -15,38 +15,21 @@ use SimpleSAML\Assert\Assert;
 abstract class AbstractBaseIDType extends AbstractSamlElement implements BaseIdentifierInterface
 {
     /**
-     * The security or administrative domain that qualifies the identifier.
-     * This attribute provides a means to federate identifiers from disparate user stores without collision.
-     *
-     * @see saml-core-2.0-os
-     *
-     * @var string|null
-     */
-    protected ?string $NameQualifier = null;
-
-    /**
-     * Further qualifies an identifier with the name of a service provider or affiliation of providers.
-     * This attribute provides an additional means to federate identifiers on the basis of the relying party or parties.
-     *
-     * @see saml-core-2.0-os
-     *
-     * @var string|null
-     */
-    protected ?string $SPNameQualifier = null;
-
-
-    /**
      * Initialize a saml:BaseIDAbstractType from scratch
      *
-     * @param string|null $NameQualifier
-     * @param string|null $SPNameQualifier
+     * @param string|null $nameQualifier
+     *   The security or administrative domain that qualifies the identifier.
+     *   This attribute provides a means to federate identifiers from disparate user stores without collision.
+     * @param string|null $spNameQualifier
+     *   Further qualifies an identifier with the name of a service provider or affiliation of providers. This
+     *   attribute provides an additional means to federate identifiers on the basis of the relying party or parties.
      */
     protected function __construct(
-        ?string $NameQualifier = null,
-        ?string $SPNameQualifier = null
+        protected ?string $nameQualifier = null,
+        protected ?string $spNameQualifier = null
     ) {
-        $this->setNameQualifier($NameQualifier);
-        $this->setSPNameQualifier($SPNameQualifier);
+        Assert::nullOrNotWhitespaceOnly($nameQualifier);
+        Assert::nullOrNotWhitespaceOnly($spNameQualifier);
     }
 
 
@@ -57,20 +40,9 @@ abstract class AbstractBaseIDType extends AbstractSamlElement implements BaseIde
      */
     public function getNameQualifier(): ?string
     {
-        return $this->NameQualifier;
+        return $this->nameQualifier;
     }
 
-
-    /**
-     * Set the value of the NameQualifier-property
-     *
-     * @param string|null $nameQualifier
-     */
-    private function setNameQualifier(?string $nameQualifier): void
-    {
-        Assert::nullOrNotWhitespaceOnly($nameQualifier);
-        $this->NameQualifier = $nameQualifier;
-    }
 
     /**
      * Collect the value of the SPNameQualifier-property
@@ -79,19 +51,7 @@ abstract class AbstractBaseIDType extends AbstractSamlElement implements BaseIde
      */
     public function getSPNameQualifier(): ?string
     {
-        return $this->SPNameQualifier;
-    }
-
-
-    /**
-     * Set the value of the SPNameQualifier-property
-     *
-     * @param string|null $spNameQualifier
-     */
-    private function setSPNameQualifier(?string $spNameQualifier): void
-    {
-        Assert::nullOrNotWhitespaceOnly($spNameQualifier);
-        $this->SPNameQualifier = $spNameQualifier;
+        return $this->spNameQualifier;
     }
 
 
@@ -105,12 +65,12 @@ abstract class AbstractBaseIDType extends AbstractSamlElement implements BaseIde
     {
         $e = $this->instantiateParentElement($parent);
 
-        if ($this->NameQualifier !== null) {
-            $e->setAttribute('NameQualifier', $this->NameQualifier);
+        if ($this->getNameQualifier() !== null) {
+            $e->setAttribute('NameQualifier', $this->getNameQualifier());
         }
 
-        if ($this->SPNameQualifier !== null) {
-            $e->setAttribute('SPNameQualifier', $this->SPNameQualifier);
+        if ($this->getSPNameQualifier() !== null) {
+            $e->setAttribute('SPNameQualifier', $this->getSPNameQualifier());
         }
 
         return $e;

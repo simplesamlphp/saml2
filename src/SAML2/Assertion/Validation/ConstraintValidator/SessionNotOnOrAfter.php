@@ -9,8 +9,7 @@ use SimpleSAML\SAML2\Assertion\Validation\AssertionConstraintValidator;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Utilities\Temporal;
 
-class SessionNotOnOrAfter implements
-    AssertionConstraintValidator
+class SessionNotOnOrAfter implements AssertionConstraintValidator
 {
     /**
      * @param \SimpleSAML\SAML2\XML\saml\Assertion $assertion

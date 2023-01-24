@@ -52,7 +52,7 @@ final class ResponseTest extends TestCase
         $status = new Status(new StatusCode());
         $issuer = new Issuer('SomeIssuer');
 
-        $response = new Response($status, $issuer, null, null, null, 'urn:some:destination', C::CONSENT_EXPLICIT);
+        $response = new Response($status, $issuer, null, '2.0', null, null, 'urn:some:destination', C::CONSENT_EXPLICIT);
         $responseElement = $response->toXML();
 
         $this->assertTrue($responseElement->hasAttribute('Consent'));

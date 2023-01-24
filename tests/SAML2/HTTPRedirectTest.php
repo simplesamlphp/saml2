@@ -301,7 +301,7 @@ final class HTTPRedirectTest extends MockeryTestCase
         $status = new Status(new StatusCode());
         $issuer = new Issuer('testIssuer');
 
-        $response = new Response($status, $issuer, null, null, null, 'http://example.org/login?success=yes');
+        $response = new Response($status, $issuer, null, '2.0', null, null, 'http://example.org/login?success=yes');
         $response->setRelayState('http://example.org');
         $hr = new HTTPRedirect();
         $hr->send($response);

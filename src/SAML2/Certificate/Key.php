@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Certificate;
 
 use ArrayAccess;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Certificate\Exception\InvalidKeyUsageException;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 
@@ -48,24 +49,14 @@ class Key implements ArrayAccess
      */
     public function canBeUsedFor(string $usage): bool
     {
-        if (!in_array($usage, static::getValidKeyUsages(), true)) {
-            throw new InvalidKeyUsageException($usage);
-        }
+        Assert::oneOf(
+            $usage,
+            [self::USAGE_ENCRYPTION, self::USAGE_SIGNING],
+            'Invalid key usage given: "%s", usages "%2$s" allowed',
+            InvalidKeyUsageException::class,
+        );
 
         return isset($this->keyData[$usage]) && $this->keyData[$usage];
-    }
-
-
-    /**
-     * Returns the list of valid key usage options
-     * @return array
-     */
-    public static function getValidKeyUsages(): array
-    {
-        return [
-            self::USAGE_ENCRYPTION,
-            self::USAGE_SIGNING
-        ];
     }
 
 

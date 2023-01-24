@@ -16,18 +16,13 @@ use function strval;
 final class DestinationMatches implements ConstraintValidator
 {
     /**
-     * @var \SimpleSAML\SAML2\Configuration\Destination
-     */
-    private Destination $expectedDestination;
-
-    /**
      * DestinationMatches constructor.
      *
-     * @param \SimpleSAML\SAML2\Configuration\Destination $destination
+     * @param \SimpleSAML\SAML2\Configuration\Destination $expectedDestination
      */
-    public function __construct(Destination $destination)
-    {
-        $this->expectedDestination = $destination;
+    public function __construct(
+        private Destination $expectedDestination,
+    ) {
     }
 
 

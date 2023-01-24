@@ -22,19 +22,13 @@ use function sprintf;
 class ArrayCollection implements Collection
 {
     /**
-     * @var array
-     */
-    protected array $elements;
-
-
-    /**
      * ArrayCollection constructor.
      *
      * @param array $elements
      */
-    public function __construct(array $elements = [])
-    {
-        $this->elements = $elements;
+    public function __construct(
+        protected array $elements = []
+    ) {
     }
 
 

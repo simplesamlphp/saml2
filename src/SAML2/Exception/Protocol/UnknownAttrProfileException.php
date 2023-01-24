@@ -14,11 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class UnknownAttrProfileException extends ProtocolViolationException
 {
-    /**
-     * @param string $message
-     */
-    public function __construct(string $message = 'Unknown attribute profile.')
-    {
-        parent::__construct($message);
-    }
+    public const DEFAULT_MESSAGE = 'Unknown attribute profile.';
 }
