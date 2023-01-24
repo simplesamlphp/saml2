@@ -93,7 +93,7 @@ final class CustomBaseID extends AbstractBaseID
 
 
     /**
-     * Convert this Statement to XML.
+     * Convert this BaseID to XML.
      *
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this BaseID.
