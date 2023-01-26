@@ -66,7 +66,7 @@ final class SPSSODescriptorTest extends TestCase
         $this->testedClass = SPSSODescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_SPSSODescriptor.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_SPSSODescriptor.xml',
         );
     }
 
@@ -81,63 +81,57 @@ final class SPSSODescriptorTest extends TestCase
     {
         $slo1 = new SingleLogoutService(
             C::BINDING_SOAP,
-            'https://ServiceProvider.com/SAML/SLO/SOAP'
+            'https://ServiceProvider.com/SAML/SLO/SOAP',
         );
         $slo2 = new SingleLogoutService(
             C::BINDING_HTTP_REDIRECT,
             'https://ServiceProvider.com/SAML/SLO/Browser',
-            'https://ServiceProvider.com/SAML/SLO/Response'
+            'https://ServiceProvider.com/SAML/SLO/Response',
         );
         $acs1 = new AssertionConsumerService(
             0,
             C::BINDING_HTTP_ARTIFACT,
             'https://ServiceProvider.com/SAML/SSO/Artifact',
-            true
+            true,
         );
         $acs2 = new AssertionConsumerService(
             1,
             C::BINDING_HTTP_POST,
-            'https://ServiceProvider.com/SAML/SSO/POST'
+            'https://ServiceProvider.com/SAML/SSO/POST',
         );
         $reqAttr = new RequestedAttribute(
-            'urn:oid:1.3.6.1.4.1.5923.1.1.1.7',
-            null,
-            C::NAMEFORMAT_URI,
-            'eduPersonEntitlement',
-            [new AttributeValue('https://ServiceProvider.com/entitlements/123456789')]
+            Name: 'urn:oid:1.3.6.1.4.1.5923.1.1.1.7',
+            NameFormat: C::NAMEFORMAT_URI,
+            FriendlyName: 'eduPersonEntitlement',
+            AttributeValues: [new AttributeValue('https://ServiceProvider.com/entitlements/123456789')],
         );
         $attrcs1 = new AttributeConsumingService(
             0,
             [new ServiceName('en', 'Academic Journals R US')],
             [$reqAttr],
-            true
+            true,
         );
         $attrcs2 = new AttributeConsumingService(
             1,
             [new ServiceName('en', 'Academic Journals R US')],
-            [$reqAttr]
+            [$reqAttr],
         );
         $extensions = new Extensions([
             new PublicationInfo(
-                'http://publisher.ra/',
-                XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
-                null,
-                [new UsagePolicy('en', 'http://publisher.ra/policy.txt')]
-            )
+                publisher: 'http://publisher.ra/',
+                creationInstant: XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
+                usagePolicy: [new UsagePolicy('en', 'http://publisher.ra/policy.txt')],
+            ),
         ]);
         $kd = new KeyDescriptor(new KeyInfo([new KeyName('ServiceProvider.com SSO Key')]), 'signing');
         $org = new Organization(
             [new OrganizationName('en', 'Identity Providers R US')],
             [new OrganizationDisplayName('en', 'Identity Providers R US, a Division of Lerxst Corp.')],
-            [new OrganizationURL('en', 'https://IdentityProvider.com')]
+            [new OrganizationURL('en', 'https://IdentityProvider.com')],
         );
         $contact = new ContactPerson(
-            'other',
-            null,
-            null,
-            null,
-            null,
-            [new EmailAddress('john.doe@test.company')]
+            contactType: 'other',
+            emailAddress: [new EmailAddress('john.doe@test.company')],
         );
         $ars = new ArtifactResolutionService(0, C::BINDING_HTTP_ARTIFACT, C::LOCATION_A);
         $mnids = new ManageNameIDService(C::BINDING_HTTP_POST, C::LOCATION_B);
@@ -159,12 +153,12 @@ final class SPSSODescriptorTest extends TestCase
             [$ars],
             [$slo1, $slo2],
             [$mnids],
-            [new NameIDFormat(C::NAMEID_TRANSIENT)]
+            [new NameIDFormat(C::NAMEID_TRANSIENT)],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($spssod)
+            strval($spssod),
         );
     }
 
@@ -179,7 +173,7 @@ final class SPSSODescriptorTest extends TestCase
 
         new SPSSODescriptor(
             [],
-            [C::NS_SAMLP]
+            [C::NS_SAMLP],
         );
     }
 
@@ -191,13 +185,13 @@ final class SPSSODescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
-            'All md:AssertionConsumerService endpoints must be an instance of AssertionConsumerService.'
+            'All md:AssertionConsumerService endpoints must be an instance of AssertionConsumerService.',
         );
 
         /** @psalm-suppress InvalidArgument */
         new SPSSODescriptor(
             [new ArtifactResolutionService(0, C::BINDING_HTTP_POST, C::LOCATION_A)],
-            [C::NS_SAMLP]
+            [C::NS_SAMLP],
         );
     }
 
@@ -209,16 +203,15 @@ final class SPSSODescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
-            'All md:AttributeConsumingService endpoints must be an instance of AttributeConsumingService.'
+            'All md:AttributeConsumingService endpoints must be an instance of AttributeConsumingService.',
         );
 
         /** @psalm-suppress InvalidArgument */
         new SPSSODescriptor(
-            [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_A)],
-            [C::NS_SAMLP],
-            true,
-            null,
-            [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_B)]
+            assertionConsumerService: [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_A)],
+            protocolSupportEnumeration: [C::NS_SAMLP],
+            authnRequestsSigned: true,
+            attributeConsumingService: [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_B)],
         );
     }
 
@@ -230,7 +223,7 @@ final class SPSSODescriptorTest extends TestCase
     {
         $spssod = new SPSSODescriptor(
             [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_A)],
-            [C::NS_SAMLP]
+            [C::NS_SAMLP],
         );
         $this->assertNull($spssod->getAuthnRequestsSigned());
         $this->assertNull($spssod->getWantAssertionsSigned());
@@ -250,7 +243,7 @@ final class SPSSODescriptorTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($spssod)
+            strval($spssod),
         );
     }
 

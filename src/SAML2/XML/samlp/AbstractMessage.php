@@ -90,7 +90,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
         protected ?string $destination = null,
         protected ?string $consent = null,
         ?Extensions $extensions = null,
-        ?string $relayState = null
+        ?string $relayState = null,
     ) {
         Assert::nullOrNotWhitespaceOnly($id);
         Assert::nullOrValidURI($destination); // Covers the empty string

@@ -24,13 +24,13 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @param string $publisher
      * @param int|null $creationInstant
      * @param string|null $publicationId
-     * @param \SimpleSAML\SAML2\XML\mdrpi\UsagePolicy[] $UsagePolicy
+     * @param \SimpleSAML\SAML2\XML\mdrpi\UsagePolicy[] $usagePolicy
      */
     public function __construct(
         protected string $publisher,
         protected ?int $creationInstant = null,
         protected ?string $publicationId = null,
-        protected array $usagePolicy = []
+        protected array $usagePolicy = [],
     ) {
         Assert::allIsInstanceOf($usagePolicy, UsagePolicy::class);
 
@@ -42,13 +42,13 @@ final class PublicationInfo extends AbstractMdrpiElement
             function ($up) {
                 return $up->getLanguage();
             },
-            $usagePolicy
+            $usagePolicy,
         );
         Assert::uniqueValues(
             $languages,
             'There MUST NOT be more than one <mdrpi:UsagePolicy>,'
             . ' within a given <mdrpi:PublicationInfo>, for a given language',
-            ProtocolViolationException::class
+            ProtocolViolationException::class,
         );
     }
 

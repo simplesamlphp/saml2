@@ -44,7 +44,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
             $orgs,
             1,
             'More than one Organization found in this descriptor',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $extensions = Extensions::getChildrenOfClass($xml);
@@ -52,7 +52,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
             $extensions,
             1,
             'Only one md:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $object = new static(
@@ -64,7 +64,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
             self::getAttribute($xml, 'errorURL', null),
             KeyDescriptor::getChildrenOfClass($xml),
             !empty($orgs) ? $orgs[0] : null,
-            ContactPerson::getChildrenOfClass($xml)
+            ContactPerson::getChildrenOfClass($xml),
         );
 
         $object->setXML($xml);

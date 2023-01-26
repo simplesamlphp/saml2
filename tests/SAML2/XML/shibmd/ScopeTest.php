@@ -37,7 +37,7 @@ final class ScopeTest extends TestCase
         $this->testedClass = Scope::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/shibmd_Scope.xml'
+            dirname(__FILE__, 4) . '/resources/xml/shibmd_Scope.xml',
         );
     }
 
@@ -51,7 +51,7 @@ final class ScopeTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($scope)
+            strval($scope),
         );
     }
 

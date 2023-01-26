@@ -59,15 +59,15 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         $this->testedClass = AttributeAuthorityDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_AttributeAuthorityDescriptor.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_AttributeAuthorityDescriptor.xml',
         );
         $this->as = new AttributeService(
             C::BINDING_SOAP,
-            "https://IdentityProvider.com/SAML/AA/SOAP"
+            "https://IdentityProvider.com/SAML/AA/SOAP",
         );
         $this->aidrs = new AssertionIDRequestService(
             C::BINDING_URI,
-            "https://IdentityProvider.com/SAML/AA/URI"
+            "https://IdentityProvider.com/SAML/AA/URI",
         );
     }
 
@@ -83,7 +83,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         $attr1 = new Attribute(
             "urn:oid:1.3.6.1.4.1.5923.1.1.1.6",
             C::NAMEFORMAT_URI,
-            "eduPersonPrincipalName"
+            "eduPersonPrincipalName",
         );
 
         $attr2 = new Attribute(
@@ -96,7 +96,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
                 new AttributeValue('faculty'),
                 new AttributeValue('employee'),
                 new AttributeValue('staff'),
-            ]
+            ],
         );
         $aad = new AttributeAuthorityDescriptor(
             [$this->as],
@@ -111,12 +111,12 @@ final class AttributeAuthorityDescriptorTest extends TestCase
                 new AttributeProfile(C::PROFILE_1),
                 new AttributeProfile(C::PROFILE_2),
             ],
-            [$attr1, $attr2]
+            [$attr1, $attr2],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($aad)
+            strval($aad),
         );
     }
 
@@ -127,7 +127,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     {
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'At least one protocol must be supported by this md:AttributeAuthorityDescriptor.'
+            'At least one protocol must be supported by this md:AttributeAuthorityDescriptor.',
         );
         new AttributeAuthorityDescriptor([$this->as], []);
     }
@@ -212,7 +212,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
-            'Expected an instance of SimpleSAML\SAML2\XML\md\AssertionIDRequestService. Got: string'
+            'Expected an instance of SimpleSAML\SAML2\XML\md\AssertionIDRequestService. Got: string',
         );
 
         /** @psalm-suppress InvalidArgument */
@@ -241,7 +241,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
             [C::NS_SAMLP],
             [$this->aidrs],
             [new NameIDFormat(C::NAMEID_TRANSIENT)],
-            [new AttributeProfile('')]
+            [new AttributeProfile('')],
         );
     }
 
@@ -253,7 +253,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
-            'Expected an instance of SimpleSAML\SAML2\XML\saml\Attribute. Got: string'
+            'Expected an instance of SimpleSAML\SAML2\XML\saml\Attribute. Got: string',
         );
 
         /** @psalm-suppress InvalidArgument */
@@ -263,7 +263,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
             [$this->aidrs],
             [new NameIDFormat(C::NAMEID_PERSISTENT)],
             [new AttributeProfile(C::PROFILE_1)],
-            ['x']
+            ['x'],
         );
     }
 
@@ -280,7 +280,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($aad)
+            strval($aad),
         );
     }
 

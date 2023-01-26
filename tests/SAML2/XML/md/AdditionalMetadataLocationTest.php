@@ -40,7 +40,7 @@ final class AdditionalMetadataLocationTest extends TestCase
         $this->testedClass = AdditionalMetadataLocation::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_AdditionalMetadataLocation.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_AdditionalMetadataLocation.xml',
         );
     }
 
@@ -57,7 +57,7 @@ final class AdditionalMetadataLocationTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($additionalMetadataLocation)
+            strval($additionalMetadataLocation),
         );
     }
 
@@ -84,7 +84,7 @@ final class AdditionalMetadataLocationTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($additionalMetadataLocation)
+            strval($additionalMetadataLocation),
         );
     }
 

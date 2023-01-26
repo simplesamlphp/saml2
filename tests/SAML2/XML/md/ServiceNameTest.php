@@ -44,7 +44,7 @@ final class ServiceNameTest extends TestCase
         $this->testedClass = ServiceName::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_ServiceName.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_ServiceName.xml',
         );
 
         $this->arrayDocument = ['en' => 'Academic Journals R US'];
@@ -63,7 +63,7 @@ final class ServiceNameTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
+            strval($name),
         );
     }
 
@@ -92,7 +92,7 @@ final class ServiceNameTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
+            strval($name),
         );
     }
 

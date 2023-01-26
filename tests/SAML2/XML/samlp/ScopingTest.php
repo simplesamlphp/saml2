@@ -39,7 +39,7 @@ final class ScopingTest extends TestCase
         $this->testedClass = Scoping::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_Scoping.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_Scoping.xml',
         );
     }
 
@@ -57,7 +57,7 @@ final class ScopingTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($scoping)
+            strval($scoping),
         );
     }
 
@@ -98,7 +98,7 @@ final class ScopingTest extends TestCase
         $scoping = new Scoping();
         $this->assertEquals(
             "<samlp:Scoping xmlns:samlp=\"$samlpns\"/>",
-            strval($scoping)
+            strval($scoping),
         );
         $this->assertTrue($scoping->isEmptyElement());
     }
@@ -112,7 +112,7 @@ final class ScopingTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($scoping)
+            strval($scoping),
         );
     }
 }

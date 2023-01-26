@@ -20,7 +20,7 @@ class SubjectConfirmationRecipientMatches implements SubjectConfirmationConstrai
      * @param \SimpleSAML\SAML2\Configuration\Destination $destination
      */
     public function __construct(
-        private Destination $destination
+        private Destination $destination,
     ) {
     }
 
@@ -42,7 +42,7 @@ class SubjectConfirmationRecipientMatches implements SubjectConfirmationConstrai
             $result->addError(sprintf(
                 'Recipient in SubjectConfirmationData ("%s") does not match the current destination ("%s")',
                 $recipient,
-                strval($this->destination)
+                strval($this->destination),
             ));
         }
     }

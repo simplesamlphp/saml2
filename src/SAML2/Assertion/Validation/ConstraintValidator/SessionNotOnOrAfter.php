@@ -21,7 +21,7 @@ class SessionNotOnOrAfter implements AssertionConstraintValidator
         $currentTime = Temporal::getTime();
         if (($sessionNotOnOrAfterTimestamp !== null) && ($sessionNotOnOrAfterTimestamp <= ($currentTime - 60))) {
             $result->addError(
-                'Received an assertion with a session that has expired. Check clock synchronization on IdP and SP.'
+                'Received an assertion with a session that has expired. Check clock synchronization on IdP and SP.',
             );
         }
     }

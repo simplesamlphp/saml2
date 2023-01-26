@@ -40,7 +40,7 @@ final class ConditionsTest extends TestCase
         $this->testedClass = Conditions::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_Conditions.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_Conditions.xml',
         );
     }
 
@@ -59,22 +59,22 @@ final class ConditionsTest extends TestCase
             [
                 new AudienceRestriction(
                     [
-                        new Audience('http://sp.example.com/demo1/metadata.php')
-                    ]
+                        new Audience('http://sp.example.com/demo1/metadata.php'),
+                    ],
                 ),
             ],
             true,
             new ProxyRestriction(
                 [
-                    new Audience('http://sp.example.com/demo2/metadata.php')
+                    new Audience('http://sp.example.com/demo2/metadata.php'),
                 ],
-                2
-            )
+                2,
+            ),
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($conditions)
+            strval($conditions),
         );
     }
 
@@ -89,7 +89,7 @@ final class ConditionsTest extends TestCase
         $conditions = new Conditions();
         $this->assertEquals(
             "<saml:Conditions xmlns:saml=\"$samlns\"/>",
-            strval($conditions)
+            strval($conditions),
         );
         $this->assertTrue($conditions->isEmptyElement());
     }
@@ -106,7 +106,7 @@ final class ConditionsTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($conditions)
+            strval($conditions),
         );
     }
 }

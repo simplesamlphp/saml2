@@ -82,7 +82,7 @@ class KeyLoader
         if ($required && !$this->hasKeys()) {
             throw new NoKeysFoundException(
                 'No keys found in configured metadata, please ensure that either the "keys", "certData" or '
-                . '"certificate" entries is available.'
+                . '"certificate" entries is available.',
             );
         }
 
@@ -137,7 +137,7 @@ class KeyLoader
         if (!Certificate::hasValidStructure($certificate)) {
             throw new InvalidCertificateStructureException(sprintf(
                 'Could not find PEM encoded certificate in "%s"',
-                $certificateFile
+                $certificateFile,
             ));
         }
 

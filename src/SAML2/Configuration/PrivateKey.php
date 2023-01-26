@@ -32,7 +32,7 @@ class PrivateKey extends ArrayAdapter
         private string $filePathOrContents,
         private string $name,
         private string $passphrase = '',
-        private bool $isFile = true
+        private bool $isFile = true,
     ) {
     }
 

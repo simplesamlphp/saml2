@@ -47,7 +47,7 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
     protected function __construct(
         protected string $type,
         ?string $NameQualifier = null,
-        ?string $SPNameQualifier = null
+        ?string $SPNameQualifier = null,
     ) {
         parent::__construct($NameQualifier, $SPNameQualifier);
 
@@ -80,7 +80,7 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:BaseID> element.',
-            SchemaViolationException::class
+            SchemaViolationException::class,
         );
 
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');

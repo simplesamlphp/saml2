@@ -47,39 +47,39 @@ final class EntityAttributes extends AbstractMdattrElement
             $statements = array_merge(
                 $assertion->getAttributeStatements(),
                 $assertion->getAuthnStatements(),
-                $assertion->getStatements()
+                $assertion->getStatements(),
             );
 
             Assert::allIsInstanceOf(
                 $statements,
                 AttributeStatement::class,
                 '<saml:Asssertion> elements in an <mdattr:EntityAttributes> may only contain AttributeStatements',
-                ProtocolViolationException::class
+                ProtocolViolationException::class,
             );
             Assert::count(
                 $statements,
                 1,
                 'One (and only one) <saml:AttributeStatement> MUST be included '
                 . 'in a <saml:Assertion> inside a <mdattr:EntityAttribute>',
-                ProtocolViolationException::class
+                ProtocolViolationException::class,
             );
             Assert::notNull(
                 Assertion::fromXML($assertion->toXML())->getSignature(),
                 'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must be individually signed',
-                ProtocolViolationException::class
+                ProtocolViolationException::class,
             );
 
             $subject = $assertion->getSubject();
             Assert::notNull(
                 $subject,
                 'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must contain a Subject',
-                ProtocolViolationException::class
+                ProtocolViolationException::class,
             );
 
             Assert::isEmpty(
                 $subject?->getSubjectConfirmation(),
                 'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must NOT contain any SubjectConfirmation',
-                ProtocolViolationException::class
+                ProtocolViolationException::class,
             );
 
             $nameId = $subject?->getIdentifier();
@@ -87,13 +87,13 @@ final class EntityAttributes extends AbstractMdattrElement
                 $nameId,
                 NameID::class,
                 'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must contain a NameID',
-                ProtocolViolationException::class
+                ProtocolViolationException::class,
             );
             Assert::same(
                 $nameId?->getFormat(),
                 C::NAMEID_ENTITY,
                 sprintf('The NameID format must be %s', C::NAMEID_ENTITY),
-                ProtocolViolationException::class
+                ProtocolViolationException::class,
             );
         }
     }

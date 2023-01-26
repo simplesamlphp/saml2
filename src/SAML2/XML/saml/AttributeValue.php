@@ -40,14 +40,14 @@ class AttributeValue extends AbstractSamlElement
     ) {
         Assert::true(
             is_string($value) || is_int($value) || is_null($value) || is_array($value),
-            'Value must be of type "string", "int", "null", or an array of "AbstractElement".'
+            'Value must be of type "string", "int", "null", or an array of "AbstractElement".',
         );
 
         if (is_array($value)) {
             Assert::allIsInstanceOf(
                 $value,
                 AbstractElement::class,
-                'All values passed as an array must be an instance of "AbstractElement".'
+                'All values passed as an array must be an instance of "AbstractElement".',
             );
         }
     }
@@ -73,7 +73,7 @@ class AttributeValue extends AbstractSamlElement
                     '%s:%s',
                     $this->value::getNamespacePrefix(),
                     ":",
-                    AbstractElement::getClassName(get_class($this->value))
+                    AbstractElement::getClassName(get_class($this->value)),
                 );
             default:
                 return "xs:string";

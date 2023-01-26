@@ -77,7 +77,7 @@ final class RequestInitiator extends AbstractEndpointType
         return new static(
             $location,
             self::getAttribute($xml, 'ResponseLocation', null),
-            self::getAttributesNSFromXML($xml)
+            self::getAttributesNSFromXML($xml),
         );
     }
 }

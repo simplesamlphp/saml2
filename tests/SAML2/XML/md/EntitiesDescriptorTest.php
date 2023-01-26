@@ -47,7 +47,7 @@ final class EntitiesDescriptorTest extends TestCase
         $this->testedClass = EntitiesDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_EntitiesDescriptor.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_EntitiesDescriptor.xml',
         );
     }
 
@@ -60,23 +60,20 @@ final class EntitiesDescriptorTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $extensions = new Extensions(
-            [
-                new PublicationInfo(
-                    'http://publisher.ra/',
-                    XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
-                    null,
-                    [new UsagePolicy('en', 'http://publisher.ra/policy.txt')]
-                )
-            ]
-        );
+        $extensions = new Extensions([
+            new PublicationInfo(
+                publisher: 'http://publisher.ra/',
+                creationInstant: XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
+                usagePolicy: [new UsagePolicy('en', 'http://publisher.ra/policy.txt')],
+            ),
+        ]);
         $entitiesdChildElement = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
             C::NS_MD,
-            'EntitiesDescriptor'
+            'EntitiesDescriptor',
         );
         $entitydElement = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
             C::NS_MD,
-            'EntityDescriptor'
+            'EntityDescriptor',
         );
 
         /** @psalm-suppress PossiblyNullArgument */
@@ -86,18 +83,15 @@ final class EntitiesDescriptorTest extends TestCase
         $childEntityd = EntityDescriptor::fromXML($entitydElement->item(1));
 
         $entitiesd = new EntitiesDescriptor(
-            [$childEntityd],
-            [$childEntitiesd],
-            'Federation',
-            null,
-            null,
-            null,
-            $extensions
+            entityDescriptors: [$childEntityd],
+            entitiesDescriptors: [$childEntitiesd],
+            Name: 'Federation',
+            extensions: $extensions,
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($entitiesd)
+            strval($entitiesd),
         );
     }
 
@@ -109,13 +103,11 @@ final class EntitiesDescriptorTest extends TestCase
     {
         $entitydElement = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
             C::NS_MD,
-            'EntityDescriptor'
+            'EntityDescriptor',
         );
         /** @psalm-suppress PossiblyNullArgument */
         $childEntityd = EntityDescriptor::fromXML($entitydElement->item(1));
-        $entitiesd = new EntitiesDescriptor(
-            [$childEntityd]
-        );
+        $entitiesd = new EntitiesDescriptor([$childEntityd]);
         $this->assertNull($entitiesd->getName());
         $this->assertEmpty($entitiesd->getEntitiesDescriptors());
     }
@@ -128,13 +120,13 @@ final class EntitiesDescriptorTest extends TestCase
     {
         $entitiesdChildElement = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
             C::NS_MD,
-            'EntitiesDescriptor'
+            'EntitiesDescriptor',
         );
         /** @psalm-suppress PossiblyNullArgument */
         $childEntitiesd = EntitiesDescriptor::fromXML($entitiesdChildElement->item(0));
         $entitiesd = new EntitiesDescriptor(
             [],
-            [$childEntitiesd]
+            [$childEntitiesd],
         );
         $this->assertEmpty($entitiesd->getEntityDescriptors());
     }
@@ -147,7 +139,7 @@ final class EntitiesDescriptorTest extends TestCase
     {
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
-            'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.'
+            'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.',
         );
         new EntitiesDescriptor();
     }
@@ -165,7 +157,7 @@ final class EntitiesDescriptorTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($entitiesd)
+            strval($entitiesd),
         );
     }
 
@@ -199,7 +191,7 @@ final class EntitiesDescriptorTest extends TestCase
     {
         $entities = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
             C::NS_MD,
-            'EntitiesDescriptor'
+            'EntitiesDescriptor',
         );
         /** @psalm-suppress PossiblyNullArgument */
         $this->xmlRepresentation->documentElement->removeChild($entities->item(0));
@@ -216,7 +208,7 @@ final class EntitiesDescriptorTest extends TestCase
     {
         $entity = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
             C::NS_MD,
-            'EntityDescriptor'
+            'EntityDescriptor',
         );
         /*
          *  getElementsByTagNameNS() searches recursively. Therefore, it finds first the EntityDescriptor that's
@@ -240,7 +232,7 @@ final class EntitiesDescriptorTest extends TestCase
         // remove child EntitiesDescriptor
         $entities = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
             C::NS_MD,
-            'EntitiesDescriptor'
+            'EntitiesDescriptor',
         );
         /** @psalm-suppress PossiblyNullArgument */
         $this->xmlRepresentation->documentElement->removeChild($entities->item(0));
@@ -248,14 +240,14 @@ final class EntitiesDescriptorTest extends TestCase
         // remove child EntityDescriptor
         $entity = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
             C::NS_MD,
-            'EntityDescriptor'
+            'EntityDescriptor',
         );
         /** @psalm-suppress PossiblyNullArgument */
         $this->xmlRepresentation->documentElement->removeChild($entity->item(0));
 
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
-            'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.'
+            'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.',
         );
         EntitiesDescriptor::fromXML($this->xmlRepresentation->documentElement);
     }

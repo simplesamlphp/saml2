@@ -58,7 +58,7 @@ final class SubjectTest extends TestCase
         $this->testedClass = Subject::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_Subject.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_Subject.xml',
         );
 
         $this->subject = DOMDocumentFactory::fromString(<<<XML
@@ -66,13 +66,13 @@ final class SubjectTest extends TestCase
 XML
         );
         $this->baseId = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_BaseID.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_BaseID.xml',
         );
         $this->nameId = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_NameID.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_NameID.xml',
         );
         $this->subjectConfirmation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_SubjectConfirmation.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_SubjectConfirmation.xml',
         );
     }
 
@@ -102,35 +102,31 @@ XML
                 new KeyInfo([new KeyName('SomeKey')]),
                 new Chunk($arbitrary->documentElement),
             ],
-            [$attr1, $attr2]
+            [$attr1, $attr2],
         );
 
         $subject = new Subject(
             new NameID(
-                'SomeNameIDValue',
-                null,
-                'https://sp.example.org/authentication/sp/metadata',
-                C::NAMEID_TRANSIENT,
-                null
+                value: 'SomeNameIDValue',
+                SPNameQualifier: 'https://sp.example.org/authentication/sp/metadata',
+                Format: C::NAMEID_TRANSIENT,
             ),
             [
                 new SubjectConfirmation(
                     'urn:oasis:names:tc:SAML:2.0:cm:bearer',
                     new NameID(
-                        'SomeOtherNameIDValue',
-                        null,
-                        'https://sp.example.org/authentication/sp/metadata',
-                        C::NAMEID_TRANSIENT,
-                        null
+                        value: 'SomeOtherNameIDValue',
+                        SPNameQualifier: 'https://sp.example.org/authentication/sp/metadata',
+                        Format: C::NAMEID_TRANSIENT,
                     ),
                     $subjectConfirmationData,
-                )
-            ]
+                ),
+            ],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($subject)
+            strval($subject),
         );
     }
 
@@ -157,30 +153,26 @@ XML
                 new KeyInfo([new KeyName('SomeKey')]),
                 new Chunk($arbitrary->documentElement),
             ],
-            [$attr1, $attr2]
+            [$attr1, $attr2],
         );
 
         $subject = new Subject(
             new NameID(
-                'SomeNameIDValue',
-                null,
-                'https://sp.example.org/authentication/sp/metadata',
-                C::NAMEID_TRANSIENT,
-                null
+                value: 'SomeNameIDValue',
+                SPNameQualifier: 'https://sp.example.org/authentication/sp/metadata',
+                Format: C::NAMEID_TRANSIENT,
             ),
             [
                 new SubjectConfirmation(
                     'urn:oasis:names:tc:SAML:2.0:cm:bearer',
                     new NameID(
-                        'SomeOtherNameIDValue',
-                        null,
-                        'https://sp.example.org/authentication/sp/metadata',
-                        C::NAMEID_TRANSIENT,
-                        null
+                        value: 'SomeOtherNameIDValue',
+                        SPNameQualifier: 'https://sp.example.org/authentication/sp/metadata',
+                        Format: C::NAMEID_TRANSIENT,
                     ),
                     $subjectConfirmationData,
-                )
-            ]
+                ),
+            ],
         );
 
         // Marshall it to a \DOMElement
@@ -221,7 +213,7 @@ XML
                 new KeyInfo([new KeyName('SomeKey')]),
                 new Chunk($arbitrary->documentElement),
             ],
-            [$attr1, $attr2]
+            [$attr1, $attr2],
         );
 
         $subject = new Subject(
@@ -233,15 +225,13 @@ XML
                 new SubjectConfirmation(
                     'urn:oasis:names:tc:SAML:2.0:cm:bearer',
                     new NameID(
-                        'SomeOtherNameIDValue',
-                        null,
-                        'https://sp.example.org/authentication/sp/metadata',
-                        C::NAMEID_TRANSIENT,
-                        null
+                        value: 'SomeOtherNameIDValue',
+                        SPNameQualifier: 'https://sp.example.org/authentication/sp/metadata',
+                        Format: C::NAMEID_TRANSIENT,
                     ),
                     $subjectConfirmationData,
-                )
-            ]
+                ),
+            ],
         );
 
         $this->assertNotNull($subject->getIdentifier());
@@ -253,7 +243,7 @@ XML
         $document = $this->subject;
         $document->documentElement->appendChild($document->importNode($this->baseId->documentElement, true));
         $document->documentElement->appendChild(
-            $document->importNode($this->subjectConfirmation->documentElement, true)
+            $document->importNode($this->subjectConfirmation->documentElement, true),
         );
 
         $this->assertEqualXMLStructure($document->documentElement, $subject->toXML());
@@ -344,7 +334,7 @@ XML
 
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage(
-            'A <saml:Subject> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.'
+            'A <saml:Subject> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.',
         );
         Subject::fromXML($document->documentElement);
     }

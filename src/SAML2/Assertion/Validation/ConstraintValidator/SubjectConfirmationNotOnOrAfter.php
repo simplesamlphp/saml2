@@ -20,7 +20,7 @@ class SubjectConfirmationNotOnOrAfter implements SubjectConfirmationConstraintVa
      */
     public function validate(
         SubjectConfirmation $subjectConfirmation,
-        Result $result
+        Result $result,
     ): void {
         $data = $subjectConfirmation->getSubjectConfirmationData();
         Assert::notNull($data);

@@ -53,22 +53,22 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
         protected array $artifactResolutionService = [],
         protected array $singleLogoutService = [],
         protected array $manageNameIDService = [],
-        protected array $nameIDFormat = []
+        protected array $nameIDFormat = [],
     ) {
         Assert::allIsInstanceOf(
             $artifactResolutionService,
             ArtifactResolutionService::class,
-            'All md:ArtifactResolutionService endpoints must be an instance of ArtifactResolutionService.'
+            'All md:ArtifactResolutionService endpoints must be an instance of ArtifactResolutionService.',
         );
         Assert::allIsInstanceOf(
             $singleLogoutService,
             SingleLogoutService::class,
-            'All md:SingleLogoutService endpoints must be an instance of SingleLogoutService.'
+            'All md:SingleLogoutService endpoints must be an instance of SingleLogoutService.',
         );
         Assert::allIsInstanceOf(
             $manageNameIDService,
             ManageNameIDService::class,
-            'All md:ManageNameIDService endpoints must be an instance of ManageNameIDService.'
+            'All md:ManageNameIDService endpoints must be an instance of ManageNameIDService.',
         );
         Assert::allIsInstanceOf($nameIDFormat, NameIDFormat::class, ProtocolViolationException::class);
 
@@ -81,7 +81,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
             $errorURL,
             $keyDescriptors,
             $organization,
-            $contacts
+            $contacts,
         );
     }
 

@@ -43,7 +43,7 @@ final class SigningMethod extends AbstractAlgElement
         protected string $algorithm,
         protected ?int $minKeySize = null,
         protected ?int $maxKeySize = null,
-        array $elements = []
+        array $elements = [],
     ) {
         Assert::validURI($algorithm, SchemaViolationException::class); // Covers the empty string
         Assert::nullOrPositiveInteger($minKeySize);

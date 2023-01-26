@@ -38,13 +38,13 @@ final class Extensions extends AbstractSamlpElement
             $xml->namespaceURI,
             self::NS,
             'Unknown namespace \'' . strval($xml->namespaceURI) . '\' for Extensions element.',
-            InvalidDOMElementException::class
+            InvalidDOMElementException::class,
         );
         Assert::eq(
             $xml->localName,
             static::getClassName(static::class),
             'Invalid Extensions element \'' . $xml->localName . '\'',
-            InvalidDOMElementException::class
+            InvalidDOMElementException::class,
         );
         $ret = [];
 

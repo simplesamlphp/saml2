@@ -35,7 +35,7 @@ final class SubjectConfirmation extends AbstractSamlElement
     public function __construct(
         protected string $method,
         ?IdentifierInterface $identifier = null,
-        protected ?SubjectConfirmationData $subjectConfirmationData = null
+        protected ?SubjectConfirmationData $subjectConfirmationData = null,
     ) {
         Assert::validURI($method, SchemaViolationException::class); // Covers the empty string
         $this->setIdentifier($identifier);
@@ -90,13 +90,13 @@ final class SubjectConfirmation extends AbstractSamlElement
             $subjectConfirmationData,
             1,
             'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         return new static(
             $Method,
             $identifier,
-            array_pop($subjectConfirmationData)
+            array_pop($subjectConfirmationData),
         );
     }
 

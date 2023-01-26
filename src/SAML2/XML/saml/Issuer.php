@@ -31,7 +31,7 @@ final class Issuer extends NameIDType
         ?string $NameQualifier = null,
         ?string $SPNameQualifier = null,
         ?string $Format = null,
-        ?string $SPProvidedID = null
+        ?string $SPProvidedID = null,
     ) {
         /**
          * The format of this NameIDType.
@@ -59,7 +59,7 @@ final class Issuer extends NameIDType
         if ($Format === C::NAMEID_ENTITY || $Format === null) {
             Assert::allNull(
                 [$NameQualifier, $SPNameQualifier, $SPProvidedID],
-                'Illegal combination of attributes being used'
+                'Illegal combination of attributes being used',
             );
         }
 

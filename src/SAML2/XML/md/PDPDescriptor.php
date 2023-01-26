@@ -47,18 +47,18 @@ final class PDPDescriptor extends AbstractRoleDescriptor
         ?string $errorURL = null,
         ?Organization $organization = null,
         array $keyDescriptors = [],
-        array $contacts = []
+        array $contacts = [],
     ) {
         Assert::minCount($authzService, 1, 'At least one md:AuthzService endpoint must be present.');
         Assert::allIsInstanceOf(
             $authzService,
             AuthzService::class,
-            'All md:AuthzService endpoints must be an instance of AuthzService.'
+            'All md:AuthzService endpoints must be an instance of AuthzService.',
         );
         Assert::allIsInstanceOf(
             $assertionIDRequestService,
             AssertionIDRequestService::class,
-            'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.'
+            'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.',
         );
         Assert::allIsInstanceOf($nameIDFormat, NameIDFormat::class);
 
@@ -71,7 +71,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             $errorURL,
             $keyDescriptors,
             $organization,
-            $contacts
+            $contacts,
         );
     }
 
@@ -134,7 +134,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             $orgs,
             1,
             'More than one Organization found in this descriptor',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $extensions = Extensions::getChildrenOfClass($xml);
@@ -142,7 +142,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             $extensions,
             1,
             'Only one md:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         return new static(
@@ -157,7 +157,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             self::getAttribute($xml, 'errorURL', null),
             !empty($orgs) ? $orgs[0] : null,
             KeyDescriptor::getChildrenOfClass($xml),
-            ContactPerson::getChildrenOfClass($xml)
+            ContactPerson::getChildrenOfClass($xml),
         );
     }
 

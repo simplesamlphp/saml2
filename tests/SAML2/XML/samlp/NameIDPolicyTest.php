@@ -34,7 +34,7 @@ final class NameIDPolicyTest extends TestCase
         $this->testedClass = NameIDPolicy::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_NameIDPolicy.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_NameIDPolicy.xml',
         );
     }
 
@@ -45,7 +45,7 @@ final class NameIDPolicyTest extends TestCase
         $nameIdPolicy = new NameIDPolicy(
             'urn:the:format',
             'TheSPNameQualifier',
-            true
+            true,
         );
 
         $this->assertEquals(
@@ -64,7 +64,7 @@ final class NameIDPolicyTest extends TestCase
         $nameIdPolicy = new NameIDPolicy();
         $this->assertEquals(
             "<samlp:NameIDPolicy xmlns:samlp=\"$samlpns\"/>",
-            strval($nameIdPolicy)
+            strval($nameIdPolicy),
         );
         $this->assertTrue($nameIdPolicy->isEmptyElement());
     }
@@ -78,7 +78,7 @@ final class NameIDPolicyTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($nameIdPolicy)
+            strval($nameIdPolicy),
         );
     }
 }

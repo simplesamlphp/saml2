@@ -42,11 +42,11 @@ final class StatusTest extends TestCase
         $this->testedClass = Status::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_Status.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_Status.xml',
         );
 
         $this->detail = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_StatusDetail.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_StatusDetail.xml',
         );
     }
 
@@ -60,23 +60,23 @@ final class StatusTest extends TestCase
                 C::STATUS_RESPONDER,
                 [
                     new StatusCode(
-                        C::STATUS_REQUEST_DENIED
-                    )
-                ]
+                        C::STATUS_REQUEST_DENIED,
+                    ),
+                ],
             ),
             new StatusMessage('Something went wrong'),
             [
                 StatusDetail::fromXML(
                     DOMDocumentFactory::fromFile(
-                        dirname(__FILE__, 4) . '/resources/xml/samlp_StatusDetail.xml'
-                    )->documentElement
+                        dirname(__FILE__, 4) . '/resources/xml/samlp_StatusDetail.xml',
+                    )->documentElement,
                 )
             ]
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($status)
+            strval($status),
         );
     }
 
@@ -90,14 +90,14 @@ final class StatusTest extends TestCase
                 C::STATUS_RESPONDER,
                 [
                     new StatusCode(
-                        C::STATUS_REQUEST_DENIED
-                    )
-                ]
+                        C::STATUS_REQUEST_DENIED,
+                    ),
+                ],
             ),
             new StatusMessage('Something went wrong'),
             [
-                new StatusDetail([new Chunk($this->detail->documentElement)])
-            ]
+                new StatusDetail([new Chunk($this->detail->documentElement)]),
+            ],
         );
 
         $statusElement = $status->toXML();
@@ -124,7 +124,7 @@ final class StatusTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($status)
+            strval($status),
         );
     }
 }

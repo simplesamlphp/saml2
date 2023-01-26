@@ -35,7 +35,7 @@ final class ActionTest extends TestCase
         $this->testedClass = Action::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_Action.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_Action.xml',
         );
     }
 
@@ -49,12 +49,12 @@ final class ActionTest extends TestCase
     {
         $action = new Action(
             C::NAMESPACE,
-            'SomeAction'
+            'SomeAction',
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($action)
+            strval($action),
         );
     }
 
@@ -70,7 +70,7 @@ final class ActionTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($action)
+            strval($action),
         );
     }
 }

@@ -28,11 +28,11 @@ final class SingleSignOnService extends AbstractEndpointType
         string $binding,
         string $location,
         ?string $unused = null,
-        array $attributes = []
+        array $attributes = [],
     ) {
         Assert::null(
             $unused,
-            'The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.'
+            'The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.',
         );
         parent::__construct($binding, $location, null, $attributes);
     }

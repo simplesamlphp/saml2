@@ -39,7 +39,7 @@ final class AttributeProfileTest extends TestCase
         $this->testedClass = AttributeProfile::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_AttributeProfile.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_AttributeProfile.xml',
         );
     }
 
@@ -55,7 +55,7 @@ final class AttributeProfileTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($attributeProfile)
+            strval($attributeProfile),
         );
     }
 
@@ -71,7 +71,7 @@ final class AttributeProfileTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($attributeProfile)
+            strval($attributeProfile),
         );
     }
 }

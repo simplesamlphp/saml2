@@ -27,7 +27,7 @@ final class NameIDPolicy extends AbstractSamlpElement
     public function __construct(
         protected ?string $Format = null,
         protected ?string $SPNameQualifier = null,
-        protected ?bool $AllowCreate = null
+        protected ?bool $AllowCreate = null,
     ) {
         Assert::nullOrValidURI($Format); // Covers the empty string
         Assert::nullOrNotWhitespaceOnly($SPNameQualifier);
@@ -97,7 +97,7 @@ final class NameIDPolicy extends AbstractSamlpElement
         return new static(
             $Format,
             $SPNameQualifier,
-            ($AllowCreate === 'true') ? true : false
+            ($AllowCreate === 'true') ? true : false,
         );
     }
 

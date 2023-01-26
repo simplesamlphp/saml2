@@ -66,10 +66,8 @@ final class SubjectConfirmationValidatorTest extends TestCase
         $this->destination = new Destination(C::ENTITY_SP);
         $this->response = new Response(new Status(new StatusCode()));
 
-        $this->identityProviderConfiguration
-            = new IdentityProvider(['entityId' => C::ENTITY_IDP]);
-        $this->serviceProviderConfiguration
-            = new ServiceProvider(['entityId' => C::ENTITY_SP]);
+        $this->identityProviderConfiguration = new IdentityProvider(['entityId' => C::ENTITY_IDP]);
+        $this->serviceProviderConfiguration = new ServiceProvider(['entityId' => C::ENTITY_SP]);
 
         $this->assertionProcessor = ProcessorBuilder::build(
             $this->logger,
@@ -77,7 +75,7 @@ final class SubjectConfirmationValidatorTest extends TestCase
             $this->destination,
             $this->identityProviderConfiguration,
             $this->serviceProviderConfiguration,
-            $this->response
+            $this->response,
         );
 
         $ns_xsi = C::NS_XSI;
@@ -145,7 +143,7 @@ XML
         $this->expectExceptionMessage(
             'Invalid SubjectConfirmation in Assertion, errors: "Recipient in SubjectConfirmationData ' .
             '("https://example.org/metadata") does not match the current destination ' .
-            '("https://simplesamlphp.org/sp/metadata")'
+            '("https://simplesamlphp.org/sp/metadata")',
         );
         $this->assertionProcessor->validateAssertion($assertion);
     }

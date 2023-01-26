@@ -37,7 +37,7 @@ final class AudienceRestrictionTest extends TestCase
         $this->testedClass = AudienceRestriction::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AudienceRestriction.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AudienceRestriction.xml',
         );
     }
 
@@ -52,13 +52,13 @@ final class AudienceRestrictionTest extends TestCase
         $condition = new AudienceRestriction(
             [
                 new Audience('urn:test:audience1'),
-                new Audience('urn:test:audience2')
-            ]
+                new Audience('urn:test:audience2'),
+            ],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($condition)
+            strval($condition),
         );
     }
 
@@ -74,7 +74,7 @@ final class AudienceRestrictionTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($condition)
+            strval($condition),
         );
     }
 }

@@ -24,7 +24,7 @@ final class PublicationPath extends AbstractMdrpiElement
      * @param \SimpleSAML\SAML2\XML\mdrpi\Publication[] $publication
      */
     public function __construct(
-        protected array $publication = []
+        protected array $publication = [],
     ) {
         Assert::allIsInstanceOf($publication, Publication::class);
     }

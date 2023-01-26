@@ -74,7 +74,7 @@ class AuthnRequest extends AbstractRequest
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
-        protected ?Scoping $scoping = null
+        protected ?Scoping $scoping = null,
     ) {
         Assert::nullOrNotWhitespaceOnly($ProviderName);
         Assert::oneOf(
@@ -264,7 +264,7 @@ class AuthnRequest extends AbstractRequest
             $conditions,
             1,
             'Only one <saml:Conditions> element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $nameIdPolicy = NameIDPolicy::getChildrenOfClass($xml);
@@ -272,7 +272,7 @@ class AuthnRequest extends AbstractRequest
             $nameIdPolicy,
             1,
             'Only one <samlp:NameIDPolicy> element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $subject = Subject::getChildrenOfClass($xml);
@@ -286,7 +286,7 @@ class AuthnRequest extends AbstractRequest
             $requestedAuthnContext,
             1,
             'Only one <samlp:RequestedAuthnContext> element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $extensions = Extensions::getChildrenOfClass($xml);
@@ -294,7 +294,7 @@ class AuthnRequest extends AbstractRequest
             $extensions,
             1,
             'Only one <samlp:Extensions> element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $signature = Signature::getChildrenOfClass($xml);
@@ -302,7 +302,7 @@ class AuthnRequest extends AbstractRequest
             $signature,
             1,
             'Only one <ds:Signature> element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $scoping = Scoping::getChildrenOfClass($xml);
@@ -327,7 +327,7 @@ class AuthnRequest extends AbstractRequest
             self::getAttribute($xml, 'Destination', null),
             self::getAttribute($xml, 'Consent', null),
             array_pop($extensions),
-            array_pop($scoping)
+            array_pop($scoping),
         );
 
         if (!empty($signature)) {

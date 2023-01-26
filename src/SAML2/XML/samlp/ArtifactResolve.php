@@ -50,7 +50,7 @@ class ArtifactResolve extends AbstractRequest
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
-        ?Extensions $extensions = null
+        ?Extensions $extensions = null,
     ) {
         Assert::stringNotEmpty($artifact);
 
@@ -108,7 +108,7 @@ class ArtifactResolve extends AbstractRequest
             $extensions,
             1,
             'Only one saml:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $signature = Signature::getChildrenOfClass($xml);
@@ -125,7 +125,7 @@ class ArtifactResolve extends AbstractRequest
             $issueInstant,
             self::getAttribute($xml, 'Destination', null),
             self::getAttribute($xml, 'Consent', null),
-            array_pop($extensions)
+            array_pop($extensions),
         );
 
         if (!empty($signature)) {

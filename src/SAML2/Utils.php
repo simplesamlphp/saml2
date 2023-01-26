@@ -28,11 +28,11 @@ class Utils
     public static function createKeyDescriptor(string $x509Data): KeyDescriptor
     {
         $x509Data = new X509Data([
-            new X509Certificate($x509Data)
+            new X509Certificate($x509Data),
         ]);
 
         $keyInfo = new KeyInfo([
-            $x509Data
+            $x509Data,
         ]);
 
         return new KeyDescriptor($keyInfo);

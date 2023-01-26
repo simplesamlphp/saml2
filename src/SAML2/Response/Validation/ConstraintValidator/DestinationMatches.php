@@ -40,7 +40,7 @@ final class DestinationMatches implements ConstraintValidator
             $result->addError(sprintf(
                 'Destination in response "%s" does not match the expected destination "%s"',
                 $destination,
-                strval($this->expectedDestination)
+                strval($this->expectedDestination),
             ));
         }
     }

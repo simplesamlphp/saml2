@@ -35,7 +35,7 @@ final class AuthnContextClassRefTest extends TestCase
         $this->testedClass = AuthnContextClassRef::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextClassRef.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextClassRef.xml',
         );
     }
 
@@ -51,7 +51,7 @@ final class AuthnContextClassRefTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($authnContextClassRef)
+            strval($authnContextClassRef),
         );
     }
 
@@ -67,7 +67,7 @@ final class AuthnContextClassRefTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($authnContextClassRef)
+            strval($authnContextClassRef),
         );
     }
 }

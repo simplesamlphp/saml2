@@ -52,7 +52,7 @@ class ArtifactResponse extends AbstractStatusResponse
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
-        protected ?AbstractMessage $message = null
+        protected ?AbstractMessage $message = null,
     ) {
         parent::__construct(
             $status,
@@ -63,7 +63,7 @@ class ArtifactResponse extends AbstractStatusResponse
             $inResponseTo,
             $destination,
             $consent,
-            $extensions
+            $extensions,
         );
     }
 
@@ -136,7 +136,7 @@ class ArtifactResponse extends AbstractStatusResponse
             $extensions,
             1,
             'Only one saml:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $signature = Signature::getChildrenOfClass($xml);
@@ -144,7 +144,7 @@ class ArtifactResponse extends AbstractStatusResponse
             $signature,
             1,
             'Only one ds:Signature element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $response = new static(
@@ -157,7 +157,7 @@ class ArtifactResponse extends AbstractStatusResponse
             $destination,
             $consent,
             empty($extensions) ? null : array_pop($extensions),
-            $message
+            $message,
         );
 
         if (!empty($signature)) {

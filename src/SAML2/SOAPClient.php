@@ -53,14 +53,14 @@ class SOAPClient
     public function send(
         AbstractMessage $msg,
         Configuration $srcMetadata,
-        Configuration $dstMetadata = null
+        Configuration $dstMetadata = null,
     ): AbstractMessage {
         $issuer = $msg->getIssuer();
 
         $ctxOpts = [
             'ssl' => [
                 'capture_peer_cert' => true,
-                'allow_self_signed' => true
+                'allow_self_signed' => true,
             ],
         ];
 
@@ -202,20 +202,17 @@ class SOAPClient
         $key = openssl_pkey_get_public($options['ssl']['peer_certificate']);
         if ($key === false) {
             $container->getLogger()->warning('Unable to get public key from peer certificate.');
-
             return;
         }
 
         $keyInfo = openssl_pkey_get_details($key);
         if ($keyInfo === false) {
             $container->getLogger()->warning('Unable to get key details from public key.');
-
             return;
         }
 
         if (!isset($keyInfo['key'])) {
             $container->getLogger()->warning('Missing key in public key details.');
-
             return;
         }
 
@@ -233,6 +230,7 @@ class SOAPClient
     public static function validateSSL(string $data, XMLSecurityKey $key): void
     {
         $container = ContainerSingleton::getInstance();
+
         /** @psalm-suppress PossiblyNullArgument */
         $keyInfo = openssl_pkey_get_details($key->key);
         if ($keyInfo === false) {
@@ -245,7 +243,6 @@ class SOAPClient
 
         if ($keyInfo['key'] !== $data) {
             $container->getLogger()->debug('Key on SSL connection did not match key we validated against.');
-
             return;
         }
 
@@ -265,7 +262,7 @@ class SOAPClient
         $soapFault = XPath::xpQuery(
             $soapMessage->firstChild,
             '/soap-env:Envelope/soap-env:Body/soap-env:Fault',
-            XPath::getXPath($soapMessage->firstChild)
+            XPath::getXPath($soapMessage->firstChild),
         );
 
         if (empty($soapFault)) {

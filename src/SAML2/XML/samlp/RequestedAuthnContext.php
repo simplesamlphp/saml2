@@ -31,7 +31,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      */
     public function __construct(
         protected array $requestedAuthnContexts = [],
-        protected ?string $Comparison = null
+        protected ?string $Comparison = null,
     ) {
         Assert::minCount($requestedAuthnContexts, 1);
         Assert::allIsInstanceOfAny($requestedAuthnContexts, [AuthnContextClassRef::class, AuthnContextDeclRef::class]);
@@ -40,13 +40,13 @@ final class RequestedAuthnContext extends AbstractSamlpElement
             Assert::allIsInstanceOf(
                 $requestedAuthnContexts,
                 AuthnContextClassRef::class,
-                'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.'
+                'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.',
             );
         } else { // Can only be AuthnContextDeclRef
             Assert::allIsInstanceOf(
                 $requestedAuthnContexts,
                 AuthnContextDeclRef::class,
-                'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.'
+                'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.',
             );
         }
         Assert::nullOrOneOf($Comparison, ['exact', 'minimum', 'maximum', 'better']);
@@ -92,9 +92,9 @@ final class RequestedAuthnContext extends AbstractSamlpElement
         return new static(
             array_merge(
                 AuthnContextClassRef::getChildrenOfClass($xml),
-                AuthnContextDeclRef::getChildrenOfClass($xml)
+                AuthnContextDeclRef::getChildrenOfClass($xml),
             ),
-            self::getAttribute($xml, 'Comparison', null)
+            self::getAttribute($xml, 'Comparison', null),
         );
     }
 

@@ -35,7 +35,7 @@ abstract class NameIDType extends AbstractBaseIDType
         ?string $nameQualifier = null,
         ?string $spNameQualifier = null,
         protected ?string $format = null,
-        protected ?string $spProvidedID = null
+        protected ?string $spProvidedID = null,
     ) {
         Assert::nullOrValidURI($format); // Covers the empty string
         Assert::nullOrNotWhitespaceOnly($spProvidedID);

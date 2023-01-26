@@ -37,7 +37,7 @@ final class IDPListTest extends TestCase
         $this->testedClass = IDPList::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_IDPList.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_IDPList.xml',
         );
     }
 
@@ -53,7 +53,7 @@ final class IDPListTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($list)
+            strval($list),
         );
     }
 
@@ -96,7 +96,7 @@ XML
         ;
 
         $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'urn:test:testLoc1');
-        $list = new IDPList([$entry1], null);
+        $list = new IDPList([$entry1]);
 
         $entries = $list->getIdpEntry();
         $this->assertCount(1, $entries);
@@ -119,7 +119,7 @@ XML
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($list)
+            strval($list),
         );
     }
 

@@ -65,7 +65,7 @@ final class ContactPerson extends AbstractMdElement
         ?Extensions $extensions = null,
         protected array $emailAddress = [],
         protected array $telephoneNumber = [],
-        array $namespacedAttribute = []
+        array $namespacedAttribute = [],
     ) {
         Assert::oneOf($contactType, self::CONTACT_TYPES);
         Assert::allIsInstanceOf($emailAddress, EmailAddress::class);
@@ -185,7 +185,7 @@ final class ContactPerson extends AbstractMdElement
             (count($extensions) === 1) ? $extensions[0] : null,
             $email,
             $telephone,
-            self::getAttributesNSFromXML($xml)
+            self::getAttributesNSFromXML($xml),
         );
     }
 
@@ -258,7 +258,7 @@ final class ContactPerson extends AbstractMdElement
             $data['SurName'],
             $data['Extensions'],
             $data['EmailAddress'],
-            $data['TelephoneNumber']
+            $data['TelephoneNumber'],
         );
 
         $attributes = [];
@@ -281,7 +281,7 @@ final class ContactPerson extends AbstractMdElement
             $Extensions,
             $EmailAddress,
             $TelephoneNumber,
-            $attributes
+            $attributes,
         );
     }
 

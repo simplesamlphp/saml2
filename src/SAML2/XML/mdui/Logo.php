@@ -38,7 +38,7 @@ final class Logo extends AbstractMduiElement
         protected string $url,
         protected int $height,
         protected int $width,
-        protected ?string $lang = null
+        protected ?string $lang = null,
     ) {
         $this->setContent($url);
     }

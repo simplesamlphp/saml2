@@ -38,12 +38,12 @@ trait ExtensionsTrait
             Assert::notNull(
                 $namespace,
                 'Extensions MUST NOT include global (non-namespace-qualified) elements.',
-                ProtocolViolationException::class
+                ProtocolViolationException::class,
             );
             Assert::true(
                 !in_array($namespace, [C::NS_SAML, C::NS_SAMLP], true),
                 'Extensions MUST NOT include any SAML-defined namespace elements.',
-                ProtocolViolationException::class
+                ProtocolViolationException::class,
             );
         }
 

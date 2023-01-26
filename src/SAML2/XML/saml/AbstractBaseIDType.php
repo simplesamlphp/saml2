@@ -26,7 +26,7 @@ abstract class AbstractBaseIDType extends AbstractSamlElement implements BaseIde
      */
     protected function __construct(
         protected ?string $nameQualifier = null,
-        protected ?string $spNameQualifier = null
+        protected ?string $spNameQualifier = null,
     ) {
         Assert::nullOrNotWhitespaceOnly($nameQualifier);
         Assert::nullOrNotWhitespaceOnly($spNameQualifier);

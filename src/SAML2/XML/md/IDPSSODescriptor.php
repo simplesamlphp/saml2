@@ -63,29 +63,29 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
         array $artifactResolutionService = [],
         array $singleLogoutService = [],
         array $manageNameIDService = [],
-        array $nameIDFormat = []
+        array $nameIDFormat = [],
     ) {
         Assert::minCount($singleSignOnService, 1, 'At least one SingleSignOnService must be specified.');
         Assert::allIsInstanceOf(
             $singleSignOnService,
             SingleSignOnService::class,
-            'All md:SingleSignOnService endpoints must be an instance of SingleSignOnService.'
+            'All md:SingleSignOnService endpoints must be an instance of SingleSignOnService.',
         );
         Assert::allIsInstanceOf(
             $nameIDMappingService,
             NameIDMappingService::class,
-            'All md:NameIDMappingService endpoints must be an instance of NameIDMappingService.'
+            'All md:NameIDMappingService endpoints must be an instance of NameIDMappingService.',
         );
         Assert::allIsInstanceOf(
             $assertionIDRequestService,
             AssertionIDRequestService::class,
-            'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.'
+            'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.',
         );
         Assert::allIsInstanceOf($attributeProfile, AttributeProfile::class);
         Assert::allIsInstanceOf(
             $attribute,
             Attribute::class,
-            'All md:Attribute elements must be an instance of Attribute.'
+            'All md:Attribute elements must be an instance of Attribute.',
         );
 
         parent::__construct(
@@ -101,7 +101,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
             $artifactResolutionService,
             $singleLogoutService,
             $manageNameIDService,
-            $nameIDFormat
+            $nameIDFormat,
         );
     }
 
@@ -197,7 +197,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
             $orgs,
             1,
             'More than one Organization found in this descriptor',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $extensions = Extensions::getChildrenOfClass($xml);
@@ -205,7 +205,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
             $extensions,
             1,
             'Only one md:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $signature = Signature::getChildrenOfClass($xml);
@@ -213,7 +213,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
             $signature,
             1,
             'Only one ds:Signature element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $idpssod = new static(
@@ -235,7 +235,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
             ArtifactResolutionService::getChildrenOfClass($xml),
             SingleLogoutService::getChildrenOfClass($xml),
             ManageNameIDService::getChildrenOfClass($xml),
-            NameIDFormat::getChildrenOfClass($xml)
+            NameIDFormat::getChildrenOfClass($xml),
         );
 
         if (!empty($signature)) {

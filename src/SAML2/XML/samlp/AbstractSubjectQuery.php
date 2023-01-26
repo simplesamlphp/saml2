@@ -42,7 +42,7 @@ abstract class AbstractSubjectQuery extends AbstractRequest
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
-        ?Extensions $extensions = null
+        ?Extensions $extensions = null,
     ) {
         parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
     }

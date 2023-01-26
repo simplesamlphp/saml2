@@ -26,7 +26,7 @@ final class IDPEntry extends AbstractSamlpElement
     public function __construct(
         protected string $providerId,
         protected ?string $name = null,
-        protected ?string $loc = null
+        protected ?string $loc = null,
     ) {
         Assert::validURI($providerId, SchemaViolationException::class); // Covers the empty string
         Assert::nullOrNotWhitespaceOnly($name);

@@ -15,6 +15,8 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 
 use function dirname;
+use function sprintf;
+use function str_pad;
 use function strval;
 
 /**
@@ -39,7 +41,7 @@ final class AffiliateMemberTest extends TestCase
         $this->testedClass = AffiliateMember::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_AffiliateMember.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_AffiliateMember.xml',
         );
     }
 
@@ -56,7 +58,7 @@ final class AffiliateMemberTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($affiliateMember)
+            strval($affiliateMember),
         );
     }
 
@@ -77,7 +79,7 @@ final class AffiliateMemberTest extends TestCase
     {
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
-            sprintf('The AffiliateMember cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH)
+            sprintf('The AffiliateMember cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
         );
 
         new AffiliateMember(str_pad('https://some.entity.org/id', C::ENTITYID_MAX_LENGTH + 1, 'a'));
@@ -96,7 +98,7 @@ final class AffiliateMemberTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($affiliateMember)
+            strval($affiliateMember),
         );
     }
 }

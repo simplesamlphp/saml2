@@ -36,7 +36,7 @@ final class DigestMethod extends AbstractAlgElement
      */
     public function __construct(
         protected string $algorithm,
-        array $elements = []
+        array $elements = [],
     ) {
         Assert::validURI($algorithm, SchemaViolationException::class); // Covers the empty string
         $this->setElements($elements);

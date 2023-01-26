@@ -35,7 +35,7 @@ final class AttributeConsumingService extends AbstractMdElement
         protected array $serviceName,
         protected array $requestedAttribute,
         ?bool $isDefault = null,
-        protected array $serviceDescription = []
+        protected array $serviceDescription = [],
     ) {
         Assert::minCount(
             $serviceName,
@@ -51,18 +51,18 @@ final class AttributeConsumingService extends AbstractMdElement
         Assert::allIsInstanceOf(
             $serviceDescription,
             ServiceDescription::class,
-            'Service descriptions must be specified as ServiceDescription objects.'
+            'Service descriptions must be specified as ServiceDescription objects.',
         );
         Assert::allIsInstanceOf(
             $requestedAttribute,
             RequestedAttribute::class,
-            'Requested attributes must be specified as RequestedAttribute objects.'
+            'Requested attributes must be specified as RequestedAttribute objects.',
         );
         Assert::minCount(
             $requestedAttribute,
             1,
             'Missing at least one RequestedAttribute in AttributeConsumingService.',
-            MissingElementException::class
+            MissingElementException::class,
         );
 
         $this->setIndex($index);
@@ -92,7 +92,7 @@ final class AttributeConsumingService extends AbstractMdElement
             $names,
             1,
             'Missing at least one ServiceName in AttributeConsumingService.',
-            MissingElementException::class
+            MissingElementException::class,
         );
 
         $descriptions = ServiceDescription::getChildrenOfClass($xml);
@@ -104,7 +104,7 @@ final class AttributeConsumingService extends AbstractMdElement
             $names,
             $requestedAttrs,
             self::getBooleanAttribute($xml, 'isDefault', null),
-            $descriptions
+            $descriptions,
         );
     }
 

@@ -32,14 +32,14 @@ final class Organization extends AbstractMdElement
      * @param \SimpleSAML\SAML2\XML\md\OrganizationDisplayName[] $organizationDisplayName
      * @param \SimpleSAML\SAML2\XML\md\OrganizationURL[] $organizationURL
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
-     * @param \DOMAttr[]                     $namespacedAttributes
+     * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
         protected array $organizationName,
         protected array $organizationDisplayName,
         protected array $organizationURL,
         ?Extensions $extensions = null,
-        array $namespacedAttributes = []
+        array $namespacedAttributes = [],
     ) {
         Assert::allIsInstanceOf($organizationName, OrganizationName::class);
         Assert::allIsInstanceOf($organizationDisplayName, OrganizationDisplayName::class);
@@ -107,7 +107,7 @@ final class Organization extends AbstractMdElement
             $displayNames,
             1,
             'Missing at least one OrganizationDisplayName',
-            MissingElementException::class
+            MissingElementException::class,
         );
 
         $urls = OrganizationURL::getChildrenOfClass($xml);
@@ -118,7 +118,7 @@ final class Organization extends AbstractMdElement
             $extensions,
             1,
             'Cannot process more than one md:Extensions element.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         return new static(
@@ -126,7 +126,7 @@ final class Organization extends AbstractMdElement
             $displayNames,
             $urls,
             !empty($extensions) ? $extensions[0] : null,
-            self::getAttributesNSFromXML($xml)
+            self::getAttributesNSFromXML($xml),
         );
     }
 

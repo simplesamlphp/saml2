@@ -32,7 +32,7 @@ final class RequesterIDTest extends TestCase
         $this->testedClass = RequesterID::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_RequesterID.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_RequesterID.xml',
         );
     }
 
@@ -48,7 +48,7 @@ final class RequesterIDTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($requesterId)
+            strval($requesterId),
         );
     }
 
@@ -61,7 +61,7 @@ final class RequesterIDTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($requesterId)
+            strval($requesterId),
         );
     }
 }

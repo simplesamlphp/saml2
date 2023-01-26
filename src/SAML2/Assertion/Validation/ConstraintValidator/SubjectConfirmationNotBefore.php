@@ -20,7 +20,7 @@ class SubjectConfirmationNotBefore implements SubjectConfirmationConstraintValid
      */
     public function validate(
         SubjectConfirmation $subjectConfirmation,
-        Result $result
+        Result $result,
     ): void {
         $data = $subjectConfirmation->getSubjectConfirmationData();
         Assert::notNull($data);

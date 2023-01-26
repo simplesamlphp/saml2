@@ -22,7 +22,7 @@ class NotOnOrAfter implements AssertionConstraintValidator
             $notValidOnOrAfterTimestamp = $conditions->getNotOnOrAfter();
             if (($notValidOnOrAfterTimestamp !== null) && ($notValidOnOrAfterTimestamp <= (Temporal::getTime() - 60))) {
                 $result->addError(
-                    'Received an assertion that has expired. Check clock synchronization on IdP and SP.'
+                    'Received an assertion that has expired. Check clock synchronization on IdP and SP.',
                 );
             }
         }

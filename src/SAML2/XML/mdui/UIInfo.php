@@ -48,7 +48,7 @@ final class UIInfo extends AbstractMduiElement
         protected array $privacyStatementURL = [],
         protected array $keywords = [],
         protected array $logo = [],
-        array $children = []
+        array $children = [],
     ) {
         Assert::allIsInstanceOf($displayName, DisplayName::class);
         /**
@@ -232,13 +232,13 @@ final class UIInfo extends AbstractMduiElement
                 function ($elt) {
                     return $elt->getLanguage();
                 },
-                $elements
+                $elements,
             );
             Assert::uniqueValues(
                 $languages,
                 'There MUST NOT be more than one <' . $elements[0]->getQualifiedName() . '>,'
                 . ' within a given <mdui:UIInfo>, for a given language',
-                ProtocolViolationException::class
+                ProtocolViolationException::class,
             );
         }
     }
@@ -280,7 +280,7 @@ final class UIInfo extends AbstractMduiElement
             $PrivacyStatementURL,
             $Keywords,
             $Logo,
-            $children
+            $children,
         );
     }
 
@@ -385,7 +385,7 @@ final class UIInfo extends AbstractMduiElement
             $InformationURL,
             $PrivacyStatementURL,
             $Keywords,
-            $Logo
+            $Logo,
         );
     }
 
@@ -435,7 +435,7 @@ final class UIInfo extends AbstractMduiElement
             'InformationURL' => $infoUrl,
             'PrivacyStatementURL' => $privacyUrl,
             'Keywords' => $keywords,
-            'Logo' => $logo
+            'Logo' => $logo,
         ];
     }
 }

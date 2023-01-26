@@ -19,7 +19,7 @@ use SimpleSAML\XMLSecurity\XML\EncryptedElementTrait;
  *
  * @package simplesamlphp/saml2
  */
-class EncryptedAssertion extends AbstractSamlElement implements EncryptedElementInterface
+final class EncryptedAssertion extends AbstractSamlElement implements EncryptedElementInterface
 {
     use EncryptedElementTrait;
 
@@ -51,7 +51,7 @@ class EncryptedAssertion extends AbstractSamlElement implements EncryptedElement
     public function decrypt(EncryptionAlgorithmInterface $decryptor): Assertion
     {
         return Assertion::fromXML(
-            DOMDocumentFactory::fromString($this->decryptData($decryptor))->documentElement
+            DOMDocumentFactory::fromString($this->decryptData($decryptor))->documentElement,
         );
     }
 

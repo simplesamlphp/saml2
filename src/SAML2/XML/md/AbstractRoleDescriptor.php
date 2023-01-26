@@ -45,13 +45,13 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
         protected array $keyDescriptor = [],
         protected ?Organization $organization = null,
         protected array $contactPerson = [],
-        array $namespacedAttributes = []
+        array $namespacedAttributes = [],
     ) {
         Assert::nullOrValidURI($errorURL, SchemaViolationException::class); // Covers the empty string
         Assert::minCount(
             $protocolSupportEnumeration,
             1,
-            'At least one protocol must be supported by this md:' . static::getLocalName() . '.'
+            'At least one protocol must be supported by this md:' . static::getLocalName() . '.',
         );
         Assert::allValidURI($protocolSupportEnumeration, SchemaViolationException::class);
         Assert::allIsInstanceOf(

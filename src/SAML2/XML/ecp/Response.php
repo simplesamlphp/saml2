@@ -64,17 +64,17 @@ final class Response extends AbstractEcpElement
         Assert::true(
             $xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand'),
             'Missing env:mustUnderstand attribute in <ecp:Response>.',
-            MissingAttributeException::class
+            MissingAttributeException::class,
         );
         Assert::true(
             $xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'actor'),
             'Missing env:actor attribute in <ecp:Response>.',
-            MissingAttributeException::class
+            MissingAttributeException::class,
         );
         Assert::true(
             $xml->hasAttribute('AssertionConsumerServiceURL'),
             'Missing AssertionConsumerServiceURL attribute in <ecp:Response>.',
-            MissingAttributeException::class
+            MissingAttributeException::class,
         );
 
         $mustUnderstand = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand');

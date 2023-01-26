@@ -36,7 +36,7 @@ final class AuthnStatement extends AbstractStatementType
         protected int $authnInstant,
         protected ?int $sessionNotOnOrAfter = null,
         protected ?string $sessionIndex = null,
-        protected ?SubjectLocality $subjectLocality = null
+        protected ?SubjectLocality $subjectLocality = null,
     ) {
         Assert::nullOrNotWhitespaceOnly($sessionIndex);
     }
@@ -119,13 +119,13 @@ final class AuthnStatement extends AbstractStatementType
             $authnContext,
             1,
             'Missing <saml:AuthnContext> in <saml:AuthnStatement>',
-            MissingElementException::class
+            MissingElementException::class,
         );
         Assert::maxCount(
             $authnContext,
             1,
             'More than one <saml:AuthnContext> in <saml:AuthnStatement>',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $authnInstant = self::getAttribute($xml, 'AuthnInstant');
@@ -151,7 +151,7 @@ final class AuthnStatement extends AbstractStatementType
             $authnInstant,
             $sessionNotOnOrAfter,
             self::getAttribute($xml, 'SessionIndex', null),
-            array_pop($subjectLocality)
+            array_pop($subjectLocality),
         );
     }
 

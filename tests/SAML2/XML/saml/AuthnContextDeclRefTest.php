@@ -36,7 +36,7 @@ final class AuthnContextDeclRefTest extends TestCase
         $this->testedClass = AuthnContextDeclRef::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextDeclRef.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextDeclRef.xml',
         );
     }
 
@@ -52,7 +52,7 @@ final class AuthnContextDeclRefTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($authnContextDeclRef)
+            strval($authnContextDeclRef),
         );
     }
 
@@ -68,7 +68,7 @@ final class AuthnContextDeclRefTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($authnContextDeclRef)
+            strval($authnContextDeclRef),
         );
     }
 }

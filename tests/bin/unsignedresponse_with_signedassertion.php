@@ -26,15 +26,13 @@ $unsignedAssertion = Assertion::fromXML($document->documentElement);
 $unsignedAssertion->sign($signer);
 
 $unsignedResponse = new Response(
-    new Status(new StatusCode(C::STATUS_SUCCESS)),
-    new Issuer('https://IdentityProvider.com'),
-    'abc123',
-    null,
-    'PHPUnit',
-    C::ENTITY_OTHER,
-    C::ENTITY_SP,
-    null,
-    [$unsignedAssertion]
+    status: new Status(new StatusCode(C::STATUS_SUCCESS)),
+    issuer: new Issuer('https://IdentityProvider.com'),
+    id: 'abc123',
+    inResponseto: 'PHPUnit',
+    destination: C::ENTITY_OTHER,
+    consent: C::ENTITY_SP,
+    assertions: [$unsignedAssertion],
 );
 
 echo $unsignedResponse->toXML()->ownerDocument->saveXML();

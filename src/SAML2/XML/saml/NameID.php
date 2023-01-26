@@ -36,7 +36,7 @@ final class NameID extends NameIDType implements EncryptableElementInterface
         ?string $NameQualifier = null,
         ?string $SPNameQualifier = null,
         ?string $Format = null,
-        ?string $SPProvidedID = null
+        ?string $SPProvidedID = null,
     ) {
         parent::__construct($value, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
 

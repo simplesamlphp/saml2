@@ -41,7 +41,7 @@ final class IndexedEndpointTypeTest extends TestCase
         $this->testedClass = AssertionConsumerService::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_AssertionConsumerService.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_AssertionConsumerService.xml',
         );
     }
 
@@ -58,7 +58,7 @@ final class IndexedEndpointTypeTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($idxep)
+            strval($idxep),
         );
     }
 
@@ -72,7 +72,7 @@ final class IndexedEndpointTypeTest extends TestCase
         $this->xmlRepresentation->documentElement->removeAttribute('isDefault');
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($idxep)
+            strval($idxep),
         );
         $this->assertNull($idxep->getIsDefault());
     }
@@ -90,7 +90,7 @@ final class IndexedEndpointTypeTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($idxep)
+            strval($idxep),
         );
     }
 
@@ -102,7 +102,7 @@ final class IndexedEndpointTypeTest extends TestCase
     {
         $this->expectException(InvalidDOMElementException::class);
         $this->expectExceptionMessage(
-            'Unexpected name for endpoint: AssertionConsumerService. Expected: ArtifactResolutionService.'
+            'Unexpected name for endpoint: AssertionConsumerService. Expected: ArtifactResolutionService.',
         );
         ArtifactResolutionService::fromXML($this->xmlRepresentation->documentElement);
     }

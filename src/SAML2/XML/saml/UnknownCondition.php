@@ -20,7 +20,7 @@ final class UnknownCondition extends AbstractCondition
      */
     public function __construct(
         protected Chunk $chunk,
-        string $type
+        string $type,
     ) {
         parent::__construct($type);
     }

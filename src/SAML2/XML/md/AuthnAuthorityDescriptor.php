@@ -48,18 +48,18 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
         ?string $errorURL = null,
         ?Organization $organization = null,
         array $keyDescriptor = [],
-        array $contact = []
+        array $contact = [],
     ) {
         Assert::minCount($authnQueryService, 1, 'Missing at least one AuthnQueryService in AuthnAuthorityDescriptor.');
         Assert::allIsInstanceOf(
             $authnQueryService,
             AbstractEndpointType::class,
-            'AuthnQueryService must be an instance of EndpointType'
+            'AuthnQueryService must be an instance of EndpointType',
         );
         Assert::allIsInstanceOf(
             $assertionIDRequestService,
             AbstractEndpointType::class,
-            'AssertionIDRequestServices must be an instance of EndpointType'
+            'AssertionIDRequestServices must be an instance of EndpointType',
         );
         Assert::allIsInstanceOf($nameIDFormat, NameIDFormat::class);
 
@@ -72,7 +72,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             $errorURL,
             $keyDescriptor,
             $organization,
-            $contact
+            $contact,
         );
     }
 
@@ -141,7 +141,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             $orgs,
             1,
             'More than one Organization found in this descriptor',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $extensions = Extensions::getChildrenOfClass($xml);
@@ -149,7 +149,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             $extensions,
             1,
             'Only one md:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $signature = Signature::getChildrenOfClass($xml);
@@ -157,7 +157,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             $signature,
             1,
             'Only one ds:Signature element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $authority = new static(
@@ -172,7 +172,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             self::getAttribute($xml, 'errorURL', null),
             !empty($orgs) ? $orgs[0] : null,
             KeyDescriptor::getChildrenOfClass($xml),
-            ContactPerson::getChildrenOfClass($xml)
+            ContactPerson::getChildrenOfClass($xml),
         );
         if (!empty($signature)) {
             $authority->setSignature($signature[0]);

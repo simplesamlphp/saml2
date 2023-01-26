@@ -53,7 +53,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
         protected ?Organization $organization = null,
         protected array $contactPerson = [],
         protected array $additionalMetadataLocation = [],
-        array $namespacedAttribute = []
+        array $namespacedAttribute = [],
     ) {
         Assert::false(
             (empty($roleDescriptor) && $affiliationDescriptor === null),
@@ -65,22 +65,22 @@ final class EntityDescriptor extends AbstractMetadataDocument
             $entityId,
             C::ENTITYID_MAX_LENGTH,
             sprintf('The entityID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
-            ProtocolViolationException::class
+            ProtocolViolationException::class,
         );
         Assert::allIsInstanceOf(
             $roleDescriptor,
             AbstractRoleDescriptor::class,
-            'All role descriptors must extend AbstractRoleDescriptor.'
+            'All role descriptors must extend AbstractRoleDescriptor.',
         );
         Assert::allIsInstanceOf(
             $contactPerson,
             ContactPerson::class,
-            'All md:ContactPerson elements must be an instance of ContactPerson.'
+            'All md:ContactPerson elements must be an instance of ContactPerson.',
         );
         Assert::allIsInstanceOf(
             $additionalMetadataLocation,
             AdditionalMetadataLocation::class,
-            'All md:AdditionalMetadataLocation elements must be an instance of AdditionalMetadataLocation'
+            'All md:AdditionalMetadataLocation elements must be an instance of AdditionalMetadataLocation',
         );
 
         parent::__construct($id, $validUntil, $cacheDuration, $extensions, $namespacedAttribute);
@@ -189,7 +189,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
             $organization,
             $contactPersons,
             $additionalMetadataLocation,
-            self::getAttributesNSFromXML($xml)
+            self::getAttributesNSFromXML($xml),
         );
 
         if (!empty($signature)) {

@@ -36,7 +36,7 @@ final class AuthenticatingAuthorityTest extends TestCase
         $this->testedClass = AuthenticatingAuthority::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AuthenticatingAuthority.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthenticatingAuthority.xml',
         );
     }
 
@@ -49,7 +49,7 @@ final class AuthenticatingAuthorityTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($authenticatingAuthority)
+            strval($authenticatingAuthority),
         );
     }
 
@@ -62,7 +62,7 @@ final class AuthenticatingAuthorityTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($authenticatingAuthority)
+            strval($authenticatingAuthority),
         );
     }
 }

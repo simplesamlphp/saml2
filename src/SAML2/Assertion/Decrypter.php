@@ -78,14 +78,14 @@ class Decrypter
                     'Could not decrypt assertion with key "#%d", "%s" thrown: "%s"',
                     $index,
                     get_class($e),
-                    $e->getMessage()
+                    $e->getMessage(),
                 ));
             }
         }
 
         throw new NotDecryptedException(sprintf(
             'Could not decrypt the assertion, tried with "%d" keys. See the debug log for more information',
-            count($decryptionKeys)
+            count($decryptionKeys),
         ));
     }
 }

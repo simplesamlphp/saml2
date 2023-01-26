@@ -39,7 +39,7 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
         protected ?string $nameFormat = null,
         protected ?string $friendlyName = null,
         protected array $attributeValue = [],
-        array $namespacedAttribute = []
+        array $namespacedAttribute = [],
     ) {
         $this->dataType = C::XMLENC_ELEMENT;
 
@@ -132,7 +132,7 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
             self::getAttribute($xml, 'NameFormat', null),
             self::getAttribute($xml, 'FriendlyName', null),
             AttributeValue::getChildrenOfClass($xml),
-            self::getAttributesNSFromXML($xml)
+            self::getAttributesNSFromXML($xml),
         );
     }
 

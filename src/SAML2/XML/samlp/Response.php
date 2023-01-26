@@ -67,7 +67,7 @@ class Response extends AbstractStatusResponse
             $inResponseTo,
             $destination,
             $consent,
-            $extensions
+            $extensions,
         );
     }
 
@@ -132,7 +132,7 @@ class Response extends AbstractStatusResponse
             $extensions,
             1,
             'Only one saml:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $assertions = [];
@@ -160,7 +160,7 @@ class Response extends AbstractStatusResponse
             $destination,
             $consent,
             empty($extensions) ? null : array_pop($extensions),
-            $assertions
+            $assertions,
         );
 
         if (!empty($signature)) {

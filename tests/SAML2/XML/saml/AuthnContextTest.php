@@ -58,23 +58,23 @@ final class AuthnContextTest extends TestCase
         $this->testedClass = AuthnContext::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContext.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContext.xml',
         );
 
         $this->classRef = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextClassRef.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextClassRef.xml',
         );
 
         $this->declRef = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextDeclRef.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextDeclRef.xml',
         );
 
         $this->decl = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextDecl.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextDecl.xml',
         );
 
         $this->authority = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AuthenticatingAuthority.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthenticatingAuthority.xml',
         );
     }
 
@@ -90,19 +90,17 @@ final class AuthnContextTest extends TestCase
             new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
             null,
             new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml'),
-            [new AuthenticatingAuthority('https://idp.example.com/SAML2')]
+            [new AuthenticatingAuthority('https://idp.example.com/SAML2')],
         );
 
         $this->assertEquals(
-            new AuthnContextClassRef(
-                C::AC_PASSWORD_PROTECTED_TRANSPORT
-            ),
-            $authnContext->getAuthnContextClassRef()
+            new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
+            $authnContext->getAuthnContextClassRef(),
         );
         $this->assertNull($authnContext->getAuthnContextDecl());
         $this->assertEquals(
             new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml'),
-            $authnContext->getAuthnContextDeclRef()
+            $authnContext->getAuthnContextDeclRef(),
         );
         $authorities = $authnContext->getAuthenticatingAuthorities();
         $this->assertCount(1, $authorities);
@@ -128,7 +126,7 @@ final class AuthnContextTest extends TestCase
             null,
             $authnContextDecl,
             null,
-            [$authenticatingAuthority]
+            [$authenticatingAuthority],
         );
 
         $this->assertNull($authnContext->getAuthnContextClassRef());
@@ -158,7 +156,7 @@ final class AuthnContextTest extends TestCase
             new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
             $authnContextDecl,
             null,
-            [$authenticatingAuthority]
+            [$authenticatingAuthority],
         );
 
         // Marshall it to a \DOMElement
@@ -174,7 +172,7 @@ final class AuthnContextTest extends TestCase
         $authnContextElements = XPath::xpQuery(
             $authnContextElement,
             './saml_assertion:AuthnContextClassRef/following-sibling::*',
-            $xpCache
+            $xpCache,
         );
         $this->assertCount(2, $authnContextElements);
         $this->assertEquals('saml:AuthnContextDecl', $authnContextElements[0]->tagName);
@@ -193,7 +191,7 @@ final class AuthnContextTest extends TestCase
             null,
             $authnContextDecl,
             null,
-            [$authenticatingAuthority]
+            [$authenticatingAuthority],
         );
 
         // Marshall it to a \DOMElement
@@ -209,7 +207,7 @@ final class AuthnContextTest extends TestCase
         $authnContextElements = XPath::xpQuery(
             $authnContextElement,
             './saml_assertion:AuthnContextDecl/following-sibling::*',
-            $xpCache
+            $xpCache,
         );
         $this->assertCount(1, $authnContextElements);
         $this->assertEquals('saml:AuthenticatingAuthority', $authnContextElements[0]->tagName);
@@ -227,7 +225,7 @@ final class AuthnContextTest extends TestCase
             new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
             null,
             new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml'),
-            [$authenticatingAuthority]
+            [$authenticatingAuthority],
         );
 
         // Marshall it to a \DOMElement
@@ -243,7 +241,7 @@ final class AuthnContextTest extends TestCase
         $authnContextElements = XPath::xpQuery(
             $authnContextElement,
             './saml_assertion:AuthnContextClassRef/following-sibling::*',
-            $xpCache
+            $xpCache,
         );
         $this->assertCount(2, $authnContextElements);
         $this->assertEquals('saml:AuthnContextDeclRef', $authnContextElements[0]->tagName);
@@ -262,7 +260,7 @@ final class AuthnContextTest extends TestCase
             null,
             null,
             new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml'),
-            [$authenticatingAuthority]
+            [$authenticatingAuthority],
         );
 
         // Marshall it to a \DOMElement
@@ -278,7 +276,7 @@ final class AuthnContextTest extends TestCase
         $authnContextElements = XPath::xpQuery(
             $authnContextElement,
             './saml_assertion:AuthnContextDeclRef/following-sibling::*',
-            $xpCache
+            $xpCache,
         );
         $this->assertCount(1, $authnContextElements);
         $this->assertEquals('saml:AuthenticatingAuthority', $authnContextElements[0]->tagName);
@@ -301,8 +299,8 @@ final class AuthnContextTest extends TestCase
             $authnContextDecl,
             $authnContextDeclRef,
             [
-                new AuthenticatingAuthority('https://idp.example.com/SAML2')
-            ]
+                new AuthenticatingAuthority('https://idp.example.com/SAML2'),
+            ],
         );
     }
 

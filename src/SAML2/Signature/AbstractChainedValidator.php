@@ -40,7 +40,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
      */
     protected function validateElementWithKeys(
         SignedElementInterface $element,
-        ArrayCollection $pemCandidates
+        ArrayCollection $pemCandidates,
     ): bool {
         $lastException = null;
         foreach ($pemCandidates as $index => $candidateKey) {
@@ -64,7 +64,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
                 $this->logger->debug(sprintf(
                     'Validation with key "#%d" failed with exception: %s',
                     $index,
-                    $e->getMessage()
+                    $e->getMessage(),
                 ));
 
                 $lastException = $e;

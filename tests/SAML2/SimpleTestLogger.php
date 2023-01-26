@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use Psr\Log\AbstractLogger;
+use SimpleSAML\Assert\Assert;
 
 use function array_filter;
 use function count;
@@ -26,10 +27,13 @@ final class SimpleTestLogger extends AbstractLogger
      */
     public function log($level, $message, array $context = []): void
     {
+        Assert::string($level);
+        Assert::string($message);
+
         $this->messages[] = [
             'level'   => $level,
             'message' => $message,
-            'context' => $context
+            'context' => $context,
         ];
     }
 
@@ -42,7 +46,8 @@ final class SimpleTestLogger extends AbstractLogger
      */
     public function getMessagesForLevel($level): array
     {
-        return array_filter($this->messages, function ($message) use ($level) {
+        Assert::string($level);
+        return array_filter($this->messages, function (string $message) use ($level) {
             return $message['level'] === $level;
         });
     }
@@ -50,11 +55,11 @@ final class SimpleTestLogger extends AbstractLogger
 
     /**
      * Check if the given message exists within the log
-     * @param $messageToFind
+     * @param string $messageToFind
      *
      * @return bool
      */
-    public function hasMessage($messageToFind): bool
+    public function hasMessage(string $messageToFind): bool
     {
         $count = array_filter($this->messages, function ($message) use ($messageToFind) {
             return $message['message'] === $messageToFind;

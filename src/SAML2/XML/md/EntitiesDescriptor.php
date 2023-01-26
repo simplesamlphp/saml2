@@ -24,7 +24,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
      *
      * @param \SimpleSAML\SAML2\XML\md\EntityDescriptor[] $entityDescriptors
      * @param \SimpleSAML\SAML2\XML\md\EntitiesDescriptor[] $entitiesDescriptors
-     * @param string|null $name
+     * @param string|null $Name
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
@@ -39,7 +39,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         ?int $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
-        array $namespacedAttributes = []
+        array $namespacedAttributes = [],
     ) {
         Assert::true(
             !empty($entitiesDescriptors) || !empty($entityDescriptors),
@@ -108,7 +108,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             $orgs,
             1,
             'More than one Organization found in this descriptor',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $extensions = Extensions::getChildrenOfClass($xml);
@@ -116,7 +116,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             $extensions,
             1,
             'Only one md:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $signature = Signature::getChildrenOfClass($xml);
@@ -124,7 +124,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             $signature,
             1,
             'Only one ds:Signature element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $entities = new static(
@@ -135,7 +135,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
-            self::getAttributesNSFromXML($xml)
+            self::getAttributesNSFromXML($xml),
         );
 
         if (!empty($signature)) {

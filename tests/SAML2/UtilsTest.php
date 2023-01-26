@@ -38,7 +38,6 @@ final class UtilsTest extends TestCase
             'OurNameQualifier',
             'TheSPNameQualifier',
             C::NAMEID_TRANSIENT,
-            null
         );
 
         $aq = new AttributeQuery(new Subject($nameId_before));
@@ -66,7 +65,7 @@ final class UtilsTest extends TestCase
             $document->firstChild,
             'testns',
             'ns:somenode',
-            'value'
+            'value',
         );
         $this->assertEquals(
             '<root><ns:somenode xmlns:ns="testns">value</ns:somenode></root>',
@@ -78,11 +77,11 @@ final class UtilsTest extends TestCase
             $document->firstChild,
             'testns',
             'ns:somenode',
-            'value'
+            'value',
         );
         $this->assertEquals(
             '<ns:root xmlns:ns="testns"><ns:somenode>value</ns:somenode></ns:root>',
-            $document->saveXML($document->firstChild)
+            $document->saveXML($document->firstChild),
         );
     }
 
@@ -98,14 +97,14 @@ final class UtilsTest extends TestCase
             'testns',
             'ns:somenode',
             false,
-            ['value1', 'value2']
+            ['value1', 'value2'],
         );
         $this->assertEquals(
             '<root>' .
             '<ns:somenode xmlns:ns="testns">value1</ns:somenode>' .
             '<ns:somenode xmlns:ns="testns">value2</ns:somenode>' .
             '</root>',
-            $document->saveXML($document->firstChild)
+            $document->saveXML($document->firstChild),
         );
 
         $document->loadXML('<ns:root xmlns:ns="testns"/>');
@@ -114,14 +113,14 @@ final class UtilsTest extends TestCase
             'testns',
             'ns:somenode',
             false,
-            ['value1', 'value2']
+            ['value1', 'value2'],
         );
         $this->assertEquals(
             '<ns:root xmlns:ns="testns">' .
             '<ns:somenode>value1</ns:somenode>' .
             '<ns:somenode>value2</ns:somenode>' .
             '</ns:root>',
-            $document->saveXML($document->firstChild)
+            $document->saveXML($document->firstChild),
         );
 
         $document->loadXML('<root/>');
@@ -130,14 +129,14 @@ final class UtilsTest extends TestCase
             'testns',
             'ns:somenode',
             true,
-            ['en' => 'value (en)', 'no' => 'value (no)']
+            ['en' => 'value (en)', 'no' => 'value (no)'],
         );
         $this->assertEquals(
             '<root>' .
             '<ns:somenode xmlns:ns="testns" xml:lang="en">value (en)</ns:somenode>' .
             '<ns:somenode xmlns:ns="testns" xml:lang="no">value (no)</ns:somenode>' .
             '</root>',
-            $document->saveXML($document->firstChild)
+            $document->saveXML($document->firstChild),
         );
 
         $document->loadXML('<ns:root xmlns:ns="testns"/>');
@@ -146,14 +145,14 @@ final class UtilsTest extends TestCase
             'testns',
             'ns:somenode',
             true,
-            ['en' => 'value (en)', 'no' => 'value (no)']
+            ['en' => 'value (en)', 'no' => 'value (no)'],
         );
         $this->assertEquals(
             '<ns:root xmlns:ns="testns">' .
             '<ns:somenode xml:lang="en">value (en)</ns:somenode>' .
             '<ns:somenode xml:lang="no">value (no)</ns:somenode>' .
             '</ns:root>',
-            $document->saveXML($document->firstChild)
+            $document->saveXML($document->firstChild),
         );
     }
 
@@ -167,13 +166,13 @@ final class UtilsTest extends TestCase
             '<root xmlns="' . C::NS_MD . '">' .
             '<somenode>value1</somenode>' .
             '<somenode>value2</somenode>' .
-            '</root>'
+            '</root>',
         );
 
         $stringValues = XMLUtils::extractStrings(
             $document->firstChild,
             C::NS_MD,
-            'somenode'
+            'somenode',
         );
 
         $this->assertTrue(count($stringValues) === 2);
@@ -191,13 +190,13 @@ final class UtilsTest extends TestCase
             '<root xmlns="' . C::NS_MD . '">' .
             '<somenode xml:lang="en">value (en)</somenode>' .
             '<somenode xml:lang="no">value (no)</somenode>' .
-            '</root>'
+            '</root>',
         );
 
         $localizedStringValues = XMLUtils::extractLocalizedStrings(
             $document->firstChild,
             C::NS_MD,
-            'somenode'
+            'somenode',
         );
 
         $this->assertTrue(count($localizedStringValues) === 2);
@@ -215,7 +214,7 @@ final class UtilsTest extends TestCase
     {
         try {
             $ts = XMLUtils::xsDateTimeToTimestamp($time);
-//            $this->assertTrue($shouldPass);
+            $this->assertTrue($shouldPass);
             $this->assertEquals($expectedTs, $ts);
         } catch (AssertionFailedException $e) {
             $this->assertFalse($shouldPass);

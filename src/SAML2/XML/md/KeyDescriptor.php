@@ -33,7 +33,7 @@ final class KeyDescriptor extends AbstractMdElement
         Assert::nullOrOneOf(
             $use,
             ['encryption', 'signing'],
-            'The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".'
+            'The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".',
         );
         Assert::allIsInstanceOf($encryptionMethod, EncryptionMethod::class);
     }
@@ -95,19 +95,19 @@ final class KeyDescriptor extends AbstractMdElement
             $keyInfoElements,
             1,
             'No ds:KeyInfo in the KeyDescriptor.',
-            MissingElementException::class
+            MissingElementException::class,
         );
         Assert::maxCount(
             $keyInfoElements,
             1,
             'More than one ds:KeyInfo in the KeyDescriptor.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         return new static(
             $keyInfoElements[0],
             self::getAttribute($xml, 'use', null),
-            EncryptionMethod::getChildrenOfClass($xml)
+            EncryptionMethod::getChildrenOfClass($xml),
         );
     }
 

@@ -51,7 +51,7 @@ IMG;
         $this->testedClass = Logo::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdui_Logo.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdui_Logo.xml',
         );
 
         $this->arrayRepresentation = [
@@ -72,7 +72,7 @@ IMG;
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($logo)
+            strval($logo),
         );
     }
 
@@ -86,7 +86,7 @@ IMG;
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($logo)
+            strval($logo),
         );
     }
 
@@ -120,10 +120,7 @@ IMG;
         $logo = Logo::fromXML($document->documentElement);
         $this->assertEquals(1, $logo->getHeight());
         $this->assertEquals(1, $logo->getWidth());
-        $this->assertEquals(
-            $this->data,
-            $logo->getContent()
-        );
+        $this->assertEquals($this->data, $logo->getContent());
     }
 
 

@@ -29,7 +29,7 @@ final class IDPList extends AbstractSamlpElement
      */
     public function __construct(
         protected array $IDPEntry,
-        protected ?GetComplete $getComplete = null
+        protected ?GetComplete $getComplete = null,
     ) {
         Assert::minCount($IDPEntry, 1, 'At least one samlp:IDPEntry must be specified.');
         Assert::allIsInstanceOf($IDPEntry, IDPEntry::class);
@@ -77,7 +77,7 @@ final class IDPList extends AbstractSamlpElement
             $idpEntry,
             1,
             'At least one <samlp:IDPEntry> must be specified.',
-            MissingElementException::class
+            MissingElementException::class,
         );
 
         $getComplete = GetComplete::getChildrenOfClass($xml);
@@ -85,12 +85,12 @@ final class IDPList extends AbstractSamlpElement
             $getComplete,
             1,
             'Only one <samlp:GetComplete> element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         return new static(
             $idpEntry,
-            empty($getComplete) ? null : array_pop($getComplete)
+            empty($getComplete) ? null : array_pop($getComplete),
         );
     }
 

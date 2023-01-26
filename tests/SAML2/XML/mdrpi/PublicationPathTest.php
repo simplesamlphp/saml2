@@ -44,19 +44,19 @@ final class PublicationPathTest extends TestCase
         $this->testedClass = PublicationPath::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdrpi_PublicationPath.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdrpi_PublicationPath.xml',
         );
 
         $this->arrayRepresentation = [
             [
                 'publisher' => 'SomePublisher',
                 'creationInstant' => 1293840000,
-                'publicationId' => 'SomePublicationId'
+                'publicationId' => 'SomePublicationId',
             ],
             [
                 'publisher' => 'SomeOtherPublisher',
                 'creationInstant' => 1293840000,
-                'publicationId' => 'SomeOtherPublicationId'
+                'publicationId' => 'SomeOtherPublicationId',
             ],
         ];
     }
@@ -66,16 +66,14 @@ final class PublicationPathTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $publicationPath = new PublicationPath(
-            [
-                new Publication('SomePublisher', 1293840000, 'SomePublicationId'),
-                new Publication('SomeOtherPublisher', 1293840000, 'SomeOtherPublicationId'),
-            ]
-        );
+        $publicationPath = new PublicationPath([
+            new Publication('SomePublisher', 1293840000, 'SomePublicationId'),
+            new Publication('SomeOtherPublisher', 1293840000, 'SomeOtherPublicationId'),
+        ]);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($publicationPath)
+            strval($publicationPath),
         );
     }
 
@@ -90,7 +88,7 @@ final class PublicationPathTest extends TestCase
         $publicationPath = new PublicationPath([]);
         $this->assertEquals(
             "<mdrpi:PublicationPath xmlns:mdrpi=\"$mdrpins\"/>",
-            strval($publicationPath)
+            strval($publicationPath),
         );
         $this->assertTrue($publicationPath->isEmptyElement());
     }
@@ -103,7 +101,7 @@ final class PublicationPathTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($publicationPath)
+            strval($publicationPath),
         );
     }
 }

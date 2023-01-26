@@ -63,7 +63,7 @@ class LogoutRequest extends AbstractRequest
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
-        ?Extensions $extensions = null
+        ?Extensions $extensions = null,
     ) {
         Assert::nullOrValidURI($reason, SchemaViolationException::class);
         Assert::allIsInstanceOf($sessionIndexes, SessionIndex::class);
@@ -156,14 +156,14 @@ class LogoutRequest extends AbstractRequest
             $extensions,
             1,
             'Only one saml:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $identifier = self::getIdentifierFromXML($xml);
         Assert::notNull(
             $identifier,
             'Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.',
-            MissingElementException::class
+            MissingElementException::class,
         );
         Assert::isInstanceOfAny($identifier, [BaseID::class, NameID::class, EncryptedID::class]);
 
@@ -183,7 +183,7 @@ class LogoutRequest extends AbstractRequest
             $issueInstant,
             self::getAttribute($xml, 'Destination', null),
             self::getAttribute($xml, 'Consent', null),
-            array_pop($extensions)
+            array_pop($extensions),
         );
 
         if (!empty($signature)) {

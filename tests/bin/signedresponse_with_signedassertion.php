@@ -24,15 +24,13 @@ $unsignedAssertion->sign($assertionSigner);
 $signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
 
 $unsignedResponse = new Response(
-    new Status(new StatusCode(C::STATUS_SUCCESS)),
-    new Issuer('https://IdentityProvider.com'),
-    'abc123',
-    null,
-    'PHPUnit',
-    C::ENTITY_OTHER,
-    C::ENTITY_SP,
-    null,
-    [$signedAssertion]
+    status: new Status(new StatusCode(C::STATUS_SUCCESS)),
+    issuer: Issuer('https://IdentityProvider.com'),
+    id: 'abc123',
+    inResponseTo: 'PHPUnit',
+    destination: C::ENTITY_OTHER,
+    consent: C::ENTITY_SP,
+    assertions: [$signedAssertion],
 );
 
 $responseSigner = (new SignatureAlgorithmFactory())->getAlgorithm(

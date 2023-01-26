@@ -37,7 +37,7 @@ final class Conditions extends AbstractSamlElement
         protected array $condition = [],
         protected array $audienceRestriction = [],
         protected ?bool $oneTimeUse = false,
-        protected ?ProxyRestriction $proxyRestriction = null
+        protected ?ProxyRestriction $proxyRestriction = null,
     ) {
         Assert::allIsInstanceOf($condition, Condition::class);
         Assert::allIsInstanceOf($audienceRestriction, AudienceRestriction::class);
@@ -167,13 +167,13 @@ final class Conditions extends AbstractSamlElement
             $oneTimeUse,
             1,
             'There MUST occur at most one <saml:OneTimeUse> element inside a <saml:Conditions>',
-            ProtocolViolationException::class
+            ProtocolViolationException::class,
         );
         Assert::maxCount(
             $proxyRestriction,
             1,
             'There MUST occur at most one <saml:ProxyRestriction> element inside a <saml:Conditions>',
-            ProtocolViolationException::class
+            ProtocolViolationException::class,
         );
 
         return new static(
@@ -182,7 +182,7 @@ final class Conditions extends AbstractSamlElement
             $condition,
             $audienceRestriction,
             !empty($oneTimeUse),
-            array_pop($proxyRestriction)
+            array_pop($proxyRestriction),
         );
     }
 

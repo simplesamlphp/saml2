@@ -40,7 +40,7 @@ final class AttributeStatementTest extends TestCase
         $this->testedClass = AttributeStatement::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AttributeStatement.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AttributeStatement.xml',
         );
     }
 
@@ -54,15 +54,24 @@ final class AttributeStatementTest extends TestCase
     {
         $attrStatement = new AttributeStatement(
             [
-                new Attribute('urn:ServiceID', null, null, [new AttributeValue('1')]),
-                new Attribute('urn:EntityConcernedID', null, null, [new AttributeValue('1')]),
-                new Attribute('urn:EntityConcernedSubID', null, null, [new AttributeValue('1')])
+                new Attribute(
+                    name: 'urn:ServiceID',
+                    attributeValue: [new AttributeValue('1')],
+                ),
+                new Attribute(
+                    name: 'urn:EntityConcernedID',
+                    attributeValue: [new AttributeValue('1')],
+                ),
+                new Attribute(
+                    name: 'urn:EntityConcernedSubID',
+                    attributeValue: [new AttributeValue('1')],
+                ),
             ]
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($attrStatement)
+            strval($attrStatement),
         );
     }
 

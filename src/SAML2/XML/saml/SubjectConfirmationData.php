@@ -47,14 +47,14 @@ final class SubjectConfirmationData extends AbstractSamlElement
         protected ?string $inResponseTo = null,
         protected ?string $address = null,
         protected array $info = [],
-        array $namespacedAttribute = []
+        array $namespacedAttribute = [],
     ) {
         Assert::nullOrNotWhitespaceOnly($recipient);
         Assert::nullOrValidNCName($inResponseTo); // Covers the empty string
 
         if (!is_null($address) && !filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)) {
             Utils::getContainer()->getLogger()->warning(
-                sprintf('Provided argument (%s) is not a valid IP address.', $address)
+                sprintf('Provided argument (%s) is not a valid IP address.', $address),
             );
         }
 
@@ -209,7 +209,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
             $InResponseTo,
             $Address,
             $info,
-            self::getAttributesNSFromXML($xml)
+            self::getAttributesNSFromXML($xml),
         );
     }
 

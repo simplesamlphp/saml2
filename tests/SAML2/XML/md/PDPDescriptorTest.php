@@ -51,16 +51,16 @@ final class PDPDescriptorTest extends TestCase
         $this->testedClass = PDPDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_PDPDescriptor.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_PDPDescriptor.xml',
         );
 
         $this->authzService = new AuthzService(
             C::BINDING_SOAP,
-            'https://IdentityProvider.com/SAML/AA/SOAP'
+            'https://IdentityProvider.com/SAML/AA/SOAP',
         );
         $this->assertionIDRequestService = new AssertionIDRequestService(
             C::BINDING_URI,
-            'https://IdentityProvider.com/SAML/AA/URI'
+            'https://IdentityProvider.com/SAML/AA/URI',
         );
     }
 
@@ -81,12 +81,12 @@ final class PDPDescriptorTest extends TestCase
                 new NameIDFormat(C::NAMEID_X509_SUBJECT_NAME),
                 new NameIDFormat(C::NAMEID_PERSISTENT),
                 new NameIDFormat(C::NAMEID_TRANSIENT),
-            ]
+            ],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($pdpd)
+            strval($pdpd),
         );
     }
 
@@ -102,7 +102,7 @@ final class PDPDescriptorTest extends TestCase
         /** @psalm-suppress InvalidArgument */
         new PDPDescriptor(
             [$this->authzService, $this->assertionIDRequestService],
-            ["urn:oasis:names:tc:SAML:2.0:protocol"]
+            ["urn:oasis:names:tc:SAML:2.0:protocol"],
         );
     }
 
@@ -114,14 +114,14 @@ final class PDPDescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
-            'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.'
+            'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.',
         );
 
         /** @psalm-suppress InvalidArgument */
         new PDPDescriptor(
             [$this->authzService],
             ["urn:oasis:names:tc:SAML:2.0:protocol"],
-            [$this->assertionIDRequestService, $this->authzService]
+            [$this->assertionIDRequestService, $this->authzService],
         );
     }
 
@@ -133,7 +133,7 @@ final class PDPDescriptorTest extends TestCase
     {
         $pdpd = new PDPDescriptor(
             [$this->authzService],
-            ["urn:oasis:names:tc:SAML:2.0:protocol"]
+            ["urn:oasis:names:tc:SAML:2.0:protocol"],
         );
         $this->assertEmpty($pdpd->getAssertionIDRequestService());
         $this->assertEmpty($pdpd->getNameIDFormat());
@@ -152,7 +152,7 @@ final class PDPDescriptorTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($pdpd)
+            strval($pdpd),
         );
     }
 
@@ -167,7 +167,7 @@ final class PDPDescriptorTest extends TestCase
          * @psalm-suppress PossiblyNullPropertyFetch
          */
         $this->xmlRepresentation->documentElement->removeChild(
-            $this->xmlRepresentation->documentElement->firstChild->nextSibling
+            $this->xmlRepresentation->documentElement->firstChild->nextSibling,
         );
 
         $this->expectException(AssertionFailedException::class);

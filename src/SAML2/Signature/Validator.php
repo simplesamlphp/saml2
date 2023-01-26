@@ -40,7 +40,7 @@ class Validator
             $this->logger,
             [
                 new PublicKeyValidator($this->logger, new KeyLoader())
-            ]
+            ],
         );
 
         return $validator->hasValidSignature($signedElement, $configuration);

@@ -29,7 +29,7 @@ final class Action extends AbstractSamlElement
      */
     public function __construct(
         protected string $namespace,
-        string $content
+        string $content,
     ) {
         Assert::validURI($namespace, SchemaViolationException::class); // Covers the empty string
 

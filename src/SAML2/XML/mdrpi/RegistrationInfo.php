@@ -28,7 +28,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
     public function __construct(
         protected string $registrationAuthority,
         protected ?int $registrationInstant = null,
-        protected array $registrationPolicy = []
+        protected array $registrationPolicy = [],
     ) {
         Assert::allIsInstanceOf($registrationPolicy, RegistrationPolicy::class);
 
@@ -40,13 +40,13 @@ final class RegistrationInfo extends AbstractMdrpiElement
             function ($rp) {
                 return $rp->getLanguage();
             },
-            $registrationPolicy
+            $registrationPolicy,
         );
         Assert::uniqueValues(
             $languages,
             'There MUST NOT be more than one <mdrpi:RegistrationPolicy>,'
             . ' within a given <mdrpi:RegistrationInfo>, for a given language',
-            ProtocolViolationException::class
+            ProtocolViolationException::class,
         );
     }
 
@@ -188,6 +188,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
                 $data['registrationPolicy'] = array_merge($data['registrationPolicy'], $rp->toArray());
             }
         }
+
         return $data;
     }
 }

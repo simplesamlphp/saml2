@@ -87,14 +87,14 @@ final class NameIdDecryptionTransformer implements
                     'Decrypting assertion NameId with key "#%d" failed, "%s" thrown: "%s"',
                     $index,
                     get_class($e),
-                    $e->getMessage()
+                    $e->getMessage(),
                 ));
             }
         }
 
         if ($decrypted === null) {
             throw new NotDecryptedException(
-                'Could not decrypt the assertion NameId with the configured keys, see the debug log for information'
+                'Could not decrypt the assertion NameId with the configured keys, see the debug log for information',
             );
         }
 
@@ -104,7 +104,7 @@ final class NameIdDecryptionTransformer implements
             $assertion->getIssueInstant(),
             new Subject($decrypted, $subject->getSubjectConfirmation()),
             $assertion->getConditions(),
-            $assertion->getStatements()
+            $assertion->getStatements(),
         );
     }
 

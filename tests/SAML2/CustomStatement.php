@@ -70,7 +70,7 @@ final class CustomStatement extends AbstractStatement
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:Statement> element.',
-            InvalidDOMElementException::class
+            InvalidDOMElementException::class,
         );
 
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');

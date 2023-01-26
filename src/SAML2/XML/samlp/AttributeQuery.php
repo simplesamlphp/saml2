@@ -60,7 +60,7 @@ class AttributeQuery extends AbstractSubjectQuery
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
-        ?Extensions $extensions = null
+        ?Extensions $extensions = null,
     ) {
         Assert::allIsInstanceOf($attributes, Attribute::class);
 
@@ -73,7 +73,7 @@ class AttributeQuery extends AbstractSubjectQuery
                 Assert::true(
                     !in_array($name, $cache[$nameFormat], true),
                     'A single query MUST NOT contain two <saml:Attribute> elements with the same Name and NameFormat.',
-                    ProtocolViolationException::class
+                    ProtocolViolationException::class,
                 );
             }
             $cache[$nameFormat][] = $name;
@@ -138,7 +138,7 @@ class AttributeQuery extends AbstractSubjectQuery
             $extensions,
             1,
             'Only one saml:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $subject = Subject::getChildrenOfClass($xml);
@@ -147,7 +147,7 @@ class AttributeQuery extends AbstractSubjectQuery
             $subject,
             1,
             'More than one <saml:Subject> in AttributeQuery',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $signature = Signature::getChildrenOfClass($xml);
@@ -162,7 +162,7 @@ class AttributeQuery extends AbstractSubjectQuery
             $issueInstant,
             $destination,
             $consent,
-            array_pop($extensions)
+            array_pop($extensions),
         );
 
         if (!empty($signature)) {

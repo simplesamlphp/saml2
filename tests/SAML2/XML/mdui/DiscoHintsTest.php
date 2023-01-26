@@ -44,7 +44,7 @@ final class DiscoHintsTest extends TestCase
         $this->testedClass = DiscoHints::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdui_DiscoHints.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdui_DiscoHints.xml',
         );
 
         $this->arrayRepresentation = [
@@ -61,15 +61,17 @@ final class DiscoHintsTest extends TestCase
     public function testMarshalling(): void
     {
         $discoHints = new DiscoHints(
-            [],
-            [new IPHint("130.59.0.0/16"), new IPHint("2001:620::0/96")],
-            [new DomainHint("example.com"), new DomainHint("www.example.com")],
-            [new GeolocationHint("geo:47.37328,8.531126"), new GeolocationHint("geo:19.34343,12.342514")]
+            ipHint: [new IPHint("130.59.0.0/16"), new IPHint("2001:620::0/96")],
+            domainHint: [new DomainHint("example.com"), new DomainHint("www.example.com")],
+            geolocationHint: [
+                new GeolocationHint("geo:47.37328,8.531126"),
+                new GeolocationHint("geo:19.34343,12.342514"),
+            ],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($discoHints)
+            strval($discoHints),
         );
     }
 
@@ -83,7 +85,7 @@ final class DiscoHintsTest extends TestCase
         $discohints = new DiscoHints([]);
         $this->assertEquals(
             "<mdui:DiscoHints xmlns:mdui=\"$mduins\"/>",
-            strval($discohints)
+            strval($discohints),
         );
         $this->assertTrue($discohints->isEmptyElement());
     }
@@ -98,7 +100,7 @@ final class DiscoHintsTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($discoHints)
+            strval($discoHints),
         );
     }
 
@@ -119,7 +121,7 @@ final class DiscoHintsTest extends TestCase
         $discoElements = XPath::xpQuery(
             $xml,
             '/root/*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
-            XPath::getXPath($xml)
+            XPath::getXPath($xml),
         );
         $this->assertCount(1, $discoElements);
         /** @var \DOMNode $discoElement */

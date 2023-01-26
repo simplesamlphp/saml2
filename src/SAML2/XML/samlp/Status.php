@@ -44,7 +44,7 @@ final class Status extends AbstractSamlpElement
                 C::STATUS_VERSION_MISMATCH,
             ],
             'Invalid top-level status code:  %s',
-            ProtocolViolationException::class
+            ProtocolViolationException::class,
         );
         Assert::allIsInstanceOf($statusDetails, StatusDetail::class);
     }
@@ -113,7 +113,7 @@ final class Status extends AbstractSamlpElement
         return new static(
             array_pop($statusCode),
             array_pop($statusMessage),
-            $statusDetails
+            $statusDetails,
         );
     }
 

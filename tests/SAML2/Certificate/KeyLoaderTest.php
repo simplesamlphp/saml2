@@ -91,7 +91,7 @@ final class KeyLoaderTest extends MockeryTestCase
     public function certificateDataIsLoadedAsKey(): void
     {
         $this->keyLoader->loadCertificateData(
-            PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE)
+            PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE),
         );
 
         $loadedKeys = $this->keyLoader->getKeys();
@@ -104,9 +104,9 @@ final class KeyLoaderTest extends MockeryTestCase
             preg_replace(
                 '~\s+~',
                 '',
-                PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE)
+                PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE),
             ),
-            $loadedKey['X509Certificate']
+            $loadedKey['X509Certificate'],
         );
     }
 
@@ -119,7 +119,7 @@ final class KeyLoaderTest extends MockeryTestCase
     {
         $this->expectException(InvalidCertificateStructureException::class);
         $this->keyLoader->loadCertificateFile(
-            PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::BROKEN_PUBLIC_KEY)
+            PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::BROKEN_PUBLIC_KEY),
         );
     }
 
@@ -131,7 +131,7 @@ final class KeyLoaderTest extends MockeryTestCase
     public function loadingACertificateFromFileCreatesAKey(): void
     {
         $this->keyLoader->loadCertificateFile(
-            PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::PUBLIC_KEY)
+            PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::PUBLIC_KEY),
         );
 
         $loadedKeys = $this->keyLoader->getKeys();

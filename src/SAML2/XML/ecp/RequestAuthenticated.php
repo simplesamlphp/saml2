@@ -70,7 +70,7 @@ final class RequestAuthenticated extends AbstractEcpElement
         Assert::true(
             $xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'actor'),
             'Missing env:actor attribute in <ecp:RequestAuthenticated>.',
-            MissingAttributeException::class
+            MissingAttributeException::class,
         );
 
         $mustUnderstand = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand');

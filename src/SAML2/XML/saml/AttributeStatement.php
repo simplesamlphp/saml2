@@ -24,7 +24,7 @@ class AttributeStatement extends AbstractStatementType
      */
     public function __construct(
         protected array $attributes = [],
-        protected array $encryptedAttributes = []
+        protected array $encryptedAttributes = [],
     ) {
         Assert::true(!empty($attributes) || !empty($encryptedAttributes));
         Assert::allIsInstanceOf($attributes, Attribute::class);
@@ -89,7 +89,7 @@ class AttributeStatement extends AbstractStatementType
 
         return new static(
             Attribute::getChildrenOfClass($xml),
-            EncryptedAttribute::getChildrenOfClass($xml)
+            EncryptedAttribute::getChildrenOfClass($xml),
         );
     }
 

@@ -38,7 +38,7 @@ final class ArtifactResolutionServiceTest extends TestCase
         $this->testedClass = ArtifactResolutionService::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_ArtifactResolutionService.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_ArtifactResolutionService.xml',
         );
     }
 
@@ -55,7 +55,7 @@ final class ArtifactResolutionServiceTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($ars)
+            strval($ars),
         );
     }
 
@@ -67,7 +67,7 @@ final class ArtifactResolutionServiceTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
-            'The \'ResponseLocation\' attribute must be omitted for md:ArtifactResolutionService.'
+            'The \'ResponseLocation\' attribute must be omitted for md:ArtifactResolutionService.',
         );
         new ArtifactResolutionService(42, C::BINDING_HTTP_ARTIFACT, C::LOCATION_A, false, 'https://response.location/');
     }
@@ -85,7 +85,7 @@ final class ArtifactResolutionServiceTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($ars)
+            strval($ars),
         );
     }
 
@@ -97,7 +97,7 @@ final class ArtifactResolutionServiceTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
-            'The \'ResponseLocation\' attribute must be omitted for md:ArtifactResolutionService.'
+            'The \'ResponseLocation\' attribute must be omitted for md:ArtifactResolutionService.',
         );
         $this->xmlRepresentation->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
         ArtifactResolutionService::fromXML($this->xmlRepresentation->documentElement);

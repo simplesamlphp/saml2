@@ -29,13 +29,13 @@ final class Subject extends AbstractSamlElement
      */
     public function __construct(
         ?IdentifierInterface $identifier,
-        protected array $subjectConfirmation = []
+        protected array $subjectConfirmation = [],
     ) {
         if (empty($subjectConfirmation)) {
             Assert::notNull(
                 $identifier,
                 'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly one of '
-                    . '<saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
+                    . '<saml:BaseID>, <saml:NameID> or <saml:EncryptedID>',
             );
         }
         Assert::allIsInstanceOf($subjectConfirmation, SubjectConfirmation::class);
@@ -77,13 +77,13 @@ final class Subject extends AbstractSamlElement
                 $identifier,
                 'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide' .
                 ' exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>',
-                TooManyElementsException::class
+                TooManyElementsException::class,
             );
         }
 
         return new static(
             $identifier,
-            $subjectConfirmation
+            $subjectConfirmation,
         );
     }
 

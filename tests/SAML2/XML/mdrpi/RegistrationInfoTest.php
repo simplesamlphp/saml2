@@ -43,7 +43,7 @@ final class RegistrationInfoTest extends TestCase
         $this->testedClass = RegistrationInfo::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdrpi_RegistrationInfo.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdrpi_RegistrationInfo.xml',
         );
 
         $this->arrayRepresentation = [
@@ -51,7 +51,7 @@ final class RegistrationInfoTest extends TestCase
             'registrationInstant' => 1234567890,
             'registrationPolicy' => [
                 'en' => 'http://www.example.org/aai/metadata/en_registration.html',
-                'de' => 'http://www.example.org/aai/metadata/de_registration.html'
+                'de' => 'http://www.example.org/aai/metadata/de_registration.html',
             ],
         ];
     }
@@ -67,12 +67,12 @@ final class RegistrationInfoTest extends TestCase
             [
                 new RegistrationPolicy('en', 'http://www.example.org/aai/metadata/en_registration.html'),
                 new RegistrationPolicy('de', 'http://www.example.org/aai/metadata/de_registration.html'),
-            ]
+            ],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($registrationInfo)
+            strval($registrationInfo),
         );
     }
 
@@ -85,7 +85,7 @@ final class RegistrationInfoTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($registrationInfo)
+            strval($registrationInfo),
         );
     }
 

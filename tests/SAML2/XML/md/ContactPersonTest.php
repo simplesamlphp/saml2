@@ -50,7 +50,7 @@ final class ContactPersonTest extends TestCase
         $this->testedClass = ContactPerson::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_ContactPerson.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_ContactPerson.xml',
         );
 
         $this->arrayRepresentation = [
@@ -75,7 +75,7 @@ final class ContactPersonTest extends TestCase
     public function testMarshalling(): void
     {
         $ext = DOMDocumentFactory::fromString(
-            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>'
+            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>',
         );
 
         $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
@@ -89,17 +89,17 @@ final class ContactPersonTest extends TestCase
             new SurName('Doe'),
             new Extensions(
                 [
-                    new Chunk($ext->documentElement)
-                ]
+                    new Chunk($ext->documentElement),
+                ],
             ),
             [new EmailAddress('jdoe@test.company'), new EmailAddress('john.doe@test.company')],
             [new TelephoneNumber('1-234-567-8901')],
-            [$attr1, $attr2]
+            [$attr1, $attr2],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($contactPerson)
+            strval($contactPerson),
         );
     }
 
@@ -111,7 +111,7 @@ final class ContactPersonTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
-            'Expected one of: "technical", "support", "administrative", "billing", "other". Got: "wrong"'
+            'Expected one of: "technical", "support", "administrative", "billing", "other". Got: "wrong"',
         );
         new ContactPerson('wrong');
     }
@@ -129,7 +129,7 @@ final class ContactPersonTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($contactPerson)
+            strval($contactPerson),
         );
     }
 
@@ -153,7 +153,7 @@ final class ContactPersonTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
-            'Expected one of: "technical", "support", "administrative", "billing", "other". Got: "wrong"'
+            'Expected one of: "technical", "support", "administrative", "billing", "other". Got: "wrong"',
         );
         $this->xmlRepresentation->documentElement->setAttribute('contactType', 'wrong');
         ContactPerson::fromXML($this->xmlRepresentation->documentElement);

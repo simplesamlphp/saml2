@@ -44,7 +44,7 @@ final class OrganizationURLTest extends TestCase
         $this->testedClass = OrganizationURL::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_OrganizationURL.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_OrganizationURL.xml',
         );
 
         $this->arrayRepresentation = ['en' => 'https://IdentityProvider.com'];
@@ -63,7 +63,7 @@ final class OrganizationURLTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
+            strval($name),
         );
     }
 
@@ -80,7 +80,7 @@ final class OrganizationURLTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
+            strval($name),
         );
     }
 

@@ -61,7 +61,7 @@ class ValidatorChain implements ValidatorInterface
             if ($validator->canValidate($signedElement, $configuration)) {
                 $this->logger->debug(sprintf(
                     'Validating the signed element with validator of type "%s"',
-                    get_class($validator)
+                    get_class($validator),
                 ));
 
                 return $validator->hasValidSignature($signedElement, $configuration);
@@ -69,13 +69,13 @@ class ValidatorChain implements ValidatorInterface
 
             $this->logger->debug(sprintf(
                 'Could not validate the signed element with validator of type "%s"',
-                get_class($validator)
+                get_class($validator),
             ));
         }
 
         throw new MissingConfigurationException(sprintf(
             'No certificates have been configured%s',
-            $configuration->has('entityid') ? ' for "' . $configuration->get('entityid') . '"' : ''
+            $configuration->has('entityid') ? ' for "' . $configuration->get('entityid') . '"' : '',
         ));
     }
 }

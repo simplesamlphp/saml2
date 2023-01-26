@@ -66,7 +66,7 @@ abstract class AbstractCondition extends AbstractConditionType implements Extens
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:Condition> element.',
-            SchemaViolationException::class
+            SchemaViolationException::class,
         );
 
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');
@@ -93,7 +93,7 @@ abstract class AbstractCondition extends AbstractConditionType implements Extens
         Assert::subclassOf(
             $handler,
             AbstractCondition::class,
-            'Elements implementing Condition must extend \SimpleSAML\SAML2\XML\saml\AbstractCondition.'
+            'Elements implementing Condition must extend \SimpleSAML\SAML2\XML\saml\AbstractCondition.',
         );
         return $handler::fromXML($xml);
     }

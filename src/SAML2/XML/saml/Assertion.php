@@ -70,13 +70,13 @@ final class Assertion extends AbstractSamlElement implements
         protected ?int $issueInstant = null,
         protected ?Subject $subject = null,
         protected ?Conditions $conditions = null,
-        protected array $statements = []
+        protected array $statements = [],
     ) {
         $this->dataType = C::XMLENC_ELEMENT;
 
         Assert::true(
             $subject || !empty($statements),
-            "Either a <saml:Subject> or some statement must be present in a <saml:Assertion>"
+            "Either a <saml:Subject> or some statement must be present in a <saml:Assertion>",
         );
         Assert::allIsInstanceOf($statements, AbstractStatementType::class);
         Assert::nullOrNotWhitespaceOnly($id);
@@ -296,7 +296,7 @@ final class Assertion extends AbstractSamlElement implements
             $issueInstant,
             array_pop($subject),
             array_pop($conditions),
-            array_merge($authnStatement, $attrStatement, $statements)
+            array_merge($authnStatement, $attrStatement, $statements),
         );
 
         if (!empty($signature)) {

@@ -47,7 +47,7 @@ final class AttributeQueryTest extends TestCase
         $this->testedClass = AttributeQuery::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_AttributeQuery.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_AttributeQuery.xml',
         );
     }
 
@@ -59,49 +59,45 @@ final class AttributeQueryTest extends TestCase
         $nameId = new NameID('urn:example:subject', null, null, C::NAMEID_UNSPECIFIED);
 
         $attributeQuery = new AttributeQuery(
-            new Subject($nameId),
-            [
+            subject: new Subject($nameId),
+            attributes: [
                 new Attribute(
-                    'test1',
-                    null,
-                    null,
-                    [
+                    name: 'test1',
+                    attributeValue: [
                         new AttributeValue('test1_attrv1'),
-                        new AttributeValue('test1_attrv2')
-                    ]
+                        new AttributeValue('test1_attrv2'),
+                    ],
                 ),
                 new Attribute(
-                    'test2',
-                    null,
-                    null,
-                    [
+                    name: 'test2',
+                    attributeValue: [
                         new AttributeValue('test2_attrv1'),
                         new AttributeValue('test2_attrv2'),
-                        new AttributeValue('test2_attrv3')
-                    ]
+                        new AttributeValue('test2_attrv3'),
+                    ],
                 ),
                 new Attribute(
-                    'test3'
+                    name: 'test3',
                 ),
                 new Attribute(
-                    'test4',
-                    null,
-                    null,
-                    [
+                    name: 'test4',
+                    attributeValue: [
                         new AttributeValue(4),
-                        new AttributeValue(23)
-                    ]
-                )
+                        new AttributeValue(23),
+                    ],
+                ),
             ],
-            new Issuer('https://example.org/', null, null, C::NAMEID_ENTITY),
-            'aaf23196-1773-2113-474a-fe114412ab72',
-            '2.0',
-            1504698567
+            issuer: new Issuer(
+                value: 'https://example.org/',
+                Format: C::NAMEID_ENTITY,
+            ),
+            id: 'aaf23196-1773-2113-474a-fe114412ab72',
+            issueInstant: 1504698567,
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($attributeQuery)
+            strval($attributeQuery),
         );
     }
 
@@ -112,7 +108,7 @@ final class AttributeQueryTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($aq)
+            strval($aq),
         );
     }
 
@@ -121,29 +117,30 @@ final class AttributeQueryTest extends TestCase
     {
         $nameId = new NameID('NameIDValue');
         $attributeQuery = new AttributeQuery(
-            new Subject($nameId),
-            [
+            subject: new Subject($nameId),
+            attributes: [
                 new Attribute(
-                    'test1',
-                    C::NAMEFORMAT_URI,
-                    null,
-                    [
+                    name: 'test1',
+                    nameFormat: C::NAMEFORMAT_URI,
+                    attributeValue: [
                         new AttributeValue('test1_attrv1'),
-                        new AttributeValue('test1_attrv2')
-                    ]
+                        new AttributeValue('test1_attrv2'),
+                    ],
                 ),
                 new Attribute(
-                    'test2',
-                    C::NAMEFORMAT_URI,
-                    null,
-                    [
+                    name: 'test2',
+                    nameFormat: C::NAMEFORMAT_URI,
+                    attributeValue: [
                         new AttributeValue('test2_attrv1'),
                         new AttributeValue('test2_attrv2'),
-                        new AttributeValue('test2_attrv3')
-                    ]
+                        new AttributeValue('test2_attrv3'),
+                    ],
                 ),
-                new Attribute('test3', C::NAMEFORMAT_URI)
-            ]
+                new Attribute(
+                    name: 'test3',
+                    nameFormat: C::NAMEFORMAT_URI,
+                ),
+            ],
         );
         $attributeQueryElement = $attributeQuery->toXML();
 

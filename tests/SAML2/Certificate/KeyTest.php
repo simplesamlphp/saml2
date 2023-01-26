@@ -96,7 +96,7 @@ final class KeyTest extends TestCase
             'offsetGet' => ['offsetGet', [0]],
             'offsetExists' => ['offsetExists', [0]],
             'offsetSet' => ['offsetSet', [0, 2]],
-            'offsetUnset' => ['offsetUnset', [0]]
+            'offsetUnset' => ['offsetUnset', [0]],
         ];
     }
 }

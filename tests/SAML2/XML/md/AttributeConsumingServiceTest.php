@@ -45,7 +45,7 @@ final class AttributeConsumingServiceTest extends TestCase
         $this->testedClass = AttributeConsumingService::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_AttributeConsumingService.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_AttributeConsumingService.xml',
         );
     }
 
@@ -56,11 +56,10 @@ final class AttributeConsumingServiceTest extends TestCase
     protected function getRequestedAttribute(): RequestedAttribute
     {
         return new RequestedAttribute(
-            'urn:oid:1.3.6.1.4.1.5923.1.1.1.7',
-            null,
-            'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-            'eduPersonEntitlement',
-            [new AttributeValue('https://ServiceProvider.com/entitlements/123456789')]
+            Name: 'urn:oid:1.3.6.1.4.1.5923.1.1.1.7',
+            NameFormat: 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
+            FriendlyName: 'eduPersonEntitlement',
+            AttributeValues: [new AttributeValue('https://ServiceProvider.com/entitlements/123456789')],
         );
     }
 
@@ -78,12 +77,12 @@ final class AttributeConsumingServiceTest extends TestCase
             [new ServiceName('en', 'Academic Journals R US')],
             [$this->getRequestedAttribute()],
             true,
-            [new ServiceDescription('en', 'Academic Journals R US and only us')]
+            [new ServiceDescription('en', 'Academic Journals R US and only us')],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($acs)
+            strval($acs),
         );
     }
 
@@ -97,12 +96,12 @@ final class AttributeConsumingServiceTest extends TestCase
             2,
             [new ServiceName('en', 'Academic Journals R US')],
             [$this->getRequestedAttribute()],
-            false
+            false,
         );
 
         $descr = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
             C::NS_MD,
-            'ServiceDescription'
+            'ServiceDescription',
         );
 
         /**
@@ -117,7 +116,7 @@ final class AttributeConsumingServiceTest extends TestCase
         $this->xmlRepresentation->documentElement->setAttribute('isDefault', 'false');
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($acs)
+            strval($acs),
         );
     }
 
@@ -128,16 +127,15 @@ final class AttributeConsumingServiceTest extends TestCase
     public function testMarshallingWithoutIsDefault(): void
     {
         $acs = new AttributeConsumingService(
-            2,
-            [new ServiceName('en', 'Academic Journals R US')],
-            [$this->getRequestedAttribute()],
-            null,
-            [new ServiceDescription('en', 'Academic Journals R US and only us')]
+            index: 2,
+            serviceName: [new ServiceName('en', 'Academic Journals R US')],
+            requestedAttribute: [$this->getRequestedAttribute()],
+            serviceDescription: [new ServiceDescription('en', 'Academic Journals R US and only us')],
         );
         $this->xmlRepresentation->documentElement->removeAttribute('isDefault');
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($acs)
+            strval($acs),
         );
     }
 
@@ -152,7 +150,7 @@ final class AttributeConsumingServiceTest extends TestCase
         new AttributeConsumingService(
             2,
             [],
-            [$this->getRequestedAttribute()]
+            [$this->getRequestedAttribute()],
         );
     }
 
@@ -167,7 +165,7 @@ final class AttributeConsumingServiceTest extends TestCase
         new AttributeConsumingService(
             2,
             [new ServiceName('en', 'Academic Journals R US')],
-            []
+            [],
         );
     }
 
@@ -184,7 +182,7 @@ final class AttributeConsumingServiceTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($acs)
+            strval($acs),
         );
     }
 
@@ -257,7 +255,7 @@ final class AttributeConsumingServiceTest extends TestCase
     {
         $reqAttr = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
             C::NS_MD,
-            'RequestedAttribute'
+            'RequestedAttribute',
         );
         /** @psalm-suppress PossiblyNullArgument */
         $this->xmlRepresentation->documentElement->removeChild($reqAttr->item(0));

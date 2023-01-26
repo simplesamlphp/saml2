@@ -36,7 +36,7 @@ final class RequestedAuthnContextTest extends TestCase
         $this->testedClass = RequestedAuthnContext::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_RequestedAuthnContext.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_RequestedAuthnContext.xml',
         );
     }
 
@@ -50,7 +50,7 @@ final class RequestedAuthnContextTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($requestedAuthnContext)
+            strval($requestedAuthnContext),
         );
     }
 
@@ -85,9 +85,9 @@ final class RequestedAuthnContextTest extends TestCase
          new RequestedAuthnContext(
              [
                  DOMDocumentFactory::fromString('<root />'),
-                 $authnContextDeclRef
+                 $authnContextDeclRef,
              ],
-             'exact'
+             'exact',
          );
     }
 
@@ -100,7 +100,7 @@ final class RequestedAuthnContextTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($requestedAuthnContext)
+            strval($requestedAuthnContext),
         );
     }
 

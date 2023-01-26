@@ -54,7 +54,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
         ?string $errorURL = null,
         ?Organization $organization = null,
         array $keyDescriptor = [],
-        array $contact = []
+        array $contact = [],
     ) {
         Assert::minCount(
             $attributeService,
@@ -82,7 +82,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
             $errorURL,
             $keyDescriptor,
             $organization,
-            $contact
+            $contact,
         );
     }
 
@@ -169,7 +169,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
         Assert::notEmpty(
             $attrServices,
             'Must have at least one AttributeService in AttributeAuthorityDescriptor.',
-            MissingElementException::class
+            MissingElementException::class,
         );
 
         $assertIDReqServices = AssertionIDRequestService::getChildrenOfClass($xml);
@@ -182,7 +182,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
             $orgs,
             1,
             'More than one Organization found in this descriptor',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $extensions = Extensions::getChildrenOfClass($xml);
@@ -190,7 +190,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
             $extensions,
             1,
             'Only one md:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $signature = Signature::getChildrenOfClass($xml);
@@ -198,7 +198,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
             $signature,
             1,
             'Only one ds:Signature element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $authority = new static(
@@ -215,7 +215,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
             self::getAttribute($xml, 'errorURL', null),
             !empty($orgs) ? $orgs[0] : null,
             KeyDescriptor::getChildrenOfClass($xml),
-            ContactPerson::getChildrenOfClass($xml)
+            ContactPerson::getChildrenOfClass($xml),
         );
 
         if (!empty($signature)) {

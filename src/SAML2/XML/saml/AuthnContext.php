@@ -37,18 +37,18 @@ final class AuthnContext extends AbstractSamlElement
         protected ?AuthnContextClassRef $authnContextClassRef,
         protected ?AuthnContextDecl $authnContextDecl,
         protected ?AuthnContextDeclRef $authnContextDeclRef,
-        protected array $authenticatingAuthorities = []
+        protected array $authenticatingAuthorities = [],
     ) {
         if (!is_null($authnContextClassRef)) {
             Assert::oneOf(
                 null,
                 [$authnContextDecl, $authnContextDeclRef],
-                'Can only have one of AuthnContextDecl/AuthnContextDeclRef'
+                'Can only have one of AuthnContextDecl/AuthnContextDeclRef',
             );
         } else {
             Assert::false(
                 is_null($authnContextDecl) && is_null($authnContextDeclRef),
-                'You need either an AuthnContextDecl or an AuthnContextDeclRef'
+                'You need either an AuthnContextDecl or an AuthnContextDeclRef',
             );
         }
 
@@ -119,7 +119,7 @@ final class AuthnContext extends AbstractSamlElement
             $authnContextClassRef,
             1,
             "More than one <saml:AuthnContextClassRef> found",
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $authnContextDeclRef = AuthnContextDeclRef::getChildrenOfClass($xml);
@@ -127,7 +127,7 @@ final class AuthnContext extends AbstractSamlElement
             $authnContextDeclRef,
             1,
             "More than one <saml:AuthnContextDeclRef> found",
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $authnContextDecl = AuthnContextDecl::getChildrenOfClass($xml);
@@ -135,7 +135,7 @@ final class AuthnContext extends AbstractSamlElement
             $authnContextDecl,
             1,
             "More than one <saml:AuthnContextDecl> found",
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $authorities = AuthenticatingAuthority::getChildrenOfClass($xml);
@@ -144,7 +144,7 @@ final class AuthnContext extends AbstractSamlElement
             array_pop($authnContextClassRef),
             array_pop($authnContextDecl),
             array_pop($authnContextDeclRef),
-            $authorities
+            $authorities,
         );
     }
 

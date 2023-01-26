@@ -100,7 +100,7 @@ final class Scoping extends AbstractSamlpElement
         return new static(
             is_null($proxyCount) ? null : intval($proxyCount),
             array_pop($idpList),
-            $requesterId
+            $requesterId,
         );
     }
 

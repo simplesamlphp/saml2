@@ -54,7 +54,7 @@ final class UnknownRoleDescriptorTest extends TestCase
         $this->testedClass = UnknownRoleDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_UnknownRoleDescriptor.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_UnknownRoleDescriptor.xml',
         );
     }
 
@@ -74,7 +74,7 @@ final class UnknownRoleDescriptorTest extends TestCase
         $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptor()[1]);
         $this->assertEquals(
             [C::NS_SAMLP, C::PROTOCOL],
-            $descriptor->getProtocolSupportEnumeration()
+            $descriptor->getProtocolSupportEnumeration(),
         );
         $this->assertInstanceOf(Organization::class, $descriptor->getOrganization());
         $this->assertCount(2, $descriptor->getContactPerson());
@@ -99,7 +99,7 @@ final class UnknownRoleDescriptorTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($descriptor)
+            strval($descriptor),
         );
     }
 
@@ -113,7 +113,7 @@ final class UnknownRoleDescriptorTest extends TestCase
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage(
-            'Missing \'protocolSupportEnumeration\' attribute on md:UnknownRoleDescriptor.'
+            'Missing \'protocolSupportEnumeration\' attribute on md:UnknownRoleDescriptor.',
         );
 
         UnknownRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);

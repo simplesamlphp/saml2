@@ -44,7 +44,7 @@ final class EncryptedAttributeTest extends TestCase
         $this->testedClass = EncryptedAttribute::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedAttribute.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedAttribute.xml',
         );
 
         $container = new MockContainer();
@@ -60,7 +60,10 @@ final class EncryptedAttributeTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attribute = new Attribute('urn:encrypted:attribute', null, null, [new AttributeValue('very secret data')]);
+        $attribute = new Attribute(
+            name: 'urn:encrypted:attribute',
+            attributeValue: [new AttributeValue('very secret data')],
+        );
 
         $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             C::KEY_TRANSPORT_OAEP_MGF1P,

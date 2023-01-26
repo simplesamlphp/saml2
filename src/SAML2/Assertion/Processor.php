@@ -89,14 +89,14 @@ class Processor
         if (!$assertion->wasSignedAtConstruction()) {
             $this->logger->info(sprintf(
                 'Assertion with id "%s" was not signed at construction, not verifying the signature',
-                $assertion->getId()
+                $assertion->getId(),
             ));
         } else {
             $this->logger->info(sprintf('Verifying signature of Assertion with id "%s"', $assertion->getId()));
 
             if (!$this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration)) {
                 throw new InvalidSignatureException(
-                    sprintf('The assertion with id "%s" does not have a valid signature', $assertion->getId())
+                    sprintf('The assertion with id "%s" does not have a valid signature', $assertion->getId()),
                 );
             }
         }
@@ -128,18 +128,18 @@ class Processor
         if (!$assertionValidationResult->isValid()) {
             throw new InvalidAssertionException(sprintf(
                 'Invalid Assertion in SAML Response, errors: "%s"',
-                implode('", "', $assertionValidationResult->getErrors())
+                implode('", "', $assertionValidationResult->getErrors()),
             ));
         }
 
         foreach ($assertion->getSubject()->getSubjectConfirmation() as $subjectConfirmation) {
             $subjectConfirmationValidationResult = $this->subjectConfirmationValidator->validate(
-                $subjectConfirmation
+                $subjectConfirmation,
             );
             if (!$subjectConfirmationValidationResult->isValid()) {
                 throw new InvalidSubjectConfirmationException(sprintf(
                     'Invalid SubjectConfirmation in Assertion, errors: "%s"',
-                    implode('", "', $subjectConfirmationValidationResult->getErrors())
+                    implode('", "', $subjectConfirmationValidationResult->getErrors()),
                 ));
             }
         }

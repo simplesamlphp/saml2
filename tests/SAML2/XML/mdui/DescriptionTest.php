@@ -41,7 +41,7 @@ final class DescriptionTest extends TestCase
         $this->testedClass = Description::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdui_Description.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdui_Description.xml',
         );
 
         $this->arrayRepresentation = ['en' => 'Just an example'];
@@ -60,7 +60,7 @@ final class DescriptionTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
+            strval($name),
         );
     }
 
@@ -77,7 +77,7 @@ final class DescriptionTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
+            strval($name),
         );
     }
 }

@@ -44,27 +44,18 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         protected array $keyDescriptor = [],
-        array $namespacedAttribute = []
+        array $namespacedAttribute = [],
     ) {
         Assert::validURI($affiliationOwnerId, SchemaViolationException::class); // Covers the empty string
         Assert::maxLength(
             $affiliationOwnerId,
             C::ENTITYID_MAX_LENGTH,
             sprintf('The AffiliationOwnerID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
-            ProtocolViolationException::class
+            ProtocolViolationException::class,
         );
-        Assert::notEmpty(
-            $affiliateMember,
-            'List of affiliated members must not be empty.',
-        );
-        Assert::allIsInstanceOf(
-            $affiliateMember,
-            AffiliateMember::class,
-        );
-        Assert::allIsInstanceOf(
-            $keyDescriptor,
-            KeyDescriptor::class,
-        );
+        Assert::notEmpty($affiliateMember, 'List of affiliated members must not be empty.');
+        Assert::allIsInstanceOf($affiliateMember, AffiliateMember::class);
+        Assert::allIsInstanceOf($keyDescriptor, KeyDescriptor::class);
 
         parent::__construct($ID, $validUntil, $cacheDuration, $extensions, $namespacedAttribute);
     }
@@ -131,7 +122,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             $orgs,
             1,
             'More than one Organization found in this descriptor',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $extensions = Extensions::getChildrenOfClass($xml);
@@ -139,7 +130,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             $extensions,
             1,
             'Only one md:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $signature = Signature::getChildrenOfClass($xml);
@@ -147,7 +138,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             $signature,
             1,
             'Only one ds:Signature element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $afd = new static(
@@ -158,7 +149,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             $keyDescriptors,
-            self::getAttributesNSFromXML($xml)
+            self::getAttributesNSFromXML($xml),
         );
 
         if (!empty($signature)) {

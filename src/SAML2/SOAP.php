@@ -109,6 +109,7 @@ class SOAP extends Binding
         return MessageFactory::fromXML($results[0]);
     }
 
+
     /**
      * @return string|false
      */

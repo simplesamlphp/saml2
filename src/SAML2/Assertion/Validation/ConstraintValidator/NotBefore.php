@@ -22,7 +22,7 @@ class NotBefore implements AssertionConstraintValidator
             $notBeforeTimestamp = $conditions->getNotBefore();
             if (($notBeforeTimestamp !== null) && ($notBeforeTimestamp > (Temporal::getTime() + 60))) {
                 $result->addError(
-                    'Received an assertion that is valid in the future. Check clock synchronization on IdP and SP.'
+                    'Received an assertion that is valid in the future. Check clock synchronization on IdP and SP.',
                 );
             }
         }

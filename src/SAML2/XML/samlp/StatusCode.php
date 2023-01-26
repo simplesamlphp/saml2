@@ -75,7 +75,7 @@ final class StatusCode extends AbstractSamlpElement
 
         return new static(
             $Value,
-            $subCodes
+            $subCodes,
         );
     }
 

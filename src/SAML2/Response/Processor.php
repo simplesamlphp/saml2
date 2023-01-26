@@ -77,7 +77,7 @@ class Processor
             $currentDestination,
             $identityProviderConfiguration,
             $serviceProviderConfiguration,
-            $response
+            $response,
         );
 
         $this->enforcePreconditions($response);
@@ -113,7 +113,7 @@ class Processor
             $this->logger->info(sprintf(
                 'SAMLResponse with id "%s" was not signed at root level, not attempting to verify the signature of the'
                 . ' reponse itself',
-                $response->getId()
+                $response->getId(),
             ));
 
             return;
@@ -121,14 +121,14 @@ class Processor
 
         $this->logger->info(sprintf(
             'Attempting to verify the signature of SAMLResponse with id "%s"',
-            $response->getId()
+            $response->getId(),
         ));
 
         $this->responseIsSigned = true;
 
         if (!$this->signatureValidator->hasValidSignature($response, $identityProviderConfiguration)) {
             throw new InvalidResponseException(
-                sprintf('The SAMLResponse with id "%s", does not have a valid signature', $response->getId())
+                sprintf('The SAMLResponse with id "%s", does not have a valid signature', $response->getId()),
             );
         }
     }
@@ -148,14 +148,14 @@ class Processor
         }
 
         $decryptedAssertions = $this->assertionProcessor->decryptAssertions(
-            new ArrayCollection($assertions)
+            new ArrayCollection($assertions),
         );
 
         if (!$this->responseIsSigned) {
             foreach ($assertions as $assertion) {
                 if (!$assertion->wasSignedAtConstruction()) {
                     throw new UnsignedResponseException(
-                        'Both the response and the assertion it contains are not signed.'
+                        'Both the response and the assertion it contains are not signed.',
                     );
                 }
             }

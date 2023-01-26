@@ -28,7 +28,7 @@ final class Publication extends AbstractMdrpiElement
     public function __construct(
         protected string $publisher,
         protected ?int $creationInstant = null,
-        protected ?string $publicationId = null
+        protected ?string $publicationId = null,
     ) {
     }
 

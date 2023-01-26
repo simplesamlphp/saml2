@@ -70,7 +70,7 @@ final class CustomCondition extends AbstractCondition
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:Condition> element.',
-            InvalidDOMElementException::class
+            InvalidDOMElementException::class,
         );
 
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');

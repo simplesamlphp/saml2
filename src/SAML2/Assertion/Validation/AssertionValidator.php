@@ -24,7 +24,7 @@ class AssertionValidator
      */
     public function __construct(
         private IdentityProvider $identityProvider,
-        private ServiceProvider $serviceProvider
+        private ServiceProvider $serviceProvider,
     ) {
     }
 
@@ -53,6 +53,7 @@ class AssertionValidator
     public function validate(Assertion $assertion): Result
     {
         $result = new Result();
+
         foreach ($this->constraints as $validator) {
             $validator->validate($assertion, $result);
         }

@@ -37,7 +37,7 @@ final class AudienceTest extends TestCase
         $this->testedClass = Audience::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_Audience.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_Audience.xml',
         );
     }
 
@@ -53,7 +53,7 @@ final class AudienceTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($audience)
+            strval($audience),
         );
     }
 
@@ -66,7 +66,7 @@ final class AudienceTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($audience)
+            strval($audience),
         );
     }
 }

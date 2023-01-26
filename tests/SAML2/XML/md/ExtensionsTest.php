@@ -54,7 +54,7 @@ final class ExtensionsTest extends TestCase
         $this->testedClass = Extensions::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_Extensions.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_Extensions.xml',
         );
         $this->xmlRepresentation->normalizeDocument();
     }
@@ -73,8 +73,8 @@ final class ExtensionsTest extends TestCase
         $pubInfo = new PublicationInfo('SomePublisher');
         $pubPath = new PublicationPath(
             [
-                new Publication('SomePublisher')
-            ]
+                new Publication('SomePublisher'),
+            ],
         );
         $uiinfo = new UIInfo([new DisplayName('en', 'Example')]);
         $discoHints = new DiscoHints([], [new IPHint('127.0.0.1')]);
@@ -89,12 +89,12 @@ final class ExtensionsTest extends TestCase
             $uiinfo,
             $discoHints,
             $digestMethod,
-            $signingMethod
+            $signingMethod,
         ]);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($extensions)
+            strval($extensions),
         );
     }
 
@@ -108,7 +108,7 @@ final class ExtensionsTest extends TestCase
         $extensions = new Extensions([]);
         $this->assertEquals(
             '<md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"/>',
-            strval($extensions)
+            strval($extensions),
         );
         $this->assertTrue($extensions->isEmptyElement());
     }

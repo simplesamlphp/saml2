@@ -49,7 +49,7 @@ class LogoutResponse extends AbstractStatusResponse
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
-        ?string $relayState = null
+        ?string $relayState = null,
     ) {
         parent::__construct(
             $status,
@@ -61,7 +61,7 @@ class LogoutResponse extends AbstractStatusResponse
             $destination,
             $consent,
             $extensions,
-            $relayState
+            $relayState,
         );
     }
 
@@ -114,7 +114,7 @@ class LogoutResponse extends AbstractStatusResponse
             self::getAttribute($xml, 'InResponseTo', null),
             self::getAttribute($xml, 'Destination', null),
             self::getAttribute($xml, 'Consent', null),
-            empty($extensions) ? null : array_pop($extensions)
+            empty($extensions) ? null : array_pop($extensions),
         );
 
         if (!empty($signature)) {

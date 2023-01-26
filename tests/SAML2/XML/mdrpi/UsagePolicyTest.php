@@ -44,7 +44,7 @@ final class UsagePolicyTest extends TestCase
         $this->testedClass = UsagePolicy::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdrpi_UsagePolicy.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdrpi_UsagePolicy.xml',
         );
 
         $this->arrayRepresentation = ['en' => 'http://www.example.edu/en/'];
@@ -63,7 +63,7 @@ final class UsagePolicyTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
+            strval($name),
         );
     }
 
@@ -80,7 +80,7 @@ final class UsagePolicyTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
+            strval($name),
         );
     }
 

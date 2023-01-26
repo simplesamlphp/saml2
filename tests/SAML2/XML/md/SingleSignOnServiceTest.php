@@ -38,7 +38,7 @@ final class SingleSignOnServiceTest extends TestCase
         $this->testedClass = SingleSignOnService::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_SingleSignOnService.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_SingleSignOnService.xml',
         );
     }
 
@@ -55,7 +55,7 @@ final class SingleSignOnServiceTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($ssoep)
+            strval($ssoep),
         );
     }
 
@@ -67,7 +67,7 @@ final class SingleSignOnServiceTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
-            'The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.'
+            'The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.',
         );
 
         new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A, 'https://response.location/');
@@ -86,7 +86,7 @@ final class SingleSignOnServiceTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($ssoep)
+            strval($ssoep),
         );
     }
 
@@ -100,7 +100,7 @@ final class SingleSignOnServiceTest extends TestCase
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
-            'The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.'
+            'The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.',
         );
 
         SingleSignOnService::fromXML($this->xmlRepresentation->documentElement);

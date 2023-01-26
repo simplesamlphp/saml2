@@ -20,7 +20,7 @@ final class UnknownStatement extends AbstractStatement
      */
     public function __construct(
         protected Chunk $chunk,
-        string $type
+        string $type,
     ) {
         parent::__construct($type);
     }

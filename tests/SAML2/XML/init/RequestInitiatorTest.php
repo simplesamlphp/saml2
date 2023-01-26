@@ -40,7 +40,7 @@ final class RequestInitiatorTest extends TestCase
         $this->testedClass = RequestInitiator::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/init_RequestInitiator.xml'
+            dirname(__FILE__, 4) . '/resources/xml/init_RequestInitiator.xml',
         );
     }
 
@@ -60,7 +60,7 @@ final class RequestInitiatorTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($requestInitiator)
+            strval($requestInitiator),
         );
     }
 
@@ -77,7 +77,7 @@ final class RequestInitiatorTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($requestInitiator)
+            strval($requestInitiator),
         );
     }
 
@@ -91,7 +91,7 @@ final class RequestInitiatorTest extends TestCase
 
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
-            "The Binding of a RequestInitiator must be 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'."
+            "The Binding of a RequestInitiator must be 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'.",
         );
 
         RequestInitiator::fromXML($this->xmlRepresentation->documentElement);

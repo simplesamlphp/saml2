@@ -24,7 +24,7 @@ final class UnknownID extends AbstractBaseID
         protected Chunk $chunk,
         string $type,
         ?string $NameQualifier = null,
-        ?string $SPNameQualifier = null
+        ?string $SPNameQualifier = null,
     ) {
         parent::__construct($type, $NameQualifier, $SPNameQualifier);
     }

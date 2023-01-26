@@ -27,7 +27,7 @@ class ArrayCollection implements Collection
      * @param array $elements
      */
     public function __construct(
-        protected array $elements = []
+        protected array $elements = [],
     ) {
     }
 
@@ -98,7 +98,7 @@ class ArrayCollection implements Collection
             throw new RuntimeException(sprintf(
                 __METHOD__ . ' requires that the collection has exactly one element, '
                 . '"%d" elements found',
-                $this->count()
+                $this->count(),
             ));
         }
 

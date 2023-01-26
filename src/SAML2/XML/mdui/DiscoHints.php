@@ -38,7 +38,7 @@ final class DiscoHints extends AbstractMduiElement
         array $children = [],
         protected array $ipHint = [],
         protected array $domainHint = [],
-        protected array $geolocationHint = []
+        protected array $geolocationHint = [],
     ) {
         Assert::allIsInstanceOf($ipHint, IPHint::class);
         Assert::allIsInstanceOf($domainHint, DomainHint::class);

@@ -124,7 +124,7 @@ final class ArrayCollectionTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(sprintf(
             '%s::getOnlyElement requires that the collection has exactly one element, "2" elements found',
-            ArrayCollection::class
+            ArrayCollection::class,
         ));
         $arc = new ArrayCollection(['aap', 'noot']);
         $arc->getOnlyElement();
@@ -149,7 +149,7 @@ final class ArrayCollectionTest extends TestCase
         $filtered = $arc->filter(
             function ($i) {
                 return $i != 'aap';
-            }
+            },
         );
         $this->assertInstanceOf(ArrayCollection::class, $filtered);
         $this->assertEquals($filtered->get(0), null);
@@ -160,7 +160,7 @@ final class ArrayCollectionTest extends TestCase
         $mapped = $arc->map(
             function ($i) {
                 return ucfirst($i);
-            }
+            },
         );
         $this->assertInstanceOf(ArrayCollection::class, $mapped);
         $this->assertEquals($mapped->get(0), 'Aap');

@@ -24,7 +24,7 @@ final class SubjectLocality extends AbstractSamlElement
      */
     public function __construct(
         protected ?string $address = null,
-        protected ?string $dnsName = null
+        protected ?string $dnsName = null,
     ) {
         Assert::nullOrIp($address, 'Invalid IP address');
         Assert::nullOrnotWhitespaceOnly($dnsName, 'Invalid DNS name');
@@ -83,7 +83,7 @@ final class SubjectLocality extends AbstractSamlElement
 
         return new static(
             self::getAttribute($xml, 'Address', null),
-            self::getAttribute($xml, 'DNSName', null)
+            self::getAttribute($xml, 'DNSName', null),
         );
     }
 

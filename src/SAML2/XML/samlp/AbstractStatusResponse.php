@@ -47,7 +47,7 @@ abstract class AbstractStatusResponse extends AbstractMessage
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
-        ?string $relayState = null
+        ?string $relayState = null,
     ) {
         Assert::nullOrValidNCName($inResponseTo); // Covers the empty string
 

@@ -37,7 +37,7 @@ final class CompanyTest extends TestCase
         $this->testedClass = Company::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_Company.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_Company.xml',
         );
     }
 
@@ -54,7 +54,7 @@ final class CompanyTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
+            strval($name),
         );
     }
 
@@ -71,7 +71,7 @@ final class CompanyTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
+            strval($name),
         );
     }
 }

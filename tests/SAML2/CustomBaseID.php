@@ -68,7 +68,7 @@ final class CustomBaseID extends AbstractBaseID
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:BaseID> element.',
-            SchemaViolationException::class
+            SchemaViolationException::class,
         );
 
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');

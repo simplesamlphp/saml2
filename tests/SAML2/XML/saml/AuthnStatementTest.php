@@ -46,7 +46,7 @@ final class AuthnStatementTest extends TestCase
         $this->testedClass = AuthnStatement::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnStatement.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnStatement.xml',
         );
     }
 
@@ -63,17 +63,17 @@ final class AuthnStatementTest extends TestCase
                 new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
                 null,
                 null,
-                [new AuthenticatingAuthority('https://idp.example.com/SAML2')]
+                [new AuthenticatingAuthority('https://idp.example.com/SAML2')],
             ),
             XMLUtils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
             XMLUtils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
             '123',
-            new SubjectLocality('1.1.1.1', 'idp.example.org')
+            new SubjectLocality('1.1.1.1', 'idp.example.org'),
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($authnStatement)
+            strval($authnStatement),
         );
     }
 
@@ -87,12 +87,12 @@ final class AuthnStatementTest extends TestCase
                 new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
                 null,
                 null,
-                [new AuthenticatingAuthority('https://idp.example.com/SAML2')]
+                [new AuthenticatingAuthority('https://idp.example.com/SAML2')],
             ),
             XMLUtils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
             XMLUtils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
             '123',
-            new SubjectLocality('1.1.1.1', 'idp.example.org')
+            new SubjectLocality('1.1.1.1', 'idp.example.org'),
         );
 
         // Marshall it to a \DOMElement
@@ -108,7 +108,7 @@ final class AuthnStatementTest extends TestCase
         $authnStatementElements = XPath::xpQuery(
             $authnStatementElement,
             './saml_assertion:SubjectLocality/following-sibling::*',
-            $xpCache
+            $xpCache,
         );
         $this->assertCount(1, $authnStatementElements);
         $this->assertEquals('saml:AuthnContext', $authnStatementElements[0]->tagName);
@@ -126,7 +126,7 @@ final class AuthnStatementTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($authnStatement)
+            strval($authnStatement),
         );
     }
 

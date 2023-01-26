@@ -75,7 +75,7 @@ AUTHNREQUEST
         $this->assertInstanceOf(Signature::class, $signature);
         $this->assertEquals(
             $signer->getAlgorithmId(),
-            $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm()
+            $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
         );
     }
 
@@ -177,7 +177,7 @@ AUTHNREQUEST
 
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
             C::SIG_RSA_SHA256,
-            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY)
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),
         );
 
         $unsignedMessage = MessageFactory::fromXML($response->documentElement);
@@ -189,7 +189,7 @@ AUTHNREQUEST
         $this->assertInstanceOf(Signature::class, $signature);
         $this->assertEquals(
             $signer->getAlgorithmId(),
-            $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm()
+            $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
         );
     }
 
@@ -305,7 +305,7 @@ XML;
         $document  = DOMDocumentFactory::fromString($xml);
         $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage(
-            'Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.'
+            'Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.',
         );
         MessageFactory::fromXML($document->documentElement);
     }

@@ -21,7 +21,7 @@ class SubjectConfirmationResponseToMatches implements SubjectConfirmationConstra
      * @param \SimpleSAML\SAML2\XML\samlp\Response $response
      */
     public function __construct(
-        private Response $response
+        private Response $response,
     ) {
     }
 
@@ -43,7 +43,7 @@ class SubjectConfirmationResponseToMatches implements SubjectConfirmationConstra
             $result->addError(sprintf(
                 'InResponseTo in SubjectConfirmationData ("%s") does not match the Response InResponseTo ("%s")',
                 $inResponseTo,
-                strval($this->getInResponseTo())
+                strval($this->getInResponseTo()),
             ));
         }
     }

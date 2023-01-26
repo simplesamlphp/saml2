@@ -66,7 +66,7 @@ abstract class AbstractStatement extends AbstractStatementType implements Extens
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:Statement> element.',
-            SchemaViolationException::class
+            SchemaViolationException::class,
         );
 
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');
@@ -93,7 +93,7 @@ abstract class AbstractStatement extends AbstractStatementType implements Extens
         Assert::subclassOf(
             $handler,
             AbstractStatement::class,
-            'Elements implementing Statement must extend \SimpleSAML\SAML2\XML\saml\AbstractStatement.'
+            'Elements implementing Statement must extend \SimpleSAML\SAML2\XML\saml\AbstractStatement.',
         );
         return $handler::fromXML($xml);
     }

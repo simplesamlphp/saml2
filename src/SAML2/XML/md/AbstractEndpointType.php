@@ -41,11 +41,11 @@ abstract class AbstractEndpointType extends AbstractMdElement
     /**
      * EndpointType constructor.
      *
-     * @param string      $binding
-     * @param string      $location
+     * @param string $binding
+     * @param string $location
      * @param string|null $responseLocation
-     * @param array       $attributes
-     * @param array       $children
+     * @param array $attributes
+     * @param array $children
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
@@ -118,7 +118,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
             $xml->localName,
             $qualifiedName,
             'Unexpected name for endpoint: ' . $xml->localName . '. Expected: ' . $qualifiedName . '.',
-            InvalidDOMElementException::class
+            InvalidDOMElementException::class,
         );
 
         /** @var string $binding */
@@ -141,7 +141,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
             $location,
             self::getAttribute($xml, 'ResponseLocation', null),
             self::getAttributesNSFromXML($xml),
-            $children
+            $children,
         );
     }
 
