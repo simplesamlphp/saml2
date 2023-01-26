@@ -56,7 +56,7 @@ final class HTTPRedirectTest extends MockeryTestCase
         $this->assertInstanceOf(AbstractRequest::class, $samlrequest);
         $this->assertEquals(
             'https://profile.surfconext.nl/simplesaml/module.php/saml/sp/metadata.php/default-sp',
-            $samlrequest->getIssuer()->getContent()
+            $samlrequest->getIssuer()->getContent(),
         );
     }
 
@@ -123,7 +123,7 @@ final class HTTPRedirectTest extends MockeryTestCase
         $relaystate = $samlrequest->getRelayState();
         $this->assertEquals(
             'https://demo.moo-archive.nl/module.php/admin/test/default-sp',
-            $relaystate
+            $relaystate,
         );
     }
 
@@ -202,7 +202,7 @@ final class HTTPRedirectTest extends MockeryTestCase
         $q = [
             'SAMLRequest' => 'pVJNb9swDP0rhu6O7XjeGiEJkDYoGqDbgibboZdCkahEgEx5Ir11%2F36y02FdD7n0JPDjPT4%2BcU6q9Z1c9XzCB%2FjRA3H23HokORYWoo8ogyJHElULJFnL3erzvZxOStnFwEEHL15BLiMUEUR2AUW2WS%2FEUw2NrXRp7NWshEPVzJqm%2BTQzVV1DddC21rUy1tq6norsO0RKyIVIRAlO1MMGiRVySpVVk1fTvKr25ZVsGvnh46PI1mkbh4pH1Im5I1kUgEeHMKE%2BWh0QnnmCvlBpf0B2emwunOkKcnj0kJM7Yj7oXf2VfhOQ%2BhbiDuJPp%2BHbw%2F0%2F8uSIdf4tO7m28zC4U7TB9KnendKAIabzO82VpjFrwKrec06dyLYv%2Fl47NEnNZWsP5yaSd%2Fv9Nt9%2B3e3Fcj5wy9GquHyPxhZYGcXqjcR58XrA%2FHxLX5K0zXobvNO%2Fs9sQW8WXlQ8ZZ3I7tkqOCsmlz0iWex9%2B3URQDAvBsQdRLM8j%2F7%2FY5R8%3D',
             'RelayState' => 'https://profile.surfconext.nl/',
-            'SAMLEncoding' => 'urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:none'
+            'SAMLEncoding' => 'urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:none',
         ];
         $request = new ServerRequest('GET', 'http://tnyholm.se');
         $request = $request->withQueryParams($q);
@@ -301,7 +301,11 @@ final class HTTPRedirectTest extends MockeryTestCase
         $status = new Status(new StatusCode());
         $issuer = new Issuer('testIssuer');
 
-        $response = new Response($status, $issuer, null, null, null, 'http://example.org/login?success=yes');
+        $response = new Response(
+            status: $status,
+            issuer: $issuer,
+            destination: 'http://example.org/login?success=yes',
+        );
         $response->setRelayState('http://example.org');
         $hr = new HTTPRedirect();
         $hr->send($response);

@@ -21,23 +21,18 @@ use function is_null;
  */
 final class IDPList extends AbstractSamlpElement
 {
-    /** @var \SimpleSAML\SAML2\XML\samlp\IDPEntry[] */
-    protected array $IDPEntry;
-
-    /** @var \SimpleSAML\SAML2\XML\samlp\GetComplete|null */
-    protected ?GetComplete $getComplete;
-
-
     /**
      * Initialize an IDPList element.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\IDPEntry[] $idpEntry
      * @param \SimpleSAML\SAML2\XML\samlp\GetComplete|null $getComplete
      */
-    public function __construct(array $idpEntry, ?GetComplete $getComplete = null)
-    {
-        $this->setIdpEntry($idpEntry);
-        $this->setGetComplete($getComplete);
+    public function __construct(
+        protected array $IDPEntry,
+        protected ?GetComplete $getComplete = null,
+    ) {
+        Assert::minCount($IDPEntry, 1, 'At least one samlp:IDPEntry must be specified.');
+        Assert::allIsInstanceOf($IDPEntry, IDPEntry::class);
     }
 
 
@@ -51,32 +46,11 @@ final class IDPList extends AbstractSamlpElement
 
 
     /**
-     * @param \SimpleSAML\SAML2\XML\samlp\IDPEntry[] $idpEntry
-     */
-    private function setIdpEntry(array $idpEntry): void
-    {
-        Assert::minCount($idpEntry, 1, 'At least one samlp:IDPEntry must be specified.');
-        Assert::allIsInstanceOf($idpEntry, IDPEntry::class);
-
-        $this->IDPEntry = $idpEntry;
-    }
-
-
-    /**
      * @return \SimpleSAML\SAML2\XML\samlp\GetComplete|null
      */
     public function getGetComplete(): ?GetComplete
     {
         return $this->getComplete;
-    }
-
-
-    /**
-     * @param \SimpleSAML\SAML2\XML\samlp\GetComplete|null $getComplete
-     */
-    private function setGetComplete(?GetComplete $getComplete): void
-    {
-        $this->getComplete = $getComplete;
     }
 
 
@@ -103,7 +77,7 @@ final class IDPList extends AbstractSamlpElement
             $idpEntry,
             1,
             'At least one <samlp:IDPEntry> must be specified.',
-            MissingElementException::class
+            MissingElementException::class,
         );
 
         $getComplete = GetComplete::getChildrenOfClass($xml);
@@ -111,12 +85,12 @@ final class IDPList extends AbstractSamlpElement
             $getComplete,
             1,
             'Only one <samlp:GetComplete> element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         return new static(
             $idpEntry,
-            empty($getComplete) ? null : array_pop($getComplete)
+            empty($getComplete) ? null : array_pop($getComplete),
         );
     }
 

@@ -10,8 +10,7 @@ use SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator
 use SimpleSAML\SAML2\Utilities\Temporal;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 
-class SubjectConfirmationNotBefore implements
-    SubjectConfirmationConstraintValidator
+class SubjectConfirmationNotBefore implements SubjectConfirmationConstraintValidator
 {
     /**
      * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmation $subjectConfirmation
@@ -21,7 +20,7 @@ class SubjectConfirmationNotBefore implements
      */
     public function validate(
         SubjectConfirmation $subjectConfirmation,
-        Result $result
+        Result $result,
     ): void {
         $data = $subjectConfirmation->getSubjectConfirmationData();
         Assert::notNull($data);

@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
+use SimpleSAML\SAML2\Assertion\Processor;
 use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Configuration\Destination;
@@ -42,42 +43,42 @@ use function getcwd;
 final class NameIdDecryptionTransformerTest extends TestCase
 {
     /** @var \DOMDocument */
-    protected $document;
+    protected DOMDocument $document;
 
     /**
      * @var \SAML2\Assertion\Processor
      */
-    protected $assertionProcessor;
+    protected Processor $assertionProcessor;
 
     /**
      * @var \SAML2\Configuration\IdentityProvider
      */
-    protected $identityProviderConfiguration;
+    protected IdentityProvider $identityProviderConfiguration;
 
     /**
      * @var \SAML2\Configuration\ServiceProvider
      */
-    protected $serviceProviderConfiguration;
+    protected ServiceProvider $serviceProviderConfiguration;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    protected $logger;
+    protected LoggerInterface $logger;
 
     /**
      * @var \SAML2\Response\Validation\Validator
      */
-    protected $validator;
+    protected Validator $validator;
 
     /**
      * @var \SAML2\Configuration\Destination
      */
-    protected $destination;
+    protected Destination $destination;
 
     /**
      * @var \SAML2\xml\samlp\Response
      */
-    protected $response;
+    protected Response $response;
 
     /** @var string */
     private const FRAMEWORK = 'vendor/simplesamlphp/xml-security';
@@ -98,14 +99,14 @@ final class NameIdDecryptionTransformerTest extends TestCase
 
         $this->identityProviderConfiguration = new IdentityProvider(['assertionEncryptionEnabled' => true]);
         $base = getcwd() . DIRECTORY_SEPARATOR . self::FRAMEWORK;
-        $certDir = 'tests' . DIRECTORY_SEPARATOR . PEMCertificatesMock::CERTIFICATE_DIR;
+        $keysDir = 'tests' . DIRECTORY_SEPARATOR . PEMCertificatesMock::KEYS_DIR;
         $this->serviceProviderConfiguration = new ServiceProvider(
             [
                 'entityId' => C::ENTITY_SP,
                 'blacklistedEncryptionAlgorithms' => [],
                 'privateKeys' => [
                     new PrivateKey(
-                        $base . DIRECTORY_SEPARATOR . $certDir . DIRECTORY_SEPARATOR . PEMCertificatesMock::PRIVATE_KEY,
+                        $base . DIRECTORY_SEPARATOR . $keysDir . DIRECTORY_SEPARATOR . PEMCertificatesMock::PRIVATE_KEY,
                         'default',
                         PEMCertificatesMock::PASSPHRASE,
                         true,
@@ -125,18 +126,17 @@ final class NameIdDecryptionTransformerTest extends TestCase
 
         $encryptor = (new KeyTransportAlgorithmFactory([]))->getAlgorithm(
             C::KEY_TRANSPORT_RSA_1_5,
-            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY)
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY),
         );
         $nameId = new NameID('value', 'name_qualifier');
         $encryptedId = new EncryptedID($nameId->encrypt($encryptor));
 
         $assertion = new Assertion(
-            new Issuer(C::ENTITY_IDP),
-            '_45e42090d8cbbfa52d5a394b01049fc2221e274182',
-            1582718682,
-            new Subject($encryptedId),
-            null,
-            [
+            issuer: new Issuer(C::ENTITY_IDP),
+            id: '_45e42090d8cbbfa52d5a394b01049fc2221e274182',
+            issueInstant: 1582718682,
+            subject: new Subject($encryptedId),
+            statements: [
                 new AuthnStatement(
                     new AuthnContext(
                         new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),

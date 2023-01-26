@@ -9,8 +9,7 @@ use SimpleSAML\SAML2\Assertion\Validation\AssertionConstraintValidator;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Utilities\Temporal;
 
-class NotBefore implements
-    AssertionConstraintValidator
+class NotBefore implements AssertionConstraintValidator
 {
     /**
      * @param \SimpleSAML\SAML2\XML\saml\Assertion $assertion
@@ -23,7 +22,7 @@ class NotBefore implements
             $notBeforeTimestamp = $conditions->getNotBefore();
             if (($notBeforeTimestamp !== null) && ($notBeforeTimestamp > (Temporal::getTime() + 60))) {
                 $result->addError(
-                    'Received an assertion that is valid in the future. Check clock synchronization on IdP and SP.'
+                    'Received an assertion that is valid in the future. Check clock synchronization on IdP and SP.',
                 );
             }
         }

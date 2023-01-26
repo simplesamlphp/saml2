@@ -44,7 +44,7 @@ final class EncryptionMethodTest extends TestCase
         $this->testedClass = EncryptionMethod::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_EncryptionMethod.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_EncryptionMethod.xml',
         );
     }
 
@@ -67,7 +67,7 @@ final class EncryptionMethodTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($encryptionMethod)
+            strval($encryptionMethod),
         );
     }
 
@@ -78,14 +78,14 @@ final class EncryptionMethodTest extends TestCase
     public function testMarshallingWithoutOptionalParameters(): void
     {
         $encryptionMethod = new EncryptionMethod(C::KEY_TRANSPORT_OAEP_MGF1P);
-        $document = DOMDocumentFactory::fromString(
-            '<md:EncryptionMethod xmlns:md="' . C::NS_MD .
-            '" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>'
-        );
+        $document = DOMDocumentFactory::fromString(sprintf(
+            '<md:EncryptionMethod xmlns:md="%s" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>',
+            C::NS_MD,
+        ));
 
         $this->assertEquals(
             $document->saveXML($document->documentElement),
-            strval($encryptionMethod)
+            strval($encryptionMethod),
         );
     }
 
@@ -94,7 +94,7 @@ final class EncryptionMethodTest extends TestCase
     {
         $alg = C::KEY_TRANSPORT_OAEP_MGF1P;
         $chunkXml = DOMDocumentFactory::fromString(
-            '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>'
+            '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>',
         );
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 
@@ -131,7 +131,7 @@ final class EncryptionMethodTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($encryptionMethod)
+            strval($encryptionMethod),
         );
     }
 
@@ -153,11 +153,10 @@ final class EncryptionMethodTest extends TestCase
      */
     public function testUnmarshallingWithoutOptionalParameters(): void
     {
-        $mdns = C::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<md:EncryptionMethod xmlns:md="{$mdns}" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>
-XML
-        );
+        $document = DOMDocumentFactory::fromString(sprintf(
+            '<md:EncryptionMethod xmlns:md="%s" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>',
+            C::NS_MD,
+        ));
 
         $em = EncryptionMethod::fromXML($document->documentElement);
         $this->assertNull($em->getKeySize());
@@ -165,7 +164,7 @@ XML
         $this->assertEmpty($em->getElements());
         $this->assertEquals(
             $document->saveXML($document->documentElement),
-            strval($em)
+            strval($em),
         );
     }
 }

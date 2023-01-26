@@ -20,28 +20,6 @@ use function preg_split;
 final class PDPDescriptor extends AbstractRoleDescriptor
 {
     /**
-     * List of AuthzService endpoints.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AuthzService[]
-     */
-    protected array $authzServiceEndpoints = [];
-
-    /**
-     * List of AssertionIDRequestService endpoints.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
-     */
-    protected array $assertionIDRequestServiceEndpoints = [];
-
-    /**
-     * List of supported NameID formats.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\NameIDFormat[]
-     */
-    protected array $NameIDFormats = [];
-
-
-    /**
      * PDPDescriptor constructor.
      *
      * @param \SimpleSAML\SAML2\XML\md\AuthzService[] $authzServiceEndpoints
@@ -58,10 +36,10 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts
      */
     public function __construct(
-        array $authzServiceEndpoints,
+        protected array $authzService,
         array $protocolSupportEnumeration,
-        array $assertionIDRequestService = [],
-        array $nameIDFormats = [],
+        protected array $assertionIDRequestService = [],
+        protected array $nameIDFormat = [],
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
@@ -69,8 +47,21 @@ final class PDPDescriptor extends AbstractRoleDescriptor
         ?string $errorURL = null,
         ?Organization $organization = null,
         array $keyDescriptors = [],
-        array $contacts = []
+        array $contacts = [],
     ) {
+        Assert::minCount($authzService, 1, 'At least one md:AuthzService endpoint must be present.');
+        Assert::allIsInstanceOf(
+            $authzService,
+            AuthzService::class,
+            'All md:AuthzService endpoints must be an instance of AuthzService.',
+        );
+        Assert::allIsInstanceOf(
+            $assertionIDRequestService,
+            AssertionIDRequestService::class,
+            'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.',
+        );
+        Assert::allIsInstanceOf($nameIDFormat, NameIDFormat::class);
+
         parent::__construct(
             $protocolSupportEnumeration,
             $ID,
@@ -80,12 +71,8 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             $errorURL,
             $keyDescriptors,
             $organization,
-            $contacts
+            $contacts,
         );
-
-        $this->setAuthzServiceEndpoints($authzServiceEndpoints);
-        $this->setAssertionIDRequestServices($assertionIDRequestService);
-        $this->setNameIDFormats($nameIDFormats);
     }
 
 
@@ -94,27 +81,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\AuthzService[]
      */
-    public function getAuthzServiceEndpoints(): array
+    public function getAuthzService(): array
     {
-        return $this->authzServiceEndpoints;
-    }
-
-
-    /**
-     * Set the AuthzService endpoints for this PDPDescriptor
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AuthzService[] $authzServices
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    private function setAuthzServiceEndpoints(array $authzServices = []): void
-    {
-        Assert::minCount($authzServices, 1, 'At least one md:AuthzService endpoint must be present.');
-        Assert::allIsInstanceOf(
-            $authzServices,
-            AuthzService::class,
-            'All md:AuthzService endpoints must be an instance of AuthzService.'
-        );
-        $this->authzServiceEndpoints = $authzServices;
+        return $this->authzService;
     }
 
 
@@ -123,26 +92,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
-    public function getAssertionIDRequestServices(): array
+    public function getAssertionIDRequestService(): array
     {
-        return $this->assertionIDRequestServiceEndpoints;
-    }
-
-
-    /**
-     * Set the AssertionIDRequestService endpoints for this PDPDescriptor
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestServices
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    private function setAssertionIDRequestServices(array $assertionIDRequestServices): void
-    {
-        Assert::allIsInstanceOf(
-            $assertionIDRequestServices,
-            AssertionIDRequestService::class,
-            'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.'
-        );
-        $this->assertionIDRequestServiceEndpoints = $assertionIDRequestServices;
+        return $this->assertionIDRequestService;
     }
 
 
@@ -151,21 +103,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
-    public function getNameIDFormats(): array
+    public function getNameIDFormat(): array
     {
-        return $this->NameIDFormats;
-    }
-
-
-    /**
-     * Set the NameIDFormats supported by this PDPDescriptor
-     *
-     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormats
-     */
-    private function setNameIDFormats(array $nameIDFormats): void
-    {
-        Assert::allIsInstanceOf($nameIDFormats, NameIDFormat::class);
-        $this->NameIDFormats = $nameIDFormats;
+        return $this->nameIDFormat;
     }
 
 
@@ -194,7 +134,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             $orgs,
             1,
             'More than one Organization found in this descriptor',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $extensions = Extensions::getChildrenOfClass($xml);
@@ -202,7 +142,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             $extensions,
             1,
             'Only one md:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         return new static(
@@ -217,7 +157,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             self::getAttribute($xml, 'errorURL', null),
             !empty($orgs) ? $orgs[0] : null,
             KeyDescriptor::getChildrenOfClass($xml),
-            ContactPerson::getChildrenOfClass($xml)
+            ContactPerson::getChildrenOfClass($xml),
         );
     }
 
@@ -233,15 +173,15 @@ final class PDPDescriptor extends AbstractRoleDescriptor
     {
         $e = parent::toUnsignedXML($parent);
 
-        foreach ($this->getAuthzServiceEndpoints() as $ep) {
+        foreach ($this->getAuthzService() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->getAssertionIDRequestServices() as $ep) {
+        foreach ($this->getAssertionIDRequestService() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->getNameIDFormats() as $nidFormat) {
+        foreach ($this->getNameIDFormat() as $nidFormat) {
             $nidFormat->toXML($e);
         }
 

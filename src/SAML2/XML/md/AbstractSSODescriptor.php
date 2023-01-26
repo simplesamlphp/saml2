@@ -17,37 +17,6 @@ use SimpleSAML\XML\Utils as XMLUtils;
 abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
 {
     /**
-     * List of ArtifactResolutionService endpoints.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType[]
-     */
-    protected array $artifactResolutionServiceEndpoints = [];
-
-    /**
-     * List of SingleLogoutService endpoints.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
-     */
-    protected array $sloServiceEndpoints = [];
-
-    /**
-     * List of ManageNameIDService endpoints.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
-     */
-    protected array $manageNameIDServiceEndpoints = [];
-
-    /**
-     * List of supported NameID formats.
-     *
-     * Array of strings.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\NameIDFormat[]
-     */
-    protected array $nameIDFormats = [];
-
-
-    /**
      * Initialize a RoleDescriptor.
      *
      * @param string[] $protocolSupportEnumeration A set of URI specifying the protocols supported.
@@ -81,11 +50,28 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
         array $keyDescriptors = [],
         ?Organization $organization = null,
         array $contacts = [],
-        array $artifactResolutionService = [],
-        array $singleLogoutService = [],
-        array $manageNameIDService = [],
-        array $nameIDFormat = []
+        protected array $artifactResolutionService = [],
+        protected array $singleLogoutService = [],
+        protected array $manageNameIDService = [],
+        protected array $nameIDFormat = [],
     ) {
+        Assert::allIsInstanceOf(
+            $artifactResolutionService,
+            ArtifactResolutionService::class,
+            'All md:ArtifactResolutionService endpoints must be an instance of ArtifactResolutionService.',
+        );
+        Assert::allIsInstanceOf(
+            $singleLogoutService,
+            SingleLogoutService::class,
+            'All md:SingleLogoutService endpoints must be an instance of SingleLogoutService.',
+        );
+        Assert::allIsInstanceOf(
+            $manageNameIDService,
+            ManageNameIDService::class,
+            'All md:ManageNameIDService endpoints must be an instance of ManageNameIDService.',
+        );
+        Assert::allIsInstanceOf($nameIDFormat, NameIDFormat::class, ProtocolViolationException::class);
+
         parent::__construct(
             $protocolSupportEnumeration,
             $ID,
@@ -95,13 +81,8 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
             $errorURL,
             $keyDescriptors,
             $organization,
-            $contacts
+            $contacts,
         );
-
-        $this->setArtifactResolutionServices($artifactResolutionService);
-        $this->setSingleLogoutServices($singleLogoutService);
-        $this->setManageNameIDServices($manageNameIDService);
-        $this->setNameIDFormats($nameIDFormat);
     }
 
 
@@ -110,26 +91,9 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType[]
      */
-    public function getArtifactResolutionServices(): array
+    public function getArtifactResolutionService(): array
     {
-        return $this->artifactResolutionServiceEndpoints;
-    }
-
-
-    /**
-     * Set the value of the ArtifactResolutionService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType[] $artifactResolutionServices
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setArtifactResolutionServices(array $artifactResolutionServices): void
-    {
-        Assert::allIsInstanceOf(
-            $artifactResolutionServices,
-            ArtifactResolutionService::class,
-            'All md:ArtifactResolutionService endpoints must be an instance of ArtifactResolutionService.'
-        );
-        $this->artifactResolutionServiceEndpoints = $artifactResolutionServices;
+        return $this->artifactResolutionService;
     }
 
 
@@ -138,27 +102,9 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
      */
-    public function getSingleLogoutServices(): array
+    public function getSingleLogoutService(): array
     {
-        return $this->sloServiceEndpoints;
-    }
-
-
-    /**
-     * Set the value of the SingleLogoutService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AbstractEndpointType[] $singleLogoutServices
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setSingleLogoutServices(array $singleLogoutServices): void
-    {
-        Assert::allIsInstanceOf(
-            $singleLogoutServices,
-            SingleLogoutService::class,
-            'All md:SingleLogoutService endpoints must be an instance of SingleLogoutService.'
-        );
-
-        $this->sloServiceEndpoints = $singleLogoutServices;
+        return $this->singleLogoutService;
     }
 
 
@@ -167,27 +113,9 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
      */
-    public function getManageNameIDServices(): array
+    public function getManageNameIDService(): array
     {
-        return $this->manageNameIDServiceEndpoints;
-    }
-
-
-    /**
-     * Set the value of the ManageNameIDService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AbstractEndpointType[] $manageNameIDServices
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setManageNameIDServices(array $manageNameIDServices): void
-    {
-        Assert::allIsInstanceOf(
-            $manageNameIDServices,
-            ManageNameIDService::class,
-            'All md:ManageNameIDService endpoints must be an instance of ManageNameIDService.'
-        );
-
-        $this->manageNameIDServiceEndpoints = $manageNameIDServices;
+        return $this->manageNameIDService;
     }
 
 
@@ -196,21 +124,9 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
-    public function getNameIDFormats(): array
+    public function getNameIDFormat(): array
     {
-        return $this->nameIDFormats;
-    }
-
-
-    /**
-     * Set the value of the NameIDFormat-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormats
-     */
-    protected function setNameIDFormats(array $nameIDFormats): void
-    {
-        Assert::allIsInstanceOf($nameIDFormats, NameIDFormat::class, ProtocolViolationException::class);
-        $this->nameIDFormats = $nameIDFormats;
+        return $this->nameIDFormat;
     }
 
 
@@ -224,19 +140,19 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
     {
         $e = parent::toUnsignedXML($parent);
 
-        foreach ($this->getArtifactResolutionServices() as $ep) {
+        foreach ($this->getArtifactResolutionService() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->getSingleLogoutServices() as $ep) {
+        foreach ($this->getSingleLogoutService() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->getManageNameIDServices() as $ep) {
+        foreach ($this->getManageNameIDService() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->getNameIDFormats() as $nidFormat) {
+        foreach ($this->getNameIDFormat() as $nidFormat) {
             $nidFormat->toXML($e);
         }
 

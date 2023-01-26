@@ -42,7 +42,7 @@ final class OrganizationTest extends TestCase
         $this->testedClass = Organization::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_Organization.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_Organization.xml',
         );
     }
 
@@ -65,16 +65,16 @@ final class OrganizationTest extends TestCase
             [new OrganizationURL('en', 'https://IdentityProvider.com')],
             new Extensions(
                 [
-                    new Chunk($ext->documentElement)
-                ]
-            )
+                    new Chunk($ext->documentElement),
+                ],
+            ),
         );
         $root = DOMDocumentFactory::fromString('<root/>');
         $root->formatOutput = true;
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($org)
+            strval($org),
         );
     }
 
@@ -91,7 +91,7 @@ final class OrganizationTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($org)
+            strval($org),
         );
     }
 }

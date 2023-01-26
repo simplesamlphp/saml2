@@ -66,7 +66,7 @@ final class AuthnRequestTest extends TestCase
         $this->testedClass = AuthnRequest::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_AuthnRequest.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_AuthnRequest.xml',
         );
     }
 
@@ -77,30 +77,23 @@ final class AuthnRequestTest extends TestCase
     public function testMarshalling(): void
     {
         $subject = new Subject(
-            new NameID('user@example.org', null, null, C::NAMEID_UNSPECIFIED)
+            new NameID(
+                value: 'user@example.org',
+                Format: C::NAMEID_UNSPECIFIED,
+            ),
         );
 
         $authnRequest = new AuthnRequest(
-            null,
-            $subject,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            new Issuer('https://gateway.stepup.org/saml20/sp/metadata'),
-            '_2b0226190ca1c22de6f66e85f5c95158',
-            1411393320,
-            'https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO'
+            subject: $subject,
+            issuer: new Issuer('https://gateway.stepup.org/saml20/sp/metadata'),
+            id: '_2b0226190ca1c22de6f66e85f5c95158',
+            issueInstant: 1411393320,
+            destination: 'https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO',
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($authnRequest)
+            strval($authnRequest),
         );
     }
 
@@ -111,21 +104,21 @@ final class AuthnRequestTest extends TestCase
         $rac = new RequestedAuthnContext(
             [
                 new AuthnContextClassRef('urn:test:accr1'),
-                new AuthnContextClassRef('urn:test:accr2')
+                new AuthnContextClassRef('urn:test:accr2'),
             ],
-            'better'
+            'better',
         );
 
         // Create Subject
         $subject = new Subject(
-            new Issuer('some issuer')
+            new Issuer('some issuer'),
         );
 
         // Create NameIDPolicy
         $nameIdPolicy = new NameIDPolicy(
             'urn:the:format',
             'TheSPNameQualifier',
-            true
+            true,
         );
 
         // Create Conditions
@@ -136,17 +129,17 @@ final class AuthnRequestTest extends TestCase
             [
                 new AudienceRestriction(
                     [
-                        new Audience('http://sp.example.com/demo1/metadata.php')
-                    ]
+                        new Audience('http://sp.example.com/demo1/metadata.php'),
+                    ],
                 ),
             ],
             true,
             new ProxyRestriction(
                 [
-                    new Audience('http://sp.example.com/demo2/metadata.php')
+                    new Audience('http://sp.example.com/demo2/metadata.php'),
                 ],
-                2
-            )
+                2,
+            ),
         );
 
         // Create Scoping
@@ -157,24 +150,12 @@ final class AuthnRequestTest extends TestCase
         $scoping = new Scoping(2, $list, [$requesterId]);
 
         $authnRequest = new AuthnRequest(
-            $rac,
-            $subject,
-            $nameIdPolicy,
-            $conditions,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            new Issuer('https://gateway.stepup.org/saml20/sp/metadata'),
-            null,
-            null,
-            null,
-            null,
-            null,
-            $scoping
+            requestedAuthnContext: $rac,
+            subject: $subject,
+            nameIdPolicy: $nameIdPolicy,
+            conditions: $conditions,
+            issuer: new Issuer('https://gateway.stepup.org/saml20/sp/metadata'),
+            scoping: $scoping
         );
 
         $authnRequestElement = $authnRequest->toXML();
@@ -189,7 +170,7 @@ final class AuthnRequestTest extends TestCase
         $authnRequestElements = XPath::xpQuery(
             $authnRequestElement,
             './saml_assertion:Subject/following-sibling::*',
-            $xpCache
+            $xpCache,
         );
         $this->assertCount(4, $authnRequestElements);
         $this->assertEquals('samlp:NameIDPolicy', $authnRequestElements[0]->tagName);
@@ -226,7 +207,7 @@ AUTHNREQUEST;
         $this->assertEquals(C::BINDING_HTTP_ARTIFACT, $authnRequest->getProtocolBinding());
         $this->assertEquals(
             'https://sp.example.com/SAML2/SSO/Artifact',
-            $authnRequest->getAssertionConsumerServiceURL()
+            $authnRequest->getAssertionConsumerServiceURL(),
         );
         $this->assertInstanceOf(Issuer::class, $issuer);
         $this->assertEquals('https://sp.example.com/SAML2', $issuer->getContent());
@@ -308,7 +289,7 @@ AUTHNREQUEST;
         $container->setBlacklistedAlgorithms(null);
 
         $xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/authnrequest/authnrequest_encryptedid.xml'
+            dirname(__FILE__, 4) . '/resources/xml/authnrequest/authnrequest_encryptedid.xml',
         );
         $authnRequest = AuthnRequest::fromXML($xmlRepresentation->documentElement);
 
@@ -320,7 +301,7 @@ AUTHNREQUEST;
 
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $identifier->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
-            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY)
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),
         );
 
         $nameId = $identifier->decrypt($decryptor);
@@ -339,7 +320,7 @@ AUTHNREQUEST;
     {
         $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             C::KEY_TRANSPORT_OAEP,
-            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
         // create an encrypted NameID
@@ -352,21 +333,9 @@ AUTHNREQUEST;
 
         // basic AuthnRequest
         $request = new AuthnRequest(
-            null,
-            new Subject($nameId),
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            $issuer,
-            null,
-            null,
-            $destination
+            subject: new Subject($nameId),
+            issuer: $issuer,
+            destination: $destination,
         );
 
         $expectedXml = <<<AUTHNREQUEST
@@ -420,36 +389,20 @@ AUTHNREQUEST;
         $destination = 'https://tiqr.example.org/idp/profile/saml2/Redirect/SSO';
 
         $scoping = new Scoping(
-            null,
-            new IDPList(
+            IDPList: new IDPList(
                 [
                     new IDPEntry('urn:test:Legacy1'),
                     new IDPEntry('http://example.org/AAP', 'N00T', 'https://mies'),
-                    new IDPEntry('urn:example:1', 'Voorbeeld', 'urn:test:else')
-                ]
-            )
+                    new IDPEntry('urn:example:1', 'Voorbeeld', 'urn:test:else'),
+                ],
+            ),
         );
 
         // basic AuthnRequest
         $request = new AuthnRequest(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            $issuer,
-            null,
-            null,
-            $destination,
-            null,
-            null,
-            $scoping
+            issuer: $issuer,
+            destination: $destination,
+            scoping: $scoping,
         );
 
         $expectedStructureDocument = <<<AUTHNREQUEST
@@ -505,7 +458,7 @@ AUTHNREQUEST;
         $expectedList = [
             new IDPEntry('urn:test:Legacy1'),
             new IDPEntry('http://example.org/AAP', 'N00T', 'https://mies'),
-            new IDPEntry('urn:example:1', 'Voorbeeld')
+            new IDPEntry('urn:example:1', 'Voorbeeld'),
         ];
 
         $scoping = $authnRequest->getScoping();
@@ -596,26 +549,15 @@ AUTHNREQUEST;
         $nameIdPolicy = new NameIDPolicy(
             C::NAMEID_TRANSIENT,
             "https://sp.example.com/SAML2",
-            true
+            true,
         );
 
         // basic AuthnRequest
         $request = new AuthnRequest(
-            null,
-            null,
-            $nameIdPolicy,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            $issuer,
-            null,
-            $issueInstant,
-            $destination
+            nameIdPolicy: $nameIdPolicy,
+            issuer: $issuer,
+            issueInstant: $issueInstant,
+            destination: $destination,
         );
 
         $expectedStructureDocument = <<<AUTHNREQUEST
@@ -643,7 +585,7 @@ AUTHNREQUEST;
 
         $this->assertXmlStringEqualsXmlString(
             $expectedStructure->ownerDocument->saveXML(),
-            $requestStructure->ownerDocument->saveXML()
+            $requestStructure->ownerDocument->saveXML(),
         );
     }
 
@@ -661,21 +603,10 @@ AUTHNREQUEST;
 
         // basic AuthnRequest
         $request = new AuthnRequest(
-            null,
-            null,
-            $nameIdPolicy,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            $issuer,
-            null,
-            $issueInstant,
-            $destination
+            nameIdPolicy: $nameIdPolicy,
+            issuer: $issuer,
+            issueInstant: $issueInstant,
+            destination: $destination,
         );
 
         $expectedStructureDocument = <<<AUTHNREQUEST
@@ -700,7 +631,7 @@ AUTHNREQUEST;
 
         $this->assertXmlStringEqualsXmlString(
             $expectedStructure->ownerDocument->saveXML(),
-            $requestStructure->ownerDocument->saveXML()
+            $requestStructure->ownerDocument->saveXML(),
         );
     }
 
@@ -763,21 +694,10 @@ AUTHNREQUEST;
 
         // basic AuthnRequest
         $request = new AuthnRequest(
-            null,
-            null,
-            null,
-            null,
-            $forceAuthn,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            $issuer,
-            null,
-            $issueInstant,
-            $destination
+            forceAuthn: $forceAuthn,
+            issuer: $issuer,
+            issueInstant: $issueInstant,
+            destination: $destination,
         );
 
         $expectedStructureDocument = <<<AUTHNREQUEST
@@ -802,7 +722,7 @@ AUTHNREQUEST;
 
         $this->assertXmlStringEqualsXmlString(
             $expectedStructure->ownerDocument->saveXML(),
-            $requestStructure->ownerDocument->saveXML()
+            $requestStructure->ownerDocument->saveXML(),
         );
     }
 
@@ -882,21 +802,10 @@ AUTHNREQUEST;
 
         // basic AuthnRequest
         $request = new AuthnRequest(
-            null,
-            null,
-            null,
-            null,
-            null,
-            $isPassive,
-            null,
-            null,
-            null,
-            null,
-            null,
-            $issuer,
-            null,
-            $issueInstant,
-            $destination
+            isPassive: $isPassive,
+            issuer: $issuer,
+            issueInstant: $issueInstant,
+            destination: $destination,
         );
 
         $expectedStructureDocument = <<<AUTHNREQUEST
@@ -921,7 +830,7 @@ AUTHNREQUEST;
 
         $this->assertXmlStringEqualsXmlString(
             $expectedStructure->ownerDocument->saveXML(),
-            $requestStructure->ownerDocument->saveXML()
+            $requestStructure->ownerDocument->saveXML(),
         );
     }
 
@@ -939,21 +848,10 @@ AUTHNREQUEST;
 
         // basic AuthnRequest
         $request = new AuthnRequest(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            $providerName,
-            $issuer,
-            null,
-            $issueInstant,
-            $destination
+            ProviderName: $providerName,
+            issuer: $issuer,
+            issueInstant: $issueInstant,
+            destination: $destination,
         );
 
         $expectedStructureDocument = <<<AUTHNREQUEST
@@ -978,7 +876,7 @@ AUTHNREQUEST;
 
         $this->assertXmlStringEqualsXmlString(
             $expectedStructure->ownerDocument->saveXML(),
-            $requestStructure->ownerDocument->saveXML()
+            $requestStructure->ownerDocument->saveXML(),
         );
     }
 
@@ -1025,21 +923,11 @@ AUTHNREQUEST;
 
         $this->expectException(ProtocolViolationException::class);
         new AuthnRequest(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            $assertionConsumerServiceIndex,
-            $protocolBinding,
-            null,
-            null,
-            $issuer,
-            null,
-            $issueInstant,
-            $destination
+            assertionConsumerServiceIndex: $assertionConsumerServiceIndex,
+            protocolBinding: $protocolBinding,
+            issuer: $issuer,
+            issueInstant: $issueInstant,
+            destination: $destination,
         );
     }
 
@@ -1059,21 +947,11 @@ AUTHNREQUEST;
 
         $this->expectException(ProtocolViolationException::class);
         new AuthnRequest(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            $assertionConsumerServiceURL,
-            $assertionConsumerServiceIndex,
-            null,
-            null,
-            null,
-            $issuer,
-            null,
-            $issueInstant,
-            $destination
+            assertionConsumerServiceURL: $assertionConsumerServiceURL,
+            assertionConsumerServiceIndex: $assertionConsumerServiceIndex,
+            issuer: $issuer,
+            issueInstant: $issueInstant,
+            destination: $destination,
         );
     }
 
@@ -1092,21 +970,11 @@ AUTHNREQUEST;
 
         // basic AuthnRequest
         $request = new AuthnRequest(
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            $assertionConsumerServiceURL,
-            null,
-            $protocolBinding,
-            null,
-            null,
-            $issuer,
-            null,
-            $issueInstant,
-            $destination
+            assertionConsumerServiceURL: $assertionConsumerServiceURL,
+            protocolBinding: $protocolBinding,
+            issuer: $issuer,
+            issueInstant: $issueInstant,
+            destination: $destination,
         );
 
         $expectedStructureDocument = <<<AUTHNREQUEST
@@ -1133,7 +1001,7 @@ AUTHNREQUEST;
 
         $this->assertXmlStringEqualsXmlString(
             $expectedStructure->ownerDocument->saveXML(),
-            $requestStructure->ownerDocument->saveXML()
+            $requestStructure->ownerDocument->saveXML(),
         );
     }
 
@@ -1233,36 +1101,21 @@ AUTHNREQUEST;
         $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
         $destination = 'https://tiqr.example.org/idp/profile/saml2/Redirect/SSO';
         $conditions = new Conditions(
-            null,
-            null,
-            [],
-            [
+            audienceRestriction: [
                 new AudienceRestriction(
                     [
                         new Audience('https://sp1.example.org'),
-                        new Audience('https://sp2.example.org')
-                    ]
-                )
-            ]
+                        new Audience('https://sp2.example.org'),
+                    ],
+                ),
+            ],
         );
 
         // basic AuthnRequest
         $request = new AuthnRequest(
-            null,
-            null,
-            null,
-            $conditions,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            $issuer,
-            null,
-            null,
-            $destination
+            conditions: $conditions,
+            issuer: $issuer,
+            destination: $destination,
         );
 
         $expectedStructureDocument = <<<AUTHNREQUEST

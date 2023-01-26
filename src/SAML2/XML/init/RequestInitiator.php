@@ -38,7 +38,7 @@ final class RequestInitiator extends AbstractEndpointType
     public function __construct(
         string $location,
         ?string $responseLocation = null,
-        array $attributes = []
+        array $attributes = [],
     ) {
         parent::__construct(self::NS, $location, $responseLocation, $attributes);
     }
@@ -77,7 +77,7 @@ final class RequestInitiator extends AbstractEndpointType
         return new static(
             $location,
             self::getAttribute($xml, 'ResponseLocation', null),
-            self::getAttributesNSFromXML($xml)
+            self::getAttributesNSFromXML($xml),
         );
     }
 }

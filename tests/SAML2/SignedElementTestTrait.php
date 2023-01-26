@@ -86,7 +86,7 @@ trait SignedElementTestTrait
                 //
                 $signer = (new SignatureAlgorithmFactory([]))->getAlgorithm(
                     $algorithm,
-                    PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY)
+                    PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
                 );
 
                 $keyInfo = new KeyInfo([
@@ -103,13 +103,13 @@ trait SignedElementTestTrait
                 $signed = $this->testedClass::fromXML($unsigned->toXML());
                 $this->assertEquals(
                     $algorithm,
-                    $signed->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm()
+                    $signed->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
                 );
 
                 // verify signature
                 $verifier = (new SignatureAlgorithmFactory([]))->getAlgorithm(
                     $signed->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
-                    PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY)
+                    PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY),
                 );
 
                 try {
@@ -126,7 +126,7 @@ trait SignedElementTestTrait
                 $this->assertEquals(
                     PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY),
                     $verified->getVerifyingKey(),
-                    'No validating certificate for algorithm: ' . $algorithm
+                    sprintf('No validating certificate for algorithm: %s', $algorithm),
                 );
 
                 //
@@ -150,7 +150,7 @@ trait SignedElementTestTrait
                 $this->assertEquals(
                     PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY),
                     $verified->getVerifyingKey(),
-                    'No validating certificate for algorithm: ' . $algorithm
+                    sprintf('No validating certificate for algorithm: %s', $algorithm),
                 );
 
                 //
@@ -158,7 +158,7 @@ trait SignedElementTestTrait
                 //
                 $signer = (new SignatureAlgorithmFactory([]))->getAlgorithm(
                     $algorithm,
-                    PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::OTHER_PRIVATE_KEY)
+                    PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::OTHER_PRIVATE_KEY),
                 );
                 $unsigned->sign($signer, C::C14N_EXCLUSIVE_WITHOUT_COMMENTS, null);
                 $signed = $this->testedClass::fromXML($unsigned->toXML());
@@ -179,7 +179,7 @@ trait SignedElementTestTrait
                 $this->assertEquals(
                     PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY),
                     $verified->getVerifyingKey(),
-                    'No validating certificate for algorithm: ' . $algorithm
+                    sprintf('No validating certificate for algorithm: %s', $algorithm),
                 );
             }
         }

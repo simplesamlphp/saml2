@@ -53,7 +53,7 @@ final class ResponseTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($response)
+            strval($response),
         );
     }
 
@@ -93,7 +93,7 @@ final class ResponseTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($response)
+            strval($response),
         );
     }
 

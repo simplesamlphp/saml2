@@ -90,7 +90,7 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
                 'Attempted to get privateKey by name "%s", found "%d" keys, where only one was expected. Please '
                 . 'verify that your configuration is correct',
                 $name,
-                $keyCount
+                $keyCount,
             ));
         }
 

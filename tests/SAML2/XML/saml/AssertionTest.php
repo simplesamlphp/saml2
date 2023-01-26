@@ -73,7 +73,7 @@ final class AssertionTest extends MockeryTestCase
         $this->testedClass = Assertion::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_Assertion.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_Assertion.xml',
         );
 
         $container = new MockContainer();
@@ -95,58 +95,59 @@ final class AssertionTest extends MockeryTestCase
             1314780665,
             1314780665,
             [],
-            [new AudienceRestriction([new Audience(C::ENTITY_SP)])]
+            [new AudienceRestriction([new Audience(C::ENTITY_SP)])],
         );
 
         // Create the AuthnStatement
         $authnStatement = new AuthnStatement(
-            new AuthnContext(
+            authnContext: new AuthnContext(
                 new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
                 null,
                 null
             ),
-            1314780665,
-            null,
-            '_93af655219464fb403b34436cfb0c5cb1d9a5502',
-            new SubjectLocality('127.0.0.1')
+            authnInstant: 1314780665,
+            sessionIndex: '_93af655219464fb403b34436cfb0c5cb1d9a5502',
+            subjectLocality: new SubjectLocality('127.0.0.1')
         );
 
         // Create the AttributeStatement
-        $attrStatement = new AttributeStatement(
-            [
-                new Attribute('urn:test:ServiceID', null, null, [new AttributeValue('1')]),
-                new Attribute('urn:test:EntityConcernedID', null, null, [new AttributeValue('1')]),
-                new Attribute('urn:test:EntityConcernedSubID', null, null, [new AttributeValue('1')])
-            ]
-        );
+        $attrStatement = new AttributeStatement([
+            new Attribute(
+                name: 'urn:test:ServiceID',
+                attributeValue: [new AttributeValue('1')],
+            ),
+            new Attribute(
+                name: 'urn:test:EntityConcernedID',
+                attributeValue: [new AttributeValue('1')],
+            ),
+            new Attribute(
+                name: 'urn:test:EntityConcernedSubID',
+                attributeValue: [new AttributeValue('1')],
+            ),
+        ]);
 
         // Create the Subject
         $subject = new Subject(
             new NameID(
-                'SomeNameIDValue',
-                null,
-                'https://sp.example.org/authentication/sp/metadata',
-                C::NAMEID_TRANSIENT,
-                null
+                value: 'SomeNameIDValue',
+                SPNameQualifier: 'https://sp.example.org/authentication/sp/metadata',
+                Format: C::NAMEID_TRANSIENT,
             ),
             [
                 new SubjectConfirmation(
                     'urn:oasis:names:tc:SAML:2.0:cm:bearer',
                     new NameID(
-                        'SomeOtherNameIDValue',
-                        null,
-                        'https://sp.example.org/authentication/sp/metadata',
-                        C::NAMEID_TRANSIENT,
-                        null
+                        value: 'SomeOtherNameIDValue',
+                        SPNameQualifier: 'https://sp.example.org/authentication/sp/metadata',
+                        Format: C::NAMEID_TRANSIENT,
                     ),
                     new SubjectConfirmationData(
-                        null,
-                        1314780665,
-                        'https://sp.example.org/authentication/sp/consume-assertion',
-                        '_13603a6565a69297e9809175b052d115965121c8'
-                    )
-                )
-            ]
+                        notOnOrAfter: 1314780665,
+                        recipient: 'https://sp.example.org/authentication/sp/consume-assertion',
+                        inResponseTo: '_13603a6565a69297e9809175b052d115965121c8',
+                    ),
+                ),
+            ],
         );
 
         // Create an assertion
@@ -156,12 +157,12 @@ final class AssertionTest extends MockeryTestCase
             5611,
             $subject,
             $conditions,
-            [$authnStatement, $attrStatement]
+            [$authnStatement, $attrStatement],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($assertion)
+            strval($assertion),
         );
     }
 
@@ -238,14 +239,13 @@ XML;
 
         // Create Conditions
         $conditions = new Conditions(
-            1234567880,
-            1234567990,
-            [],
-            [
+            notBefore: 1234567880,
+            notOnOrAfter: 1234567990,
+            audienceRestriction: [
                 new AudienceRestriction(
-                    [new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)]
-                )
-            ]
+                    [new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)],
+                ),
+            ],
         );
 
         // Create AuthnStatement
@@ -254,29 +254,47 @@ XML;
                 new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                 null,
                 new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml'),
-                [new AuthenticatingAuthority(C::ENTITY_IDP), new AuthenticatingAuthority(C::ENTITY_OTHER)]
+                [
+                    new AuthenticatingAuthority(C::ENTITY_IDP),
+                    new AuthenticatingAuthority(C::ENTITY_OTHER),
+                ],
             ),
             1234567890 - 1,
             1234568890 + 200,
             'idx1',
-            new SubjectLocality('127.0.0.1', 'no.place.like.home')
+            new SubjectLocality('127.0.0.1', 'no.place.like.home'),
         );
 
         // Create AttributeStatement
         $attributeStatement = new AttributeStatement(
             // Attribute
             [
-                new Attribute('name1', null, null, [new AttributeValue('value1'), new AttributeValue('value2')]),
-                new Attribute('name2', C::NAMEFORMAT_UNSPECIFIED, null, [new AttributeValue(2)]),
-                new Attribute('name3', C::NAMEFORMAT_BASIC, null, [new AttributeValue(null)])
+                new Attribute(
+                    name: 'name1',
+                    attributeValue: [new AttributeValue('value1'), new AttributeValue('value2')],
+                ),
+                new Attribute(
+                    name: 'name2',
+                    nameFormat: C::NAMEFORMAT_UNSPECIFIED,
+                    attributeValue: [new AttributeValue(2)],
+                ),
+                new Attribute(
+                    name: 'name3',
+                    nameFormat: C::NAMEFORMAT_BASIC,
+                    attributeValue: [new AttributeValue(null)],
+                ),
             ],
-            // EncryptedAttribute
-            []
         );
 
         // Create an assertion
         $statements = [$authnStatement, $attributeStatement];
-        $assertion = new Assertion($issuer, '_123abc', 1234567890, null, $conditions, $statements);
+        $assertion = new Assertion(
+            issuer: $issuer,
+            id: '_123abc',
+            issueInstant: 1234567890,
+            conditions: $conditions,
+            statements: $statements,
+        );
 
         $assertionElement = $assertion->toXML()->ownerDocument?->saveXML();
 
@@ -290,7 +308,7 @@ XML;
         $authnStatement = $authnStatements[0];
         $this->assertEquals(
             'https://example.org/relative/path/to/document.xml',
-            $authnStatement->getAuthnContext()->getAuthnContextDeclRef()?->getContent()
+            $authnStatement->getAuthnContext()->getAuthnContextDeclRef()?->getContent(),
         );
         $this->assertEquals('_123abc', $assertionToVerify->getId());
         $this->assertEquals(1234567890, $assertionToVerify->getIssueInstant());
@@ -335,25 +353,20 @@ XML;
 
         // Create Conditions
         $conditions = new Conditions(
-            null,
-            null,
-            [],
-            [
+            audienceRestriction: [
                 new AudienceRestriction(
-                    [C::ENTITY_SP, C::ENTITY_OTHER]
-                )
-            ]
+                    [C::ENTITY_SP, C::ENTITY_OTHER],
+                ),
+            ],
         );
 
         // Create AuthnStatement
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
-                null,
-                null,
-                [C::ENTITY_IDP, C::ENTITY_OTHER]
+                authnContextClassRef: new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
+                authenticatingAuthorities: [C::ENTITY_IDP, C::ENTITY_OTHER]
             ),
-            time()
+            time(),
         );
 
         // Create AttributeStatement
@@ -361,27 +374,37 @@ XML;
             // Attribute
             [
                 new Attribute(
-                    'name1',
-                    null,
-                    null,
-                    [new AttributeValue('value1'), new AttributeValue(123), new AttributeValue('2017-31-12')]
+                    name: 'name1',
+                    attributeValue: [
+                        new AttributeValue('value1'),
+                        new AttributeValue(123),
+                        new AttributeValue('2017-31-12'),
+                    ],
                 ),
-                new Attribute('name2', null, null, [new AttributeValue(2)]),
-                new Attribute('name3', null, null, [new AttributeValue(1234), new AttributeValue('+2345')])
+                new Attribute(
+                    name: 'name2',
+                    attributeValue: [new AttributeValue(2)],
+                ),
+                new Attribute(
+                    name: 'name3',
+                    attributeValue: [new AttributeValue(1234), new AttributeValue('+2345')],
+                ),
             ],
-            // EncryptedAttribute
-            []
         );
 
         // Create an assertion
-        $assertion = new Assertion($issuer, null, null, null, $conditions, [$authnStatement, $attributeStatement]);
+        $assertion = new Assertion(
+            issuer: $issuer,
+            conditions: $conditions,
+            statements: [$authnStatement, $attributeStatement],
+        );
 
 
         // set xs:type for first and third name1 values, and all name3 values.
         // second name1 value and all name2 values will use default behaviour
         $assertion->setAttributesValueTypes([
             "name1" => ["xs:string", null, "xs:date"],
-            "name3" => "xs:decimal"
+            "name3" => "xs:decimal",
         ]);
 
         $assertionElement = $assertion->toXML()->ownerDocument->saveXML();
@@ -482,7 +505,7 @@ XML
 
         $this->assertEquals(
             C::SIG_RSA_SHA256,
-            $signedAssertion->getSignature()?->getSignedInfo()->getSignatureMethod()?->getAlgorithm()
+            $signedAssertion->getSignature()?->getSignedInfo()->getSignatureMethod()?->getAlgorithm(),
         );
         $this->assertTrue($signedAssertion->wasSignedAtConstruction());
     }
@@ -1028,10 +1051,7 @@ XML;
 
         // Create the Conditions
         $conditions = new Conditions(
-            null,
-            null,
-            [],
-            [
+            audienceRestriction: [
                 new AudienceRestriction(
                     [new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)]
                 )
@@ -1039,7 +1059,10 @@ XML;
         );
 
         // Create a Subject
-        $nameId = new NameID("just_a_basic_identifier", null, null, C::NAMEID_TRANSIENT);
+        $nameId = new NameID(
+            value: "just_a_basic_identifier",
+            Format: C::NAMEID_TRANSIENT,
+        );
         $this->assertInstanceOf(NameID::class, $nameId);
 
         $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
@@ -1055,19 +1078,17 @@ XML;
             new AuthnContext(
                 new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA2),
                 null,
-                null
+                null,
             ),
-            time()
+            time(),
         );
 
         // Create an assertion
         $assertion = new Assertion(
-            $issuer,
-            null,
-            null,
-            $subject,
-            $conditions,
-            [$authnStatement]
+            issuer: $issuer,
+            subject: $subject,
+            conditions: $conditions,
+            statements: [$authnStatement],
         );
 
         // Marshall it to a \DOMElement
@@ -1097,10 +1118,7 @@ XML;
 
         // Create the conditions
         $conditions = new Conditions(
-            null,
-            null,
-            [],
-            [new AudienceRestriction([new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)])]
+            audienceRestriction: [new AudienceRestriction([new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)])]
         );
 
         // Create AttributeStatement
@@ -1108,15 +1126,16 @@ XML;
             // Attribute
             [
                 new Attribute(
-                    'name1',
-                    C::NAMEFORMAT_UNSPECIFIED,
-                    null,
-                    [new AttributeValue('value1'), new AttributeValue('value2')]
+                    name: 'name1',
+                    nameFormat: C::NAMEFORMAT_UNSPECIFIED,
+                    attributeValue: [new AttributeValue('value1'), new AttributeValue('value2')],
                 ),
-                new Attribute('name2', C::NAMEFORMAT_UNSPECIFIED, null, [new AttributeValue('value3')]),
+                new Attribute(
+                    name: 'name2',
+                    nameFormat: C::NAMEFORMAT_UNSPECIFIED,
+                    attributeValue: [new AttributeValue('value3')],
+                ),
             ],
-            // EncryptedAttribute
-            []
         );
 
         // Create the statements
@@ -1124,9 +1143,9 @@ XML;
             new AuthnContext(
                 new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_URN),
                 null,
-                null
+                null,
             ),
-            time()
+            time(),
         );
 
         // Create Subject
@@ -1137,7 +1156,12 @@ XML;
         $statements = [$authnStatement, $attributeStatement];
 
         // Create a signed assertion
-        $assertion = new Assertion($issuer, null, null, $subject, $conditions, $statements);
+        $assertion = new Assertion(
+            issuer: $issuer,
+            subject: $subject,
+            conditions: $conditions,
+            statements: $statements,
+        );
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
             C::SIG_RSA_SHA256,
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
@@ -1158,7 +1182,7 @@ XML;
         $assertionElements = XPath::xpQuery(
             $assertionElement,
             './saml_assertion:Issuer/following-sibling::*',
-            $xpCache
+            $xpCache,
         );
         $this->assertCount(5, $assertionElements);
         $this->assertEquals('ds:Signature', $assertionElements[0]->tagName);
@@ -1214,7 +1238,7 @@ XML;
 
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encass->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
-            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::OTHER_PRIVATE_KEY)
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::OTHER_PRIVATE_KEY),
         );
 
         $decrypted = $encass->decrypt($decryptor);

@@ -70,7 +70,7 @@ class SpIsValidAudience implements
         $result->addError(sprintf(
             'The configured Service Provider [%s] is not a valid audience for the assertion. Audiences: [%s]',
             strval($entityId),
-            implode(', ', $all)
+            implode(', ', $all),
         ));
     }
 }

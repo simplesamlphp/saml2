@@ -23,59 +23,41 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
 final class AffiliationDescriptor extends AbstractMetadataDocument
 {
     /**
-     * The affiliationOwnerID.
-     *
-     * @var string
-     */
-    public string $affiliationOwnerID;
-
-    /**
-     * The AffiliateMember(s).
-     *
-     * Array of \SimpleSAML\SAML2\XML\md\AffiliateMember elements.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AffiliateMember[]
-     */
-    protected array $AffiliateMembers = [];
-
-    /**
-     * KeyDescriptor elements.
-     *
-     * Array of \SimpleSAML\SAML2\XML\md\KeyDescriptor elements.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\KeyDescriptor[]
-     */
-    protected array $KeyDescriptors = [];
-
-
-    /**
      * Generic constructor for SAML metadata documents.
      *
-     * @param string $ownerID The ID of the owner of this affiliation.
-     * @param \SimpleSAML\SAML2\XML\md\AffiliateMember[] $members A non-empty array of members of this affiliation.
+     * @param string $affiliationOwnerId The ID of the owner of this affiliation.
+     * @param \SimpleSAML\SAML2\XML\md\AffiliateMember[] $affiliateMember
+     *   A non-empty array of members of this affiliation.
      * @param string|null $ID The ID for this document. Defaults to null.
      * @param int|null $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to an empty array.
-     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $KeyDescriptor
      *   An optional array of KeyDescriptors. Defaults to an empty array.
-     * @param \DOMAttr[] $namespacedAttributes
+     * @param \DOMAttr[] $namespacedAttribute
      */
     public function __construct(
-        string $ownerID,
-        array $members,
+        protected string $affiliationOwnerId,
+        protected array $affiliateMember,
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
-        array $keyDescriptors = [],
-        array $namespacedAttributes = []
+        protected array $keyDescriptor = [],
+        array $namespacedAttribute = [],
     ) {
-        parent::__construct($ID, $validUntil, $cacheDuration, $extensions, $namespacedAttributes);
+        Assert::validURI($affiliationOwnerId, SchemaViolationException::class); // Covers the empty string
+        Assert::maxLength(
+            $affiliationOwnerId,
+            C::ENTITYID_MAX_LENGTH,
+            sprintf('The AffiliationOwnerID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
+            ProtocolViolationException::class,
+        );
+        Assert::notEmpty($affiliateMember, 'List of affiliated members must not be empty.');
+        Assert::allIsInstanceOf($affiliateMember, AffiliateMember::class);
+        Assert::allIsInstanceOf($keyDescriptor, KeyDescriptor::class);
 
-        $this->setAffiliationOwnerID($ownerID);
-        $this->setAffiliateMembers($members);
-        $this->setKeyDescriptors($keyDescriptors);
+        parent::__construct($ID, $validUntil, $cacheDuration, $extensions, $namespacedAttribute);
     }
 
 
@@ -84,28 +66,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      *
      * @return string
      */
-    public function getAffiliationOwnerID(): string
+    public function getAffiliationOwnerId(): string
     {
-        return $this->affiliationOwnerID;
-    }
-
-
-    /**
-     * Set the value of the affiliationOwnerId-property
-     *
-     * @param string $affiliationOwnerId
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setAffiliationOwnerID(string $affiliationOwnerId): void
-    {
-        Assert::validURI($affiliationOwnerId, SchemaViolationException::class); // Covers the empty string
-        Assert::maxLength(
-            $affiliationOwnerId,
-            C::ENTITYID_MAX_LENGTH,
-            sprintf('The AffiliationOwnerID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
-            ProtocolViolationException::class
-        );
-        $this->affiliationOwnerID = $affiliationOwnerId;
+        return $this->affiliationOwnerId;
     }
 
 
@@ -114,29 +77,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      *
      * @return \SimpleSAML\SAML2\XML\md\AffiliateMember[]
      */
-    public function getAffiliateMembers(): array
+    public function getAffiliateMember(): array
     {
-        return $this->AffiliateMembers;
-    }
-
-
-    /**
-     * Set the value of the AffiliateMember-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AffiliateMember[] $affiliateMembers
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setAffiliateMembers(array $affiliateMembers): void
-    {
-        Assert::notEmpty(
-            $affiliateMembers,
-            'List of affiliated members must not be empty.',
-        );
-        Assert::allIsInstanceOf(
-            $affiliateMembers,
-            AffiliateMember::class,
-        );
-        $this->AffiliateMembers = $affiliateMembers;
+        return $this->affiliateMember;
     }
 
 
@@ -145,24 +88,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      *
      * @return \SimpleSAML\SAML2\XML\md\KeyDescriptor[]
      */
-    public function getKeyDescriptors(): array
+    public function getKeyDescriptor(): array
     {
-        return $this->KeyDescriptors;
-    }
-
-
-    /**
-     * Set the value of the KeyDescriptor-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors
-     */
-    protected function setKeyDescriptors(array $keyDescriptors): void
-    {
-        Assert::allIsInstanceOf(
-            $keyDescriptors,
-            KeyDescriptor::class,
-        );
-        $this->KeyDescriptors = $keyDescriptors;
+        return $this->keyDescriptor;
     }
 
 
@@ -194,7 +122,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             $orgs,
             1,
             'More than one Organization found in this descriptor',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $extensions = Extensions::getChildrenOfClass($xml);
@@ -202,7 +130,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             $extensions,
             1,
             'Only one md:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $signature = Signature::getChildrenOfClass($xml);
@@ -210,7 +138,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             $signature,
             1,
             'Only one ds:Signature element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $afd = new static(
@@ -221,7 +149,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             self::getAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             $keyDescriptors,
-            self::getAttributesNSFromXML($xml)
+            self::getAttributesNSFromXML($xml),
         );
 
         if (!empty($signature)) {
@@ -242,13 +170,13 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toUnsignedXML($parent);
-        $e->setAttribute('affiliationOwnerID', $this->getAffiliationOwnerID());
+        $e->setAttribute('affiliationOwnerID', $this->getAffiliationOwnerId());
 
-        foreach ($this->getAffiliateMembers() as $am) {
+        foreach ($this->getAffiliateMember() as $am) {
             $am->toXML($e);
         }
 
-        foreach ($this->getKeyDescriptors() as $kd) {
+        foreach ($this->getKeyDescriptor() as $kd) {
             $kd->toXML($e);
         }
 

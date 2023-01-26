@@ -49,7 +49,7 @@ final class AffiliationDescriptorTest extends TestCase
         $this->testedClass = AffiliationDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_AffiliationDescriptor.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_AffiliationDescriptor.xml',
         );
     }
 
@@ -63,27 +63,26 @@ final class AffiliationDescriptorTest extends TestCase
     public function testMarshalling(): void
     {
         $affiliationDescriptor = new AffiliationDescriptor(
-            C::ENTITY_IDP,
-            [new AffiliateMember(C::ENTITY_SP), new AffiliateMember(C::ENTITY_OTHER)],
-            'TheID',
-            1234567890,
-            'PT5000S',
-            null,
-            [
+            affiliationOwnerId: C::ENTITY_IDP,
+            affiliateMember: [new AffiliateMember(C::ENTITY_SP), new AffiliateMember(C::ENTITY_OTHER)],
+            ID: 'TheID',
+            validUntil: 1234567890,
+            cacheDuration: 'PT5000S',
+            keyDescriptor: [
                 new KeyDescriptor(
                     new KeyInfo(
                         [
-                            new KeyName('IdentityProvider.com SSO Key')
-                        ]
+                            new KeyName('IdentityProvider.com SSO Key'),
+                        ],
                     ),
-                    'signing'
-                )
-            ]
+                    'signing',
+                ),
+            ],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($affiliationDescriptor)
+            strval($affiliationDescriptor),
         );
     }
 
@@ -95,13 +94,8 @@ final class AffiliationDescriptorTest extends TestCase
     {
         $this->expectException(SchemaViolationException::class);
         new AffiliationDescriptor(
-            '',
-            [new AffiliateMember(C::ENTITY_SP), new AffiliateMember(C::ENTITY_OTHER)],
-            'TheID',
-            1234567890,
-            'PT5000S',
-            null,
-            [Utils::createKeyDescriptor("testCert")]
+            affiliationOwnerId: '',
+            affiliateMember: [new AffiliateMember(C::ENTITY_SP), new AffiliateMember(C::ENTITY_OTHER)],
         );
     }
 
@@ -114,13 +108,8 @@ final class AffiliationDescriptorTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('List of affiliated members must not be empty.');
         new AffiliationDescriptor(
-            C::ENTITY_IDP,
-            [],
-            'TheID',
-            1234567890,
-            'PT5000S',
-            null,
-            [Utils::createKeyDescriptor("testCert")]
+            affiliationOwnerId: C::ENTITY_IDP,
+            affiliateMember: [],
         );
     }
 
@@ -137,7 +126,7 @@ final class AffiliationDescriptorTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($affiliationDescriptor)
+            strval($affiliationDescriptor),
         );
     }
 

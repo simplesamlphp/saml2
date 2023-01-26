@@ -23,5 +23,5 @@ $unsignedAssertion->sign($signer);
 echo str_replace(
     'SomeNameIDValue',
     'SomeNameID<!-- some random comment-->Value',
-    strval($unsignedAssertion->toXML()->ownerDocument->saveXML())
+    strval($unsignedAssertion->toXML()->ownerDocument->saveXML()),
 );

@@ -38,7 +38,7 @@ final class NameIDMappingServiceTest extends TestCase
         $this->testedClass = NameIDMappingService::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_NameIDMappingService.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_NameIDMappingService.xml',
         );
     }
 
@@ -55,7 +55,7 @@ final class NameIDMappingServiceTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($nidmsep)
+            strval($nidmsep),
         );
     }
 
@@ -67,7 +67,7 @@ final class NameIDMappingServiceTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
-            'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.'
+            'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.',
         );
         new NameIDMappingService(C::BINDING_HTTP_POST, C::LOCATION_A, 'https://response.location/');
     }
@@ -85,7 +85,7 @@ final class NameIDMappingServiceTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($nidmsep)
+            strval($nidmsep),
         );
     }
 
@@ -97,7 +97,7 @@ final class NameIDMappingServiceTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
-            'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.'
+            'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.',
         );
 
         $this->xmlRepresentation->documentElement->setAttribute('ResponseLocation', 'https://response.location/');

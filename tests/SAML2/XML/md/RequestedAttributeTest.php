@@ -39,7 +39,7 @@ final class RequestedAttributeTest extends TestCase
         $this->testedClass = RequestedAttribute::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_RequestedAttribute.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_RequestedAttribute.xml',
         );
     }
 
@@ -57,12 +57,12 @@ final class RequestedAttributeTest extends TestCase
             true,
             C::NAMEFORMAT_URI,
             'Attribute',
-            [new AttributeValue('value1')]
+            [new AttributeValue('value1')],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($ra)
+            strval($ra),
         );
     }
 
@@ -93,7 +93,7 @@ final class RequestedAttributeTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($ra)
+            strval($ra),
         );
     }
 

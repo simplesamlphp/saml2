@@ -33,7 +33,7 @@ final class IDPEntryTest extends TestCase
         $this->testedClass = IDPentry::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_IDPEntry.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_IDPEntry.xml',
         );
     }
 
@@ -46,7 +46,7 @@ final class IDPEntryTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($entry)
+            strval($entry),
         );
     }
 
@@ -58,7 +58,7 @@ final class IDPEntryTest extends TestCase
         $document->documentElement->removeAttribute('Name');
         $document->documentElement->removeAttribute('Loc');
 
-        $entry = new IDPEntry('urn:some:requester', null, null);
+        $entry = new IDPEntry('urn:some:requester');
 
         $this->assertEquals('urn:some:requester', $entry->getProviderID());
         $this->assertNull($entry->getName());
@@ -66,7 +66,7 @@ final class IDPEntryTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($document->documentElement),
-            strval($entry)
+            strval($entry),
         );
     }
 
@@ -79,7 +79,7 @@ final class IDPEntryTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($entry)
+            strval($entry),
         );
     }
 }

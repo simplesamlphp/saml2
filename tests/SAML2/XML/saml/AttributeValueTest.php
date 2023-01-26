@@ -37,7 +37,7 @@ final class AttributeValueTest extends TestCase
         $this->testedClass = AttributeValue::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AttributeValue.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_AttributeValue.xml',
         );
     }
 
@@ -70,7 +70,7 @@ final class AttributeValueTest extends TestCase
         $this->assertEquals('xs:integer', $av->getXsiType());
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($av)
+            strval($av),
         );
     }
 
@@ -87,7 +87,7 @@ final class AttributeValueTest extends TestCase
 XML;
         $this->assertEquals(
             $xml,
-            strval($av)
+            strval($av),
         );
     }
 
@@ -103,7 +103,7 @@ XML;
         $this->xmlRepresentation->documentElement->textContent = '';
         $this->assertEqualXMLStructure(
             $this->xmlRepresentation->documentElement,
-            $av->toXML()
+            $av->toXML(),
         );
         $this->assertEquals('', $av->getValue());
         $this->assertEquals('xs:string', $av->getXsiType());
@@ -124,7 +124,7 @@ XML;
         $this->assertEquals(2, $av->getValue());
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($av)
+            strval($av),
         );
     }
 
@@ -172,7 +172,7 @@ XML
 
         $this->assertEquals(
             $document->saveXML($document->documentElement),
-            strval($attributeValue)
+            strval($attributeValue),
         );
     }
      */

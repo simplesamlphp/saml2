@@ -32,7 +32,7 @@ final class SessionIndexTest extends TestCase
         $this->testedClass = SessionIndex::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_SessionIndex.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_SessionIndex.xml',
         );
     }
 
@@ -48,7 +48,7 @@ final class SessionIndexTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($sessionIndex)
+            strval($sessionIndex),
         );
     }
 
@@ -61,7 +61,7 @@ final class SessionIndexTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($sessionIndex)
+            strval($sessionIndex),
         );
     }
 }

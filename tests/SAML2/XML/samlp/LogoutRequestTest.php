@@ -65,7 +65,7 @@ final class LogoutRequestTest extends MockeryTestCase
         $this->testedClass = LogoutRequest::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_LogoutRequest.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_LogoutRequest.xml',
         );
     }
 
@@ -76,7 +76,10 @@ final class LogoutRequestTest extends MockeryTestCase
     {
         $nameId = new NameID('NameIDValue');
 
-        $logoutRequest = new LogoutRequest($nameId, null, null, [new SessionIndex('SessionIndexValue')]);
+        $logoutRequest = new LogoutRequest(
+            identifier: $nameId,
+            sessionIndexes: [new SessionIndex('SessionIndexValue')],
+        );
 
         $logoutRequestElement = $logoutRequest->toXML();
         $this->assertEquals('LogoutRequest', $logoutRequestElement->localName);
@@ -94,10 +97,8 @@ final class LogoutRequestTest extends MockeryTestCase
 
         $nameId = new NameID('NameIDValue');
         $logoutRequest = new LogoutRequest(
-            $nameId,
-            null,
-            null,
-            [new SessionIndex('SessionIndexValue1'), new SessionIndex('SessionIndexValue2')]
+            identifier: $nameId,
+            sessionIndexes: [new SessionIndex('SessionIndexValue1'), new SessionIndex('SessionIndexValue2')],
         );
         $logoutRequestElement = $logoutRequest->toXML();
 
@@ -115,7 +116,10 @@ final class LogoutRequestTest extends MockeryTestCase
     {
         $nameId = new NameID('NameIDValue');
 
-        $logoutRequest = new LogoutRequest($nameId, null, null, [new SessionIndex('SessionIndexValue')]);
+        $logoutRequest = new LogoutRequest(
+            identifier: $nameId,
+            sessionIndexes: [new SessionIndex('SessionIndexValue')],
+        );
 
         $logoutRequestElement = $logoutRequest->toXML();
 
@@ -129,7 +133,7 @@ final class LogoutRequestTest extends MockeryTestCase
         $logoutRequestElements = XPath::xpQuery(
             $logoutRequestElement,
             './saml_assertion:NameID/following-sibling::*',
-            $xpCache
+            $xpCache,
         );
 
         $this->assertCount(1, $logoutRequestElements);
@@ -160,7 +164,7 @@ final class LogoutRequestTest extends MockeryTestCase
 
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
-            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY)
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),
         );
         $identifier = $encid->decrypt($decryptor);
         $this->assertInstanceOf(NameID::class, $identifier);
@@ -173,7 +177,7 @@ final class LogoutRequestTest extends MockeryTestCase
     public function testEncryptedNameId(): void
     {
         $eid = EncryptedID::fromXML(DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedID.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedID.xml',
         )->documentElement);
 
         $logoutRequest = new LogoutRequest($eid);
@@ -183,8 +187,8 @@ final class LogoutRequestTest extends MockeryTestCase
             XPath::xpQuery(
                 $logoutRequestElement,
                 './saml_assertion:EncryptedID/xenc:EncryptedData',
-                XPath::getXPath($logoutRequestElement)
-            )
+                XPath::getXPath($logoutRequestElement),
+            ),
         );
     }
 
@@ -235,7 +239,7 @@ XML;
 
         $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage(
-            "Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>."
+            "Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.",
         );
         LogoutRequest::fromXML($this->logoutRequestElement);
     }
@@ -376,10 +380,13 @@ XML;
         $nameId = new NameID('test');
         $sessionIndexes = [
             new SessionIndex('SessionIndexValue1'),
-            new SessionIndex('SessionIndexValue2')
+            new SessionIndex('SessionIndexValue2'),
         ];
 
-        $logoutRequest = new LogoutRequest($nameId, null, null, $sessionIndexes);
+        $logoutRequest = new LogoutRequest(
+            identifier: $nameId,
+            sessionIndexes: $sessionIndexes,
+        );
 
         $sessionIndexes = $logoutRequest->getSessionIndexes();
         $this->assertCount(2, $sessionIndexes);

@@ -27,11 +27,6 @@ final class NameIdDecryptionTransformer implements
     ServiceProviderAware
 {
     /**
-     * @var \SimpleSAML\SAML2\Certificate\PrivateKeyLoader
-     */
-    private PrivateKeyLoader $privateKeyLoader;
-
-    /**
      * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
      */
     private IdentityProvider $identityProvider;
@@ -41,11 +36,6 @@ final class NameIdDecryptionTransformer implements
      */
     private ServiceProvider $serviceProvider;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private LoggerInterface $logger;
-
 
     /**
      * Constructor for NameIdDecryptionTransformer
@@ -54,8 +44,8 @@ final class NameIdDecryptionTransformer implements
      * @param \SimpleSAML\SAML2\Certificate\PrivateKeyLoader $privateKeyLoader
      */
     public function __construct(
-        LoggerInterface $logger,
-        PrivateKeyLoader $privateKeyLoader
+        private LoggerInterface $logger,
+        private PrivateKeyLoader $privateKeyLoader,
     ) {
         $this->logger = $logger;
         $this->privateKeyLoader = $privateKeyLoader;
@@ -97,14 +87,14 @@ final class NameIdDecryptionTransformer implements
                     'Decrypting assertion NameId with key "#%d" failed, "%s" thrown: "%s"',
                     $index,
                     get_class($e),
-                    $e->getMessage()
+                    $e->getMessage(),
                 ));
             }
         }
 
         if ($decrypted === null) {
             throw new NotDecryptedException(
-                'Could not decrypt the assertion NameId with the configured keys, see the debug log for information'
+                'Could not decrypt the assertion NameId with the configured keys, see the debug log for information',
             );
         }
 
@@ -114,7 +104,7 @@ final class NameIdDecryptionTransformer implements
             $assertion->getIssueInstant(),
             new Subject($decrypted, $subject->getSubjectConfirmation()),
             $assertion->getConditions(),
-            $assertion->getStatements()
+            $assertion->getStatements(),
         );
     }
 

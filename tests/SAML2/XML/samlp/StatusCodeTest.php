@@ -35,7 +35,7 @@ final class StatusCodeTest extends TestCase
         $this->testedClass = StatusCode::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_StatusCode.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_StatusCode.xml',
         );
     }
 
@@ -48,13 +48,13 @@ final class StatusCodeTest extends TestCase
         $statusCode = new StatusCode(
             C::STATUS_RESPONDER,
             [
-                new StatusCode(C::STATUS_REQUEST_DENIED)
-            ]
+                new StatusCode(C::STATUS_REQUEST_DENIED),
+            ],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($statusCode)
+            strval($statusCode),
         );
     }
 
@@ -67,7 +67,7 @@ final class StatusCodeTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($statusCode)
+            strval($statusCode),
         );
     }
 }

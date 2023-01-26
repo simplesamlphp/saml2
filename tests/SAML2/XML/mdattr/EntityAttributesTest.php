@@ -56,7 +56,7 @@ final class EntityAttributesTest extends TestCase
         $this->testedClass = EntityAttributes::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdattr_EntityAttributes.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdattr_EntityAttributes.xml',
         );
     }
 
@@ -66,14 +66,13 @@ final class EntityAttributesTest extends TestCase
     public function testMarshalling(): void
     {
         $attribute1 = new Attribute(
-            'attrib1',
-            C::NAMEFORMAT_URI,
-            null,
-            [
+            name: 'attrib1',
+            nameFormat: C::NAMEFORMAT_URI,
+            attributeValue: [
                 new AttributeValue('is'),
                 new AttributeValue('really'),
                 new AttributeValue('cool'),
-            ]
+            ],
         );
 
         // Create an Issuer
@@ -81,54 +80,54 @@ final class EntityAttributesTest extends TestCase
 
         // Create the conditions
         $conditions = new Conditions(
-            null,
-            null,
-            [],
-            [new AudienceRestriction([new Audience(C::ENTITY_IDP), new Audience(C::ENTITY_URN)])]
+            condition: [],
+            audienceRestriction: [
+                new AudienceRestriction([
+                    new Audience(C::ENTITY_IDP),
+                    new Audience(C::ENTITY_URN),
+                ]),
+            ],
         );
 
         // Create the statements
-        $attrStatement = new AttributeStatement(
-            [
-                new Attribute(
-                    'urn:mace:dir:attribute-def:uid',
-                    C::NAMEFORMAT_URI,
-                    null,
-                    [
-                        new AttributeValue('student2')
-                    ]
-                ),
-                new Attribute(
-                    'urn:mace:terena.org:attribute-def:schacHomeOrganization',
-                    C::NAMEFORMAT_URI,
-                    null,
-                    [
-                        new AttributeValue('university.example.org'),
-                        new AttributeValue('bbb.cc')
-                    ]
-                ),
-                new Attribute(
-                    'urn:schac:attribute-def:schacPersonalUniqueCode',
-                    C::NAMEFORMAT_URI,
-                    null,
-                    [
-                        new AttributeValue('urn:schac:personalUniqueCode:nl:local:uvt.nl:memberid:524020'),
-                        new AttributeValue('urn:schac:personalUniqueCode:nl:local:surfnet.nl:studentid:12345')
-                    ]
-                ),
-                new Attribute(
-                    'urn:mace:dir:attribute-def:eduPersonAffiliation',
-                    C::NAMEFORMAT_URI,
-                    null,
-                    [
-                        new AttributeValue('member'),
-                        new AttributeValue('student')
-                    ]
-                )
-            ]
-        );
+        $attrStatement = new AttributeStatement([
+            new Attribute(
+                name: 'urn:mace:dir:attribute-def:uid',
+                nameFormat: C::NAMEFORMAT_URI,
+                attributeValue: [
+                    new AttributeValue('student2'),
+                ],
+            ),
+            new Attribute(
+                name: 'urn:mace:terena.org:attribute-def:schacHomeOrganization',
+                nameFormat: C::NAMEFORMAT_URI,
+                attributeValue: [
+                    new AttributeValue('university.example.org'),
+                    new AttributeValue('bbb.cc'),
+                ],
+            ),
+            new Attribute(
+                name: 'urn:schac:attribute-def:schacPersonalUniqueCode',
+                nameFormat: C::NAMEFORMAT_URI,
+                attributeValue: [
+                    new AttributeValue('urn:schac:personalUniqueCode:nl:local:uvt.nl:memberid:524020'),
+                    new AttributeValue('urn:schac:personalUniqueCode:nl:local:surfnet.nl:studentid:12345'),
+                ],
+            ),
+            new Attribute(
+                name: 'urn:mace:dir:attribute-def:eduPersonAffiliation',
+                nameFormat: C::NAMEFORMAT_URI,
+                attributeValue: [
+                    new AttributeValue('member'),
+                    new AttributeValue('student'),
+                ],
+            ),
+        ]);
 
-        $subject = new Subject(new NameID('some:entity', null, null, C::NAMEID_ENTITY));
+        $subject = new Subject(new NameID(
+            value: 'some:entity',
+            Format: C::NAMEID_ENTITY,
+        ));
 
         // Create an assertion
         $unsignedAssertion = new Assertion(
@@ -149,14 +148,13 @@ final class EntityAttributesTest extends TestCase
         $signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
 
         $attribute2 = new Attribute(
-            'foo',
-            'urn:simplesamlphp:v1:simplesamlphp',
-            null,
-            [
+            name: 'foo',
+            nameFormat: 'urn:simplesamlphp:v1:simplesamlphp',
+            attributeValue: [
                 new AttributeValue('is'),
                 new AttributeValue('really'),
-                new AttributeValue('cool')
-            ]
+                new AttributeValue('cool'),
+            ],
         );
 
         $entityAttributes = new EntityAttributes([$attribute1]);
@@ -165,7 +163,7 @@ final class EntityAttributesTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($entityAttributes)
+            strval($entityAttributes),
         );
     }
 
@@ -178,7 +176,7 @@ final class EntityAttributesTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($entityAttributes)
+            strval($entityAttributes),
         );
     }
 }

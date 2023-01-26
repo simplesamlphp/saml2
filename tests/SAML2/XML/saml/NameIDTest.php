@@ -38,7 +38,7 @@ final class NameIDTest extends TestCase
         $this->testedClass = NameID::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_NameID.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_NameID.xml',
         );
     }
 
@@ -55,12 +55,12 @@ final class NameIDTest extends TestCase
             'TheNameQualifier',
             'TheSPNameQualifier',
             'urn:the:format',
-            'TheSPProvidedID'
+            'TheSPProvidedID',
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($nameId)
+            strval($nameId),
         );
     }
 
@@ -76,7 +76,7 @@ final class NameIDTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($nameId)
+            strval($nameId),
         );
     }
 }

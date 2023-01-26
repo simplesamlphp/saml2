@@ -42,7 +42,7 @@ final class ArtifactResponseTest extends TestCase
         $this->testedClass = ArtifactResponse::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_ArtifactResponse.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_ArtifactResponse.xml',
         );
     }
 
@@ -57,43 +57,35 @@ final class ArtifactResponseTest extends TestCase
         $destination = 'https://idp.example.org/SAML2/SSO/Artifact';
         $protocolBinding = C::BINDING_HTTP_ARTIFACT;
         $assertionConsumerServiceURL = 'https://sp.example.com/SAML2/SSO/Artifact';
-        $nameIdPolicy = new NameIDPolicy(C::NAMEID_EMAIL_ADDRESS, null, false);
+        $nameIdPolicy = new NameIDPolicy(
+            Format: C::NAMEID_EMAIL_ADDRESS,
+            AllowCreate: false,
+        );
 
         $authnRequest = new AuthnRequest(
-            null,
-            null,
-            $nameIdPolicy,
-            null,
-            null,
-            null,
-            $assertionConsumerServiceURL,
-            null,
-            $protocolBinding,
-            null,
-            null,
-            $issuer2,
-            $id,
-            $issueInstant,
-            $destination
+            nameIdPolicy: $nameIdPolicy,
+            assertionConsumerServiceURL: $assertionConsumerServiceURL,
+            protocolBinding: $protocolBinding,
+            issuer: $issuer2,
+            id: $id,
+            issueInstant: $issueInstant,
+            destination: $destination,
         );
 
         $status = new Status(new StatusCode());
         $issuer1 = new Issuer('https://sp.example.com/SAML2');
         $artifactResponse = new ArtifactResponse(
-            $status,
-            $issuer1,
-            '_d84a49e5958803dedcff4c984c2b0d95',
-            1102238519,
-            '_cce4ee769ed970b501d680f697989d14',
-            null,
-            null,
-            null,
-            $authnRequest
+            status: $status,
+            issuer: $issuer1,
+            id: '_d84a49e5958803dedcff4c984c2b0d95',
+            issueInstant: 1102238519,
+            inResponseTo: '_cce4ee769ed970b501d680f697989d14',
+            message: $authnRequest,
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($artifactResponse)
+            strval($artifactResponse),
         );
     }
 
@@ -106,7 +98,7 @@ final class ArtifactResponseTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($ar)
+            strval($ar),
         );
     }
 }

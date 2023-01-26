@@ -43,7 +43,7 @@ final class EndpointTypeTest extends TestCase
         $this->testedClass = AttributeService::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_AttributeService.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_AttributeService.xml',
         );
     }
 
@@ -70,12 +70,12 @@ final class EndpointTypeTest extends TestCase
             'https://whatever/',
             'https://foo.bar/',
             [$attr],
-            [$child]
+            [$child],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($endpointType)
+            strval($endpointType),
         );
     }
 
@@ -123,7 +123,7 @@ final class EndpointTypeTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($endpointType)
+            strval($endpointType),
         );
     }
 
@@ -135,7 +135,7 @@ final class EndpointTypeTest extends TestCase
     {
         $this->expectException(InvalidDOMElementException::class);
         $this->expectExceptionMessage(
-            'Unexpected name for endpoint: AttributeService. Expected: AssertionIDRequestService.'
+            'Unexpected name for endpoint: AttributeService. Expected: AssertionIDRequestService.',
         );
         AssertionIDRequestService::fromXML($this->xmlRepresentation->documentElement);
     }

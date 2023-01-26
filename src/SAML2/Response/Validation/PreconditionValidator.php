@@ -22,8 +22,6 @@ class PreconditionValidator extends Validator
     {
         // move to DI
         $this->addConstraintValidator(new IsSuccessful());
-        $this->addConstraintValidator(
-            new DestinationMatches($destination)
-        );
+        $this->addConstraintValidator(new DestinationMatches($destination));
     }
 }

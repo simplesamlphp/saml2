@@ -28,16 +28,13 @@ use function array_pop;
  */
 class ArtifactResolve extends AbstractRequest
 {
-    /** @var string */
-    protected string $artifact;
-
-
     /**
      * Initialize an ArtifactResolve.
      *
      * @param string $artifact
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
+     * @param string $version
      * @param int|null $issueInstant
      * @param string|null $destination
      * @param string|null $consent
@@ -46,17 +43,18 @@ class ArtifactResolve extends AbstractRequest
      * @throws \Exception
      */
     public function __construct(
-        string $artifact,
+        protected string $artifact,
         ?Issuer $issuer = null,
         ?string $id = null,
+        string $version = '2.0',
         ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
-        ?Extensions $extensions = null
+        ?Extensions $extensions = null,
     ) {
-        parent::__construct($issuer, $id, $issueInstant, $destination, $consent, $extensions);
+        Assert::stringNotEmpty($artifact);
 
-        $this->setArtifact($artifact);
+        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
     }
 
 
@@ -69,20 +67,7 @@ class ArtifactResolve extends AbstractRequest
      */
     public function getArtifact(): string
     {
-        Assert::notEmpty($this->artifact, 'Artifact not set.');
-
         return $this->artifact;
-    }
-
-
-    /**
-     * Set the artifact that should be included in this response.
-     *
-     * @param string $artifact
-     */
-    private function setArtifact(string $artifact): void
-    {
-        $this->artifact = $artifact;
     }
 
 
@@ -104,14 +89,9 @@ class ArtifactResolve extends AbstractRequest
         Assert::same($xml->localName, 'ArtifactResolve', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ArtifactResolve::NS, InvalidDOMElementException::class);
 
-        Assert::true(
-            version_compare('2.0', self::getAttribute($xml, 'Version'), '<='),
-            RequestVersionTooLowException::class
-        );
-        Assert::true(
-            version_compare('2.0', self::getAttribute($xml, 'Version'), '>='),
-            RequestVersionTooHighException::class
-        );
+        $version = self::getAttribute($xml, 'Version');
+        Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
 
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
@@ -128,7 +108,7 @@ class ArtifactResolve extends AbstractRequest
             $extensions,
             1,
             'Only one saml:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $signature = Signature::getChildrenOfClass($xml);
@@ -141,10 +121,11 @@ class ArtifactResolve extends AbstractRequest
             $artifact,
             array_pop($issuer),
             self::getAttribute($xml, 'ID'),
+            $version,
             $issueInstant,
             self::getAttribute($xml, 'Destination', null),
             self::getAttribute($xml, 'Consent', null),
-            array_pop($extensions)
+            array_pop($extensions),
         );
 
         if (!empty($signature)) {

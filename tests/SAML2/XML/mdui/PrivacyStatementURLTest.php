@@ -43,7 +43,7 @@ final class PrivacyStatementURLTest extends TestCase
         $this->testedClass = PrivacyStatementURL::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdui_PrivacyStatementURL.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdui_PrivacyStatementURL.xml',
         );
 
         $this->arrayRepresentation = ['en' => 'https://example.org/privacy'];
@@ -62,7 +62,7 @@ final class PrivacyStatementURLTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
+            strval($name),
         );
     }
 
@@ -79,7 +79,7 @@ final class PrivacyStatementURLTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
+            strval($name),
         );
     }
 

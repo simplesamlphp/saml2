@@ -19,6 +19,7 @@ use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
+use SimpleSAML\XML\DOMDocumentFactory;
 use stdClass;
 
 /**
@@ -56,18 +57,26 @@ final class ProcessorTest extends MockeryTestCase
             $subjectConfirmationValidator,
             $transformer,
             $identityProvider,
-            $logger
+            $logger,
         );
     }
 
+
     /**
-     * TODO: Fix it, or drop the Assertion processor entirely
-     *
      * @test
+     */
     public function processorCorrectlyEncryptsAssertions(): void
     {
-        $encryptedAssertion = m::mock(EncryptedAssertion::class);
-        $assertion = m::mock(Assertion::class);
+        $encryptedAssertion = EncryptedAssertion::fromXML(
+            DOMDocumentFactory::fromFile(
+                dirname(__FILE__, 3) . '/resources/xml/saml_EncryptedAssertion.xml'
+            )->documentElement
+        );
+        $assertion = Assertion::fromXML(
+            DOMDocumentFactory::fromFile(
+                dirname(__FILE__, 3) . '/resources/xml/saml_Assertion.xml'
+            )->documentElement
+        );
 
         $testData = [
             [$assertion],
@@ -89,7 +98,7 @@ final class ProcessorTest extends MockeryTestCase
             }
         }
     }
-     */
+
 
     /**
      * @test

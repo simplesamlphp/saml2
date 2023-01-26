@@ -23,40 +23,6 @@ use function preg_split;
 final class SPSSODescriptor extends AbstractSSODescriptor
 {
     /**
-     * Whether this SP signs authentication requests.
-     *
-     * @var bool|null
-     */
-    protected ?bool $authnRequestsSigned = null;
-
-    /**
-     * Whether this SP wants the Assertion elements to be signed.
-     *
-     * @var bool|null
-     */
-    protected ?bool $wantAssertionsSigned = null;
-
-    /**
-     * List of AssertionConsumerService endpoints for this SP.
-     *
-     * Array with IndexedEndpointType objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AssertionConsumerService[]
-     */
-    protected array $assertionConsumerService = [];
-
-    /**
-     * List of AttributeConsumingService descriptors for this SP.
-     *
-     * Array with \SimpleSAML\SAML2\XML\md\AttributeConsumingService objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AttributeConsumingService[]
-     */
-    protected array $attributeConsumingService = [];
-
-
-
-    /**
      * SPSSODescriptor constructor.
      *
      * @param \SimpleSAML\SAML2\XML\md\AssertionConsumerService[] $assertionConsumerService
@@ -78,11 +44,11 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
      */
     public function __construct(
-        array $assertionConsumerService,
+        protected array $assertionConsumerService,
         array $protocolSupportEnumeration,
-        ?bool $authnRequestsSigned = null,
-        ?bool $wantAssertionsSigned = null,
-        array $attributeConsumingService = [],
+        protected ?bool $authnRequestsSigned = null,
+        protected ?bool $wantAssertionsSigned = null,
+        protected array $attributeConsumingService = [],
         ?string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
@@ -94,7 +60,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
         array $artifactResolutionService = [],
         array $singleLogoutService = [],
         array $manageNameIDService = [],
-        array $nameIDFormat = []
+        array $nameIDFormat = [],
     ) {
         parent::__construct(
             $protocolSupportEnumeration,
@@ -112,21 +78,28 @@ final class SPSSODescriptor extends AbstractSSODescriptor
             $nameIDFormat
         );
 
-        $this->setAssertionConsumerService($assertionConsumerService);
-        $this->setAuthnRequestsSigned($authnRequestsSigned);
-        $this->setWantAssertionsSigned($wantAssertionsSigned);
-        $this->setAttributeConsumingService($attributeConsumingService);
+        Assert::minCount($assertionConsumerService, 1, 'At least one AssertionConsumerService must be specified.');
+        Assert::allIsInstanceOf(
+            $assertionConsumerService,
+            AssertionConsumerService::class,
+            'All md:AssertionConsumerService endpoints must be an instance of AssertionConsumerService.',
+        );
+        Assert::allIsInstanceOf(
+            $attributeConsumingService,
+            AttributeConsumingService::class,
+            'All md:AttributeConsumingService endpoints must be an instance of AttributeConsumingService.',
+        );
 
         // test that only one ACS is marked as default
         Assert::maxCount(
             array_filter(
-                $this->getAttributeConsumingService(),
+                $attributeConsumingService,
                 function (AttributeConsumingService $acs) {
                     return $acs->getIsDefault() === true;
                 }
             ),
             1,
-            'Only one md:AttributeConsumingService can be set as default.'
+            'Only one md:AttributeConsumingService can be set as default.',
         );
     }
 
@@ -143,17 +116,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor
 
 
     /**
-     * Set the value of the AuthnRequestsSigned-property
-     *
-     * @param bool|null $flag
-     */
-    private function setAuthnRequestsSigned(?bool $flag): void
-    {
-        $this->authnRequestsSigned = $flag;
-    }
-
-
-    /**
      * Collect the value of the WantAssertionsSigned-property
      *
      * @return bool|null
@@ -161,17 +123,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor
     public function getWantAssertionsSigned(): ?bool
     {
         return $this->wantAssertionsSigned;
-    }
-
-
-    /**
-     * Set the value of the WantAssertionsSigned-property
-     *
-     * @param bool|null $flag
-     */
-    private function setWantAssertionsSigned(?bool $flag): void
-    {
-        $this->wantAssertionsSigned = $flag;
     }
 
 
@@ -187,24 +138,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor
 
 
     /**
-     * Set the value of the AssertionConsumerService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AssertionConsumerService[] $acs
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    private function setAssertionConsumerService(array $acs): void
-    {
-        Assert::minCount($acs, 1, 'At least one AssertionConsumerService must be specified.');
-        Assert::allIsInstanceOf(
-            $acs,
-            AssertionConsumerService::class,
-            'All md:AssertionConsumerService endpoints must be an instance of AssertionConsumerService.'
-        );
-        $this->assertionConsumerService = $acs;
-    }
-
-
-    /**
      * Collect the value of the AttributeConsumingService-property
      *
      * @return \SimpleSAML\SAML2\XML\md\AttributeConsumingService[]
@@ -212,23 +145,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor
     public function getAttributeConsumingService(): array
     {
         return $this->attributeConsumingService;
-    }
-
-
-    /**
-     * Set the value of the AttributeConsumingService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AttributeConsumingService[] $acs
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    private function setAttributeConsumingService(array $acs): void
-    {
-        Assert::allIsInstanceOf(
-            $acs,
-            AttributeConsumingService::class,
-            'All md:AttributeConsumingService endpoints must be an instance of AttributeConsumingService.'
-        );
-        $this->attributeConsumingService = $acs;
     }
 
 
@@ -258,7 +174,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
             $orgs,
             1,
             'More than one Organization found in this descriptor',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $extensions = Extensions::getChildrenOfClass($xml);
@@ -266,7 +182,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
             $extensions,
             1,
             'Only one md:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $signature = Signature::getChildrenOfClass($xml);
@@ -274,7 +190,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
             $signature,
             1,
             'Only one ds:Signature element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $spssod = new static(
@@ -294,12 +210,14 @@ final class SPSSODescriptor extends AbstractSSODescriptor
             ArtifactResolutionService::getChildrenOfClass($xml),
             SingleLogoutService::getChildrenOfClass($xml),
             ManageNameIDService::getChildrenOfClass($xml),
-            NameIDFormat::getChildrenOfClass($xml)
+            NameIDFormat::getChildrenOfClass($xml),
         );
+
         if (!empty($signature)) {
             $spssod->setSignature($signature[0]);
             $spssod->setXML($xml);
         }
+
         return $spssod;
     }
 

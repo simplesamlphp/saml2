@@ -19,30 +19,6 @@ use SimpleSAML\XML\Utils as XMLUtils;
 final class RegistrationInfo extends AbstractMdrpiElement
 {
     /**
-     * The identifier of the metadata registration authority.
-     *
-     * @var string
-     */
-    protected string $registrationAuthority;
-
-    /**
-     * The registration timestamp for the metadata, as a UNIX timestamp.
-     *
-     * @var int|null
-     */
-    protected ?int $registrationInstant = null;
-
-    /**
-     * Link to registration policy for this metadata.
-     *
-     * This is an array with RegistrationPolicy objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy[]
-     */
-    protected array $RegistrationPolicy = [];
-
-
-    /**
      * Create/parse a mdrpi:RegistrationInfo element.
      *
      * @param string $registrationAuthority
@@ -50,13 +26,28 @@ final class RegistrationInfo extends AbstractMdrpiElement
      * @param \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy[] $RegistrationPolicy
      */
     public function __construct(
-        string $registrationAuthority,
-        int $registrationInstant = null,
-        array $RegistrationPolicy = []
+        protected string $registrationAuthority,
+        protected ?int $registrationInstant = null,
+        protected array $registrationPolicy = [],
     ) {
-        $this->setRegistrationAuthority($registrationAuthority);
-        $this->setRegistrationInstant($registrationInstant);
-        $this->setRegistrationPolicy($RegistrationPolicy);
+        Assert::allIsInstanceOf($registrationPolicy, RegistrationPolicy::class);
+
+        /**
+         * 2.1.1:  There MUST NOT be more than one <mdrpi:RegistrationPolicy>,
+         *         within a given <mdrpi:RegistrationInfo>, for a given language
+         */
+        $languages = array_map(
+            function ($rp) {
+                return $rp->getLanguage();
+            },
+            $registrationPolicy,
+        );
+        Assert::uniqueValues(
+            $languages,
+            'There MUST NOT be more than one <mdrpi:RegistrationPolicy>,'
+            . ' within a given <mdrpi:RegistrationInfo>, for a given language',
+            ProtocolViolationException::class,
+        );
     }
 
 
@@ -72,17 +63,6 @@ final class RegistrationInfo extends AbstractMdrpiElement
 
 
     /**
-     * Set the value of the registrationAuthority property
-     *
-     * @param string $registrationAuthority
-     */
-    private function setRegistrationAuthority(string $registrationAuthority): void
-    {
-        $this->registrationAuthority = $registrationAuthority;
-    }
-
-
-    /**
      * Collect the value of the registrationInstant property
      *
      * @return int|null
@@ -94,54 +74,13 @@ final class RegistrationInfo extends AbstractMdrpiElement
 
 
     /**
-     * Set the value of the registrationInstant property
-     *
-     * @param int|null $registrationInstant
-     */
-    private function setRegistrationInstant(?int $registrationInstant): void
-    {
-        $this->registrationInstant = $registrationInstant;
-    }
-
-
-    /**
      * Collect the value of the RegistrationPolicy property
      *
      * @return \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy[]
      */
     public function getRegistrationPolicy(): array
     {
-        return $this->RegistrationPolicy;
-    }
-
-
-    /**
-     * Set the value of the RegistrationPolicy property
-     *
-     * @param \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy[] $registrationPolicy
-     */
-    private function setRegistrationPolicy(array $registrationPolicy): void
-    {
-        Assert::allIsInstanceOf($registrationPolicy, RegistrationPolicy::class);
-
-        /**
-         * 2.1.1:  There MUST NOT be more than one <mdrpi:RegistrationPolicy>,
-         *         within a given <mdrpi:RegistrationInfo>, for a given language
-         */
-        $languages = array_map(
-            function ($rp) {
-                return $rp->getLanguage();
-            },
-            $registrationPolicy
-        );
-        Assert::uniqueValues(
-            $languages,
-            'There MUST NOT be more than one <mdrpi:RegistrationPolicy>,'
-            . ' within a given <mdrpi:RegistrationInfo>, for a given language',
-            ProtocolViolationException::class
-        );
-
-        $this->RegistrationPolicy = $registrationPolicy;
+        return $this->registrationPolicy;
     }
 
 
@@ -249,6 +188,7 @@ final class RegistrationInfo extends AbstractMdrpiElement
                 $data['registrationPolicy'] = array_merge($data['registrationPolicy'], $rp->toArray());
             }
         }
+
         return $data;
     }
 }

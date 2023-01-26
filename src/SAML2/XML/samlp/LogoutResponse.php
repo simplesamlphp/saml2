@@ -29,6 +29,7 @@ class LogoutResponse extends AbstractStatusResponse
      * @param \SimpleSAML\SAML2\XML\samlp\Status $status
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
+     * @param string $version
      * @param int|null $issueInstant
      * @param string|null $inResponseTo
      * @param string|null $destination
@@ -42,23 +43,25 @@ class LogoutResponse extends AbstractStatusResponse
         Status $status,
         ?Issuer $issuer = null,
         ?string $id = null,
+        string $version = '2.0',
         ?int $issueInstant = null,
         ?string $inResponseTo = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
-        ?string $relayState = null
+        ?string $relayState = null,
     ) {
         parent::__construct(
             $status,
             $issuer,
             $id,
+            $version,
             $issueInstant,
             $inResponseTo,
             $destination,
             $consent,
             $extensions,
-            $relayState
+            $relayState,
         );
     }
 
@@ -79,14 +82,9 @@ class LogoutResponse extends AbstractStatusResponse
         Assert::same($xml->localName, 'LogoutResponse', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, LogoutResponse::NS, InvalidDOMElementException::class);
 
-        Assert::true(
-            version_compare('2.0', self::getAttribute($xml, 'Version'), '<='),
-            RequestVersionTooLowException::class
-        );
-        Assert::true(
-            version_compare('2.0', self::getAttribute($xml, 'Version'), '>='),
-            RequestVersionTooHighException::class
-        );
+        $version = self::getAttribute($xml, 'Version');
+        Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
 
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
@@ -111,11 +109,12 @@ class LogoutResponse extends AbstractStatusResponse
             array_pop($status),
             array_pop($issuer),
             self::getAttribute($xml, 'ID'),
+            $version,
             $issueInstant,
             self::getAttribute($xml, 'InResponseTo', null),
             self::getAttribute($xml, 'Destination', null),
             self::getAttribute($xml, 'Consent', null),
-            empty($extensions) ? null : array_pop($extensions)
+            empty($extensions) ? null : array_pop($extensions),
         );
 
         if (!empty($signature)) {

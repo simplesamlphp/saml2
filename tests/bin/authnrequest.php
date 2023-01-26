@@ -30,21 +30,10 @@ $issuer = new Issuer('https://gateway.example.org/saml20/sp/metadata');
 $subject = new Subject($eid);
 
 $authnRequest = new AuthnRequest(
-    null,
-    $subject,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    null,
-    $issuer,
-    "123",
-    null,
-    'https://tiqr.example.org/idp/profile/saml2/Redirect/SSO'
+    subject: $subject,
+    issuer: $issuer,
+    id: '123',
+    destination: 'https://tiqr.example.org/idp/profile/saml2/Redirect/SSO',
 );
 
 $authnRequest = $authnRequest->toXML();

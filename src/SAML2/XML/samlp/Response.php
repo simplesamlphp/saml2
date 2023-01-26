@@ -31,19 +31,12 @@ use function array_pop;
 class Response extends AbstractStatusResponse
 {
     /**
-     * The assertions in this response.
-     *
-     * @var (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\EncryptedAssertion)[]
-     */
-    protected array $assertions = [];
-
-
-    /**
      * Constructor for SAML 2 response messages.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\Status $status
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
-     * @param string $id
+     * @param string|null $id
+     * @param string $version
      * @param int $issueInstant
      * @param string $inResponseTo
      * @param string|null $destination
@@ -55,25 +48,27 @@ class Response extends AbstractStatusResponse
         Status $status,
         ?Issuer $issuer = null,
         ?string $id = null,
+        string $version = '2.0',
         ?int $issueInstant = null,
         ?string $inResponseTo = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
-        array $assertions = []
+        protected array $assertions = [],
     ) {
+        Assert::allIsInstanceOfAny($assertions, [Assertion::class, EncryptedAssertion::class]);
+
         parent::__construct(
             $status,
             $issuer,
             $id,
+            $version,
             $issueInstant,
             $inResponseTo,
             $destination,
             $consent,
-            $extensions
+            $extensions,
         );
-
-        $this->setAssertions($assertions);
     }
 
 
@@ -85,20 +80,6 @@ class Response extends AbstractStatusResponse
     public function getAssertions(): array
     {
         return $this->assertions;
-    }
-
-
-    /**
-     * Set the assertions that should be included in this response.
-     *
-     * @param (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\EncryptedAssertion)[] $assertions
-     *   The assertions.
-     */
-    protected function setAssertions(array $assertions): void
-    {
-        Assert::allIsInstanceOfAny($assertions, [Assertion::class, EncryptedAssertion::class]);
-
-        $this->assertions = $assertions;
     }
 
 
@@ -120,14 +101,9 @@ class Response extends AbstractStatusResponse
         Assert::same($xml->localName, 'Response', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Response::NS, InvalidDOMElementException::class);
 
-        Assert::true(
-            version_compare('2.0', self::getAttribute($xml, 'Version'), '<='),
-            RequestVersionTooLowException::class
-        );
-        Assert::true(
-            version_compare('2.0', self::getAttribute($xml, 'Version'), '>='),
-            RequestVersionTooHighException::class
-        );
+        $version = self::getAttribute($xml, 'Version');
+        Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
 
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
@@ -156,7 +132,7 @@ class Response extends AbstractStatusResponse
             $extensions,
             1,
             'Only one saml:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $assertions = [];
@@ -178,12 +154,13 @@ class Response extends AbstractStatusResponse
             array_pop($status),
             empty($issuer) ? null : array_pop($issuer),
             $id,
+            $version,
             $issueInstant,
             $inResponseTo,
             $destination,
             $consent,
             empty($extensions) ? null : array_pop($extensions),
-            $assertions
+            $assertions,
         );
 
         if (!empty($signature)) {
@@ -206,7 +183,7 @@ class Response extends AbstractStatusResponse
         $e = parent::toUnsignedXML($parent);
 
         foreach ($this->getAssertions() as $assertion) {
-            $assertion->toXML($e); // Doesn't work for unknown reasons
+            $assertion->toXML($e);
         }
 
         return $e;

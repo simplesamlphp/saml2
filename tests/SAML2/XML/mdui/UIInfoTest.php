@@ -49,7 +49,7 @@ final class UIInfoTest extends TestCase
         $this->testedClass = UIInfo::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdui_UIInfo.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdui_UIInfo.xml',
         );
 
         $this->arrayRepresentation = [
@@ -71,30 +71,28 @@ final class UIInfoTest extends TestCase
         $logo = new Logo("https://example.org/idp/images/logo_87x88.png", 88, 87, "fy");
 
         $uiinfo = new UIInfo(
-            [
+            displayName: [
                 new DisplayName("en", "University of Examples"),
-                new DisplayName("el", "Univërsitä øf Exåmpleß")
+                new DisplayName("el", "Univërsitä øf Exåmpleß"),
             ],
-            [
+            description: [
                 new Description("en", "Just an example"),
             ],
-            [
+            informationURL: [
                 new InformationURL("en", "http://www.example.edu/en/"),
-                new InformationURL("el", "http://www.example.edu/")
+                new InformationURL("el", "http://www.example.edu/"),
             ],
-            [
-                new PrivacyStatementURL("en", "https://example.org/privacy")
+            privacyStatementURL: [
+                new PrivacyStatementURL("en", "https://example.org/privacy"),
             ],
-            [],
-            [],
-            [
+            children: [
                 new Chunk(DOMDocumentFactory::fromString(
                     '<ssp:child1 xmlns:ssp="urn:custom:ssp" />'
                 )->documentElement),
                 new Chunk(DOMDocumentFactory::fromString(
                     '<myns:child2 xmlns:myns="urn:test:mynamespace" />'
-                )->documentElement)
-            ]
+                )->documentElement),
+            ],
         );
 
         $keyword = new Keywords('en', ['University Fictional']);
@@ -107,7 +105,7 @@ final class UIInfoTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($uiinfo)
+            strval($uiinfo),
         );
     }
 
@@ -122,20 +120,19 @@ final class UIInfoTest extends TestCase
 
         $discohints = new DiscoHints(
             [],
-            [new IPHint("192.168.6.0/24"), new IPHint("fd00:0123:aa:1001::/64")]
+            [new IPHint("192.168.6.0/24"), new IPHint("fd00:0123:aa:1001::/64")],
         );
 
         // keywords appears twice, direcyly under UIinfo and as child of DiscoHints
         $discohints->addChild(new Chunk($keywords->toXML()));
 
         $uiinfo = new UIInfo(
-            [],
-            [],
-            [],
-            [],
-            [$keywords],
-            [],
-            [new Chunk(DOMDocumentFactory::fromString('<ssp:child1 xmlns:ssp="urn:custom:ssp" />')->documentElement)]
+            keywords: [$keywords],
+            children: [
+                new Chunk(DOMDocumentFactory::fromString(
+                    '<ssp:child1 xmlns:ssp="urn:custom:ssp" />',
+                )->documentElement),
+            ],
         );
         $uiinfo->addLogo($logo);
 
@@ -146,7 +143,7 @@ final class UIInfoTest extends TestCase
         $infoElements = XPath::xpQuery(
             $xml,
             '/root/*[local-name()=\'UIInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
-            $xpCache
+            $xpCache,
         );
         $this->assertCount(1, $infoElements);
         $infoElement = $infoElements[0];
@@ -155,7 +152,7 @@ final class UIInfoTest extends TestCase
         $logoElements = XPath::xpQuery(
             $infoElement,
             './*[local-name()=\'Logo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
-            $xpCache
+            $xpCache,
         );
         $this->assertCount(1, $logoElements);
         $this->assertEquals("https://example.edu/logo.png", $logoElements[0]->textContent);
@@ -165,7 +162,7 @@ final class UIInfoTest extends TestCase
         $keywordElements = XPath::xpQuery(
             $infoElement,
             './*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
-            $xpCache
+            $xpCache,
         );
         $this->assertCount(1, $keywordElements);
         $this->assertEquals("voorbeeld+specimen", $keywordElements[0]->textContent);
@@ -175,7 +172,7 @@ final class UIInfoTest extends TestCase
         $childElements = XPath::xpQuery(
             $infoElement,
             './*[local-name()=\'child1\' and namespace-uri()=\'urn:custom:ssp\']',
-            $xpCache
+            $xpCache,
         );
         $this->assertCount(1, $childElements);
     }
@@ -190,7 +187,7 @@ final class UIInfoTest extends TestCase
         $uiInfo = new UIInfo([]);
         $this->assertEquals(
             "<mdui:UIInfo xmlns:mdui=\"$mduins\"/>",
-            strval($uiInfo)
+            strval($uiInfo),
         );
         $this->assertTrue($uiInfo->isEmptyElement());
     }
@@ -205,7 +202,7 @@ final class UIInfoTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($uiinfo)
+            strval($uiinfo),
         );
     }
 

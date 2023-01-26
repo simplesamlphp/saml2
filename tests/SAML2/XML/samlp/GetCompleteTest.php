@@ -32,7 +32,7 @@ final class GetCompleteTest extends TestCase
         $this->testedClass = GetComplete::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_GetComplete.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_GetComplete.xml',
         );
     }
 
@@ -48,7 +48,7 @@ final class GetCompleteTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($getComplete)
+            strval($getComplete),
         );
     }
 
@@ -61,7 +61,7 @@ final class GetCompleteTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($getComplete)
+            strval($getComplete),
         );
     }
 }

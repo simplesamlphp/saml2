@@ -14,11 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class UnsupportedBindingException extends ProtocolViolationException
 {
-    /**
-     * @param string $message
-     */
-    public function __construct(string $message = 'Unsupported binding.')
-    {
-        parent::__construct($message);
-    }
+    public const DEFAULT_MESSAGE = 'Unsupported binding.';
 }

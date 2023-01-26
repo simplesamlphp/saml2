@@ -39,47 +39,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     use SignableElementTrait;
     use SignedElementTrait;
 
-    /**
-     * The identifier of this message.
-     *
-     * @var string
-     */
-    protected string $id;
-
-    /**
-     * The version of this message.
-     *
-     * @var string
-     */
-    protected string $version = '2.0';
-
-    /**
-     * The issue timestamp of this message, as an UNIX timestamp.
-     *
-     * @var int
-     */
-    protected int $issueInstant;
-
-    /**
-     * The destination URL of this message if it is known.
-     *
-     * @var string|null
-     */
-    protected ?string $destination = null;
-
-    /**
-     * The destination URL of this message if it is known.
-     *
-     * @var string|null
-     */
-    protected ?string $consent;
-
-    /**
-     * The entity id of the issuer of this message, or null if unknown.
-     *
-     * @var \SimpleSAML\SAML2\XML\saml\Issuer|null
-     */
-    protected ?Issuer $issuer = null;
 
     /**
      * The RelayState associated with this message.
@@ -114,6 +73,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      *
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
+     * @param string $version
      * @param int|null $issueInstant
      * @param string|null $destination
      * @param string|null $consent
@@ -123,19 +83,19 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      * @throws \Exception
      */
     protected function __construct(
-        ?Issuer $issuer = null,
-        ?string $id = null,
-        ?int $issueInstant = null,
-        ?string $destination = null,
-        ?string $consent = null,
+        protected ?Issuer $issuer = null,
+        protected ?string $id = null,
+        protected $version = '2.0',
+        protected ?int $issueInstant = null,
+        protected ?string $destination = null,
+        protected ?string $consent = null,
         ?Extensions $extensions = null,
-        ?string $relayState = null
+        ?string $relayState = null,
     ) {
-        $this->setIssuer($issuer);
-        $this->setId($id);
-        $this->setIssueInstant($issueInstant);
-        $this->setDestination($destination);
-        $this->setConsent($consent);
+        Assert::nullOrNotWhitespaceOnly($id);
+        Assert::nullOrValidURI($destination); // Covers the empty string
+        Assert::nullOrValidURI($consent); // Covers the empty string
+
         $this->setExtensions($extensions);
         $this->setRelayState($relayState);
     }
@@ -148,24 +108,11 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      */
     public function getId(): string
     {
-        return $this->id;
-    }
-
-
-    /**
-     * Set the identifier of this message.
-     *
-     * @param string|null $id The new identifier of this message
-     */
-    private function setId(?string $id): void
-    {
-        Assert::nullOrNotWhitespaceOnly($id);
-
-        if ($id === null) {
-            $id = Utils::getContainer()->generateId();
+        if ($this->id === null) {
+            return Utils::getContainer()->generateId();
         }
 
-        $this->id = $id;
+        return $this->id;
     }
 
 
@@ -187,22 +134,11 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      */
     public function getIssueInstant(): int
     {
-        return $this->issueInstant;
-    }
-
-
-    /**
-     * Set the issue timestamp of this message.
-     *
-     * @param int|null $issueInstant The new issue timestamp of this message, as an UNIX timestamp
-     */
-    private function setIssueInstant(?int $issueInstant): void
-    {
-        if ($issueInstant === null) {
-            $issueInstant = Temporal::getTime();
+        if ($this->issueInstant === null) {
+            return Temporal::getTime();
         }
 
-        $this->issueInstant = $issueInstant;
+        return $this->issueInstant;
     }
 
 
@@ -214,18 +150,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     public function getDestination(): ?string
     {
         return $this->destination;
-    }
-
-
-    /**
-     * Set the destination of this message.
-     *
-     * @param string|null $destination The new destination of this message
-     */
-    private function setDestination(string $destination = null): void
-    {
-        Assert::nullOrValidURI($destination); // Covers the empty string
-        $this->destination = $destination;
     }
 
 
@@ -243,20 +167,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
 
     /**
-     * Set the given consent for this message.
-     * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
-     *
-     * @see \SimpleSAML\SAML2\Constants
-     * @param string|null $consent
-     */
-    private function setConsent(?string $consent): void
-    {
-        Assert::nullOrValidURI($consent); // Covers the empty string
-        $this->consent = $consent;
-    }
-
-
-    /**
      * Retrieve the issuer if this message.
      *
      * @return \SimpleSAML\SAML2\XML\saml\Issuer|null The issuer of this message, or NULL if no issuer is given
@@ -264,17 +174,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     public function getIssuer(): ?Issuer
     {
         return $this->issuer;
-    }
-
-
-    /**
-     * Set the issuer of this message.
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
-     */
-    private function setIssuer(Issuer $issuer = null): void
-    {
-        $this->issuer = $issuer;
     }
 
 

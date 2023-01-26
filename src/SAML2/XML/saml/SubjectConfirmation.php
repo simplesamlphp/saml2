@@ -24,20 +24,6 @@ final class SubjectConfirmation extends AbstractSamlElement
 {
     use IdentifierTrait;
 
-    /**
-     * The method we can use to verify this Subject.
-     *
-     * @var string
-     */
-    protected string $Method;
-
-    /**
-     * SubjectConfirmationData element with extra data for verification of the Subject.
-     *
-     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData|null
-     */
-    protected ?SubjectConfirmationData $SubjectConfirmationData = null;
-
 
     /**
      * Initialize (and parse) a SubjectConfirmation element.
@@ -47,13 +33,12 @@ final class SubjectConfirmation extends AbstractSamlElement
      * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData|null $subjectConfirmationData
      */
     public function __construct(
-        string $method,
+        protected string $method,
         ?IdentifierInterface $identifier = null,
-        SubjectConfirmationData $subjectConfirmationData = null
+        protected ?SubjectConfirmationData $subjectConfirmationData = null,
     ) {
-        $this->setMethod($method);
+        Assert::validURI($method, SchemaViolationException::class); // Covers the empty string
         $this->setIdentifier($identifier);
-        $this->setSubjectConfirmationData($subjectConfirmationData);
     }
 
 
@@ -64,19 +49,7 @@ final class SubjectConfirmation extends AbstractSamlElement
      */
     public function getMethod(): string
     {
-        return $this->Method;
-    }
-
-
-    /**
-     * Set the value of the Method-property
-     *
-     * @param string $method
-     */
-    private function setMethod(string $method): void
-    {
-        Assert::validURI($method, SchemaViolationException::class); // Covers the empty string
-        $this->Method = $method;
+        return $this->method;
     }
 
 
@@ -87,18 +60,7 @@ final class SubjectConfirmation extends AbstractSamlElement
      */
     public function getSubjectConfirmationData(): ?SubjectConfirmationData
     {
-        return $this->SubjectConfirmationData;
-    }
-
-
-    /**
-     * Set the value of the SubjectConfirmationData-property
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData|null $subjectConfirmationData
-     */
-    private function setSubjectConfirmationData(?SubjectConfirmationData $subjectConfirmationData): void
-    {
-        $this->SubjectConfirmationData = $subjectConfirmationData;
+        return $this->subjectConfirmationData;
     }
 
 
@@ -128,13 +90,13 @@ final class SubjectConfirmation extends AbstractSamlElement
             $subjectConfirmationData,
             1,
             'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         return new static(
             $Method,
             $identifier,
-            array_pop($subjectConfirmationData)
+            array_pop($subjectConfirmationData),
         );
     }
 

@@ -24,7 +24,7 @@ class InvalidArgumentException extends BuiltinInvalidArgumentException
         $message = sprintf(
             'Invalid Argument type: "%s" expected, "%s" given',
             $expected,
-            is_object($parameter) ? get_class($parameter) : gettype($parameter)
+            is_object($parameter) ? get_class($parameter) : gettype($parameter),
         );
 
         return new self($message);

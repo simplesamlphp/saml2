@@ -28,9 +28,6 @@ final class CustomBaseID extends AbstractBaseID
     /** @var string */
     protected const XSI_TYPE_PREFIX = 'ssp';
 
-    /** @var \SimpleSAML\SAML2\XML\saml\Audience[] $audience */
-    protected array $audience = [];
-
 
     /**
      * CustomBaseID constructor.
@@ -39,10 +36,14 @@ final class CustomBaseID extends AbstractBaseID
      * @param string|null $NameQualifier
      * @param string|null $SPNameQualifier
      */
-    public function __construct(array $audience, string $NameQualifier = null, string $SPNameQualifier = null)
-    {
+    public function __construct(
+        protected array $audience,
+        string $NameQualifier = null,
+        string $SPNameQualifier = null,
+    ) {
+        Assert::allIsInstanceOf($audience, Audience::class);
+
         parent::__construct(self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME, $NameQualifier, $SPNameQualifier);
-        $this->setAudience($audience);
     }
 
 
@@ -58,18 +59,6 @@ final class CustomBaseID extends AbstractBaseID
 
 
     /**
-     * Set the value of the audience-attribute
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
-     */
-    protected function setAudience(array $audience): void
-    {
-        Assert::allIsInstanceOf($audience, Audience::class);
-        $this->audience = $audience;
-    }
-
-
-    /**
      * @inheritDoc
      */
     public static function fromXML(DOMElement $xml): static
@@ -79,7 +68,7 @@ final class CustomBaseID extends AbstractBaseID
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:BaseID> element.',
-            SchemaViolationException::class
+            SchemaViolationException::class,
         );
 
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');

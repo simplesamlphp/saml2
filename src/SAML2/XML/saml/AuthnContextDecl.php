@@ -18,18 +18,14 @@ use SimpleSAML\SAML2\Utils;
  */
 final class AuthnContextDecl extends AbstractSamlElement
 {
-    /** @var \DOMNodeList */
-    protected DOMNodeList $decl;
-
-
     /**
      * Initialize an AuthnContextDecl.
      *
      * @param \DOMNodeList $decl
      */
-    public function __construct(DOMNodeList $decl)
-    {
-        $this->setDecl($decl);
+    public function __construct(
+        protected DOMNodeList $decl,
+    ) {
     }
 
 
@@ -41,17 +37,6 @@ final class AuthnContextDecl extends AbstractSamlElement
     public function getDecl(): DOMNodeList
     {
         return $this->decl;
-    }
-
-
-    /**
-     * Set the value of the decl-property
-     *
-     * @param \DOMNodeList $decl
-     */
-    private function setDecl(DOMNodeList $decl): void
-    {
-        $this->decl = $decl;
     }
 
 

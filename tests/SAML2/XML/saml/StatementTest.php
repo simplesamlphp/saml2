@@ -44,7 +44,7 @@ final class StatementTest extends TestCase
         $this->testedClass = CustomStatement::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_Statement.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_Statement.xml',
         );
 
         $container = new MockContainer();
@@ -66,7 +66,7 @@ final class StatementTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($statement)
+            strval($statement),
         );
     }
 
@@ -88,7 +88,7 @@ final class StatementTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($statement)
+            strval($statement),
         );
     }
 

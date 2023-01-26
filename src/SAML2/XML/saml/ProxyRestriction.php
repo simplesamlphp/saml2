@@ -15,26 +15,17 @@ use function strval;
 final class ProxyRestriction extends AbstractConditionType
 {
     /**
-     * @param \SimpleSAML\SAML2\XML\saml\Audience[]
-     */
-    protected array $audience = [];
-
-    /**
-     * @param int|null
-     */
-    protected ?int $count;
-
-
-    /**
      * ProxyRestriction constructor.
      *
      * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
      * @param int|null $count
      */
-    public function __construct(array $audience = [], ?int $count = null)
-    {
-        $this->setCount($count);
-        $this->setAudience($audience);
+    public function __construct(
+        protected array $audience = [],
+        protected ?int $count = null,
+    ) {
+        Assert::nullOrNatural($count, 'Count must be a non-negative integer.');
+        Assert::allIsInstanceOf($audience, Audience::class);
     }
 
 
@@ -50,18 +41,6 @@ final class ProxyRestriction extends AbstractConditionType
 
 
     /**
-     * Set the value of the count-attribute
-     *
-     * @param int|null $count
-     */
-    protected function setCount(?int $count): void
-    {
-        Assert::nullOrNatural($count, 'Count must be a non-negative integer.');
-        $this->count = $count;
-    }
-
-
-    /**
      * Get the value of the audience-attribute.
      *
      * @return \SimpleSAML\SAML2\XML\saml\Audience[]
@@ -69,19 +48,6 @@ final class ProxyRestriction extends AbstractConditionType
     public function getAudience(): array
     {
         return $this->audience;
-    }
-
-
-    /**
-     * Set the value of the audience-attribute
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
-     */
-    protected function setAudience(array $audience): void
-    {
-        Assert::allIsInstanceOf($audience, Audience::class);
-
-        $this->audience = $audience;
     }
 
 

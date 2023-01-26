@@ -21,25 +21,6 @@ use function is_bool;
  */
 final class Conditions extends AbstractSamlElement
 {
-    /** @var int|null */
-    protected ?int $notBefore;
-
-    /** @var int|null */
-    protected ?int $notOnOrAfter;
-
-    /** @var \SimpleSAML\SAML2\XML\saml\Condition[] */
-    protected array $condition;
-
-    /** @var \SimpleSAML\SAML2\XML\saml\AudienceRestriction[] */
-    protected array $audienceRestriction;
-
-    /** @var bool */
-    protected bool $oneTimeUse = false;
-
-    /** @var \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null */
-    protected ?ProxyRestriction $proxyRestriction;
-
-
     /**
      * Initialize a Conditions element.
      *
@@ -51,21 +32,15 @@ final class Conditions extends AbstractSamlElement
      * @param \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null $proxyRestriction
      */
     public function __construct(
-        ?int $notBefore = null,
-        ?int $notOnOrAfter = null,
-        array $condition = [],
-        array $audienceRestriction = [],
-        ?bool $oneTimeUse = null,
-        ?ProxyRestriction $proxyRestriction = null
+        protected ?int $notBefore = null,
+        protected ?int $notOnOrAfter = null,
+        protected array $condition = [],
+        protected array $audienceRestriction = [],
+        protected ?bool $oneTimeUse = false,
+        protected ?ProxyRestriction $proxyRestriction = null,
     ) {
-        $this->setNotBefore($notBefore);
-        $this->setNotOnOrAfter($notOnOrAfter);
-        $this->setCondition($condition);
-        $this->setAudienceRestriction($audienceRestriction);
-        if (is_bool($oneTimeUse)) {
-            $this->setOneTimeUse($oneTimeUse);
-        }
-        $this->setProxyRestriction($proxyRestriction);
+        Assert::allIsInstanceOf($condition, Condition::class);
+        Assert::allIsInstanceOf($audienceRestriction, AudienceRestriction::class);
     }
 
 
@@ -81,17 +56,6 @@ final class Conditions extends AbstractSamlElement
 
 
     /**
-     * Set the value of the notBefore-property
-     *
-     * @param int|null $notBefore
-     */
-    private function setNotBefore(?int $notBefore): void
-    {
-        $this->notBefore = $notBefore;
-    }
-
-
-    /**
      * Collect the value of the notOnOrAfter-property
      *
      * @return int|null
@@ -99,17 +63,6 @@ final class Conditions extends AbstractSamlElement
     public function getNotOnOrAfter(): ?int
     {
         return $this->notOnOrAfter;
-    }
-
-
-    /**
-     * Set the value of the notOnOrAfter-property
-     *
-     * @param int|null $notOnOrAfter
-     */
-    private function setNotOnOrAfter(?int $notOnOrAfter): void
-    {
-        $this->notOnOrAfter = $notOnOrAfter;
     }
 
 
@@ -125,19 +78,6 @@ final class Conditions extends AbstractSamlElement
 
 
     /**
-     * Set the value of the condition-property
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\Condition[] $condition
-     */
-    private function setCondition(array $condition): void
-    {
-        Assert::allIsInstanceOf($condition, Condition::class);
-
-        $this->condition = $condition;
-    }
-
-
-    /**
      * Collect the value of the audienceRestriction-property
      *
      * @return \SimpleSAML\SAML2\XML\saml\AudienceRestriction[]
@@ -145,19 +85,6 @@ final class Conditions extends AbstractSamlElement
     public function getAudienceRestriction(): array
     {
         return $this->audienceRestriction;
-    }
-
-
-    /**
-     * Set the value of the audienceRestriction-property
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\AudienceRestriction[] $audienceRestriction
-     */
-    private function setAudienceRestriction(array $audienceRestriction): void
-    {
-        Assert::allIsInstanceOf($audienceRestriction, AudienceRestriction::class);
-
-        $this->audienceRestriction = $audienceRestriction;
     }
 
 
@@ -173,17 +100,6 @@ final class Conditions extends AbstractSamlElement
 
 
     /**
-     * Set the value of the oneTimeUse-property
-     *
-     * @param bool $oneTimeUse
-     */
-    private function setOneTimeUse(bool $oneTimeUse): void
-    {
-        $this->oneTimeUse = $oneTimeUse;
-    }
-
-
-    /**
      * Collect the value of the proxyRestriction-property
      *
      * @return \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null
@@ -191,17 +107,6 @@ final class Conditions extends AbstractSamlElement
     public function getProxyRestriction(): ?ProxyRestriction
     {
         return $this->proxyRestriction;
-    }
-
-
-    /**
-     * Set the value of the proxyRestriction-property
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null $proxyRestriction
-     */
-    private function setProxyRestriction(?ProxyRestriction $proxyRestriction): void
-    {
-        $this->proxyRestriction = $proxyRestriction;
     }
 
 
@@ -262,13 +167,13 @@ final class Conditions extends AbstractSamlElement
             $oneTimeUse,
             1,
             'There MUST occur at most one <saml:OneTimeUse> element inside a <saml:Conditions>',
-            ProtocolViolationException::class
+            ProtocolViolationException::class,
         );
         Assert::maxCount(
             $proxyRestriction,
             1,
             'There MUST occur at most one <saml:ProxyRestriction> element inside a <saml:Conditions>',
-            ProtocolViolationException::class
+            ProtocolViolationException::class,
         );
 
         return new static(
@@ -277,7 +182,7 @@ final class Conditions extends AbstractSamlElement
             $condition,
             $audienceRestriction,
             !empty($oneTimeUse),
-            array_pop($proxyRestriction)
+            array_pop($proxyRestriction),
         );
     }
 

@@ -15,12 +15,6 @@ class TransformerChain implements TransformerInterface
     /** @var \SimpleSAML\SAML2\Assertion\Transformer\TransformerInterface[] */
     private $transformers = [];
 
-    /** @var \SimpleSAML\SAML2\Configuration\IdentityProvider */
-    private $identityProvider;
-
-    /** @var \SimpleSAML\SAML2\Configuration\ServiceProvider */
-    private $serviceProvider;
-
 
     /**
      * Constructor for TransformerChain
@@ -29,11 +23,9 @@ class TransformerChain implements TransformerInterface
      * @param \SimpleSAML\SAML2\Configuration\ServiceProvider $serviceProvider
      */
     public function __construct(
-        IdentityProvider $identityProvider,
-        ServiceProvider $serviceProvider
+        private IdentityProvider $identityProvider,
+        private ServiceProvider $serviceProvider,
     ) {
-        $this->identityProvider = $identityProvider;
-        $this->serviceProvider  = $serviceProvider;
     }
 
 

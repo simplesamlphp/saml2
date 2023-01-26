@@ -36,7 +36,7 @@ final class FileTest extends TestCase
         $this->assertEquals(
             "Yes we can!\n",
             $contents,
-            'The contents of the loaded file differ from what was expected'
+            'The contents of the loaded file differ from what was expected',
         );
     }
 }

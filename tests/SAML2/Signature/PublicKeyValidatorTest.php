@@ -80,7 +80,7 @@ final class PublicKeyValidatorTest extends MockeryTestCase
     {
         $controlledCollection = new KeyCollection([
             new Key(['type' => 'not_X509']),
-            new Key(['type' => 'again_not_X509'])
+            new Key(['type' => 'again_not_X509']),
         ]);
 
         $keyloaderMock = $this->prepareKeyLoader($controlledCollection);
@@ -102,12 +102,12 @@ final class PublicKeyValidatorTest extends MockeryTestCase
     public function signedMessageWithValidSignatureIsValidatedCorrectly(): void
     {
         $config = new IdentityProvider(
-            ['certificateData' => PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE)]
+            ['certificateData' => PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE)],
         );
         $validator = new PublicKeyValidator(new SimpleTestLogger(), new KeyLoader());
 
         $doc = DOMDocumentFactory::fromFile(
-            __DIR__ . '/../../resources/xml/response/signedresponse_with_unsignedassertion.xml'
+            __DIR__ . '/../../resources/xml/response/signedresponse_with_unsignedassertion.xml',
         );
 
         // convert to signed response

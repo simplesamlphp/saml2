@@ -69,10 +69,8 @@ final class AssertionValidatorTest extends TestCase
         $this->destination = new Destination($destination);
         $this->response = new Response(new Status(new StatusCode()));
 
-        $this->identityProviderConfiguration
-            = new IdentityProvider(['entityId' => $idpentity]);
-        $this->serviceProviderConfiguration
-            = new ServiceProvider(['entityId' => $spentity]);
+        $this->identityProviderConfiguration = new IdentityProvider(['entityId' => $idpentity]);
+        $this->serviceProviderConfiguration  = new ServiceProvider(['entityId' => $spentity]);
 
         $this->assertionProcessor = ProcessorBuilder::build(
             $this->logger,
@@ -80,7 +78,7 @@ final class AssertionValidatorTest extends TestCase
             $this->destination,
             $this->identityProviderConfiguration,
             $this->serviceProviderConfiguration,
-            $this->response
+            $this->response,
         );
 
         $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
@@ -172,7 +170,7 @@ XML
         $this->expectException(InvalidAssertionException::class);
         $this->expectExceptionMessage(
             'The configured Service Provider [https://simplesamlphp.org/idp/metadata] is not a valid audience '
-            . 'for the assertion. Audiences: [https://example.edu/not-the-sp-entity-id]"'
+            . 'for the assertion. Audiences: [https://example.edu/not-the-sp-entity-id]"',
         );
         $result = $this->assertionProcessor->validateAssertion($assertion);
     }

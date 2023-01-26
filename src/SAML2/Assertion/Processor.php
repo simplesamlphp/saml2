@@ -23,42 +23,6 @@ use function sprintf;
 class Processor
 {
     /**
-     * @var \SimpleSAML\SAML2\Assertion\Decrypter
-     */
-    private Decrypter $decrypter;
-
-    /**
-     * @var \SimpleSAML\SAML2\Assertion\Validation\AssertionValidator
-     */
-    private AssertionValidator $assertionValidator;
-
-    /**
-     * @var \SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationValidator
-     */
-    private SubjectConfirmationValidator $subjectConfirmationValidator;
-
-    /**
-     * @var \SimpleSAML\SAML2\Assertion\Transformer\TransformerInterface
-     */
-    private TransformerInterface $transformer;
-
-    /**
-     * @var \SimpleSAML\SAML2\Signature\Validator
-     */
-    private Validator $signatureValidator;
-
-    /**
-     * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
-     */
-    private IdentityProvider $identityProviderConfiguration;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private LoggerInterface $logger;
-
-
-    /**
      * @param \SimpleSAML\SAML2\Assertion\Decrypter $decrypter
      * @param \SimpleSAML\SAML2\Signature\Validator $signatureValidator
      * @param \SimpleSAML\SAML2\Assertion\Validation\AssertionValidator $assertionValidator
@@ -68,21 +32,14 @@ class Processor
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
-        Decrypter $decrypter,
-        Validator $signatureValidator,
-        AssertionValidator $assertionValidator,
-        SubjectConfirmationValidator $subjectConfirmationValidator,
-        TransformerInterface $transformer,
-        IdentityProvider $identityProviderConfiguration,
-        LoggerInterface $logger
+        private Decrypter $decrypter,
+        private Validator $signatureValidator,
+        private AssertionValidator $assertionValidator,
+        private SubjectConfirmationValidator $subjectConfirmationValidator,
+        private TransformerInterface $transformer,
+        private IdentityProvider $identityProviderConfiguration,
+        private LoggerInterface $logger,
     ) {
-        $this->assertionValidator            = $assertionValidator;
-        $this->signatureValidator            = $signatureValidator;
-        $this->decrypter                     = $decrypter;
-        $this->subjectConfirmationValidator  = $subjectConfirmationValidator;
-        $this->transformer                   = $transformer;
-        $this->identityProviderConfiguration = $identityProviderConfiguration;
-        $this->logger                        = $logger;
     }
 
 
@@ -132,14 +89,14 @@ class Processor
         if (!$assertion->wasSignedAtConstruction()) {
             $this->logger->info(sprintf(
                 'Assertion with id "%s" was not signed at construction, not verifying the signature',
-                $assertion->getId()
+                $assertion->getId(),
             ));
         } else {
             $this->logger->info(sprintf('Verifying signature of Assertion with id "%s"', $assertion->getId()));
 
             if (!$this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration)) {
                 throw new InvalidSignatureException(
-                    sprintf('The assertion with id "%s" does not have a valid signature', $assertion->getId())
+                    sprintf('The assertion with id "%s" does not have a valid signature', $assertion->getId()),
                 );
             }
         }
@@ -171,18 +128,18 @@ class Processor
         if (!$assertionValidationResult->isValid()) {
             throw new InvalidAssertionException(sprintf(
                 'Invalid Assertion in SAML Response, errors: "%s"',
-                implode('", "', $assertionValidationResult->getErrors())
+                implode('", "', $assertionValidationResult->getErrors()),
             ));
         }
 
-        foreach ($assertion->getSubjectConfirmation() as $subjectConfirmation) {
+        foreach ($assertion->getSubject()->getSubjectConfirmation() as $subjectConfirmation) {
             $subjectConfirmationValidationResult = $this->subjectConfirmationValidator->validate(
-                $subjectConfirmation
+                $subjectConfirmation,
             );
             if (!$subjectConfirmationValidationResult->isValid()) {
                 throw new InvalidSubjectConfirmationException(sprintf(
                     'Invalid SubjectConfirmation in Assertion, errors: "%s"',
-                    implode('", "', $subjectConfirmationValidationResult->getErrors())
+                    implode('", "', $subjectConfirmationValidationResult->getErrors()),
                 ));
             }
         }

@@ -22,7 +22,7 @@ class PreconditionNotMetException extends InvalidResponseException
     {
         $message = sprintf(
             'Cannot process response, preconditions not met: "%s"',
-            implode('", "', $result->getErrors())
+            implode('", "', $result->getErrors()),
         );
 
         return new self($message);

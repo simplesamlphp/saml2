@@ -16,15 +16,6 @@ use SimpleSAML\XML\Exception\SchemaViolationException;
  */
 final class IDPEntry extends AbstractSamlpElement
 {
-    /** @var string */
-    protected string $providerId;
-
-    /** @var string|null */
-    protected ?string $name;
-
-    /** @var string|null */
-    protected ?string $loc;
-
     /**
      * Initialize an IDPEntry element.
      *
@@ -32,11 +23,14 @@ final class IDPEntry extends AbstractSamlpElement
      * @param string|null $name
      * @param string|null $loc
      */
-    public function __construct(string $providerId, ?string $name = null, ?string $loc = null)
-    {
-        $this->setProviderId($providerId);
-        $this->setName($name);
-        $this->setLoc($loc);
+    public function __construct(
+        protected string $providerId,
+        protected ?string $name = null,
+        protected ?string $loc = null,
+    ) {
+        Assert::validURI($providerId, SchemaViolationException::class); // Covers the empty string
+        Assert::nullOrNotWhitespaceOnly($name);
+        Assert::nullOrValidURI($loc, SchemaViolationException::class); // Covers the empty string
     }
 
 
@@ -50,16 +44,6 @@ final class IDPEntry extends AbstractSamlpElement
 
 
     /**
-     * @param string $providerId
-     */
-    private function setProviderId(string $providerId): void
-    {
-        Assert::validURI($providerId, SchemaViolationException::class); // Covers the empty string
-        $this->providerId = $providerId;
-    }
-
-
-    /**
      * @return string|null
      */
     public function getName(): ?string
@@ -69,31 +53,11 @@ final class IDPEntry extends AbstractSamlpElement
 
 
     /**
-     * @param string $name|null
-     */
-    private function setName(?string $name): void
-    {
-        Assert::nullOrNotWhitespaceOnly($name);
-        $this->name = $name;
-    }
-
-
-    /**
      * @return string|null
      */
     public function getLoc(): ?string
     {
         return $this->loc;
-    }
-
-
-    /**
-     * @param string $loc|null
-     */
-    private function setLoc(?string $loc): void
-    {
-        Assert::nullOrValidURI($loc, SchemaViolationException::class); // Covers the empty string
-        $this->loc = $loc;
     }
 
 

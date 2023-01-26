@@ -43,7 +43,7 @@ final class ConditionTest extends TestCase
         $this->testedClass = CustomCondition::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_Condition.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_Condition.xml',
         );
 
         $container = new MockContainer();
@@ -60,12 +60,12 @@ final class ConditionTest extends TestCase
     public function testMarshalling(): void
     {
         $condition = new CustomCondition(
-            [new Audience('urn:some:audience')]
+            [new Audience('urn:some:audience')],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($condition)
+            strval($condition),
         );
     }
 
@@ -88,7 +88,7 @@ final class ConditionTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($condition)
+            strval($condition),
         );
     }
 

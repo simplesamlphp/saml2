@@ -28,12 +28,12 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
      * static methods to get its properties from a given \DOMElement for your convenience. Look at the implementation
      * of fromXML() to know how to use them.
      *
-     * @param int         $index
-     * @param string      $binding
-     * @param string      $location
-     * @param bool|null   $isDefault
+     * @param int $index
+     * @param string $binding
+     * @param string $location
+     * @param bool|null $isDefault
      * @param string|null $responseLocation
-     * @param array       $attributes
+     * @param array $attributes
      */
     public function __construct(
         int $index,
@@ -41,9 +41,10 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
         string $location,
         ?bool $isDefault = null,
         ?string $responseLocation = null,
-        array $attributes = []
+        array $attributes = [],
     ) {
         parent::__construct($binding, $location, $responseLocation, $attributes);
+
         $this->setIndex($index);
         $this->setIsDefault($isDefault);
     }
@@ -67,7 +68,7 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
             $xml->localName,
             $qualifiedName,
             'Unexpected name for endpoint: ' . $xml->localName . '. Expected: ' . $qualifiedName . '.',
-            InvalidDOMElementException::class
+            InvalidDOMElementException::class,
         );
 
         /** @var int $index */
@@ -85,7 +86,7 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
             $location,
             self::getBooleanAttribute($xml, 'isDefault', null),
             self::getAttribute($xml, 'ResponseLocation', null),
-            self::getAttributesNSFromXML($xml)
+            self::getAttributesNSFromXML($xml),
         );
     }
 

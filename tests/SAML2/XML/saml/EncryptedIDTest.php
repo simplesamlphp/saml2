@@ -59,7 +59,7 @@ final class EncryptedIDTest extends TestCase
         $this->testedClass = EncryptedID::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedID.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedID.xml',
         );
 
         $container = new MockContainer();
@@ -77,44 +77,37 @@ final class EncryptedIDTest extends TestCase
     public function testMarshalling(): void
     {
         $ed = new EncryptedData(
-            new CipherData(new CipherValue('720FAxwOXcv8ast9YvQutUoue+YA2FgLLNaD/FZrWiNexTkPyZ8CWrcf2zZj2zrOwTjQ9KJvzvCuzq4fM51sU1boOakLpz05NonDdMgeWW/eWcOJJfOZs0tYvYc5qZ/R+BzRnJsGG6w2ZmipEi88X/8uA85c')),
-            null,
-            C::XMLENC_ELEMENT,
-            null,
-            null,
-            new EncryptionMethod('http://www.w3.org/2009xmlenc11#aes256-gcm'),
-            new KeyInfo([
+            cipherData: new CipherData(
+                new CipherValue('720FAxwOXcv8ast9YvQutUoue+YA2FgLLNaD/FZrWiNexTkPyZ8CWrcf2zZj2zrOwTjQ9KJvzvCuzq4fM51sU1boOakLpz05NonDdMgeWW/eWcOJJfOZs0tYvYc5qZ/R+BzRnJsGG6w2ZmipEi88X/8uA85c'),
+            ),
+            type: C::XMLENC_ELEMENT,
+            encryptionMethod: new EncryptionMethod('http://www.w3.org/2009xmlenc11#aes256-gcm'),
+            keyInfo: new KeyInfo([
                 new EncryptedKey(
-                    new CipherData(new CipherValue('he5ZBjtfp/1/Y3PgE/CWspDPADig9vuZ7yZyYXDQ1wA/HBTPCldtL/p6UT5RCAFYUwN6kp3jnHkhK1yMjrI1SMw0n5NEc2wO9N5inQIeQOZ8XD9yD9M5fHvWz2ByNMGlB35RWMnBRHzDi1PRV7Irwcs9WoiODh3i6j2vYXP7cAo=')),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    new EncryptionMethod('http://www.w3.org/2009/xmlenc11#rsa-oaep'),
+                    cipherData: new CipherData(
+                        new CipherValue('he5ZBjtfp/1/Y3PgE/CWspDPADig9vuZ7yZyYXDQ1wA/HBTPCldtL/p6UT5RCAFYUwN6kp3jnHkhK1yMjrI1SMw0n5NEc2wO9N5inQIeQOZ8XD9yD9M5fHvWz2ByNMGlB35RWMnBRHzDi1PRV7Irwcs9WoiODh3i6j2vYXP7cAo='),
+                    ),
+                    encryptionMethod: new EncryptionMethod('http://www.w3.org/2009/xmlenc11#rsa-oaep'),
                 )
             ]),
         );
         $ek = new EncryptedKey(
-            new CipherData(new CipherValue('he5ZBjtfp/1/Y3PgE/CWspDPADig9vuZ7yZyYXDQ1wA/HBTPCldtL/p6UT5RCAFYUwN6kp3jnHkhK1yMjrI1SMw0n5NEc2wO9N5inQIeQOZ8XD9yD9M5fHvWz2ByNMGlB35RWMnBRHzDi1PRV7Irwcs9WoiODh3i6j2vYXP7cAo=')),
-            'Encrypted_KEY_ID',
-            null,
-            null,
-            null,
-            'some_ENTITY_ID',
-            new CarriedKeyName('Name of the key'),
-            new EncryptionMethod('http://www.w3.org/2009/xmlenc11#rsa-oaep'),
-            null,
-            new ReferenceList(
-                [new DataReference('#Encrypted_DATA_ID')]
-            )
+            cipherData: new CipherData(
+                new CipherValue('he5ZBjtfp/1/Y3PgE/CWspDPADig9vuZ7yZyYXDQ1wA/HBTPCldtL/p6UT5RCAFYUwN6kp3jnHkhK1yMjrI1SMw0n5NEc2wO9N5inQIeQOZ8XD9yD9M5fHvWz2ByNMGlB35RWMnBRHzDi1PRV7Irwcs9WoiODh3i6j2vYXP7cAo='),
+            ),
+            id: 'Encrypted_KEY_ID',
+            recipient: 'some_ENTITY_ID',
+            carriedKeyName: new CarriedKeyName('Name of the key'),
+            encryptionMethod: new EncryptionMethod('http://www.w3.org/2009/xmlenc11#rsa-oaep'),
+            referenceList: new ReferenceList(
+                [new DataReference('#Encrypted_DATA_ID')],
+            ),
         );
         $eid = new EncryptedID($ed);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($eid)
+            strval($eid),
         );
     }
 
@@ -124,38 +117,30 @@ final class EncryptedIDTest extends TestCase
     public function testMarshallingElementOrdering(): void
     {
         $ed = new EncryptedData(
-            new CipherData(new CipherValue('iFz/8KASJCLCAHqaAKhZXWOG/TPZlgTxcQ25lTGxdSdEsGYz7cg5lfZAbcN3UITCP9MkJsyjMlRsQouIqBkoPCGZz8NXibDkQ8OUeE7JdkFgKvgUMXawp+uDL4gHR8L7l6SPAmWZU3Hx/Wg9pTJBOpTjwoS0')),
-            null,
-            null,
-            null,
-            null,
-            new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#aes128-cbc'),
-            new KeyInfo([
+            cipherData: new CipherData(
+                new CipherValue('iFz/8KASJCLCAHqaAKhZXWOG/TPZlgTxcQ25lTGxdSdEsGYz7cg5lfZAbcN3UITCP9MkJsyjMlRsQouIqBkoPCGZz8NXibDkQ8OUeE7JdkFgKvgUMXawp+uDL4gHR8L7l6SPAmWZU3Hx/Wg9pTJBOpTjwoS0'),
+            ),
+            encryptionMethod: new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#aes128-cbc'),
+            keyInfo: new KeyInfo([
                 new EncryptedKey(
-                    new CipherData(new CipherValue('GMhpk09X+quNC/SsnxcDglZU/DCLAu9bMJ5bPcgaBK4s3F1eXciU8hlOYNaskSwP86HmA704NbzSDOHAgN6ckR+iCssxA7XCBjz0hltsgfn5p9Rh8qKtKltiXvxo/xXTcSXXZXNcE0R2KTya0P4DjZvYYgbIls/AH8ZyDV07ntI=')),
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    null,
-                    new EncryptionMethod('http://www.w3.org/2009/xmlenc11#rsa-oaep'),
+                    cipherData: new CipherData(
+                        new CipherValue('GMhpk09X+quNC/SsnxcDglZU/DCLAu9bMJ5bPcgaBK4s3F1eXciU8hlOYNaskSwP86HmA704NbzSDOHAgN6ckR+iCssxA7XCBjz0hltsgfn5p9Rh8qKtKltiXvxo/xXTcSXXZXNcE0R2KTya0P4DjZvYYgbIls/AH8ZyDV07ntI='),
+                    ),
+                    encryptionMethod: new EncryptionMethod('http://www.w3.org/2009/xmlenc11#rsa-oaep'),
                 ),
             ]),
         );
         $ek = new EncryptedKey(
-            new CipherData(new CipherValue('GMhpk09X+quNC/SsnxcDglZU/DCLAu9bMJ5bPcgaBK4s3F1eXciU8hlOYNaskSwP86HmA704NbzSDOHAgN6ckR+iCssxA7XCBjz0hltsgfn5p9Rh8qKtKltiXvxo/xXTcSXXZXNcE0R2KTya0P4DjZvYYgbIls/AH8ZyDV07ntI=')),
-            'Encrypted_KEY_ID',
-            null,
-            null,
-            null,
-            'some_ENTITY_ID',
-            new CarriedKeyName('Name of the key'),
-            new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5'),
-            null,
-            new ReferenceList(
-                [new DataReference('#Encrypted_DATA_ID')]
-            )
+            cipherData: new CipherData(
+                new CipherValue('GMhpk09X+quNC/SsnxcDglZU/DCLAu9bMJ5bPcgaBK4s3F1eXciU8hlOYNaskSwP86HmA704NbzSDOHAgN6ckR+iCssxA7XCBjz0hltsgfn5p9Rh8qKtKltiXvxo/xXTcSXXZXNcE0R2KTya0P4DjZvYYgbIls/AH8ZyDV07ntI='),
+            ),
+            id: 'Encrypted_KEY_ID',
+            recipient: 'some_ENTITY_ID',
+            carriedKeyName: new CarriedKeyName('Name of the key'),
+            encryptionMethod: new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5'),
+            referenceList: new ReferenceList(
+                [new DataReference('#Encrypted_DATA_ID')],
+            ),
         );
         $eid = new EncryptedID($ed);
         $eidElement = $eid->toXML();
@@ -199,7 +184,7 @@ final class EncryptedIDTest extends TestCase
         $encid = EncryptedID::fromXML($doc->documentElement);
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
-            $privKey
+            $privKey,
         );
         $id = $encid->decrypt($decryptor);
         $this->assertEquals(strval($nameid), strval($id));
@@ -217,7 +202,7 @@ final class EncryptedIDTest extends TestCase
         $encid = EncryptedID::fromXML($doc->documentElement);
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
-            $privKey
+            $privKey,
         );
         $id = $encid->decrypt($decryptor);
         $this->assertInstanceOf(CustomBaseID::class, $id);
@@ -237,7 +222,7 @@ final class EncryptedIDTest extends TestCase
         $encid = EncryptedID::fromXML($doc->documentElement);
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
-            $privKey
+            $privKey,
         );
         $id = $encid->decrypt($decryptor);
         $this->assertInstanceOf(UnknownID::class, $id);

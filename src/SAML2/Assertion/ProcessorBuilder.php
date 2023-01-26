@@ -47,7 +47,7 @@ class ProcessorBuilder
         Destination $currentDestination,
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider,
-        Response $response
+        Response $response,
     ): Processor {
         $keyloader = new PrivateKeyLoader();
         $decrypter = new Decrypter($logger, $identityProvider, $serviceProvider, $keyloader);
@@ -56,14 +56,14 @@ class ProcessorBuilder
             $identityProvider,
             $serviceProvider,
             $currentDestination,
-            $response
+            $response,
         );
 
         $transformerChain = self::createAssertionTransformerChain(
             $logger,
             $keyloader,
             $identityProvider,
-            $serviceProvider
+            $serviceProvider,
         );
 
         return new Processor(
@@ -73,7 +73,7 @@ class ProcessorBuilder
             $subjectConfirmationValidator,
             $transformerChain,
             $identityProvider,
-            $logger
+            $logger,
         );
     }
 
@@ -85,7 +85,7 @@ class ProcessorBuilder
      */
     private static function createAssertionValidator(
         IdentityProvider $identityProvider,
-        ServiceProvider $serviceProvider
+        ServiceProvider $serviceProvider,
     ): AssertionValidator {
         $validator = new AssertionValidator($identityProvider, $serviceProvider);
         $validator->addConstraintValidator(new NotBefore());
@@ -108,28 +108,14 @@ class ProcessorBuilder
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider,
         Destination $currentDestination,
-        Response $response
+        Response $response,
     ): SubjectConfirmationValidator {
         $validator = new SubjectConfirmationValidator($identityProvider, $serviceProvider);
-        $validator->addConstraintValidator(
-            new SubjectConfirmationMethod()
-        );
-        $validator->addConstraintValidator(
-            new SubjectConfirmationNotBefore()
-        );
-        $validator->addConstraintValidator(
-            new SubjectConfirmationNotOnOrAfter()
-        );
-        $validator->addConstraintValidator(
-            new SubjectConfirmationRecipientMatches(
-                $currentDestination
-            )
-        );
-        $validator->addConstraintValidator(
-            new SubjectConfirmationResponseToMatches(
-                $response
-            )
-        );
+        $validator->addConstraintValidator(new SubjectConfirmationMethod());
+        $validator->addConstraintValidator(new SubjectConfirmationNotBefore());
+        $validator->addConstraintValidator(new SubjectConfirmationNotOnOrAfter());
+        $validator->addConstraintValidator(new SubjectConfirmationRecipientMatches($currentDestination));
+        $validator->addConstraintValidator(new SubjectConfirmationResponseToMatches($response));
 
         return $validator;
     }
@@ -145,12 +131,10 @@ class ProcessorBuilder
         LoggerInterface $logger,
         PrivateKeyLoader $keyloader,
         IdentityProvider $identityProvider,
-        ServiceProvider $serviceProvider
+        ServiceProvider $serviceProvider,
     ): TransformerChain {
         $chain = new TransformerChain($identityProvider, $serviceProvider);
-        $chain->addTransformerStep(
-            new NameIdDecryptionTransformer($logger, $keyloader)
-        );
+        $chain->addTransformerStep(new NameIdDecryptionTransformer($logger, $keyloader));
 
         return $chain;
     }

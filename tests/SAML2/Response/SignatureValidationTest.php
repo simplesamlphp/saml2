@@ -19,8 +19,11 @@ use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\Utils\Certificate;
+
+use function dirname;
 
 /**
  * Test that ensures that either the response or the assertion(s) or both must be signed.
@@ -70,10 +73,9 @@ final class SignatureValidationTest extends MockeryTestCase
             ->andReturn($this->assertionProcessor);
 
         $this->identityProviderConfiguration = new IdentityProvider(
-            ['certificateData' => PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE)]
+            ['certificateData' => PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE)],
         );
-        $this->serviceProviderConfiguration
-            = new ServiceProvider(['entityId' => C::ENTITY_URN]);
+        $this->serviceProviderConfiguration = new ServiceProvider(['entityId' => C::ENTITY_URN]);
     }
 
 
@@ -95,7 +97,7 @@ final class SignatureValidationTest extends MockeryTestCase
             $this->serviceProviderConfiguration,
             $this->identityProviderConfiguration,
             new Destination($this->currentDestination),
-            $this->getUnsignedResponseWithSignedAssertion()
+            $this->getUnsignedResponseWithSignedAssertion(),
         );
     }
 
@@ -118,7 +120,7 @@ final class SignatureValidationTest extends MockeryTestCase
             $this->serviceProviderConfiguration,
             $this->identityProviderConfiguration,
             new Destination($this->currentDestination),
-            $this->getSignedResponseWithUnsignedAssertion()
+            $this->getSignedResponseWithUnsignedAssertion(),
         );
     }
 
@@ -141,21 +143,22 @@ final class SignatureValidationTest extends MockeryTestCase
             $this->serviceProviderConfiguration,
             $this->identityProviderConfiguration,
             new Destination($this->currentDestination),
-            $this->getSignedResponseWithSignedAssertion()
+            $this->getSignedResponseWithSignedAssertion(),
         );
     }
 
 
     /**
-     * NOTE: This test is probably wrong; the SAML2 specs do not demand a signature
-     *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
+     */
     public function testThatAnUnsignedResponseWithNoSignedAssertionsThrowsAnException(): void
     {
-        $this->expectException(UnsignedResponseException::class);
-
-        $assertion = Mockery::mock(Assertion::class);
+        $assertion = Assertion::fromXML(
+            DOMDocumentFactory::fromFile(
+                dirname(__FILE__, 3) . '/resources/xml/saml_Assertion.xml',
+            )->documentElement
+        );
 
         // The processAssertions is called to decrypt possible encrypted assertions,
         // after which it should fail with an exception due to having no signature
@@ -167,14 +170,14 @@ final class SignatureValidationTest extends MockeryTestCase
 
         $processor = new ResponseProcessor(new NullLogger());
 
+        $this->expectException(UnsignedResponseException::class);
         $processor->process(
             $this->serviceProviderConfiguration,
             $this->identityProviderConfiguration,
             new Destination($this->currentDestination),
-            $this->getUnsignedResponseWithUnsignedAssertion()
+            $this->getUnsignedResponseWithUnsignedAssertion(),
         );
     }
-     */
 
 
     /**

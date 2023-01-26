@@ -20,13 +20,6 @@ final class Scope extends AbstractShibmdElement
 {
     use StringElementTrait;
 
-    /**
-     * Whether this is a regexp scope.
-     *
-     * @var bool
-     */
-    protected bool $regexp;
-
 
     /**
      * Create a Scope.
@@ -34,10 +27,11 @@ final class Scope extends AbstractShibmdElement
      * @param string $scope
      * @param bool $regexp
      */
-    public function __construct(string $scope, bool $regexp = false)
-    {
+    public function __construct(
+        string $scope,
+        protected bool $regexp = false,
+    ) {
         $this->setContent($scope);
-        $this->setIsRegexpScope($regexp);
     }
 
 
@@ -62,17 +56,6 @@ final class Scope extends AbstractShibmdElement
     public function isRegexpScope(): bool
     {
         return $this->regexp;
-    }
-
-
-    /**
-     * Set the value of the regexp-property
-     *
-     * @param bool $regexp
-     */
-    private function setIsRegexpScope(bool $regexp): void
-    {
-        $this->regexp = $regexp;
     }
 
 
@@ -109,12 +92,7 @@ final class Scope extends AbstractShibmdElement
         /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
         $e->textContent = $this->getContent();
-
-        if ($this->isRegexpScope() === true) {
-            $e->setAttribute('regexp', 'true');
-        } else {
-            $e->setAttribute('regexp', 'false');
-        }
+        $e->setAttribute('regexp', $this->isRegexpScope() ? 'true' : 'false');
 
         return $e;
     }

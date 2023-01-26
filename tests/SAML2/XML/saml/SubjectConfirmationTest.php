@@ -42,7 +42,7 @@ final class SubjectConfirmationTest extends TestCase
         $this->testedClass = SubjectConfirmation::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_SubjectConfirmation.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_SubjectConfirmation.xml',
         );
     }
 
@@ -73,13 +73,13 @@ final class SubjectConfirmationTest extends TestCase
                     new KeyInfo([new KeyName('SomeKey')]),
                     new Chunk(DOMDocumentFactory::fromString('<some>Arbitrary Element</some>')->documentElement),
                 ],
-                [$attr1, $attr2]
+                [$attr1, $attr2],
             ),
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($subjectConfirmation)
+            strval($subjectConfirmation),
         );
     }
 
@@ -104,7 +104,7 @@ XML
 
         $this->assertEquals(
             $doc->saveXML($doc->documentElement),
-            strval($subjectConfirmation)
+            strval($subjectConfirmation),
         );
     }
 
@@ -116,7 +116,7 @@ XML
         $subjectConfirmation = new SubjectConfirmation(
             'urn:test:SomeMethod',
             new NameID('SomeNameIDValue'),
-            new SubjectConfirmationData(time())
+            new SubjectConfirmationData(time()),
         );
 
         // Marshall it to a \DOMElement
@@ -132,7 +132,7 @@ XML
         $subjectConfirmationElements = XPath::xpQuery(
             $subjectConfirmationElement,
             './saml_assertion:NameID/following-sibling::*',
-            $xpCache
+            $xpCache,
         );
         $this->assertCount(1, $subjectConfirmationElements);
         $this->assertEquals('saml:SubjectConfirmationData', $subjectConfirmationElements[0]->tagName);
@@ -150,7 +150,7 @@ XML
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($subjectConfirmation)
+            strval($subjectConfirmation),
         );
     }
 
@@ -229,7 +229,7 @@ XML
 
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage(
-            'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.'
+            'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.',
         );
         SubjectConfirmation::fromXML($document->documentElement);
     }

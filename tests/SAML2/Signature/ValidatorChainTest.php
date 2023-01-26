@@ -56,7 +56,7 @@ final class ValidatorChainTest extends TestCase
 
         $validationResult = $this->chain->hasValidSignature(
             new Response(new Status(new StatusCode())),
-            new IdentityProvider([])
+            new IdentityProvider([]),
         );
         $this->assertFalse($validationResult, 'The validation result is not what is expected');
     }
@@ -74,7 +74,7 @@ final class ValidatorChainTest extends TestCase
 
         $validationResult = $this->chain->hasValidSignature(
             new Response(new Status(new StatusCode())),
-            new IdentityProvider([])
+            new IdentityProvider([]),
         );
         $this->assertFalse($validationResult, 'The validation result is not what is expected');
     }

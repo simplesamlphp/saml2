@@ -71,19 +71,19 @@ trait IdentifierTrait
             $baseId,
             1,
             'More than one <saml:BaseID> in <' . $class . '>.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
         Assert::maxCount(
             $nameId,
             1,
             'More than one <saml:NameID> in <' . $class . '>.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
         Assert::maxCount(
             $encryptedId,
             1,
             'More than one <saml:EncryptedID> in <' . $class . '>.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $identifiers = array_merge($baseId, $nameId, $encryptedId);
@@ -91,7 +91,7 @@ trait IdentifierTrait
             $identifiers,
             1,
             'A <' . $class . '> can contain exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null $identifier */

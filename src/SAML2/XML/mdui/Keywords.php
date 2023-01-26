@@ -21,32 +21,16 @@ use function implode;
 final class Keywords extends AbstractMduiElement
 {
     /**
-     * The keywords of this item.
-     *
-     * Array of strings.
-     *
-     * @var string[]
-     */
-    protected array $Keywords = [];
-
-    /**
-     * The language of this item.
-     *
-     * @var string
-     */
-    protected string $lang;
-
-
-    /**
      * Initialize a Keywords.
      *
      * @param string $lang
-     * @param string[] $Keywords
+     * @param string[] $keywords
      */
-    public function __construct(string $lang, array $Keywords = [])
-    {
-        $this->setLanguage($lang);
-        $this->setKeywords($Keywords);
+    public function __construct(
+        protected string $lang,
+        protected array $keywords = [],
+    ) {
+        Assert::allNotContains($keywords, '+', 'Keywords may not contain a "+" character.');
     }
 
 
@@ -62,38 +46,13 @@ final class Keywords extends AbstractMduiElement
 
 
     /**
-     * Set the value of the lang-property
-     *
-     * @param string $lang
-     */
-    private function setLanguage(string $lang): void
-    {
-        $this->lang = $lang;
-    }
-
-
-    /**
      * Collect the value of the Keywords-property
      *
      * @return string[]
      */
     public function getKeywords(): array
     {
-        return $this->Keywords;
-    }
-
-
-    /**
-     * Set the value of the Keywords-property
-     *
-     * @param string[] $keywords
-     *
-     * @throws \SimpleSAML\Assert\AssertionFailedException if one of the keywords contains `+`
-     */
-    private function setKeywords(array $keywords): void
-    {
-        Assert::allNotContains($keywords, '+', 'Keywords may not contain a "+" character.');
-        $this->Keywords = $keywords;
+        return $this->keywords;
     }
 
 
@@ -107,7 +66,7 @@ final class Keywords extends AbstractMduiElement
     public function addKeyword(string $keyword): void
     {
         Assert::notContains($keyword, '+', 'Keyword may not contain a "+" character.');
-        $this->Keywords[] = $keyword;
+        $this->keywords[] = $keyword;
     }
 
 

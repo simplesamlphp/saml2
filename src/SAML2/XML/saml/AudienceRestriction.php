@@ -17,18 +17,15 @@ use SimpleSAML\XML\Utils as XMLUtils;
  */
 final class AudienceRestriction extends AbstractConditionType
 {
-    /** @var \SimpleSAML\SAML2\XML\saml\Audience[] */
-    protected array $audience = [];
-
-
     /**
      * Initialize a saml:AudienceRestriction
      *
      * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
      */
-    public function __construct(array $audience)
-    {
-        $this->setAudience($audience);
+    public function __construct(
+        protected array $audience,
+    ) {
+        Assert::allIsInstanceOf($audience, Audience::class);
     }
 
 
@@ -40,19 +37,6 @@ final class AudienceRestriction extends AbstractConditionType
     public function getAudience(): array
     {
         return $this->audience;
-    }
-
-
-    /**
-     * Set the value of the Audience-property
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
-     */
-    private function setAudience(array $audience): void
-    {
-        Assert::allIsInstanceOf($audience, Audience::class);
-
-        $this->audience = $audience;
     }
 
 

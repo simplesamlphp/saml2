@@ -37,7 +37,7 @@ final class SurNameTest extends TestCase
         $this->testedClass = SurName::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_SurName.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_SurName.xml',
         );
     }
 
@@ -54,7 +54,7 @@ final class SurNameTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
+            strval($name),
         );
     }
 
@@ -71,7 +71,7 @@ final class SurNameTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($name)
+            strval($name),
         );
     }
 }

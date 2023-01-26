@@ -42,13 +42,13 @@ final class PublicationTest extends TestCase
         $this->testedClass = Publication::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdrpi_Publication.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdrpi_Publication.xml',
         );
 
         $this->arrayRepresentation = [
             'publisher' => 'SomePublisher',
             'creationInstant' => 1234567890,
-            'publicationId' => 'SomePublicationId'
+            'publicationId' => 'SomePublicationId',
         ];
     }
 
@@ -60,12 +60,12 @@ final class PublicationTest extends TestCase
         $publication = new Publication(
             'SomePublisher',
             1293840000,
-            'SomePublicationId'
+            'SomePublicationId',
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($publication)
+            strval($publication),
         );
     }
 
@@ -78,7 +78,7 @@ final class PublicationTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($publication)
+            strval($publication),
         );
     }
 

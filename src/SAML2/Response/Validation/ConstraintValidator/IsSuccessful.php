@@ -24,7 +24,7 @@ class IsSuccessful implements ConstraintValidator
      */
     public function validate(
         Response $response,
-        Result $result
+        Result $result,
     ): void {
         if (!$response->isSuccess()) {
             $result->addError($this->buildMessage($response->getStatus()));
@@ -54,7 +54,7 @@ class IsSuccessful implements ConstraintValidator
             '%s%s%s',
             $this->truncateStatus($statusCode->getValue()),
             $subCodes ? '/' . implode('/', $subCodes) : '',
-            $statusMessage ? ' ' . $statusMessage->getContent() : ''
+            $statusMessage ? ' ' . $statusMessage->getContent() : '',
         );
     }
 

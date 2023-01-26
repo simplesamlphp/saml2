@@ -44,7 +44,7 @@ final class BaseIDTest extends TestCase
         $this->testedClass = AbstractBaseID::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_BaseID.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_BaseID.xml',
         );
 
         $container = new MockContainer();
@@ -93,7 +93,7 @@ final class BaseIDTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($baseId)
+            strval($baseId),
         );
     }
 

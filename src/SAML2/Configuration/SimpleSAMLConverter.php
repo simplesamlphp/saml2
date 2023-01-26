@@ -21,7 +21,7 @@ class SimpleSAMLConverter
      */
     public static function convertToIdentityProvider(
         Configuration $configuration,
-        string $certificatePrefix = ''
+        string $certificatePrefix = '',
     ): IdentityProvider {
         $pluckedConfiguration = static::pluckConfiguration($configuration, $certificatePrefix);
         static::enrichForDecryptionProvider($configuration, $pluckedConfiguration);
@@ -41,7 +41,7 @@ class SimpleSAMLConverter
      */
     public static function convertToServiceProvider(
         Configuration $configuration,
-        string $certificatePrefix = ''
+        string $certificatePrefix = '',
     ): ServiceProvider {
         $pluckedConfiguration = static::pluckConfiguration($configuration, $certificatePrefix);
         static::enrichForServiceProvider($configuration, $pluckedConfiguration);
@@ -126,7 +126,7 @@ class SimpleSAMLConverter
      */
     protected static function enrichForDecryptionProvider(
         Configuration $configuration,
-        array &$baseConfiguration
+        array &$baseConfiguration,
     ): void {
         if ($configuration->hasValue('sharedKey')) {
             $baseConfiguration['sharedKey'] = $configuration->getString('sharedKey', null);
@@ -136,7 +136,7 @@ class SimpleSAMLConverter
             $baseConfiguration['privateKeys'][] = new PrivateKey(
                 $configuration->getString('new_privatekey'),
                 PrivateKey::NAME_NEW,
-                $configuration->getString('new_privatekey_pass', null)
+                $configuration->getString('new_privatekey_pass', null),
             );
         }
 
@@ -144,12 +144,13 @@ class SimpleSAMLConverter
             $baseConfiguration['privateKeys'][] = new PrivateKey(
                 $configuration->getString('privatekey'),
                 PrivateKey::NAME_DEFAULT,
-                $configuration->getString('privatekey_pass', null)
+                $configuration->getString('privatekey_pass', null),
             );
 
             if ($configuration->hasValue('encryption.blacklisted-algorithms')) {
-                $baseConfiguration['blacklistedEncryptionAlgorithms'] = $configuration
-                    ->getValue('encryption.blacklisted-algorithms');
+                $baseConfiguration['blacklistedEncryptionAlgorithms'] = $configuration->getValue(
+                    'encryption.blacklisted-algorithms'
+                );
             }
         }
     }

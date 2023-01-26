@@ -45,7 +45,7 @@ final class AttributeTest extends TestCase
         $this->testedClass = Attribute::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_Attribute.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_Attribute.xml',
         );
 
         $container = new MockContainer();
@@ -73,14 +73,14 @@ final class AttributeTest extends TestCase
             'TheFriendlyName',
             [
                 new AttributeValue('FirstValue'),
-                new AttributeValue('SecondValue')
+                new AttributeValue('SecondValue'),
             ],
-            [$attr1, $attr2]
+            [$attr1, $attr2],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($attribute)
+            strval($attribute),
         );
     }
 
@@ -97,7 +97,7 @@ final class AttributeTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($attribute)
+            strval($attribute),
         );
     }
 

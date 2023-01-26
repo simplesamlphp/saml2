@@ -48,7 +48,7 @@ class KeyLoader
     public static function extractPublicKeys(
         CertificateProvider $config,
         string $usage = null,
-        bool $required = false
+        bool $required = false,
     ): KeyCollection {
         $keyLoader = new self();
 
@@ -65,7 +65,7 @@ class KeyLoader
     public function loadKeysFromConfiguration(
         CertificateProvider $config,
         string $usage = null,
-        bool $required = false
+        bool $required = false,
     ): KeyCollection {
         $keys = $config->getKeys();
         $certificateData = $config->getCertificateData();
@@ -82,7 +82,7 @@ class KeyLoader
         if ($required && !$this->hasKeys()) {
             throw new NoKeysFoundException(
                 'No keys found in configured metadata, please ensure that either the "keys", "certData" or '
-                . '"certificate" entries is available.'
+                . '"certificate" entries is available.',
             );
         }
 
@@ -137,7 +137,7 @@ class KeyLoader
         if (!Certificate::hasValidStructure($certificate)) {
             throw new InvalidCertificateStructureException(sprintf(
                 'Could not find PEM encoded certificate in "%s"',
-                $certificateFile
+                $certificateFile,
             ));
         }
 

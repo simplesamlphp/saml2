@@ -26,11 +26,9 @@ $nid = new NameID('very secret');
 $eid = new EncryptedID($nid->encrypt($encryptor));
 
 $logoutRequest = new LogoutRequest(
-    $eid,
-    null,
-    null,
-    [new SessionIndex('SomeSessionIndex1'), new SessionIndex('SomeSessionIndex2')],
-    new Issuer('urn:test:TheIssuer')
+    identifier: $eid,
+    sessionIndexes: [new SessionIndex('SomeSessionIndex1'), new SessionIndex('SomeSessionIndex2')],
+    issuer: new Issuer('urn:test:TheIssuer')
 );
 
 $logoutRequest = $logoutRequest->toXML();

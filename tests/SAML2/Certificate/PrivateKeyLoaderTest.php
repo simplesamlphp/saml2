@@ -65,23 +65,23 @@ final class PrivateKeyLoaderTest extends TestCase
             'no passphrase' => [
                 new ConfPrivateKey(
                     PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::BROKEN_PRIVATE_KEY),
-                    ConfPrivateKey::NAME_DEFAULT
-                )
+                    ConfPrivateKey::NAME_DEFAULT,
+                ),
             ],
             'with passphrase' => [
                 new ConfPrivateKey(
                     PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::BROKEN_PRIVATE_KEY),
                     ConfPrivateKey::NAME_DEFAULT,
-                    'foo bar baz'
-                )
+                    'foo bar baz',
+                ),
             ],
             'private key as contents' => [
                 new ConfPrivateKey(
                     PEMCertificatesMock::loadPlainKeyFile(PEMCertificatesMock::BROKEN_PRIVATE_KEY),
                     ConfPrivateKey::NAME_DEFAULT,
                     '',
-                    false
-                )
+                    false,
+                ),
             ],
         ];
     }

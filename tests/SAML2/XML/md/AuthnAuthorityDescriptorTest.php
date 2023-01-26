@@ -52,7 +52,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->testedClass = AuthnAuthorityDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_AuthnAuthorityDescriptor.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_AuthnAuthorityDescriptor.xml',
         );
 
         $this->aqs = new AuthnQueryService(C::BINDING_HTTP_POST, 'http://www.example.com/aqs');
@@ -72,12 +72,12 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             [$this->aqs],
             [C::NS_SAMLP, C::PROTOCOL],
             [$this->aidrs],
-            [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)]
+            [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($aad)
+            strval($aad),
         );
     }
 
@@ -93,7 +93,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             [],
             [C::NS_SAMLP, C::PROTOCOL],
             [$this->aidrs],
-            [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)]
+            [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)],
         );
     }
 
@@ -105,7 +105,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     {
         new AuthnAuthorityDescriptor(
             [$this->aqs],
-            [C::NS_SAMLP, C::PROTOCOL]
+            [C::NS_SAMLP, C::PROTOCOL],
         );
 
         $this->assertTrue(true);
@@ -122,7 +122,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             [$this->aqs],
             [C::NS_SAMLP, C::PROTOCOL],
             [$this->aidrs],
-            [new NameIDFormat(''), new NameIDFormat(C::NAMEID_TRANSIENT)]
+            [new NameIDFormat(''), new NameIDFormat(C::NAMEID_TRANSIENT)],
         );
     }
 
@@ -138,7 +138,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             [$this->aqs, ''],
             [C::NS_SAMLP, C::PROTOCOL],
             [$this->aidrs],
-            [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)]
+            [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)],
         );
     }
 
@@ -154,7 +154,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             [$this->aqs],
             [C::NS_SAMLP, C::PROTOCOL],
             [$this->aidrs, ''],
-            [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)]
+            [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)],
         );
     }
 
@@ -171,7 +171,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($aad)
+            strval($aad),
         );
     }
 

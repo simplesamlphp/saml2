@@ -35,7 +35,7 @@ final class StatusDetailTest extends TestCase
         $this->testedClass = StatusDetail::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_StatusDetail.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_StatusDetail.xml',
         );
     }
 
@@ -45,14 +45,14 @@ final class StatusDetailTest extends TestCase
     public function testMarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(
-            '<ssp:Cause xmlns:ssp="urn:custom:ssp">org.sourceid.websso.profiles.idp.FailedAuthnSsoException</ssp:Cause>'
+            '<ssp:Cause xmlns:ssp="urn:custom:ssp">org.sourceid.websso.profiles.idp.FailedAuthnSsoException</ssp:Cause>',
         );
 
         $statusDetail = new StatusDetail([new Chunk($document->documentElement)]);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($statusDetail)
+            strval($statusDetail),
         );
     }
 
@@ -66,7 +66,7 @@ final class StatusDetailTest extends TestCase
         $statusDetail = new StatusDetail([]);
         $this->assertEquals(
             "<samlp:StatusDetail xmlns:samlp=\"$samlpns\"/>",
-            strval($statusDetail)
+            strval($statusDetail),
         );
         $this->assertTrue($statusDetail->isEmptyElement());
     }
@@ -80,7 +80,7 @@ final class StatusDetailTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($statusDetail)
+            strval($statusDetail),
         );
     }
 }

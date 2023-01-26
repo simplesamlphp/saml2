@@ -27,23 +27,18 @@ final class DigestMethod extends AbstractAlgElement
     /** The namespace-attribute for the xs:any element */
     public const NAMESPACE = C::XS_ANY_NS_ANY;
 
-    /**
-     * An URI identifying an algorithm supported for digest operations.
-     *
-     * @var string
-     */
-    protected string $Algorithm;
-
 
     /**
      * Create/parse an alg:DigestMethod element.
      *
-     * @param string $Algorithm
+     * @param string $algorithm
      * @param \SimpleSAML\XML\Chunk[] $elements
      */
-    public function __construct(string $Algorithm, array $elements = [])
-    {
-        $this->setAlgorithm($Algorithm);
+    public function __construct(
+        protected string $algorithm,
+        array $elements = [],
+    ) {
+        Assert::validURI($algorithm, SchemaViolationException::class); // Covers the empty string
         $this->setElements($elements);
     }
 
@@ -55,19 +50,7 @@ final class DigestMethod extends AbstractAlgElement
      */
     public function getAlgorithm(): string
     {
-        return $this->Algorithm;
-    }
-
-
-    /**
-     * Set the value of the Algorithm-property
-     *
-     * @param string $algorithm
-     */
-    private function setAlgorithm(string $algorithm): void
-    {
-        Assert::validURI($algorithm, SchemaViolationException::class); // Covers the empty string
-        $this->Algorithm = $algorithm;
+        return $this->algorithm;
     }
 
 

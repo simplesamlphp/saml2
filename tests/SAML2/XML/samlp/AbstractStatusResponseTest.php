@@ -44,9 +44,9 @@ final class AbstractStatusResponseTest extends TestCase
                 C::STATUS_SUCCESS,
                 [
                     new StatusCode(
-                        'urn:test:OurSubStatusCode'
-                    )
-                ]
+                        'urn:test:OurSubStatusCode',
+                    ),
+                ],
             ),
             new StatusMessage('OurMessageText')
         );
@@ -84,7 +84,7 @@ final class AbstractStatusResponseTest extends TestCase
                 C::STATUS_SUCCESS,
                 [
                     new StatusCode('urn:test:OurSubStatusCode'),
-                ]
+                ],
             ),
             new StatusMessage('OurMessageText')
         );
@@ -102,7 +102,11 @@ final class AbstractStatusResponseTest extends TestCase
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
 
-        $response = new Response($status, $issuer, null, null, null, null, null, $extensions);
+        $response = new Response(
+            status: $status,
+            issuer: $issuer,
+            extensions: $extensions,
+        );
         $response->sign($signer);
         $responseElement = $response->toXML();
 
@@ -228,10 +232,14 @@ XML;
     public function testResponseTo(): void
     {
         $status = new Status(
-            new StatusCode(C::STATUS_REQUESTER)
+            new StatusCode(C::STATUS_REQUESTER),
         );
 
-        $response = new Response($status, null, null, 1453323439, 'aabb12234');
+        $response = new Response(
+            status: $status,
+            issueInstant: 1453323439,
+            inResponseTo: 'aabb12234',
+        );
 
         $responseElement = $response->toXML();
 

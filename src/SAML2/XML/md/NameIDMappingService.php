@@ -28,11 +28,11 @@ final class NameIDMappingService extends AbstractEndpointType
         string $binding,
         string $location,
         ?string $unused = null,
-        array $attributes = []
+        array $attributes = [],
     ) {
         Assert::null(
             $unused,
-            'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.'
+            'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.',
         );
         parent::__construct($binding, $location, null, $attributes);
     }

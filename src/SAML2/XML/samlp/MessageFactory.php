@@ -33,7 +33,7 @@ abstract class MessageFactory
             $xml->namespaceURI,
             C::NS_SAMLP,
             'Unknown namespace of SAML message: ' . var_export($xml->namespaceURI, true),
-            InvalidDOMElementException::class
+            InvalidDOMElementException::class,
         );
 
         switch ($xml->localName) {

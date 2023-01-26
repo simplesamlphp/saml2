@@ -58,13 +58,13 @@ final class SigningMethodTest extends TestCase
             [
                 new Chunk(DOMDocumentFactory::fromString(
                     '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>'
-                )->documentElement)
+                )->documentElement),
             ],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($signingMethod)
+            strval($signingMethod),
         );
     }
 
@@ -77,7 +77,7 @@ final class SigningMethodTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($signingMethod)
+            strval($signingMethod),
         );
     }
 

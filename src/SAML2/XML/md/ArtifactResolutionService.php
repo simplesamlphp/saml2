@@ -32,7 +32,7 @@ final class ArtifactResolutionService extends AbstractIndexedEndpointType
         string $location,
         ?bool $isDefault = null,
         ?string $unused = null,
-        array $attributes = []
+        array $attributes = [],
     ) {
         Assert::null(
             $unused,

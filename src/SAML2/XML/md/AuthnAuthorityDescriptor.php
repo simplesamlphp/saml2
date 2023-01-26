@@ -21,59 +21,48 @@ use function preg_split;
 final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
 {
     /**
-     * List of AuthnQueryService endpoints.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
-     */
-    protected array $AuthnQueryServices = [];
-
-    /**
-     * List of AssertionIDRequestService endpoints.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
-     */
-    protected array $AssertionIDRequestServices = [];
-
-    /**
-     * List of supported NameID formats.
-     *
-     * Array of strings.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\NameIDFormat[]
-     */
-    protected array $NameIDFormats = [];
-
-
-    /**
      * AuthnAuthorityDescriptor constructor.
      *
-     * @param array $authnQueryServices
+     * @param array $authnQueryService
      * @param array $protocolSupportEnumeration
-     * @param array $assertionIDRequestServices
-     * @param array $nameIDFormats
+     * @param array $assertionIDRequestService
+     * @param array $nameIDFormat
      * @param string|null $ID
      * @param int|null $validUntil
      * @param string|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @param string|null $errorURL
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
-     * @param array $keyDescriptors
-     * @param array $contacts
+     * @param array $keyDescriptor
+     * @param array $contact
      */
     public function __construct(
-        array $authnQueryServices,
+        protected array $authnQueryService,
         array $protocolSupportEnumeration,
-        array $assertionIDRequestServices = [],
-        array $nameIDFormats = [],
+        protected array $assertionIDRequestService = [],
+        protected array $nameIDFormat = [],
         string $ID = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         ?string $errorURL = null,
         ?Organization $organization = null,
-        array $keyDescriptors = [],
-        array $contacts = []
+        array $keyDescriptor = [],
+        array $contact = [],
     ) {
+        Assert::minCount($authnQueryService, 1, 'Missing at least one AuthnQueryService in AuthnAuthorityDescriptor.');
+        Assert::allIsInstanceOf(
+            $authnQueryService,
+            AbstractEndpointType::class,
+            'AuthnQueryService must be an instance of EndpointType',
+        );
+        Assert::allIsInstanceOf(
+            $assertionIDRequestService,
+            AbstractEndpointType::class,
+            'AssertionIDRequestServices must be an instance of EndpointType',
+        );
+        Assert::allIsInstanceOf($nameIDFormat, NameIDFormat::class);
+
         parent::__construct(
             $protocolSupportEnumeration,
             $ID,
@@ -81,13 +70,10 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             $cacheDuration,
             $extensions,
             $errorURL,
-            $keyDescriptors,
+            $keyDescriptor,
             $organization,
-            $contacts
+            $contact,
         );
-        $this->setAuthnQueryServices($authnQueryServices);
-        $this->setAssertionIDRequestService($assertionIDRequestServices);
-        $this->setNameIDFormat($nameIDFormats);
     }
 
 
@@ -96,27 +82,9 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
      */
-    public function getAuthnQueryServices(): array
+    public function getAuthnQueryService(): array
     {
-        return $this->AuthnQueryServices;
-    }
-
-
-    /**
-     * Set the AuthnQueryService endpoints
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AbstractEndpointType[] $authnQueryServices
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setAuthnQueryServices(array $authnQueryServices): void
-    {
-        Assert::minCount($authnQueryServices, 1, 'Missing at least one AuthnQueryService in AuthnAuthorityDescriptor.');
-        Assert::allIsInstanceOf(
-            $authnQueryServices,
-            AbstractEndpointType::class,
-            'AuthnQueryService must be an instance of EndpointType'
-        );
-        $this->AuthnQueryServices = $authnQueryServices;
+        return $this->authnQueryService;
     }
 
 
@@ -125,26 +93,9 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\AbstractEndpointType[]
      */
-    public function getAssertionIDRequestServices(): array
+    public function getAssertionIDRequestService(): array
     {
-        return $this->AssertionIDRequestServices;
-    }
-
-
-    /**
-     * Set the AssertionIDRequestService endpoints
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AbstractEndpointType[] $assertionIDRequestServices
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setAssertionIDRequestService(array $assertionIDRequestServices = []): void
-    {
-        Assert::allIsInstanceOf(
-            $assertionIDRequestServices,
-            AbstractEndpointType::class,
-            'AssertionIDRequestServices must be an instance of EndpointType'
-        );
-        $this->AssertionIDRequestServices = $assertionIDRequestServices;
+        return $this->assertionIDRequestService;
     }
 
 
@@ -153,22 +104,9 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
-    public function getNameIDFormats(): array
+    public function getNameIDFormat(): array
     {
-        return $this->NameIDFormats;
-    }
-
-
-    /**
-     * Set the values of the NameIDFormat
-     *
-     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormats
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setNameIDFormat(array $nameIDFormats): void
-    {
-        Assert::allIsInstanceOf($nameIDFormats, NameIDFormat::class);
-        $this->NameIDFormats = $nameIDFormats;
+        return $this->nameIDFormat;
     }
 
 
@@ -203,7 +141,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             $orgs,
             1,
             'More than one Organization found in this descriptor',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $extensions = Extensions::getChildrenOfClass($xml);
@@ -211,7 +149,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             $extensions,
             1,
             'Only one md:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $signature = Signature::getChildrenOfClass($xml);
@@ -219,7 +157,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             $signature,
             1,
             'Only one ds:Signature element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $authority = new static(
@@ -234,7 +172,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             self::getAttribute($xml, 'errorURL', null),
             !empty($orgs) ? $orgs[0] : null,
             KeyDescriptor::getChildrenOfClass($xml),
-            ContactPerson::getChildrenOfClass($xml)
+            ContactPerson::getChildrenOfClass($xml),
         );
         if (!empty($signature)) {
             $authority->setSignature($signature[0]);
@@ -256,15 +194,15 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
     {
         $e = parent::toUnsignedXML($parent);
 
-        foreach ($this->getAuthnQueryServices() as $ep) {
+        foreach ($this->getAuthnQueryService() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->getAssertionIDRequestServices() as $ep) {
+        foreach ($this->getAssertionIDRequestService() as $ep) {
             $ep->toXML($e);
         }
 
-        foreach ($this->getNameIDFormats() as $nidFormat) {
+        foreach ($this->getNameIDFormat() as $nidFormat) {
             $nidFormat->toXML($e);
         }
 

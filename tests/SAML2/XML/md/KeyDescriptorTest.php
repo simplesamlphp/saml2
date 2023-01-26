@@ -41,7 +41,7 @@ final class KeyDescriptorTest extends TestCase
         $this->testedClass = KeyDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_KeyDescriptor.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_KeyDescriptor.xml',
         );
     }
 
@@ -57,12 +57,12 @@ final class KeyDescriptorTest extends TestCase
         $kd = new KeyDescriptor(
             new KeyInfo([new KeyName('IdentityProvider.com SSO Key')]),
             'signing',
-            [new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5')]
+            [new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5')],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($kd)
+            strval($kd),
         );
     }
 
@@ -77,7 +77,7 @@ final class KeyDescriptorTest extends TestCase
 
         new KeyDescriptor(
             new KeyInfo([new KeyName('IdentityProvider.com SSO Key')]),
-            'wrong'
+            'wrong',
         );
     }
 
@@ -90,10 +90,9 @@ final class KeyDescriptorTest extends TestCase
         $kd = new KeyDescriptor(new KeyInfo([new KeyName('IdentityProvider.com SSO Key')]));
 
         $this->assertNull($kd->getUse());
-        $this->assertEmpty($kd->getEncryptionMethods());
+        $this->assertEmpty($kd->getEncryptionMethod());
 
-        $this->assertEquals(
-            <<<XML
+        $this->assertEquals(<<<XML
 <md:KeyDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
   <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
     <ds:KeyName>IdentityProvider.com SSO Key</ds:KeyName>
@@ -101,7 +100,7 @@ final class KeyDescriptorTest extends TestCase
 </md:KeyDescriptor>
 XML
             ,
-            strval($kd)
+            strval($kd),
         );
     }
 
@@ -118,7 +117,7 @@ XML
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($kd)
+            strval($kd),
         );
     }
 
@@ -153,6 +152,6 @@ XML
 
         $kd = KeyDescriptor::fromXML($document->documentElement);
         $this->assertNull($kd->getUse());
-        $this->assertEmpty($kd->getEncryptionMethods());
+        $this->assertEmpty($kd->getEncryptionMethod());
     }
 }

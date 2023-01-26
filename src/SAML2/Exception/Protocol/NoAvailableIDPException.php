@@ -14,11 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class NoAvailableIDPException extends ProtocolViolationException
 {
-    /**
-     * @param string $message
-     */
-    public function __construct(string $message = 'No IDP available.')
-    {
-        parent::__construct($message);
-    }
+    public const DEFAULT_MESSAGE = 'No IdP available.';
 }

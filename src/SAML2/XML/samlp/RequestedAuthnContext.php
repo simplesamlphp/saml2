@@ -20,13 +20,6 @@ use function array_merge;
  */
 final class RequestedAuthnContext extends AbstractSamlpElement
 {
-    /** @var (\SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|\SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef)[] */
-    protected array $requestedAuthnContexts = [];
-
-    /** @var string|null */
-    protected ?string $Comparison = null;
-
-
     /**
      * Initialize a RequestedAuthnContext.
      *
@@ -37,11 +30,26 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      * @param string $Comparison
      */
     public function __construct(
-        array $requestedAuthnContexts = [],
-        string $Comparison = null
+        protected array $requestedAuthnContexts = [],
+        protected ?string $Comparison = null,
     ) {
-        $this->setRequestedAuthnContexts($requestedAuthnContexts);
-        $this->setComparison($Comparison);
+        Assert::minCount($requestedAuthnContexts, 1);
+        Assert::allIsInstanceOfAny($requestedAuthnContexts, [AuthnContextClassRef::class, AuthnContextDeclRef::class]);
+
+        if ($requestedAuthnContexts[0] instanceof AuthnContextClassRef) {
+            Assert::allIsInstanceOf(
+                $requestedAuthnContexts,
+                AuthnContextClassRef::class,
+                'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.',
+            );
+        } else { // Can only be AuthnContextDeclRef
+            Assert::allIsInstanceOf(
+                $requestedAuthnContexts,
+                AuthnContextDeclRef::class,
+                'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.',
+            );
+        }
+        Assert::nullOrOneOf($Comparison, ['exact', 'minimum', 'maximum', 'better']);
     }
 
 
@@ -57,42 +65,6 @@ final class RequestedAuthnContext extends AbstractSamlpElement
 
 
     /**
-     * Set the value of the requestedAuthnContexts-property
-     *
-     * @param (
-     *    \SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|
-     *    \SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef
-     * )[] $requestedAuthnContexts
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
-     *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
-     *   if the supplied element is missing the Algorithm attribute
-     */
-    private function setRequestedAuthnContexts(array $requestedAuthnContexts): void
-    {
-        Assert::minCount($requestedAuthnContexts, 1);
-        Assert::allIsInstanceOfAny($requestedAuthnContexts, [AuthnContextClassRef::class, AuthnContextDeclRef::class]);
-
-        if ($requestedAuthnContexts[0] instanceof AuthnContextClassRef) {
-            Assert::allIsInstanceOf(
-                $requestedAuthnContexts,
-                AuthnContextClassRef::class,
-                'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.'
-            );
-        } else { // Can only be AuthnContextDeclRef
-            Assert::allIsInstanceOf(
-                $requestedAuthnContexts,
-                AuthnContextDeclRef::class,
-                'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.'
-            );
-        }
-
-        $this->requestedAuthnContexts = $requestedAuthnContexts;
-    }
-
-
-    /**
      * Collect the value of the Comparison-property
      *
      * @return string|null
@@ -100,18 +72,6 @@ final class RequestedAuthnContext extends AbstractSamlpElement
     public function getComparison(): ?string
     {
         return $this->Comparison;
-    }
-
-
-    /**
-     * Set the value of the Comparison-property
-     *
-     * @param string|null $comparison
-     */
-    private function setComparison(?string $comparison): void
-    {
-        Assert::nullOrOneOf($comparison, ['exact', 'minimum', 'maximum', 'better']);
-        $this->Comparison = $comparison;
     }
 
 
@@ -132,9 +92,9 @@ final class RequestedAuthnContext extends AbstractSamlpElement
         return new static(
             array_merge(
                 AuthnContextClassRef::getChildrenOfClass($xml),
-                AuthnContextDeclRef::getChildrenOfClass($xml)
+                AuthnContextDeclRef::getChildrenOfClass($xml),
             ),
-            self::getAttribute($xml, 'Comparison', null)
+            self::getAttribute($xml, 'Comparison', null),
         );
     }
 

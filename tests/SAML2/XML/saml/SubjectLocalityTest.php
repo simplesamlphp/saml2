@@ -38,7 +38,7 @@ final class SubjectLocalityTest extends TestCase
         $this->testedClass = SubjectLocality::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_SubjectLocality.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_SubjectLocality.xml',
         );
     }
 
@@ -52,12 +52,12 @@ final class SubjectLocalityTest extends TestCase
     {
         $subjectLocality = new SubjectLocality(
             '1.1.1.1',
-            'idp.example.org'
+            'idp.example.org',
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($subjectLocality)
+            strval($subjectLocality),
         );
     }
 
@@ -75,7 +75,7 @@ final class SubjectLocalityTest extends TestCase
         $subjectLocality = new SubjectLocality();
         $this->assertEquals(
             "<saml:SubjectLocality xmlns:saml=\"$samlns\"/>",
-            strval($subjectLocality)
+            strval($subjectLocality),
         );
         $this->assertTrue($subjectLocality->isEmptyElement());
     }
@@ -89,7 +89,7 @@ final class SubjectLocalityTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($subjectLocality)
+            strval($subjectLocality),
         );
     }
 }

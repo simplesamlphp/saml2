@@ -22,7 +22,7 @@ class X509 extends Key
             'encryption'      => true,
             'signing'         => true,
             'type'            => 'X509Certificate',
-            'X509Certificate' => $certificateContents
+            'X509Certificate' => $certificateContents,
         ];
 
         return new self($data);

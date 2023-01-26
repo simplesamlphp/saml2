@@ -24,96 +24,66 @@ use function is_null;
 final class EntityDescriptor extends AbstractMetadataDocument
 {
     /**
-     * The entityID this EntityDescriptor represents.
-     *
-     * @var string
-     */
-    protected string $entityID;
-
-    /**
-     * Array with all roles for this entity.
-     *
-     * Array of \SimpleSAML\SAML2\XML\md\RoleDescriptor objects (and subclasses of RoleDescriptor).
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor[]
-     */
-    protected array $RoleDescriptor = [];
-
-    /**
-     * AffiliationDescriptor of this entity.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AffiliationDescriptor|null
-     */
-    protected ?AffiliationDescriptor $AffiliationDescriptor = null;
-
-    /**
-     * Organization of this entity.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\Organization|null
-     */
-    protected ?Organization $Organization = null;
-
-    /**
-     * ContactPerson elements for this entity.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\ContactPerson[]
-     */
-    protected array $ContactPerson = [];
-
-    /**
-     * AdditionalMetadataLocation elements for this entity.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation[]
-     */
-    protected array $AdditionalMetadataLocation = [];
-
-
-    /**
      * Initialize an EntitiyDescriptor.
      *
-     * @param string $entityID The entityID of the entity described by this descriptor.
+     * @param string $entityId The entityID of the entity described by this descriptor.
      * @param string|null $id The ID for this document. Defaults to null.
      * @param int|null $validUntil Unix time of validify for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions.
-     * @param \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor[] $roleDescriptors An array of role descriptors.
+     * @param \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor[] $roleDescriptor An array of role descriptors.
      * @param \SimpleSAML\SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor An affiliation descriptor to
      *   use instead of role descriptors.
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization The organization responsible for the SAML entity.
-     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts A list of contact persons for this SAML entity.
-     * @param \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation[] $additionalMdLocations A list of
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contactPerson A list of contact persons for this SAML entity.
+     * @param \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation[] $additionalMetadataLocation A list of
      *   additional metadata locations.
-     * @param \DOMAttr[] $namespacedAttributes
+     * @param \DOMAttr[] $namespacedAttribute
      *
      * @throws \Exception
      */
     public function __construct(
-        string $entityID,
+        protected string $entityId,
         ?string $id = null,
         ?int $validUntil = null,
         ?string $cacheDuration = null,
         Extensions $extensions = null,
-        array $roleDescriptors = [],
-        ?AffiliationDescriptor $affiliationDescriptor = null,
-        ?Organization $organization = null,
-        array $contacts = [],
-        array $additionalMdLocations = [],
-        array $namespacedAttributes = []
+        protected array $roleDescriptor = [],
+        protected ?AffiliationDescriptor $affiliationDescriptor = null,
+        protected ?Organization $organization = null,
+        protected array $contactPerson = [],
+        protected array $additionalMetadataLocation = [],
+        array $namespacedAttribute = [],
     ) {
         Assert::false(
-            (empty($roleDescriptors) && $affiliationDescriptor === null),
+            (empty($roleDescriptor) && $affiliationDescriptor === null),
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.',
             ProtocolViolationException::class,
         );
+        Assert::validURI($entityId, SchemaViolationException::class); // Covers the empty string
+        Assert::maxLength(
+            $entityId,
+            C::ENTITYID_MAX_LENGTH,
+            sprintf('The entityID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
+            ProtocolViolationException::class,
+        );
+        Assert::allIsInstanceOf(
+            $roleDescriptor,
+            AbstractRoleDescriptor::class,
+            'All role descriptors must extend AbstractRoleDescriptor.',
+        );
+        Assert::allIsInstanceOf(
+            $contactPerson,
+            ContactPerson::class,
+            'All md:ContactPerson elements must be an instance of ContactPerson.',
+        );
+        Assert::allIsInstanceOf(
+            $additionalMetadataLocation,
+            AdditionalMetadataLocation::class,
+            'All md:AdditionalMetadataLocation elements must be an instance of AdditionalMetadataLocation',
+        );
 
-        parent::__construct($id, $validUntil, $cacheDuration, $extensions, $namespacedAttributes);
-
-        $this->setEntityID($entityID);
-        $this->setRoleDescriptors($roleDescriptors);
-        $this->setAffiliationDescriptor($affiliationDescriptor);
-        $this->setOrganization($organization);
-        $this->setContactPersons($contacts);
-        $this->setAdditionalMetadataLocations($additionalMdLocations);
+        parent::__construct($id, $validUntil, $cacheDuration, $extensions, $namespacedAttribute);
     }
 
 
@@ -219,7 +189,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
             $organization,
             $contactPersons,
             $additionalMetadataLocation,
-            self::getAttributesNSFromXML($xml)
+            self::getAttributesNSFromXML($xml),
         );
 
         if (!empty($signature)) {
@@ -237,26 +207,9 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @return string
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
-    public function getEntityID(): string
+    public function getEntityId(): string
     {
-        return $this->entityID;
-    }
-
-
-    /**
-     * Set the value of the entityID-property
-     * @param string $entityId
-     */
-    protected function setEntityID(string $entityId): void
-    {
-        Assert::validURI($entityId, SchemaViolationException::class); // Covers the empty string
-        Assert::maxLength(
-            $entityId,
-            C::ENTITYID_MAX_LENGTH,
-            sprintf('The entityID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
-            ProtocolViolationException::class
-        );
-        $this->entityID = $entityId;
+        return $this->entityId;
     }
 
 
@@ -265,26 +218,9 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @return \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor[]
      */
-    public function getRoleDescriptors(): array
+    public function getRoleDescriptor(): array
     {
-        return $this->RoleDescriptor;
-    }
-
-
-    /**
-     * Set the value of the RoleDescriptor property.
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor[] $roleDescriptors
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setRoleDescriptors(array $roleDescriptors): void
-    {
-        Assert::allIsInstanceOf(
-            $roleDescriptors,
-            AbstractRoleDescriptor::class,
-            'All role descriptors must extend AbstractRoleDescriptor.'
-        );
-        $this->RoleDescriptor = $roleDescriptors;
+        return $this->roleDescriptor;
     }
 
 
@@ -295,18 +231,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      */
     public function getAffiliationDescriptor(): ?AffiliationDescriptor
     {
-        return $this->AffiliationDescriptor;
-    }
-
-
-    /**
-     * Set the value of the AffliationDescriptor property.
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor
-     */
-    protected function setAffiliationDescriptor(?AffiliationDescriptor $affiliationDescriptor = null): void
-    {
-        $this->AffiliationDescriptor = $affiliationDescriptor;
+        return $this->affiliationDescriptor;
     }
 
 
@@ -317,18 +242,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      */
     public function getOrganization(): ?Organization
     {
-        return $this->Organization;
-    }
-
-
-    /**
-     * Set the value of the Organization property.
-     *
-     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
-     */
-    protected function setOrganization(?Organization $organization = null): void
-    {
-        $this->Organization = $organization;
+        return $this->organization;
     }
 
 
@@ -337,26 +251,9 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @return \SimpleSAML\SAML2\XML\md\ContactPerson[]
      */
-    public function getContactPersons(): array
+    public function getContactPerson(): array
     {
-        return $this->ContactPerson;
-    }
-
-
-    /**
-     * Set the value of the ContactPerson property.
-     *
-     * @param array $contactPerson
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setContactPersons(array $contactPerson): void
-    {
-        Assert::allIsInstanceOf(
-            $contactPerson,
-            ContactPerson::class,
-            'All md:ContactPerson elements must be an instance of ContactPerson.'
-        );
-        $this->ContactPerson = $contactPerson;
+        return $this->contactPerson;
     }
 
 
@@ -365,26 +262,9 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @return \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation[]
      */
-    public function getAdditionalMetadataLocations(): array
+    public function getAdditionalMetadataLocation(): array
     {
-        return $this->AdditionalMetadataLocation;
-    }
-
-
-    /**
-     * Set the value of the AdditionalMetadataLocation property.
-     *
-     * @param array $additionalMetadataLocation
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    protected function setAdditionalMetadataLocations(array $additionalMetadataLocation): void
-    {
-        Assert::allIsInstanceOf(
-            $additionalMetadataLocation,
-            AdditionalMetadataLocation::class,
-            'All md:AdditionalMetadataLocation elements must be an instance of AdditionalMetadataLocation'
-        );
-        $this->AdditionalMetadataLocation = $additionalMetadataLocation;
+        return $this->additionalMetadataLocation;
     }
 
 
@@ -397,24 +277,24 @@ final class EntityDescriptor extends AbstractMetadataDocument
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toUnsignedXML($parent);
-        $e->setAttribute('entityID', $this->entityID);
+        $e->setAttribute('entityID', $this->getEntityId());
 
         foreach ($this->getAttributesNS() as $attr) {
             $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
         }
 
-        foreach ($this->getRoleDescriptors() as $n) {
+        foreach ($this->getRoleDescriptor() as $n) {
             $n->toXML($e);
         }
 
         $this->getAffiliationDescriptor()?->toXML($e);
         $this->getOrganization()?->toXML($e);
 
-        foreach ($this->getContactPersons() as $cp) {
+        foreach ($this->getContactPerson() as $cp) {
             $cp->toXML($e);
         }
 
-        foreach ($this->getAdditionalMetadataLocations() as $n) {
+        foreach ($this->getAdditionalMetadataLocation() as $n) {
             $n->toXML($e);
         }
 

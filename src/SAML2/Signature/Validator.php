@@ -14,18 +14,14 @@ use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
  */
 class Validator
 {
-    /** @var \Psr\Log\LoggerInterface */
-    private LoggerInterface $logger;
-
-
     /**
      * Constructor for Validator
      *
      * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
+    public function __construct(
+        private LoggerInterface $logger,
+    ) {
     }
 
 
@@ -37,14 +33,14 @@ class Validator
      */
     public function hasValidSignature(
         SignedElementInterface $signedElement,
-        CertificateProvider $configuration
+        CertificateProvider $configuration,
     ): bool {
         // should be DI
         $validator = new ValidatorChain(
             $this->logger,
             [
                 new PublicKeyValidator($this->logger, new KeyLoader())
-            ]
+            ],
         );
 
         return $validator->hasValidSignature($signedElement, $configuration);

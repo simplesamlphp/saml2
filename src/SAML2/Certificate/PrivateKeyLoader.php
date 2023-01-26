@@ -39,7 +39,7 @@ class PrivateKeyLoader
      */
     public function loadDecryptionKeys(
         DecryptionProvider $identityProvider,
-        DecryptionProvider $serviceProvider
+        DecryptionProvider $serviceProvider,
     ): ArrayCollection {
         $decryptionKeys = new ArrayCollection();
 

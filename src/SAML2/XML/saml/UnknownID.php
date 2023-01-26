@@ -14,9 +14,6 @@ use SimpleSAML\XML\Chunk;
  */
 final class UnknownID extends AbstractBaseID
 {
-    /** @var \SimpleSAML\XML\Chunk */
-    protected Chunk $chunk;
-
     /**
      * @param \SimpleSAML\XML\Chunk $chunk The whole BaseID element as a chunk object.
      * @param string $type The xsi:type of this identifier.
@@ -24,13 +21,12 @@ final class UnknownID extends AbstractBaseID
      * @param string|null $SPNameQualifier
      */
     public function __construct(
-        Chunk $chunk,
+        protected Chunk $chunk,
         string $type,
         ?string $NameQualifier = null,
-        ?string $SPNameQualifier = null
+        ?string $SPNameQualifier = null,
     ) {
         parent::__construct($type, $NameQualifier, $SPNameQualifier);
-        $this->chunk = $chunk;
     }
 
 

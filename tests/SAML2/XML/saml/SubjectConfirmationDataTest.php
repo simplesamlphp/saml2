@@ -39,7 +39,7 @@ final class SubjectConfirmationDataTest extends TestCase
         $this->testedClass = SubjectConfirmationData::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_SubjectConfirmationData.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_SubjectConfirmationData.xml',
         );
     }
 
@@ -73,7 +73,7 @@ final class SubjectConfirmationDataTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($subjectConfirmationData)
+            strval($subjectConfirmationData),
         );
     }
 
@@ -99,7 +99,7 @@ final class SubjectConfirmationDataTest extends TestCase
                 new KeyInfo([new KeyName('SomeKey')]),
                 new Chunk($arbitrary->documentElement),
             ],
-            [$attr1, $attr2]
+            [$attr1, $attr2],
         );
 
         $this->assertEquals(987654321, $subjectConfirmationData->getNotBefore());
@@ -116,7 +116,7 @@ final class SubjectConfirmationDataTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($document),
-            strval($subjectConfirmationData)
+            strval($subjectConfirmationData),
         );
     }
 
@@ -132,7 +132,7 @@ final class SubjectConfirmationDataTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($subjectConfirmationData)
+            strval($subjectConfirmationData),
         );
     }
 

@@ -26,7 +26,7 @@ class File
         if (!is_readable($file)) {
             throw new RuntimeException(sprintf(
                 'File "%s" does not exist or is not readable',
-                $file
+                $file,
             ));
         }
 
@@ -34,7 +34,7 @@ class File
         if ($contents === false) {
             throw new RuntimeException(sprintf(
                 'Could not read from existing and readable file "%s"',
-                $file
+                $file,
             ));
         }
 

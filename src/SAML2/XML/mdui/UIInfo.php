@@ -31,74 +31,62 @@ final class UIInfo extends AbstractMduiElement
     public const NAMESPACE = C::XS_ANY_NS_OTHER;
 
     /**
-     * The DisplayName, as an array of DisplayName objects
-     *
-     * @var \SimpleSAML\SAML2\XML\mdui\DisplayName[]
-     */
-    protected array $DisplayName = [];
-
-    /**
-     * The Description, as an array of Description objects
-     *
-     * @var \SimpleSAML\SAML2\XML\mdui\Description[]
-     */
-    protected array $Description = [];
-
-    /**
-     * The InformationURL, as an array of InformationURL objects
-     *
-     * @var \SimpleSAML\SAML2\XML\mdui\InformationURL[]
-     */
-    protected array $InformationURL = [];
-
-    /**
-     * The PrivacyStatementURL, as an array of PrivacyStatementURL objects
-     *
-     * @var \SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL[]
-     */
-    protected array $PrivacyStatementURL = [];
-
-    /**
-     * The Keywords, as an array of Keywords objects
-     *
-     * @var \SimpleSAML\SAML2\XML\mdui\Keywords[]
-     */
-    protected array $Keywords = [];
-
-    /**
-     * The Logo, as an array of Logo objects
-     *
-     * @var \SimpleSAML\SAML2\XML\mdui\Logo[]
-     */
-    protected array $Logo = [];
-
-
-    /**
      * Create a UIInfo element.
      *
-     * @param \SimpleSAML\SAML2\XML\mdui\DisplayName[] $DisplayName
-     * @param \SimpleSAML\SAML2\XML\mdui\Description[] $Description
-     * @param \SimpleSAML\SAML2\XML\mdui\InformationURL[] $InformationURL
-     * @param \SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL[] $PrivacyStatementURL
-     * @param \SimpleSAML\SAML2\XML\mdui\Keywords[] $Keywords
-     * @param \SimpleSAML\SAML2\XML\mdui\Logo[] $Logo
+     * @param \SimpleSAML\SAML2\XML\mdui\DisplayName[] $displayName
+     * @param \SimpleSAML\SAML2\XML\mdui\Description[] $description
+     * @param \SimpleSAML\SAML2\XML\mdui\InformationURL[] $informationURL
+     * @param \SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL[] $privacyStatementURL
+     * @param \SimpleSAML\SAML2\XML\mdui\Keywords[] $keywords
+     * @param \SimpleSAML\SAML2\XML\mdui\Logo[] $logo
      * @param \SimpleSAML\XML\Chunk[] $children
      */
     public function __construct(
-        array $DisplayName = [],
-        array $Description = [],
-        array $InformationURL = [],
-        array $PrivacyStatementURL = [],
-        array $Keywords = [],
-        array $Logo = [],
-        array $children = []
+        protected array $displayName = [],
+        protected array $description = [],
+        protected array $informationURL = [],
+        protected array $privacyStatementURL = [],
+        protected array $keywords = [],
+        protected array $logo = [],
+        array $children = [],
     ) {
-        $this->setDisplayName($DisplayName);
-        $this->setDescription($Description);
-        $this->setInformationURL($InformationURL);
-        $this->setPrivacyStatementURL($PrivacyStatementURL);
-        $this->setKeywords($Keywords);
-        $this->setLogo($Logo);
+        Assert::allIsInstanceOf($displayName, DisplayName::class);
+        /**
+         * 2.1.2:  There MUST NOT be more than one <mdui:DisplayName>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $this->testLocalizedElements($displayName);
+
+        Assert::allIsInstanceOf($description, Description::class);
+        /**
+         * 2.1.3:  There MUST NOT be more than one <mdui:Description>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $this->testLocalizedElements($description);
+
+        Assert::allIsInstanceOf($keywords, Keywords::class);
+        /**
+         * 2.1.4:  There MUST NOT be more than one <mdui:Keywords>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $this->testLocalizedElements($keywords);
+
+        Assert::allIsInstanceOf($informationURL, InformationURL::class);
+        /**
+         * 2.1.6:  There MUST NOT be more than one <mdui:InformationURL>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $this->testLocalizedElements($informationURL);
+
+        Assert::allIsInstanceOf($privacyStatementURL, PrivacyStatementURL::class);
+        /**
+         * 2.1.7:  There MUST NOT be more than one <mdui:PrivacyStatementURL>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $this->testLocalizedElements($privacyStatementURL);
+
+        Assert::allIsInstanceOf($logo, Logo::class);
+
         $this->setElements($children);
     }
 
@@ -110,28 +98,7 @@ final class UIInfo extends AbstractMduiElement
      */
     public function getKeywords(): array
     {
-        return $this->Keywords;
-    }
-
-
-    /**
-     * Set the value of the Keywords-property
-     *
-     * @param \SimpleSAML\SAML2\XML\mdui\Keywords[] $keywords
-     *
-     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
-     */
-    private function setKeywords(array $keywords): void
-    {
-        Assert::allIsInstanceOf($keywords, Keywords::class);
-
-        /**
-         * 2.1.4:  There MUST NOT be more than one <mdui:Keywords>,
-         *         within a given <mdui:UIInfo>, for a given language
-         */
-        $this->testLocalizedElements($keywords);
-
-        $this->Keywords = $keywords;
+        return $this->keywords;
     }
 
 
@@ -142,7 +109,13 @@ final class UIInfo extends AbstractMduiElement
      */
     public function addKeyword(Keywords $keyword): void
     {
-        $this->setKeywords(array_merge($this->Keywords, [$keyword]));
+        /**
+         * 2.1.4:  There MUST NOT be more than one <mdui:Keywords>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $keywords = array_merge($this->keywords, [$keyword]);
+        $this->testLocalizedElements($keywords);
+        $this->keywords = $keywords;
     }
 
 
@@ -153,26 +126,7 @@ final class UIInfo extends AbstractMduiElement
      */
     public function getDisplayName(): array
     {
-        return $this->DisplayName;
-    }
-
-
-    /**
-     * Set the value of the DisplayName-property
-     *
-     * @param \SimpleSAML\SAML2\XML\mdui\DisplayName[] $displayName
-     */
-    private function setDisplayName(array $displayName): void
-    {
-        Assert::allIsInstanceOf($displayName, DisplayName::class);
-
-        /**
-         * 2.1.2:  There MUST NOT be more than one <mdui:DisplayName>,
-         *         within a given <mdui:UIInfo>, for a given language
-         */
-        $this->testLocalizedElements($displayName);
-
-        $this->DisplayName = $displayName;
+        return $this->displayName;
     }
 
 
@@ -183,26 +137,7 @@ final class UIInfo extends AbstractMduiElement
      */
     public function getDescription(): array
     {
-        return $this->Description;
-    }
-
-
-    /**
-     * Set the value of the Description-property
-     *
-     * @param \SimpleSAML\SAML2\XML\mdui\Description[] $description
-     */
-    private function setDescription(array $description): void
-    {
-        Assert::allIsInstanceOf($description, Description::class);
-
-        /**
-         * 2.1.3:  There MUST NOT be more than one <mdui:Description>,
-         *         within a given <mdui:UIInfo>, for a given language
-         */
-        $this->testLocalizedElements($description);
-
-        $this->Description = $description;
+        return $this->description;
     }
 
 
@@ -212,26 +147,7 @@ final class UIInfo extends AbstractMduiElement
      */
     public function getInformationURL(): array
     {
-        return $this->InformationURL;
-    }
-
-
-    /**
-     * Set the value of the InformationURL-property
-     *
-     * @param \SimpleSAML\SAML2\XML\mdui\InformationURL[] $informationURL
-     */
-    private function setInformationURL(array $informationURL): void
-    {
-        Assert::allIsInstanceOf($informationURL, InformationURL::class);
-
-        /**
-         * 2.1.6:  There MUST NOT be more than one <mdui:InformationURL>,
-         *         within a given <mdui:UIInfo>, for a given language
-         */
-        $this->testLocalizedElements($informationURL);
-
-        $this->InformationURL = $informationURL;
+        return $this->informationURL;
     }
 
 
@@ -242,26 +158,7 @@ final class UIInfo extends AbstractMduiElement
      */
     public function getPrivacyStatementURL(): array
     {
-        return $this->PrivacyStatementURL;
-    }
-
-
-    /**
-     * Set the value of the PrivacyStatementURL-property
-     *
-     * @param \SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL[] $privacyStatementURL
-     */
-    private function setPrivacyStatementURL(array $privacyStatementURL): void
-    {
-        Assert::allIsInstanceOf($privacyStatementURL, PrivacyStatementURL::class);
-
-        /**
-         * 2.1.7:  There MUST NOT be more than one <mdui:PrivacyStatementURL>,
-         *         within a given <mdui:UIInfo>, for a given language
-         */
-        $this->testLocalizedElements($privacyStatementURL);
-
-        $this->PrivacyStatementURL = $privacyStatementURL;
+        return $this->privacyStatementURL;
     }
 
 
@@ -272,20 +169,7 @@ final class UIInfo extends AbstractMduiElement
      */
     public function getLogo(): array
     {
-        return $this->Logo;
-    }
-
-
-    /**
-     * Set the value of the Logo-property
-     *
-     * @param \SimpleSAML\SAML2\XML\mdui\Logo[] $logo
-     */
-    private function setLogo(array $logo): void
-    {
-        Assert::allIsInstanceOf($logo, Logo::class);
-
-        $this->Logo = $logo;
+        return $this->logo;
     }
 
 
@@ -296,7 +180,7 @@ final class UIInfo extends AbstractMduiElement
      */
     public function addLogo(Logo $logo): void
     {
-        $this->Logo[] = $logo;
+        $this->logo[] = $logo;
     }
 
 
@@ -319,12 +203,12 @@ final class UIInfo extends AbstractMduiElement
     public function isEmptyElement(): bool
     {
         return (
-            empty($this->DisplayName)
-            && empty($this->Description)
-            && empty($this->InformationURL)
-            && empty($this->PrivacyStatementURL)
-            && empty($this->Keywords)
-            && empty($this->Logo)
+            empty($this->displayName)
+            && empty($this->description)
+            && empty($this->informationURL)
+            && empty($this->privacyStatementURL)
+            && empty($this->keywords)
+            && empty($this->logo)
             && empty($this->elements)
         );
     }
@@ -348,13 +232,13 @@ final class UIInfo extends AbstractMduiElement
                 function ($elt) {
                     return $elt->getLanguage();
                 },
-                $elements
+                $elements,
             );
             Assert::uniqueValues(
                 $languages,
                 'There MUST NOT be more than one <' . $elements[0]->getQualifiedName() . '>,'
                 . ' within a given <mdui:UIInfo>, for a given language',
-                ProtocolViolationException::class
+                ProtocolViolationException::class,
             );
         }
     }
@@ -396,7 +280,7 @@ final class UIInfo extends AbstractMduiElement
             $PrivacyStatementURL,
             $Keywords,
             $Logo,
-            $children
+            $children,
         );
     }
 
@@ -501,7 +385,7 @@ final class UIInfo extends AbstractMduiElement
             $InformationURL,
             $PrivacyStatementURL,
             $Keywords,
-            $Logo
+            $Logo,
         );
     }
 
@@ -551,7 +435,7 @@ final class UIInfo extends AbstractMduiElement
             'InformationURL' => $infoUrl,
             'PrivacyStatementURL' => $privacyUrl,
             'Keywords' => $keywords,
-            'Logo' => $logo
+            'Logo' => $logo,
         ];
     }
 }

@@ -71,7 +71,7 @@ final class EntityDescriptorTest extends TestCase
         $this->testedClass = EntityDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_EntityDescriptor.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_EntityDescriptor.xml',
         );
     }
 
@@ -95,47 +95,56 @@ final class EntityDescriptorTest extends TestCase
             [
                 new SingleSignOnService(
                     C::BINDING_HTTP_REDIRECT,
-                    'https://engine.test.example.edu/authentication/idp/single-sign-on'
-                )
+                    'https://engine.test.example.edu/authentication/idp/single-sign-on',
+                ),
             ],
-            [C::NS_SAMLP]
+            [C::NS_SAMLP],
         );
         $attrad = new AttributeAuthorityDescriptor(
             [
                 new AttributeService(
                     C::BINDING_SOAP,
-                    'https://idp.example.org/AttributeService'
-                )
+                    'https://idp.example.org/AttributeService',
+                ),
             ],
-            [C::NS_SAMLP]
+            [C::NS_SAMLP],
         );
         $authnad = new AuthnAuthorityDescriptor(
             [
                 new AuthnQueryService(
                     C::BINDING_HTTP_REDIRECT,
-                    'http://www.example.com/aqs'
-                )
+                    'http://www.example.com/aqs',
+                ),
             ],
-            [C::NS_SAMLP]
+            [C::NS_SAMLP],
         );
         $pdpd = new PDPDescriptor(
             [
                 new AuthzService(
                     C::BINDING_SOAP,
-                    'https://IdentityProvider.com/SAML/AA/SOAP'
-                )
+                    'https://IdentityProvider.com/SAML/AA/SOAP',
+                ),
             ],
-            [C::NS_SAMLP]
+            [C::NS_SAMLP],
         );
         $org = new Organization(
             [new OrganizationName('en', 'orgNameTest (en)')],
             [new OrganizationDisplayName('en', 'orgDispNameTest (en)')],
-            [new OrganizationURL('en', 'https://IdentityProvider.com')]
+            [new OrganizationURL('en', 'https://IdentityProvider.com')],
         );
         $contacts = [
-            new ContactPerson('support', null, null, null, null, [new EmailAddress('help@example.edu')]),
-            new ContactPerson('technical', null, null, null, null, [new EmailAddress('root@example.edu')]),
-            new ContactPerson('administrative', null, null, null, null, [new EmailAddress('info@example.edu')]),
+            new ContactPerson(
+                contactType: 'support',
+                emailAddress: [new EmailAddress('help@example.edu')],
+            ),
+            new ContactPerson(
+                contactType: 'technical',
+                emailAddress: [new EmailAddress('root@example.edu')],
+            ),
+            new ContactPerson(
+                contactType: 'administrative',
+                emailAddress: [new EmailAddress('info@example.edu')],
+            ),
         ];
         $mdloc = [
             new AdditionalMetadataLocation(C::NAMESPACE, 'https://example.edu/some/metadata.xml'),
@@ -143,35 +152,33 @@ final class EntityDescriptorTest extends TestCase
         ];
         $extensions = new Extensions([
             new PublicationInfo(
-                'http://publisher.ra/',
-                XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
-                null,
-                [new UsagePolicy('en', 'http://publisher.ra/policy.txt')]
+                publisher: 'http://publisher.ra/',
+                creationInstant: XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
+                usagePolicy: [new UsagePolicy('en', 'http://publisher.ra/policy.txt')]
             )
         ]);
 
         $ed = new EntityDescriptor(
-            $entityid,
-            $id,
-            $now,
-            $duration,
-            $extensions,
-            [
+            entityId: $entityid,
+            id: $id,
+            validUntil: $now,
+            cacheDuration: $duration,
+            extensions: $extensions,
+            roleDescriptor: [
                 $idpssod,
                 $attrad,
                 $authnad,
                 $pdpd,
             ],
-            null,
-            $org,
-            $contacts,
-            $mdloc,
-            [$attr1]
+            organization: $org,
+            contactPerson: $contacts,
+            additionalMetadataLocation: $mdloc,
+            namespacedAttribute: [$attr1],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($ed)
+            strval($ed),
         );
     }
 
@@ -227,12 +234,21 @@ XML
         $org = new Organization(
             [new OrganizationName('en', 'orgNameTest (en)')],
             [new OrganizationDisplayName('en', 'orgDispNameTest (en)')],
-            [new OrganizationURL('en', 'https://IdentityProvider.com')]
+            [new OrganizationURL('en', 'https://IdentityProvider.com')],
         );
         $contacts = [
-            new ContactPerson('support', null, null, null, null, [new EmailAddress('help@example.edu')]),
-            new ContactPerson('technical', null, null, null, null, [new EmailAddress('root@example.edu')]),
-            new ContactPerson('administrative', null, null, null, null, [new EmailAddress('info@example.edu')]),
+            new ContactPerson(
+                contactType: 'support',
+                emailAddress: [new EmailAddress('help@example.edu')],
+            ),
+            new ContactPerson(
+                contactType: 'technical',
+                emailAddress: [new EmailAddress('root@example.edu')],
+            ),
+            new ContactPerson(
+                contactType: 'administrative',
+                emailAddress: [new EmailAddress('info@example.edu')],
+            ),
         ];
         $mdloc = [
             new AdditionalMetadataLocation(C::NAMESPACE, 'https://example.edu/some/metadata.xml'),
@@ -240,34 +256,32 @@ XML
         ];
         $extensions = new Extensions([
             new PublicationInfo(
-                'http://publisher.ra/',
-                XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
-                null,
-                [new UsagePolicy('en', 'http://publisher.ra/policy.txt')]
-            )
+                publisher: 'http://publisher.ra/',
+                creationInstant: XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
+                usagePolicy: [new UsagePolicy('en', 'http://publisher.ra/policy.txt')],
+            ),
         ]);
 
         $ed = new EntityDescriptor(
-            $entityid,
-            $id,
-            $now,
-            $duration,
-            $extensions,
-            [],
-            $ad,
-            $org,
-            $contacts,
-            $mdloc
+            entityId: $entityid,
+            id: $id,
+            validUntil: $now,
+            cacheDuration: $duration,
+            extensions: $extensions,
+            affiliationDescriptor: $ad,
+            organization: $org,
+            contactPerson: $contacts,
+            additionalMetadataLocation: $mdloc,
         );
         $this->assertEquals($entityid, $ed->getEntityID());
         $this->assertEquals($id, $ed->getID());
         $this->assertEquals($now, $ed->getValidUntil());
         $this->assertEquals($duration, $ed->getCacheDuration());
-        $this->assertEmpty($ed->getRoleDescriptors());
+        $this->assertEmpty($ed->getRoleDescriptor());
         $this->assertInstanceOf(AffiliationDescriptor::class, $ed->getAffiliationDescriptor());
         $this->assertEquals(
             $document->saveXML($document->documentElement),
-            strval($ed)
+            strval($ed),
         );
     }
 
@@ -279,7 +293,7 @@ XML
     {
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
-            'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
+            'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.',
         );
         new EntityDescriptor(C::ENTITY_SP);
     }
@@ -295,7 +309,7 @@ XML
 
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
-            'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
+            'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.',
         );
 
         EntityDescriptor::fromXML($this->xmlRepresentation->documentElement);
@@ -309,13 +323,8 @@ XML
     {
         $this->expectException(SchemaViolationException::class);
         new EntityDescriptor(
-            '',
-            null,
-            null,
-            null,
-            null,
-            [],
-            new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_SP)])
+            entityId: '',
+            affiliationDescriptor: new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_SP)]),
         );
     }
 
@@ -327,17 +336,12 @@ XML
     {
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
-            sprintf('The entityID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH)
+            sprintf('The entityID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
         );
 
         new EntityDescriptor(
-            str_pad('urn:x-simplesamlphp:', C::ENTITYID_MAX_LENGTH + 1, 'a'),
-            null,
-            null,
-            null,
-            null,
-            [],
-            new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_OTHER)])
+            entityId: str_pad('urn:x-simplesamlphp:', C::ENTITYID_MAX_LENGTH + 1, 'a'),
+            affiliationDescriptor: new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_OTHER)]),
         );
     }
 
@@ -367,17 +371,17 @@ XML
                 '{urn:test:something}attr1' => [
                     'qualifiedName' => 'test:attr1',
                     'namespaceURI' => 'urn:test:something',
-                    'value' => 'testval1'
-                ]
+                    'value' => 'testval1',
+                ],
             ],
-            $entityDescriptor->getAttributesNS()
+            $entityDescriptor->getAttributesNS(),
         );
         $this->assertEquals(C::ENTITY_IDP, $entityDescriptor->getEntityID());
         $this->assertEquals('_5A3CHB081', $entityDescriptor->getID());
         $this->assertEquals(1580895565, $entityDescriptor->getValidUntil());
         $this->assertEquals('P2Y6M5DT12H35M30S', $entityDescriptor->getCacheDuration());
 
-        $roleDescriptors = $entityDescriptor->getRoleDescriptors();
+        $roleDescriptors = $entityDescriptor->getRoleDescriptor();
         $this->assertCount(5, $roleDescriptors);
         $this->assertInstanceOf(IDPSSODescriptor::class, $roleDescriptors[0]);
         $this->assertInstanceOf(AttributeAuthorityDescriptor::class, $roleDescriptors[1]);
@@ -390,24 +394,24 @@ XML
 
         $this->assertInstanceOf(Organization::class, $entityDescriptor->getOrganization());
 
-        $this->assertCount(3, $entityDescriptor->getContactPersons());
-        $this->assertInstanceOf(ContactPerson::class, $entityDescriptor->getContactPersons()[0]);
-        $this->assertInstanceOf(ContactPerson::class, $entityDescriptor->getContactPersons()[1]);
-        $this->assertInstanceOf(ContactPerson::class, $entityDescriptor->getContactPersons()[2]);
+        $this->assertCount(3, $entityDescriptor->getContactPerson());
+        $this->assertInstanceOf(ContactPerson::class, $entityDescriptor->getContactPerson()[0]);
+        $this->assertInstanceOf(ContactPerson::class, $entityDescriptor->getContactPerson()[1]);
+        $this->assertInstanceOf(ContactPerson::class, $entityDescriptor->getContactPerson()[2]);
 
-        $this->assertCount(2, $entityDescriptor->getAdditionalMetadataLocations());
+        $this->assertCount(2, $entityDescriptor->getAdditionalMetadataLocation());
         $this->assertInstanceOf(
             AdditionalMetadataLocation::class,
-            $entityDescriptor->getAdditionalMetadataLocations()[0]
+            $entityDescriptor->getAdditionalMetadataLocation()[0],
         );
         $this->assertInstanceOf(
             AdditionalMetadataLocation::class,
-            $entityDescriptor->getAdditionalMetadataLocations()[1]
+            $entityDescriptor->getAdditionalMetadataLocation()[1],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($entityDescriptor)
+            strval($entityDescriptor),
         );
     }
 
@@ -447,7 +451,7 @@ XML
         );
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
-            'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
+            'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.',
         );
         EntityDescriptor::fromXML($document->documentElement);
     }
@@ -496,7 +500,7 @@ XML
 XML
         );
         $entityDescriptor = EntityDescriptor::fromXML($document->documentElement);
-        $this->assertEquals([], $entityDescriptor->getRoleDescriptors());
+        $this->assertEquals([], $entityDescriptor->getRoleDescriptor());
         $this->assertInstanceOf(AffiliationDescriptor::class, $entityDescriptor->getAffiliationDescriptor());
     }
 
@@ -593,7 +597,7 @@ XML
         );
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
-            'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
+            'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.',
         );
         EntityDescriptor::fromXML($document->documentElement);
     }

@@ -37,7 +37,7 @@ final class ProxyRestrictionTest extends TestCase
         $this->testedClass = ProxyRestriction::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_ProxyRestriction.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_ProxyRestriction.xml',
         );
     }
 
@@ -52,14 +52,14 @@ final class ProxyRestrictionTest extends TestCase
         $condition = new ProxyRestriction(
             [
                 new Audience('urn:test:audience1'),
-                new Audience('urn:test:audience2')
+                new Audience('urn:test:audience2'),
             ],
-            2
+            2,
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($condition)
+            strval($condition),
         );
     }
 
@@ -75,7 +75,7 @@ final class ProxyRestrictionTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($condition)
+            strval($condition),
         );
     }
 }

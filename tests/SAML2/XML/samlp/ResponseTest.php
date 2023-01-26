@@ -40,7 +40,7 @@ final class ResponseTest extends TestCase
         $this->testedClass = Response::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_Response.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_Response.xml',
         );
     }
 
@@ -52,7 +52,12 @@ final class ResponseTest extends TestCase
         $status = new Status(new StatusCode());
         $issuer = new Issuer('SomeIssuer');
 
-        $response = new Response($status, $issuer, null, null, null, 'urn:some:destination', C::CONSENT_EXPLICIT);
+        $response = new Response(
+            status: $status,
+            issuer: $issuer,
+            destination: 'urn:some:destination',
+            consent: C::CONSENT_EXPLICIT,
+        );
         $responseElement = $response->toXML();
 
         $this->assertTrue($responseElement->hasAttribute('Consent'));
@@ -64,7 +69,7 @@ final class ResponseTest extends TestCase
         $issuerElements = XPath::xpQuery(
             $responseElement,
             './saml_assertion:Issuer',
-            XPath::getXPath($responseElement)
+            XPath::getXPath($responseElement),
         );
         $this->assertCount(1, $issuerElements);
         $this->assertEquals('SomeIssuer', $issuerElements[0]->textContent);
@@ -168,7 +173,7 @@ XML;
         $this->assertXmlStringEqualsXmlString(
             $fixtureXml,
             $requestXml,
-            'Response after Unmarshalling and re-marshalling remains the same'
+            'Response after Unmarshalling and re-marshalling remains the same',
         );
     }
 }

@@ -62,8 +62,10 @@ trait ExtensionPointTrait
     {
         Assert::true(
             defined('static::XSI_TYPE_PREFIX'),
-            self::getClassName(static::class)
-            . '::XSI_TYPE_PREFIX constant must be defined and set to the namespace for the xsi:type it represents.',
+            sprintf(
+                '%s::XSI_TYPE_PREFIX constant must be defined and set to the namespace for the xsi:type it represents.',
+                self::getClassName(static::class),
+            ),
             RuntimeException::class,
         );
 

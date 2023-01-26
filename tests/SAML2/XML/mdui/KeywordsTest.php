@@ -41,11 +41,11 @@ final class KeywordsTest extends TestCase
         $this->testedClass = Keywords::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdui_Keywords.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdui_Keywords.xml',
         );
 
         $this->arrayRepresentation = [
-            'en' => ["KLM", "royal", "Dutch"]
+            'en' => ["KLM", "royal", "Dutch"],
         ];
     }
 
@@ -60,7 +60,7 @@ final class KeywordsTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($keywords)
+            strval($keywords),
         );
     }
 
@@ -86,7 +86,7 @@ final class KeywordsTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($keywords)
+            strval($keywords),
         );
     }
 

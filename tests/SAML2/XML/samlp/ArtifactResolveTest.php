@@ -36,7 +36,7 @@ final class ArtifactResolveTest extends TestCase
         $this->testedClass = ArtifactResolve::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_ArtifactResolve.xml'
+            dirname(__FILE__, 4) . '/resources/xml/samlp_ArtifactResolve.xml',
         );
     }
 
@@ -48,11 +48,11 @@ final class ArtifactResolveTest extends TestCase
         $issuer = new Issuer('https://ServiceProvider.com/SAML');
         $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
 
-        $artifactResolve = new ArtifactResolve($artifact, $issuer, '_6c3a4f8b9c2d', 1074711649);
+        $artifactResolve = new ArtifactResolve($artifact, $issuer, '_6c3a4f8b9c2d', '2.0', 1074711649);
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($artifactResolve)
+            strval($artifactResolve),
         );
     }
 

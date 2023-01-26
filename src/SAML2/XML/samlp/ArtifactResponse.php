@@ -28,16 +28,13 @@ use function version_compare;
  */
 class ArtifactResponse extends AbstractStatusResponse
 {
-    /** @var \SimpleSAML\SAML2\XML\samlp\AbstractMessage|null */
-    protected ?AbstractMessage $message;
-
-
     /**
      * Constructor for SAML 2 ArtifactResponse.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\Status $status
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
+     * @param string $version
      * @param int|null $issueInstant
      * @param string|null $inResponseTo
      * @param string|null $destination
@@ -49,25 +46,25 @@ class ArtifactResponse extends AbstractStatusResponse
         Status $status,
         ?Issuer $issuer = null,
         ?string $id = null,
+        string $version = '2.0',
         ?int $issueInstant = null,
         ?string $inResponseTo = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
-        ?AbstractMessage $message = null
+        protected ?AbstractMessage $message = null,
     ) {
         parent::__construct(
             $status,
             $issuer,
             $id,
+            $version,
             $issueInstant,
             $inResponseTo,
             $destination,
             $consent,
-            $extensions
+            $extensions,
         );
-
-        $this->setMessage($message);
     }
 
 
@@ -79,17 +76,6 @@ class ArtifactResponse extends AbstractStatusResponse
     public function getMessage(): ?AbstractMessage
     {
         return $this->message;
-    }
-
-
-    /**
-     * Set the value of the any-property
-     *
-     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage|null $message
-     */
-    private function setMessage(?AbstractMessage $message): void
-    {
-        $this->message = $message;
     }
 
 
@@ -109,14 +95,9 @@ class ArtifactResponse extends AbstractStatusResponse
         Assert::same($xml->localName, 'ArtifactResponse', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ArtifactResponse::NS, InvalidDOMElementException::class);
 
-        Assert::true(
-            version_compare('2.0', self::getAttribute($xml, 'Version'), '<='),
-            RequestVersionTooLowException::class
-        );
-        Assert::true(
-            version_compare('2.0', self::getAttribute($xml, 'Version'), '>='),
-            RequestVersionTooHighException::class
-        );
+        $version = self::getAttribute($xml, 'Version');
+        Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
 
         $id = self::getAttribute($xml, 'ID');
         $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
@@ -155,7 +136,7 @@ class ArtifactResponse extends AbstractStatusResponse
             $extensions,
             1,
             'Only one saml:Extensions element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $signature = Signature::getChildrenOfClass($xml);
@@ -163,19 +144,20 @@ class ArtifactResponse extends AbstractStatusResponse
             $signature,
             1,
             'Only one ds:Signature element is allowed.',
-            TooManyElementsException::class
+            TooManyElementsException::class,
         );
 
         $response = new static(
             array_pop($status),
             empty($issuer) ? null : array_pop($issuer),
             $id,
+            $version,
             $issueInstant,
             $inResponseTo,
             $destination,
             $consent,
             empty($extensions) ? null : array_pop($extensions),
-            $message
+            $message,
         );
 
         if (!empty($signature)) {

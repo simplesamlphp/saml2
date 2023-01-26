@@ -16,13 +16,6 @@ use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
  */
 class AttributeStatement extends AbstractStatementType
 {
-    /** @var \SimpleSAML\SAML2\XML\saml\Attribute[] */
-    protected array $attributes = [];
-
-    /** @var \SimpleSAML\SAML2\XML\saml\EncryptedAttribute[] */
-    protected array $encryptedAttributes = [];
-
-
     /**
      * AttributeStatement constructor.
      *
@@ -30,12 +23,12 @@ class AttributeStatement extends AbstractStatementType
      * @param \SimpleSAML\SAML2\XML\saml\EncryptedAttribute[] $encryptedAttributes
      */
     public function __construct(
-        array $attributes = [],
-        array $encryptedAttributes = []
+        protected array $attributes = [],
+        protected array $encryptedAttributes = [],
     ) {
         Assert::true(!empty($attributes) || !empty($encryptedAttributes));
-        $this->setAttributes($attributes);
-        $this->setEncryptedAttributes($encryptedAttributes);
+        Assert::allIsInstanceOf($attributes, Attribute::class);
+        Assert::allIsInstanceOf($encryptedAttributes, EncryptedAttribute::class);
     }
 
 
@@ -45,16 +38,6 @@ class AttributeStatement extends AbstractStatementType
     public function getAttributes(): array
     {
         return $this->attributes;
-    }
-
-
-    /**
-     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes
-     */
-    private function setAttributes(array $attributes): void
-    {
-        Assert::allIsInstanceOf($attributes, Attribute::class);
-        $this->attributes = $attributes;
     }
 
 
@@ -93,16 +76,6 @@ class AttributeStatement extends AbstractStatementType
 
 
     /**
-     * @param \SimpleSAML\SAML2\XML\saml\EncryptedAttribute[] $encryptedAttributes
-     */
-    private function setEncryptedAttributes(array $encryptedAttributes): void
-    {
-        Assert::allIsInstanceOf($encryptedAttributes, EncryptedAttribute::class);
-        $this->encryptedAttributes = $encryptedAttributes;
-    }
-
-
-    /**
      * @param \DOMElement $xml
      * @return \SimpleSAML\SAML2\XML\saml\AttributeStatement
      *
@@ -116,7 +89,7 @@ class AttributeStatement extends AbstractStatementType
 
         return new static(
             Attribute::getChildrenOfClass($xml),
-            EncryptedAttribute::getChildrenOfClass($xml)
+            EncryptedAttribute::getChildrenOfClass($xml),
         );
     }
 

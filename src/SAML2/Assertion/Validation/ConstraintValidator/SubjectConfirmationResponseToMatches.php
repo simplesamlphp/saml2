@@ -13,20 +13,16 @@ use SimpleSAML\SAML2\XML\samlp\Response;
 use function sprintf;
 use function strval;
 
-class SubjectConfirmationResponseToMatches implements
-    SubjectConfirmationConstraintValidator
+class SubjectConfirmationResponseToMatches implements SubjectConfirmationConstraintValidator
 {
-    /** @var \SimpleSAML\SAML2\XML\samlp\Response */
-    private Response $response;
-
-
     /**
      * Constructor for SubjectConfirmationResponseToMatches
+     *
      * @param \SimpleSAML\SAML2\XML\samlp\Response $response
      */
-    public function __construct(Response $response)
-    {
-        $this->response = $response;
+    public function __construct(
+        private Response $response,
+    ) {
     }
 
 
@@ -47,7 +43,7 @@ class SubjectConfirmationResponseToMatches implements
             $result->addError(sprintf(
                 'InResponseTo in SubjectConfirmationData ("%s") does not match the Response InResponseTo ("%s")',
                 $inResponseTo,
-                strval($this->getInResponseTo())
+                strval($this->getInResponseTo()),
             ));
         }
     }

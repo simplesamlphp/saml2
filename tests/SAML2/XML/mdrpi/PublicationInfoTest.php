@@ -66,12 +66,12 @@ final class PublicationInfoTest extends TestCase
             [
                 new UsagePolicy('en', 'http://TheEnglishUsagePolicy'),
                 new UsagePolicy('no', 'http://TheNorwegianUsagePolicy'),
-            ]
+            ],
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($publicationInfo)
+            strval($publicationInfo),
         );
     }
 
@@ -84,7 +84,7 @@ final class PublicationInfoTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($publicationInfo)
+            strval($publicationInfo),
         );
     }
 

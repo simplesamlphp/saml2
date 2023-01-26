@@ -20,28 +20,20 @@ use function intval;
  */
 final class Scoping extends AbstractSamlpElement
 {
-    /** @var \SimpleSAML\SAML2\XML\samlp\IDPList|null */
-    protected ?IDPList $IDPList;
-
-    /** @var \SimpleSAML\SAML2\XML\samlp\RequesterID[] */
-    protected array $requesterId;
-
-    /** @var int|null */
-    protected ?int $proxyCount;
-
-
     /**
      * Initialize a Scoping element.
      *
      * @param int|null $proxyCount
-     * @param \SimpleSAML\SAML2\XML\samlp\IDPList|null $idpList
+     * @param \SimpleSAML\SAML2\XML\samlp\IDPList|null $IDPList
      * @param \SimpleSAML\SAML2\XML\samlp\RequesterID[] $requesterId
      */
-    public function __construct(?int $proxyCount = null, ?IDPList $idpList = null, array $requesterId = [])
-    {
-        $this->setProxyCount($proxyCount);
-        $this->setIDPList($idpList);
-        $this->setRequesterId($requesterId);
+    public function __construct(
+        protected ?int $proxyCount = null,
+        protected ?IDPList $IDPList = null,
+        protected array $requesterId = [],
+    ) {
+        Assert::allIsInstanceOf($requesterId, RequesterID::class);
+        Assert::nullOrNatural($proxyCount);
     }
 
 
@@ -55,15 +47,6 @@ final class Scoping extends AbstractSamlpElement
 
 
     /**
-     * @param \SimpleSAML\SAML2\XML\samlp\IDPList|null $idpList
-     */
-    private function setIDPList(?IDPList $idpList): void
-    {
-        $this->IDPList = $idpList;
-    }
-
-
-    /**
      * @return \SimpleSAML\SAML2\XML\samlp\RequesterID[]
      */
     public function getRequesterId(): array
@@ -73,32 +56,11 @@ final class Scoping extends AbstractSamlpElement
 
 
     /**
-     * @param \SimpleSAML\SAML2\XML\samlp\RequesterID[] $requesterId
-     */
-    private function setRequesterId(array $requesterId): void
-    {
-        Assert::allIsInstanceOf($requesterId, RequesterID::class);
-
-        $this->requesterId = $requesterId;
-    }
-
-
-    /**
      * @return int|null
      */
     public function getProxyCount(): ?int
     {
         return $this->proxyCount;
-    }
-
-
-    /**
-     * @param int|null $proxyCount
-     */
-    private function setProxyCount(?int $proxyCount): void
-    {
-        Assert::nullOrNatural($proxyCount);
-        $this->proxyCount = $proxyCount;
     }
 
 
@@ -138,7 +100,7 @@ final class Scoping extends AbstractSamlpElement
         return new static(
             is_null($proxyCount) ? null : intval($proxyCount),
             array_pop($idpList),
-            $requesterId
+            $requesterId,
         );
     }
 

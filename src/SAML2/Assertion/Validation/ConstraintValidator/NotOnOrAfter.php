@@ -9,8 +9,7 @@ use SimpleSAML\SAML2\Assertion\Validation\AssertionConstraintValidator;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Utilities\Temporal;
 
-class NotOnOrAfter implements
-    AssertionConstraintValidator
+class NotOnOrAfter implements AssertionConstraintValidator
 {
     /**
      * @param \SimpleSAML\SAML2\XML\saml\Assertion $assertion
@@ -23,7 +22,7 @@ class NotOnOrAfter implements
             $notValidOnOrAfterTimestamp = $conditions->getNotOnOrAfter();
             if (($notValidOnOrAfterTimestamp !== null) && ($notValidOnOrAfterTimestamp <= (Temporal::getTime() - 60))) {
                 $result->addError(
-                    'Received an assertion that has expired. Check clock synchronization on IdP and SP.'
+                    'Received an assertion that has expired. Check clock synchronization on IdP and SP.',
                 );
             }
         }

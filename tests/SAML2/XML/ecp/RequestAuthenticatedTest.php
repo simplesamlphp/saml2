@@ -49,7 +49,7 @@ final class RequestAuthenticatedTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($ra)
+            strval($ra),
         );
     }
 
@@ -62,7 +62,7 @@ final class RequestAuthenticatedTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($ra)
+            strval($ra),
         );
     }
 

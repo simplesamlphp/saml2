@@ -26,59 +26,29 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
 
 
     /**
-     * The Name of this attribute.
-     *
-     * @var string
-     */
-    protected string $Name;
-
-    /**
-     * The NameFormat of this attribute (URI).
-     *
-     * @var string|null
-     */
-    protected ?string $NameFormat = null;
-
-    /**
-     * The FriendlyName of this attribute.
-     *
-     * @var string|null
-     */
-    protected ?string $FriendlyName = null;
-
-    /**
-     * List of attribute values.
-     *
-     * Array of \SimpleSAML\SAML2\XML\saml\AttributeValue elements.
-     *
-     * @var \SimpleSAML\SAML2\XML\saml\AttributeValue[]
-     */
-    protected array $AttributeValues = [];
-
-
-    /**
      * Initialize an Attribute.
      *
-     * @param string $Name
-     * @param string|null $NameFormat
-     * @param string|null $FriendlyName
-     * @param \SimpleSAML\SAML2\XML\saml\AttributeValue[] $AttributeValues
-     * @param \DOMAttr[] $namespacedAttributes
+     * @param string $name
+     * @param string|null $nameFormat
+     * @param string|null $friendlyName
+     * @param \SimpleSAML\SAML2\XML\saml\AttributeValue[] $attributeValue
+     * @param \DOMAttr[] $namespacedAttribute
      */
     public function __construct(
-        string $Name,
-        ?string $NameFormat = null,
-        ?string $FriendlyName = null,
-        array $AttributeValues = [],
-        array $namespacedAttributes = []
+        protected string $name,
+        protected ?string $nameFormat = null,
+        protected ?string $friendlyName = null,
+        protected array $attributeValue = [],
+        array $namespacedAttribute = [],
     ) {
         $this->dataType = C::XMLENC_ELEMENT;
 
-        $this->setName($Name);
-        $this->setNameFormat($NameFormat);
-        $this->setFriendlyName($FriendlyName);
-        $this->setAttributeValues($AttributeValues);
-        $this->setAttributesNS($namespacedAttributes);
+        Assert::notWhitespaceOnly($name, 'Cannot specify an empty name for an Attribute.');
+        Assert::nullOrValidURI($nameFormat); // Covers the empty string
+        Assert::nullOrNotWhitespaceOnly($friendlyName, 'FriendlyName cannot be an empty string.');
+        Assert::allIsInstanceOf($attributeValue, AttributeValue::class, 'Invalid AttributeValue.');
+
+        $this->setAttributesNS($namespacedAttribute);
     }
 
 
@@ -89,19 +59,7 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
      */
     public function getName(): string
     {
-        return $this->Name;
-    }
-
-
-    /**
-     * Set the value of the Name-property
-     *
-     * @param string $name
-     */
-    protected function setName(string $name): void
-    {
-        Assert::notWhitespaceOnly($name, 'Cannot specify an empty name for an Attribute.');
-        $this->Name = $name;
+        return $this->name;
     }
 
 
@@ -112,20 +70,7 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
      */
     public function getNameFormat(): ?string
     {
-        return $this->NameFormat;
-    }
-
-
-    /**
-     * Set the value of the NameFormat-property
-     *
-     * @param string|null $NameFormat
-     * @throws \SimpleSAML\Assert\AssertionFailedException if the NameFormat is empty
-     */
-    protected function setNameFormat(?string $NameFormat): void
-    {
-        Assert::nullOrValidURI($NameFormat); // Covers the empty string
-        $this->NameFormat = $NameFormat;
+        return $this->nameFormat;
     }
 
 
@@ -136,20 +81,7 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
      */
     public function getFriendlyName(): ?string
     {
-        return $this->FriendlyName;
-    }
-
-
-    /**
-     * Set the value of the FriendlyName-property
-     *
-     * @param string|null $friendlyName
-     * @throws \SimpleSAML\Assert\AssertionFailedException if the FriendlyName is empty
-     */
-    private function setFriendlyName(?string $friendlyName): void
-    {
-        Assert::nullOrNotWhitespaceOnly($friendlyName, 'FriendlyName cannot be an empty string.');
-        $this->FriendlyName = $friendlyName;
+        return $this->friendlyName;
     }
 
 
@@ -160,19 +92,7 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
      */
     public function getAttributeValues(): array
     {
-        return $this->AttributeValues;
-    }
-
-
-    /**
-     * Set the value of the AttributeValues-property
-     *
-     * @param \SimpleSAML\SAML2\XML\saml\AttributeValue[] $attributeValues
-     */
-    protected function setAttributeValues(array $attributeValues): void
-    {
-        Assert::allIsInstanceOf($attributeValues, AttributeValue::class, 'Invalid AttributeValue.');
-        $this->AttributeValues = $attributeValues;
+        return $this->attributeValue;
     }
 
 
@@ -212,7 +132,7 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
             self::getAttribute($xml, 'NameFormat', null),
             self::getAttribute($xml, 'FriendlyName', null),
             AttributeValue::getChildrenOfClass($xml),
-            self::getAttributesNSFromXML($xml)
+            self::getAttributesNSFromXML($xml),
         );
     }
 

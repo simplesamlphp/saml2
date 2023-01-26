@@ -30,23 +30,72 @@ use function sprintf;
 final class EntityAttributes extends AbstractMdattrElement
 {
     /**
-     * Array with child elements.
-     *
-     * The elements can be \SimpleSAML\SAML2\XML\saml\Attribute or \SimpleSAML\SAML2\XML\saml\Assertion elements.
-     *
-     * @var (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\Attribute)[]
-     */
-    protected array $children = [];
-
-
-    /**
      * Create a EntityAttributes element.
      *
      * @param (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\Attribute)[] $children
      */
-    public function __construct(array $children)
-    {
-        $this->setChildren($children);
+    public function __construct(
+        protected array $children,
+    ) {
+        Assert::allIsInstanceOfAny($children, [Assertion::class, Attribute::class]);
+
+        $assertions = array_filter($children, function ($child) {
+            return $child instanceof Assertion;
+        });
+
+        foreach ($assertions as $assertion) {
+            $statements = array_merge(
+                $assertion->getAttributeStatements(),
+                $assertion->getAuthnStatements(),
+                $assertion->getStatements(),
+            );
+
+            Assert::allIsInstanceOf(
+                $statements,
+                AttributeStatement::class,
+                '<saml:Asssertion> elements in an <mdattr:EntityAttributes> may only contain AttributeStatements',
+                ProtocolViolationException::class,
+            );
+            Assert::count(
+                $statements,
+                1,
+                'One (and only one) <saml:AttributeStatement> MUST be included '
+                . 'in a <saml:Assertion> inside a <mdattr:EntityAttribute>',
+                ProtocolViolationException::class,
+            );
+            Assert::notNull(
+                Assertion::fromXML($assertion->toXML())->getSignature(),
+                'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must be individually signed',
+                ProtocolViolationException::class,
+            );
+
+            $subject = $assertion->getSubject();
+            Assert::notNull(
+                $subject,
+                'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must contain a Subject',
+                ProtocolViolationException::class,
+            );
+
+            Assert::isEmpty(
+                $subject?->getSubjectConfirmation(),
+                'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must NOT contain any SubjectConfirmation',
+                ProtocolViolationException::class,
+            );
+
+            $nameId = $subject?->getIdentifier();
+            Assert::isInstanceOf(
+                $nameId,
+                NameID::class,
+                'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must contain a NameID',
+                ProtocolViolationException::class,
+            );
+            Assert::same(
+                $nameId?->getFormat(),
+                C::NAMEID_ENTITY,
+                sprintf('The NameID format must be %s', C::NAMEID_ENTITY),
+                ProtocolViolationException::class,
+            );
+        }
     }
 
 
@@ -62,79 +111,6 @@ final class EntityAttributes extends AbstractMdattrElement
 
 
     /**
-     * Set the value of the childen-property
-     *
-     * @param (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\Attribute)[] $children
-     * @return void
-     * @throws \SimpleSAML\Assert\AssertionFailedException
-     */
-    private function setChildren(array $children): void
-    {
-        Assert::allIsInstanceOfAny($children, [Assertion::class, Attribute::class]);
-
-        $assertions = array_filter($children, function ($child) {
-            return $child instanceof Assertion;
-        });
-
-        foreach ($assertions as $assertion) {
-            $statements = array_merge(
-                $assertion->getAttributeStatements(),
-                $assertion->getAuthnStatements(),
-                $assertion->getStatements()
-            );
-
-            Assert::allIsInstanceOf(
-                $statements,
-                AttributeStatement::class,
-                '<saml:Asssertion> elements in an <mdattr:EntityAttributes> may only contain AttributeStatements',
-                ProtocolViolationException::class
-            );
-            Assert::count(
-                $statements,
-                1,
-                'One (and only one) <saml:AttributeStatement> MUST be included '
-                . 'in a <saml:Assertion> inside a <mdattr:EntityAttribute>',
-                ProtocolViolationException::class
-            );
-            Assert::notNull(
-                Assertion::fromXML($assertion->toXML())->getSignature(),
-                'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must be individually signed',
-                ProtocolViolationException::class
-            );
-
-            $subject = $assertion->getSubject();
-            Assert::notNull(
-                $subject,
-                'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must contain a Subject',
-                ProtocolViolationException::class
-            );
-
-            Assert::isEmpty(
-                $subject?->getSubjectConfirmation(),
-                'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must NOT contain any SubjectConfirmation',
-                ProtocolViolationException::class
-            );
-
-            $nameId = $subject?->getIdentifier();
-            Assert::isInstanceOf(
-                $nameId,
-                NameID::class,
-                'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must contain a NameID',
-                ProtocolViolationException::class
-            );
-            Assert::same(
-                $nameId?->getFormat(),
-                C::NAMEID_ENTITY,
-                sprintf('The NameID format must be %s', C::NAMEID_ENTITY),
-                ProtocolViolationException::class
-            );
-        }
-
-        $this->children = $children;
-    }
-
-
-    /**
      * Add the value to the children-property
      *
      * @param \SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\Attribute $child
@@ -143,7 +119,7 @@ final class EntityAttributes extends AbstractMdattrElement
      */
     public function addChild($child): void
     {
-        $this->setChildren(array_merge($this->children, [$child]));
+        $this->children = array_merge($this->children, [$child]);
     }
 
 

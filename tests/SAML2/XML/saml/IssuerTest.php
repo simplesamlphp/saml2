@@ -39,7 +39,7 @@ final class IssuerTest extends TestCase
         $this->testedClass = Issuer::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_Issuer.xml'
+            dirname(__FILE__, 4) . '/resources/xml/saml_Issuer.xml',
         );
     }
 
@@ -56,12 +56,12 @@ final class IssuerTest extends TestCase
             'TheNameQualifier',
             'TheSPNameQualifier',
             'urn:the:format',
-            'TheSPProvidedID'
+            'TheSPProvidedID',
         );
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($issuer)
+            strval($issuer),
         );
     }
 
@@ -79,7 +79,7 @@ final class IssuerTest extends TestCase
             'TheNameQualifier',
             'TheSPNameQualifier',
             C::NAMEID_ENTITY,
-            'TheSPProvidedID'
+            'TheSPProvidedID',
         );
     }
 
@@ -94,11 +94,10 @@ final class IssuerTest extends TestCase
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
         new Issuer(
-            'TheIssuerValue',
-            'TheNameQualifier',
-            'TheSPNameQualifier',
-            null,
-            'TheSPProvidedID'
+            value: 'TheIssuerValue',
+            NameQualifier: 'TheNameQualifier',
+            SPNameQualifier: 'TheSPNameQualifier',
+            SPProvidedID: 'TheSPProvidedID',
         );
     }
 
@@ -114,7 +113,7 @@ final class IssuerTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($issuer)
+            strval($issuer),
         );
     }
 

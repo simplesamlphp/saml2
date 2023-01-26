@@ -25,46 +25,26 @@ final class DiscoHints extends AbstractMduiElement
     /** The namespace-attribute for the xs:any element */
     public const NAMESPACE = C::XS_ANY_NS_OTHER;
 
-    /**
-     * The IPHint, as an array of strings.
-     *
-     * @var \SimpleSAML\SAML2\XML\mdui\IPHint[]
-     */
-    protected array $IPHint = [];
-
-    /**
-     * The DomainHint, as an array of strings.
-     *
-     * @var \SimpleSAML\SAML2\XML\mdui\DomainHint[]
-     */
-    protected array $DomainHint = [];
-
-    /**
-     * The GeolocationHint, as an array of strings.
-     *
-     * @var \SimpleSAML\SAML2\XML\mdui\GeolocationHint[]
-     */
-    protected array $GeolocationHint = [];
-
 
     /**
      * Create a DiscoHints element.
      *
      * @param \SimpleSAML\XML\Chunk[] $children
-     * @param \SimpleSAML\SAML2\XML\mdui\IPHint[] $IPHint
-     * @param \SimpleSAML\SAML2\XML\mdui\DomainHint[] $DomainHint
-     * @param \SimpleSAML\SAML2\XML\mdui\GeolocationHint[] $GeolocationHint
+     * @param \SimpleSAML\SAML2\XML\mdui\IPHint[] $ipHint
+     * @param \SimpleSAML\SAML2\XML\mdui\DomainHint[] $domainHint
+     * @param \SimpleSAML\SAML2\XML\mdui\GeolocationHint[] $geolocationHint
      */
     public function __construct(
         array $children = [],
-        array $IPHint = [],
-        array $DomainHint = [],
-        array $GeolocationHint = []
+        protected array $ipHint = [],
+        protected array $domainHint = [],
+        protected array $geolocationHint = [],
     ) {
+        Assert::allIsInstanceOf($ipHint, IPHint::class);
+        Assert::allIsInstanceOf($domainHint, DomainHint::class);
+        Assert::allIsInstanceOf($geolocationHint, GeolocationHint::class);
+
         $this->setElements($children);
-        $this->setIPHint($IPHint);
-        $this->setDomainHint($DomainHint);
-        $this->setGeolocationHint($GeolocationHint);
     }
 
 
@@ -75,20 +55,7 @@ final class DiscoHints extends AbstractMduiElement
      */
     public function getIPHint(): array
     {
-        return $this->IPHint;
-    }
-
-
-    /**
-     * Set the value of the IPHint-property
-     *
-     * @param \SimpleSAML\SAML2\XML\mdui\IPHint[] $hints
-     */
-    private function setIPHint(array $hints): void
-    {
-        Assert::allIsInstanceOf($hints, IPHint::class);
-
-        $this->IPHint = $hints;
+        return $this->ipHint;
     }
 
 
@@ -99,20 +66,7 @@ final class DiscoHints extends AbstractMduiElement
      */
     public function getDomainHint(): array
     {
-        return $this->DomainHint;
-    }
-
-
-    /**
-     * Set the value of the DomainHint-property
-     *
-     * @param \SimpleSAML\SAML2\XML\mdui\DomainHint[] $hints
-     */
-    private function setDomainHint(array $hints): void
-    {
-        Assert::allIsInstanceOf($hints, DomainHint::class);
-
-        $this->DomainHint = $hints;
+        return $this->domainHint;
     }
 
 
@@ -123,20 +77,7 @@ final class DiscoHints extends AbstractMduiElement
      */
     public function getGeolocationHint(): array
     {
-        return $this->GeolocationHint;
-    }
-
-
-    /**
-     * Set the value of the GeolocationHint-property
-     *
-     * @param \SimpleSAML\SAML2\XML\mdui\GeolocationHint[] $hints
-     */
-    private function setGeolocationHint(array $hints): void
-    {
-        Assert::allIsInstanceOf($hints, GeolocationHint::class);
-
-        $this->GeolocationHint = $hints;
+        return $this->geolocationHint;
     }
 
 
@@ -160,9 +101,9 @@ final class DiscoHints extends AbstractMduiElement
     {
         return (
             empty($this->elements)
-            && empty($this->IPHint)
-            && empty($this->DomainHint)
-            && empty($this->GeolocationHint)
+            && empty($this->ipHint)
+            && empty($this->domainHint)
+            && empty($this->geolocationHint)
         );
     }
 

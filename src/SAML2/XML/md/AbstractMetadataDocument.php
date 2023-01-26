@@ -28,27 +28,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      */
     protected DOMElement $xml;
 
-    /**
-     * The ID of this element.
-     *
-     * @var string|null
-     */
-    protected ?string $id;
-
-    /**
-     * How long this element is valid, as a unix timestamp.
-     *
-     * @var int|null
-     */
-    protected ?int $validUntil;
-
-    /**
-     * The length of time this element can be cached, as string.
-     *
-     * @var string|null
-     */
-    protected ?string $cacheDuration;
-
 
     /**
      * Generic constructor for SAML metadata documents.
@@ -60,15 +39,15 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
-        ?string $id = null,
-        ?int $validUntil = null,
-        ?string $cacheDuration = null,
+        protected ?string $id = null,
+        protected ?int $validUntil = null,
+        protected ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         $namespacedAttributes = []
     ) {
-        $this->setId($id);
-        $this->setValidUntil($validUntil);
-        $this->setCacheDuration($cacheDuration);
+        Assert::nullOrValidNCName($id, SchemaViolationException::class);
+        Assert::nullOrValidDuration($cacheDuration, SchemaViolationException::class);
+
         $this->setExtensions($extensions);
         $this->setAttributesNS($namespacedAttributes);
     }
@@ -86,18 +65,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 
 
     /**
-     * Set the value of the id property.
-     *
-     * @param string|null $id
-     */
-    protected function setId(?string $id): void
-    {
-        Assert::nullOrValidNCName($id, SchemaViolationException::class);
-        $this->id = $id;
-    }
-
-
-    /**
      * Collect the value of the validUntil property.
      *
      * @return int|null
@@ -109,17 +76,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 
 
     /**
-     * Set the value of the validUntil-property
-     *
-     * @param int|null $validUntil
-     */
-    protected function setValidUntil(?int $validUntil): void
-    {
-        $this->validUntil = $validUntil;
-    }
-
-
-    /**
      * Collect the value of the cacheDuration property.
      *
      * @return string|null
@@ -127,18 +83,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     public function getCacheDuration(): ?string
     {
         return $this->cacheDuration;
-    }
-
-
-    /**
-     * Set the value of the cacheDuration-property
-     *
-     * @param string|null $cacheDuration
-     */
-    protected function setCacheDuration(?string $cacheDuration): void
-    {
-        Assert::nullOrValidDuration($cacheDuration, SchemaViolationException::class);
-        $this->cacheDuration = $cacheDuration;
     }
 
 

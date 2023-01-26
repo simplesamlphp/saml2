@@ -54,7 +54,7 @@ final class UnknownRoleDescriptorTest extends TestCase
         $this->testedClass = UnknownRoleDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_UnknownRoleDescriptor.xml'
+            dirname(__FILE__, 4) . '/resources/xml/md_UnknownRoleDescriptor.xml',
         );
     }
 
@@ -69,17 +69,17 @@ final class UnknownRoleDescriptorTest extends TestCase
     {
         $descriptor = UnknownRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertCount(2, $descriptor->getKeyDescriptors());
-        $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptors()[0]);
-        $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptors()[1]);
+        $this->assertCount(2, $descriptor->getKeyDescriptor());
+        $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptor()[0]);
+        $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptor()[1]);
         $this->assertEquals(
             [C::NS_SAMLP, C::PROTOCOL],
-            $descriptor->getProtocolSupportEnumeration()
+            $descriptor->getProtocolSupportEnumeration(),
         );
         $this->assertInstanceOf(Organization::class, $descriptor->getOrganization());
-        $this->assertCount(2, $descriptor->getContactPersons());
-        $this->assertInstanceOf(ContactPerson::class, $descriptor->getContactPersons()[0]);
-        $this->assertInstanceOf(ContactPerson::class, $descriptor->getContactPersons()[1]);
+        $this->assertCount(2, $descriptor->getContactPerson());
+        $this->assertInstanceOf(ContactPerson::class, $descriptor->getContactPerson()[0]);
+        $this->assertInstanceOf(ContactPerson::class, $descriptor->getContactPerson()[1]);
         $this->assertEquals('TheID', $descriptor->getID());
         $this->assertEquals(1234567890, $descriptor->getValidUntil());
         $this->assertEquals('PT5000S', $descriptor->getCacheDuration());
@@ -99,7 +99,7 @@ final class UnknownRoleDescriptorTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($descriptor)
+            strval($descriptor),
         );
     }
 
@@ -113,7 +113,7 @@ final class UnknownRoleDescriptorTest extends TestCase
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage(
-            'Missing \'protocolSupportEnumeration\' attribute on md:UnknownRoleDescriptor.'
+            'Missing \'protocolSupportEnumeration\' attribute on md:UnknownRoleDescriptor.',
         );
 
         UnknownRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);

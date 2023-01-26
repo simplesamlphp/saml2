@@ -45,7 +45,7 @@ class EncryptedAttribute extends AbstractSamlElement implements EncryptedElement
     public function decrypt(EncryptionAlgorithmInterface $decryptor): Attribute
     {
         return Attribute::fromXML(
-            DOMDocumentFactory::fromString($this->decryptData($decryptor))->documentElement
+            DOMDocumentFactory::fromString($this->decryptData($decryptor))->documentElement,
         );
     }
 }
