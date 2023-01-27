@@ -92,7 +92,8 @@ final class KeyDescriptorTest extends TestCase
         $this->assertNull($kd->getUse());
         $this->assertEmpty($kd->getEncryptionMethod());
 
-        $this->assertEquals(<<<XML
+        $this->assertEquals(
+            <<<XML
 <md:KeyDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
   <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
     <ds:KeyName>IdentityProvider.com SSO Key</ds:KeyName>

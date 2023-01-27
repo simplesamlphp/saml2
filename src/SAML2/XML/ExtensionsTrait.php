@@ -19,14 +19,14 @@ use function in_array;
  */
 trait ExtensionsTrait
 {
-    /** @var \SimpleSAML\XML\ElementInterface[] */
+    /** @var \SimpleSAML\XML\SerializableElementInterface[] */
     protected array $extensions = [];
 
 
     /**
      * Extensions constructor.
      *
-     * @param \SimpleSAML\XML\ElementInterface[] $extensions
+     * @param \SimpleSAML\XML\SerializableElementInterface[] $extensions
      */
     public function __construct(array $extensions)
     {
@@ -57,7 +57,7 @@ trait ExtensionsTrait
     /**
      * Get an array with all extensions present.
      *
-     * @return \SimpleSAML\XML\ElementInterface[]
+     * @return \SimpleSAML\XML\SerializableElementInterface[]
      */
     public function getList(): array
     {

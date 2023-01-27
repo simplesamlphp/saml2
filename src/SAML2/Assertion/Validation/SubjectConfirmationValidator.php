@@ -32,7 +32,9 @@ class SubjectConfirmationValidator
     /**
      * @param \SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator $constraint
      */
-    public function addConstraintValidator(SubjectConfirmationConstraintValidator $constraint): void {
+    public function addConstraintValidator(
+        SubjectConfirmationConstraintValidator $constraint
+    ): void {
         if ($constraint instanceof IdentityProviderAware) {
             $constraint->setIdentityProvider($this->identityProvider);
         }

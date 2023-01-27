@@ -58,7 +58,7 @@ final class DigestMethod extends AbstractAlgElement
      * Convert XML into a DigestMethod
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
