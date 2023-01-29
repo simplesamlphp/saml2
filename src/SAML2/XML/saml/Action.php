@@ -63,7 +63,7 @@ final class Action extends AbstractSamlElement
         Assert::same($xml->namespaceURI, Action::NS, InvalidDOMElementException::class);
 
         return new self(
-            self::getAttribute($xml, 'Namespace', null),
+            self::getAttribute($xml, 'Namespace'),
             $xml->textContent,
         );
     }

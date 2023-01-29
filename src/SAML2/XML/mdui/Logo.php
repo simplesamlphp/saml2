@@ -8,6 +8,7 @@ use DOMElement;
 use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\StringElementTrait;
 
 use function filter_var;
@@ -155,8 +156,18 @@ final class Logo extends AbstractMduiElement
         Assert::keyExists($data, 'url');
 
         $Url = $data['url'];
-        $Width = $data['width'] ?? null;
-        $Height = $data['height'] ?? null;
+        $Width = $data['width'];
+        Assert::notNull(
+            $Width,
+            'Missing \'width\' attribute on mdui:Logo.',
+            MissingAttributeException::class,
+        );
+        $Height = $data['height'];
+        Assert::notNull(
+            $Height,
+            'Missing \'height\' attribute on mdui:Logo.',
+            MissingAttributeException::class,
+        );
         $lang = $data['lang'] ?? null;
 
         return new static($Url, $Height, $Width, $lang);

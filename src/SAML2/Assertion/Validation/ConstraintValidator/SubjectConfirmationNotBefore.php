@@ -27,7 +27,7 @@ class SubjectConfirmationNotBefore implements SubjectConfirmationConstraintValid
 
         /** @psalm-suppress PossiblyNullReference */
         $notBefore = $data->getNotBefore();
-        if ($notBefore && $notBefore > Temporal::getTime() + 60) {
+        if ($notBefore !== null && $notBefore > (Temporal::getTime() + 60)) {
             $result->addError('NotBefore in SubjectConfirmationData is in the future');
         }
     }

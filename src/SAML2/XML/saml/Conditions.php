@@ -28,7 +28,7 @@ final class Conditions extends AbstractSamlElement
      * @param int|null $notOnOrAfter
      * @param \SimpleSAML\SAML2\XML\saml\Condition[] $condition
      * @param \SimpleSAML\SAML2\XML\saml\AudienceRestriction[] $audienceRestriction
-     * @param bool|null $oneTimeUse
+     * @param bool $oneTimeUse
      * @param \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null $proxyRestriction
      */
     public function __construct(
@@ -36,7 +36,7 @@ final class Conditions extends AbstractSamlElement
         protected ?int $notOnOrAfter = null,
         protected array $condition = [],
         protected array $audienceRestriction = [],
-        protected ?bool $oneTimeUse = false,
+        protected bool $oneTimeUse = false,
         protected ?ProxyRestriction $proxyRestriction = null,
     ) {
         Assert::allIsInstanceOf($condition, Condition::class);

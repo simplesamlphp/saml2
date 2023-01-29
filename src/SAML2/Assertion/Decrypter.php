@@ -59,17 +59,11 @@ class Decrypter
     {
         $decryptionKeys = $this->privateKeyLoader->loadDecryptionKeys($this->identityProvider, $this->serviceProvider);
 
-        $blacklistedKeys = $this->identityProvider->getBlacklistedAlgorithms();
-        if (is_null($blacklistedKeys)) {
-            $container = ContainerSingleton::getInstance();
-            $blacklistedKeys = $container->getBlacklistedEncryptionAlgorithms();
-        }
-
         // reflects the simplesamlphp behaviour for BC, see
         // https://github.com/simplesamlphp/simplesamlphp/blob/3d735912342767d391297cc5e13272a76730aca0/modules/saml/lib/Message.php#L369
         foreach ($decryptionKeys as $index => $key) {
             try {
-                $decryptedAssertion = $assertion->decrypt($key, $blacklistedKeys);
+                $decryptedAssertion = $assertion->decrypt($key);
                 $this->logger->debug(sprintf('Decrypted Assertion with key "#%d"', $index));
 
                 return $decryptedAssertion;

@@ -11,6 +11,8 @@ namespace SimpleSAML\SAML2\Exception;
  */
 class ProtocolViolationException extends RuntimeException
 {
+    public const DEFAULT_MESSAGE = 'A violation of the SAML2 protocol occurred.';
+
     /**
      * @param string $message
      */

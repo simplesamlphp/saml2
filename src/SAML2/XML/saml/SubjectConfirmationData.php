@@ -47,7 +47,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
         protected ?string $inResponseTo = null,
         protected ?string $address = null,
         protected array $info = [],
-        array $namespacedAttribute = [],
+        array $namespacedAttributes = [],
     ) {
         Assert::nullOrNotWhitespaceOnly($recipient);
         Assert::nullOrValidNCName($inResponseTo); // Covers the empty string
@@ -60,7 +60,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
 
         Assert::allIsInstanceOfAny($info, [Chunk::class, KeyInfo::class]);
 
-        $this->setAttributesNS($namespacedAttribute);
+        $this->setAttributesNS($namespacedAttributes);
     }
 
 
@@ -144,7 +144,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
             && empty($this->inResponseTo)
             && empty($this->address)
             && empty($this->info)
-            && empty($this->namespacedAttribute)
+            && empty($this->namespacedAttributes)
         );
     }
 

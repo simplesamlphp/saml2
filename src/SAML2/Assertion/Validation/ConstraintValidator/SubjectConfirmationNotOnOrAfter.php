@@ -27,7 +27,7 @@ class SubjectConfirmationNotOnOrAfter implements SubjectConfirmationConstraintVa
 
         /** @psalm-suppress PossiblyNullReference */
         $notOnOrAfter = $data->getNotOnOrAfter();
-        if ($notOnOrAfter && $notOnOrAfter <= Temporal::getTime() - 60) {
+        if ($notOnOrAfter !== null && $notOnOrAfter <= (Temporal::getTime() - 60)) {
             $result->addError('NotOnOrAfter in SubjectConfirmationData is in the past');
         }
     }

@@ -70,16 +70,11 @@ final class NameIdDecryptionTransformer implements
         }
 
         $decryptionKeys  = $this->privateKeyLoader->loadDecryptionKeys($this->identityProvider, $this->serviceProvider);
-        $blacklistedKeys = $this->identityProvider->getBlacklistedAlgorithms();
-        if (is_null($blacklistedKeys)) {
-            $container = ContainerSingleton::getInstance();
-            $blacklistedKeys = $container->getBlacklistedEncryptionAlgorithms();
-        }
 
         $decrypted = null;
         foreach ($decryptionKeys as $index => $key) {
             try {
-                $decrypted = $identifier->decrypt($key, $blacklistedKeys);
+                $decrypted = $identifier->decrypt($key);
                 $this->logger->debug(sprintf('Decrypted assertion NameId with key "#%d"', $index));
                 break;
             } catch (Exception $e) {
