@@ -67,8 +67,8 @@ final class ScopeTest extends TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $scopeElement = $scope->toXML($document->documentElement);
 
-        /** @var \DOMElement[] $scopeElements */
         $xpCache = XPath::getXPath($scopeElement);
+        /** @var \DOMElement[] $scopeElements */
         $scopeElements = XPath::xpQuery($scopeElement, '/root/shibmd:Scope', $xpCache);
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];
@@ -89,8 +89,8 @@ final class ScopeTest extends TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $scopeElement = $scope->toXML($document->documentElement);
 
-        /** @var \DOMElement[] $scopeElements */
         $xpCache = XPath::getXPath($scopeElement);
+        /** @var \DOMElement[] $scopeElements */
         $scopeElements = XPath::xpQuery($scopeElement, '/root/shibmd:Scope', $xpCache);
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];

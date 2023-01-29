@@ -44,7 +44,7 @@ class Response extends AbstractStatusResponse
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      * @param (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\EncryptedAssertion)[] $assertions
      */
-    public function __construct(
+    final public function __construct(
         Status $status,
         ?Issuer $issuer = null,
         ?string $id = null,
@@ -87,7 +87,7 @@ class Response extends AbstractStatusResponse
      * Convert XML into a Response element.
      *
      * @param \DOMElement $xml The input message.
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong

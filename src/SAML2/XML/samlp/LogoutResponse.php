@@ -21,7 +21,7 @@ use function array_pop;
  *
  * @package simplesamlphp/saml2
  */
-class LogoutResponse extends AbstractStatusResponse
+final class LogoutResponse extends AbstractStatusResponse
 {
     /**
      * Constructor for SAML 2 LogoutResponse.
@@ -70,7 +70,7 @@ class LogoutResponse extends AbstractStatusResponse
      * Convert XML into an LogoutResponse
      *
      * @param \DOMElement $xml
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong

@@ -79,7 +79,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      * Convert XML into a RequestedAuthnContext
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong

@@ -87,7 +87,7 @@ final class Status extends AbstractSamlpElement
      * Convert XML into a Status
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\samlp\Status
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong

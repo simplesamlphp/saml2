@@ -162,6 +162,7 @@ final class LogoutRequestTest extends MockeryTestCase
         $this->assertEquals('SomeSessionIndex1', $sessionIndexes[0]->getContent());
         $this->assertEquals('SomeSessionIndex2', $sessionIndexes[1]->getContent());
 
+        /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),

@@ -179,14 +179,17 @@ final class EncryptedIDTest extends TestCase
         // test with a NameID
         $nameid = new NameID('value', 'name_qualifier');
         $encid = new EncryptedID($nameid->encrypt($encryptor));
+        /** @psalm-suppress ArgumentTypeCoercion */
         $doc = DOMDocumentFactory::fromString(strval($encid));
 
         $encid = EncryptedID::fromXML($doc->documentElement);
+        /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
             $privKey,
         );
         $id = $encid->decrypt($decryptor);
+        /** @psalm-suppress ArgumentTypeCoercion */
         $this->assertEquals(strval($nameid), strval($id));
 
         // test a custom BaseID that's registered
@@ -197,15 +200,18 @@ final class EncryptedIDTest extends TestCase
         );
 
         $encid = new EncryptedID($customId->encrypt($encryptor));
+        /** @psalm-suppress ArgumentTypeCoercion */
         $doc = DOMDocumentFactory::fromString(strval($encid));
 
         $encid = EncryptedID::fromXML($doc->documentElement);
+        /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
             $privKey,
         );
         $id = $encid->decrypt($decryptor);
         $this->assertInstanceOf(CustomBaseID::class, $id);
+        /** @psalm-suppress ArgumentTypeCoercion */
         $this->assertEquals(strval($customId), strval($id));
 
         // Remove registration by using a clean container
@@ -217,15 +223,18 @@ final class EncryptedIDTest extends TestCase
         $unknownId = $customId;
 
         $encid = new EncryptedID($unknownId->encrypt($encryptor));
+        /** @psalm-suppress ArgumentTypeCoercion */
         $doc = DOMDocumentFactory::fromString(strval($encid));
 
         $encid = EncryptedID::fromXML($doc->documentElement);
+        /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
             $privKey,
         );
         $id = $encid->decrypt($decryptor);
         $this->assertInstanceOf(UnknownID::class, $id);
+        /** @psalm-suppress ArgumentTypeCoercion */
         $this->assertEquals(strval($unknownId), strval($id));
 
         // test with unsupported ID

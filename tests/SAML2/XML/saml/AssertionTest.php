@@ -505,7 +505,7 @@ XML
 
         $this->assertEquals(
             C::SIG_RSA_SHA256,
-            $signedAssertion->getSignature()?->getSignedInfo()->getSignatureMethod()?->getAlgorithm(),
+            $signedAssertion->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
         );
         $this->assertTrue($signedAssertion->wasSignedAtConstruction());
     }
@@ -666,13 +666,14 @@ XML;
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()?->getAlgorithm(),
+            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
         // Was signed
         $this->assertTrue($assertion->wasSignedAtConstruction());
 
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Assertion $verified */
         $verified = $assertion->verify($verifier);
 
         // Double-check that we can actually retrieve some basics.
@@ -692,12 +693,14 @@ XML;
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()?->getAlgorithm(),
+            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Assertion $verified */
         $verified = $assertion->verify($verifier);
 
+        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Subject $subject */
         $subject = $verified->getSubject();
 
         $identifier = $subject->getIdentifier();
@@ -715,7 +718,7 @@ XML;
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()?->getAlgorithm(),
+            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
@@ -757,7 +760,7 @@ XML;
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()?->getAlgorithm(),
+            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY),
         );
 

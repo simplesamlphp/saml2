@@ -46,7 +46,7 @@ final class GetComplete extends AbstractSamlpElement
      * Convert XML into an GetComplete
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   If the qualified name of the supplied element is wrong

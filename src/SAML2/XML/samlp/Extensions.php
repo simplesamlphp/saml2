@@ -27,7 +27,7 @@ final class Extensions extends AbstractSamlpElement
      * as a \SimpleSAML\XML\Chunk object.
      *
      * @param \DOMElement $xml
-     * @return \SimpleSAML\SAML2\XML\samlp\Extensions
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong

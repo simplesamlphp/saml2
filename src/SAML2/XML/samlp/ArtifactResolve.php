@@ -75,7 +75,7 @@ class ArtifactResolve extends AbstractRequest
      * Create a class from XML
      *
      * @param \DOMElement $xml
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong

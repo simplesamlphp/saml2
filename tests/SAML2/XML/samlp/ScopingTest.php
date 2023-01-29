@@ -77,6 +77,7 @@ final class ScopingTest extends TestCase
 
         // Test for an IDPList
         $xpCache = XPath::getXPath($scopingElement);
+        /** @psalm-var \DOMElement[] $scopingElements */
         $scopingElements = XPath::xpQuery($scopingElement, './saml_protocol:IDPList', $xpCache);
         $this->assertCount(1, $scopingElements);
 

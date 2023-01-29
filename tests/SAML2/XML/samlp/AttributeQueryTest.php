@@ -145,8 +145,8 @@ final class AttributeQueryTest extends TestCase
         $attributeQueryElement = $attributeQuery->toXML();
 
         // Test Attribute Names
-        /** @psalm-var \DOMElement[] $attributes */
         $xpCache = XPath::getXPath($attributeQueryElement);
+        /** @psalm-var \DOMElement[] $attributes */
         $attributes = XPath::xpQuery($attributeQueryElement, './saml_assertion:Attribute', $xpCache);
         $this->assertCount(3, $attributes);
         $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));

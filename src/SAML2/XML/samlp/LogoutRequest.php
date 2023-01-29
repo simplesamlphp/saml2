@@ -31,7 +31,7 @@ use function gmdate;
  *
  * @package simplesamlphp/saml2
  */
-class LogoutRequest extends AbstractRequest
+final class LogoutRequest extends AbstractRequest
 {
     use IdentifierTrait;
 
@@ -112,7 +112,7 @@ class LogoutRequest extends AbstractRequest
      * Convert XML into a LogoutRequest
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\samlp\LogoutRequest
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
