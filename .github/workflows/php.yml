@@ -18,7 +18,7 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-latest, windows-latest]
-        php-versions: ['8.0', '8.1']
+        php-versions: ['8.0', '8.1', '8.2']
 
     steps:
       - name: Setup PHP, with composer and extensions
@@ -203,5 +203,4 @@ jobs:
         run: php vendor/bin/psalm --show-info=true --shepherd --php-version=${{ steps.setup-php.outputs.php-version }}
 
       - name: Psalter
-        continue-on-error: true
         run: php vendor/bin/psalter --issues=UnnecessaryVarAnnotation --dry-run --php-version=${{ steps.setup-php.outputs.php-version }}
