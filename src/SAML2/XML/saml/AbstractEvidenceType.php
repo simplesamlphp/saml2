@@ -23,10 +23,10 @@ abstract class AbstractEvidenceType extends AbstractSamlElement
      * @param \SimpleSAML\SAML2\XML\saml\EncryptedAssertion[] $encryptedAssertion
      */
     final public function __construct(
-        protected array $assertionIDRef,
-        protected array $assertionURIRef,
-        protected array $assertion,
-        protected array $encryptedAssertion,
+        protected array $assertionIDRef = [],
+        protected array $assertionURIRef = [],
+        protected array $assertion = [],
+        protected array $encryptedAssertion = [],
     ) {
         Assert::allIsInstanceOf($assertionIDRef, AssertionIDRef::class, SchemaViolationException::class);
         Assert::allIsInstanceOf($assertionURIRef, AssertionURIRef::class, SchemaViolationException::class);

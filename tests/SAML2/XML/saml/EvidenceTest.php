@@ -86,10 +86,25 @@ final class EvidenceTest extends TestCase
             [EncryptedAssertion::fromXML($this->encryptedAssertion->documentElement)],
         );
 
+        $this->assertFalse($evidence->isEmptyElement());
+
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
             strval($evidence),
         );
+    }
+
+
+    /**
+     */
+    public function testMarshallingWithNoContent(): void
+    {
+        $evidence = new Evidence();
+        $this->assertEquals(
+            '<saml:Evidence xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"/>',
+            strval($evidence)
+        );
+        $this->assertTrue($evidence->isEmptyElement());
     }
 
 
