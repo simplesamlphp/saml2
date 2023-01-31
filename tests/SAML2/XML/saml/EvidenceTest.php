@@ -22,7 +22,6 @@ use function strval;
  * Class \SimpleSAML\SAML2\XML\saml\EvidenceTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\Evidence
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractEvidenceType
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  *
  * @package simplesamlphp/saml2
