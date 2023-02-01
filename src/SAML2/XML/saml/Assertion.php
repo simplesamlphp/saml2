@@ -53,6 +53,13 @@ final class Assertion extends AbstractSamlElement implements
      */
     protected bool $wasSignedAtConstruction = false;
 
+    /**
+     * The original signed XML
+     *
+     * @var \DOMElement
+     */
+    protected DOMElement $xml;
+
 
     /**
      * Assertion constructor.
