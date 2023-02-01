@@ -23,7 +23,7 @@ use function gmdate;
 final class AuthnStatement extends AbstractStatementType
 {
     /**
-     * Initialize an AuthnContext.
+     * Initialize an AuthnStatement.
      *
      * @param \SimpleSAML\SAML2\XML\saml\AuthnContext $authnContext
      * @param int $authnInstant
@@ -102,7 +102,7 @@ final class AuthnStatement extends AbstractStatementType
      *
      * @param \DOMElement $xml The XML element we should load
      *
-     * @return \SimpleSAML\SAML2\XML\saml\AuthnStatement
+     * @return static
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XML\Exception\MissingElementException
