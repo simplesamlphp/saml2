@@ -11,13 +11,13 @@ use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\Test\SAML2\SignedElementTestTrait;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 

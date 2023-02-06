@@ -15,6 +15,7 @@ use SimpleSAML\SAML2\XML\md\PDPDescriptor;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
 use function strval;
@@ -33,6 +34,7 @@ final class PDPDescriptorTest extends TestCase
 {
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
+    use SignedElementTestTrait;
 
 
     /** @var \SimpleSAML\SAML2\XML\md\AuthzService */

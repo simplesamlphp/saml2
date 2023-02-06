@@ -20,6 +20,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 use SimpleSAML\XMLSecurity\XMLSecurityDSig;
 
 use function dirname;
@@ -43,6 +44,7 @@ final class UnknownRoleDescriptorTest extends TestCase
 {
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
+    use SignedElementTestTrait;
 
 
     /**
