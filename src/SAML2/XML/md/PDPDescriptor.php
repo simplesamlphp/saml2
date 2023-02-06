@@ -9,6 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function preg_split;
 
@@ -137,6 +138,9 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             TooManyElementsException::class,
         );
 
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
+
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount(
             $extensions,
@@ -145,7 +149,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             TooManyElementsException::class,
         );
 
-        return new static(
+        $pdp = new static(
             AuthzService::getChildrenOfClass($xml),
             preg_split('/[\s]+/', trim($protocols)),
             AssertionIDRequestService::getChildrenOfClass($xml),
@@ -159,6 +163,13 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             KeyDescriptor::getChildrenOfClass($xml),
             ContactPerson::getChildrenOfClass($xml),
         );
+
+        if (!empty($signature)) {
+            $pdp->setSignature($signature[0]);
+            $pdp->setXML($xml);
+        }
+
+        return $pdp;
     }
 
 

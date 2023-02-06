@@ -6,12 +6,15 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\AbstractElement;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
+use function array_pop;
 use function preg_split;
 
 /**
@@ -47,6 +50,9 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
             TooManyElementsException::class,
         );
 
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
+
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount(
             $extensions,
@@ -55,7 +61,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
             TooManyElementsException::class,
         );
 
-        $object = new static(
+        $descriptor = new static(
             preg_split('/[\s]+/', trim($protocols)),
             self::getAttribute($xml, 'ID', null),
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
@@ -67,9 +73,12 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
             ContactPerson::getChildrenOfClass($xml),
         );
 
-        $object->setXML($xml);
+        if (!empty($signature)) {
+            $descriptor->setSignature($signature[0]);
+        }
 
-        return $object;
+        $descriptor->setXML($xml);
+        return $descriptor;
     }
 
 
@@ -81,7 +90,25 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $chunk = new Chunk($this->xml);
-        return $chunk->toXML($parent);
+        if ($this->isSigned() === true && $this->signer === null) {
+            // We already have a signed document and no signer was set to re-sign it
+            if ($parent === null) {
+                return $this->xml;
+            }
+
+            $node = $parent->ownerDocument?->importNode($this->getXML(), true);
+            $parent->appendChild($node);
+            return $parent;
+        }
+
+        $e = (new Chunk($this->xml))->toXML($parent);
+
+        if ($this->signer !== null) {
+            $signedXML = $this->doSign($e);
+            $signedXML->insertBefore($this->signature?->toXML($signedXML), $signedXML->firstChild);
+            return $signedXML;
+        }
+
+        return $e;
     }
 }
