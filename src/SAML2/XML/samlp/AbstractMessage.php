@@ -85,7 +85,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     protected function __construct(
         protected ?Issuer $issuer = null,
         protected ?string $id = null,
-        protected $version = '2.0',
+        protected string $version = '2.0',
         protected ?int $issueInstant = null,
         protected ?string $destination = null,
         protected ?string $consent = null,
