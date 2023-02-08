@@ -48,6 +48,8 @@ final class AssertionIDRequestTest extends TestCase
     // Marshalling
 
 
+    /**
+     */
     public function testMarshalling(): void
     {
         $assertionIDRequest = new AssertionIDRequest(
