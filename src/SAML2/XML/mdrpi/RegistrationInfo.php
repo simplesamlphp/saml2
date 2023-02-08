@@ -148,15 +148,15 @@ final class RegistrationInfo extends AbstractMdrpiElement
      */
     public static function fromArray(array $data): static
     {
-        Assert::keyExists($data, 'registrationAuthority');
+        Assert::keyExists($data, 'authority');
 
-        $registrationAuthority = $data['registrationAuthority'];
+        $registrationAuthority = $data['authority'];
         Assert::string($registrationAuthority);
 
-        $registrationInstant = $data['registrationInstant'] ?? null;
+        $registrationInstant = $data['instant'] ?? null;
         Assert::nullOrInteger($registrationInstant);
 
-        $rp = $data['registrationPolicy'] ?? [];
+        $rp = $data['policies'] ?? [];
         Assert::isArray($rp);
 
         $registrationPolicy = [];
@@ -176,16 +176,16 @@ final class RegistrationInfo extends AbstractMdrpiElement
     public function toArray(): array
     {
         $data = [];
-        $data['registrationAuthority'] = $this->getRegistrationAuthority();
+        $data['authority'] = $this->getRegistrationAuthority();
 
         if ($this->getRegistrationInstant() !== null) {
-            $data['registrationInstant'] = $this->getRegistrationInstant();
+            $data['instant'] = $this->getRegistrationInstant();
         }
 
         if (!empty($this->getRegistrationPolicy())) {
-            $data['registrationPolicy'] = [];
+            $data['policies'] = [];
             foreach ($this->getRegistrationPolicy() as $rp) {
-                $data['registrationPolicy'] = array_merge($data['registrationPolicy'], $rp->toArray());
+                $data['policies'] = array_merge($data['policies'], $rp->toArray());
             }
         }
 

@@ -16,6 +16,10 @@ the newly added NameIDPolicy-class.
 The API of the StatusResponse-class has been slightly changed; getStatus/setStatus will now handle Status-objects
 instead of the previous array
 
+### RegistrationInfo change
+
+RegistrationInfo toArray/fromArray returns different elements to better align with the public documention. e.g. `authority` rather than `registrationAuthority`.
+
 ## 4.0 to 4.1
 
 ### Assertion processor BC breaking change
@@ -26,12 +30,12 @@ This problem was introduced in [#120](https://github.com/simplesamlphp/saml2/pul
 If you are using the assertion processor as a stand-alone component, then you will have to update your code to reflect this
 change, see: [97a7bd0](https://github.com/simplesamlphp/saml2/commit/97a7bd0be4865617048e1ea92aa0b55df488fe4a).
 
-## 3.4 to 4.0 
+## 3.4 to 4.0
 
 ### Assertion processor BC breaking change
 
 The response processor in pre 4.0 releases assumed all assertions are decrypted, and caused a fatal error when the response was unsigned.
-This problem was fixed in [#120](https://github.com/simplesamlphp/saml2/pull/120). 
+This problem was fixed in [#120](https://github.com/simplesamlphp/saml2/pull/120).
 
 If you are using the assertion processor as a stand-alone component, then you will have to update your code to reflect this
 change, see: [e6c01fa](https://github.com/simplesamlphp/saml2/commit/e6c01fa9b0e815682e24916f03a84d245480c4a0).

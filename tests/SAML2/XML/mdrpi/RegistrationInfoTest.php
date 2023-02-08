@@ -47,9 +47,9 @@ final class RegistrationInfoTest extends TestCase
         );
 
         $this->arrayRepresentation = [
-            'registrationAuthority' => 'https://ExampleAuthority',
-            'registrationInstant' => 1234567890,
-            'registrationPolicy' => [
+            'authority' => 'https://ExampleAuthority',
+            'instant' => 1234567890,
+            'policies' => [
                 'en' => 'http://www.example.org/aai/metadata/en_registration.html',
                 'de' => 'http://www.example.org/aai/metadata/de_registration.html',
             ],
