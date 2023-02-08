@@ -64,6 +64,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      * The original signed XML
      *
      * @var \DOMElement
+     * @psalm-suppress PropertyNotSetInConstructor
      */
     protected DOMElement $xml;
 

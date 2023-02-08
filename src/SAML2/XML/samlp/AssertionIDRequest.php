@@ -28,7 +28,7 @@ final class AssertionIDRequest extends AbstractRequest
     /**
      * Initialize an AssertionIDRequest.
      *
-     * @param \SimpleSAML\SAML2\XML\saml\AssertionIDRef $assertionIDRef
+     * @param \SimpleSAML\SAML2\XML\saml\AssertionIDRef[] $assertionIDRef
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param string $version
@@ -98,10 +98,12 @@ final class AssertionIDRequest extends AbstractRequest
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::maxCount($issuer, 1, 'Only one <saml:Issuer> element is allowed.', TooManyElementsException::class);
 
+        /** @psalm-var string $version */
         $version = self::getAttribute($xml, 'Version');
         Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
         Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
 
+        /** @psalm-var string $issueInstant */
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
         $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);

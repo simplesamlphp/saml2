@@ -37,7 +37,7 @@ final class AssertionIDRequestTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->testedClass = AuthnRequest::class;
+        $this->testedClass = AssertionIDRequest::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_AssertionIDRequest.xml',
