@@ -74,8 +74,7 @@ final class Scope extends AbstractShibmdElement
         Assert::same($xml->namespaceURI, Scope::NS, InvalidDOMElementException::class);
 
         $scope = $xml->textContent;
-        /** @psalm-var bool $regexp */
-        $regexp = self::getBooleanAttribute($xml, 'regexp', 'false');
+        $regexp = self::getBooleanAttribute($xml, 'regexp', false);
 
         return new static($scope, $regexp);
     }
