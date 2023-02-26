@@ -268,6 +268,11 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const NS_SOAP = 'http://schemas.xmlsoap.org/soap/envelope/';
 
     /**
+     * The namespace for the IDP Discovery protocol
+     */
+    public const NS_IDPDISC = 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol';
+
+    /**
      * The responding provider was unable to successfully authenticate the principal.
      *
      * Second-level status code.
