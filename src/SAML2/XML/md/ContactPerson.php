@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DOMDocument;
 use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
-use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
@@ -266,7 +266,7 @@ final class ContactPerson extends AbstractMdElement
             $name = array_key_first($attribute);
             $value = $attribute[$name];
 
-            $doc = DOMDocumentFactory::create();
+            $doc = new DOMDocument();
             $elt = $doc->createElement("placeholder");
             $elt->setAttributeNS($ns, $name, $value);
 
