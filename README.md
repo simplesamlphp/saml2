@@ -71,14 +71,6 @@ Example:
     $binding->send($request);
 ```
 
-Security
---------
-* Should you need to create a DOMDocument instance, use the `\SimpleSAML\SAML2\DOMDocumentFactory` to create DOMDocuments from
-  either a string (`\SimpleSAML\SAML2\DOMDocumentFactory::fromString($theXmlAsString)`), a file (`\SimpleSAML\SAML2\DOMDocumentFactory::fromFile($pathToTheFile)`)
-  or just a new instance (`\SimpleSAML\SAML2\DOMDocumentFactory::create()`). This in order to protect yourself against the
-  [XXE Processing Vulnerability](https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Processing), as well as
-  [XML Entity Expansion](https://phpsecurity.readthedocs.org/en/latest/Injection-Attacks.html#defenses-against-xml-entity-expansion) attacks.
-
 License
 -------
 This library is licensed under the LGPL license version 2.1.
