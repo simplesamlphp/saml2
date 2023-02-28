@@ -63,23 +63,14 @@ class Organization
         $this->Extensions = Extensions::getList($xml);
 
         $this->OrganizationName = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationName');
-        if (empty($this->OrganizationName)) {
-            $this->OrganizationName = ['invalid' => ''];
-        }
 
         $this->OrganizationDisplayName = Utils::extractLocalizedStrings(
             $xml,
             Constants::NS_MD,
             'OrganizationDisplayName'
         );
-        if (empty($this->OrganizationDisplayName)) {
-            $this->OrganizationDisplayName = ['invalid' => ''];
-        }
 
         $this->OrganizationURL = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationURL');
-        if (empty($this->OrganizationURL)) {
-            $this->OrganizationURL = ['invalid' => ''];
-        }
     }
 
 
