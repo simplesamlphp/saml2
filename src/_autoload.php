@@ -17,19 +17,10 @@ declare(strict_types=1);
  */
 function SAML2_autoload(string $className) : void
 {
-    // handle classes that have been renamed
-    $renamed = [
-        'SAML2_Const' => 'SAML2_Constants',
-    ];
-    $oldName = $className;
-    if (array_key_exists($className, $renamed)) {
-        $className = $renamed[$className];
-    }
-
-    $file = dirname(__FILE__).'/'.str_replace('_', '/', $className).'.php';
+    $file = dirname(__FILE__) . '/' . str_replace('_', '/', $className) . '.php';
     if (file_exists($file)) {
         require_once($file);
-        $newName = '\\'.str_replace('_', '\\', $className);
+        $newName = '\\' . str_replace('_', '\\', $className);
         class_alias($newName, $oldName);
     }
 }
