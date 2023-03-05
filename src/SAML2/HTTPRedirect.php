@@ -4,8 +4,24 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use DOMElement;
+use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use Webmozart\Assert\Assert;
+
+use function array_key_exists;
+use function base64_decode;
+use function base64_encode;
+use function count;
+use function explode;
+use function get_class;
+use function gzdeflate;
+use function gzinflate;
+use function strlen;
+use function strpos;
+use function urldecode;
+use function urlencode;
+use function var_export;
 
 /**
  * Class which implements the HTTP-Redirect binding.
@@ -22,12 +38,12 @@ class HTTPRedirect extends Binding
      * @param \SAML2\Message $message The message.
      * @return string The URL the user should be redirected to in order to send a message.
      */
-    public function getRedirectURL(Message $message) : string
+    public function getRedirectURL(Message $message): string
     {
         if ($this->destination === null) {
             $destination = $message->getDestination();
             if ($destination === null) {
-                throw new \Exception('Cannot build a redirect URL, no destination set.');
+                throw new Exception('Cannot build a redirect URL, no destination set.');
             }
         } else {
             $destination = $this->destination;
@@ -55,15 +71,15 @@ class HTTPRedirect extends Binding
         $msg .= urlencode($msgStr);
 
         if ($relayState !== null) {
-            $msg .= '&RelayState='.urlencode($relayState);
+            $msg .= '&RelayState=' . urlencode($relayState);
         }
 
         if ($key !== null) { // add the signature
             /** @psalm-suppress PossiblyInvalidArgument */
-            $msg .= '&SigAlg='.urlencode($key->type);
+            $msg .= '&SigAlg=' . urlencode($key->type);
 
             $signature = $key->signData($msg);
-            $msg .= '&Signature='.urlencode(base64_encode($signature));
+            $msg .= '&Signature=' . urlencode(base64_encode($signature));
         }
 
         if (strpos($destination, '?') === false) {
@@ -83,10 +99,10 @@ class HTTPRedirect extends Binding
      * @param \SAML2\Message $message The message we should send.
      * @return void
      */
-    public function send(Message $message) : void
+    public function send(Message $message): void
     {
         $destination = $this->getRedirectURL($message);
-        Utils::getContainer()->getLogger()->debug('Redirect to '.strlen($destination).' byte URL: '.$destination);
+        Utils::getContainer()->getLogger()->debug('Redirect to ' . strlen($destination) . ' byte URL: ' . $destination);
         Utils::getContainer()->redirect($destination);
     }
 
@@ -109,27 +125,27 @@ class HTTPRedirect extends Binding
         } elseif (array_key_exists('SAMLResponse', $data)) {
             $message = $data['SAMLResponse'];
         } else {
-            throw new \Exception('Missing SAMLRequest or SAMLResponse parameter.');
+            throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
 
         if (isset($data['SAMLEncoding']) && $data['SAMLEncoding'] !== self::DEFLATE) {
-            throw new \Exception('Unknown SAMLEncoding: '.var_export($data['SAMLEncoding'], true));
+            throw new Exception('Unknown SAMLEncoding: ' . var_export($data['SAMLEncoding'], true));
         }
 
         $message = base64_decode($message);
         if ($message === false) {
-            throw new \Exception('Error while base64 decoding SAML message.');
+            throw new Exception('Error while base64 decoding SAML message.');
         }
 
         $message = gzinflate($message);
         if ($message === false) {
-            throw new \Exception('Error while inflating SAML message.');
+            throw new Exception('Error while inflating SAML message.');
         }
 
         $document = DOMDocumentFactory::fromString($message);
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
-        if (!$document->firstChild instanceof \DOMElement) {
-            throw new \Exception('Malformed SAML message received.');
+        if (!$document->firstChild instanceof DOMElement) {
+            throw new Exception('Malformed SAML message received.');
         }
         $message = Message::fromXML($document->firstChild);
 
@@ -142,7 +158,7 @@ class HTTPRedirect extends Binding
         }
 
         if (!array_key_exists('SigAlg', $data)) {
-            throw new \Exception('Missing signature algorithm.');
+            throw new Exception('Missing signature algorithm.');
         }
 
         $signData = [
@@ -166,7 +182,7 @@ class HTTPRedirect extends Binding
      *
      * @return array The query data that is signed.
      */
-    private static function parseQuery() : array
+    private static function parseQuery(): array
     {
         /*
          * Parse the query string. We need to do this ourself, so that we get access
@@ -192,18 +208,18 @@ class HTTPRedirect extends Binding
             switch ($name) {
                 case 'SAMLRequest':
                 case 'SAMLResponse':
-                    $sigQuery = $name.'='.$value;
+                    $sigQuery = $name . '=' . $value;
                     break;
                 case 'RelayState':
-                    $relayState = '&RelayState='.$value;
+                    $relayState = '&RelayState=' . $value;
                     break;
                 case 'SigAlg':
-                    $sigAlg = '&SigAlg='.$value;
+                    $sigAlg = '&SigAlg=' . $value;
                     break;
             }
         }
 
-        $data['SignedQuery'] = $sigQuery.$relayState.$sigAlg;
+        $data['SignedQuery'] = $sigQuery . $relayState . $sigAlg;
 
         return $data;
     }
@@ -219,7 +235,7 @@ class HTTPRedirect extends Binding
      * @throws \Exception
      * @return void
      */
-    public static function validateSignature(array $data, XMLSecurityKey $key) : void
+    public static function validateSignature(array $data, XMLSecurityKey $key): void
     {
         Assert::keyExists($data, "Query");
         Assert::keyExists($data, "SigAlg");
@@ -232,14 +248,14 @@ class HTTPRedirect extends Binding
         $signature = base64_decode($signature);
 
         if ($key->type !== XMLSecurityKey::RSA_SHA256) {
-            throw new \Exception('Invalid key type for validating signature on query string.');
+            throw new Exception('Invalid key type for validating signature on query string.');
         }
         if ($key->type !== $sigAlg) {
             $key = Utils::castKey($key, $sigAlg);
         }
 
         if ($key->verifySignature($query, $signature) !== 1) {
-            throw new \Exception('Unable to validate signature on query string.');
+            throw new Exception('Unable to validate signature on query string.');
         }
     }
 }

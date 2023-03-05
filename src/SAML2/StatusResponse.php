@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMElement;
-use Webmozart\Assert\Assert;
+use Exception;
+use SimpleSAML\Assert\Assert;
+
+use function array_key_exists;
+use function is_null;
 
 /**
  * Base class for all SAML 2 response messages.
@@ -34,7 +38,7 @@ abstract class StatusResponse extends Message
      *
      * @var string|null
      */
-    private $inResponseTo;
+    private ?string $inResponseTo;
 
 
     /**
@@ -42,7 +46,7 @@ abstract class StatusResponse extends Message
      *
      * @var array
      */
-    private $status;
+    private array $status;
 
 
     /**
@@ -73,13 +77,13 @@ abstract class StatusResponse extends Message
         /** @var \DOMElement[] $status */
         $status = Utils::xpQuery($xml, './saml_protocol:Status');
         if (empty($status)) {
-            throw new \Exception('Missing status code on response.');
+            throw new Exception('Missing status code on response.');
         }
 
         /** @var \DOMElement[] $statusCode */
         $statusCode = Utils::xpQuery($status[0], './saml_protocol:StatusCode');
         if (empty($statusCode)) {
-            throw new \Exception('Missing status code in status element.');
+            throw new Exception('Missing status code in status element.');
         }
         $this->status['Code'] = $statusCode[0]->getAttribute('Value');
 
@@ -102,7 +106,7 @@ abstract class StatusResponse extends Message
      *
      * @return bool true if the status code is success, false if not.
      */
-    public function isSuccess() : bool
+    public function isSuccess(): bool
     {
         Assert::keyExists($this->status, "Code");
 
@@ -115,7 +119,7 @@ abstract class StatusResponse extends Message
      *
      * @return string|null The ID of the request.
      */
-    public function getInResponseTo() : ?string
+    public function getInResponseTo(): ?string
     {
         return $this->inResponseTo;
     }
@@ -127,7 +131,7 @@ abstract class StatusResponse extends Message
      * @param string|null $inResponseTo The ID of the request.
      * @return void
      */
-    public function setInResponseTo(string $inResponseTo = null) : void
+    public function setInResponseTo(string $inResponseTo = null): void
     {
         $this->inResponseTo = $inResponseTo;
     }
@@ -138,7 +142,7 @@ abstract class StatusResponse extends Message
      *
      * @return array The status code.
      */
-    public function getStatus() : array
+    public function getStatus(): array
     {
         return $this->status;
     }
@@ -150,7 +154,7 @@ abstract class StatusResponse extends Message
      * @param array $status The status code.
      * @return void
      */
-    public function setStatus(array $status) : void
+    public function setStatus(array $status): void
     {
         Assert::keyExists($status, "Code", 'Cannot set status without a Code key in the array.');
 
@@ -169,7 +173,7 @@ abstract class StatusResponse extends Message
      *
      * @return \DOMElement This status response.
      */
-    public function toUnsignedXML() : DOMElement
+    public function toUnsignedXML(): DOMElement
     {
         $root = parent::toUnsignedXML();
 

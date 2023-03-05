@@ -5,10 +5,21 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMDocument;
-
 use SAML2\Exception\InvalidArgumentException;
 use SAML2\Exception\RuntimeException;
 use SAML2\Exception\UnparseableXmlException;
+
+use function defined;
+use function file_get_contents;
+use function is_file;
+use function is_readable;
+use function libxml_clear_errors;
+use function libxml_disable_entity_loader;
+use function libxml_disable_internal_errors;
+use function libxml_entity_loader;
+use function libxml_get_last_error;
+use function sprintf;
+use function trim;
 
 final class DOMDocumentFactory
 {
@@ -26,7 +37,7 @@ final class DOMDocumentFactory
      *
      * @return \DOMDocument
      */
-    public static function fromString(string $xml) : DOMDocument
+    public static function fromString(string $xml): DOMDocument
     {
         if (trim($xml) === '') {
             throw InvalidArgumentException::invalidType('non-empty string', $xml);
@@ -77,7 +88,7 @@ final class DOMDocumentFactory
      *
      * @return \DOMDocument
      */
-    public static function fromFile(string $file) : DOMDocument
+    public static function fromFile(string $file): DOMDocument
     {
         if (!is_file($file)) {
             throw new InvalidArgumentException(sprintf('Path "%s" is not a file', $file));
@@ -108,7 +119,7 @@ final class DOMDocumentFactory
     /**
      * @return \DOMDocument
      */
-    public static function create() : DOMDocument
+    public static function create(): DOMDocument
     {
         return new DOMDocument();
     }

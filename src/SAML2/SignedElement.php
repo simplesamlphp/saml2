@@ -20,14 +20,14 @@ abstract class SignedElement
      *
      * @var XMLSecurityKey|null
      */
-    protected $signatureKey;
+    protected ?XMLSecurityKey $signatureKey;
 
     /**
      * List of certificates that should be included in the message.
      *
      * @var array
      */
-    protected $certificates = [];
+    protected array $certificates = [];
 
 
     /**
@@ -39,7 +39,7 @@ abstract class SignedElement
      * @param  XMLSecurityKey $key The key we should check against.
      * @return bool True if successful, false if we don't have a signature that can be verified.
      */
-    abstract public function validate(XMLSecurityKey $key) : bool;
+    abstract public function validate(XMLSecurityKey $key): bool;
 
 
     /**
@@ -49,7 +49,7 @@ abstract class SignedElement
      * @param array $certificates An array of certificates.
      * @return void
      */
-    public function setCertificates(array $certificates) : void
+    public function setCertificates(array $certificates): void
     {
         $this->certificates = $certificates;
     }
@@ -60,7 +60,7 @@ abstract class SignedElement
      *
      * @return array An array of certificates
      */
-    public function getCertificates() : array
+    public function getCertificates(): array
     {
         return $this->certificates;
     }
@@ -71,7 +71,7 @@ abstract class SignedElement
      *
      * @return XMLSecurityKey|null The key, or NULL if no key is specified
      */
-    public function getSignatureKey() : ?XMLSecurityKey
+    public function getSignatureKey(): ?XMLSecurityKey
     {
         return $this->signatureKey;
     }
@@ -85,7 +85,7 @@ abstract class SignedElement
      * @param XMLSecurityKey|null $signatureKey
      * @return void
      */
-    public function setSignatureKey(XMLSecurityKey $signatureKey = null) : void
+    public function setSignatureKey(XMLSecurityKey $signatureKey = null): void
     {
         $this->signatureKey = $signatureKey;
     }

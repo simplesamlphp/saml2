@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMElement;
-
+use Exception;
 use SAML2\XML\saml\NameID;
+
+use function count;
 
 /**
  * Base class for SAML 2 subject query messages.
@@ -26,7 +28,7 @@ abstract class SubjectQuery extends Request
      *
      * @var \SAML2\XML\saml\NameID|null
      */
-    private $nameId = null;
+    private ?NameID $nameId = null;
 
 
     /**
@@ -54,22 +56,22 @@ abstract class SubjectQuery extends Request
      * @throws \Exception
      * @return void
      */
-    private function parseSubject(\DOMElement $xml) : void
+    private function parseSubject(\DOMElement $xml): void
     {
         /** @var \DOMElement[] $subject */
         $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
         if (empty($subject)) {
-            throw new \Exception('Missing subject in subject query.');
+            throw new Exception('Missing subject in subject query.');
         } elseif (count($subject) > 1) {
-            throw new \Exception('More than one <saml:Subject> in subject query.');
+            throw new Exception('More than one <saml:Subject> in subject query.');
         }
 
         /** @var \DOMElement[] $nameId */
         $nameId = Utils::xpQuery($subject[0], './saml_assertion:NameID');
         if (empty($nameId)) {
-            throw new \Exception('Missing <saml:NameID> in <saml:Subject>.');
+            throw new Exception('Missing <saml:NameID> in <saml:Subject>.');
         } elseif (count($nameId) > 1) {
-            throw new \Exception('More than one <saml:NameID> in <saml:Subject>.');
+            throw new Exception('More than one <saml:NameID> in <saml:Subject>.');
         }
         $this->nameId = new NameID($nameId[0]);
     }
@@ -80,7 +82,7 @@ abstract class SubjectQuery extends Request
      *
      * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
      */
-    public function getNameId() : ?NameID
+    public function getNameId(): ?NameID
     {
         return $this->nameId;
     }
@@ -92,7 +94,7 @@ abstract class SubjectQuery extends Request
      * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
-    public function setNameId(NameID $nameId = null) : void
+    public function setNameId(NameID $nameId = null): void
     {
         $this->nameId = $nameId;
     }
@@ -103,10 +105,10 @@ abstract class SubjectQuery extends Request
      *
      * @return \DOMElement This subject query.
      */
-    public function toUnsignedXML() : DOMElement
+    public function toUnsignedXML(): DOMElement
     {
         if ($this->nameId === null) {
-            throw new \Exception('Cannot convert SubjectQuery to XML without a NameID set.');
+            throw new Exception('Cannot convert SubjectQuery to XML without a NameID set.');
         }
         $root = parent::toUnsignedXML();
 

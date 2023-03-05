@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMDocument;
-
+use Exception;
 use SAML2\Exception\Protocol\UnsupportedBindingException;
 use SAML2\XML\ecp\Response as ECPResponse;
+
+use function file_get_contents;
 
 /**
  * Class which implements the SOAP binding.
@@ -45,7 +47,7 @@ SOAP;
             $response = new ECPResponse();
             $destination = $this->destination ?: $message->getDestination();
             if ($destination === null) {
-                throw new \Exception('No destination available for SOAP message.');
+                throw new Exception('No destination available for SOAP message.');
             }
             $response->setAssertionConsumerServiceURL($destination);
 
@@ -77,7 +79,7 @@ SOAP;
      * @param \SAML2\Message $message The message we should send.
      * @return void
      */
-    public function send(Message $message) : void
+    public function send(Message $message): void
     {
         header('Content-Type: text/xml', true);
 
@@ -98,7 +100,7 @@ SOAP;
      * @throws \Exception If unable to receive the message
      * @return \SAML2\Message The received message.
      */
-    public function receive() : Message
+    public function receive(): Message
     {
         $postText = $this->getInputStream();
 

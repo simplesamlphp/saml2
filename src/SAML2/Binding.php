@@ -6,6 +6,13 @@ namespace SAML2;
 
 use SAML2\Exception\Protocol\UnsupportedBindingException;
 
+use function array_key_exist;
+use function array_keys;
+use function array_map;
+use function explode;
+use function implode;
+use function var_export;
+
 /**
  * Base class for SAML 2 bindings.
  *
@@ -19,7 +26,7 @@ abstract class Binding
      * This can be null, in which case the destination in the message is used.
      * @var string|null
      */
-    protected $destination = null;
+    protected ?string $destination = null;
 
 
     /**
@@ -31,7 +38,7 @@ abstract class Binding
      * @throws \SAML2\Exception\Protocol\UnsupportedBindingException
      * @return \SAML2\Binding The binding.
      */
-    public static function getBinding(string $urn) : Binding
+    public static function getBinding(string $urn): Binding
     {
         switch ($urn) {
             case Constants::BINDING_HTTP_POST:
@@ -48,7 +55,7 @@ abstract class Binding
             case Constants::BINDING_PAOS:
                 return new SOAP();
             default:
-                throw new UnsupportedBindingException('Unsupported binding: '.var_export($urn, true));
+                throw new UnsupportedBindingException('Unsupported binding: ' . var_export($urn, true));
         }
     }
 
@@ -64,7 +71,7 @@ abstract class Binding
      * @throws \SAML2\Exception\Protocol\UnsupportedBindingException
      * @return \SAML2\Binding The binding.
      */
-    public static function getCurrentBinding() : Binding
+    public static function getCurrentBinding(): Binding
     {
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET':
@@ -105,13 +112,13 @@ abstract class Binding
         $logger->warning('Unable to find the SAML 2 binding used for this request.');
         $logger->warning('Request method: '.var_export($_SERVER['REQUEST_METHOD'], true));
         if (!empty($_GET)) {
-            $logger->warning("GET parameters: '".implode("', '", array_map('addslashes', array_keys($_GET)))."'");
+            $logger->warning("GET parameters: '" . implode("', '", array_map('addslashes', array_keys($_GET))) . "'");
         }
         if (!empty($_POST)) {
-            $logger->warning("POST parameters: '".implode("', '", array_map('addslashes', array_keys($_POST)))."'");
+            $logger->warning("POST parameters: '" . implode("', '", array_map('addslashes', array_keys($_POST))) . "'");
         }
         if (isset($_SERVER['CONTENT_TYPE'])) {
-            $logger->warning('Content-Type: '.var_export($_SERVER['CONTENT_TYPE'], true));
+            $logger->warning('Content-Type: ' . var_export($_SERVER['CONTENT_TYPE'], true));
         }
 
         throw new UnsupportedBindingException('Unable to find the SAML 2 binding used for this request.');
@@ -123,7 +130,7 @@ abstract class Binding
      *
      * @return string|null $destination The destination the message will be delivered to.
      */
-    public function getDestination() : ?string
+    public function getDestination(): ?string
     {
         return $this->destination;
     }
@@ -137,7 +144,7 @@ abstract class Binding
      * @param string|null $destination The destination the message should be delivered to.
      * @return void
      */
-    public function setDestination(string $destination = null) : void
+    public function setDestination(string $destination = null): void
     {
         $this->destination = $destination;
     }
@@ -152,7 +159,7 @@ abstract class Binding
      * @param \SAML2\Message $message The message which should be sent.
      * @return void
      */
-    abstract public function send(Message $message) : void;
+    abstract public function send(Message $message): void;
 
 
     /**

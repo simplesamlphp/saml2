@@ -6,6 +6,8 @@ namespace SAML2;
 
 use DOMElement;
 
+use function is_null;
+
 /**
  * The Artifact is part of the SAML 2.0 IdP code, and it builds an artifact object.
  * I am using strings, because I find them easier to work with.
@@ -16,8 +18,7 @@ use DOMElement;
  */
 class ArtifactResolve extends Request
 {
-    /** @var string */
-    private $artifact;
+    private string $artifact;
 
 
     /**
@@ -40,7 +41,7 @@ class ArtifactResolve extends Request
      *
      * @return string artifact.
      */
-    public function getArtifact() : string
+    public function getArtifact(): string
     {
         return $this->artifact;
     }
@@ -52,7 +53,7 @@ class ArtifactResolve extends Request
      * @param string $artifact
      * @return void
      */
-    public function setArtifact(string $artifact) : void
+    public function setArtifact(string $artifact): void
     {
         $this->artifact = $artifact;
     }
@@ -63,7 +64,7 @@ class ArtifactResolve extends Request
      *
      * @return \DOMElement This response.
      */
-    public function toUnsignedXML() : DOMElement
+    public function toUnsignedXML(): DOMElement
     {
         $root = parent::toUnsignedXML();
         $artifactelement = $this->document->createElementNS(Constants::NS_SAMLP, 'Artifact', $this->artifact);
