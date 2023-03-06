@@ -7,10 +7,12 @@ on:  # yamllint disable-line rule:truthy
     branches: ['**']
     paths-ignore:
       - '**.md'
+      - '**.yml'
   pull_request:
     branches: [master, release-*]
     paths-ignore:
       - '**.md'
+      - '**.yml'
 
 jobs:
   basic-tests:
