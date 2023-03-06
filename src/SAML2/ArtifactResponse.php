@@ -23,8 +23,7 @@ class ArtifactResponse extends StatusResponse
      *
      * @var \DOMElement|null
      */
-    private ?DOMElement 	
-$any = null;
+    private ?DOMElement $any = null;
 
 
     /**

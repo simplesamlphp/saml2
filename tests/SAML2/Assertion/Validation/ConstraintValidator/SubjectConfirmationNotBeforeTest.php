@@ -28,7 +28,7 @@ class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
     /**
      * @return void
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
         $this->subjectConfirmation = new \SAML2\XML\saml\SubjectConfirmation();
@@ -41,11 +41,11 @@ class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
      * @group assertion-validation
      * @test
      *
-     * @runInSeparateProcess 
+     * @runInSeparateProcess
      * @preserveGlobalState disabled
      * @return void
      */
-    public function timestamp_in_the_future_beyond_graceperiod_is_not_valid() : void
+    public function timestamp_in_the_future_beyond_graceperiod_is_not_valid(): void
     {
         $this->subjectConfirmation->getSubjectConfirmationData()->setNotBefore($this->currentTime + 61);
 
@@ -63,11 +63,11 @@ class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
      * @group assertion-validation
      * @test
      *
-     * @runInSeparateProcess 
+     * @runInSeparateProcess
      * @preserveGlobalState disabled
      * @return void
      */
-    public function time_within_graceperiod_is_valid() : void
+    public function time_within_graceperiod_is_valid(): void
     {
         $this->subjectConfirmation->getSubjectConfirmationData()->setNotBefore($this->currentTime + 60);
 
@@ -84,11 +84,11 @@ class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
      * @group assertion-validation
      * @test
      *
-     * @runInSeparateProcess 
+     * @runInSeparateProcess
      * @preserveGlobalState disabled
      * @return void
      */
-    public function current_time_is_valid() : void
+    public function current_time_is_valid(): void
     {
         $this->subjectConfirmation->getSubjectConfirmationData()->setNotBefore($this->currentTime);
 

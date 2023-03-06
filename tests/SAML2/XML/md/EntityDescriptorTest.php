@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Exception;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\EntityDescriptor;
 use SAML2\XML\md\AffiliationDescriptor;
@@ -18,10 +19,9 @@ class EntityDescriptorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMissingAffiliationId() : void
+    public function testMissingAffiliationId(): void
     {
-        $document = DOMDocumentFactory::fromString(
-        <<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor>
         <AffiliateMember>test</AffiliateMember>
@@ -29,7 +29,7 @@ class EntityDescriptorTest extends \PHPUnit\Framework\TestCase
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\Exception::class, 'Missing affiliationOwnerID on AffiliationDescriptor.');
+        $this->expectException(Exception::class, 'Missing affiliationOwnerID on AffiliationDescriptor.');
         new EntityDescriptor($document->firstChild);
     }
 
@@ -37,10 +37,9 @@ XML
     /**
      * @return void
      */
-    public function testMissingEntityId() : void
+    public function testMissingEntityId(): void
     {
-        $document = DOMDocumentFactory::fromString(
-        <<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="asdf">
         <AffiliateMember>test</AffiliateMember>
@@ -48,7 +47,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\Exception::class, 'Missing required attribute entityID on EntityDescriptor.');
+        $this->expectException(Exception::class, 'Missing required attribute entityID on EntityDescriptor.');
         new EntityDescriptor($document->firstChild);
     }
 
@@ -56,17 +55,16 @@ XML
     /**
      * @return void
      */
-    public function testMissingAffiliateMember() : void
+    public function testMissingAffiliateMember(): void
     {
-        $document = DOMDocumentFactory::fromString(
-        <<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="asdf">
     </AffiliationDescriptor>
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\Exception::class, 'Missing AffiliateMember in AffiliationDescriptor.');
+        $this->expectException(Exception::class, 'Missing AffiliateMember in AffiliationDescriptor.');
         new EntityDescriptor($document->firstChild);
     }
 
@@ -74,15 +72,17 @@ XML
     /**
      * @return void
      */
-    public function testMissingDescriptor() : void
+    public function testMissingDescriptor(): void
     {
-        $document = DOMDocumentFactory::fromString(
-        <<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\Exception::class, 'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.');
+        $this->expectException(
+            Exception::class,
+            'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
+        );
         new EntityDescriptor($document->firstChild);
     }
 
@@ -90,10 +90,9 @@ XML
     /**
      * @return void
      */
-    public function testInvalidValidUntil() : void
+    public function testInvalidValidUntil(): void
     {
-        $document = DOMDocumentFactory::fromString(
-        <<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor validUntil="asdf" entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="asd">
         <AffiliateMember>test</AffiliateMember>
@@ -101,7 +100,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\Exception::Class, 'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: asdf');
+        $this->expectException(Exception::Class, 'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: asdf');
         new EntityDescriptor($document->firstChild);
     }
 
@@ -109,10 +108,9 @@ XML
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(
-        <<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="asdf" ID="theAffiliationDescriptorID" validUntil="2010-02-01T12:34:56Z" cacheDuration="PT9000S" >
         <AffiliateMember>test</AffiliateMember>
@@ -145,7 +143,7 @@ XML
     /**
      * @return void
      */
-    public function testUnmarshalling2() : void
+    public function testUnmarshalling2(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor entityID="theEntityID" ID="theID" validUntil="2010-01-01T12:34:56Z" cacheDuration="PT5000S" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">

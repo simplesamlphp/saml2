@@ -19,7 +19,7 @@ class SubjectConfirmationMethodTest extends \Mockery\Adapter\Phpunit\MockeryTest
     /**
      * @return void
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->subjectConfirmation = new \SAML2\XML\saml\SubjectConfirmation();
     }
@@ -30,7 +30,7 @@ class SubjectConfirmationMethodTest extends \Mockery\Adapter\Phpunit\MockeryTest
      * @test
      * @return void
      */
-    public function a_subject_confirmation_with_bearer_method_is_valid() : void
+    public function a_subject_confirmation_with_bearer_method_is_valid(): void
     {
         $this->subjectConfirmation->setMethod(Constants::CM_BEARER);
 
@@ -48,7 +48,7 @@ class SubjectConfirmationMethodTest extends \Mockery\Adapter\Phpunit\MockeryTest
      * @test
      * @return void
      */
-    public function a_subject_confirmation_with_holder_of_key_method_is_not_valid() : void
+    public function a_subject_confirmation_with_holder_of_key_method_is_not_valid(): void
     {
         $this->subjectConfirmation->setMethod(Constants::CM_HOK);
 

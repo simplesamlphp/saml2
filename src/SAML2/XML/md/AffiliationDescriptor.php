@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use Webmozart\Assert\Assert;
-
 use SAML2\Constants;
 use SAML2\SignedElementHelper;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 AffiliationDescriptor element.
@@ -110,7 +109,7 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @return string
      */
-    public function getAffiliationOwnerID() : string
+    public function getAffiliationOwnerID(): string
     {
         return $this->affiliationOwnerID;
     }
@@ -122,7 +121,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param string $affiliationOwnerId
      * @return void
      */
-    public function setAffiliationOwnerID(string $affiliationOwnerId) : void
+    public function setAffiliationOwnerID(string $affiliationOwnerId): void
     {
         $this->affiliationOwnerID = $affiliationOwnerId;
     }
@@ -133,7 +132,7 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @return string|null
      */
-    public function getID() : ?string
+    public function getID(): ?string
     {
         return $this->ID;
     }
@@ -145,7 +144,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param string|null $Id
      * @return void
      */
-    public function setID(string $Id = null) : void
+    public function setID(string $Id = null): void
     {
         $this->ID = $Id;
     }
@@ -156,7 +155,7 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @return \SAML2\XML\Chunk[]
      */
-    public function getExtensions() : array
+    public function getExtensions(): array
     {
         return $this->Extensions;
     }
@@ -168,7 +167,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param array $extensions
      * @return void
      */
-    public function setExtensions(array $extensions) : void
+    public function setExtensions(array $extensions): void
     {
         $this->Extensions = $extensions;
     }
@@ -180,7 +179,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param Extensions $extensions The Extensions
      * @return void
      */
-    public function addExtension(Extensions $extension) : void
+    public function addExtension(Extensions $extension): void
     {
         $this->Extensions[] = $extension;
     }
@@ -191,7 +190,7 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @return array
      */
-    public function getAffiliateMember() : array
+    public function getAffiliateMember(): array
     {
         return $this->AffiliateMember;
     }
@@ -203,7 +202,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param array $affiliateMember
      * @return void
      */
-    public function setAffiliateMember(array $affiliateMember) : void
+    public function setAffiliateMember(array $affiliateMember): void
     {
         $this->AffiliateMember = $affiliateMember;
     }
@@ -214,7 +213,7 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @return \SAML2\XML\md\KeyDescriptor[]
      */
-    public function getKeyDescriptor() : array
+    public function getKeyDescriptor(): array
     {
         return $this->KeyDescriptor;
     }
@@ -226,7 +225,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param array $keyDescriptor
      * @return void
      */
-    public function setKeyDescriptor(array $keyDescriptor) : void
+    public function setKeyDescriptor(array $keyDescriptor): void
     {
         $this->KeyDescriptor = $keyDescriptor;
     }
@@ -238,7 +237,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param \SAML2\XML\md\KeyDescriptor $keyDescriptor
      * @return void
      */
-    public function addKeyDescriptor(KeyDescriptor $keyDescriptor) : void
+    public function addKeyDescriptor(KeyDescriptor $keyDescriptor): void
     {
         $this->KeyDescriptor[] = $keyDescriptor;
     }
@@ -250,7 +249,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param \DOMElement $parent The EntityDescriptor we should append this endpoint to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         Assert::notEmpty($this->affiliationOwnerID);
 

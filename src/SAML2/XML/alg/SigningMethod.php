@@ -85,7 +85,7 @@ class SigningMethod
      * @param string $algorithm
      * @return void
      */
-    public function setAlgorithm(string $algorithm) : void
+    public function setAlgorithm(string $algorithm): void
     {
         $this->Algorithm = $algorithm;
     }
@@ -96,7 +96,7 @@ class SigningMethod
      *
      * @return int|null
      */
-    public function getMinKeySize() : ?int
+    public function getMinKeySize(): ?int
     {
         return $this->MinKeySize;
     }
@@ -108,7 +108,7 @@ class SigningMethod
      * @param int|null $minKeySize
      * @return void
      */
-    public function setMinKeySize(int $minKeySize = null) : void
+    public function setMinKeySize(int $minKeySize = null): void
     {
         $this->MinKeySize = $minKeySize;
     }
@@ -119,7 +119,7 @@ class SigningMethod
      *
      * @return int|null
      */
-    public function getMaxKeySize() : ?int
+    public function getMaxKeySize(): ?int
     {
         return $this->MaxKeySize;
     }
@@ -131,7 +131,7 @@ class SigningMethod
      * @param int|null $maxKeySize
      * @return void
      */
-    public function setMaxKeySize(int $maxKeySize = null) : void
+    public function setMaxKeySize(int $maxKeySize = null): void
     {
         $this->MaxKeySize = $maxKeySize;
     }
@@ -144,7 +144,7 @@ class SigningMethod
      * @return \DOMElement
      * @throws \Exception
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         Assert::notEmpty($this->Algorithm, 'Cannot convert SigningMethod to XML without an Algorithm set.');
         Assert::nullOrInteger($this->MinKeySize);

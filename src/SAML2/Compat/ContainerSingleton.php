@@ -17,7 +17,7 @@ class ContainerSingleton
     /**
      * @return \SAML2\Compat\AbstractContainer
      */
-    public static function getInstance() : AbstractContainer
+    public static function getInstance(): AbstractContainer
     {
         if (!isset(self::$container)) {
             self::$container = self::initSspContainer();
@@ -32,7 +32,7 @@ class ContainerSingleton
      * @param \SAML2\Compat\AbstractContainer $container
      * @return void
      */
-    public static function setContainer(AbstractContainer $container) : void
+    public static function setContainer(AbstractContainer $container): void
     {
         self::$container = $container;
     }
@@ -41,7 +41,7 @@ class ContainerSingleton
     /**
      * @return \SAML2\Compat\Ssp\Container
      */
-    public static function initSspContainer() : Container
+    public static function initSspContainer(): Container
     {
         return new Container();
     }

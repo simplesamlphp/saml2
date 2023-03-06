@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use SAML2\Constants;
+use PHPUnit\Framework\TestCase;
+use SAML2\Constants as C;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 use SAML2\XML\saml\NameID;
@@ -12,12 +13,12 @@ use SAML2\XML\saml\NameID;
 /**
  * Class \SAML2\XML\md\NameIDTest
  */
-class NameIDTest extends \PHPUnit\Framework\TestCase
+class NameIDTest extends TestCase
 {
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $nameId = new NameID();
         $nameId->setNameQualifier('TheNameQualifier');
@@ -42,9 +43,9 @@ class NameIDTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:NameID xmlns:saml="{$samlNamespace}" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">TheNameIDValue</saml:NameID>
 XML
@@ -62,7 +63,7 @@ XML
     /**
      * @return void
      */
-    public function testToString() : void
+    public function testToString(): void
     {
         $nameId = new NameID();
         $nameId->setNameQualifier('TheNameQualifier');
@@ -71,8 +72,8 @@ XML
         $nameId->setSPProvidedID('TheSPProvidedID');
         $nameId->setValue('TheNameIDValue');
 
-        $output = '<saml:NameID xmlns:saml="'.\SAML2\Constants::NS_SAML.'" NameQualifier="TheNameQualifier" '.
-                  'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">'.
+        $output = '<saml:NameID xmlns:saml="' . C::NS_SAML . '" NameQualifier="TheNameQualifier" ' .
+                  'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">' .
                   'TheNameIDValue</saml:NameID>';
 
         $this->assertXmlStringEqualsXmlString($output, $nameId->__toString());

@@ -15,7 +15,7 @@ class PreconditionNotMetException extends InvalidResponseException
      * @param Result $result
      * @return PreconditionNotMetException
      */
-    public static function createFromValidationResult(Result $result) : PreconditionNotMetException
+    public static function createFromValidationResult(Result $result): PreconditionNotMetException
     {
         $message = sprintf(
             'Cannot process response, preconditions not met: "%s"',

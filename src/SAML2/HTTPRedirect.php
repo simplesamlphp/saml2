@@ -30,7 +30,7 @@ use function var_export;
  */
 class HTTPRedirect extends Binding
 {
-    const DEFLATE = 'urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:DEFLATE';
+    public const DEFLATE = 'urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:DEFLATE';
 
     /**
      * Create the redirect URL for a message.
@@ -83,9 +83,9 @@ class HTTPRedirect extends Binding
         }
 
         if (strpos($destination, '?') === false) {
-            $destination .= '?'.$msg;
+            $destination .= '?' . $msg;
         } else {
-            $destination .= '&'.$msg;
+            $destination .= '&' . $msg;
         }
 
         return $destination;

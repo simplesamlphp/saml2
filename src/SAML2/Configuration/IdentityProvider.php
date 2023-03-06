@@ -21,7 +21,7 @@ class IdentityProvider extends ArrayAdapter implements CertificateProvider, Decr
     /**
      * @return string|null
      */
-    public function getCertificateData() : ?string
+    public function getCertificateData(): ?string
     {
         return $this->get('certificateData');
     }
@@ -30,7 +30,7 @@ class IdentityProvider extends ArrayAdapter implements CertificateProvider, Decr
     /**
      * @return string|null
      */
-    public function getCertificateFile() : ?string
+    public function getCertificateFile(): ?string
     {
         return $this->get('certificateFile');
     }
@@ -48,7 +48,7 @@ class IdentityProvider extends ArrayAdapter implements CertificateProvider, Decr
     /**
      * @return bool|null
      */
-    public function isAssertionEncryptionRequired() : ?bool
+    public function isAssertionEncryptionRequired(): ?bool
     {
         return $this->get('assertionEncryptionEnabled');
     }
@@ -57,7 +57,7 @@ class IdentityProvider extends ArrayAdapter implements CertificateProvider, Decr
     /**
      * @return string|null
      */
-    public function getSharedKey() : ?string
+    public function getSharedKey(): ?string
     {
         return $this->get('sharedKey');
     }
@@ -108,7 +108,7 @@ class IdentityProvider extends ArrayAdapter implements CertificateProvider, Decr
     /**
      * @return array|null
      */
-    public function getBlacklistedAlgorithms() : ?array
+    public function getBlacklistedAlgorithms(): ?array
     {
         return $this->get('blacklistedEncryptionAlgorithms');
     }
@@ -117,7 +117,7 @@ class IdentityProvider extends ArrayAdapter implements CertificateProvider, Decr
     /**
      * @return string|null
      */
-    public function getEntityId() : ?string
+    public function getEntityId(): ?string
     {
         return $this->get('entityId');
     }

@@ -6,7 +6,6 @@ namespace SAML2\XML\ds;
 
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
-
 use SAML2\Utils;
 
 /**
@@ -44,7 +43,7 @@ class X509Certificate
      *
      * @return string
      */
-    public function getCertificate() : string
+    public function getCertificate(): string
     {
         return str_replace(["\r\n", "\r", "\n", "\t", ' '], '', $this->certificate);
     }
@@ -56,7 +55,7 @@ class X509Certificate
      * @param string $certificate
      * @return void
      */
-    public function setCertificate(string $certificate) : void
+    public function setCertificate(string $certificate): void
     {
         $this->certificate = $certificate;
     }
@@ -68,7 +67,7 @@ class X509Certificate
      * @param \DOMElement $parent The element we should append this X509Certificate element to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         return Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:X509Certificate', $this->getCertificate());
     }

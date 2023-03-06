@@ -26,7 +26,7 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @return void
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->mockConfiguration = \Mockery::mock(CertificateProvider::class);
         $this->mockSignedElement = \Mockery::mock(SignedElement::class);
@@ -38,7 +38,7 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      * @group signature
      * @return void
      */
-    public function it_cannot_validate_if_no_keys_can_be_loaded() : void
+    public function itCannotValidateIfNoKeysCanBeLoaded(): void
     {
         $keyloaderMock = $this->prepareKeyLoader(new KeyCollection());
         $validator = new PublicKeyValidator(new \Psr\Log\NullLogger(), $keyloaderMock);
@@ -52,7 +52,7 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      * @group signature
      * @return void
      */
-    public function it_will_validate_when_keys_can_be_loaded() : void
+    public function itWillValidateWhenKeysCanBeLoaded(): void
     {
         $keyloaderMock = $this->prepareKeyLoader(new KeyCollection([1, 2]));
         $validator = new PublicKeyValidator(new \Psr\Log\NullLogger(), $keyloaderMock);
@@ -66,7 +66,7 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      * @group signature
      * @return void
      */
-    public function non_X509_keys_are_not_used_for_validation() : void
+    public function nonX509KeysAreNotUsedForValidation(): void
     {
         $controlledCollection = new KeyCollection([
             new Key(['type' => 'not_X509']),
@@ -90,7 +90,7 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      * @group signature
      * @return void
      */
-    public function signed_message_with_valid_signature_is_validated_correctly() : void
+    public function signedMessageWithValidSignatureIsValidatedCorrectly(): void
     {
         $pattern = Certificate::CERTIFICATE_PATTERN;
         preg_match($pattern, CertificatesMock::PUBLIC_KEY_PEM, $matches);

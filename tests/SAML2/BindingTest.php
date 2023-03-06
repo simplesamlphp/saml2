@@ -17,7 +17,7 @@ class BindingTest extends \PHPUnit\Framework\TestCase
     /**
      * Test getting binding objects from string.
      */
-    public function testGetBinding() : void
+    public function testGetBinding(): void
     {
         $bind = Binding::getBinding(Constants::BINDING_HTTP_POST);
         $this->assertInstanceOf(HTTPPost::class, $bind);
@@ -38,7 +38,7 @@ class BindingTest extends \PHPUnit\Framework\TestCase
     /**
      * Test binding guessing functionality.
      */
-    public function testBindingGuesserGET() : void
+    public function testBindingGuesserGET(): void
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
         $_GET = ['SAMLRequest' => 'pVJNjxMxDP0ro9yn88FOtRu1lcpWiEoLVNvCgQtKE6eNlHGG2IHl35OZLmLZQy%2BcrNh%2Bz88vXpDq%2FSDXic%2F4CN8TEBdPvUeSU2EpUkQZFDmSqHogyVru1x8eZDur5RADBx28eAG5jlBEENkFFMV2sxTfzO0dmKa11namPuoc39hba%2BfqpqlbM6%2Fb5mZ%2B1LWtj6L4ApEycikyUYYTJdgisULOqbrpyqYt67tD28iulV33VRSbvI1DxRPqzDyQrCrAk0OYUYpWB4QnnqGvVN4fkJ2emitnhoocnjyU5E5YjnrXf6TfB6TUQ9xD%2FOE0fH58%2BEueHbHOv2Yn1w8eRneqPpiU68M5DxjfdIltqTRNWQNWJc8lDaLYPfv71qHJaq5be7w0kXx%2FOOzK3af9QawWI7ecrIqr%2F9HYAyujWL2SuKheDlhcbuljlrbd7IJ3%2BlfxLsRe8XXlY8aZ0k6tkqNCcvkzsuXeh5%2F3ERTDUnBMIKrVZeS%2FF7v6DQ%3D%3D'];
@@ -62,7 +62,7 @@ class BindingTest extends \PHPUnit\Framework\TestCase
     /**
      * Test binding guessing functionality.
      */
-    public function testBindingGuesserPOST() : void
+    public function testBindingGuesserPOST(): void
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
         $_POST = ['SAMLRequest' => 'lZLBbtswDIZfxdDddpw0TiYkAZK4BQJ0RZGsO+wyCDKTCJMpT6S69u0nOejaXVr0JIDkT/L7xQWpzvZyHfiMe/gdgDh76iySHBJLETxKp8iQRNUBSdbysP56K8fFSPbesdPOijeS9xWKCDwbhyLbNUvxcz6bbLeT8WjeNLPpzea6qjbr2WZyVdXX9WZWVyL7Dp5i/VJEeRQRBdghsUKOoVE1zatxXtXfqlpOvsjp6IfImshgUPGgOjP3JMsS8GQQCo65goI/aofwxAXaUkV0QDZ6UJSm7UsyeLKQkzlhnlbdOiRIA99D05ciqYP38c1N11ujDYvsxnkNg8NLcVSWIHHcRyvMI/yLrF+cScNCB/4A/tFoeNjfvlLw+ZeJa7VFz/nVvAjsLzDWhTaxdGBtZOgd8R6oTxuJ1SJ9ixyc86tPduqAVatYLcq3TRaXo7mLHuyaexcxnxNkpz6wKEVMmx+HUsleIZloVYSPw/5sPSiOhrAPIMrVZeT/p7n6Cw=='];
@@ -101,7 +101,7 @@ class BindingTest extends \PHPUnit\Framework\TestCase
     /**
      * Test binding guessing functionality with unsupported HTTP method.
      */
-    public function testBindingGuesserWRONG() : void
+    public function testBindingGuesserWRONG(): void
     {
         $_SERVER['REQUEST_METHOD'] = 'PUT';
         $_SERVER['CONTENT_TYPE'] = 'text/xml';
@@ -113,7 +113,7 @@ class BindingTest extends \PHPUnit\Framework\TestCase
     /**
      * Test destination getter and setter.
      */
-    public function testGetSetDestination() : void
+    public function testGetSetDestination(): void
     {
         $bind = Binding::getBinding(Constants::BINDING_HTTP_POST);
         $dest = $bind->getDestination();

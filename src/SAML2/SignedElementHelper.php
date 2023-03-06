@@ -191,12 +191,12 @@ class SignedElementHelper extends SignedElement
         $ret = [];
         foreach ($this->certificates as $cert) {
             /* Construct a PEM formatted certificate */
-            $pemCert = "-----BEGIN CERTIFICATE-----\n".
-                chunk_split($cert, 64).
+            $pemCert = "-----BEGIN CERTIFICATE-----\n" .
+                chunk_split($cert, 64) .
                 "-----END CERTIFICATE-----\n";
 
             /* Extract the public key from the certificate for validation. */
-            $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type'=>'public']);
+            $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
             $key->loadKey($pemCert);
 
             try {

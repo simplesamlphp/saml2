@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 use SAML2\XML\saml\Issuer;
@@ -17,7 +17,7 @@ class IssuerShowAllTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $issuer = new Issuer();
         $issuer->setNameQualifier('TheNameQualifier');
@@ -41,9 +41,9 @@ class IssuerShowAllTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:Issuer xmlns:saml="{$samlNamespace}" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">TheIssuerValue</saml:Issuer>
 XML
@@ -61,17 +61,17 @@ XML
     /**
      * @return void
      */
-    public function testToStringShowAllTrueFormatNameID() : void
+    public function testToStringShowAllTrueFormatNameID(): void
     {
         $issuer = new Issuer();
         $issuer->setNameQualifier('TheNameQualifier');
         $issuer->setSPNameQualifier('TheSPNameQualifier');
-        $issuer->setFormat(Constants::NAMEID_ENTITY);
+        $issuer->setFormat(C::NAMEID_ENTITY);
         $issuer->setSPProvidedID('TheSPProvidedID');
         $issuer->setvalue('TheIssuerValue');
         $issuer->setSaml2IssuerShowAll(true);
 
-        $output = '<saml:Issuer xmlns:saml="'.\SAML2\Constants::NS_SAML.'" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" Format="'.Constants::NAMEID_ENTITY.'" SPProvidedID="TheSPProvidedID">'.
+        $output = '<saml:Issuer xmlns:saml="' . C::NS_SAML . '" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" Format="' . C::NAMEID_ENTITY . '" SPProvidedID="TheSPProvidedID">' .
                   'TheIssuerValue</saml:Issuer>';
 
         $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
@@ -81,18 +81,18 @@ XML
     /**
      * @return void
      */
-    public function testToStringShowAllFalseFormatNameID() : void
+    public function testToStringShowAllFalseFormatNameID(): void
     {
         $issuer = new Issuer();
         $issuer->setNameQualifier('TheNameQualifier');
         $issuer->setSPNameQualifier('TheSPNameQualifier');
-        $issuer->setFormat(Constants::NAMEID_ENTITY);
+        $issuer->setFormat(C::NAMEID_ENTITY);
         $issuer->setSPProvidedID('TheSPProvidedID');
         $issuer->setValue('TheIssuerValue');
         $issuer->setSaml2IssuerShowAll(false);
-        
-        $output = '<saml:Issuer xmlns:saml="'.\SAML2\Constants::NS_SAML.'">TheIssuerValue</saml:Issuer>';
-        
+
+        $output = '<saml:Issuer xmlns:saml="' . C::NS_SAML . '">TheIssuerValue</saml:Issuer>';
+
         $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
     }
 
@@ -100,7 +100,7 @@ XML
     /**
      * @return void
      */
-    public function testToStringShowAllTrueNOTNameIDFormat() : void
+    public function testToStringShowAllTrueNOTNameIDFormat(): void
     {
         $issuer = new Issuer();
         $issuer->setNameQualifier('TheNameQualifier');
@@ -109,11 +109,11 @@ XML
         $issuer->setSPProvidedID('TheSPProvidedID');
         $issuer->setValue('TheIssuerValue');
         $issuer->setSaml2IssuerShowAll(true);
-                
-        $output = '<saml:Issuer xmlns:saml="'.\SAML2\Constants::NS_SAML.'" NameQualifier="TheNameQualifier" '.
-            'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">'.
+
+        $output = '<saml:Issuer xmlns:saml="' . C::NS_SAML . '" NameQualifier="TheNameQualifier" ' .
+            'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">' .
             'TheIssuerValue</saml:Issuer>';
-        
+
         $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
     }
 
@@ -121,7 +121,7 @@ XML
     /**
      * @return void
      */
-    public function testToStringShowAllDefaultNOTNameIDFormat() : void
+    public function testToStringShowAllDefaultNOTNameIDFormat(): void
     {
         $issuer = new Issuer();
         $issuer->setNameQualifier('TheNameQualifier');
@@ -130,11 +130,11 @@ XML
         $issuer->setSPProvidedID('TheSPProvidedID');
         $issuer->setValue('TheIssuerValue');
         //$issuer->setSaml2IssuerShowAll(false);
-        
-        $output = '<saml:Issuer xmlns:saml="'.\SAML2\Constants::NS_SAML.'" NameQualifier="TheNameQualifier" '.
-            'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">'.
+
+        $output = '<saml:Issuer xmlns:saml="' . C::NS_SAML . '" NameQualifier="TheNameQualifier" ' .
+            'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">' .
             'TheIssuerValue</saml:Issuer>';
-        
+
         $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
     }
 
@@ -142,19 +142,18 @@ XML
     /**
      * @return void
      */
-    public function testToStringShowAllDefaultNameIDFormat() : void
+    public function testToStringShowAllDefaultNameIDFormat(): void
     {
         $issuer = new Issuer();
         $issuer->setNameQualifier('TheNameQualifier');
         $issuer->setSPNameQualifier('TheSPNameQualifier');
-        $issuer->setFormat(Constants::NAMEID_ENTITY);
+        $issuer->setFormat(C::NAMEID_ENTITY);
         $issuer->setSPProvidedID('TheSPProvidedID');
         $issuer->setValue('TheIssuerValue');
         //$issuer->setSaml2IssuerShowAll(false);
-        
-        
-        $output = '<saml:Issuer xmlns:saml="'.\SAML2\Constants::NS_SAML.'">TheIssuerValue</saml:Issuer>';
-        
+
+        $output = '<saml:Issuer xmlns:saml="' . C::NS_SAML . '">TheIssuerValue</saml:Issuer>';
+
         $this->assertXmlStringEqualsXmlString($output, $issuer->__toString());
     }
 }

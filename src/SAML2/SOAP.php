@@ -34,7 +34,7 @@ class SOAP extends Binding
 SOAP;
         $envelope = sprintf($envelope, Constants::NS_SOAP);
 
-        $doc = new DOMDocument;
+        $doc = new DOMDocument();
         $doc->loadXML($envelope);
 
         // In the Artifact Resolution profile, this will be an ArtifactResolve

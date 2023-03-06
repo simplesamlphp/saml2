@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
-
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 
@@ -17,7 +16,6 @@ use SAML2\DOMDocumentFactory;
  */
 class Issuer extends NameIDType
 {
-
     /**
      * @var string
      */
@@ -75,7 +73,7 @@ class Issuer extends NameIDType
      *
      * @return bool
      */
-    public function isSaml2IssuerShowAll() : bool
+    public function isSaml2IssuerShowAll(): bool
     {
         return $this->Saml2IssuerShowAll;
     }
@@ -87,7 +85,7 @@ class Issuer extends NameIDType
      * @param bool $saml2IssuerShowAll
      * @return void
      */
-    public function setSaml2IssuerShowAll(bool $saml2IssuerShowAll) : void
+    public function setSaml2IssuerShowAll(bool $saml2IssuerShowAll): void
     {
         $this->Saml2IssuerShowAll = $saml2IssuerShowAll;
     }
@@ -99,9 +97,10 @@ class Issuer extends NameIDType
      * @param \DOMElement|null $parent The element we should append to.
      * @return \DOMElement The current Issuer object converted into a \DOMElement.
      */
-    public function toXML(DOMElement $parent = null) : DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        if (($this->Saml2IssuerShowAll && ($this->Format === Constants::NAMEID_ENTITY))
+        if (
+            ($this->Saml2IssuerShowAll && ($this->Format === Constants::NAMEID_ENTITY))
             || ($this->Format !== Constants::NAMEID_ENTITY)
         ) {
             return parent::toXML($parent);

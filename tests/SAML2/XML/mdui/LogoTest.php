@@ -17,7 +17,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
      * Test creating a basic Logo element.
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $logo = new Logo();
         $logo->setLanguage("nl");
@@ -45,7 +45,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
      * Unmarshalling of a logo tag
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdui:Logo height="200" width="300" xml:lang="nl">https://static.example.org/images/logos/logo300x200.png</mdui:Logo>
@@ -64,7 +64,7 @@ XML
      * Unmarshalling of a logo tag with a data: URL
      * @return void
      */
-    public function testUnmarshallingDataURL() : void
+    public function testUnmarshallingDataURL(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdui:Logo height="1" width="1">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=</mdui:Logo>
@@ -82,7 +82,7 @@ XML
      * Unmarshalling fails if url attribute not present
      * @return void
      */
-    public function testUnmarshallingFailsEmptyURL() : void
+    public function testUnmarshallingFailsEmptyURL(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdui:Logo height="200" width="300"></mdui:Logo>
@@ -98,7 +98,7 @@ XML
      * Unmarshalling fails if width attribute not present
      * @return void
      */
-    public function testUnmarshallingFailsMissingWidth() : void
+    public function testUnmarshallingFailsMissingWidth(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdui:Logo height="200">https://static.example.org/images/logos/logo300x200.png</mdui:Logo>
@@ -114,7 +114,7 @@ XML
      * Unmarshalling fails if height attribute not present
      * @return void
      */
-    public function testUnmarshallingFailsMissingHeight() : void
+    public function testUnmarshallingFailsMissingHeight(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdui:Logo width="300" xml:lang="nl">https://static.example.org/images/logos/logo300x200.png</mdui:Logo>

@@ -13,18 +13,59 @@
     <!-- This is the rule we inherit from. If you want to exlude some specific rules, see the docs on how to do that -->
     <rule ref="PSR12"/>
 
+    <!-- Ignore files with side effects that we cannot fix -->
+    <rule ref="PSR1.Files.SideEffects">
+        <exclude-pattern>src/_autoload.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/md/RoleDescriptorTest.php</exclude-pattern>
+    </rule>
+
     <rule ref="Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase">
-        <exclude-pattern>**/Assertion.php</exclude-pattern>
-        <exclude-pattern>**/LogoutRequest.php</exclude-pattern>
-        <exclude-pattern>**/EncryptedAssertion.php</exclude-pattern>
+        <exclude-pattern>src/SAML2/Assertion.php</exclude-pattern>
+        <exclude-pattern>src/SAML2/LogoutRequest.php</exclude-pattern>
+        <exclude-pattern>src/SAML2/EncryptedAssertion.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Assertion/ProcessorTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/NotBeforeTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SessionNotOnOrAfterTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationNotBeforeTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationNotOnOrAfterTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SpIsValidAudienceTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationMethodTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationResponseToMatchesTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationRecipientMathchesTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Utilities/FileTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Utilities/ArrayCollectionTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Certificate/X509Test.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Certificate/KeyLoaderTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Certificate/PrivateKeyLoaderTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Certificate/KeyTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Certificate/PrivateKeyTest.php</exclude-pattern>
     </rule>
 
     <!-- Lines can be a little bit longer before they break the build -->
     <rule ref="Generic.Files.LineLength">
         <properties>
-            <property name="lineLimit" value="80"/>
-            <property name="absoluteLineLimit" value="120"/>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="130"/>
         </properties>
-        <exclude-pattern>**/EntityDescriptor.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/AssertionTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Assertion/ProcessorTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/AuthnRequestTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/BindingTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/CertificatesMock</exclude-pattern>
+        <exclude-pattern>tests/SAML2/HTTPPostTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/HTTPRedirectTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/LogoutRequestTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/ResponseTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/SOAPTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/UtilsTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/md/AffiliationDescriptorTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/md/ContactPersonTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/md/EndpointTypeTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/md/EntityDescriptorTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/mdattr/EntityAttributesTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/mdui/LogoTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/saml/AttributeValueTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/saml/IssuerXMLShowAllTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/saml/NameIDTest.php</exclude-pattern>
     </rule>
 </ruleset>

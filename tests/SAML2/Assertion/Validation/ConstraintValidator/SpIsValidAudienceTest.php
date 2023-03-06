@@ -27,7 +27,7 @@ class SpIsValidAudienceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @return void
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
         $this->assertion = \Mockery::mock(\SAML2\Assertion::class);
@@ -40,7 +40,7 @@ class SpIsValidAudienceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      * @test
      * @return void
      */
-    public function when_no_valid_audiences_are_given_the_assertion_is_valid() : void
+    public function when_no_valid_audiences_are_given_the_assertion_is_valid(): void
     {
         $this->assertion->shouldReceive('getValidAudiences')->andReturn(null);
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('entityId');
@@ -60,7 +60,7 @@ class SpIsValidAudienceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      * @test
      * @return void
      */
-    public function if_the_sp_entity_id_is_not_in_the_valid_audiences_the_assertion_is_invalid() : void
+    public function if_the_sp_entity_id_is_not_in_the_valid_audiences_the_assertion_is_invalid(): void
     {
         $this->assertion->shouldReceive('getValidAudiences')->andReturn(['someEntityId']);
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('anotherEntityId');
@@ -81,7 +81,7 @@ class SpIsValidAudienceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      * @test
      * @return void
      */
-    public function the_assertion_is_valid_when_the_current_sp_entity_id_is_a_valid_audience() : void
+    public function the_assertion_is_valid_when_the_current_sp_entity_id_is_a_valid_audience(): void
     {
         $this->assertion->shouldReceive('getValidAudiences')->andReturn(['foo', 'bar', 'validEntityId', 'baz']);
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('validEntityId');

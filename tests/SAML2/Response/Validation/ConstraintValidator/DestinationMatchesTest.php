@@ -19,7 +19,7 @@ class DestinationMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @return void
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->response = \Mockery::mock('SAML2\Response');
     }
@@ -30,7 +30,7 @@ class DestinationMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      * @test
      * @return void
      */
-    public function a_response_is_valid_when_the_destinations_match() : void
+    public function aResponseIsValidWhenTheDestinationsMatch(): void
     {
         $expectedDestination = new Destination('VALID DESTINATION');
         $this->response->shouldReceive('getDestination')->once()->andReturn('VALID DESTINATION');
@@ -48,7 +48,7 @@ class DestinationMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      * @test
      * @return void
      */
-    public function a_response_is_not_valid_when_the_destinations_are_not_equal() : void
+    public function aResponseIsNotValidWhenTheDestinationsAreNotEqual(): void
     {
         $this->response->shouldReceive('getDestination')->once()->andReturn('FOO');
         $validator = new DestinationMatches(

@@ -19,7 +19,7 @@ class IsSuccessful implements ConstraintValidator
     public function validate(
         Response $response,
         Result $result
-    ) : void {
+    ): void {
         if (!$response->isSuccess()) {
             $result->addError($this->buildMessage($response->getStatus()));
         }
@@ -31,13 +31,13 @@ class IsSuccessful implements ConstraintValidator
      *
      * @return string
      */
-    private function buildMessage(array $responseStatus) : string
+    private function buildMessage(array $responseStatus): string
     {
         return sprintf(
             '%s%s%s',
             $this->truncateStatus($responseStatus['Code']),
-            $responseStatus['SubCode'] ? '/'.$this->truncateStatus($responseStatus['SubCode']) : '',
-            $responseStatus['Message'] ? ' '.$responseStatus['Message'] : ''
+            $responseStatus['SubCode'] ? '/' . $this->truncateStatus($responseStatus['SubCode']) : '',
+            $responseStatus['Message'] ? ' ' . $responseStatus['Message'] : ''
         );
     }
 
@@ -48,7 +48,7 @@ class IsSuccessful implements ConstraintValidator
      *
      * @return string
      */
-    private function truncateStatus(string $status) : string
+    private function truncateStatus(string $status): string
     {
         $prefixLength = strlen(Constants::STATUS_PREFIX);
         if (strpos($status, Constants::STATUS_PREFIX) !== 0) {

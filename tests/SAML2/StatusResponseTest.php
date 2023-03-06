@@ -16,7 +16,7 @@ class StatusResponseTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $response = new Response();
         $response->setStatus([
@@ -47,7 +47,7 @@ class StatusResponseTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -83,7 +83,7 @@ XML;
      * A status reponse that is not an error
      * @return void
      */
-    public function testStatusSuccess() : void
+    public function testStatusSuccess(): void
     {
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -116,7 +116,7 @@ XML;
      * See if we can parse a StatusResponse with a subcode
      * @return void
      */
-    public function testStatusSubcode() : void
+    public function testStatusSubcode(): void
     {
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -152,7 +152,7 @@ XML;
      * Test adding in-response-to to a status message.
      * @return void
      */
-    public function testResponseTo() : void
+    public function testResponseTo(): void
     {
         $response = new Response();
         $response->setIssueInstant(1453323439);
@@ -176,9 +176,9 @@ XML;
   </samlp:Status>
 </samlp:Response>
 STATUSXML
-       );
-       $expectedStructure = $expectedStructureDocument->documentElement;
-       $this->assertEqualXMLStructure($expectedStructure, $responseElement);
+        );
+        $expectedStructure = $expectedStructureDocument->documentElement;
+        $this->assertEqualXMLStructure($expectedStructure, $responseElement);
     }
 
 
@@ -186,7 +186,7 @@ STATUSXML
      * A response without any <Status> element throws exception
      * @return void
      */
-    public function testNoStatusElementThrowsException() : void
+    public function testNoStatusElementThrowsException(): void
     {
         $this->expectException(\Exception::class, 'Missing status code on response');
 
@@ -219,7 +219,7 @@ XML;
      * StatusCode is required in a StatusResponse.
      * @return void
      */
-    public function testNoStatusCodeThrowsException() : void
+    public function testNoStatusCodeThrowsException(): void
     {
         $this->expectException(\Exception::class, 'Missing status code in status element');
 

@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
-use Webmozart\Assert\Assert;
-
 use SAML2\Assertion\Validation\Result;
 use SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
 use SAML2\Response;
 use SAML2\XML\saml\SubjectConfirmation;
+use Webmozart\Assert\Assert;
 
 class SubjectConfirmationResponseToMatches implements
     SubjectConfirmationConstraintValidator
@@ -33,7 +32,7 @@ class SubjectConfirmationResponseToMatches implements
      * @param Result $result
      * @return void
      */
-    public function validate(SubjectConfirmation $subjectConfirmation, Result $result) : void
+    public function validate(SubjectConfirmation $subjectConfirmation, Result $result): void
     {
         $data = $subjectConfirmation->getSubjectConfirmationData();
         Assert::notNull($data);

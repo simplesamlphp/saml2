@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\Compat;
 
-use \Psr\Log\LoggerInterface;
-use \Psr\Log\NullLogger;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 /**
  * Class \SAML2\Compat\MockContainer
@@ -47,7 +47,7 @@ class MockContainer extends AbstractContainer
      * Get a PSR-3 compatible logger.
      * @return \Psr\Log\LoggerInterface
      */
-    public function getLogger() : LoggerInterface
+    public function getLogger(): LoggerInterface
     {
         return new NullLogger();
     }
@@ -57,7 +57,7 @@ class MockContainer extends AbstractContainer
      * Generate a random identifier for identifying SAML2 documents.
      * @return string
      */
-    public function generateId() : string
+    public function generateId(): string
     {
         return $this->id;
     }
@@ -76,7 +76,7 @@ class MockContainer extends AbstractContainer
      * @param string $type
      * @return void
      */
-    public function debugMessage($message, string $type) : void
+    public function debugMessage($message, string $type): void
     {
         $this->debugMessages[$type] = $message;
     }
@@ -89,7 +89,7 @@ class MockContainer extends AbstractContainer
      * @param array $data
      * @return void
      */
-    public function redirect(string $url, array $data = []) : void
+    public function redirect(string $url, array $data = []): void
     {
         $this->redirectUrl = $url;
         $this->redirectData = $data;
@@ -103,7 +103,7 @@ class MockContainer extends AbstractContainer
      * @param array $data
      * @return void
      */
-    public function postRedirect(string $url = null, array $data = []) : void
+    public function postRedirect(string $url = null, array $data = []): void
     {
         $this->postRedirectUrl = $url;
         $this->postRedirectData = $data;
@@ -113,7 +113,7 @@ class MockContainer extends AbstractContainer
     /**
      * @return string
      */
-    public function getTempDir() : string
+    public function getTempDir(): string
     {
         return sys_get_temp_dir();
     }
@@ -125,7 +125,7 @@ class MockContainer extends AbstractContainer
      * @param int|null $mode
      * @return void
      */
-    public function writeFile(string $filename, string $data, int $mode = null) : void
+    public function writeFile(string $filename, string $data, int $mode = null): void
     {
         if ($mode === null) {
             $mode = 0600;

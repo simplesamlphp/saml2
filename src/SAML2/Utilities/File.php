@@ -17,7 +17,7 @@ class File
      *
      * @return string
      */
-    public static function getFileContents(string $file) : string
+    public static function getFileContents(string $file): string
     {
         if (!is_readable($file)) {
             throw new RuntimeException(sprintf(

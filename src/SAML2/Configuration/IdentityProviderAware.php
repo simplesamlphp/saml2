@@ -14,5 +14,5 @@ interface IdentityProviderAware
      *
      * @return void
      */
-    public function setIdentityProvider(IdentityProvider $identityProvider) : void;
+    public function setIdentityProvider(IdentityProvider $identityProvider): void;
 }

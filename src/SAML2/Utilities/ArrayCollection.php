@@ -6,7 +6,6 @@ namespace SAML2\Utilities;
 
 use ArrayIterator;
 use Closure;
-
 use SAML2\Exception\RuntimeException;
 
 /**
@@ -36,7 +35,7 @@ class ArrayCollection implements Collection
      *
      * @return void
      */
-    public function add($key) : void
+    public function add($key): void
     {
         $this->elements[] = $key;
     }
@@ -58,7 +57,7 @@ class ArrayCollection implements Collection
      *
      * @return ArrayCollection
      */
-    public function filter(Closure $filterFunction) : Collection
+    public function filter(Closure $filterFunction): Collection
     {
         return new self(array_filter($this->elements, $filterFunction));
     }
@@ -69,7 +68,7 @@ class ArrayCollection implements Collection
      * @param mixed $value
      * @return void
      */
-    public function set($key, $value) : void
+    public function set($key, $value): void
     {
         $this->elements[$key] = $value;
     }
@@ -80,7 +79,7 @@ class ArrayCollection implements Collection
      *
      * @return void
      */
-    public function remove($key) : void
+    public function remove($key): void
     {
         $elt = array_search($key, $this->elements);
         if ($elt === false) {
@@ -98,7 +97,7 @@ class ArrayCollection implements Collection
     {
         if ($this->count() !== 1) {
             throw new RuntimeException(sprintf(
-                __CLASS__.'::'.__METHOD__.' requires that the collection has exactly one element, '
+                __CLASS__ . '::' . __METHOD__ . ' requires that the collection has exactly one element, '
                 . '"%d" elements found',
                 $this->count()
             ));
@@ -131,7 +130,7 @@ class ArrayCollection implements Collection
      *
      * @return ArrayCollection
      */
-    public function map(Closure $function) : ArrayCollection
+    public function map(Closure $function): ArrayCollection
     {
         return new self(array_map($function, $this->elements));
     }
@@ -140,7 +139,7 @@ class ArrayCollection implements Collection
     /**
      * @return int
      */
-    public function count() : int
+    public function count(): int
     {
         return count($this->elements);
     }
@@ -149,7 +148,7 @@ class ArrayCollection implements Collection
     /**
      * @return \ArrayIterator
      */
-    public function getIterator() : ArrayIterator
+    public function getIterator(): ArrayIterator
     {
         return new ArrayIterator($this->elements);
     }
@@ -160,7 +159,7 @@ class ArrayCollection implements Collection
      *
      * @return bool
      */
-    public function offsetExists($offset) : bool
+    public function offsetExists($offset): bool
     {
         return isset($this->elements[$offset]);
     }
@@ -183,7 +182,7 @@ class ArrayCollection implements Collection
      * @param mixed $value
      * @return void
      */
-    public function offsetSet($offset, $value) : void
+    public function offsetSet($offset, $value): void
     {
         $this->elements[$offset] = $value;
     }
@@ -193,7 +192,7 @@ class ArrayCollection implements Collection
      * @param $offset
      * @return void
      */
-    public function offsetUnset($offset) : void
+    public function offsetUnset($offset): void
     {
         unset($this->elements[$offset]);
     }

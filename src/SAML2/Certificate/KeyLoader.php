@@ -45,7 +45,7 @@ class KeyLoader
         CertificateProvider $config,
         string $usage = null,
         bool $required = false
-    ) : KeyCollection {
+    ): KeyCollection {
         $keyLoader = new self();
 
         return $keyLoader->loadKeysFromConfiguration($config, $usage, $required);
@@ -62,7 +62,7 @@ class KeyLoader
         CertificateProvider $config,
         string $usage = null,
         bool $required = false
-    ) : KeyCollection {
+    ): KeyCollection {
         $keys = $config->getKeys();
         $certificateData = $config->getCertificateData();
         $certificateFile = $config->getCertificateFile();
@@ -78,7 +78,7 @@ class KeyLoader
         if ($required && !$this->hasKeys()) {
             throw new NoKeysFoundException(
                 'No keys found in configured metadata, please ensure that either the "keys", "certData" or '
-                .'"certificate" entries is available.'
+                . '"certificate" entries is available.'
             );
         }
 
@@ -94,7 +94,7 @@ class KeyLoader
      * @param string|null $usage
      * @return void
      */
-    public function loadKeys($configuredKeys, string $usage = null) : void
+    public function loadKeys($configuredKeys, string $usage = null): void
     {
         foreach ($configuredKeys as $keyData) {
             if (isset($keyData['X509Certificate'])) {
@@ -118,7 +118,7 @@ class KeyLoader
      * @param string $certificateData
      * @return void
      */
-    public function loadCertificateData(string $certificateData) : void
+    public function loadCertificateData(string $certificateData): void
     {
         $this->loadedKeys->add(X509::createFromCertificateData($certificateData));
     }
@@ -130,7 +130,7 @@ class KeyLoader
      * @param string $certificateFile the full path to the cert file.
      * @return void
      */
-    public function loadCertificateFile(string $certificateFile) : void
+    public function loadCertificateFile(string $certificateFile): void
     {
         $certificate = File::getFileContents($certificateFile);
 
@@ -150,7 +150,7 @@ class KeyLoader
     /**
      * @return \SAML2\Certificate\KeyCollection
      */
-    public function getKeys() : KeyCollection
+    public function getKeys(): KeyCollection
     {
         return $this->loadedKeys;
     }
@@ -159,7 +159,7 @@ class KeyLoader
     /**
      * @return bool
      */
-    public function hasKeys() : bool
+    public function hasKeys(): bool
     {
         return count($this->loadedKeys) && true;
     }

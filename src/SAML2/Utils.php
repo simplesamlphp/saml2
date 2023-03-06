@@ -146,13 +146,15 @@ class Utils
             return $key;
         }
 
-        if (!in_array($algorithm, [
-            XMLSecurityKey::RSA_1_5,
-            XMLSecurityKey::RSA_SHA1,
-            XMLSecurityKey::RSA_SHA256,
-            XMLSecurityKey::RSA_SHA384,
-            XMLSecurityKey::RSA_SHA512
-        ], true)) {
+        if (
+            !in_array($algorithm, [
+                XMLSecurityKey::RSA_1_5,
+                XMLSecurityKey::RSA_SHA1,
+                XMLSecurityKey::RSA_SHA256,
+                XMLSecurityKey::RSA_SHA384,
+                XMLSecurityKey::RSA_SHA512
+            ], true)
+        ) {
             throw new Exception('Unsupported signing algorithm.');
         }
 
@@ -288,7 +290,7 @@ class Utils
         }
 
         foreach ($namespaces as $prefix => $uri) {
-            $newElement->setAttributeNS($uri, $prefix.':__ns_workaround__', 'tmp');
+            $newElement->setAttributeNS($uri, $prefix . ':__ns_workaround__', 'tmp');
             $newElement->removeAttributeNS($uri, '__ns_workaround__');
         }
 
@@ -384,8 +386,11 @@ class Utils
      * @throws \Exception
      * @return \DOMElement The decrypted element.
      */
-    private static function doDecryptElement(DOMElement $encryptedData, XMLSecurityKey $inputKey, array &$blacklist): DOMElement
-    {
+    private static function doDecryptElement(
+        DOMElement $encryptedData,
+        XMLSecurityKey $inputKey,
+        array &$blacklist
+    ): DOMElement {
         $enc = new XMLSecEnc();
 
         $enc->setNode($encryptedData);
@@ -424,7 +429,7 @@ class Utils
                 throw new Exception(
                     'Algorithm mismatch between input key and key used to encrypt ' .
                     ' the symmetric key for the message. Key was: ' .
-                    var_export($inputKeyAlgo, true) .'; message was: ' .
+                    var_export($inputKeyAlgo, true) . '; message was: ' .
                     var_export($symKeyInfoAlgo, true)
                 );
             }
@@ -472,7 +477,7 @@ class Utils
                 /** @psalm-suppress PossiblyNullArgument */
                 $pkey = openssl_pkey_get_details($symmetricKeyInfo->key);
                 $pkey = sha1(serialize($pkey), true);
-                $key = sha1($encryptedKey.$pkey, true);
+                $key = sha1($encryptedKey . $pkey, true);
 
                 /* Make sure that the key has the correct length. */
                 if (strlen($key) > $keySize) {
@@ -511,10 +516,9 @@ class Utils
          * tree was serialized for encryption. In that case, we may miss the
          * namespaces needed to parse the XML.
          */
-        $xml = '<root xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" '.
-                        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">'.
-            $decrypted.
-            '</root>';
+        $xml = '<root xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ' .
+                        'xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">' .
+            $decrypted . '</root>';
 
         try {
             $newDoc = DOMDocumentFactory::fromString($xml);
@@ -541,8 +545,11 @@ class Utils
      * @throws \Exception
      * @return \DOMElement The decrypted element.
      */
-    public static function decryptElement(DOMElement $encryptedData, XMLSecurityKey $inputKey, array $blacklist = []): DOMElement
-    {
+    public static function decryptElement(
+        DOMElement $encryptedData,
+        XMLSecurityKey $inputKey,
+        array $blacklist = []
+    ): DOMElement {
         try {
             return self::doDecryptElement($encryptedData, $inputKey, $blacklist);
         } catch (Exception $e) {
@@ -570,7 +577,7 @@ class Utils
         foreach ($parent->childNodes as $node) {
             if ($node->namespaceURI !== $namespaceURI || $node->localName !== $localName) {
                 continue;
-            } else if (!($node instanceof DOMElement)) {
+            } elseif (!($node instanceof DOMElement)) {
                 continue;
             }
 
@@ -725,7 +732,7 @@ class Utils
         $regex = '/^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T(\\d\\d):(\\d\\d):(\\d\\d)(?:\\.\\d{1,9})?Z$/D';
         if (preg_match($regex, $time, $matches) == 0) {
             throw new Exception(
-                'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: '.$time
+                'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: ' . $time
             );
         }
 

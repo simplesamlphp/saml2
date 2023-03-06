@@ -108,7 +108,7 @@ class UIInfo
      *
      * @return \SAML2\XML\mdui\Keywords[]
      */
-    public function getKeywords() : array
+    public function getKeywords(): array
     {
         return $this->Keywords;
     }
@@ -120,7 +120,7 @@ class UIInfo
      * @param \SAML2\XML\mdui\Keywords[] $keywords
      * @return void
      */
-    public function setKeywords(array $keywords) : void
+    public function setKeywords(array $keywords): void
     {
         Assert::allIsInstanceOf($keywords, Keywords::class);
         $this->Keywords = $keywords;
@@ -133,7 +133,7 @@ class UIInfo
      * @param \SAML2\XML\mdui\Keywords $keyword
      * @return void
      */
-    public function addKeyword(Keywords $keyword) : void
+    public function addKeyword(Keywords $keyword): void
     {
         $this->Keywords[] = $keyword;
     }
@@ -144,7 +144,7 @@ class UIInfo
      *
      * @return string[]
      */
-    public function getDisplayName() : array
+    public function getDisplayName(): array
     {
         return $this->DisplayName;
     }
@@ -156,7 +156,7 @@ class UIInfo
      * @param array $displayName
      * @return void
      */
-    public function setDisplayName(array $displayName) : void
+    public function setDisplayName(array $displayName): void
     {
         $this->DisplayName = $displayName;
     }
@@ -167,7 +167,7 @@ class UIInfo
      *
      * @return string[]
      */
-    public function getDescription() : array
+    public function getDescription(): array
     {
         return $this->Description;
     }
@@ -179,7 +179,7 @@ class UIInfo
      * @param array $description
      * @return void
      */
-    public function setDescription(array $description) : void
+    public function setDescription(array $description): void
     {
         $this->Description = $description;
     }
@@ -189,7 +189,7 @@ class UIInfo
      * Collect the value of the InformationURL-property
      * @return string[]
      */
-    public function getInformationURL() : array
+    public function getInformationURL(): array
     {
         return $this->InformationURL;
     }
@@ -201,7 +201,7 @@ class UIInfo
      * @param array $informationURL
      * @return void
      */
-    public function setInformationURL(array $informationURL) : void
+    public function setInformationURL(array $informationURL): void
     {
         $this->InformationURL = $informationURL;
     }
@@ -212,7 +212,7 @@ class UIInfo
      *
      * @return string[]
      */
-    public function getPrivacyStatementURL() : array
+    public function getPrivacyStatementURL(): array
     {
         return $this->PrivacyStatementURL;
     }
@@ -224,7 +224,7 @@ class UIInfo
      * @param array $privacyStatementURL
      * @return void
      */
-    public function setPrivacyStatementURL(array $privacyStatementURL) : void
+    public function setPrivacyStatementURL(array $privacyStatementURL): void
     {
         $this->PrivacyStatementURL = $privacyStatementURL;
     }
@@ -235,7 +235,7 @@ class UIInfo
      *
      * @return \SAML2\XML\mdui\Logo[]
      */
-    public function getLogo() : array
+    public function getLogo(): array
     {
         return $this->Logo;
     }
@@ -247,7 +247,7 @@ class UIInfo
      * @param \SAML2\XML\mdui\Logo[] $logo
      * @return void
      */
-    public function setLogo(array $logo) : void
+    public function setLogo(array $logo): void
     {
         $this->Logo = $logo;
     }
@@ -259,7 +259,7 @@ class UIInfo
      * @param \SAML2\XML\mdui\Logo $logo
      * @return void
      */
-    public function addLogo(Logo $logo) : void
+    public function addLogo(Logo $logo): void
     {
         $this->Logo[] = $logo;
     }
@@ -270,7 +270,7 @@ class UIInfo
      *
      * @return \SAML2\XML\Chunk[]
      */
-    public function getChildren() : array
+    public function getChildren(): array
     {
         return $this->children;
     }
@@ -282,7 +282,7 @@ class UIInfo
      * @param array $children
      * @return void
      */
-    public function setChildren(array $children) : void
+    public function setChildren(array $children): void
     {
         $this->children = $children;
     }
@@ -294,7 +294,7 @@ class UIInfo
      * @param \SAML2\XML\Chunk $child
      * @return void
      */
-    public function addChildren(Chunk $child) : void
+    public function addChildren(Chunk $child): void
     {
         $this->children[] = $child;
     }
@@ -306,16 +306,17 @@ class UIInfo
      * @param \DOMElement $parent The element we should append to.
      * @return \DOMElement|null
      */
-    public function toXML(DOMElement $parent) : ?DOMElement
+    public function toXML(DOMElement $parent): ?DOMElement
     {
         $e = null;
-        if (!empty($this->DisplayName)
-         || !empty($this->Description)
-         || !empty($this->InformationURL)
-         || !empty($this->PrivacyStatementURL)
-         || !empty($this->Keywords)
-         || !empty($this->Logo)
-         || !empty($this->children)
+        if (
+            !empty($this->DisplayName)
+            || !empty($this->Description)
+            || !empty($this->InformationURL)
+            || !empty($this->PrivacyStatementURL)
+            || !empty($this->Keywords)
+            || !empty($this->Logo)
+            || !empty($this->children)
         ) {
             $doc = $parent->ownerDocument;
 

@@ -49,7 +49,7 @@ class SubjectConfirmationValidator
      */
     public function addConstraintValidator(
         SubjectConfirmationConstraintValidator $constraint
-    ) : void {
+    ): void {
         if ($constraint instanceof IdentityProviderAware) {
             $constraint->setIdentityProvider($this->identityProvider);
         }
@@ -66,7 +66,7 @@ class SubjectConfirmationValidator
      * @param SubjectConfirmation $subjectConfirmation
      * @return Result
      */
-    public function validate(SubjectConfirmation $subjectConfirmation) : Result
+    public function validate(SubjectConfirmation $subjectConfirmation): Result
     {
         $result = new Result();
         foreach ($this->constraints as $validator) {

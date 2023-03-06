@@ -31,7 +31,7 @@ class NotBeforeTest extends ControlledTimeTest
     /**
      * @return void
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
         $this->assertion = \Mockery::mock(Assertion::class);
@@ -43,7 +43,7 @@ class NotBeforeTest extends ControlledTimeTest
      * @test
      * @return void
      */
-    public function timestamp_in_the_future_beyond_graceperiod_is_not_valid() : void
+    public function timestamp_in_the_future_beyond_graceperiod_is_not_valid(): void
     {
         $this->assertion->shouldReceive('getNotBefore')->andReturn($this->currentTime + 61);
 
@@ -62,7 +62,7 @@ class NotBeforeTest extends ControlledTimeTest
      * @test
      * @return void
      */
-    public function time_within_graceperiod_is_valid() : void
+    public function time_within_graceperiod_is_valid(): void
     {
         $this->assertion->shouldReceive('getNotBefore')->andReturn($this->currentTime + 60);
 
@@ -80,7 +80,7 @@ class NotBeforeTest extends ControlledTimeTest
      * @test
      * @return void
      */
-    public function current_time_is_valid() : void
+    public function current_time_is_valid(): void
     {
         $this->assertion->shouldReceive('getNotBefore')->andReturn($this->currentTime);
 

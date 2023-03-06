@@ -443,7 +443,7 @@ abstract class Message extends SignedElement
     {
         $this->document = DOMDocumentFactory::create();
 
-        $root = $this->document->createElementNS(Constants::NS_SAMLP, 'samlp:'.$this->tagName);
+        $root = $this->document->createElementNS(Constants::NS_SAMLP, 'samlp:' . $this->tagName);
         $this->document->appendChild($root);
 
         /* Ugly hack to add another namespace declaration to the root element. */

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML;
 
 use DOMElement;
-
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 use Serializable;
@@ -58,7 +57,7 @@ class Chunk implements Serializable
      *
      * @return \DOMElement This element.
      */
-    public function getXML() : DOMElement
+    public function getXML(): DOMElement
     {
         return $this->xml;
     }
@@ -70,7 +69,7 @@ class Chunk implements Serializable
      * @param  \DOMElement $parent The element we should append this element to.
      * @return \DOMElement The new element.
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         return Utils::copyElement($this->xml, $parent);
     }
@@ -81,7 +80,7 @@ class Chunk implements Serializable
      *
      * @return string
      */
-    public function getLocalName() : string
+    public function getLocalName(): string
     {
         return $this->localName;
     }
@@ -93,7 +92,7 @@ class Chunk implements Serializable
      * @param string $localName
      * @return void
      */
-    public function setLocalName(string $localName) : void
+    public function setLocalName(string $localName): void
     {
         $this->localName = $localName;
     }
@@ -104,7 +103,7 @@ class Chunk implements Serializable
      *
      * @return string|null
      */
-    public function getNamespaceURI() : ?string
+    public function getNamespaceURI(): ?string
     {
         return $this->namespaceURI;
     }
@@ -116,7 +115,7 @@ class Chunk implements Serializable
      * @param string|null $namespaceURI
      * @return void
      */
-    public function setNamespaceURI(string $namespaceURI = null) : void
+    public function setNamespaceURI(string $namespaceURI = null): void
     {
         $this->namespaceURI = $namespaceURI;
     }
@@ -127,7 +126,7 @@ class Chunk implements Serializable
      *
      * @return string The serialized chunk.
      */
-    public function serialize() : string
+    public function serialize(): string
     {
         return serialize($this->xml->ownerDocument->saveXML($this->xml));
     }
@@ -141,7 +140,7 @@ class Chunk implements Serializable
      *
      * Type hint not possible due to upstream method signature
      */
-    public function unserialize($serialized) : void
+    public function unserialize($serialized): void
     {
         $doc = DOMDocumentFactory::fromString(unserialize($serialized));
         $this->xml = $doc->documentElement;

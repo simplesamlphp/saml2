@@ -15,7 +15,7 @@ declare(strict_types=1);
  * @param string $className Name of the class.
  * @return void
  */
-function SAML2_autoload(string $className) : void
+function SAML2_autoload(string $className): void
 {
     $file = dirname(__FILE__) . '/' . str_replace('_', '/', $className) . '.php';
     if (file_exists($file)) {

@@ -25,7 +25,7 @@ class SessionNotOnOrAfterTest extends ControlledTimeTest
     /**
      * @return void
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
         $this->assertion = \Mockery::mock(\SAML2\Assertion::class);
@@ -37,7 +37,7 @@ class SessionNotOnOrAfterTest extends ControlledTimeTest
      * @test
      * @return void
      */
-    public function timestamp_in_the_past_before_graceperiod_is_not_valid() : void
+    public function timestamp_in_the_past_before_graceperiod_is_not_valid(): void
     {
         $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime - 60);
 
@@ -73,7 +73,7 @@ class SessionNotOnOrAfterTest extends ControlledTimeTest
      * @test
      * @return void
      */
-    public function current_time_is_valid() : void
+    public function current_time_is_valid(): void
     {
         $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime);
 

@@ -16,7 +16,7 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $publicationInfo = new PublicationInfo();
         $publicationInfo->setPublisher('TestPublisher');
@@ -47,9 +47,15 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertCount(2, $usagePolicyElements);
 
-        $this->assertEquals('en', $usagePolicyElements[0]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang"));
+        $this->assertEquals(
+            'en',
+            $usagePolicyElements[0]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang")
+        );
         $this->assertEquals('http://EnglishUsagePolicy', $usagePolicyElements[0]->textContent);
-        $this->assertEquals('no', $usagePolicyElements[1]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang"));
+        $this->assertEquals(
+            'no',
+            $usagePolicyElements[1]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang")
+        );
         $this->assertEquals('http://NorwegianUsagePolicy', $usagePolicyElements[1]->textContent);
     }
 
@@ -57,7 +63,7 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"

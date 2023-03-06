@@ -46,7 +46,7 @@ class MockChainedValidator extends AbstractChainedValidator
     public function canValidate(
         SignedElement $signedElement,
         CertificateProvider $configuration
-    ) : bool {
+    ): bool {
         return $this->canValidate;
     }
 
@@ -57,7 +57,7 @@ class MockChainedValidator extends AbstractChainedValidator
     public function hasValidSignature(
         SignedElement $signedElement,
         CertificateProvider $configuration
-    ) : bool {
+    ): bool {
         return $this->isValid;
     }
 }

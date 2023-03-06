@@ -19,7 +19,7 @@ class PrivateKeyLoaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         $this->privateKeyLoader = new PrivateKeyLoader();
     }
@@ -35,7 +35,7 @@ class PrivateKeyLoaderTest extends \PHPUnit\Framework\TestCase
      */
     public function loading_a_configured_private_key_returns_a_certificate_private_key(
         \SAML2\Configuration\PrivateKey $configuredKey
-    ) : void {
+    ): void {
         $resultingKey = $this->privateKeyLoader->loadPrivateKey($configuredKey);
 
         $this->assertInstanceOf(PrivateKey::class, $resultingKey);
@@ -49,7 +49,7 @@ class PrivateKeyLoaderTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function privateKeyTestProvider() : array
+    public function privateKeyTestProvider(): array
     {
         return [
             'no passphrase'   => [

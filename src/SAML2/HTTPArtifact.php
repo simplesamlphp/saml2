@@ -58,11 +58,11 @@ class HTTPArtifact extends Binding
         if ($issuer === null) {
             throw new Exception('Cannot get redirect URL, no Issuer set in the message.');
         }
-        $artifact = base64_encode("\x00\x04\x00\x00".sha1($issuer->getValue(), true) . $generatedId);
+        $artifact = base64_encode("\x00\x04\x00\x00" . sha1($issuer->getValue(), true) . $generatedId);
         $artifactData = $message->toUnsignedXML();
         $artifactDataString = $artifactData->ownerDocument->saveXML($artifactData);
 
-        $store->set('artifact', $artifact, $artifactDataString, Temporal::getTime() + 15*60);
+        $store->set('artifact', $artifact, $artifactDataString, Temporal::getTime() + (15 * 60));
 
         $params = [
             'SAMLart' => $artifact,
@@ -135,7 +135,9 @@ class HTTPArtifact extends Binding
             throw new Exception('No ArtifactResolutionService with the correct index.');
         }
 
-        Utils::getContainer()->getLogger()->debug("ArtifactResolutionService endpoint being used is := " . $endpoint['Location']);
+        Utils::getContainer()->getLogger()->debug(
+            "ArtifactResolutionService endpoint being used is := " . $endpoint['Location']
+        );
 
         //Construct the ArtifactResolve Request
         $ar = new ArtifactResolve();

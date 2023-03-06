@@ -101,8 +101,9 @@ abstract class Binding
                      */
                     ($contentType === 'text/xml' || $contentType === 'application/xml')
                     // See paragraph 3.2.3 of Binding for SAML2 (OASIS)
-                    || (isset($_SERVER['HTTP_SOAPACTION']) && $_SERVER['HTTP_SOAPACTION'] === 'http://www.oasis-open.org/committees/security'))
-                {
+                    || (isset($_SERVER['HTTP_SOAPACTION'])
+                        && $_SERVER['HTTP_SOAPACTION'] === 'http://www.oasis-open.org/committees/security')
+                ) {
                     return new SOAP();
                 }
                 break;
@@ -110,7 +111,7 @@ abstract class Binding
 
         $logger = Utils::getContainer()->getLogger();
         $logger->warning('Unable to find the SAML 2 binding used for this request.');
-        $logger->warning('Request method: '.var_export($_SERVER['REQUEST_METHOD'], true));
+        $logger->warning('Request method: ' . var_export($_SERVER['REQUEST_METHOD'], true));
         if (!empty($_GET)) {
             $logger->warning("GET parameters: '" . implode("', '", array_map('addslashes', array_keys($_GET))) . "'");
         }

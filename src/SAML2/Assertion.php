@@ -278,7 +278,7 @@ class Assertion extends SignedElement
 
         if ($xml->getAttribute('Version') !== '2.0') {
             /* Currently a very strict check. */
-            throw new Exception('Unsupported version: '.$xml->getAttribute('Version'));
+            throw new Exception('Unsupported version: ' . $xml->getAttribute('Version'));
         }
 
         $this->issueInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
@@ -1482,7 +1482,7 @@ class Assertion extends SignedElement
             $document = $parentElement->ownerDocument;
         }
 
-        $root = $document->createElementNS(Constants::NS_SAML, 'saml:'.'Assertion');
+        $root = $document->createElementNS(Constants::NS_SAML, 'saml:' . 'Assertion');
         $parentElement->appendChild($root);
 
         /* Ugly hack to add another namespace declaration to the root element. */
@@ -1536,7 +1536,7 @@ class Assertion extends SignedElement
         if ($this->encryptedNameId === null) {
             $this->nameId->toXML($subject);
         } else {
-            $eid = $subject->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:'.'EncryptedID');
+            $eid = $subject->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:' . 'EncryptedID');
             $subject->appendChild($eid);
             $eid->appendChild($subject->ownerDocument->importNode($this->encryptedNameId, true));
         }
@@ -1584,7 +1584,8 @@ class Assertion extends SignedElement
      */
     private function addAuthnStatement(DOMElement $root): void
     {
-        if ($this->authnInstant === null ||
+        if (
+            $this->authnInstant === null ||
             (
                 $this->authnContextClassRef === null &&
                 $this->authnContextDecl === null &&
@@ -1696,7 +1697,7 @@ class Assertion extends SignedElement
             if (array_key_exists($name, $this->attributesValueTypes)) {
                 $valueTypes = $this->attributesValueTypes[$name];
                 if (is_array($valueTypes) && count($valueTypes) != count($values)) {
-                    throw new Exception('Array of value types and array of values have different size for attribute '.
+                    throw new Exception('Array of value types and array of values have different size for attribute ' .
                         var_export($name, true));
                 }
             } else {

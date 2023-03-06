@@ -15,7 +15,7 @@ class ArtifactResponseTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $issuer1 = new Issuer();
         $issuer2 = new Issuer();
@@ -45,7 +45,7 @@ class ArtifactResponseTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $xml = <<<XML
 <samlp:ArtifactResponse
@@ -83,6 +83,9 @@ XML;
         $any = $ar->getAny();
         $authnRequest = new AuthnRequest($any);
         $this->assertEquals('_306f8ec5b618f361c70b6ffb1480eade', $authnRequest->getId());
-        $this->assertEquals('https://sp.example.com/SAML2/SSO/Artifact', $authnRequest->getAssertionConsumerServiceURL());
+        $this->assertEquals(
+            'https://sp.example.com/SAML2/SSO/Artifact',
+            $authnRequest->getAssertionConsumerServiceURL(),
+        );
     }
 }

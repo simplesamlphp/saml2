@@ -17,7 +17,7 @@ class NotBefore implements
      * @param Result $result
      * @return void
      */
-    public function validate(Assertion $assertion, Result $result) : void
+    public function validate(Assertion $assertion, Result $result): void
     {
         $notBeforeTimestamp = $assertion->getNotBefore();
         if (($notBeforeTimestamp !== null) && ($notBeforeTimestamp > (Temporal::getTime() + 60))) {

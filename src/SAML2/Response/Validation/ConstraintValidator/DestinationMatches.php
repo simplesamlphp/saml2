@@ -33,7 +33,7 @@ final class DestinationMatches implements
      * @param Result $result
      * @return void
      */
-    public function validate(Response $response, Result $result) : void
+    public function validate(Response $response, Result $result): void
     {
         $destination = $response->getDestination();
         if ($destination === null) {

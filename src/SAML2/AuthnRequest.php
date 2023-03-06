@@ -866,11 +866,17 @@ class AuthnRequest extends Request
                         $idpEntry->setAttribute('ProviderID', $provider);
                     } elseif (is_array($provider)) {
                         foreach ($provider as $attribute => $value) {
-                            if (in_array($attribute, [
-                                'ProviderID',
-                                'Loc',
-                                'Name'
-                            ], true)) {
+                            if (
+                                in_array(
+                                    $attribute,
+                                    [
+                                        'ProviderID',
+                                        'Loc',
+                                        'Name'
+                                    ],
+                                    true
+                                )
+                            ) {
                                 $idpEntry->setAttribute($attribute, $value);
                             }
                         }

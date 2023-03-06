@@ -29,7 +29,7 @@ class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
     /**
      * @return void
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
         $this->subjectConfirmation = new \SAML2\XML\saml\SubjectConfirmation();
@@ -46,7 +46,7 @@ class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
      * @preserveGlobalState disabled
      * @return void
      */
-    public function timestamp_in_the_past_before_graceperiod_is_not_valid() : void
+    public function timestamp_in_the_past_before_graceperiod_is_not_valid(): void
     {
         $this->subjectConfirmationData->setNotOnOrAfter($this->currentTime - 60);
 
@@ -68,7 +68,7 @@ class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
      * @preserveGlobalState disabled
      * @return void
      */
-    public function time_within_graceperiod_is_valid() : void
+    public function time_within_graceperiod_is_valid(): void
     {
         $this->subjectConfirmationData->setNotOnOrAfter($this->currentTime - 59);
 
@@ -89,7 +89,7 @@ class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
      * @preserveGlobalState disabled
      * @return void
      */
-    public function current_time_is_valid() : void
+    public function current_time_is_valid(): void
     {
         $this->subjectConfirmationData->setNotOnOrAfter($this->currentTime);
 
