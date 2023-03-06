@@ -265,7 +265,7 @@ final class Assertion extends AbstractSamlElement implements
         Assert::same(self::getAttribute($xml, 'Version'), '2.0', 'Unsupported version: %s');
 
         $id = self::getAttribute($xml, 'ID');
-        Assert::nullOrValidNCName($id); // Covers the empty string
+        Assert::validNCName($id); // Covers the empty string
 
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications

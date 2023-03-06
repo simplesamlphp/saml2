@@ -100,7 +100,7 @@ class ArtifactResponse extends AbstractStatusResponse
         Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
 
         $id = self::getAttribute($xml, 'ID');
-        Assert::nullOrValidNCName($id); // Covers the empty string
+        Assert::validNCName($id); // Covers the empty string
 
         $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
         $destination = self::getAttribute($xml, 'Destination', null);

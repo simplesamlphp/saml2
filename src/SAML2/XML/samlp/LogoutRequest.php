@@ -65,7 +65,6 @@ final class LogoutRequest extends AbstractRequest
         ?string $consent = null,
         ?Extensions $extensions = null,
     ) {
-        Assert::nullOrValidURI($reason, SchemaViolationException::class);
         Assert::allIsInstanceOf($sessionIndexes, SessionIndex::class);
 
         parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
@@ -133,7 +132,7 @@ final class LogoutRequest extends AbstractRequest
         Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
 
         $id = self::getAttribute($xml, 'ID');
-        Assert::nullOrValidNCName($id); // Covers the empty string
+        Assert::validNCName($id); // Covers the empty string
 
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications

@@ -109,7 +109,7 @@ class Response extends AbstractStatusResponse
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
         $id = self::getAttribute($xml, 'ID');
-        Assert::nullOrValidNCName($id); // Covers the empty string
+        Assert::validNCName($id); // Covers the empty string
 
         $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
         $destination = self::getAttribute($xml, 'Destination', null);

@@ -120,7 +120,7 @@ class AttributeQuery extends AbstractSubjectQuery
         Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
 
         $id = self::getAttribute($xml, 'ID');
-        Assert::nullOrValidNCName($id); // Covers the empty string
+        Assert::validNCName($id); // Covers the empty string
 
         $destination = self::getAttribute($xml, 'Destination', null);
         $consent = self::getAttribute($xml, 'Consent', null);
