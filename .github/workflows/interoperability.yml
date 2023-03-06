@@ -8,7 +8,7 @@ on:  # yamllint disable-line rule:truthy
     paths-ignore:
       - '**.md'
   pull_request:
-    branches: [master,release-*]
+    branches: [master, release-*]
     paths-ignore:
       - '**.md'
 

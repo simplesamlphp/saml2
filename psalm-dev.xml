@@ -2,14 +2,21 @@
 <psalm
   name="SimpleSAMLphp"
   useDocblockTypes="true"
-  errorLevel="2"
+  errorLevel="4"
   reportMixedIssues="false"
   hideExternalErrors="true"
 >
   <projectFiles>
-    <directory name="src/SAML2" />
+    <directory name="tests/SAML2/XML/alg" />
+    <directory name="tests/SAML2/XML/ecp" />
+    <directory name="tests/SAML2/XML/init" />
+    <directory name="tests/SAML2/XML/md" />
+    <directory name="tests/SAML2/XML/mdrpi" />
+    <directory name="tests/SAML2/XML/mdui" />
+    <directory name="tests/SAML2/XML/saml" />
+    <directory name="tests/SAML2/XML/samlp" />
+    <directory name="tests/SAML2/XML/shibmd" />
     <ignoreFiles>
-      <directory name="tests" />
       <directory name="vendor" />
     </ignoreFiles>
   </projectFiles>
@@ -31,5 +38,21 @@
     <PossiblyUnusedMethod errorLevel="info" />
     <PropertyNotSetInConstructor errorLevel="suppress" />
     <MissingClosureReturnType errorLevel="suppress" />
+
+    <PropertyNotSetInConstructor>
+      <errorLevel type="suppress">
+        <directory name="tests" />
+      </errorLevel>
+    </PropertyNotSetInConstructor>
+
+    <InternalMethod>
+      <errorLevel type="suppress">
+        <directory name="tests" />
+      </errorLevel>
+    </InternalMethod>
   </issueHandlers>
+
+  <stubs>
+    <file name="vendor/simplesamlphp/simplesamlphp-test-framework/stubs/soap.php" />
+  </stubs>
 </psalm>

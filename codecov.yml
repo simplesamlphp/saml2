@@ -15,4 +15,4 @@ comment:
   require_head: true
   branches: null
 github_checks:
-    annotations: false
+  annotations: false
