@@ -249,6 +249,9 @@ class AuthnRequest extends AbstractRequest
         Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
         Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
 
+        $id = self::getAttribute($xml, 'ID');
+        Assert::nullOrValidNCName($id); // Covers the empty string
+
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
         $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
@@ -321,7 +324,7 @@ class AuthnRequest extends AbstractRequest
             $attributeConsumingServiceIndex,
             self::getAttribute($xml, 'ProviderName', null),
             array_pop($issuer),
-            self::getAttribute($xml, 'ID'),
+            $id,
             $version,
             $issueInstant,
             self::getAttribute($xml, 'Destination', null),

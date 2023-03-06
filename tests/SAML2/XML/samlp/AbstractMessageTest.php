@@ -297,6 +297,7 @@ XML;
 <samlp:LogoutRequest
                 xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
                 xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+                ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
                 Version="2.0" IssueInstant="2010-07-22T11:30:19Z"
                 >
   <saml:Issuer>TheIssuer</saml:Issuer>

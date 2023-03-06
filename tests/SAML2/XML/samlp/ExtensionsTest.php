@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\samlp\Extensions;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
@@ -26,6 +27,7 @@ use function strval;
  */
 final class ExtensionsTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
 
@@ -34,6 +36,8 @@ final class ExtensionsTest extends TestCase
      */
     public function setUp(): void
     {
+        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-protocol-2.0.xsd';
+
         $this->testedClass = Extensions::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(

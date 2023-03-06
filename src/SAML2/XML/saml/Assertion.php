@@ -81,6 +81,7 @@ final class Assertion extends AbstractSamlElement implements
     ) {
         $this->dataType = C::XMLENC_ELEMENT;
 
+        Assert::nullOrValidNCName($id); // Covers the empty string
         Assert::true(
             $subject || !empty($statements),
             "Either a <saml:Subject> or some statement must be present in a <saml:Assertion>",
@@ -263,6 +264,9 @@ final class Assertion extends AbstractSamlElement implements
         Assert::same($xml->namespaceURI, Assertion::NS, InvalidDOMElementException::class);
         Assert::same(self::getAttribute($xml, 'Version'), '2.0', 'Unsupported version: %s');
 
+        $id = self::getAttribute($xml, 'ID');
+        Assert::nullOrValidNCName($id); // Covers the empty string
+
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
         $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
@@ -299,7 +303,7 @@ final class Assertion extends AbstractSamlElement implements
 
         $assertion = new static(
             array_pop($issuer),
-            self::getAttribute($xml, 'ID'),
+            $id,
             $issueInstant,
             array_pop($subject),
             array_pop($conditions),

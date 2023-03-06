@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\Test\SAML2\XML\samlp;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\samlp\StatusMessage;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -23,12 +24,15 @@ use function strval;
  */
 final class StatusMessageTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
     /**
      */
     protected function setUp(): void
     {
+        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-protocol-2.0.xsd';
+
         $this->testedClass = StatusMessage::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
