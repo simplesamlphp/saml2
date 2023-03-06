@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -26,6 +27,7 @@ use function strval;
  */
 final class RequestedAuthnContextTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
 
@@ -33,6 +35,8 @@ final class RequestedAuthnContextTest extends TestCase
      */
     public function setUp(): void
     {
+        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-protocol-2.0.xsd';
+
         $this->testedClass = RequestedAuthnContext::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(

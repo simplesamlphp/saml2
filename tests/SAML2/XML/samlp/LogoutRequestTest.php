@@ -16,6 +16,7 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\samlp\LogoutRequest;
 use SimpleSAML\SAML2\XML\samlp\SessionIndex;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -49,6 +50,7 @@ use function strval;
  */
 final class LogoutRequestTest extends MockeryTestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
     use SignedElementTestTrait;
 
@@ -62,6 +64,8 @@ final class LogoutRequestTest extends MockeryTestCase
      */
     public function setUp(): void
     {
+        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-protocol-2.0.xsd';
+
         $this->testedClass = LogoutRequest::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(

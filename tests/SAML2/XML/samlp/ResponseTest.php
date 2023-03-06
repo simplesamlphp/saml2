@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
@@ -29,6 +30,7 @@ use function strval;
  */
 final class ResponseTest extends TestCase
 {
+    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
     use SignedElementTestTrait;
 
@@ -37,6 +39,8 @@ final class ResponseTest extends TestCase
      */
     public function setUp(): void
     {
+        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-protocol-2.0.xsd';
+
         $this->testedClass = Response::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
