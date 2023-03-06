@@ -1,12 +1,14 @@
+---
+
 name: Documentation
 
 on:
   push:
-    branches: [ master, release-* ]
+    branches: [master, release-*]
     paths:
       - '**.md'
   pull_request:
-    branches: [ master, release-* ]
+    branches: [master, release-*]
     paths:
       - '**.md'
 
@@ -30,4 +32,5 @@ jobs:
           path: '**/*.md'
           check_filenames: true
           ignore_words_list: tekst
+
 
