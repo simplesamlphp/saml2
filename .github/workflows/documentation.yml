@@ -2,7 +2,7 @@
 
 name: Documentation
 
-on:
+on:  # yamllint disable-line rule:truthy
   push:
     branches: [master, release-*]
     paths:
@@ -32,5 +32,3 @@ jobs:
           path: '**/*.md'
           check_filenames: true
           ignore_words_list: tekst
-
-

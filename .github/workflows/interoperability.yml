@@ -2,13 +2,13 @@
 
 name: Interoperability
 
-on:
+on:  # yamllint disable-line rule:truthy
   push:
-    branches: [ '**' ]
+    branches: ['**']
     paths-ignore:
       - '**.md'
   pull_request:
-    branches: [ master, release-* ]
+    branches: [master,release-*]
     paths-ignore:
       - '**.md'
 
@@ -24,7 +24,8 @@ jobs:
 
     steps:
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
+        # https://github.com/shivammathur/setup-php
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
           extensions: mbstring, xml

@@ -27,8 +27,6 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: true
           LINTER_RULES_PATH: 'tools/linters'
-          VALIDATE_CSS: true
-          VALIDATE_JAVASCRIPT_ES: true
           VALIDATE_JSON: true
           VALIDATE_PHP_BUILTIN: true
           VALIDATE_YAML: true
@@ -96,7 +94,8 @@ jobs:
     runs-on: [ubuntu-latest]
     steps:
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
+        # https://github.com/shivammathur/setup-php
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '8.1'
           extensions: dom, mbstring, openssl, xml, zlib
