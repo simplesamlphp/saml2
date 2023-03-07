@@ -6,6 +6,8 @@ namespace SimpleSAML\SAML2;
 
 use DOMElement;
 use Exception;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
@@ -94,15 +96,17 @@ class HTTPRedirect extends Binding
 
     /**
      * Send a SAML 2 message using the HTTP-Redirect binding.
-     * Note: This function never returns.
      *
-     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message we should send.
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    public function send(AbstractMessage $message): void
+    public function send(AbstractMessage $message): ResponseInterface
     {
         $destination = $this->getRedirectURL($message);
-        Utils::getContainer()->getLogger()->debug('Redirect to ' . strlen($destination) . ' byte URL: ' . $destination);
-        Utils::getContainer()->redirect($destination);
+        Utils::getContainer()->getLogger()->debug(
+            'Redirect to ' . strlen($destination) . ' byte URL: ' . $destination
+        );
+        return new Response(303, ['Location' => $destination]);
     }
 
 

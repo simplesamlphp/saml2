@@ -26,26 +26,6 @@ class MockContainer extends AbstractContainer
      */
     private array $debugMessages = [];
 
-    /**
-     * @var string
-     */
-    private string $redirectUrl;
-
-    /**
-     * @var array
-     */
-    private array $redirectData = [];
-
-    /**
-     * @var string|null
-     */
-    private ?string $postRedirectUrl = null;
-
-    /**
-     * @var array
-     */
-    private array $postRedirectData;
-
 
     /**
      * Get a PSR-3 compatible logger.
@@ -86,28 +66,17 @@ class MockContainer extends AbstractContainer
 
 
     /**
-     * Trigger the user to perform a GET to the given URL with the given data.
-     *
-     * @param string $url
-     * @param array $data
-     */
-    public function redirect(string $url, array $data = []): void
-    {
-        $this->redirectUrl = $url;
-        $this->redirectData = $data;
-    }
-
-
-    /**
      * Trigger the user to perform a POST to the given URL with the given data.
      *
      * @param string|null $url
      * @param array $data
+     * @return string
      */
-    public function postRedirect(string $url = null, array $data = []): void
-    {
-        $this->postRedirectUrl = $url;
-        $this->postRedirectData = $data;
+    public function getPOSTRedirectURL(
+        /** @scrutinizer ignore-unused */string $url = null,
+        /** @scrutinizer ignore-unused */array $data = []
+    ): string {
+        return $url;
     }
 
 

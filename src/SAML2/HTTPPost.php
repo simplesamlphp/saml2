@@ -7,6 +7,8 @@ namespace SimpleSAML\SAML2;
 use DOMDocument;
 use DOMElement;
 use Exception;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
@@ -27,11 +29,10 @@ class HTTPPost extends Binding
     /**
      * Send a SAML 2 message using the HTTP-POST binding.
      *
-     * Note: This function never returns.
-     *
      * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message we should send.
+     * @return \Psr\Http\Message\ResponseInterface The response
      */
-    public function send(AbstractMessage $message): void
+    public function send(AbstractMessage $message): ResponseInterface
     {
         if ($this->destination === null) {
             $destination = $message->getDestination();
@@ -63,7 +64,8 @@ class HTTPPost extends Binding
             $post['RelayState'] = $relayState;
         }
 
-        Utils::getContainer()->postRedirect($destination, $post);
+        $container = Utils::getContainer();
+        return new Response(303, ['Location' => $container->getPOSTRedirectURL($destination, $post)]);
     }
 
 

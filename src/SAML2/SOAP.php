@@ -6,19 +6,21 @@ namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use Exception;
-use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use SimpleSAML\SOAP\Constants as C;
-use SimpleSAML\SOAP11\XML\env\Body;
-use SimpleSAML\SOAP11\XML\env\Envelope;
-use SimpleSAML\SOAP11\XML\env\Header;
+use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ecp\Response as ECPResponse;
 use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
-use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\samlp\Response as SAML2_Response;
+use SimpleSAML\SOAP\Constants as C;
+use SimpleSAML\SOAP11\XML\env\Body;
+use SimpleSAML\SOAP11\XML\env\Envelope;
+use SimpleSAML\SOAP11\XML\env\Header;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function file_get_contents;
@@ -44,7 +46,7 @@ class SOAP extends Binding
         // In the Artifact Resolution profile, this will be an ArtifactResolve
         // containing another message (e.g. a Response), however in the ECP
         // profile, this is the Response itself.
-        if ($message instanceof Response) {
+        if ($message instanceof SAML2_Response) {
             $requestAuthenticated = new RequestAuthenticated(1);
 
             $destination = $this->destination ?: $message->getDestination();
@@ -66,21 +68,15 @@ class SOAP extends Binding
     /**
      * Send a SAML 2 message using the SOAP binding.
      *
-     * Note: This function never returns.
-     *
      * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message we should send.
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    public function send(AbstractMessage $message): void
+    public function send(AbstractMessage $message): ResponseInterface
     {
-        header('Content-Type: text/xml', true);
-
         $xml = $this->getOutputToSend($message);
-        if ($xml !== false) {
-            Utils::getContainer()->debugMessage($xml, 'out');
-        }
+        Utils::getContainer()->debugMessage($xml, 'out');
 
-        // DOMDocument::saveXML() returned false. Something is seriously wrong here. Not much we can do.
-        throw new Exception('Error while generating XML for SAML message.');
+        return new Response(200, ['Content-Type' => 'text/xml'], $xml);
     }
 
 
@@ -88,10 +84,11 @@ class SOAP extends Binding
      * Receive a SAML 2 message sent using the HTTP-POST binding.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
+     * @return \SimpleSAML\SAML2\XML\samlp\AnstractMessage The received message.
+     *
      * @throws \Exception If unable to receive the message
      */
-    public function receive(ServerRequestInterface $request): AbstractMessage
+    public function receive(/** @scrutinizer ignore-unused */ServerRequestInterface $request): AbstractMessage
     {
         $postText = $this->getInputStream();
 
@@ -103,8 +100,10 @@ class SOAP extends Binding
         /** @var \DOMNode $xml */
         $xml = $document->firstChild;
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
+
+        $xpCache = XPath::getXPath($document->documentElement);
         /** @var \DOMElement[] $results */
-        $results = XPath::xpQuery($xml, '/soap-env:Envelope/soap-env:Body/*[1]', XPath::getXPath($xml));
+        $results = XPath::xpQuery($xml, '/soap-env:Envelope/soap-env:Body/*[1]', $xpCache);
 
         return MessageFactory::fromXML($results[0]);
     }

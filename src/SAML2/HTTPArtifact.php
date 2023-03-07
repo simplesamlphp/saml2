@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2;
 
 use Exception;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\Configuration;
@@ -91,15 +93,13 @@ class HTTPArtifact extends Binding
     /**
      * Send a SAML 2 message using the HTTP-Redirect binding.
      *
-     * Note: This function never returns.
-     *
      * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message we should send.
-     * @throws \Exception
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    public function send(AbstractMessage $message): void
+    public function send(AbstractMessage $message): ResponseInterface
     {
         $destination = $this->getRedirectURL($message);
-        Utils::getContainer()->redirect($destination);
+        return new Response(303, ['Location' => $destination]);
     }
 
 

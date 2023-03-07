@@ -95,7 +95,7 @@ final class BindingTest extends TestCase
         $this->assertInstanceOf(HTTPPost::class, $bind);
 
         $request = new ServerRequest('POST', 'http://tnyholm.se');
-        $request = $request->withParsedBody([])->withAddedHeader('CONTENT_TYPE', 'text/xml');
+        $request = $request->withParsedBody([])->withAddedHeader('Content-Type', 'text/xml');
         $bind = Binding::getCurrentBinding($request);
         $this->assertInstanceOf(SOAP::class, $bind);
 
@@ -107,20 +107,21 @@ final class BindingTest extends TestCase
 
         $q = ['AAP' => 'Noot'];
         $request = new ServerRequest('POST', 'http://tnyholm.se');
-        $request = $request->withParsedBody($q);
-        $this->expectException(UnsupportedBindingException::class);
-        $this->expectExceptionMessage('Unable to find the SAML 2 binding used for this request.');
+        $request = $request->withParsedBody($q)->withAddedHeader('Content-Type', 'application/xml');
         $bind = Binding::getCurrentBinding($request);
-
-        $_SERVER['CONTENT_TYPE'] = 'application/xml';
-        $bind = Binding::getCurrentBinding();
         $this->assertInstanceOf(SOAP::class, $bind);
-        unset($_SERVER['CONTENT_TYPE']);
 
-        $_SERVER['HTTP_SOAPACTION'] = 'http://www.oasis-open.org/committees/security';
-        $bind = Binding::getCurrentBinding();
+        $q = ['AAP' => 'Noot'];
+        $request = new ServerRequest('POST', 'http://tnyholm.se');
+        $request = $request->withParsedBody($q)->withAddedHeader('SOAPAction', 'http://www.oasis-open.org/committees/security');
+        $bind = Binding::getCurrentBinding($request);
         $this->assertInstanceOf(SOAP::class, $bind);
-        unset($_SERVER['HTTP_SOAPACTION']);
+
+        $q = ['AAP' => 'Noot'];
+        $request = new ServerRequest('POST', 'http://tnyholm.se');
+        $request = $request->withParsedBody($q);
+        $this->expectException(UnsupportedBindingException::class, 'Unable to find the current binding.');
+        Binding::getCurrentBinding($request);
     }
 
 
