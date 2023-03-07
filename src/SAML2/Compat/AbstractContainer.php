@@ -147,21 +147,13 @@ abstract class AbstractContainer
 
 
     /**
-     * Trigger the user to perform a GET to the given URL with the given data.
-     *
-     * @param string $url
-     * @param array $data
-     */
-    abstract public function redirect(string $url, array $data = []): void;
-
-
-    /**
      * Trigger the user to perform a POST to the given URL with the given data.
      *
      * @param string $url
      * @param array $data
+     * @return string
      */
-    abstract public function postRedirect(string $url, array $data = []): void;
+    abstract public function getPOSTRedirectURL(string $url, array $data = []): string;
 
 
     /**

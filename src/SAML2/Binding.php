@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2;
 
 use Exception;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
@@ -77,7 +78,6 @@ abstract class Binding
      */
     public static function getCurrentBinding(ServerRequestInterface $request): Binding
     {
-        $headers = $request->getHeaders();
         $method = $request->getMethod();
 
         switch ($method) {
@@ -91,12 +91,11 @@ abstract class Binding
                 break;
 
             case 'POST':
-                if (isset($headers['CONTENT_TYPE'])) {
-                    $contentType = $headers['CONTENT_TYPE'][0];
+                $contentType = null;
+                if ($request->hasHeader('Content-Type')) {
+                    $contentType = $request->getHeader('Content-Type')[0];
                     $contentType = explode(';', $contentType);
                     $contentType = $contentType[0]; /* Remove charset. */
-                } else {
-                    $contentType = null;
                 }
 
                 $query = $request->getParsedBody();
@@ -104,19 +103,21 @@ abstract class Binding
                     return new HTTPPost();
                 } elseif (array_key_exists('SAMLart', $query)) {
                     return new HTTPArtifact();
-                } elseif (
+                } else {
                     /**
                      * The registration information for text/xml is in all respects the same
                      * as that given for application/xml (RFC 7303 - Section 9.1)
                      */
-                    ($contentType === 'text/xml' || $contentType === 'application/xml')
-                    // See paragraph 3.2.3 of Binding for SAML2 (OASIS)
-                    || (
-                        isset($_SERVER['HTTP_SOAPACTION'])
-                        && $_SERVER['HTTP_SOAPACTION'] === 'http://www.oasis-open.org/committees/security'
-                    )
-                ) {
-                    return new SOAP();
+                    if (
+                        ($contentType === 'text/xml' || $contentType === 'application/xml')
+                        // See paragraph 3.2.3 of Binding for SAML2 (OASIS)
+                        || (
+                            $request->hasHeader('SOAPAction')
+                            && $request->getHeader('SOAPAction')[0] === 'http://www.oasis-open.org/committees/security'
+                        )
+                    ) {
+                        return new SOAP();
+                    }
                 }
                 break;
         }
@@ -124,15 +125,13 @@ abstract class Binding
         $logger = Utils::getContainer()->getLogger();
         $logger->warning('Unable to find the SAML 2 binding used for this request.');
         $logger->warning('Request method: ' . var_export($method, true));
+
         if (!empty($query)) {
-            $logger->warning(sprintf(
-                '%s parameters: \'%s\'',
-                $method,
-                implode("', '", array_map('addslashes', array_keys($query))),
-            ));
+            $logger->warning($method . " parameters: '" . implode("', '", array_map('addslashes', array_keys($query))) . "'");
         }
-        if (isset($headers['CONTENT_TYPE'])) {
-            $logger->warning('Content-Type: ' . var_export($headers['CONTENT_TYPE'], true));
+
+        if ($request->hasHeader('Content-Type')) {
+            $logger->warning('Content-Type: ' . var_export($request->getHeader('Content-Type')[0], true));
         }
 
         throw new UnsupportedBindingException('Unable to find the SAML 2 binding used for this request.');
@@ -170,8 +169,9 @@ abstract class Binding
      * The message will be delivered to the destination set in the message.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message which should be sent.
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    abstract public function send(AbstractMessage $message): void;
+    abstract public function send(AbstractMessage $message): ResponseInterface;
 
 
     /**
