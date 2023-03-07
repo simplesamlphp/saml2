@@ -103,7 +103,9 @@ class HTTPRedirect extends Binding
     public function send(AbstractMessage $message): ResponseInterface
     {
         $destination = $this->getRedirectURL($message);
-        Utils::getContainer()->getLogger()->debug('Redirect to '.strlen($destination).' byte URL: '.$destination);
+        Utils::getContainer()->getLogger()->debug(
+            'Redirect to ' . strlen($destination) . ' byte URL: ' . $destination
+        );
         return new Response(303, ['Location' => $destination]);
     }
 

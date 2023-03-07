@@ -127,7 +127,9 @@ abstract class Binding
         $logger->warning('Request method: ' . var_export($method, true));
 
         if (!empty($query)) {
-            $logger->warning($method . " parameters: '" . implode("', '", array_map('addslashes', array_keys($query))) . "'");
+            $logger->warning(
+                $method . " parameters: '" . implode("', '", array_map('addslashes', array_keys($query))) . "'"
+            );
         }
 
         if ($request->hasHeader('Content-Type')) {

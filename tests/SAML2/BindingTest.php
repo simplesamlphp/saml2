@@ -107,7 +107,7 @@ final class BindingTest extends TestCase
 
         $q = ['AAP' => 'Noot'];
         $request = new ServerRequest('POST', 'http://tnyholm.se');
-        $request = $request->withParsedBody($q)->withAddedHeader('Content-Type', 'application/xml');;
+        $request = $request->withParsedBody($q)->withAddedHeader('Content-Type', 'application/xml');
         $bind = Binding::getCurrentBinding($request);
         $this->assertInstanceOf(SOAP::class, $bind);
 
