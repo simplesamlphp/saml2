@@ -110,6 +110,6 @@ final class DOMDocumentFactory
      */
     public static function create() : DOMDocument
     {
-        return new DOMDocument();
+        return new DOMDocument('1.0', 'UTF-8');
     }
 }
