@@ -90,10 +90,7 @@ class HTTPPost extends Binding
         }
 
         $msgStr = base64_decode($msgStr);
-
-        $xml = new DOMDocument();
-        $xml->loadXML($msgStr);
-        $msgStr = $xml->saveXML();
+        $msgStr = DOMDocumentFactory::fromString($msgStr)->saveXML();
 
         $document = DOMDocumentFactory::fromString($msgStr);
         Utils::getContainer()->debugMessage($document->documentElement, 'in');

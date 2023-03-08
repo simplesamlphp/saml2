@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
-use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
@@ -243,8 +242,7 @@ XML;
 
         $responseElement = $response->toXML();
 
-        $expectedStructureDocument = new DOMDocument();
-        $expectedStructureDocument->loadXML(<<<STATUSXML
+        $expectedStructureDocument = DOMDocumentFactory::fromString(<<<STATUSXML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
                 xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                 ID="123"

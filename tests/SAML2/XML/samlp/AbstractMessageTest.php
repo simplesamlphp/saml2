@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
-use DOMDocument;
 use DOMElement;
 use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
@@ -29,6 +28,8 @@ use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
+use function dirname;
+
 /**
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
@@ -41,8 +42,7 @@ final class AbstractMessageTest extends MockeryTestCase
      */
     public function testCorrectSignatureMethodCanBeExtractedFromAuthnRequest(): void
     {
-        $authnRequest = new DOMDocument();
-        $authnRequest->loadXML(<<<'AUTHNREQUEST'
+        $authnRequest = DOMDocumentFactory::fromString(<<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -85,8 +85,7 @@ AUTHNREQUEST
      */
     public function testIssuerParsedAsNameID(): void
     {
-        $authnRequest = new DOMDocument();
-        $authnRequest->loadXML(<<<AUTHNREQUEST
+        $authnRequest = DOMDocumentFactory::fromString(<<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -172,8 +171,9 @@ AUTHNREQUEST
      */
     public function testCorrectSignatureMethodCanBeExtractedFromResponse(): void
     {
-        $response = new DOMDocument();
-        $response->load(__DIR__ . '../../../../resources/xml/samlp_Response.xml');
+        $response = DOMDocumentFactory::fromFile(
+            dirname(__DIR__, 3) . '/resources/xml/samlp_Response.xml',
+        );
 
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
             C::SIG_RSA_SHA256,
@@ -199,8 +199,7 @@ AUTHNREQUEST
      */
     public function testGetExtensions(): void
     {
-        $authnRequest = new DOMDocument();
-        $authnRequest->loadXML(<<<'AUTHNREQUEST'
+        $authnRequest = DOMDocumentFactory::fromString(<<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"

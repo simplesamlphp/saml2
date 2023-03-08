@@ -62,7 +62,7 @@ final class ResponseTest extends TestCase
      */
     public function testToXMLResponseAppended(): void
     {
-        $doc = new DOMDocument();
+        $doc = new DOMDocument('1.0', 'UTF-8');
         $element = $doc->createElement('Foobar');
 
         $response = new Response('https://example.com/ACS');

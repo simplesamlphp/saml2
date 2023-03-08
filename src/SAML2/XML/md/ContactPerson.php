@@ -266,7 +266,7 @@ final class ContactPerson extends AbstractMdElement
             $name = array_key_first($attribute);
             $value = $attribute[$name];
 
-            $doc = new DOMDocument();
+            $doc = new DOMDocument('1.0', 'UTF-8');
             $elt = $doc->createElement("placeholder");
             $elt->setAttributeNS($ns, $name, $value);
 
