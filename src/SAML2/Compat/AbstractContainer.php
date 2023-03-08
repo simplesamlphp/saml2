@@ -125,13 +125,6 @@ abstract class AbstractContainer
 
 
     /**
-     * Generate a random identifier for identifying SAML2 documents.
-     * @return string
-     */
-    abstract public function generateId(): string;
-
-
-    /**
      * Log an incoming message to the debug log.
      *
      * Type can be either:

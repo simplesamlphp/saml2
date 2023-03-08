@@ -17,11 +17,6 @@ use function sys_get_temp_dir;
 class MockContainer extends AbstractContainer
 {
     /**
-     * @var string
-     */
-    private string $id = 's2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b';
-
-    /**
      * @var array
      */
     private array $debugMessages = [];
@@ -34,16 +29,6 @@ class MockContainer extends AbstractContainer
     public function getLogger(): LoggerInterface
     {
         return new NullLogger();
-    }
-
-
-    /**
-     * Generate a random identifier for identifying SAML2 documents.
-     * @return string
-     */
-    public function generateId(): string
-    {
-        return $this->id;
     }
 
 

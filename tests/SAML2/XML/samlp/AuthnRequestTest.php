@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Audience;
@@ -29,6 +28,7 @@ use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
 use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
 use SimpleSAML\SAML2\XML\samlp\RequesterID;
 use SimpleSAML\SAML2\XML\samlp\Scoping;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -560,6 +560,7 @@ AUTHNREQUEST;
         // basic AuthnRequest
         $request = new AuthnRequest(
             nameIdPolicy: $nameIdPolicy,
+            id: C::MSGID,
             issuer: $issuer,
             issueInstant: $issueInstant,
             destination: $destination,
@@ -570,7 +571,7 @@ AUTHNREQUEST;
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     Version="2.0"
-    ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
+    ID="_s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
     IssueInstant="2004-12-05T09:21:59Z"
     Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
     <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
@@ -609,6 +610,7 @@ AUTHNREQUEST;
         // basic AuthnRequest
         $request = new AuthnRequest(
             nameIdPolicy: $nameIdPolicy,
+            id: C::MSGID,
             issuer: $issuer,
             issueInstant: $issueInstant,
             destination: $destination,
@@ -619,7 +621,7 @@ AUTHNREQUEST;
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     Version="2.0"
-    ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
+    ID="_s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
     IssueInstant="2004-12-05T09:21:59Z"
     Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
     <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
@@ -700,6 +702,7 @@ AUTHNREQUEST;
         // basic AuthnRequest
         $request = new AuthnRequest(
             forceAuthn: $forceAuthn,
+            id: C::MSGID,
             issuer: $issuer,
             issueInstant: $issueInstant,
             destination: $destination,
@@ -710,7 +713,7 @@ AUTHNREQUEST;
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     Version="2.0"
-    ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
+    ID="_s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
     ForceAuthn="true"
     IssueInstant="2004-12-05T09:21:59Z"
     Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
@@ -808,6 +811,7 @@ AUTHNREQUEST;
         // basic AuthnRequest
         $request = new AuthnRequest(
             isPassive: $isPassive,
+            id: C::MSGID,
             issuer: $issuer,
             issueInstant: $issueInstant,
             destination: $destination,
@@ -818,7 +822,7 @@ AUTHNREQUEST;
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     Version="2.0"
-    ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
+    ID="_s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
     IsPassive="true"
     IssueInstant="2004-12-05T09:21:59Z"
     Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
@@ -854,6 +858,7 @@ AUTHNREQUEST;
         // basic AuthnRequest
         $request = new AuthnRequest(
             ProviderName: $providerName,
+            id: C::MSGID,
             issuer: $issuer,
             issueInstant: $issueInstant,
             destination: $destination,
@@ -864,7 +869,7 @@ AUTHNREQUEST;
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     Version="2.0"
-    ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
+    ID="_s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
     ProviderName="My Example SP"
     IssueInstant="2004-12-05T09:21:59Z"
     Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
@@ -977,6 +982,7 @@ AUTHNREQUEST;
         $request = new AuthnRequest(
             assertionConsumerServiceURL: $assertionConsumerServiceURL,
             protocolBinding: $protocolBinding,
+            id: C::MSGID,
             issuer: $issuer,
             issueInstant: $issueInstant,
             destination: $destination,
@@ -987,7 +993,7 @@ AUTHNREQUEST;
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     Version="2.0"
-    ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
+    ID="_s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
     IssueInstant="2004-12-05T09:21:59Z"
     Destination="https://idp.example.org/idp/profile/saml2/Redirect/SSO"
     AssertionConsumerServiceURL="https://sp.example.org/authentication/sp/consume-assertion"

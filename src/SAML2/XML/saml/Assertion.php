@@ -18,6 +18,7 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XML\Utils\Random as RandomUtils;
 use SimpleSAML\XMLSecurity\Utils\Security as SecurityUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
@@ -154,8 +155,7 @@ final class Assertion extends AbstractSamlElement implements
     public function getId(): string
     {
         if ($this->id === null) {
-            $container = ContainerSingleton::getInstance();
-            return $container->generateId();
+            return (new RandomUtils())->generateId();
         }
 
         return $this->id;

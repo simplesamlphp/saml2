@@ -29,4 +29,6 @@ class Constants extends \SimpleSAML\SAML2\Constants
     public const PROFILE_1 = 'urn:x-simplesamlphp:profile:one';
     public const PROFILE_2 = 'urn:x-simplesamlphp:profile:two';
     public const PROTOCOL = 'urn:x-simplesamlphp:protocol';
+
+    public const MSGID = '_s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b';
 }

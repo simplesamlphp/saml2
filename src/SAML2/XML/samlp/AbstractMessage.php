@@ -15,6 +15,7 @@ use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\XML\Utils\Random as RandomUtils;
 use SimpleSAML\XMLSecurity\Exception\NoSignatureFoundException;
 use SimpleSAML\XMLSecurity\Key\PublicKey;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
@@ -110,7 +111,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     public function getId(): string
     {
         if ($this->id === null) {
-            return Utils::getContainer()->generateId();
+            return (new RandomUtils())->generateId();
         }
 
         return $this->id;

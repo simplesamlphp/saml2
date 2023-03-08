@@ -13,13 +13,13 @@ use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\RetrievalMethod;
 use SimpleSAML\XMLSecurity\XML\ds\Transform;
@@ -110,6 +110,7 @@ final class EncryptedAssertionTest extends TestCase
     public function testEncryption(): void
     {
         $assertion = new Assertion(
+            id: C::MSGID,
             issuer: new Issuer('Test'),
             subject: new Subject(new NameID('Someone')),
         );
