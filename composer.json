@@ -18,8 +18,10 @@
     ],
     "require": {
         "php": "^8.0",
-        "ext-openssl": "*",
+        "ext-date": "*",
         "ext-dom": "*",
+        "ext-openssl": "*",
+        "ext-pcre": "*",
         "ext-zlib": "*",
 
         "nyholm/psr7": "^1.5.1",

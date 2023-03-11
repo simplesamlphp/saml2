@@ -22,7 +22,7 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ['8.0']
+        php-versions: ['8.2']
 
     steps:
       - name: Setup PHP, with composer and extensions
@@ -30,10 +30,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: mbstring, xml
+          extensions: ctype, date, dom, hash, mbstring, openssl, pcre, spl, xml
           tools: composer:v2
           ini-values: error_reporting=E_ALL, memory_limit=-1
-          coverage: pcov
+          coverage: none
 
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
@@ -61,10 +61,18 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
+      - name: Cache eduGAIN metadata
+        uses: actions/cache@v3
+        with:
+          path: /tmp/metadata
+          key: ${{ runner.os }}-metadata-${{ hashFiles('**/edugain-v2.lock') }}
+          restore-keys: ${{ runner.os }}-metadata-
+
       - name: Download eduGAIN metadata & public key
         run: |
-            wget https://mds.edugain.org/edugain-v2.xml -O /tmp/edugain.xml
-            wget https://technical.edugain.org/mds-v2.cer -O /tmp/edugain-pub.crt
+            mkdir -p /tmp/metadata
+            wget https://mds.edugain.org/edugain-v2.xml -O /tmp/metadata/edugain.xml
+            wget https://technical.edugain.org/mds-v2.cer -O /tmp/metadataedugain-pub.crt
 
       - name: Run unit tests
         run: |

@@ -27,6 +27,8 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: true
           LINTER_RULES_PATH: 'tools/linters'
+          VALIDATE_CSS: true
+          VALIDATE_JAVASCRIPT_ES: true
           VALIDATE_JSON: true
           VALIDATE_PHP_BUILTIN: true
           VALIDATE_YAML: true
@@ -42,14 +44,18 @@ jobs:
         # https://github.com/shivammathur/setup-php
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'
+          # Should be the higest supported version, so we can use the newest tools
+          php-version: '8.2'
           tools: composer:v2
-          extensions: dom, mbstring, openssl, xml, zlib
+          extensions: ctype, date, dom, hash, mbstring, openssl, pcre, spl, xml
 
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
 
       - uses: actions/checkout@v3
+
+      - name: Get composer cache directory
+        run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$GITHUB_ENV"
 
       - name: Cache composer dependencies
         uses: actions/cache@v3
@@ -65,28 +71,29 @@ jobs:
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: PHP Code Sniffer
-        run: php vendor/bin/phpcs
+        run: php vendor/simplesamlphp/simplesamlphp-test-framework/tools/phpcs
 
       - name: Psalm
         continue-on-error: true
         run: |
-          php vendor/bin/psalm \
+          php vendor/simplesamlphp/simplesamlphp-test-framework/tools/psalm \
           -c psalm.xml \
           --show-info=true \
           --shepherd \
           --php-version=${{ steps.setup-php.outputs.php-version }}
 
       - name: Psalm (testsuite)
-        continue-on-error: true
         run: |
-          php vendor/bin/psalm \
+          php vendor/simplesamlphp/simplesamlphp-test-framework/tools/psalm \
           -c psalm-dev.xml \
           --show-info=true \
           --shepherd \
           --php-version=${{ steps.setup-php.outputs.php-version }}
+
       - name: Psalter
         run: |
-          php vendor/bin/psalter \
+          php vendor/simplesamlphp/simplesamlphp-test-framework/tools/psalm \
+          --alter \
           --issues=UnnecessaryVarAnnotation \
           --dry-run \
           --php-version=${{ steps.setup-php.outputs.php-version }}
@@ -99,8 +106,9 @@ jobs:
         # https://github.com/shivammathur/setup-php
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.1'
-          extensions: dom, mbstring, openssl, xml, zlib
+          # Should be the lowest supported version
+          php-version: '8.0'
+          extensions: ctype, date, dom, hash, mbstring, openssl, pcre, spl, xml
           tools: composer:v2
           coverage: none
 
@@ -108,6 +116,9 @@ jobs:
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
 
       - uses: actions/checkout@v3
+
+      - name: Get composer cache directory
+        run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$GITHUB_ENV"
 
       - name: Cache composer dependencies
         uses: actions/cache@v3
@@ -125,7 +136,7 @@ jobs:
       - name: Update Composer dependencies
         run: composer update --no-progress --prefer-dist --optimize-autoloader
 
-      - name: Security check for locked dependencies
+      - name: Security check for updated dependencies
         run: composer audit
 
   unit-tests-linux:
@@ -144,10 +155,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: dom, mbstring, openssl, soap, xml
+          extensions: ctype, date, dom, hash, mbstring, openssl, pcre, spl, xml
           tools: composer:v2
           ini-values: error_reporting=E_ALL
-          coverage: xdebug
+          coverage: pcov
 
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
@@ -159,6 +170,7 @@ jobs:
         run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
+
       - uses: actions/checkout@v3
 
       - name: Get composer cache directory
@@ -175,19 +187,20 @@ jobs:
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: Run unit tests with coverage
-        if: ${{ matrix.php-versions == '8.1' }}
-        run: ./vendor/bin/phpunit
+        if: ${{ matrix.php-versions == '8.2' }}
+        run: vendor/bin/phpunit
 
       - name: Run unit tests (no coverage)
-        if: ${{ matrix.php-versions != '8.1' }}
-        run: ./vendor/bin/phpunit --no-coverage
+        if: ${{ matrix.php-versions != '8.2' }}
+        run: vendor/bin/phpunit --no-coverage
 
       - name: Save coverage data
-        if: ${{ matrix.php-versions == '8.1' }}
+        if: ${{ matrix.php-versions == '8.2' }}
         uses: actions/upload-artifact@v3
         with:
           name: coverage-data
-          path: ${{ github.workspace }}/build
+          # The build-directory alone is not enough to make codecov work
+          path: ${{ github.workspace }}
 
   unit-tests-windows:
     name: "Syntax and unit tests, PHP ${{ matrix.php-versions }}, ${{ matrix.operating-system }}"
@@ -205,10 +218,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: dom, mbstring, openssl, soap, xml
+          extensions: ctype, date, dom, hash, mbstring, openssl, pcre, spl, xml
           tools: composer:v2
           ini-values: error_reporting=E_ALL
-          coverage: xdebug
+          coverage: none
 
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
@@ -220,6 +233,7 @@ jobs:
         run: |
           git config --global core.autocrlf false
           git config --global core.eol lf
+
       - uses: actions/checkout@v3
 
       - name: Get composer cache directory
@@ -236,7 +250,7 @@ jobs:
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: Run unit tests
-        run: ./vendor/bin/phpunit --no-coverage
+        run: vendor/bin/phpunit --no-coverage
 
   coverage:
     name: Code coverage
