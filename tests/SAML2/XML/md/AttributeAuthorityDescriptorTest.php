@@ -15,11 +15,11 @@ use SimpleSAML\SAML2\XML\md\NameIDFormat;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
@@ -54,12 +54,12 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-metadata-2.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
         $this->testedClass = AttributeAuthorityDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_AttributeAuthorityDescriptor.xml',
+            dirname(__FILE__, 5) . '/resources/xml/md_AttributeAuthorityDescriptor.xml',
         );
         $this->as = new AttributeService(
             C::BINDING_SOAP,

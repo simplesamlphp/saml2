@@ -10,10 +10,10 @@ use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\samlp\GetComplete;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;
@@ -36,12 +36,12 @@ final class IDPListTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-protocol-2.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
         $this->testedClass = IDPList::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_IDPList.xml',
+            dirname(__FILE__, 5) . '/resources/xml/samlp_IDPList.xml',
         );
     }
 

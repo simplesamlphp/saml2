@@ -18,10 +18,10 @@ use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
@@ -172,7 +172,7 @@ AUTHNREQUEST
     public function testCorrectSignatureMethodCanBeExtractedFromResponse(): void
     {
         $response = DOMDocumentFactory::fromFile(
-            dirname(__DIR__, 3) . '/resources/xml/samlp_Response.xml',
+            dirname(__DIR__, 4) . '/resources/xml/samlp_Response.xml',
         );
 
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(

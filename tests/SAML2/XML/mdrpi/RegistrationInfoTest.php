@@ -9,11 +9,11 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy;
-use SimpleSAML\Test\XML\ArrayizableElementTestTrait;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
@@ -38,12 +38,12 @@ final class RegistrationInfoTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-metadata-rpi-v1.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
 
         $this->testedClass = RegistrationInfo::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdrpi_RegistrationInfo.xml',
+            dirname(__FILE__, 5) . '/resources/xml/mdrpi_RegistrationInfo.xml',
         );
 
         $this->arrayRepresentation = [

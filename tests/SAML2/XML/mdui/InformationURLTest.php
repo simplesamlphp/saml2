@@ -9,11 +9,11 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\mdui\InformationURL;
-use SimpleSAML\Test\XML\ArrayizableElementTestTrait;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;
@@ -39,12 +39,12 @@ final class InformationURLTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
 
         $this->testedClass = InformationURL::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdui_InformationURL.xml',
+            dirname(__FILE__, 5) . '/resources/xml/mdui_InformationURL.xml',
         );
 
         $this->arrayRepresentation = ['en' => 'http://www.example.edu/en/'];

@@ -16,12 +16,12 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\samlp\LogoutRequest;
 use SimpleSAML\SAML2\XML\samlp\SessionIndex;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Key\PrivateKey;
@@ -64,12 +64,12 @@ final class LogoutRequestTest extends MockeryTestCase
      */
     public function setUp(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-protocol-2.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
         $this->testedClass = LogoutRequest::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_LogoutRequest.xml',
+            dirname(__FILE__, 5) . '/resources/xml/samlp_LogoutRequest.xml',
         );
     }
 
@@ -182,7 +182,7 @@ final class LogoutRequestTest extends MockeryTestCase
     public function testEncryptedNameId(): void
     {
         $eid = EncryptedID::fromXML(DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedID.xml',
+            dirname(__FILE__, 5) . '/resources/xml/saml_EncryptedID.xml',
         )->documentElement);
 
         $logoutRequest = new LogoutRequest($eid);

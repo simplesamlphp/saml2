@@ -59,7 +59,7 @@ final class PrivateKeyLoaderTest extends TestCase
      *
      * @return array
      */
-    public function privateKeyTestProvider(): array
+    public static function privateKeyTestProvider(): array
     {
         return [
             'no passphrase' => [

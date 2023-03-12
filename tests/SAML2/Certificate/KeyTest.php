@@ -90,7 +90,7 @@ final class KeyTest extends TestCase
     /**
      * @return array
      */
-    public function functionProvider(): array
+    public static function functionProvider(): array
     {
         return [
             'offsetGet' => ['offsetGet', [0]],

@@ -8,9 +8,9 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\SAML2\XML\mdui\DomainHint;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;
@@ -32,12 +32,12 @@ final class DomainHintTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
 
         $this->testedClass = DomainHint::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdui_DomainHint.xml',
+            dirname(__FILE__, 5) . '/resources/xml/mdui_DomainHint.xml',
         );
     }
 

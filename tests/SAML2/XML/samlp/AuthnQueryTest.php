@@ -14,12 +14,12 @@ use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\samlp\AuthnQuery;
 use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -46,12 +46,12 @@ final class AuthnQueryTest extends TestCase
      */
     public function setup(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-protocol-2.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
         $this->testedClass = AuthnQuery::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_AuthnQuery.xml',
+            dirname(__FILE__, 5) . '/resources/xml/samlp_AuthnQuery.xml',
         );
     }
 

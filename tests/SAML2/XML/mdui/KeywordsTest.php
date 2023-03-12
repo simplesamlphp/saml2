@@ -10,9 +10,9 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\mdui\Keywords;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\Test\XML\ArrayizableElementTestTrait;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
@@ -36,12 +36,12 @@ final class KeywordsTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
 
         $this->testedClass = Keywords::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdui_Keywords.xml',
+            dirname(__FILE__, 5) . '/resources/xml/mdui_Keywords.xml',
         );
 
         $this->arrayRepresentation = [

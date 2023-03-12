@@ -8,12 +8,12 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\alg\SigningMethod;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 
 use function dirname;
 use function strval;
@@ -37,12 +37,12 @@ final class SigningMethodTest extends TestCase
     protected function setUp(): void
     {
         $this->schema = dirname(__FILE__, 5)
-            . '/schemas/sstc-saml-metadata-algsupport-v1.0.xsd';
+            . '/resources/schemas/sstc-saml-metadata-algsupport-v1.0.xsd';
 
         $this->testedClass = SigningMethod::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/alg_SigningMethod.xml'
+            dirname(__FILE__, 5) . '/resources/xml/alg_SigningMethod.xml'
         );
     }
 

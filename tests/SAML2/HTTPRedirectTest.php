@@ -8,7 +8,6 @@ use Exception;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\Error\Warning;
-use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\HTTPRedirect;
@@ -18,6 +17,7 @@ use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 

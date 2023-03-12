@@ -7,9 +7,9 @@ namespace SimpleSAML\Test\SAML2\XML\shibmd;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\shibmd\KeyAuthority;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\X509Certificate;
@@ -35,12 +35,12 @@ final class KeyAuthorityTest extends TestCase
      */
     public function setUp(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/schemas/sstc-saml-metadata-shibmd-v1.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-shibmd-v1.0.xsd';
 
         $this->testedClass = KeyAuthority::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/shibmd_KeyAuthority.xml',
+            dirname(__FILE__, 5) . '/resources/xml/shibmd_KeyAuthority.xml',
         );
     }
 

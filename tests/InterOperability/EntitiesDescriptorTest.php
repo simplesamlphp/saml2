@@ -38,7 +38,7 @@ final class EntitiesDescriptorTest extends TestCase
     /**
      * @return array
      */
-    public function provideMetadata(): array
+    public static function provideMetadata(): array
     {
         return [
             'eduGAIN' => [

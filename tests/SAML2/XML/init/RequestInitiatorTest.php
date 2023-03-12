@@ -11,9 +11,9 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\init\RequestInitiator;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;
@@ -35,12 +35,12 @@ final class RequestInitiatorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/schemas/sstc-request-initiation.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-request-initiation.xsd';
 
         $this->testedClass = RequestInitiator::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/init_RequestInitiator.xml',
+            dirname(__FILE__, 5) . '/resources/xml/init_RequestInitiator.xml',
         );
     }
 

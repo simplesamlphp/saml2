@@ -225,7 +225,7 @@ final class UtilsTest extends TestCase
     /**
      * @return array
      */
-    public function xsDateTimes(): array
+    public static function xsDateTimes(): array
     {
         return [
             [true, '2015-01-01T00:00:00Z', 1420070400],

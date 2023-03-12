@@ -16,12 +16,12 @@ use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\md\GivenName;
 use SimpleSAML\SAML2\XML\md\SurName;
 use SimpleSAML\SAML2\XML\md\TelephoneNumber;
-use SimpleSAML\Test\XML\ArrayizableElementTestTrait;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
@@ -45,12 +45,12 @@ final class ContactPersonTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-metadata-2.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
         $this->testedClass = ContactPerson::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_ContactPerson.xml',
+            dirname(__FILE__, 5) . '/resources/xml/md_ContactPerson.xml',
         );
 
         $this->arrayRepresentation = [

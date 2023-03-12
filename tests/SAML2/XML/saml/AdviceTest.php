@@ -11,10 +11,10 @@ use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\AssertionIDRef;
 use SimpleSAML\SAML2\XML\saml\AssertionURIRef;
 use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;
@@ -49,28 +49,28 @@ final class AdviceTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-assertion-2.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
         $this->testedClass = Advice::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_Advice.xml',
+            dirname(__FILE__, 5) . '/resources/xml/saml_Advice.xml',
         );
 
         $this->assertionIDRef = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AssertionIDRef.xml',
+            dirname(__FILE__, 5) . '/resources/xml/saml_AssertionIDRef.xml',
         );
 
         $this->assertionURIRef = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AssertionURIRef.xml',
+            dirname(__FILE__, 5) . '/resources/xml/saml_AssertionURIRef.xml',
         );
 
         $this->assertion = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_Assertion.xml',
+            dirname(__FILE__, 5) . '/resources/xml/saml_Assertion.xml',
         );
 
         $this->encryptedAssertion = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedAssertion.xml',
+            dirname(__FILE__, 5) . '/resources/xml/saml_EncryptedAssertion.xml',
         );
     }
 

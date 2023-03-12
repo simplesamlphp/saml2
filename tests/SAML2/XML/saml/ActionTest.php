@@ -10,8 +10,8 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Action;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;
@@ -35,7 +35,7 @@ final class ActionTest extends TestCase
         $this->testedClass = Action::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_Action.xml',
+            dirname(__FILE__, 5) . '/resources/xml/saml_Action.xml',
         );
     }
 

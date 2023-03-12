@@ -9,11 +9,11 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy;
-use SimpleSAML\Test\XML\ArrayizableElementTestTrait;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;
@@ -39,12 +39,12 @@ final class RegistrationPolicyTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-metadata-rpi-v1.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
 
         $this->testedClass = RegistrationPolicy::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdrpi_RegistrationPolicy.xml',
+            dirname(__FILE__, 5) . '/resources/xml/mdrpi_RegistrationPolicy.xml',
         );
 
         $this->arrayRepresentation = ['en' => 'http://www.example.edu/en/'];

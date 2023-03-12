@@ -10,11 +10,11 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
 use SimpleSAML\SAML2\XML\md\AssertionConsumerService;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;
@@ -36,12 +36,12 @@ final class IndexedEndpointTypeTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-metadata-2.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
         $this->testedClass = AssertionConsumerService::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_AssertionConsumerService.xml',
+            dirname(__FILE__, 5) . '/resources/xml/md_AssertionConsumerService.xml',
         );
     }
 

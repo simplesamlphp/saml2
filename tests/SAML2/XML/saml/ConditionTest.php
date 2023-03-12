@@ -12,9 +12,9 @@ use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\UnknownCondition;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\CustomCondition;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;
@@ -38,12 +38,12 @@ final class ConditionTest extends TestCase
      */
     public function setup(): void
     {
-        $this->schema = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/simplesamlphp.xsd';
 
         $this->testedClass = CustomCondition::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_Condition.xml',
+            dirname(__FILE__, 5) . '/resources/xml/saml_Condition.xml',
         );
 
         $container = new MockContainer();

@@ -34,7 +34,7 @@ final class AbstractLocalizedNameTest extends TestCase
     protected function setUp(): void
     {
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_ServiceDescription.xml',
+            dirname(__FILE__, 5) . '/resources/xml/md_ServiceDescription.xml',
         );
     }
 

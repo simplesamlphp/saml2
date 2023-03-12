@@ -11,11 +11,11 @@ use SimpleSAML\SAML2\XML\md\Organization;
 use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
 use SimpleSAML\SAML2\XML\md\OrganizationName;
 use SimpleSAML\SAML2\XML\md\OrganizationURL;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;
@@ -37,12 +37,12 @@ final class OrganizationTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/schemas/saml-schema-metadata-2.0.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
         $this->testedClass = Organization::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_Organization.xml',
+            dirname(__FILE__, 5) . '/resources/xml/md_Organization.xml',
         );
     }
 

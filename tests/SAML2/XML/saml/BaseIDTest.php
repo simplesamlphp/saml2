@@ -12,10 +12,10 @@ use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\SAML2\XML\saml\UnknownID;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\CustomBaseID;
-use SimpleSAML\Test\XML\SchemaValidationTestTrait;
-use SimpleSAML\Test\XML\SerializableElementTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;
@@ -39,12 +39,12 @@ final class BaseIDTest extends TestCase
      */
     public function setup(): void
     {
-        $this->schema = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/simplesamlphp.xsd';
 
         $this->testedClass = AbstractBaseID::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_BaseID.xml',
+            dirname(__FILE__, 5) . '/resources/xml/saml_BaseID.xml',
         );
 
         $container = new MockContainer();
