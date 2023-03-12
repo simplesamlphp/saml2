@@ -43,7 +43,7 @@ final class EntitiesDescriptorTest extends TestCase
         return [
             'eduGAIN' => [
                 true,
-                DOMDocumentFactory::fromFile('/tmp/edugain.xml')->documentElement,
+                DOMDocumentFactory::fromFile('/tmp/metadata/edugain.xml')->documentElement,
             ],
         ];
     }
