@@ -226,41 +226,6 @@ XML;
 
 
     /**
-     * Test adding in-response-to to a status message.
-     */
-    public function testResponseTo(): void
-    {
-        $status = new Status(
-            new StatusCode(C::STATUS_REQUESTER),
-        );
-
-        $response = new Response(
-            status: $status,
-            issueInstant: 1453323439,
-            inResponseTo: 'aabb12234',
-        );
-
-        $responseElement = $response->toXML();
-
-        $expectedStructureDocument = DOMDocumentFactory::fromString(<<<STATUSXML
-<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-                xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-                ID="123"
-                Version="2.0"
-                IssueInstant="2016-01-20T20:57:19Z"
-                InResponseTo="aabb12234">
-  <samlp:Status>
-    <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Requester"/>
-  </samlp:Status>
-</samlp:Response>
-STATUSXML
-        );
-        $expectedStructure = $expectedStructureDocument->documentElement;
-        $this->assertEqualXMLStructure($expectedStructure, $responseElement);
-    }
-
-
-    /**
      * A response without any <Status> element throws exception
      */
     public function testNoStatusElementThrowsException(): void

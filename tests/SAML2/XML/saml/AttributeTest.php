@@ -15,7 +15,7 @@ use SimpleSAML\SAML2\XML\saml\EncryptedAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\Testutils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\Key\PublicKey;

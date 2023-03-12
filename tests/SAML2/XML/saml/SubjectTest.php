@@ -246,7 +246,8 @@ XML
             $document->importNode($this->subjectConfirmation->documentElement, true),
         );
 
-        $this->assertEqualXMLStructure($document->documentElement, $subject->toXML());
+        $this->assertXmlStringEqualsXmlString($document->saveXML(), strval($subject));
+//        $this->assertEqualXMLStructure($document->documentElement, $subject->toXML());
     }
 
 
@@ -267,7 +268,7 @@ XML
         $this->assertNotNull($subject->getIdentifier());
         $this->assertInstanceOf(NameID::class, $subject->getIdentifier());
 
-        $this->assertEqualXMLStructure($document->documentElement, $subject->toXML());
+        $this->assertXmlStringEqualsXmlString($document->saveXML(), strval($subject));
     }
 
 

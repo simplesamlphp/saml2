@@ -44,7 +44,7 @@ final class NameIDPolicyTest extends TestCase
 
     /**
      */
-    public function testMarshalling(): void
+    public function testMarshallingChristmas(): void
     {
         $nameIdPolicy = new NameIDPolicy(
             'urn:the:format',
@@ -54,6 +54,25 @@ final class NameIDPolicyTest extends TestCase
 
         $this->assertEquals(
             $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($nameIdPolicy)
+        );
+    }
+
+
+    /**
+     */
+    public function testMarshallingFormatOnly(): void
+    {
+        $xmlRepresentation = DOMDocumentFactory::fromString(
+            '<samlp:NameIDPolicy xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" Format="urn:the:format"/>'
+        );
+
+        $nameIdPolicy = new NameIDPolicy(
+            'urn:the:format',
+        );
+
+        $this->assertEquals(
+            $xmlRepresentation->saveXML($xmlRepresentation->documentElement),
             strval($nameIdPolicy)
         );
     }
