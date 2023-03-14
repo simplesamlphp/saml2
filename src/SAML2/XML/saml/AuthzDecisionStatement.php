@@ -118,7 +118,7 @@ final class AuthzDecisionStatement extends AbstractStatementType
             $evidence,
             1,
             'Too many <saml:Evidence> in <saml:AuthzDecisionStatement>',
-            TooManyElementException::class,
+            TooManyElementsException::class,
         );
 
         return new static(
