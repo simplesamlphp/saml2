@@ -44,7 +44,7 @@ final class AssertionIDRequestTest extends TestCase
         $this->testedClass = AssertionIDRequest::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/samlp_AssertionIDRequest.xml',
+            dirname(__FILE__, 4) . '/resources/xml/samlp_AssertionIDRequest.xml',
         );
     }
 

@@ -35,7 +35,7 @@ final class ActionTest extends TestCase
         $this->testedClass = Action::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_Action.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_Action.xml',
         );
     }
 

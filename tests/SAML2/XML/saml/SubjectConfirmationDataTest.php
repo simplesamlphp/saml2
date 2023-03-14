@@ -39,7 +39,7 @@ final class SubjectConfirmationDataTest extends TestCase
         $this->testedClass = SubjectConfirmationData::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_SubjectConfirmationData.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_SubjectConfirmationData.xml',
         );
     }
 

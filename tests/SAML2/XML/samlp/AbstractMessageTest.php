@@ -172,7 +172,7 @@ AUTHNREQUEST
     public function testCorrectSignatureMethodCanBeExtractedFromResponse(): void
     {
         $response = DOMDocumentFactory::fromFile(
-            dirname(__DIR__, 4) . '/resources/xml/samlp_Response.xml',
+            dirname(__DIR__, 3) . '/resources/xml/samlp_Response.xml',
         );
 
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(

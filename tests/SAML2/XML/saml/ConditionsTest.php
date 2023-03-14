@@ -40,7 +40,7 @@ final class ConditionsTest extends TestCase
         $this->testedClass = Conditions::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_Conditions.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_Conditions.xml',
         );
     }
 

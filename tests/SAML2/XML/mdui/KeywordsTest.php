@@ -41,7 +41,7 @@ final class KeywordsTest extends TestCase
         $this->testedClass = Keywords::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/mdui_Keywords.xml',
+            dirname(__FILE__, 4) . '/resources/xml/mdui_Keywords.xml',
         );
 
         $this->arrayRepresentation = [

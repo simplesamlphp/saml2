@@ -58,7 +58,7 @@ final class IDPSSODescriptorTest extends TestCase
         $this->testedClass = IDPSSODescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_IDPSSODescriptor.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_IDPSSODescriptor.xml',
         );
     }
 

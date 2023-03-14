@@ -40,7 +40,7 @@ final class ArtifactResolveTest extends TestCase
         $this->testedClass = ArtifactResolve::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/samlp_ArtifactResolve.xml',
+            dirname(__FILE__, 4) . '/resources/xml/samlp_ArtifactResolve.xml',
         );
     }
 

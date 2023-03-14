@@ -37,7 +37,7 @@ final class DomainHintTest extends TestCase
         $this->testedClass = DomainHint::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/mdui_DomainHint.xml',
+            dirname(__FILE__, 4) . '/resources/xml/mdui_DomainHint.xml',
         );
     }
 

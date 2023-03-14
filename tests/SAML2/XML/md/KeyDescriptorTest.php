@@ -41,7 +41,7 @@ final class KeyDescriptorTest extends TestCase
         $this->testedClass = KeyDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_KeyDescriptor.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_KeyDescriptor.xml',
         );
     }
 

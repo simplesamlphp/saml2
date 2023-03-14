@@ -40,7 +40,7 @@ final class RequestedAuthnContextTest extends TestCase
         $this->testedClass = RequestedAuthnContext::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/samlp_RequestedAuthnContext.xml',
+            dirname(__FILE__, 4) . '/resources/xml/samlp_RequestedAuthnContext.xml',
         );
     }
 

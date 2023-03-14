@@ -36,7 +36,7 @@ final class AssertionIDRefTest extends TestCase
         $this->testedClass = AssertionIDRef::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_AssertionIDRef.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_AssertionIDRef.xml',
         );
     }
 

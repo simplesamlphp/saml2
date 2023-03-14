@@ -53,7 +53,7 @@ final class PDPDescriptorTest extends TestCase
         $this->testedClass = PDPDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_PDPDescriptor.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_PDPDescriptor.xml',
         );
 
         $this->authzService = new AuthzService(

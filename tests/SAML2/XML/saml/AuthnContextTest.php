@@ -58,23 +58,23 @@ final class AuthnContextTest extends TestCase
         $this->testedClass = AuthnContext::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_AuthnContext.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContext.xml',
         );
 
         $this->classRef = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_AuthnContextClassRef.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextClassRef.xml',
         );
 
         $this->declRef = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_AuthnContextDeclRef.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextDeclRef.xml',
         );
 
         $this->decl = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_AuthnContextDecl.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextDecl.xml',
         );
 
         $this->authority = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_AuthenticatingAuthority.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthenticatingAuthority.xml',
         );
     }
 

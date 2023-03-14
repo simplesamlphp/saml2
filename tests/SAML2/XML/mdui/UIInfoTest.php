@@ -49,7 +49,7 @@ final class UIInfoTest extends TestCase
         $this->testedClass = UIInfo::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/mdui_UIInfo.xml',
+            dirname(__FILE__, 4) . '/resources/xml/mdui_UIInfo.xml',
         );
 
         $this->arrayRepresentation = [

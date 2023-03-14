@@ -51,7 +51,7 @@ IMG;
         $this->testedClass = Logo::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/mdui_Logo.xml',
+            dirname(__FILE__, 4) . '/resources/xml/mdui_Logo.xml',
         );
 
         $this->arrayRepresentation = [

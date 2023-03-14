@@ -39,7 +39,7 @@ final class StatusDetailTest extends TestCase
         $this->testedClass = StatusDetail::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/samlp_StatusDetail.xml',
+            dirname(__FILE__, 4) . '/resources/xml/samlp_StatusDetail.xml',
         );
     }
 

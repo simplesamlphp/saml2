@@ -37,7 +37,7 @@ final class CompanyTest extends TestCase
         $this->testedClass = Company::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_Company.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_Company.xml',
         );
     }
 

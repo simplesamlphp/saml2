@@ -58,7 +58,7 @@ final class SubjectTest extends TestCase
         $this->testedClass = Subject::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_Subject.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_Subject.xml',
         );
 
         $this->subject = DOMDocumentFactory::fromString(<<<XML
@@ -66,13 +66,13 @@ final class SubjectTest extends TestCase
 XML
         );
         $this->baseId = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_BaseID.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_BaseID.xml',
         );
         $this->nameId = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_NameID.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_NameID.xml',
         );
         $this->subjectConfirmation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_SubjectConfirmation.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_SubjectConfirmation.xml',
         );
     }
 

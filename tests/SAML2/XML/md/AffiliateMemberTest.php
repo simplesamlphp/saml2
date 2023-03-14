@@ -41,7 +41,7 @@ final class AffiliateMemberTest extends TestCase
         $this->testedClass = AffiliateMember::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_AffiliateMember.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_AffiliateMember.xml',
         );
     }
 

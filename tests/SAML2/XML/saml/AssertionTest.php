@@ -73,7 +73,7 @@ final class AssertionTest extends MockeryTestCase
         $this->testedClass = Assertion::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_Assertion.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_Assertion.xml',
         );
 
         $container = new MockContainer();
@@ -662,7 +662,7 @@ XML;
      */
     public function testVerifySignedAssertion(): void
     {
-        $doc = DOMDocumentFactory::fromFile('resources/xml/assertions/signedassertion.xml');
+        $doc = DOMDocumentFactory::fromFile('tests/resources/xml/assertions/signedassertion.xml');
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
@@ -689,7 +689,7 @@ XML;
      */
     public function testCommentsInSignedAssertion(): void
     {
-        $doc = DOMDocumentFactory::fromFile('resources/xml/assertions/signedassertion_with_comments.xml');
+        $doc = DOMDocumentFactory::fromFile('tests/resources/xml/assertions/signedassertion_with_comments.xml');
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
@@ -714,7 +714,7 @@ XML;
      */
     public function testVerifySignedAssertionChangedBody(): void
     {
-        $doc = DOMDocumentFactory::fromFile('resources/xml/assertions/signedassertion_tampered.xml');
+        $doc = DOMDocumentFactory::fromFile('tests/resources/xml/assertions/signedassertion_tampered.xml');
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
@@ -735,7 +735,7 @@ XML;
      */
     public function testVerifySignedAssertionWrongAlgorithm(): void
     {
-        $doc = DOMDocumentFactory::fromFile('resources/xml/assertions/signedassertion.xml');
+        $doc = DOMDocumentFactory::fromFile('tests/resources/xml/assertions/signedassertion.xml');
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
@@ -756,7 +756,7 @@ XML;
      */
     public function testVerifySignedAssertionWrongKey(): void
     {
-        $doc = DOMDocumentFactory::fromFile('resources/xml/assertions/signedassertion.xml');
+        $doc = DOMDocumentFactory::fromFile('tests/resources/xml/assertions/signedassertion.xml');
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(

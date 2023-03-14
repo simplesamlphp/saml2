@@ -42,7 +42,7 @@ final class DigestMethodTest extends TestCase
         $this->testedClass = DigestMethod::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/alg_DigestMethod.xml'
+            dirname(__FILE__, 4) . '/resources/xml/alg_DigestMethod.xml'
         );
     }
 

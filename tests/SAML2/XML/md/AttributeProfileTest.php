@@ -39,7 +39,7 @@ final class AttributeProfileTest extends TestCase
         $this->testedClass = AttributeProfile::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_AttributeProfile.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_AttributeProfile.xml',
         );
     }
 

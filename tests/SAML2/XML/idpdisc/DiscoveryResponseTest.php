@@ -41,7 +41,7 @@ final class DiscoveryEndpointTest extends TestCase
         $this->testedClass = DiscoveryResponse::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/idpdisc_DiscoveryResponse.xml',
+            dirname(__FILE__, 4) . '/resources/xml/idpdisc_DiscoveryResponse.xml',
         );
     }
 

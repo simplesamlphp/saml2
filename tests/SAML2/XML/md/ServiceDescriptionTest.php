@@ -43,7 +43,7 @@ final class ServiceDescriptionTest extends TestCase
         $this->testedClass = ServiceDescription::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_ServiceDescription.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_ServiceDescription.xml',
         );
 
         $this->arrayDocument = ['en' => 'Academic Journals R US and only us'];

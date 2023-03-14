@@ -39,12 +39,12 @@ final class EncryptionMethodTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/simplesamlphp.xsd';
+        $this->schema = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
 
         $this->testedClass = EncryptionMethod::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_EncryptionMethod.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_EncryptionMethod.xml',
         );
     }
 

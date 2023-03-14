@@ -43,7 +43,7 @@ final class RegistrationInfoTest extends TestCase
         $this->testedClass = RegistrationInfo::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/mdrpi_RegistrationInfo.xml',
+            dirname(__FILE__, 4) . '/resources/xml/mdrpi_RegistrationInfo.xml',
         );
 
         $this->arrayRepresentation = [

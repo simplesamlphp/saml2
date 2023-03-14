@@ -39,7 +39,7 @@ final class NameIDFormatTest extends TestCase
         $this->testedClass = NameIDFormat::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_NameIDFormat.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_NameIDFormat.xml',
         );
     }
 

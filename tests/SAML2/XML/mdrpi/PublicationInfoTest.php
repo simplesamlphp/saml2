@@ -43,7 +43,7 @@ final class PublicationInfoTest extends TestCase
         $this->testedClass = PublicationInfo::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/mdrpi_PublicationInfo.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdrpi_PublicationInfo.xml'
         );
 
         $this->arrayRepresentation = [

@@ -54,7 +54,7 @@ final class ExtensionsTest extends TestCase
         $this->testedClass = Extensions::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_Extensions.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_Extensions.xml',
         );
         $this->xmlRepresentation->normalizeDocument();
     }

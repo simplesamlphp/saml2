@@ -43,11 +43,11 @@ final class AuthzDecisionStatementTest extends TestCase
         $this->testedClass = AuthzDecisionStatement::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_AuthzDecisionStatement.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthzDecisionStatement.xml',
         );
 
         $this->evidence = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_Evidence.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_Evidence.xml',
         );
     }
 

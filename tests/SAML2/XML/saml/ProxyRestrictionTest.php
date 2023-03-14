@@ -37,7 +37,7 @@ final class ProxyRestrictionTest extends TestCase
         $this->testedClass = ProxyRestriction::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_ProxyRestriction.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_ProxyRestriction.xml',
         );
     }
 

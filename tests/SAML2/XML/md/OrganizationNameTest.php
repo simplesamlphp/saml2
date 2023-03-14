@@ -41,7 +41,7 @@ final class OrganizationNameTest extends TestCase
         $this->testedClass = OrganizationName::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_OrganizationName.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_OrganizationName.xml',
         );
 
         $this->arrayRepresentation = ['en' => 'Identity Providers R US'];

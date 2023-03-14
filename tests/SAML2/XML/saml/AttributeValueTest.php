@@ -37,7 +37,7 @@ final class AttributeValueTest extends TestCase
         $this->testedClass = AttributeValue::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_AttributeValue.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_AttributeValue.xml',
         );
     }
 

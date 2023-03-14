@@ -49,7 +49,7 @@ final class AffiliationDescriptorTest extends TestCase
         $this->testedClass = AffiliationDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_AffiliationDescriptor.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_AffiliationDescriptor.xml',
         );
     }
 

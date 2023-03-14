@@ -57,7 +57,7 @@ final class EncryptedAssertionTest extends TestCase
         $this->testedClass = EncryptedAssertion::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_EncryptedAssertion.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedAssertion.xml',
         );
 
         $container = new MockContainer();

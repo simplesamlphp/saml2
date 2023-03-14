@@ -71,7 +71,7 @@ final class EntityDescriptorTest extends TestCase
         $this->testedClass = EntityDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_EntityDescriptor.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_EntityDescriptor.xml',
         );
     }
 

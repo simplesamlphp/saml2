@@ -45,7 +45,7 @@ final class AttributeConsumingServiceTest extends TestCase
         $this->testedClass = AttributeConsumingService::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_AttributeConsumingService.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_AttributeConsumingService.xml',
         );
     }
 

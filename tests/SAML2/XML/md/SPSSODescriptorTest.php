@@ -66,7 +66,7 @@ final class SPSSODescriptorTest extends TestCase
         $this->testedClass = SPSSODescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_SPSSODescriptor.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_SPSSODescriptor.xml',
         );
     }
 

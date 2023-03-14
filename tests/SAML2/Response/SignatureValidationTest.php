@@ -155,7 +155,7 @@ final class SignatureValidationTest extends MockeryTestCase
     {
         $assertion = Assertion::fromXML(
             DOMDocumentFactory::fromFile(
-                dirname(__FILE__, 4) . '/resources/xml/saml_Assertion.xml',
+                dirname(__FILE__, 3) . '/resources/xml/saml_Assertion.xml',
             )->documentElement
         );
 
@@ -185,7 +185,7 @@ final class SignatureValidationTest extends MockeryTestCase
     private function getSignedResponseWithUnsignedAssertion(): Response
     {
         $doc = DOMDocumentFactory::fromFile(
-            dirname(__DIR__, 3) . '/resources/xml/response/signedresponse_with_unsignedassertion.xml',
+            dirname(__DIR__, 2) . '/resources/xml/response/signedresponse_with_unsignedassertion.xml',
         );
 
         return Response::fromXML($doc->documentElement);
@@ -198,7 +198,7 @@ final class SignatureValidationTest extends MockeryTestCase
     private function getUnsignedResponseWithSignedAssertion(): Response
     {
         $doc = DOMDocumentFactory::fromFile(
-            dirname(__DIR__, 3) . '/resources/xml/response/unsignedresponse_with_signedassertion.xml',
+            dirname(__DIR__, 2) . '/resources/xml/response/unsignedresponse_with_signedassertion.xml',
         );
 
         return Response::fromXML($doc->documentElement);
@@ -211,7 +211,7 @@ final class SignatureValidationTest extends MockeryTestCase
     private function getSignedResponseWithSignedAssertion(): Response
     {
         $doc = DOMDocumentFactory::fromFile(
-            dirname(__DIR__, 3) . '/resources/xml/response/signedresponse_with_signedassertion.xml',
+            dirname(__DIR__, 2) . '/resources/xml/response/signedresponse_with_signedassertion.xml',
         );
 
         return Response::fromXML($doc->documentElement);
@@ -224,7 +224,7 @@ final class SignatureValidationTest extends MockeryTestCase
     private function getUnsignedResponseWithUnsignedAssertion(): Response
     {
         $doc = DOMDocumentFactory::fromFile(
-            dirname(__DIR__, 3) . '/resources/xml/samlp_Response.xml',
+            dirname(__DIR__, 2) . '/resources/xml/samlp_Response.xml',
         );
 
         return Response::fromXML($doc->documentElement);

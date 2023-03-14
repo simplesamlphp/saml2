@@ -44,7 +44,7 @@ final class InformationURLTest extends TestCase
         $this->testedClass = InformationURL::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/mdui_InformationURL.xml',
+            dirname(__FILE__, 4) . '/resources/xml/mdui_InformationURL.xml',
         );
 
         $this->arrayRepresentation = ['en' => 'http://www.example.edu/en/'];

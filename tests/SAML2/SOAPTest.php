@@ -81,7 +81,7 @@ SOAP
     public function testSendArtifactResponse(): void
     {
         $artifact = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 3) . '/resources/xml/samlp_ArtifactResponse.xml',
+            dirname(__FILE__, 2) . '/resources/xml/samlp_ArtifactResponse.xml',
         );
         $message = MessageFactory::fromXML($artifact->documentElement);
 
@@ -106,7 +106,7 @@ SOAP
     public function testSendResponse(): void
     {
         $response = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 3) . '/resources/xml/samlp_Response.xml',
+            dirname(__FILE__, 2) . '/resources/xml/samlp_Response.xml',
         );
         $message = MessageFactory::fromXML($response->documentElement);
 

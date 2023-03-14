@@ -32,7 +32,7 @@ final class MessageFactoryTest extends TestCase
      */
     public static function provideMessages(): array
     {
-        $base = dirname(__FILE__, 5) . '/resources/xml/';
+        $base = dirname(__FILE__, 4) . '/resources/xml/';
 
         return [
             'AttributeQuery' => [$base . 'samlp_AttributeQuery.xml', AttributeQuery::class],
@@ -65,7 +65,7 @@ final class MessageFactoryTest extends TestCase
     public function testMessageFactoryWithOtherNamespace(): void
     {
         $document = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_Attribute.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_Attribute.xml',
         );
 
         $this->expectException(InvalidDOMElementException::class);
@@ -80,7 +80,7 @@ final class MessageFactoryTest extends TestCase
     public function testMessageFactoryWithSameNamespaceButNotMessage(): void
     {
         $document = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/samlp_Status.xml',
+            dirname(__FILE__, 4) . '/resources/xml/samlp_Status.xml',
         );
 
         $this->expectException(InvalidDOMElementException::class);

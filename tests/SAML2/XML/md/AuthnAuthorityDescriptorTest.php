@@ -52,7 +52,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->testedClass = AuthnAuthorityDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_AuthnAuthorityDescriptor.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_AuthnAuthorityDescriptor.xml',
         );
 
         $this->aqs = new AuthnQueryService(C::BINDING_HTTP_POST, 'http://www.example.com/aqs');

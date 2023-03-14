@@ -45,7 +45,7 @@ final class AttributeTest extends TestCase
         $this->testedClass = Attribute::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_Attribute.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_Attribute.xml',
         );
 
         $container = new MockContainer();

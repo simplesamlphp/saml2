@@ -36,7 +36,7 @@ final class SessionIndexTest extends TestCase
         $this->testedClass = SessionIndex::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/samlp_SessionIndex.xml',
+            dirname(__FILE__, 4) . '/resources/xml/samlp_SessionIndex.xml',
         );
     }
 

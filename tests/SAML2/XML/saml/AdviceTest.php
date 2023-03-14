@@ -54,23 +54,23 @@ final class AdviceTest extends TestCase
         $this->testedClass = Advice::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_Advice.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_Advice.xml',
         );
 
         $this->assertionIDRef = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_AssertionIDRef.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_AssertionIDRef.xml',
         );
 
         $this->assertionURIRef = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_AssertionURIRef.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_AssertionURIRef.xml',
         );
 
         $this->assertion = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_Assertion.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_Assertion.xml',
         );
 
         $this->encryptedAssertion = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_EncryptedAssertion.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedAssertion.xml',
         );
     }
 

@@ -40,7 +40,7 @@ final class KeyAuthorityTest extends TestCase
         $this->testedClass = KeyAuthority::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/shibmd_KeyAuthority.xml',
+            dirname(__FILE__, 4) . '/resources/xml/shibmd_KeyAuthority.xml',
         );
     }
 

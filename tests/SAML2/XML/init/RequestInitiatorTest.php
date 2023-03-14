@@ -40,7 +40,7 @@ final class RequestInitiatorTest extends TestCase
         $this->testedClass = RequestInitiator::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/init_RequestInitiator.xml',
+            dirname(__FILE__, 4) . '/resources/xml/init_RequestInitiator.xml',
         );
     }
 

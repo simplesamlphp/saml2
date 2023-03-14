@@ -36,7 +36,7 @@ final class AssertionURIRefTest extends TestCase
         $this->testedClass = AssertionURIRef::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_AssertionURIRef.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_AssertionURIRef.xml',
         );
     }
 

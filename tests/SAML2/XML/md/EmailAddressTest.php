@@ -38,7 +38,7 @@ final class EmailAddressTest extends TestCase
         $this->arrayRepresentation = ['mailto:john.doe@example.org'];
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_EmailAddress.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_EmailAddress.xml',
         );
     }
 

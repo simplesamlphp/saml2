@@ -37,7 +37,7 @@ final class AudienceTest extends TestCase
         $this->testedClass = Audience::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_Audience.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_Audience.xml',
         );
     }
 

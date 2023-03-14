@@ -44,7 +44,7 @@ final class PublicationPathTest extends TestCase
         $this->testedClass = PublicationPath::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/mdrpi_PublicationPath.xml',
+            dirname(__FILE__, 4) . '/resources/xml/mdrpi_PublicationPath.xml',
         );
 
         $this->arrayRepresentation = [

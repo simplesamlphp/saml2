@@ -36,7 +36,7 @@ final class AuthnContextDeclRefTest extends TestCase
         $this->testedClass = AuthnContextDeclRef::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/saml_AuthnContextDeclRef.xml',
+            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextDeclRef.xml',
         );
     }
 

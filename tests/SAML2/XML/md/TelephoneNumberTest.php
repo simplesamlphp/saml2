@@ -38,7 +38,7 @@ final class TelephoneNumberTest extends TestCase
         $this->arrayRepresentation = ['+1234567890'];
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_TelephoneNumber.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_TelephoneNumber.xml',
         );
     }
 

@@ -40,7 +40,7 @@ final class ResponseTest extends TestCase
         $this->testedClass = Response::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/ecp_Response.xml'
+            dirname(__FILE__, 4) . '/resources/xml/ecp_Response.xml'
         );
     }
 

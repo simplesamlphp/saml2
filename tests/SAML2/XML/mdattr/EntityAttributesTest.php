@@ -56,7 +56,7 @@ final class EntityAttributesTest extends TestCase
         $this->testedClass = EntityAttributes::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/mdattr_EntityAttributes.xml',
+            dirname(__FILE__, 4) . '/resources/xml/mdattr_EntityAttributes.xml',
         );
     }
 

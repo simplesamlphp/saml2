@@ -41,7 +41,7 @@ final class DisplayNameTest extends TestCase
         $this->testedClass = DisplayName::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/mdui_DisplayName.xml',
+            dirname(__FILE__, 4) . '/resources/xml/mdui_DisplayName.xml',
         );
 
         $this->arrayRepresentation = ['en' => 'University of Examples'];

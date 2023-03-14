@@ -59,7 +59,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         $this->testedClass = AttributeAuthorityDescriptor::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_AttributeAuthorityDescriptor.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_AttributeAuthorityDescriptor.xml',
         );
         $this->as = new AttributeService(
             C::BINDING_SOAP,

@@ -37,7 +37,7 @@ final class GivenNameTest extends TestCase
         $this->testedClass = GivenName::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/md_GivenName.xml',
+            dirname(__FILE__, 4) . '/resources/xml/md_GivenName.xml',
         );
     }
 

@@ -70,7 +70,7 @@ final class AuthnRequestTest extends TestCase
         $this->testedClass = AuthnRequest::class;
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/samlp_AuthnRequest.xml',
+            dirname(__FILE__, 4) . '/resources/xml/samlp_AuthnRequest.xml',
         );
     }
 
@@ -293,7 +293,7 @@ AUTHNREQUEST;
         $container->setBlacklistedAlgorithms(null);
 
         $xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 5) . '/resources/xml/authnrequest/authnrequest_encryptedid.xml',
+            dirname(__FILE__, 4) . '/resources/xml/authnrequest/authnrequest_encryptedid.xml',
         );
         $authnRequest = AuthnRequest::fromXML($xmlRepresentation->documentElement);
 

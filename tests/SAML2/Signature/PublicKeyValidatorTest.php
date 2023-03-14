@@ -107,7 +107,7 @@ final class PublicKeyValidatorTest extends MockeryTestCase
         $validator = new PublicKeyValidator(new SimpleTestLogger(), new KeyLoader());
 
         $doc = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/response/signedresponse_with_unsignedassertion.xml',
+            dirname(__FILE__, 3) . '/resources/xml/response/signedresponse_with_unsignedassertion.xml',
         );
 
         // convert to signed response
