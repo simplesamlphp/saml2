@@ -31,12 +31,12 @@
         "psr/log": "^2.0 || ^3.0",
         "simplesamlphp/xml-common": "^1.7.0",
         "simplesamlphp/xml-security": "^1.6.0",
-        "simplesamlphp/xml-soap": "^1.0.2",
         "simplesamlphp/assert": "^1.0.3"
     },
     "require-dev": {
         "mockery/mockery": "^1.5.1",
-        "simplesamlphp/simplesamlphp-test-framework": "^1.5.1"
+        "simplesamlphp/simplesamlphp-test-framework": "^1.5.1",
+        "simplesamlphp/xml-soap": "^1.0.2"
     },
     "autoload": {
         "psr-4": {
