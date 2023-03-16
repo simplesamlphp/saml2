@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\IdentifierTrait;
 use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
-use SimpleSAML\SAML2\XML\saml\BaseID;
+use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -167,7 +167,7 @@ final class LogoutRequest extends AbstractRequest
             'Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.',
             MissingElementException::class,
         );
-        Assert::isInstanceOfAny($identifier, [BaseID::class, NameID::class, EncryptedID::class]);
+        Assert::isInstanceOfAny($identifier, [AbstractBaseID::class, NameID::class, EncryptedID::class]);
 
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.');

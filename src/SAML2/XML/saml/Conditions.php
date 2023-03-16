@@ -26,7 +26,7 @@ final class Conditions extends AbstractSamlElement
      *
      * @param int|null $notBefore
      * @param int|null $notOnOrAfter
-     * @param \SimpleSAML\SAML2\XML\saml\Condition[] $condition
+     * @param \SimpleSAML\SAML2\XML\saml\AbstractCondition[] $condition
      * @param \SimpleSAML\SAML2\XML\saml\AudienceRestriction[] $audienceRestriction
      * @param bool $oneTimeUse
      * @param \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null $proxyRestriction
@@ -39,7 +39,7 @@ final class Conditions extends AbstractSamlElement
         protected bool $oneTimeUse = false,
         protected ?ProxyRestriction $proxyRestriction = null,
     ) {
-        Assert::allIsInstanceOf($condition, Condition::class);
+        Assert::allIsInstanceOf($condition, AbstractCondition::class);
         Assert::allIsInstanceOf($audienceRestriction, AudienceRestriction::class);
     }
 
@@ -69,7 +69,7 @@ final class Conditions extends AbstractSamlElement
     /**
      * Collect the value of the condition-property
      *
-     * @return \SimpleSAML\SAML2\XML\saml\Condition[]
+     * @return \SimpleSAML\SAML2\XML\saml\AbstractCondition[]
      */
     public function getCondition(): array
     {
