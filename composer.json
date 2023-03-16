@@ -35,7 +35,7 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.5.1",
-        "simplesamlphp/simplesamlphp-test-framework": "^1.5.1",
+        "simplesamlphp/simplesamlphp-test-framework": "^1.5.4",
         "simplesamlphp/xml-soap": "^1.0.2"
     },
     "autoload": {

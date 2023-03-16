@@ -15,6 +15,10 @@
     <rule ref="PSR12"/>
     <rule ref="vendor/simplesamlphp/simplesamlphp-test-framework/phpcs-simplesamlphp.xml"/>
 
+    <rule ref="Generic.PHP.RequireStrictTypes">
+        <exclude-pattern>tests/bin/**</exclude-pattern>
+    </rule>
+
     <rule ref="PSR1.Files.SideEffects">
         <exclude-pattern>src/_autoload.php</exclude-pattern>
     </rule>
