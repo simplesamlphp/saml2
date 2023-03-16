@@ -60,10 +60,8 @@ final class SubjectLocality extends AbstractSamlElement
      */
     public function isEmptyElement(): bool
     {
-        return (
-            empty($this->address)
-            && empty($this->dnsName)
-        );
+        return empty($this->address)
+            && empty($this->dnsName);
     }
 
 

@@ -55,13 +55,11 @@ final class Advice extends AbstractSamlElement
      */
     public function isEmptyElement(): bool
     {
-        return (
-            empty($this->assertionIDRef)
+        return empty($this->assertionIDRef)
             && empty($this->assertionURIRef)
             && empty($this->assertion)
             && empty($this->encryptedAssertion)
-            && empty($this->getElements())
-        );
+            && empty($this->getElements());
     }
 
 

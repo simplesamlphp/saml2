@@ -95,7 +95,7 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
             list($element) = $qname;
         }
         $ns = $xml->lookupNamespaceUri($prefix);
-        $type = ($ns === null ) ? $element : implode(':', [$ns, $element]);
+        $type = ($ns === null) ? $element : implode(':', [$ns, $element]);
 
         // now check if we have a handler registered for it
         $handler = Utils::getContainer()->getExtensionHandler($type);

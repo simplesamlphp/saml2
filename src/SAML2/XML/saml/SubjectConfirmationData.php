@@ -137,15 +137,13 @@ final class SubjectConfirmationData extends AbstractSamlElement
      */
     public function isEmptyElement(): bool
     {
-        return (
-            empty($this->notBefore)
+        return empty($this->notBefore)
             && empty($this->notOnOrAfter)
             && empty($this->recipient)
             && empty($this->inResponseTo)
             && empty($this->address)
             && empty($this->info)
-            && empty($this->namespacedAttributes)
-        );
+            && empty($this->namespacedAttributes);
     }
 
 

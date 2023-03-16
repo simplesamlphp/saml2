@@ -117,14 +117,12 @@ final class Conditions extends AbstractSamlElement
      */
     public function isEmptyElement(): bool
     {
-        return (
-            empty($this->notBefore)
+        return empty($this->notBefore)
             && empty($this->notOnOrAfter)
             && empty($this->condition)
             && empty($this->audienceRestriction)
             && $this->oneTimeUse === false
-            && empty($this->proxyRestriction)
-        );
+            && empty($this->proxyRestriction);
     }
 
 

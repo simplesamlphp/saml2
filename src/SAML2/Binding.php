@@ -111,10 +111,8 @@ abstract class Binding
                     if (
                         ($contentType === 'text/xml' || $contentType === 'application/xml')
                         // See paragraph 3.2.3 of Binding for SAML2 (OASIS)
-                        || (
-                            $request->hasHeader('SOAPAction')
-                            && $request->getHeader('SOAPAction')[0] === 'http://www.oasis-open.org/committees/security'
-                        )
+                        || ($request->hasHeader('SOAPAction')
+                            && $request->getHeader('SOAPAction')[0] === 'http://www.oasis-open.org/committees/security')
                     ) {
                         return new SOAP();
                     }

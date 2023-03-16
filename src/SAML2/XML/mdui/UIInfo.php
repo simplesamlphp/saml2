@@ -202,15 +202,13 @@ final class UIInfo extends AbstractMduiElement
      */
     public function isEmptyElement(): bool
     {
-        return (
-            empty($this->displayName)
+        return empty($this->displayName)
             && empty($this->description)
             && empty($this->informationURL)
             && empty($this->privacyStatementURL)
             && empty($this->keywords)
             && empty($this->logo)
-            && empty($this->elements)
-        );
+            && empty($this->elements);
     }
 
 

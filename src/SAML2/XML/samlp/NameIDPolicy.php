@@ -68,11 +68,9 @@ final class NameIDPolicy extends AbstractSamlpElement
      */
     public function isEmptyElement(): bool
     {
-        return (
-            empty($this->Format)
+        return empty($this->Format)
             && empty($this->SPNameQualifier)
-            && empty($this->AllowCreate)
-        );
+            && empty($this->AllowCreate);
     }
 
 

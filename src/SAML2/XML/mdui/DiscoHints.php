@@ -99,12 +99,10 @@ final class DiscoHints extends AbstractMduiElement
      */
     public function isEmptyElement(): bool
     {
-        return (
-            empty($this->elements)
+        return empty($this->elements)
             && empty($this->ipHint)
             && empty($this->domainHint)
-            && empty($this->geolocationHint)
-        );
+            && empty($this->geolocationHint);
     }
 
 

@@ -42,12 +42,10 @@ final class Evidence extends AbstractSamlElement
      */
     public function isEmptyElement(): bool
     {
-        return (
-            empty($this->assertionIDRef)
+        return empty($this->assertionIDRef)
             && empty($this->assertionURIRef)
             && empty($this->assertion)
-            && empty($this->encryptedAssertion)
-        );
+            && empty($this->encryptedAssertion);
     }
 
 

@@ -71,11 +71,9 @@ final class Scoping extends AbstractSamlpElement
      */
     public function isEmptyElement(): bool
     {
-        return (
-            empty($this->proxyCount)
+        return empty($this->proxyCount)
             && empty($this->IDPList)
-            && empty($this->requesterId)
-        );
+            && empty($this->requesterId);
     }
 
 
