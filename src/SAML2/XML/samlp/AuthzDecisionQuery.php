@@ -78,17 +78,6 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery
 
 
     /**
-     * Collect the value of the decision-property
-     *
-     * @return string
-     */
-    public function getDecision(): string
-    {
-        return $this->decision;
-    }
-
-
-    /**
      * Collect the value of the action-property
      *
      * @return array
