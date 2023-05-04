@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace SAML2\Utilities;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Utilities\ArrayCollection;
 use SAML2\Exception\RuntimeException;
 
-class ArrayCollectionTest extends \PHPUnit\Framework\TestCase
+use function ucfirst;
+
+class ArrayCollectionTest extends TestCase
 {
     /**
      * @return void
@@ -143,7 +146,9 @@ class ArrayCollectionTest extends \PHPUnit\Framework\TestCase
         $arc = new ArrayCollection(['aap', 'aap', 'noot', 'mies']);
 
         $filtered = $arc->filter(
-            function ($i) { return $i != 'aap'; }
+            function ($i) {
+                return $i != 'aap';
+            }
         );
         $this->assertInstanceOf(ArrayCollection::class, $filtered);
         $this->assertEquals($filtered->get(0), null);
@@ -152,7 +157,9 @@ class ArrayCollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($filtered->get(3), 'mies');
 
         $mapped = $arc->map(
-            function ($i) { return ucfirst($i); }
+            function ($i) {
+                return ucfirst($i);
+            }
         );
         $this->assertInstanceOf(ArrayCollection::class, $mapped);
         $this->assertEquals($mapped->get(0), 'Aap');

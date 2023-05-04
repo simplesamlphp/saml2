@@ -19,26 +19,29 @@
         <exclude-pattern>tests/SAML2/XML/md/RoleDescriptorTest.php</exclude-pattern>
     </rule>
 
+    <rule ref="PSR1.Methods.CamelCapsMethodName"> 
+        <exclude-pattern>tests/SAML2/Assertion/ProcessorTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/NotBeforeTest.php</exclude-pattern> 
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/NotOnOrAfterTest.php</exclude-pattern> 
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SessionNotOnOrAfterTest.php</exclude-pattern> 
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SpIsValidAudienceTest.php</exclude-pattern> 
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationMethodTest.php</exclude-pattern> 
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationNotBeforeTest.php</exclude-pattern> 
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationNotOnOrAfterTest.php</exclude-pattern> 
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationRecipientMathchesTest.php</exclude-pattern> 
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationResponseToMatchesTest.php</exclude-pattern> 
+        <exclude-pattern>tests/SAML2/Certificate/KeyTest.php</exclude-pattern> <exclude-pattern>tests/SAML2/Certificate/KeyLoaderTest.php</exclude-pattern> 
+        <exclude-pattern>tests/SAML2/Certificate/PrivateKeyLoaderTest.php</exclude-pattern> 
+        <exclude-pattern>tests/SAML2/Certificate/PrivateKeyTest.php</exclude-pattern> 
+        <exclude-pattern>tests/SAML2/Certificate/X509Test.php</exclude-pattern> 
+        <exclude-pattern>tests/SAML2/Utilities/ArrayCollectionTest.php</exclude-pattern> 
+        <exclude-pattern>tests/SAML2/Utilities/FileTest.php</exclude-pattern>
+    </rule>
+
     <rule ref="Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase">
         <exclude-pattern>src/SAML2/Assertion.php</exclude-pattern>
         <exclude-pattern>src/SAML2/LogoutRequest.php</exclude-pattern>
         <exclude-pattern>src/SAML2/EncryptedAssertion.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/Assertion/ProcessorTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/NotBeforeTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SessionNotOnOrAfterTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationNotBeforeTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationNotOnOrAfterTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SpIsValidAudienceTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationMethodTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationResponseToMatchesTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationRecipientMathchesTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/Utilities/FileTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/Utilities/ArrayCollectionTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/Certificate/X509Test.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/Certificate/KeyLoaderTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/Certificate/PrivateKeyLoaderTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/Certificate/KeyTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/Certificate/PrivateKeyTest.php</exclude-pattern>
     </rule>
 
     <!-- Lines can be a little bit longer before they break the build -->
@@ -49,14 +52,17 @@
         </properties>
         <exclude-pattern>tests/SAML2/AssertionTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/Assertion/ProcessorTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/AttributeQueryTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/AuthnRequestTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/BindingTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/CertificatesMock</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Certificate/KeyLoaderTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/CertificatesMock.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/HTTPPostTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/HTTPRedirectTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/LogoutRequestTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/ResponseTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/SOAPTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Utilities/ArrayCollectionTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/UtilsTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/md/AffiliationDescriptorTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/md/ContactPersonTest.php</exclude-pattern>
@@ -67,5 +73,6 @@
         <exclude-pattern>tests/SAML2/XML/saml/AttributeValueTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/saml/IssuerXMLShowAllTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/saml/NameIDTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationResponseToMatchesTest.php</exclude-pattern>
     </rule>
 </ruleset>

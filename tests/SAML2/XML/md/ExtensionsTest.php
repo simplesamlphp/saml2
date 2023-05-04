@@ -4,10 +4,20 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
-use SAML2\XML\shibmd\Scope;
+use SAML2\XML\Chunk;
 use SAML2\XML\alg\DigestMethod;
+use SAML2\XML\alg\SigningMethod;
+use SAML2\XML\mdattr\EntityAttributes;
+use SAML2\XML\mdrpi\PublicationInfo;
+use SAML2\XML\mdrpi\RegistrationInfo;
+use SAML2\XML\mdui\DiscoHints;
+use SAML2\XML\mdui\UIInfo;
+use SAML2\XML\shibmd\Scope;
+
+use function trim;
 
 /**
  * Class \SAML2\XML\md\ExtensionsTest.
@@ -16,7 +26,7 @@ use SAML2\XML\alg\DigestMethod;
  *
  * @package simplesamlphp/saml2
  */
-class ExtensionsTest extends \PHPUnit\Framework\TestCase
+class ExtensionsTest extends TestCase
 {
     /**
      * Adding an empty list to an Extensions element should yield an empty element. If there were contents already
@@ -35,11 +45,13 @@ class ExtensionsTest extends \PHPUnit\Framework\TestCase
         Extensions::addList($r, []);
         $list = Extensions::getList($r);
         $this->assertCount(0, $list);
-        $this->assertEquals(<<<XML
+        $this->assertEquals(
+            <<<XML
 <?xml version="1.0"?>
 <root/>
-XML,
-            trim($d->saveXML())
+XML
+            ,
+            trim($d->saveXML()),
         );
 
         // add an empty list on a non-empty Extensions element
@@ -51,17 +63,19 @@ XML,
         Extensions::addList($r, []);
         $list = Extensions::getList($r);
         $this->assertCount(1, $list);
-        $this->assertEquals(<<<XML
+        $this->assertEquals(
+            <<<XML
 <?xml version="1.0"?>
 <root>
   <md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ns="urn:some:ns">
     <ns:SomeChunk xmlns:ns="urn:some:ns" foo="bar">Contents</ns:SomeChunk>
   </md:Extensions>
 </root>
-XML,
+XML
+            ,
             trim($d->saveXML())
         );
-        $this->assertInstanceOf(\SAML2\XML\Chunk::class, $list[0]);
+        $this->assertInstanceOf(Chunk::class, $list[0]);
     }
 
 
@@ -71,7 +85,8 @@ XML,
      */
     public function testSupportedExtensions(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <root>
   <md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
                  xmlns:shibmd="urn:mace:shibboleth:metadata:1.0"
@@ -99,15 +114,15 @@ XML
         );
         $list = Extensions::getList($document->documentElement);
         $this->assertCount(9, $list);
-        $this->assertInstanceOf(\SAML2\XML\shibmd\Scope::class, $list[0]);
-        $this->assertInstanceOf(\SAML2\XML\mdattr\EntityAttributes::class, $list[1]);
-        $this->assertInstanceOf(\SAML2\XML\mdrpi\RegistrationInfo::class, $list[2]);
-        $this->assertInstanceOf(\SAML2\XML\mdrpi\PublicationInfo::class, $list[3]);
-        $this->assertInstanceOf(\SAML2\XML\mdui\UIInfo::class, $list[4]);
-        $this->assertInstanceOf(\SAML2\XML\mdui\DiscoHints::class, $list[5]);
-        $this->assertInstanceOf(\SAML2\XML\alg\DigestMethod::class, $list[6]);
-        $this->assertInstanceOf(\SAML2\XML\alg\SigningMethod::class, $list[7]);
-        $this->assertInstanceOf(\SAML2\XML\Chunk::class, $list[8]);
+        $this->assertInstanceOf(Scope::class, $list[0]);
+        $this->assertInstanceOf(EntityAttributes::class, $list[1]);
+        $this->assertInstanceOf(RegistrationInfo::class, $list[2]);
+        $this->assertInstanceOf(PublicationInfo::class, $list[3]);
+        $this->assertInstanceOf(UIInfo::class, $list[4]);
+        $this->assertInstanceOf(DiscoHints::class, $list[5]);
+        $this->assertInstanceOf(DigestMethod::class, $list[6]);
+        $this->assertInstanceOf(SigningMethod::class, $list[7]);
+        $this->assertInstanceOf(Chunk::class, $list[8]);
     }
 
 
@@ -130,7 +145,8 @@ XML
             $digest,
         ];
         Extensions::addList($r, $extensions);
-        $this->assertEquals(<<<XML
+        $this->assertEquals(
+            <<<XML
 <?xml version="1.0"?>
 <root>
   <md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
@@ -138,7 +154,8 @@ XML
     <alg:DigestMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" Algorithm="SomeAlgorithm"/>
   </md:Extensions>
 </root>
-XML,
+XML
+            ,
             trim($r->ownerDocument->saveXML())
         );
     }

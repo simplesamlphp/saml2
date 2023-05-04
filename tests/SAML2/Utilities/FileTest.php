@@ -29,6 +29,10 @@ class FileTest extends \PHPUnit\Framework\TestCase
     {
         $contents = File::getFileContents(__DIR__ . '/File/can_be_loaded.txt');
 
-        $this->assertEquals("Yes we can!\n", $contents, 'The contents of the loaded file differ from what was expected');
+        $this->assertEquals(
+            "Yes we can!\n",
+            $contents,
+            'The contents of the loaded file differ from what was expected',
+        );
     }
 }
