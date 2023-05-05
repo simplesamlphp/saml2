@@ -57,18 +57,20 @@ class AttributeValueTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $returnedStructure = $attribute->toXML($document->firstChild);
 
-        $expectedStructureDocument = new \DOMDocument();
-        $expectedStructureDocument->loadXML(<<<ATTRIBUTEVALUE
-<saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="TheName"
- NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
-  <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></saml:AttributeValue>
-</saml:Attribute>
+        $expectedStructureDocument = DOMDocumentFactory::fromString(
+            <<<ATTRIBUTEVALUE
+<root>
+  <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="TheName"
+    NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
+    <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></saml:AttributeValue>
+  </saml:Attribute>
+</root>
 ATTRIBUTEVALUE
         );
-        $expectedStructure = $expectedStructureDocument->documentElement;
+        $expectedStructure = $expectedStructureDocument->saveXML();
 
-        $this->assertEqualXMLStructure($expectedStructure, $returnedStructure);
+        $this->assertXmlStringEqualsXmlString($expectedStructure, $returnedStructure->ownerDocument->saveXML());
         $this->assertEquals("", $attribute->getAttributeValue()[0]->getString());
     }
 
@@ -84,9 +86,9 @@ ATTRIBUTEVALUE
         $attribute->setNameFormat('TheNameFormat');
         $attribute->setFriendlyName('TheFriendlyName');
 
-        $element = new \DOMDocument();
-        $element->loadXML(<<<ATTRIBUTEVALUE
-<NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">urn:collab:person:surftest.nl:example</NameID>
+        $element = DOMDocumentFactory::fromString(
+            <<<ATTRIBUTEVALUE
+<saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">urn:collab:person:surftest.nl:example</saml:NameID>
 ATTRIBUTEVALUE
         );
 
@@ -97,19 +99,21 @@ ATTRIBUTEVALUE
         $document = DOMDocumentFactory::fromString('<root />');
         $returnedStructure = $attribute->toXML($document->firstChild);
 
-        $expectedStructureDocument = new \DOMDocument();
-        $expectedStructureDocument->loadXML(<<<ATTRIBUTEXML
-<saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
-  <saml:AttributeValue>
-    <NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">urn:collab:person:surftest.nl:example</NameID>
-  </saml:AttributeValue>
-</saml:Attribute>
+        $expectedStructureDocument = DOMDocumentFactory::fromString(
+            <<<ATTRIBUTEXML
+<root>
+  <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+    Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
+    <saml:AttributeValue>
+      <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">urn:collab:person:surftest.nl:example</saml:NameID>
+    </saml:AttributeValue>
+  </saml:Attribute>
+</root>
 ATTRIBUTEXML
         );
-        $expectedStructure = $expectedStructureDocument->documentElement;
+        $expectedStructure = $expectedStructureDocument->saveXML();
 
-        $this->assertEqualXMLStructure($expectedStructure, $returnedStructure);
+        $this->assertXmlStringEqualsXmlString($expectedStructure, $returnedStructure->ownerDocument->saveXML());
         $this->assertEquals("urn:collab:person:surftest.nl:example", $attribute->getAttributeValue()[0]->getString());
     }
 
@@ -127,7 +131,7 @@ ATTRIBUTEXML
 
         $this->assertEquals("Aap:noot:mies", $av2->getString());
 
-        $element = new \DOMDocument();
+        $element = new DOMDocument();
         $element->loadXML(<<<ATTRIBUTEVALUE
 <NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">urn:collab:person:surftest.nl:example</NameID>
 ATTRIBUTEVALUE

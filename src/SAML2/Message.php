@@ -100,7 +100,7 @@ abstract class Message extends SignedElement
      *
      * @var XMLSecurityKey|null
      */
-    protected ?XMLSecurityKey $signatureKey;
+    protected ?XMLSecurityKey $signatureKey = null;
 
     /**
      * @var bool

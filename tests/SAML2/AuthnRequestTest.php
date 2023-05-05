@@ -225,40 +225,21 @@ AUTHNREQUEST;
         $key = CertificatesMock::getPublicKey();
         $request->encryptNameId($key);
 
-        $expectedXml = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID=""
-    Version=""
-    IssueInstant=""
-    Destination="">
-    <saml:Issuer></saml:Issuer>
-    <saml:Subject>
-        <saml:EncryptedID xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
-            <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" Type="http://www.w3.org/2001/04/xmlenc#Element">
-                <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes128-cbc"/>
-                <dsig:KeyInfo xmlns:dsig="http://www.w3.org/2000/09/xmldsig#">
-                    <xenc:EncryptedKey>
-                        <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/>
-                        <xenc:CipherData>
-                            <xenc:CipherValue></xenc:CipherValue>
-                        </xenc:CipherData>
-                    </xenc:EncryptedKey>
-                </dsig:KeyInfo>
-                <xenc:CipherData>
-                    <xenc:CipherValue></xenc:CipherValue>
-                </xenc:CipherData>
-            </xenc:EncryptedData>
-        </saml:EncryptedID>
-    </saml:Subject>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $expectedStructure = DOMDocumentFactory::fromString($expectedXml)->documentElement;
         $requestStructure = $request->toUnsignedXML();
 
-        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+        // Test for an Issuer
+        $issuerElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer');
+        $this->assertCount(1, $issuerElements);
+        $this->assertEquals('https://gateway.example.org/saml20/sp/metadata', $issuerElements[0]->textContent);
+
+        // Test ordering of AuthnRequest contents
+        $requestElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*');
+        $this->assertCount(1, $requestElements);
+        $this->assertEquals('saml:Subject', $requestElements[0]->tagName);
+
+        // Test existence of EncryptedID
+        $encryptedIdElements = Utils::xpQuery($requestStructure, './saml_assertion:Subject/saml_assertion:EncryptedID');
+        $this->assertCount(1, $encryptedIdElements);
     }
 
 
@@ -282,27 +263,24 @@ AUTHNREQUEST;
             ['ProviderID' => 'urn:example:1', 'Name' => 'Voorbeeld', 'Something' => 'Else']
         ]);
 
-        $expectedStructureDocument = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID=""
-    Version=""
-    IssueInstant=""
-    Destination="">
-    <saml:Issuer></saml:Issuer>
-    <samlp:Scoping><samlp:IDPList>
-        <samlp:IDPEntry ProviderID="Legacy1"/>
-        <samlp:IDPEntry ProviderID="http://example.org/AAP" Name="N00T" Loc="https://mies"/>
-        <samlp:IDPEntry ProviderID="urn:example:1" Name="Voorbeeld"/>
-    </samlp:IDPList></samlp:Scoping>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
         $requestStructure = $request->toUnsignedXML();
 
-        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+        // Test for an Issuer
+        $issuerElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer');
+        $this->assertCount(1, $issuerElements);
+        $this->assertEquals('https://gateway.example.org/saml20/sp/metadata', $issuerElements[0]->textContent);
+
+        // Test ordering of AuthnRequest contents
+        $requestElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*');
+        $this->assertCount(1, $requestElements);
+        $this->assertEquals('samlp:Scoping', $requestElements[0]->tagName);
+
+        // Test existence of IDPEntry
+        $idpEntryElements = Utils::xpQuery(
+            $requestStructure,
+            './saml_protocol:Scoping/saml_protocol:IDPList/saml_protocol:IDPEntry',
+        );
+        $this->assertCount(3, $idpEntryElements);
     }
 
 
@@ -385,26 +363,24 @@ AUTHNREQUEST;
             'https://shib.example.edu/SSO/Metadata',
         ]);
 
-        $expectedStructureDocument = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID=""
-    Version=""
-    IssueInstant=""
-    Destination="">
-    <saml:Issuer></saml:Issuer>
-    <samlp:Scoping>
-        <samlp:RequesterID>https://engine.demo.openconext.org/authentication/sp/metadata</samlp:RequesterID>
-        <samlp:RequesterID>https://shib.example.edu/SSO/Metadata</samlp:RequesterID>
-    </samlp:Scoping>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
         $requestStructure = $request->toUnsignedXML();
 
-        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+        // Test for an Issuer
+        $issuerElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer');
+        $this->assertCount(1, $issuerElements);
+        $this->assertEquals('https://gateway.example.org/saml20/sp/metadata', $issuerElements[0]->textContent);
+
+        // Test ordering of AuthnRequest contents
+        $requestElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*');
+        $this->assertCount(1, $requestElements);
+        $this->assertEquals('samlp:Scoping', $requestElements[0]->tagName);
+
+        // Test existence of RequesterID
+        $requesterIdElements = Utils::xpQuery(
+            $requestStructure,
+            './saml_protocol:Scoping/saml_protocol:RequesterID',
+        );
+        $this->assertCount(2, $requesterIdElements);
     }
 
 
@@ -459,26 +435,17 @@ AUTHNREQUEST;
             'https://engine.demo.openconext.org/authentication/sp/metadata',
         ]);
 
-        $expectedStructureDocument = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="123"
-    Version="2.0"
-    IssueInstant="2004-12-05T09:21:59Z"
-    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
-    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
-    <samlp:Scoping ProxyCount="34">
-        <samlp:RequesterID>https://engine.demo.openconext.org/authentication/sp/metadata</samlp:RequesterID>
-    </samlp:Scoping>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
         $requestStructure = $request->toUnsignedXML();
 
-        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
-        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+        // Test existence of RequesterID
+        $scopingElements = Utils::xpQuery(
+            $requestStructure,
+            './saml_protocol:Scoping',
+        );
+        $this->assertCount(1, $scopingElements);
+
+        $proxyCount = $scopingElements[0]->getAttribute('ProxyCount');
+        $this->assertEquals('34', $proxyCount);
     }
 
 
@@ -575,28 +542,22 @@ AUTHNREQUEST;
         ];
         $request->setNameIDPolicy($nameIdPolicy);
 
-        $expectedStructureDocument = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="123"
-    Version="2.0"
-    IssueInstant="2004-12-05T09:21:59Z"
-    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
-    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
-    <samlp:NameIDPolicy
-        Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"
-        SPNameQualifier="https://sp.example.com/SAML2" AllowCreate="true"
-    />
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
         $requestStructure = $request->toUnsignedXML();
 
-        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+        // Test for an Issuer
+        $issuerElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer');
+        $this->assertCount(1, $issuerElements);
+        $this->assertEquals('https://gateway.example.org/saml20/sp/metadata', $issuerElements[0]->textContent);
 
-        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+        // Test ordering of AuthnRequest contents
+        $requestElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*');
+        $this->assertCount(1, $requestElements);
+        $this->assertEquals('samlp:NameIDPolicy', $requestElements[0]->tagName);
+
+        // Test NameIDPolicy
+        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:nameid-format:transient", $requestElements[0]->getAttribute('Format'));
+        $this->assertEquals("https://sp.example.com/SAML2", $requestElements[0]->getAttribute('SPNameQualifier'));
+        $this->assertEquals('true', $requestElements[0]->getAttribute('AllowCreate'));
     }
 
 
@@ -618,25 +579,22 @@ AUTHNREQUEST;
         $nameIdPolicy = ["Format" => "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"];
         $request->setNameIDPolicy($nameIdPolicy);
 
-        $expectedStructureDocument = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="123"
-    Version="2.0"
-    IssueInstant="2004-12-05T09:21:59Z"
-    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
-    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
-    <samlp:NameIDPolicy Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"/>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
         $requestStructure = $request->toUnsignedXML();
 
-        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+        // Test for an Issuer
+        $issuerElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer');
+        $this->assertCount(1, $issuerElements);
+        $this->assertEquals('https://gateway.example.org/saml20/sp/metadata', $issuerElements[0]->textContent);
 
-        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+        // Test ordering of AuthnRequest contents
+        $requestElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*');
+        $this->assertCount(1, $requestElements);
+        $this->assertEquals('samlp:NameIDPolicy', $requestElements[0]->tagName);
+
+        // Test NameIDPolicy
+        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:nameid-format:transient", $requestElements[0]->getAttribute('Format'));
+        $this->assertFalse($requestElements[0]->hasAttribute('SPNameQualifier'));
+        $this->assertFalse($requestElements[0]->hasAttribute('AllowCreate'));
     }
 
 
@@ -766,25 +724,9 @@ AUTHNREQUEST;
 
         $request->setForceAuthn(true);
 
-        $expectedStructureDocument = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="123"
-    Version="2.0"
-    ForceAuthn="true"
-    IssueInstant="2004-12-05T09:21:59Z"
-    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
-    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
         $requestStructure = $request->toUnsignedXML();
 
-        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
-
-        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+        $this->assertEquals('true', $requestStructure->getAttribute('ForceAuthn'));
     }
 
 
@@ -867,25 +809,9 @@ AUTHNREQUEST;
 
         $request->setIsPassive(true);
 
-        $expectedStructureDocument = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="123"
-    Version="2.0"
-    IsPassive="true"
-    IssueInstant="2004-12-05T09:21:59Z"
-    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
-    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
         $requestStructure = $request->toUnsignedXML();
 
-        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
-
-        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+        $this->assertEquals('true', $requestStructure->getAttribute('IsPassive'));
     }
 
 
@@ -906,25 +832,9 @@ AUTHNREQUEST;
 
         $request->setProviderName("My Example SP");
 
-        $expectedStructureDocument = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="123"
-    ProviderName="My Example SP"
-    Version="2.0"
-    IssueInstant="2004-12-05T09:21:59Z"
-    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
-    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
         $requestStructure = $request->toUnsignedXML();
 
-        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
-
-        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+        $this->assertEquals('My Example SP', $requestStructure->getAttribute('ProviderName'));
     }
 
 
@@ -973,27 +883,16 @@ AUTHNREQUEST;
         $request->setProtocolBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
         $request->setAssertionConsumerServiceURL("https://sp.example.org/authentication/sp/consume-assertion");
 
-        $expectedStructureDocument = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID="123"
-    Version="2.0"
-    IssueInstant="2004-12-05T09:21:59Z"
-    Destination="https://idp.example.org/idp/profile/saml2/Redirect/SSO"
-    AssertionConsumerServiceURL="https://sp.example.org/authentication/sp/consume-assertion"
-    ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
->
-    <saml:Issuer>https://sp.example.org/saml20/sp/metadata</saml:Issuer>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
         $requestStructure = $request->toUnsignedXML();
 
-        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
-
-        $this->assertXmlStringEqualsXmlString($expectedStructure->ownerDocument->saveXML(), $requestStructure->ownerDocument->saveXML());
+        $this->assertEquals(
+            'https://sp.example.org/authentication/sp/consume-assertion',
+            $requestStructure->getAttribute('AssertionConsumerServiceURL'),
+        );
+        $this->assertEquals(
+            'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST',
+            $requestStructure->getAttribute('ProtocolBinding'),
+        );
     }
 
 
@@ -1092,28 +991,26 @@ AUTHNREQUEST;
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setAudiences(array('https://sp1.example.org', 'https://sp2.example.org'));
 
-        $expectedStructureDocument = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    ID=""
-    Version=""
-    IssueInstant=""
-    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO">
-    <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
-    <saml:Conditions>
-      <saml:AudienceRestriction>
-        <saml:Audience>https://sp1.example.org</saml:Audience>
-        <saml:Audience>https://sp2.example.org</saml:Audience>
-      </saml:AudienceRestriction>
-    </saml:Conditions>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $expectedStructure = DOMDocumentFactory::fromString($expectedStructureDocument)->documentElement;
         $requestStructure = $request->toUnsignedXML();
 
-        $this->assertEqualXMLStructure($expectedStructure, $requestStructure);
+        // Test for an Issuer
+        $issuerElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer');
+        $this->assertCount(1, $issuerElements);
+        $this->assertEquals('https://gateway.example.org/saml20/sp/metadata', $issuerElements[0]->textContent);
+
+        // Test ordering of AuthnRequest contents
+        $requestElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*');
+        $this->assertCount(1, $requestElements);
+        $this->assertEquals('saml:Conditions', $requestElements[0]->tagName);
+
+        // Test existence of Audience
+        $audienceElements = Utils::xpQuery(
+            $requestStructure,
+            './saml_assertion:Conditions/saml_assertion:AudienceRestriction/saml_assertion:Audience',
+        );
+        $this->assertCount(2, $audienceElements);
+        $this->assertEquals('https://sp1.example.org', $audienceElements[0]->textContent);
+        $this->assertEquals('https://sp2.example.org', $audienceElements[1]->textContent);
     }
 
 

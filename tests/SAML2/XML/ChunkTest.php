@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML;
 
 use SAML2\DOMDocumentFactory;
+use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
 use SAML2\XML\Chunk;
@@ -53,6 +54,10 @@ class ChunkTest extends \PHPUnit\Framework\TestCase
         $newchunk = new Chunk($document->firstChild);
         $newchunk->unserialize($ser);
 
-        $this->assertEqualXMLStructure($this->chunk->getXML(), $newchunk->getXML());
+        // Test for an Issuer
+        $avElements = Utils::xpQuery($newchunk->getXML(), './saml_assertion:AttributeValue');
+        $this->assertCount(2, $avElements);
+        $this->assertEquals('FirstValue', $avElements[0]->textContent);
+        $this->assertEquals('SecondValue', $avElements[1]->textContent);
     }
 }

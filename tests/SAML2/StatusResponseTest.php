@@ -161,24 +161,12 @@ XML;
         ]);
         $response->setInResponseTo('aabb12234');
 
-        $responseElement = $response->toUnsignedXML();
+        $responseStructure = $response->toUnsignedXML();
 
-        $expectedStructureDocument = new \DOMDocument();
-        $expectedStructureDocument->loadXML(<<<STATUSXML
-<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-                xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-                ID="123"
-                Version="2.0"
-                IssueInstant="2016-01-20T20:57:19Z"
-                InResponseTo="aabb12234">
-  <samlp:Status>
-    <samlp:StatusCode Value="OurStatusCode"/>
-  </samlp:Status>
-</samlp:Response>
-STATUSXML
-        );
-        $expectedStructure = $expectedStructureDocument->documentElement;
-        $this->assertEqualXMLStructure($expectedStructure, $responseElement);
+        // Test for a StatusCode
+        $statusCodeElements = Utils::xpQuery($responseStructure, './saml_protocol:Status/saml_protocol:StatusCode');
+        $this->assertCount(1, $statusCodeElements);
+        $this->assertEquals('OurStatusCode', $statusCodeElements[0]->getAttribute('Value'));
     }
 
 

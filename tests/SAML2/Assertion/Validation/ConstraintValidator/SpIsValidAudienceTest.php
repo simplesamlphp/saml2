@@ -42,7 +42,7 @@ class SpIsValidAudienceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function when_no_valid_audiences_are_given_the_assertion_is_valid(): void
     {
-        $this->assertion->shouldReceive('getValidAudiences')->andReturn(null);
+        $this->assertion->shouldReceive('getValidAudiences')->andReturn([]);
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('entityId');
 
         $validator = new SpIsValidAudience();

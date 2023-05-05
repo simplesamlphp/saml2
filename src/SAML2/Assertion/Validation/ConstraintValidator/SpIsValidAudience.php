@@ -38,7 +38,7 @@ class SpIsValidAudience implements
     public function validate(Assertion $assertion, Result $result): void
     {
         $intendedAudiences = $assertion->getValidAudiences();
-        if ($intendedAudiences === null) {
+        if (empty($intendedAudiences)) {
             return;
         }
 

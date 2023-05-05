@@ -20,7 +20,7 @@ abstract class SignedElement
      *
      * @var XMLSecurityKey|null
      */
-    protected ?XMLSecurityKey $signatureKey;
+    protected ?XMLSecurityKey $signatureKey = null;
 
     /**
      * List of certificates that should be included in the message.

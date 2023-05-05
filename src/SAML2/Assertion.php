@@ -392,7 +392,7 @@ class Assertion extends SignedElement
             switch ($node->localName) {
                 case 'AudienceRestriction':
                     $audiences = Utils::extractStrings($node, Constants::NS_SAML, 'Audience');
-                    if ($this->validAudiences === null) {
+                    if (empty($this->validAudiences)) {
                         /* The first (and probably last) AudienceRestriction element. */
                         $this->validAudiences = $audiences;
                     } else {
@@ -676,7 +676,7 @@ class Assertion extends SignedElement
     {
         Assert::same($key->type, XMLSecurityKey::RSA_SHA256);
 
-        if ($this->signatureData === null) {
+        if (empty($this->signatureData)) {
             return false;
         }
 
@@ -1010,7 +1010,7 @@ class Assertion extends SignedElement
      *
      * @return array|null The allowed audiences.
      */
-    public function getValidAudiences(): ?array
+    public function getValidAudiences(): array
     {
         return $this->validAudiences;
     }
@@ -1021,10 +1021,10 @@ class Assertion extends SignedElement
      *
      * This may be null, in which case all audiences are allowed.
      *
-     * @param array|null $validAudiences The allowed audiences.
+     * @param array $validAudiences The allowed audiences.
      * @return void
      */
-    public function setValidAudiences(array $validAudiences = null): void
+    public function setValidAudiences(array $validAudiences = []): void
     {
         $this->validAudiences = $validAudiences;
     }
@@ -1271,19 +1271,19 @@ class Assertion extends SignedElement
     }
 
     /**
-     * @return array|null
+     * @return array
      */
-    public function getSignatureData(): ?array
+    public function getSignatureData(): array
     {
         return $this->signatureData;
     }
 
 
     /**
-     * @param array|null $signatureData
+     * @param array $signatureData
      * @return void
      */
-    public function setSignatureData(array $signatureData = null): void
+    public function setSignatureData(array $signatureData = []): void
     {
         $this->signatureData = $signatureData;
     }
@@ -1567,7 +1567,7 @@ class Assertion extends SignedElement
             $conditions->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->notOnOrAfter));
         }
 
-        if ($this->validAudiences !== null) {
+        if (!empty($this->validAudiences)) {
             $ar = $document->createElementNS(Constants::NS_SAML, 'saml:AudienceRestriction');
             $conditions->appendChild($ar);
 

@@ -47,7 +47,7 @@ class ExtensionsTest extends TestCase
         $this->assertCount(0, $list);
         $this->assertEquals(
             <<<XML
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <root/>
 XML
             ,
@@ -65,7 +65,7 @@ XML
         $this->assertCount(1, $list);
         $this->assertEquals(
             <<<XML
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <root>
   <md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ns="urn:some:ns">
     <ns:SomeChunk xmlns:ns="urn:some:ns" foo="bar">Contents</ns:SomeChunk>
@@ -147,7 +147,7 @@ XML
         Extensions::addList($r, $extensions);
         $this->assertEquals(
             <<<XML
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <root>
   <md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
     <shibmd:Scope xmlns:shibmd="urn:mace:shibboleth:metadata:1.0" regexp="false">SomeScope</shibmd:Scope>

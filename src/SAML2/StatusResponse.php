@@ -38,7 +38,7 @@ abstract class StatusResponse extends Message
      *
      * @var string|null
      */
-    private ?string $inResponseTo;
+    private ?string $inResponseTo = null;
 
 
     /**

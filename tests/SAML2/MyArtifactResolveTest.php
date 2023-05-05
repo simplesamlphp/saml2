@@ -9,7 +9,7 @@ use SAML2\DOMDocumentFactory;
 use SAML2\ArtifactResolve;
 use SAML2\Utils;
 
-class ArtifactResolveTest extends \PHPUnit\Framework\TestCase
+class MyArtifactResolveTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return void

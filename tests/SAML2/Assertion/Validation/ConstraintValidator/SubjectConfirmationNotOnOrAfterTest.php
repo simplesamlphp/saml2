@@ -7,13 +7,13 @@ namespace SAML2\Assertion\Validation\ConstraintValidator;
 use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotOnOrAfter;
 use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
 use SAML2\Assertion\Validation\Result;
-use Test\SAML2\ControlledTimeTest;
+use Test\SAML2\AbstractControlledTime;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to not contaminate the other
  * tests.
  */
-class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
+class SubjectConfirmationNotOnOrAfterTest extends AbstractControlledTime
 {
     /**
      * @var \Mockery\MockInterface

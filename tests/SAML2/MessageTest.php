@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMDocument;
+use Exception;
 use SAML2\Message;
 use SAML2\Response;
 use SAML2\DOMDocumentFactory;
