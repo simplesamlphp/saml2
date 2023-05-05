@@ -9,7 +9,7 @@ use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
 use SimpleSAML\Store\StoreFactory;
-use SimpleSAML\Utils;
+use SimpleSAML\Utils\HTTP;
 
 use SAML2\Utilities\Temporal;
 use SAML2\XML\saml\Issuer;
@@ -69,7 +69,7 @@ class HTTPArtifact extends Binding
         if ($destination === null) {
             throw new \Exception('Cannot get redirect URL, no destination set in the message.');
         }
-        $httpUtils = new Utils\HTTP();
+        $httpUtils = new HTTP();
         return $httpUtils->addURLparameters($destination, $params);
     }
 
