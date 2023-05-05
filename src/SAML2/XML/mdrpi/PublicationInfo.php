@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SAML2\XML\mdrpi;
 
 use DOMElement;
-use Webmozart\Assert\Assert;
 use SAML2\Utils;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class for handling the mdrpi:PublicationInfo element.

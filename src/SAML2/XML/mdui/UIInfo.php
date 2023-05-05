@@ -7,7 +7,7 @@ namespace SAML2\XML\mdui;
 use DOMElement;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class for handling the metadata extensions for login and discovery user interface

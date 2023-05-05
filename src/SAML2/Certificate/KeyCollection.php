@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Certificate;
 
 use SAML2\Utilities\ArrayCollection;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Simple collection object for transporting keys

@@ -8,7 +8,7 @@ use DOMElement;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\saml\Attribute;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Class for handling the EntityAttributes metadata extension.

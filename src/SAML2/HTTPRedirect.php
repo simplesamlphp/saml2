@@ -7,7 +7,7 @@ namespace SAML2;
 use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use Webmozart\Assert\Assert;
+use SimpleSAML\Assert\Assert;
 
 use function array_key_exists;
 use function base64_decode;
