@@ -16,8 +16,7 @@ use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SOAP11\XML\env\Body;
 use SimpleSAML\SOAP11\XML\env\Envelope;
 use SimpleSAML\SOAP11\XML\env\Fault;
-use SimpleSAML\Utils\Config;
-use SimpleSAML\Utils\Crypto;
+use SimpleSAML\Utils
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\UnparseableXMLException;
@@ -70,7 +69,8 @@ class SOAPClient
         if ($srcMetadata->hasValue('saml.SOAPClient.certificate')) {
             $cert = $srcMetadata->getValue('saml.SOAPClient.certificate');
             if ($cert !== false) {
-                $ctxOpts['ssl']['local_cert'] = Config::getCertPath(
+                $configUtils = new Utils\Config();
+                $ctxOpts['ssl']['local_cert'] = $configUtils->getCertPath(
                     $srcMetadata->getString('saml.SOAPClient.certificate')
                 );
                 if ($srcMetadata->hasValue('saml.SOAPClient.privatekey_pass')) {
@@ -79,8 +79,9 @@ class SOAPClient
             }
         } else {
             /* Use the SP certificate and privatekey if it is configured. */
-            $privateKey = Crypto::loadPrivateKey($srcMetadata);
-            $publicKey = Crypto::loadPublicKey($srcMetadata);
+            $cryptoUtils = new Utils\Crypto();
+            $privateKey = $cryptoUtils->loadPrivateKey($srcMetadata);
+            $publicKey = $cryptoUtils->loadPublicKey($srcMetadata);
             if ($privateKey !== null && $publicKey !== null && isset($publicKey['PEM'])) {
                 $keyCertData = $privateKey['PEM'] . $publicKey['PEM'];
                 $file = $container->getTempDir() . '/' . sha1($keyCertData) . '.pem';

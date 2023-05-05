@@ -17,8 +17,8 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
-use SimpleSAML\Store;
-use SimpleSAML\Utils\HTTP;
+use SimpleSAML\Store\StoreFactory;
+use SimpleSAML\Utils;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function array_key_exists;
@@ -57,7 +57,10 @@ class HTTPArtifact extends Binding
     public function getRedirectURL(AbstractMessage $message): string
     {
         /** @psalm-suppress UndefinedClass */
-        $store = Store::getInstance();
+        $config = Configuration::getInstance();
+
+        /** @psalm-suppress UndefinedClass */
+        $store = StoreFactory::getInstance($config->getString('store.type'));
         if ($store === false) {
             throw new Exception('Unable to send artifact without a datastore configured.');
         }
@@ -86,7 +89,8 @@ class HTTPArtifact extends Binding
         }
 
         /** @psalm-suppress UndefinedClass */
-        return HTTP::addURLparameters($destination, $params);
+        $httpUtils = new Utils\HTTP();
+        return $httpUtils->addURLparameters($destination, $params);
     }
 
 
