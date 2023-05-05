@@ -6,9 +6,9 @@ namespace SAML2\XML\mdattr;
 
 use DOMElement;
 use SAML2\Utils;
-use SAML2\XML\Chunk;
 use SAML2\XML\saml\Attribute;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class for handling the EntityAttributes metadata extension.
@@ -26,9 +26,9 @@ class EntityAttributes
     /**
      * Array with child elements.
      *
-     * The elements can be \SAML2\XML\saml\Attribute or \SAML2\XML\Chunk elements.
+     * The elements can be \SAML2\XML\saml\Attribute or \SimpleSAML\XML\Chunk elements.
      *
-     * @var (\SAML2\XML\saml\Attribute|\SAML2\XML\Chunk)[]
+     * @var (\SAML2\XML\saml\Attribute|\SimpleSAML\XML\Chunk)[]
      */
     private $children = [];
 
@@ -58,7 +58,7 @@ class EntityAttributes
     /**
      * Collect the value of the children-property
      *
-     * @return (\SAML2\XML\Chunk|\SAML2\XML\saml\Attribute)[]
+     * @return (\SimpleSAML\XML\Chunk|\SAML2\XML\saml\Attribute)[]
      */
     public function getChildren(): array
     {
@@ -81,7 +81,7 @@ class EntityAttributes
     /**
      * Add the value to the children-property
      *
-     * @param \SAML2\XML\Chunk|\SAML2\XML\saml\Attribute $child
+     * @param \SimpleSAML\XML\Chunk|\SAML2\XML\saml\Attribute $child
      * @return void
      */
     public function addChildren($child): void
@@ -104,7 +104,7 @@ class EntityAttributes
         $e = $doc->createElementNS(EntityAttributes::NS, 'mdattr:EntityAttributes');
         $parent->appendChild($e);
 
-        /** @var \SAML2\XML\saml\Attribute|\SAML2\XML\Chunk $child */
+        /** @var \SAML2\XML\saml\Attribute|\SimpleSAML\XML\Chunk $child */
         foreach ($this->children as $child) {
             $child->toXML($e);
         }

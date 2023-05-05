@@ -6,9 +6,9 @@ namespace SAML2\XML\ds;
 
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
-use SAML2\XML\Chunk;
 use SAML2\XML\ds\X509Certificate;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class representing a ds:X509Data element.
@@ -21,9 +21,9 @@ class X509Data
      * The various X509 data elements.
      *
      * Array with various elements describing this certificate.
-     * Unknown elements will be represented by \SAML2\XML\Chunk.
+     * Unknown elements will be represented by \SimpleSAML\XML\Chunk.
      *
-     * @var (\SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate)[]
+     * @var (\SimpleSAML\XML\Chunk|\SAML2\XML\ds\X509Certificate)[]
      */
     private $data = [];
 
@@ -86,7 +86,7 @@ class X509Data
     /**
      * Add the value to the data-property
      *
-     * @param \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate $data
+     * @param \SimpleSAML\XML\Chunk|\SAML2\XML\ds\X509Certificate $data
      * @return void
      */
     public function addData($data): void
@@ -109,7 +109,7 @@ class X509Data
         $e = $doc->createElementNS(XMLSecurityDSig::XMLDSIGNS, 'ds:X509Data');
         $parent->appendChild($e);
 
-        /** @var \SAML2\XML\Chunk|\SAML2\XML\ds\X509Certificate $n */
+        /** @var \SimpleSAML\XML\Chunk|\SAML2\XML\ds\X509Certificate $n */
         foreach ($this->getData() as $n) {
             $n->toXML($e);
         }

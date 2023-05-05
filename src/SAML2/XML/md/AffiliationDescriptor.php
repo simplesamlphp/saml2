@@ -153,7 +153,7 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Collect the value of the Extensions-property
      *
-     * @return \SAML2\XML\Chunk[]
+     * @return \SimpleSAML\XML\Chunk[]
      */
     public function getExtensions(): array
     {

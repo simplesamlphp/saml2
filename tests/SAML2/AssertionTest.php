@@ -8,10 +8,10 @@ use SAML2\Assertion;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
-use SAML2\XML\Chunk;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class \SAML2\AssertionTest

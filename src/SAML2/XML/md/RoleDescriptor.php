@@ -8,7 +8,7 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\SignedElementHelper;
 use SAML2\Utils;
-use SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class representing SAML 2 RoleDescriptor element.
@@ -205,7 +205,7 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * Collect the value of the Extensions property.
      *
-     * @return \SAML2\XML\Chunk[]
+     * @return \SimpleSAML\XML\Chunk[]
      */
     public function getExtensions(): array
     {
@@ -228,7 +228,7 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * Add an Extension.
      *
-     * @param \SAML2\XML\Chunk $extensions The Extensions
+     * @param \SimpleSAML\XML\Chunk $extensions The Extensions
      * @return void
      */
     public function addExtension(Extensions $extension): void

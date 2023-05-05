@@ -12,6 +12,7 @@ use SAML2\DOMDocumentFactory;
 use SAML2\XML\saml\Issuer;
 use SAML2\Constants;
 use SAML2\Utils;
+use SimpleSAML\XML\Chunk;
 
 class MessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -233,7 +234,7 @@ AUTHNREQUEST
 
         $dom = \SAML2\DOMDocumentFactory::create();
         $ce = $dom->createElementNS('http://www.example.com/XFoo', 'xfoo:test', 'Test data!');
-        $newexts[] = new \SAML2\XML\Chunk($ce);
+        $newexts[] = new Chunk($ce);
 
         $message->setExtensions($newexts);
 

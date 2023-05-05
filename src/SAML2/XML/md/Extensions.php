@@ -10,7 +10,6 @@ use SAML2\Utils;
 use SAML2\XML\alg\Common as ALG;
 use SAML2\XML\alg\DigestMethod;
 use SAML2\XML\alg\SigningMethod;
-use SAML2\XML\Chunk;
 use SAML2\XML\mdattr\EntityAttributes;
 use SAML2\XML\mdrpi\Common as MDRPI;
 use SAML2\XML\mdrpi\PublicationInfo;
@@ -19,6 +18,7 @@ use SAML2\XML\mdui\Common as MDUI;
 use SAML2\XML\mdui\DiscoHints;
 use SAML2\XML\mdui\UIInfo;
 use SAML2\XML\shibmd\Scope;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class for handling SAML2 metadata extensions.
@@ -38,7 +38,7 @@ class Extensions
      *          \SAML2\XML\mdui\DiscoHints|
      *          \SAML2\XML\alg\DigestMethod|
      *          \SAML2\XML\alg\SigningMethod|
-     *          \SAML2\XML\Chunk)[]  Array of extensions.
+     *          \SimpleSAML\XML\Chunk)[]  Array of extensions.
      */
     public static function getList(DOMElement $parent): array
     {
@@ -85,7 +85,7 @@ class Extensions
      * Add a list of Extensions to the given element.
      *
      * @param \DOMElement $parent The element we should add the extensions to.
-     * @param \SAML2\XML\Chunk[] $extensions List of extension objects.
+     * @param \SimpleSAML\XML\Chunk[] $extensions List of extension objects.
      * @return void
      */
     public static function addList(DOMElement $parent, array $extensions): void

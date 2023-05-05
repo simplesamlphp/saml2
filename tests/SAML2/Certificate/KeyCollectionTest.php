@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace SAML2\Certificate;
 
-class KeyCollectionTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+use Mockery\Adapter\Phpunit\MockeryTestCase;
+use SimpleSAML\Assert\AssertionFailedException;
+
+class KeyCollectionTest extends MockeryTestCase
 {
     /**
      * @group certificate
@@ -13,7 +16,7 @@ class KeyCollectionTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testKeyCollectionAddWrongType(): void
     {
-        $this->expectException(\InvalidArgumentException::class);
+        $this->expectException(AssertionFailedException::class);
         $kc = new KeyCollection();
         $kc->add("not a key, just a string");
     }

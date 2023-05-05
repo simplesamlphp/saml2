@@ -7,8 +7,8 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
-use SAML2\XML\Chunk;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class representing SAML 2 Organization element.
@@ -76,7 +76,7 @@ class Organization
     /**
      * Collect the value of the Extensions property.
      *
-     * @return \SAML2\XML\Chunk[]
+     * @return \SimpleSAML\XML\Chunk[]
      */
     public function getExtensions(): array
     {
@@ -99,7 +99,7 @@ class Organization
     /**
      * Add an Extension.
      *
-     * @param \SAML2\XML\Chunk $extensions The Extensions
+     * @param \SimpleSAML\XML\Chunk $extensions The Extensions
      * @return void
      */
     public function addExtension(Extensions $extension): void

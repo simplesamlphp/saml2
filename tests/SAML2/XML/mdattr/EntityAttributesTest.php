@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace SAML2\XML\mdattr;
 
 use SAML2\DOMDocumentFactory;
-use SAML2\XML\Chunk;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
 use SAML2\XML\mdattr\EntityAttributes;
 use SAML2\Utils;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class \SAML2\XML\mdattr\EntityAttributesTest
