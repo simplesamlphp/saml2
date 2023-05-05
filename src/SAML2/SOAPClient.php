@@ -65,7 +65,8 @@ class SOAPClient
         if ($srcMetadata->hasValue('saml.SOAPClient.certificate')) {
             $cert = $srcMetadata->getValue('saml.SOAPClient.certificate');
             if ($cert !== false) {
-                $ctxOpts['ssl']['local_cert'] = Config::getCertPath(
+                $configUtils = new Config();
+                $ctxOpts['ssl']['local_cert'] = $configUtils->getCertPath(
                     $srcMetadata->getString('saml.SOAPClient.certificate')
                 );
                 if ($srcMetadata->hasValue('saml.SOAPClient.privatekey_pass')) {
@@ -74,8 +75,9 @@ class SOAPClient
             }
         } else {
             /* Use the SP certificate and privatekey if it is configured. */
-            $privateKey = Crypto::loadPrivateKey($srcMetadata);
-            $publicKey = Crypto::loadPublicKey($srcMetadata);
+            $cryptoUtils = new Crypto();
+            $privateKey = $cryptoUtils->loadPrivateKey($srcMetadata);
+            $publicKey = $cryptoUtils->loadPublicKey($srcMetadata);
             if ($privateKey !== null && $publicKey !== null && isset($publicKey['PEM'])) {
                 $keyCertData = $privateKey['PEM'] . $publicKey['PEM'];
                 $file = $container->getTempDir() . '/' . sha1($keyCertData) . '.pem';
