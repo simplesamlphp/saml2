@@ -9,18 +9,22 @@
         }
     ],
     "require": {
-        "php": ">=7.4 || ^8.0",
-        "ext-openssl": "*",
+        "php": "^8.0",
+        "ext-date": "*",
         "ext-dom": "*",
+        "ext-filter": "*",
+        "ext-openssl": "*",
+        "ext-pcre": "*",
+        "ext-soap": "*",
         "ext-zlib": "*",
 
-        "psr/log": "~1.1 || ^2.0 || ^3.0",
+        "psr/log": "^2.0 || ^3.0",
         "robrichards/xmlseclibs": "^3.1.1",
-        "simplesamlphp/assert": "^0.8"
+        "simplesamlphp/assert": "^1.0.4"
     },
     "require-dev": {
         "mockery/mockery": "^1.5",
-        "simplesamlphp/simplesamlphp-test-framework": "^1.2.2"
+        "simplesamlphp/simplesamlphp-test-framework": "^1.5.4"
     },
     "autoload": {
         "psr-4": {
