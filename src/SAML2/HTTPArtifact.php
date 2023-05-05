@@ -18,7 +18,7 @@ use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
 use SimpleSAML\Store\StoreFactory;
-use SimpleSAML\Utils;
+use SimpleSAML\Utils\HTTP;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function array_key_exists;
@@ -89,7 +89,7 @@ class HTTPArtifact extends Binding
         }
 
         /** @psalm-suppress UndefinedClass */
-        $httpUtils = new Utils\HTTP();
+        $httpUtils = new HTTP();
         return $httpUtils->addURLparameters($destination, $params);
     }
 
