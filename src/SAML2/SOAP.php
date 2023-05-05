@@ -8,6 +8,7 @@ use DOMDocument;
 use Exception;
 use SAML2\Exception\Protocol\UnsupportedBindingException;
 use SAML2\XML\ecp\Response as ECPResponse;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 use function file_get_contents;
 
@@ -34,7 +35,7 @@ class SOAP extends Binding
 SOAP;
         $envelope = sprintf($envelope, Constants::NS_SOAP);
 
-        $doc = new DOMDocument();
+        $doc = DOMDocumentFactory::create();
         $doc->loadXML($envelope);
 
         // In the Artifact Resolution profile, this will be an ArtifactResolve

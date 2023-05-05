@@ -33,7 +33,7 @@ Usage
 * Install with [Composer](https://getcomposer.org/doc/00-intro.md), run the following command in your project:
 
 ```bash
-composer require simplesamlphp/saml2:^3.0
+composer require simplesamlphp/saml2:^5.0
 ```
 
 * Provide the required external dependencies by extending and implementing the ```SAML2\Compat\AbstractContainer```
@@ -66,9 +66,9 @@ Example:
 
 Security
 --------
-* Should you need to create a DOMDocument instance, use the `SAML2\DOMDocumentFactory` to create DOMDocuments from
-  either a string (`SAML2\DOMDocumentFactory::fromString($theXmlAsString)`), a file (`SAML2\DOMDocumentFactory::fromFile($pathToTheFile)`)
-  or just a new instance (`SAML2\DOMDocumentFactory::create()`). This in order to protect yourself against the
+* Should you need to create a DOMDocument instance, use the `SimpleSAML\XML\DOMDocumentFactory` to create DOMDocuments from
+  either a string (`SimpleSAML\XML\DOMDocumentFactory::fromString($theXmlAsString)`), a file (`SimpleSAML\XML\DOMDocumentFactory::fromFile($pathToTheFile)`)
+  or just a new instance (`SimpleSAML\XML\DOMDocumentFactory::create()`). This in order to protect yourself against the
   [XXE Processing Vulnerability](https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Processing), as well as
   [XML Entity Expansion](https://phpsecurity.readthedocs.org/en/latest/Injection-Attacks.html#defenses-against-xml-entity-expansion) attacks
 

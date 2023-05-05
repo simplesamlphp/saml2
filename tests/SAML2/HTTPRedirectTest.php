@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace SAML2;
 
 use PHPUnit\Framework\Error\Warning;
-use SAML2\DOMDocumentFactory;
 use SAML2\HTTPRedirect;
 use SAML2\AuthnRequest;
 use SAML2\Request;
 use SAML2\Response;
 use SAML2\XML\saml\Issuer;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

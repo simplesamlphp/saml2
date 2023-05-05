@@ -17,6 +17,7 @@ use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 use function array_intersect;
 use function array_key_exists;

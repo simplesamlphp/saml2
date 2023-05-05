@@ -6,6 +6,7 @@ namespace SAML2;
 
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SAML2\AttributeQueryTest

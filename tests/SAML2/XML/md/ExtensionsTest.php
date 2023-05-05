@@ -6,7 +6,6 @@ namespace SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
 use SAML2\XML\alg\DigestMethod;
 use SAML2\XML\alg\SigningMethod;
 use SAML2\XML\mdattr\EntityAttributes;
@@ -16,6 +15,7 @@ use SAML2\XML\mdui\DiscoHints;
 use SAML2\XML\mdui\UIInfo;
 use SAML2\XML\shibmd\Scope;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 use function trim;
 

@@ -9,6 +9,7 @@ use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\XML\saml\NameID;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 use function count;
 use function is_null;

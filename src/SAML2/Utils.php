@@ -22,6 +22,7 @@ use SAML2\XML\ds\X509Data;
 use SAML2\XML\ds\KeyName;
 use SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 use function count;
 use function gmmktime;

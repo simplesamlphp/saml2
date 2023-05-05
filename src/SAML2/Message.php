@@ -11,6 +11,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\Extensions;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 use function call_user_func;
 use function count;

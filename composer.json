@@ -21,7 +21,7 @@
         "psr/log": "^2.0 || ^3.0",
         "robrichards/xmlseclibs": "^3.1.1",
         "simplesamlphp/assert": "^1.0.4",
-        "simplesamlphp/xml-common": "^1.7.2"
+        "simplesamlphp/xml-common": "^1.7.3"
     },
     "require-dev": {
         "mockery/mockery": "^1.5",

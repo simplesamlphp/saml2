@@ -7,9 +7,9 @@ namespace SAML2\Response;
 use SAML2\CertificatesMock;
 use SAML2\Assertion;
 use SAML2\Configuration\IdentityProvider;
-use SAML2\DOMDocumentFactory;
 use SAML2\Signature\Validator;
 use SAML2\Utilities\Certificate;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

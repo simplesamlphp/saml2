@@ -8,6 +8,7 @@ use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 use function array_key_exists;
 use function base64_decode;
