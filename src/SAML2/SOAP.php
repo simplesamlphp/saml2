@@ -84,7 +84,7 @@ class SOAP extends Binding
      * Receive a SAML 2 message sent using the HTTP-POST binding.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @return \SimpleSAML\SAML2\XML\samlp\AnstractMessage The received message.
+     * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
      *
      * @throws \Exception If unable to receive the message
      */
