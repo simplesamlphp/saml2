@@ -10,9 +10,9 @@ use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\SAML2\Exception\RuntimeException;
-use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
+use SimpleSAML\SOAP11\Utils\XPath;
 use SimpleSAML\SOAP11\XML\env\Body;
 use SimpleSAML\SOAP11\XML\env\Envelope;
 use SimpleSAML\SOAP11\XML\env\Fault;
@@ -263,7 +263,7 @@ class SOAPClient
         /** @psalm-suppress PossiblyNullArgument */
         $soapFault = XPath::xpQuery(
             $soapMessage->firstChild,
-            '/soap-env:Envelope/soap-env:Body/soap-env:Fault',
+            '/env:Envelope/env:Body/env:Fault',
             XPath::getXPath($soapMessage->firstChild),
         );
 

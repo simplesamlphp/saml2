@@ -11,7 +11,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SOAP11\Utils\XPath;
 use SimpleSAML\SAML2\XML\ecp\Response as ECPResponse;
 use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
@@ -103,7 +103,7 @@ class SOAP extends Binding
 
         $xpCache = XPath::getXPath($document->documentElement);
         /** @var \DOMElement[] $results */
-        $results = XPath::xpQuery($xml, '/soap-env:Envelope/soap-env:Body/*[1]', $xpCache);
+        $results = XPath::xpQuery($xml, '/env:Envelope/env:Body/*[1]', $xpCache);
 
         return MessageFactory::fromXML($results[0]);
     }
