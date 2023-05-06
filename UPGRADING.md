@@ -18,7 +18,7 @@ instead of the previous array
 
 ## 4.0 to 4.1
 
-** Assertion processor BC breaking change* *
+### Assertion processor BC breaking change
 
 The assertion processor in 4.0 assumed all assertions are encrypted and would try and decrypt twice, causing a fatal error.
 This problem was introduced in [#120](https://github.com/simplesamlphp/saml2/pull/120).
@@ -28,7 +28,7 @@ change, see: [97a7bd0](https://github.com/simplesamlphp/saml2/commit/97a7bd0be48
 
 ## 3.4 to 4.0
 
-** Assertion processor BC breaking change **
+### Assertion processor BC breaking changes
 
 The response processor in pre 4.0 releases assumed all assertions are decrypted, and caused a fatal error when the response was unsigned.
 This problem was fixed in [#120](https://github.com/simplesamlphp/saml2/pull/120).
