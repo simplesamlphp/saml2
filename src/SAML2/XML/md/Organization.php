@@ -24,28 +24,28 @@ class Organization
      *
      * @var array
      */
-    private $Extensions = [];
+    private array $Extensions = [];
 
     /**
      * The OrganizationName, as an array of language => translation.
      *
      * @var array
      */
-    private $OrganizationName = [];
+    private array $OrganizationName = [];
 
     /**
      * The OrganizationDisplayName, as an array of language => translation.
      *
      * @var array
      */
-    private $OrganizationDisplayName = [];
+    private array $OrganizationDisplayName = [];
 
     /**
      * The OrganizationURL, as an array of language => translation.
      *
      * @var array
      */
-    private $OrganizationURL = [];
+    private array $OrganizationURL = [];
 
 
     /**

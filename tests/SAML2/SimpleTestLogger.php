@@ -12,7 +12,7 @@ class SimpleTestLogger extends \Psr\Log\AbstractLogger
     /**
      * @var array
      */
-    private $messages = [];
+    private array $messages = [];
 
 
     /**

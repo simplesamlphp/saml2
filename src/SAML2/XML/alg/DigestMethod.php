@@ -21,7 +21,7 @@ class DigestMethod
      *
      * @var string
      */
-    private $Algorithm = '';
+    private string $Algorithm = '';
 
 
     /**

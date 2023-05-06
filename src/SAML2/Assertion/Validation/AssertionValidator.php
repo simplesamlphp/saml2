@@ -15,17 +15,17 @@ class AssertionValidator
     /**
      * @var \SAML2\Assertion\Validation\AssertionConstraintValidator[]
      */
-    protected $constraints;
+    protected array $constraints;
 
     /**
      * @var \SAML2\Configuration\IdentityProvider
      */
-    private $identityProvider;
+    private IdentityProvider $identityProvider;
 
     /**
      * @var \SAML2\Configuration\ServiceProvider
      */
-    private $serviceProvider;
+    private ServiceProvider $serviceProvider;
 
 
     /**

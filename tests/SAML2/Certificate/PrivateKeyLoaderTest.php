@@ -13,7 +13,7 @@ class PrivateKeyLoaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \SAML2\Certificate\PrivateKeyLoader
      */
-    private $privateKeyLoader;
+    private PrivateKeyLoader $privateKeyLoader;
 
 
     /**

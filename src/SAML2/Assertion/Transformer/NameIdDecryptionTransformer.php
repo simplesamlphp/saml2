@@ -21,22 +21,22 @@ final class NameIdDecryptionTransformer implements
     /**
      * @var \SAML2\Certificate\PrivateKeyLoader
      */
-    private $privateKeyLoader;
+    private PrivateKeyLoader $privateKeyLoader;
 
     /**
      * @var \SAML2\Configuration\IdentityProvider
      */
-    private $identityProvider;
+    private IdentityProvider $identityProvider;
 
     /**
      * @var \SAML2\Configuration\ServiceProvider
      */
-    private $serviceProvider;
+    private ServiceProvider $serviceProvider;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
 
     /**

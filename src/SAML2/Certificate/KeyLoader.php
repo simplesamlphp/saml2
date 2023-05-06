@@ -20,7 +20,7 @@ class KeyLoader
     /**
      * @var \SAML2\Certificate\KeyCollection
      */
-    private $loadedKeys;
+    private KeyCollection $loadedKeys;
 
 
     /**

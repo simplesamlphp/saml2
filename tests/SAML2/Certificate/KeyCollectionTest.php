@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SAML2\Certificate;
 
-use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 
-class KeyCollectionTest extends MockeryTestCase
+class KeyCollectionTest extends TestCase
 {
     /**
      * @group certificate

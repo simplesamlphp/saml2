@@ -20,21 +20,21 @@ class Attribute
      *
      * @var string|null
      */
-    private $Name = null;
+    private ?string $Name = null;
 
     /**
      * The NameFormat of this attribute.
      *
      * @var string|null
      */
-    private $NameFormat = null;
+    private ?string $NameFormat = null;
 
     /**
      * The FriendlyName of this attribute.
      *
      * @var string|null
      */
-    private $FriendlyName = null;
+    private ?string $FriendlyName = null;
 
     /**
      * List of attribute values.
@@ -43,7 +43,7 @@ class Attribute
      *
      * @var \SAML2\XML\saml\AttributeValue[]
      */
-    private $AttributeValue = [];
+    private array $AttributeValue = [];
 
 
     /**

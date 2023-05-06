@@ -6,6 +6,7 @@ namespace SAML2\Assertion;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Mockery\MockInterface;
 
 /**
  * @runTestsInSeparateProcesses
@@ -15,12 +16,12 @@ class ProcessorTest extends MockeryTestCase
     /**
      * @var Processor
      */
-    private $processor;
+    private Processor $processor;
 
     /**
-     * @var m\MockInterface&Decrypter
+     * @var \Mockery\MockInterface
      */
-    private $decrypter;
+    private MockInterface $decrypter;
 
     protected function setUp(): void
     {

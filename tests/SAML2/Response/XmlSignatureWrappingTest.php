@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SAML2\Response;
 
+use Exception;
+use Psr\Log\NullLogger;
+use PHPUnit\Framework\TestCase;
 use SAML2\CertificatesMock;
 use SAML2\Assertion;
 use SAML2\Configuration\IdentityProvider;
@@ -11,17 +14,17 @@ use SAML2\Signature\Validator;
 use SAML2\Utilities\Certificate;
 use SimpleSAML\XML\DOMDocumentFactory;
 
-class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class XmlSignatureWrappingTest extends TestCase
 {
     /**
      * @var \SAML2\Signature\Validator
      */
-    private $signatureValidator;
+    private Validator $signatureValidator;
 
     /**
      * @var \SAML2\Configuration\IdentityProvider
      */
-    private $identityProviderConfiguration;
+    private IdentityProvider $identityProviderConfiguration;
 
 
     /**
@@ -29,7 +32,7 @@ class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function setUp(): void
     {
-        $this->signatureValidator = new Validator(new \Psr\Log\NullLogger());
+        $this->signatureValidator = new Validator(new NullLogger());
 
         $pattern = Certificate::CERTIFICATE_PATTERN;
         preg_match($pattern, CertificatesMock::PUBLIC_KEY_PEM, $matches);
@@ -45,7 +48,7 @@ class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testThatASignatureReferencingAnEmbeddedAssertionIsNotValid(): void
     {
-        $this->expectException(\Exception::class, 'Reference validation failed');
+        $this->expectException(Exception::class, 'Reference validation failed');
 
         $assertion = $this->getSignedAssertionWithEmbeddedAssertionReferencedInSignature();
         $this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration);
@@ -57,7 +60,7 @@ class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testThatASignatureReferencingAnotherAssertionIsNotValid(): void
     {
-        $this->expectException(\Exception::class, 'Reference validation failed');
+        $this->expectException(Exception::class, 'Reference validation failed');
 
         $assertion = $this->getSignedAssertionWithSignatureThatReferencesAnotherAssertion();
         $this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration);

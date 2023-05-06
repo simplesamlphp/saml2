@@ -11,7 +11,7 @@ class ContainerSingleton
     /**
      * @var \SAML2\Compat\AbstractContainer
      */
-    protected static $container;
+    protected static AbstractContainer $container;
 
 
     /**

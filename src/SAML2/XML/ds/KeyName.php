@@ -20,7 +20,7 @@ class KeyName
      *
      * @var string
      */
-    public $name = '';
+    private string $name = '';
 
 
     /**

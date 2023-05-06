@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use DOMElement;
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\LogoutRequest;
 use SAML2\Utils\XPath;
@@ -13,12 +15,12 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SAML2\LogoutRequestTest
  */
-class LogoutRequestTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class LogoutRequestTest extends TestCase
 {
     /**
      * @var \DOMElement
      */
-    private $logoutRequestElement;
+    private DOMElement $logoutRequestElement;
 
 
     /**

@@ -6,6 +6,7 @@ namespace SAML2\Assertion\Validation\ConstraintValidator;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Mockery\MockInterface;
 use SAML2\Assertion\Validation\Result;
 use SAML2\Response;
 use SAML2\XML\saml\SubjectConfirmation;
@@ -14,19 +15,19 @@ use SAML2\XML\saml\SubjectConfirmationData;
 class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
 {
     /**
-     * @var \Mockery\MockInterface
+     * @var \SAML2\XML\saml\SubjectConfirmation
      */
-    private $subjectConfirmation;
+    private SubjectConfirmation $subjectConfirmation;
+
+    /**
+     * @var \SAML2\XML\saml\SubjectConfirmationData
+     */
+    private SubjectConfirmationData $subjectConfirmationData;
 
     /**
      * @var \Mockery\MockInterface
      */
-    private $subjectConfirmationData;
-
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private $response;
+    private MockInterface $response;
 
 
     /**

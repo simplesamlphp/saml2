@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace SAML2;
 
 use Nyholm\Psr7\ServerRequest;
+use PHPUnit\Framework\TestCase;
 use SAML2\AuthnRequest;
 use SAML2\HTTPPost;
 use SAML2\Response;
 use SAML2\XML\saml\Issuer;
 use SimpleSAML\Utils\HTTP;
 
-class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class HTTPPostTest extends TestCase
 {
     /**
      * test parsing of basic query string with authnrequest and

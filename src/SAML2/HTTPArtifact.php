@@ -36,9 +36,9 @@ use function var_export;
 class HTTPArtifact extends Binding
 {
     /**
-     * @var mixed
+     * @var \SimpleSAML\Configuration
      */
-    private $spMetadata;
+    private Configuration $spMetadata;
 
 
     /**

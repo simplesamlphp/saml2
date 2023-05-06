@@ -19,28 +19,28 @@ class Logo
      *
      * @var string
      */
-    private $url;
+    private string $url;
 
     /**
      * The width of this logo.
      *
      * @var int
      */
-    private $width;
+    private int $width;
 
     /**
      * The height of this logo.
      *
      * @var int
      */
-    private $height;
+    private int $height;
 
     /**
      * The language of this item.
      *
      * @var string|null
      */
-    private $lang = null;
+    private ?string $lang = null;
 
 
     /**

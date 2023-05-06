@@ -14,7 +14,7 @@ class Result
     /**
      * @var array
      */
-    private $errors = [];
+    private array $errors = [];
 
 
     /**

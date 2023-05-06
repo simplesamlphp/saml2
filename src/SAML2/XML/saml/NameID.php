@@ -17,5 +17,5 @@ class NameID extends NameIDType
      *
      * @var string
      */
-    protected $nodeName = 'saml:NameID';
+    protected string $nodeName = 'saml:NameID';
 }

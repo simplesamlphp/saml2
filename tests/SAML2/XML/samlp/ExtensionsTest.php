@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\samlp;
 
+use DOMElement;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\samlp\Extensions;
 use SAML2\XML\shibmd\Scope;
@@ -17,7 +18,7 @@ class ExtensionsTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \DOMElement
      */
-    private $testElement;
+    private DOMElement $testElement;
 
 
     /**

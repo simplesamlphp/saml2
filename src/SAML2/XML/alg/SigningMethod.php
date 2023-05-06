@@ -21,7 +21,7 @@ class SigningMethod
      *
      * @var string
      */
-    private $Algorithm = '';
+    private string $Algorithm = '';
 
     /**
      * The smallest key size, in bits, that the entity supports in conjunction with the algorithm. If omitted, no
@@ -29,7 +29,7 @@ class SigningMethod
      *
      * @var int|null
      */
-    private $MinKeySize = null;
+    private ?int $MinKeySize = null;
 
     /**
      * The largest key size, in bits, that the entity supports in conjunction with the algorithm. If omitted, no
@@ -37,7 +37,7 @@ class SigningMethod
      *
      * @var int|null
      */
-    private $MaxKeySize = null;
+    private ?int $MaxKeySize = null;
 
 
     /**
@@ -73,7 +73,7 @@ class SigningMethod
      *
      * @return string
      */
-    public function getAlgorithm()
+    public function getAlgorithm(): string
     {
         return $this->Algorithm;
     }

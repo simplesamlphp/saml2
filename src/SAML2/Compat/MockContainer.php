@@ -15,12 +15,12 @@ class MockContainer extends AbstractContainer
     /**
      * @var string
      */
-    private $id = '123';
+    private string $id = '123';
 
     /**
      * @var array
      */
-    private $debugMessages = [];
+    private array $debugMessages = [];
 
 
     /**

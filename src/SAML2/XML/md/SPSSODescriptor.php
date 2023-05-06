@@ -20,14 +20,14 @@ class SPSSODescriptor extends SSODescriptorType
      *
      * @var bool|null
      */
-    private $AuthnRequestsSigned = null;
+    private ?bool $AuthnRequestsSigned = null;
 
     /**
      * Whether this SP wants the Assertion elements to be signed.
      *
      * @var bool|null
      */
-    private $WantAssertionsSigned = null;
+    private ?bool $WantAssertionsSigned = null;
 
     /**
      * List of AssertionConsumerService endpoints for this SP.
@@ -36,7 +36,7 @@ class SPSSODescriptor extends SSODescriptorType
      *
      * @var \SAML2\XML\md\IndexedEndpointType[]
      */
-    private $AssertionConsumerService = [];
+    private array $AssertionConsumerService = [];
 
     /**
      * List of AttributeConsumingService descriptors for this SP.
@@ -45,7 +45,7 @@ class SPSSODescriptor extends SSODescriptorType
      *
      * @var \SAML2\XML\md\AttributeConsumingService[]
      */
-    private $AttributeConsumingService = [];
+    private array $AttributeConsumingService = [];
 
 
     /**

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Response;
 
+use Mockery\MockInterface;
 use SAML2\CertificatesMock;
 use SAML2\Assertion;
 use SAML2\Configuration\Destination;
@@ -22,27 +23,28 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @var \SAML2\Configuration\IdentityProvider
      */
-    private $identityProviderConfiguration;
+    private IdentityProvider $identityProviderConfiguration;
 
     /**
      * @var \SAML2\Configuration\ServiceProvider
      */
-    private $serviceProviderConfiguration;
+    private ServiceProvider $serviceProviderConfiguration;
 
     /**
      * @var \Mockery\MockInterface Mock of \SAML2\Assertion\ProcessorBuilder
      */
-    private $assertionProcessorBuilder;
+    private MockInterface $assertionProcessorBuilder;
 
     /**
      * @var \Mockery\MockInterface Mock of \SAML2\Assertion\Processor
      */
-    private $assertionProcessor;
+    private MockInterface $assertionProcessor;
 
     /**
      * @var string
      */
-    private $currentDestination = 'http://moodle.bridge.feide.no/simplesaml/saml2/sp/AssertionConsumerService.php';
+    private string $currentDestination =
+        'http://moodle.bridge.feide.no/simplesaml/saml2/sp/AssertionConsumerService.php';
 
 
     /**

@@ -11,10 +11,8 @@ use SAML2\Exception\InvalidArgumentException;
  */
 class Destination
 {
-    /**
-     * @var string
-     */
-    private $destination;
+    /** @var string */
+    private string $destination;
 
 
     /**

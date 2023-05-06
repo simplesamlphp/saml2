@@ -23,14 +23,14 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @var string
      */
-    public $affiliationOwnerID = '';
+    public string $affiliationOwnerID = '';
 
     /**
      * The ID of this element.
      *
      * @var string|null
      */
-    private $ID = null;
+    private ?string $ID = null;
 
     /**
      * Extensions on this element.
@@ -39,7 +39,7 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @var array
      */
-    private $Extensions = [];
+    private array $Extensions = [];
 
     /**
      * The AffiliateMember(s).
@@ -48,7 +48,7 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @var array
      */
-    private $AffiliateMember = [];
+    private array $AffiliateMember = [];
 
     /**
      * KeyDescriptor elements.
@@ -57,7 +57,7 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * @var \SAML2\XML\md\KeyDescriptor[]
      */
-    private $KeyDescriptor = [];
+    private array $KeyDescriptor = [];
 
 
     /**

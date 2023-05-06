@@ -18,22 +18,23 @@ class PrivateKey extends ArrayAdapter
     /**
      * @var string
      */
-    private $filePathOrContents;
+    private string $filePathOrContents;
 
     /**
      * @var string|null
      */
-    private $passphrase;
+    private ?string $passphrase;
 
     /**
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @var bool
      */
-    private $isFile;
+    private bool $isFile;
+
 
     /**
      * Constructor for PrivateKey.

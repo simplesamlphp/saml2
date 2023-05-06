@@ -9,10 +9,8 @@ namespace SAML2\Configuration;
  */
 class ArrayAdapter implements Queryable
 {
-    /**
-     * @var array
-     */
-    private $configuration;
+    /** @var array */
+    private array $configuration;
 
 
     /**

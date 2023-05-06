@@ -64,7 +64,7 @@ class Utils
      * @throws \Exception
      * @return array|false An array with information about the Signature element.
      */
-    public static function validateElement(DOMElement $root)
+    public static function validateElement(DOMElement $root): array|false
     {
         /* Create an XML security object. */
         $objXMLSecDSig = new XMLSecurityDSig();

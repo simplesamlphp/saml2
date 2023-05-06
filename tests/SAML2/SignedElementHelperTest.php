@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use DOMElement;
 use SAML2\SignedElementHelperMock;
 use SAML2\CertificatesMock;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
@@ -19,7 +20,7 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @var \DOMElement
      */
-    private $signedMockElement;
+    private DOMElement $signedMockElement;
 
 
     /**

@@ -23,28 +23,28 @@ class RoleDescriptor extends SignedElementHelper
      *
      * @var string
      */
-    private $elementName;
+    private string $elementName;
 
     /**
      * The ID of this element.
      *
      * @var string|null
      */
-    private $ID = null;
+    private ?string $ID = null;
 
     /**
      * List of supported protocols.
      *
      * @var array
      */
-    private $protocolSupportEnumeration = [];
+    private array $protocolSupportEnumeration = [];
 
     /**
      * Error URL for this role.
      *
      * @var string|null
      */
-    private $errorURL = null;
+    private ?string $errorURL = null;
 
     /**
      * Extensions on this element.
@@ -53,7 +53,7 @@ class RoleDescriptor extends SignedElementHelper
      *
      * @var array
      */
-    private $Extensions = [];
+    private array $Extensions = [];
 
     /**
      * KeyDescriptor elements.
@@ -62,14 +62,14 @@ class RoleDescriptor extends SignedElementHelper
      *
      * @var \SAML2\XML\md\KeyDescriptor[]
      */
-    private $KeyDescriptor = [];
+    private array $KeyDescriptor = [];
 
     /**
      * Organization of this role.
      *
      * @var \SAML2\XML\md\Organization|null
      */
-    private $Organization = null;
+    private ?Organization $Organization = null;
 
     /**
      * ContactPerson elements for this role.
@@ -78,7 +78,7 @@ class RoleDescriptor extends SignedElementHelper
      *
      * @var \SAML2\XML\md\ContactPerson[]
      */
-    private $ContactPerson = [];
+    private array $ContactPerson = [];
 
 
     /**

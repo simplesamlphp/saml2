@@ -9,19 +9,19 @@ class ImplementsToString
     /**
      * @var string
      */
-    private $value;
+    private string $value;
 
 
-    public function __construct($value)
+    public function __construct(string $value)
     {
         $this->value = $value;
     }
 
 
     /**
-     * @return mixed
+     * @return string
      */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->value;
     }

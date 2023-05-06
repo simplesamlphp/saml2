@@ -17,7 +17,7 @@ class Validator
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
 
     /**

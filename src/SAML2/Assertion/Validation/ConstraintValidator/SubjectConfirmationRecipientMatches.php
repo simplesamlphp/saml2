@@ -16,7 +16,7 @@ class SubjectConfirmationRecipientMatches implements
     /**
      * @var \SAML2\Configuration\Destination
      */
-    private $destination;
+    private Destination $destination;
 
 
     /**

@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod;
 use SAML2\Assertion\Validation\Result;
 use SAML2\Constants;
+use SAML2\XML\saml\SubjectConfirmation;
 
-class SubjectConfirmationMethodTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class SubjectConfirmationMethodTest extends TestCase
 {
     /**
-     * @var \Mockery\MockInterface
+     * @var \SAML2\XML\saml\SubjectConfirmation
      */
-    private $subjectConfirmation;
+    private SubjectConfirmation $subjectConfirmation;
 
 
     /**
@@ -21,7 +23,7 @@ class SubjectConfirmationMethodTest extends \Mockery\Adapter\Phpunit\MockeryTest
      */
     public function setUp(): void
     {
-        $this->subjectConfirmation = new \SAML2\XML\saml\SubjectConfirmation();
+        $this->subjectConfirmation = new SubjectConfirmation();
     }
 
 

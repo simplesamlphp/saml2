@@ -26,14 +26,14 @@ class KeyDescriptor
      *
      * @var string|null
      */
-    private $use = null;
+    private ?string $use = null;
 
     /**
      * The KeyInfo for this key.
      *
      * @var \SAML2\XML\ds\KeyInfo|null
      */
-    private $KeyInfo = null;
+    private ?KeyInfo $KeyInfo = null;
 
     /**
      * Supported EncryptionMethods.
@@ -42,7 +42,7 @@ class KeyDescriptor
      *
      * @var \SimpleSAML\XML\Chunk[]
      */
-    private $EncryptionMethod = [];
+    private array $EncryptionMethod = [];
 
 
     /**

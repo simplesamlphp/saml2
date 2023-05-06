@@ -22,17 +22,17 @@ class Processor
     /**
      * @var \SAML2\Assertion\Decrypter
      */
-    private $decrypter;
+    private Decrypter $decrypter;
 
     /**
      * @var \SAML2\Assertion\Validation\AssertionValidator
      */
-    private $assertionValidator;
+    private AssertionValidator $assertionValidator;
 
     /**
      * @var \SAML2\Assertion\Validation\SubjectConfirmationValidator
      */
-    private $subjectConfirmationValidator;
+    private SubjectConfirmationValidator $subjectConfirmationValidator;
 
     /**
      * @var \SAML2\Assertion\Transformer\Transformer
@@ -42,17 +42,17 @@ class Processor
     /**
      * @var \SAML2\Signature\Validator
      */
-    private $signatureValidator;
+    private Validator $signatureValidator;
 
     /**
      * @var \SAML2\Configuration\IdentityProvider
      */
-    private $identityProviderConfiguration;
+    private IdentityProvider $identityProviderConfiguration;
 
     /**
      * @var \Psr\Log\LoggerInterface
      */
-    private $logger;
+    private LoggerInterface $logger;
 
 
     /**
@@ -69,7 +69,7 @@ class Processor
         Validator $signatureValidator,
         AssertionValidator $assertionValidator,
         SubjectConfirmationValidator $subjectConfirmationValidator,
-        Transformer $transformer,
+        $transformer,
         IdentityProvider $identityProviderConfiguration,
         LoggerInterface $logger
     ) {

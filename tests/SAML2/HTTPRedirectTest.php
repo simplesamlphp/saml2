@@ -6,6 +6,7 @@ namespace SAML2;
 
 use Exception;
 use Nyholm\Psr7\ServerRequest;
+use PHPUnit\Framework\TestCase;
 use SAML2\HTTPRedirect;
 use SAML2\AuthnRequest;
 use SAML2\Request;
@@ -15,7 +16,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
-class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class HTTPRedirectTest extends TestCase
 {
     /**
      * test parsing of basic query string with authnrequest and

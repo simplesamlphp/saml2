@@ -11,10 +11,8 @@ use SAML2\Exception\InvalidArgumentException;
  */
 class Result
 {
-    /**
-     * @var array
-     */
-    private $errors = [];
+    /** @var array */
+    private array $errors = [];
 
 
     /**

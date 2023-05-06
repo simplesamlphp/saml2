@@ -15,7 +15,7 @@ final class DestinationMatches implements
     /**
      * @var \SAML2\Configuration\Destination
      */
-    private $expectedDestination;
+    private Destination $expectedDestination;
 
     /**
      * DestinationMatches constructor.

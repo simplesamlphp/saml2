@@ -22,14 +22,14 @@ class AttributeConsumingService
      *
      * @var int
      */
-    private $index;
+    private int $index;
 
     /**
      * Whether this is the default AttributeConsumingService.
      *
      * @var bool|null
      */
-    private $isDefault = null;
+    private ?bool $isDefault = null;
 
     /**
      * The ServiceName of this AttributeConsumingService.
@@ -38,7 +38,7 @@ class AttributeConsumingService
      *
      * @var array
      */
-    private $ServiceName = [];
+    private array $ServiceName = [];
 
     /**
      * The ServiceDescription of this AttributeConsumingService.
@@ -47,7 +47,7 @@ class AttributeConsumingService
      *
      * @var array
      */
-    private $ServiceDescription = [];
+    private array $ServiceDescription = [];
 
     /**
      * The RequestedAttribute elements.
@@ -56,7 +56,7 @@ class AttributeConsumingService
      *
      * @var \SAML2\XML\md\RequestedAttribute[]
      */
-    private $RequestedAttribute = [];
+    private array $RequestedAttribute = [];
 
 
     /**

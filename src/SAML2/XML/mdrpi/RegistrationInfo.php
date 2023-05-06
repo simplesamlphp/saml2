@@ -20,14 +20,14 @@ class RegistrationInfo
      *
      * @var string|null
      */
-    private $registrationAuthority = null;
+    private ?string $registrationAuthority = null;
 
     /**
      * The registration timestamp for the metadata, as a UNIX timestamp.
      *
      * @var int|null
      */
-    private $registrationInstant = null;
+    private ?int $registrationInstant = null;
 
     /**
      * Link to registration policy for this metadata.
@@ -36,7 +36,7 @@ class RegistrationInfo
      *
      * @var array
      */
-    private $RegistrationPolicy = [];
+    private array $RegistrationPolicy = [];
 
 
     /**

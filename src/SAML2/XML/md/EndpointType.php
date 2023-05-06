@@ -19,28 +19,28 @@ class EndpointType
      *
      * @var string|null
      */
-    private $Binding = null;
+    private ?string $Binding = null;
 
     /**
      * The URI to this endpoint.
      *
      * @var string|null
      */
-    private $Location = null;
+    private ?string $Location = null;
 
     /**
      * The URI where responses can be delivered.
      *
      * @var string|null
      */
-    private $ResponseLocation = null;
+    private ?string $ResponseLocation = null;
 
     /**
      * Extra (namespace qualified) attributes.
      *
      * @var array
      */
-    private $attributes = [];
+    private array $attributes = [];
 
 
     /**

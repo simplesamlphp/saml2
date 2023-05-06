@@ -19,7 +19,7 @@ class Issuer extends NameIDType
     /**
      * @var string
      */
-    protected $nodeName = 'saml:Issuer';
+    protected string $nodeName = 'saml:Issuer';
 
     /**
      * if $this->SAML2IssuerShowAll is set false
@@ -32,7 +32,7 @@ class Issuer extends NameIDType
      *
      * @var boolean
      */
-    private $Saml2IssuerShowAll = false; //setting true breaks saml-core-2.0-os 8.3.6
+    private bool $Saml2IssuerShowAll = false; //setting true breaks saml-core-2.0-os 8.3.6
 
 
     /**

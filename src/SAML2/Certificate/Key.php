@@ -17,10 +17,8 @@ class Key implements \ArrayAccess
     public const USAGE_SIGNING = 'signing';
     public const USAGE_ENCRYPTION = 'encryption';
 
-    /**
-     * @var array
-     */
-    protected $keyData = [];
+    /** @var array */
+    protected array $keyData = [];
 
 
     /**

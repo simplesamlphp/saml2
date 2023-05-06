@@ -11,7 +11,7 @@ class Validator
     /**
      * @var \SAML2\Response\Validation\ConstraintValidator[]
      */
-    protected $constraints;
+    protected array $constraints;
 
 
     /**

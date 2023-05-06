@@ -22,14 +22,14 @@ class Keywords
      *
      * @var string[]
      */
-    private $Keywords = [];
+    private array $Keywords = [];
 
     /**
      * The language of this item.
      *
      * @var string
      */
-    private $lang = '';
+    private string $lang = '';
 
 
     /**

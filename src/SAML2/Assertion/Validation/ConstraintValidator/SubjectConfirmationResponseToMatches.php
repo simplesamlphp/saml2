@@ -14,7 +14,7 @@ class SubjectConfirmationResponseToMatches implements
     SubjectConfirmationConstraintValidator
 {
     /** @var Response */
-    private $response;
+    private Response $response;
 
 
     /**

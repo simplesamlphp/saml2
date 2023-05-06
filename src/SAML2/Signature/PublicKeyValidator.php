@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Signature;
 
 use Psr\Log\LoggerInterface;
-use SAML2\Certificate\Key;
-use SAML2\Certificate\KeyLoader;
-use SAML2\Certificate\X509;
+use SAML2\Certificate;
 use SAML2\Configuration\CertificateProvider;
 use SAML2\SignedElement;
 
@@ -16,7 +14,7 @@ class PublicKeyValidator extends AbstractChainedValidator
     /**
      * @var \SAML2\Certificate\KeyCollection
      */
-    private $configuredKeys;
+    private Certificate\KeyCollection $configuredKeys;
 
     /**
      * @var \SAML2\Certificate\KeyLoader
@@ -30,7 +28,7 @@ class PublicKeyValidator extends AbstractChainedValidator
      * @param LoggerInterface $logger
      * @param KeyLoader $keyLoader
      */
-    public function __construct(LoggerInterface $logger, KeyLoader $keyLoader)
+    public function __construct(LoggerInterface $logger, $keyLoader)
     {
         $this->keyLoader = $keyLoader;
 
@@ -65,8 +63,8 @@ class PublicKeyValidator extends AbstractChainedValidator
         CertificateProvider $configuration
     ): bool {
         $logger = $this->logger;
-        $pemCandidates = $this->configuredKeys->filter(function (Key $key) use ($logger) {
-            if (!$key instanceof X509) {
+        $pemCandidates = $this->configuredKeys->filter(function (Certificate\Key $key) use ($logger) {
+            if (!$key instanceof Certificate\X509) {
                 $logger->debug(sprintf('Skipping unknown key type: "%s"', $key['type']));
                 return false;
             }

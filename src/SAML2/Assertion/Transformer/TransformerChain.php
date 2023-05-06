@@ -15,17 +15,17 @@ class TransformerChain implements Transformer
     /**
      * @var \SAML2\Assertion\Transformer\Transformer[]
      */
-    private $transformers = [];
+    private array $transformers = [];
 
     /**
      * @var \SAML2\Configuration\IdentityProvider
      */
-    private $identityProvider;
+    private IdentityProvider $identityProvider;
 
     /**
      * @var \SAML2\Configuration\ServiceProvider
      */
-    private $serviceProvider;
+    private ServiceProvider $serviceProvider;
 
 
     /**

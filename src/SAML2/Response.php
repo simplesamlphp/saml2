@@ -18,7 +18,7 @@ class Response extends StatusResponse
      *
      * @var (Assertion|EncryptedAssertion)[]
      */
-    private $assertions;
+    private array $assertions;
 
 
     /**

@@ -6,23 +6,23 @@ namespace SAML2\Assertion\Validation\ConstraintValidator;
 
 use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
 use SAML2\Assertion\Validation\Result;
+use SAML2\XML\saml\SubjectConfirmation;
+use SAML2\XML\saml\SubjectConfirmationData;
 use Test\SAML2\AbstractControlledTime;
 
 /**
- * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
- * tests.
  */
 class SubjectConfirmationNotBeforeTest extends AbstractControlledTime
 {
     /**
-     * @var \Mockery\MockInterface
+     * @var \SAML2\XML\saml\SubjectConfirmation
      */
-    private $subjectConfirmation;
+    private SubjectConfirmation $subjectConfirmation;
 
     /**
-     * @var \Mockery\MockInterface
+     * @var \SAML2\XML\saml\SubjectConfirmationData
      */
-    private $subjectConfirmationData;
+    private SubjectConfirmationData $subjectConfirmationData;
 
 
     /**
@@ -31,8 +31,8 @@ class SubjectConfirmationNotBeforeTest extends AbstractControlledTime
     public function setUp(): void
     {
         parent::setUp();
-        $this->subjectConfirmation = new \SAML2\XML\saml\SubjectConfirmation();
-        $this->subjectConfirmationData = new \SAML2\XML\saml\SubjectConfirmationData();
+        $this->subjectConfirmation = new SubjectConfirmation();
+        $this->subjectConfirmationData = new SubjectConfirmationData();
         $this->subjectConfirmation->setSubjectConfirmationData($this->subjectConfirmationData);
     }
 

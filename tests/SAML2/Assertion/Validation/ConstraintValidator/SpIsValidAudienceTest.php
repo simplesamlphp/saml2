@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
+use Mockery;
+use Mockery\MockInterface;
 use SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience;
 use SAML2\Assertion\Validation\Result;
 
@@ -16,12 +18,12 @@ class SpIsValidAudienceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @var \Mockery\MockInterface
      */
-    private $assertion;
+    private MockInterface $assertion;
 
     /**
      * @var \Mockery\MockInterface
      */
-    private $serviceProvider;
+    private MockInterface $serviceProvider;
 
 
     /**
@@ -30,8 +32,8 @@ class SpIsValidAudienceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function setUp(): void
     {
         parent::setUp();
-        $this->assertion = \Mockery::mock(\SAML2\Assertion::class);
-        $this->serviceProvider = \Mockery::mock(\SAML2\Configuration\ServiceProvider::class);
+        $this->assertion = Mockery::mock(\SAML2\Assertion::class);
+        $this->serviceProvider = Mockery::mock(\SAML2\Configuration\ServiceProvider::class);
     }
 
 

@@ -17,12 +17,12 @@ class MockChainedValidator extends AbstractChainedValidator
     /**
      * @var bool
      */
-    private $canValidate;
+    private bool $canValidate;
 
     /**
      * @var bool
      */
-    private $isValid;
+    private bool $isValid;
 
 
     /**

@@ -21,21 +21,21 @@ class PublicationInfo
      *
      * @var string
      */
-    private $publisher = '';
+    private string $publisher = '';
 
     /**
      * The creation timestamp for the metadata, as a UNIX timestamp.
      *
      * @var int|null
      */
-    private $creationInstant = null;
+    private ?int $creationInstant = null;
 
     /**
      * Identifier for this metadata publication.
      *
      * @var string|null
      */
-    private $publicationId = null;
+    private ?string $publicationId = null;
 
     /**
      * Link to usage policy for this metadata.
@@ -44,7 +44,7 @@ class PublicationInfo
      *
      * @var array
      */
-    private $UsagePolicy = [];
+    private array $UsagePolicy = [];
 
 
     /**

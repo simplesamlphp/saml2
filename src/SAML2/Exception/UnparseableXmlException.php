@@ -9,7 +9,7 @@ use LibXMLError;
 final class UnparseableXmlException extends RuntimeException
 {
     /** @var array */
-    private static $levelMap = [
+    private static array $levelMap = [
         LIBXML_ERR_WARNING => 'WARNING',
         LIBXML_ERR_ERROR   => 'ERROR',
         LIBXML_ERR_FATAL   => 'FATAL'

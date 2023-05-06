@@ -15,17 +15,17 @@ class SubjectConfirmationValidator
     /**
      * @var \SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator[]
      */
-    protected $constraints;
+    protected array $constraints;
 
     /**
      * @var \SAML2\Configuration\IdentityProvider
      */
-    protected $identityProvider;
+    protected IdentityProvider $identityProvider;
 
     /**
      * @var \SAML2\Configuration\ServiceProvider
      */
-    protected $serviceProvider;
+    protected ServiceProvider $serviceProvider;
 
 
     /**

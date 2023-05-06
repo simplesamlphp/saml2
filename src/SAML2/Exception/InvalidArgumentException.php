@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Exception;
 
 use InvalidArgumentException as BuiltinInvalidArgumentException;
+use Throwable;
 
 class InvalidArgumentException extends BuiltinInvalidArgumentException implements Throwable
 {

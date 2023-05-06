@@ -14,7 +14,7 @@ class ValidatorChainTest extends \PHPUnit\Framework\TestCase
     /**
      * @var \SAML2\Signature\ValidatorChain
      */
-    private $chain;
+    private ValidatorChain $chain;
 
 
     /**

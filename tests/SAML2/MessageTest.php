@@ -6,6 +6,7 @@ namespace SAML2;
 
 use DOMDocument;
 use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\Message;
 use SAML2\Response;
 use SAML2\XML\saml\Issuer;
@@ -14,7 +15,7 @@ use SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 
-class MessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class MessageTest extends TestCase
 {
     /**
      * @group Message

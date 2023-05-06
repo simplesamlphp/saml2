@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
+use Mockery\MockInterface;
 use SAML2\Assertion;
 use SAML2\Assertion\Validation\ConstraintValidator\NotBefore;
 use SAML2\Assertion\Validation\Result;
@@ -20,12 +21,12 @@ class NotBeforeTest extends AbstractControlledTime
     /**
      * @var \Mockery\MockInterface
      */
-    private $assertion;
+    private MockInterface $assertion;
 
     /**
      * @var int
      */
-    protected $currentTime = 1;
+    protected int $currentTime = 1;
 
 
     /**

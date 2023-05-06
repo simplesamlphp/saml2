@@ -21,7 +21,7 @@ class KeyInfo
      *
      * @var string|null
      */
-    private $Id = null;
+    private ?string $Id = null;
 
     /**
      * The various key information elements.
@@ -31,7 +31,7 @@ class KeyInfo
      *
      * @var (\SimpleSAML\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[]
      */
-    private $info = [];
+    private array $info = [];
 
 
     /**

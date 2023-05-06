@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace SAML2\Certificate;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\CertificatesMock;
 use SAML2\Certificate\PrivateKey;
 
-class PrivateKeyTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class PrivateKeyTest extends TestCase
 {
     /**
      * @group certificate

@@ -24,7 +24,7 @@ class PDPDescriptor extends RoleDescriptor
      *
      * @var \SAML2\XML\md\EndpointType[]
      */
-    private $AuthzService = [];
+    private array $AuthzService = [];
 
     /**
      * List of AssertionIDRequestService endpoints.
@@ -33,7 +33,7 @@ class PDPDescriptor extends RoleDescriptor
      *
      * @var \SAML2\XML\md\EndpointType[]
      */
-    private $AssertionIDRequestService = [];
+    private array $AssertionIDRequestService = [];
 
     /**
      * List of supported NameID formats.
@@ -42,7 +42,7 @@ class PDPDescriptor extends RoleDescriptor
      *
      * @var string[]
      */
-    private $NameIDFormat = [];
+    private array $NameIDFormat = [];
 
 
     /**

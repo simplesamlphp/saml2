@@ -19,7 +19,7 @@ class UnknownRoleDescriptor extends RoleDescriptor
      *
      * @var \SimpleSAML\XML\Chunk
      */
-    private $xml;
+    private Chunk $xml;
 
 
     /**

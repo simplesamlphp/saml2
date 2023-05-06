@@ -24,7 +24,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      *
      * @var \SAML2\XML\md\EndpointType[]
      */
-    private $AuthnQueryService = [];
+    private array $AuthnQueryService = [];
 
     /**
      * List of AssertionIDRequestService endpoints.
@@ -33,7 +33,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      *
      * @var \SAML2\XML\md\EndpointType[]
      */
-    private $AssertionIDRequestService = [];
+    private array $AssertionIDRequestService = [];
 
     /**
      * List of supported NameID formats.
@@ -42,7 +42,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      *
      * @var string[]
      */
-    private $NameIDFormat = [];
+    private array $NameIDFormat = [];
 
 
     /**
