@@ -24,7 +24,7 @@ Note that the **HTTP Artifact Binding and SOAP client do not work** outside of S
 The latest released version (`4.x` range) is the _preferred version_.
 The `3.x branch` is our LTS branch and will be supported as long as supported releases of [SimpleSAMLphp](https://www.simplesamlphp.org) are using this branch.
 
-All other branches (`2.x` and earlier) are no longer supported and will not receive any maintenance or
+All other branches (`3.x` and earlier) are no longer supported and will not receive any maintenance or
 (security) fixes. Do not use these versions.
 
 We conform to [Semantic Versioning](https://semver.org/).
