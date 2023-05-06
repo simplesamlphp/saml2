@@ -19,9 +19,9 @@ Note that the **HTTP Artifact Binding and SOAP client do not work** outside of S
 
 Which version to pick?
 ----------------------
-The latest released version (`3.x` range) is the _only supported version_.
+The latest released version (`4.x` range) is the _only supported version_.
 
-All other branches (`2.x` and earlier) are no longer supported and will not receive any maintenance or
+All other branches (`3.x` and earlier) are no longer supported and will not receive any maintenance or
 (security) fixes. Do not use these versions.
 
 Also be sure to check the [UPGRADING.md](UPGRADING.md) file if you are upgrading from an older version to `>= 4.x`. Here 
@@ -33,7 +33,7 @@ Usage
 * Install with [Composer](https://getcomposer.org/doc/00-intro.md), run the following command in your project:
 
 ```bash
-composer require simplesamlphp/saml2:^3.0
+composer require simplesamlphp/saml2:^4.0
 ```
 
 * Provide the required external dependencies by extending and implementing the ```SAML2\Compat\AbstractContainer```
