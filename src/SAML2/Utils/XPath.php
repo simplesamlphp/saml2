@@ -26,7 +26,6 @@ class XPath extends \SimpleSAML\XMLSecurity\Utils\XPath
     public static function getXPath(DOMNode $node): DOMXPath
     {
         $xp = parent::getXPath($node);
-        $xp->registerNamespace('soap-env', C::NS_SOAP);
         $xp->registerNamespace('saml_protocol', C::NS_SAMLP);
         $xp->registerNamespace('saml_assertion', C::NS_SAML);
         $xp->registerNamespace('saml_metadata', C::NS_MD);

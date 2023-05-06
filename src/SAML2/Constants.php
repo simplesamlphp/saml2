@@ -233,11 +233,6 @@ class Constants
     public const NS_ECP = 'urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp';
 
     /**
-     * The namespace for the SOAP protocol.
-     */
-    public const NS_SOAP = 'http://schemas.xmlsoap.org/soap/envelope/';
-
-    /**
      * The namespace for the SAML 2 protocol.
      */
     public const NS_SAMLP = 'urn:oasis:names:tc:SAML:2.0:protocol';

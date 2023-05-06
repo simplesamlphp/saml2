@@ -10,42 +10,48 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 
-use function filter_var;
+use function is_null;
+use function is_numeric;
+use function strval;
 
 /**
- * Class representing the ECP Response element.
+ * Class representing the ECP RequestAuthenticated element.
  *
  * @package simplesamlphp/saml2
  */
-final class Response extends AbstractEcpElement
+final class RequestAuthenticated extends AbstractEcpElement
 {
     /**
-     * Create a ECP Response element.
+     * Create a ECP RequestAuthenticated element.
      *
-     * @param string $assertionConsumerServiceURL
+     * @param int|null $mustUnderstand
      */
     public function __construct(
-        protected string $assertionConsumerServiceURL,
+        protected ?int $mustUnderstand,
     ) {
-        Assert::validURI($assertionConsumerServiceURL, SchemaViolationException::class); // Covers the empty string
+        Assert::oneOf(
+            $mustUnderstand,
+            [null, 0, 1],
+            'Invalid value of env:mustUnderstand attribute in <ecp:Response>.',
+            ProtocolViolationException::class,
+        );
     }
 
 
     /**
-     * Collect the value of the AssertionConsumerServiceURL-property
+     * Collect the value of the mustUnderstand-property
      *
-     * @return string
+     * @return int|null
      */
-    public function getAssertionConsumerServiceURL(): string
+    public function getMustUnderstand(): ?int
     {
-        return $this->assertionConsumerServiceURL;
+        return $this->mustUnderstand;
     }
 
 
     /**
-     * Convert XML into a Response
+     * Convert XML into a RequestAuthenticated
      *
      * @param \DOMElement $xml The XML element we should load
      * @return self
@@ -57,32 +63,22 @@ final class Response extends AbstractEcpElement
      */
     public static function fromXML(DOMElement $xml): static
     {
-        Assert::same($xml->localName, 'Response', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, Response::NS, InvalidDOMElementException::class);
+        Assert::same($xml->localName, 'RequestAuthenticated', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, RequestAuthenticated::NS, InvalidDOMElementException::class);
 
         // Assert required attributes
         Assert::true(
-            $xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand'),
-            'Missing env:mustUnderstand attribute in <ecp:Response>.',
-            MissingAttributeException::class,
-        );
-        Assert::true(
             $xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'actor'),
-            'Missing env:actor attribute in <ecp:Response>.',
-            MissingAttributeException::class,
-        );
-        Assert::true(
-            $xml->hasAttribute('AssertionConsumerServiceURL'),
-            'Missing AssertionConsumerServiceURL attribute in <ecp:Response>.',
+            'Missing env:actor attribute in <ecp:RequestAuthenticated>.',
             MissingAttributeException::class,
         );
 
         $mustUnderstand = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand');
         $actor = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'actor');
 
-        Assert::same(
+        Assert::oneOf(
             $mustUnderstand,
-            '1',
+            ['', '0', '1'],
             'Invalid value of env:mustUnderstand attribute in <ecp:Response>.',
             ProtocolViolationException::class,
         );
@@ -93,12 +89,14 @@ final class Response extends AbstractEcpElement
             ProtocolViolationException::class,
         );
 
-        return new static(self::getAttribute($xml, 'AssertionConsumerServiceURL'));
+        $mustUnderstand = ($mustUnderstand === '') ? null : intval($mustUnderstand);
+
+        return new static($mustUnderstand);
     }
 
 
     /**
-     * Convert this ECP Response to XML.
+     * Convert this ECP RequestAuthentication to XML.
      *
      * @param \DOMElement|null $parent The element we should append this element to.
      * @return \DOMElement
@@ -107,9 +105,10 @@ final class Response extends AbstractEcpElement
     {
         $response = $this->instantiateParentElement($parent);
 
-        $response->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', '1');
+        if ($this->getMustUnderstand() !== null) {
+            $response->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', strval($this->getMustUnderstand()));
+        }
         $response->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
-        $response->setAttribute('AssertionConsumerServiceURL', $this->getAssertionConsumerServiceURL());
 
         return $response;
     }

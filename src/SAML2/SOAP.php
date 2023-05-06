@@ -7,8 +7,14 @@ namespace SAML2;
 use DOMDocument;
 use Exception;
 use SAML2\Exception\Protocol\UnsupportedBindingException;
-use SAML2\Utils\XPath;
+use SAML2\XML\ecp\RequestAuthenticated;
 use SAML2\XML\ecp\Response as ECPResponse;
+use SimpleSAML\SOAP\Constants as SOAPC;
+use SimpleSAML\SOAP11\Utils\XPath;
+use SimpleSAML\SOAP11\XML\env\Body;
+use SimpleSAML\SOAP11\XML\env\Envelope;
+use SimpleSAML\SOAP11\XML\env\Header;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function file_get_contents;
@@ -25,51 +31,32 @@ class SOAP extends Binding
      * @throws \Exception
      * @return string|false The XML or false on error
      */
-    public function getOutputToSend(Message $message)
+    public function getOutputToSend(Message $message): string|false
     {
-        $envelope = <<<SOAP
-<?xml version="1.0" encoding="utf-8"?>
-<SOAP-ENV:Envelope xmlns:SOAP-ENV="%s">
-    <SOAP-ENV:Header />
-    <SOAP-ENV:Body />
-</SOAP-ENV:Envelope>
-SOAP;
-        $envelope = sprintf($envelope, Constants::NS_SOAP);
-
-        $doc = DOMDocumentFactory::create();
-        $doc->loadXML($envelope);
-
         // In the Artifact Resolution profile, this will be an ArtifactResolve
         // containing another message (e.g. a Response), however in the ECP
         // profile, this is the Response itself.
         if ($message instanceof Response) {
-            /** @var \DOMElement $header */
-            $header = $doc->getElementsByTagNameNS(Constants::NS_SOAP, 'Header')->item(0);
+            $requestAuthenticated = new RequestAuthenticated(1);
 
-            $response = new ECPResponse();
             $destination = $this->destination ?: $message->getDestination();
             if ($destination === null) {
                 throw new Exception('No destination available for SOAP message.');
             }
-            $response->setAssertionConsumerServiceURL($destination);
-
-            $response->toXML($header);
-
-            // TODO We SHOULD add ecp:RequestAuthenticated SOAP header if we
-            // authenticated the AuthnRequest. It may make sense to have a
-            // standardized way for Message objects to contain (optional) SOAP
-            // headers for use with the SOAP binding.
-            //
-            // https://docs.oasis-open.org/security/saml/Post2.0/saml-ecp/v2.0/cs01/saml-ecp-v2.0-cs01.html#_Toc366664733
-            // See Section 2.3.6.1
+            $response = new ECPResponse($destination);
+            $header = new Header([$requestAuthenticated, $response]);
+        } else {
+            $header = new Header();
         }
 
-        /** @var \DOMElement $body */
-        $body = $doc->getElementsByTagNameNs(Constants::NS_SOAP, 'Body')->item(0);
+        $env = new Envelope(
+            new Body([new Chunk($message->toUnsignedXML())]),
+            $header,
+        );
 
-        $body->appendChild($doc->importNode($message->toSignedXML(), true));
-
-        return $doc->saveXML();
+        $elt = $env->toXML();
+        /** @psalm-var \DOMDocument $elt->ownerDocument */
+        return $elt->ownerDocument->saveXML();
     }
 
 
@@ -114,9 +101,10 @@ SOAP;
         /** @var \DOMNode $xml */
         $xml = $document->firstChild;
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
+
         $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement[] $results */
-        $results = XPath::xpQuery($xml, '/soap-env:Envelope/soap-env:Body/*[1]', $xpCache);
+        $results = XPath::xpQuery($xml, '/env:Envelope/env:Body/*[1]', $xpCache);
 
         return Message::fromXML($results[0]);
     }
