@@ -7,6 +7,9 @@ namespace SAML2;
 use DOMDocument;
 use DOMElement;
 use Exception;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function array_key_exists;
@@ -23,12 +26,10 @@ class HTTPPost extends Binding
     /**
      * Send a SAML 2 message using the HTTP-POST binding.
      *
-     * Note: This function never returns.
-     *
      * @param \SAML2\Message $message The message we should send.
-     * @return void
+     * @return \Psr\Http\Message\ResponseInterface The response
      */
-    public function send(Message $message): void
+    public function send(Message $message): ResponseInterface
     {
         if ($this->destination === null) {
             $destination = $message->getDestination();
@@ -60,7 +61,8 @@ class HTTPPost extends Binding
             $post['RelayState'] = $relayState;
         }
 
-        Utils::getContainer()->postRedirect($destination, $post);
+        $container = Utils::getContainer();
+        return new Response(303, ['Location' => $container->getPOSTRedirectURL($destination, $post)]);
     }
 
 
@@ -69,15 +71,17 @@ class HTTPPost extends Binding
      *
      * Throws an exception if it is unable receive the message.
      *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \SAML2\Message The received message.
      * @throws \Exception
      */
-    public function receive(): Message
+    public function receive(ServerRequestInterface $request): Message
     {
-        if (array_key_exists('SAMLRequest', $_POST)) {
-            $msgStr = $_POST['SAMLRequest'];
-        } elseif (array_key_exists('SAMLResponse', $_POST)) {
-            $msgStr = $_POST['SAMLResponse'];
+        $query = $request->getParsedBody();
+        if (array_key_exists('SAMLRequest', $query)) {
+            $msgStr = $query['SAMLRequest'];
+        } elseif (array_key_exists('SAMLResponse', $query)) {
+            $msgStr = $query['SAMLResponse'];
         } else {
             throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
@@ -96,8 +100,8 @@ class HTTPPost extends Binding
 
         $msg = Message::fromXML($document->firstChild);
 
-        if (array_key_exists('RelayState', $_POST)) {
-            $msg->setRelayState($_POST['RelayState']);
+        if (array_key_exists('RelayState', $query)) {
+            $msg->setRelayState($query['RelayState']);
         }
 
         return $msg;

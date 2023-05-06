@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Exception;
+use Nyholm\Psr7\ServerRequest;
 use SAML2\HTTPArtifact;
 
 class HTTPArtifactTest extends \PHPUnit\Framework\TestCase
@@ -16,10 +18,12 @@ class HTTPArtifactTest extends \PHPUnit\Framework\TestCase
      */
     public function testArtifactMissingUrlParamThrowsException(): void
     {
-        $_REQUEST = ['a' => 'b', 'c' => 'd'];
+        $q = ['a' => 'b', 'c' => 'd'];
+        $request = new ServerRequest('GET', 'http://tnyholm.se');
+        $request = $request->withQueryParams($q);
 
         $ha = new HTTPArtifact();
-        $this->expectException(\Exception::class, 'Missing SAMLart parameter.');
-        $request = $ha->receive();
+        $this->expectException(Exception::class, 'Missing SAMLart parameter.');
+        $request = $ha->receive($request);
     }
 }

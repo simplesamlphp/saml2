@@ -38,25 +38,14 @@ abstract class AbstractContainer
     abstract public function debugMessage($message, string $type): void;
 
 
-
-    /**
-     * Trigger the user to perform a GET to the given URL with the given data.
-     *
-     * @param string $url
-     * @param array $data
-     * @return void
-     */
-    abstract public function redirect(string $url, array $data = []): void;
-
-
     /**
      * Trigger the user to perform a POST to the given URL with the given data.
      *
      * @param string $url
      * @param array $data
-     * @return void
+     * @return string
      */
-    abstract public function postRedirect(string $url, array $data = []): void;
+    abstract public function getpostRedirectURL(string $url, array $data = []): string;
 
 
     /**

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use SAML2\Exception\Protocol\UnsupportedBindingException;
 
 use function array_key_exist;
 use function array_keys;
 use function array_map;
-use function explode;
 use function implode;
 use function var_export;
 
@@ -42,13 +43,12 @@ abstract class Binding
     {
         switch ($urn) {
             case Constants::BINDING_HTTP_POST:
+            case Constants::BINDING_HOK_SSO:
                 return new HTTPPost();
             case Constants::BINDING_HTTP_REDIRECT:
                 return new HTTPRedirect();
             case Constants::BINDING_HTTP_ARTIFACT:
                 return new HTTPArtifact();
-            case Constants::BINDING_HOK_SSO:
-                return new HTTPPost();
             // ECP ACS is defined with the PAOS binding, but as the IdP, we
             // talk to the ECP using SOAP -- if support for ECP as an SP is
             // implemented, this logic may need to change
@@ -68,58 +68,66 @@ abstract class Binding
      *
      * An exception will be thrown if it is unable to guess the binding.
      *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      * @throws \SAML2\Exception\Protocol\UnsupportedBindingException
      * @return \SAML2\Binding The binding.
      */
-    public static function getCurrentBinding(): Binding
+    public static function getCurrentBinding(ServerRequestInterface $request): Binding
     {
-        switch ($_SERVER['REQUEST_METHOD']) {
+        $method = $request->getMethod();
+
+        switch ($method) {
             case 'GET':
-                if (array_key_exists('SAMLRequest', $_GET) || array_key_exists('SAMLResponse', $_GET)) {
+                $query = $request->getQueryParams();
+                if (array_key_exists('SAMLRequest', $query) || array_key_exists('SAMLResponse', $query)) {
                     return new HTTPRedirect();
-                } elseif (array_key_exists('SAMLart', $_GET)) {
+                } elseif (array_key_exists('SAMLart', $query)) {
                     return new HTTPArtifact();
                 }
                 break;
 
             case 'POST':
-                if (isset($_SERVER['CONTENT_TYPE'])) {
-                    $contentType = $_SERVER['CONTENT_TYPE'];
+                $contentType = null;
+                if ($request->hasHeader('Content-Type')) {
+                    $contentType = $request->getHeader('Content-Type')[0];
                     $contentType = explode(';', $contentType);
                     $contentType = $contentType[0]; /* Remove charset. */
-                } else {
-                    $contentType = null;
                 }
-                if (array_key_exists('SAMLRequest', $_POST) || array_key_exists('SAMLResponse', $_POST)) {
+
+                $query = $request->getParsedBody();
+                if (array_key_exists('SAMLRequest', $query) || array_key_exists('SAMLResponse', $query)) {
                     return new HTTPPost();
-                } elseif (array_key_exists('SAMLart', $_POST)) {
+                } elseif (array_key_exists('SAMLart', $query)) {
                     return new HTTPArtifact();
-                } elseif (
+                } else {
                     /**
                      * The registration information for text/xml is in all respects the same
                      * as that given for application/xml (RFC 7303 - Section 9.1)
                      */
-                    ($contentType === 'text/xml' || $contentType === 'application/xml')
-                    // See paragraph 3.2.3 of Binding for SAML2 (OASIS)
-                    || (isset($_SERVER['HTTP_SOAPACTION'])
-                        && $_SERVER['HTTP_SOAPACTION'] === 'http://www.oasis-open.org/committees/security')
-                ) {
-                    return new SOAP();
+                    if (
+                        ($contentType === 'text/xml' || $contentType === 'application/xml')
+                        // See paragraph 3.2.3 of Binding for SAML2 (OASIS)
+                        || ($request->hasHeader('SOAPAction')
+                            && $request->getHeader('SOAPAction')[0] === 'http://www.oasis-open.org/committees/security')
+                    ) {
+                        return new SOAP();
+                    }
                 }
                 break;
         }
 
         $logger = Utils::getContainer()->getLogger();
         $logger->warning('Unable to find the SAML 2 binding used for this request.');
-        $logger->warning('Request method: ' . var_export($_SERVER['REQUEST_METHOD'], true));
-        if (!empty($_GET)) {
-            $logger->warning("GET parameters: '" . implode("', '", array_map('addslashes', array_keys($_GET))) . "'");
+        $logger->warning('Request method: ' . var_export($method, true));
+
+        if (!empty($query)) {
+            $logger->warning(
+                $method . " parameters: '" . implode("', '", array_map('addslashes', array_keys($query))) . "'"
+            );
         }
-        if (!empty($_POST)) {
-            $logger->warning("POST parameters: '" . implode("', '", array_map('addslashes', array_keys($_POST))) . "'");
-        }
-        if (isset($_SERVER['CONTENT_TYPE'])) {
-            $logger->warning('Content-Type: ' . var_export($_SERVER['CONTENT_TYPE'], true));
+
+        if ($request->hasHeader('Content-Type')) {
+            $logger->warning('Content-Type: ' . var_export($request->getHeader('Content-Type')[0], true));
         }
 
         throw new UnsupportedBindingException('Unable to find the SAML 2 binding used for this request.');
@@ -158,9 +166,9 @@ abstract class Binding
      * The message will be delivered to the destination set in the message.
      *
      * @param \SAML2\Message $message The message which should be sent.
-     * @return void
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    abstract public function send(Message $message): void;
+    abstract public function send(Message $message): ResponseInterface;
 
 
     /**
@@ -169,7 +177,8 @@ abstract class Binding
      * This function will extract the message from the current request.
      * An exception will be thrown if we are unable to process the message.
      *
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \SAML2\Message The received message.
      */
-    abstract public function receive(): Message;
+    abstract public function receive(ServerRequestInterface $request): Message;
 }

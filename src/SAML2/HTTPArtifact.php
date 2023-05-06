@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace SAML2;
 
 use Exception;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
 use SAML2\XML\saml\Issuer;
@@ -84,15 +87,12 @@ class HTTPArtifact extends Binding
     /**
      * Send a SAML 2 message using the HTTP-Redirect binding.
      *
-     * Note: This function never returns.
-     *
      * @param \SAML2\Message $message The message we should send.
-     * @return void
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    public function send(Message $message): void
+    public function send(Message $message): ResponseInterface
     {
-        $destination = $this->getRedirectURL($message);
-        Utils::getContainer()->redirect($destination);
+        return new Response(303, ['Location' => $destination]);
     }
 
 
@@ -101,13 +101,15 @@ class HTTPArtifact extends Binding
      *
      * Throws an exception if it is unable receive the message.
      *
-     * @throws \Exception
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \SAML2\Message The received message.
+     * @throws \Exception
      */
-    public function receive(): Message
+    public function receive(ServerRequestInterface $request): Message
     {
-        if (array_key_exists('SAMLart', $_REQUEST)) {
-            $artifact = base64_decode($_REQUEST['SAMLart']);
+        $query = $request->getQueryParams();
+        if (array_key_exists('SAMLart', $query)) {
+            $artifact = base64_decode($query['SAMLart']);
             $endpointIndex = bin2hex(substr($artifact, 2, 2));
             $sourceId = bin2hex(substr($artifact, 4, 20));
         } else {
@@ -147,7 +149,7 @@ class HTTPArtifact extends Binding
         $issuer->setValue($this->spMetadata->getString('entityid'));
 
         $ar->setIssuer($issuer);
-        $ar->setArtifact($_REQUEST['SAMLart']);
+        $ar->setArtifact($query['SAMLart']);
         $ar->setDestination($endpoint['Location']);
 
         // sign the request
@@ -174,7 +176,7 @@ class HTTPArtifact extends Binding
         $samlResponse = Message::fromXML($xml);
         $samlResponse->addValidator([get_class($this), 'validateSignature'], $artifactResponse);
 
-        if (isset($_REQUEST['RelayState'])) {
+        if (isset($query['RelayState'])) {
             $samlResponse->setRelayState($_REQUEST['RelayState']);
         }
 

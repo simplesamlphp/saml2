@@ -6,6 +6,9 @@ namespace SAML2;
 
 use DOMElement;
 use Exception;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -95,16 +98,17 @@ class HTTPRedirect extends Binding
 
     /**
      * Send a SAML 2 message using the HTTP-Redirect binding.
-     * Note: This function never returns.
      *
-     * @param \SAML2\Message $message The message we should send.
-     * @return void
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    public function send(Message $message): void
+    public function send(Message $message): ResponseInterface
     {
         $destination = $this->getRedirectURL($message);
-        Utils::getContainer()->getLogger()->debug('Redirect to ' . strlen($destination) . ' byte URL: ' . $destination);
-        Utils::getContainer()->redirect($destination);
+        Utils::getContainer()->getLogger()->debug(
+            'Redirect to ' . strlen($destination) . ' byte URL: ' . $destination
+        );
+        return new Response(303, ['Location' => $destination]);
     }
 
 
@@ -113,24 +117,27 @@ class HTTPRedirect extends Binding
      *
      * Throws an exception if it is unable receive the message.
      *
-     * @throws \Exception
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \SAML2\Message The received message.
+     * @throws \Exception
      *
      * NPath is currently too high but solving that just moves code around.
      */
-    public function receive(): Message
+    public function receive(ServerRequestInterface $request): Message
     {
-        $data = self::parseQuery();
-        if (array_key_exists('SAMLRequest', $data)) {
-            $message = $data['SAMLRequest'];
-        } elseif (array_key_exists('SAMLResponse', $data)) {
-            $message = $data['SAMLResponse'];
+        $query = $request->getQueryParams();
+        if (array_key_exists('SAMLRequest', $query)) {
+            $message = $query['SAMLRequest'];
+            $signedQuery = 'SAMLRequest=' . urlencode($query['SAMLRequest']);
+        } elseif (array_key_exists('SAMLResponse', $query)) {
+            $message = $query['SAMLResponse'];
+            $signedQuery = 'SAMLResponse=' . urlencode($query['SAMLResponse']);
         } else {
             throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
 
-        if (isset($data['SAMLEncoding']) && $data['SAMLEncoding'] !== self::DEFLATE) {
-            throw new Exception('Unknown SAMLEncoding: ' . var_export($data['SAMLEncoding'], true));
+        if (isset($query['SAMLEncoding']) && $query['SAMLEncoding'] !== self::DEFLATE) {
+            throw new Exception('Unknown SAMLEncoding: ' . var_export($query['SAMLEncoding'], true));
         }
 
         $message = base64_decode($message);
@@ -150,79 +157,28 @@ class HTTPRedirect extends Binding
         }
         $message = Message::fromXML($document->firstChild);
 
-        if (array_key_exists('RelayState', $data)) {
-            $message->setRelayState($data['RelayState']);
+        if (array_key_exists('RelayState', $query)) {
+            $message->setRelayState($query['RelayState']);
+            $signedQuery .= '&RelayState=' . urlencode($query['RelayState']);
         }
 
-        if (!array_key_exists('Signature', $data)) {
+        if (!array_key_exists('Signature', $query)) {
             return $message;
         }
 
-        if (!array_key_exists('SigAlg', $data)) {
+        if (!array_key_exists('SigAlg', $query)) {
             throw new Exception('Missing signature algorithm.');
         }
 
         $signData = [
-            'Signature' => $data['Signature'],
-            'SigAlg'    => $data['SigAlg'],
-            'Query'     => $data['SignedQuery'],
+            'Signature' => $query['Signature'],
+            'SigAlg'    => $query['SigAlg'],
+            'Query'     => $signedQuery,
         ];
 
         $message->addValidator([get_class($this), 'validateSignature'], $signData);
 
         return $message;
-    }
-
-
-    /**
-     * Helper function to parse query data.
-     *
-     * This function returns the query string split into key=>value pairs.
-     * It also adds a new parameter, SignedQuery, which contains the data that is
-     * signed.
-     *
-     * @return array The query data that is signed.
-     */
-    private static function parseQuery(): array
-    {
-        /*
-         * Parse the query string. We need to do this ourself, so that we get access
-         * to the raw (urlencoded) values. This is required because different software
-         * can urlencode to different values.
-         */
-        $data = [];
-        $relayState = '';
-        $sigAlg = '';
-        $sigQuery = '';
-        foreach (explode('&', $_SERVER['QUERY_STRING']) as $e) {
-            $tmp = explode('=', $e, 2);
-            $name = $tmp[0];
-            if (count($tmp) === 2) {
-                $value = $tmp[1];
-            } else {
-                /* No value for this parameter. */
-                $value = '';
-            }
-            $name = urldecode($name);
-            $data[$name] = urldecode($value);
-
-            switch ($name) {
-                case 'SAMLRequest':
-                case 'SAMLResponse':
-                    $sigQuery = $name . '=' . $value;
-                    break;
-                case 'RelayState':
-                    $relayState = '&RelayState=' . $value;
-                    break;
-                case 'SigAlg':
-                    $sigAlg = '&SigAlg=' . $value;
-                    break;
-            }
-        }
-
-        $data['SignedQuery'] = $sigQuery . $relayState . $sigAlg;
-
-        return $data;
     }
 
 

@@ -6,7 +6,11 @@ namespace SAML2;
 
 use DOMDocument;
 use Exception;
+use Nyholm\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use SAML2\Exception\Protocol\UnsupportedBindingException;
+use SAML2\Response as SAML2_Response;
 use SAML2\XML\ecp\RequestAuthenticated;
 use SAML2\XML\ecp\Response as ECPResponse;
 use SimpleSAML\SOAP\Constants as SOAPC;
@@ -36,7 +40,7 @@ class SOAP extends Binding
         // In the Artifact Resolution profile, this will be an ArtifactResolve
         // containing another message (e.g. a Response), however in the ECP
         // profile, this is the Response itself.
-        if ($message instanceof Response) {
+        if ($message instanceof SAML2_Response) {
             $requestAuthenticated = new RequestAuthenticated(1);
 
             $destination = $this->destination ?: $message->getDestination();
@@ -63,33 +67,27 @@ class SOAP extends Binding
     /**
      * Send a SAML 2 message using the SOAP binding.
      *
-     * Note: This function never returns.
-     *
      * @param \SAML2\Message $message The message we should send.
-     * @return void
+     * @return \Psr\Http\Message\ResponseInterface
      */
-    public function send(Message $message): void
+    public function send(Message $message): ResponseInterface
     {
-        header('Content-Type: text/xml', true);
-
         $xml = $this->getOutputToSend($message);
-        if ($xml !== false) {
-            Utils::getContainer()->debugMessage($xml, 'out');
-            echo $xml;
-        }
+        Utils::getContainer()->debugMessage($xml, 'out');
 
-        // DOMDocument::saveXML() returned false. Something is seriously wrong here. Not much we can do.
-        exit(0);
+        return new Response(200, ['Content-Type' => 'text/xml'], $xml);
     }
 
 
     /**
      * Receive a SAML 2 message sent using the HTTP-POST binding.
      *
-     * @throws \Exception If unable to receive the message
+     * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \SAML2\Message The received message.
+     *
+     * @throws \Exception If unable to receive the message
      */
-    public function receive(): Message
+    public function receive(ServerRequestInterface $request): Message
     {
         $postText = $this->getInputStream();
 
