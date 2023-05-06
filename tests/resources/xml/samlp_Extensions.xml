@@ -1,0 +1,6 @@
+<samlp:Extensions xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol">
+  <myns:AttributeList xmlns:myns="urn:test:mynamespace">
+    <myns:Attribute name="UserName" value=""/>
+  </myns:AttributeList>
+  <myns:ExampleElement xmlns:myns="urn:test:mynamespace" name="AnotherExtension" />
+</samlp:Extensions>

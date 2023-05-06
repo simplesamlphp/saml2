@@ -1,0 +1,13 @@
+<mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
+  <mdui:DisplayName xml:lang="en">University of Examples</mdui:DisplayName>
+  <mdui:DisplayName xml:lang="el">Univërsitä øf Exåmpleß</mdui:DisplayName>
+  <mdui:Description xml:lang="en">Just an example</mdui:Description>
+  <mdui:InformationURL xml:lang="en">http://www.example.edu/en/</mdui:InformationURL>
+  <mdui:InformationURL xml:lang="el">http://www.example.edu/</mdui:InformationURL>
+  <mdui:PrivacyStatementURL xml:lang="en">https://example.org/privacy</mdui:PrivacyStatementURL>
+  <mdui:Keywords xml:lang="en">University Fictional</mdui:Keywords>
+  <mdui:Keywords xml:lang="fr">Université Fictif</mdui:Keywords>
+  <mdui:Logo height="88" width="87" xml:lang="fy">https://example.org/idp/images/logo_87x88.png</mdui:Logo>
+  <ssp:child1 xmlns:ssp="urn:custom:ssp" />
+  <myns:child2 xmlns:myns="urn:test:mynamespace" />
+</mdui:UIInfo>

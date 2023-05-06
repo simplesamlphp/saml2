@@ -1,0 +1,7 @@
+<saml:AuthnStatement xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" AuthnInstant="2020-03-23T23:37:24Z" SessionIndex="123" SessionNotOnOrAfter="2020-03-23T23:37:24Z">
+  <saml:SubjectLocality Address="1.1.1.1" DNSName="idp.example.org" />
+  <saml:AuthnContext>
+    <saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</saml:AuthnContextClassRef>
+    <saml:AuthenticatingAuthority>https://idp.example.com/SAML2</saml:AuthenticatingAuthority>
+  </saml:AuthnContext>
+</saml:AuthnStatement>

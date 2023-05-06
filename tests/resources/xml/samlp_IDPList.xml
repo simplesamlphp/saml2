@@ -1,0 +1,5 @@
+<samlp:IDPList xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol">
+  <samlp:IDPEntry ProviderID="urn:some:requester1" Name="testName1" Loc="urn:test:testLoc1"/>
+  <samlp:IDPEntry ProviderID="urn:some:requester2" Name="testName2" Loc="urn:test:testLoc2"/>
+  <samlp:GetComplete>https://some/location</samlp:GetComplete>
+</samlp:IDPList>

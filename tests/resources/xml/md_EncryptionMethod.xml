@@ -1,0 +1,5 @@
+<md:EncryptionMethod xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p">
+  <xenc:KeySize xmlns:xenc="http://www.w3.org/2001/04/xmlenc#">10</xenc:KeySize>
+  <xenc:OAEPparams xmlns:xenc="http://www.w3.org/2001/04/xmlenc#">9lWu3Q==</xenc:OAEPparams>
+  <ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>
+</md:EncryptionMethod>

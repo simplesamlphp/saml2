@@ -1,0 +1,20 @@
+<samlp:AttributeQuery xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Version="2.0" ID="aaf23196-1773-2113-474a-fe114412ab72" IssueInstant="2017-09-06T11:49:27Z">
+  <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
+  <saml:Subject>
+    <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">urn:example:subject</saml:NameID>
+  </saml:Subject>
+  <saml:Attribute Name="test1">
+    <saml:AttributeValue>test1_attrv1</saml:AttributeValue>
+    <saml:AttributeValue>test1_attrv2</saml:AttributeValue>
+  </saml:Attribute>
+  <saml:Attribute Name="test2">
+    <saml:AttributeValue>test2_attrv1</saml:AttributeValue>
+    <saml:AttributeValue>test2_attrv2</saml:AttributeValue>
+    <saml:AttributeValue>test2_attrv3</saml:AttributeValue>
+  </saml:Attribute>
+  <saml:Attribute Name="test3"/>
+  <saml:Attribute Name="test4">
+    <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:integer">4</saml:AttributeValue>
+    <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:integer">23</saml:AttributeValue>
+  </saml:Attribute>
+</samlp:AttributeQuery>

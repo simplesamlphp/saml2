@@ -1,0 +1,1 @@
+<md:AssertionIDRequestService xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="http://www.example.com/aidrs" />

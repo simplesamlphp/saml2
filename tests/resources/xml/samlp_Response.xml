@@ -1,0 +1,37 @@
+<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Version="2.0" ID="abc123" IssueInstant="2021-03-25T16:53:26Z" Destination="https://example.org/metadata" Consent="https://simplesamlphp.org/sp/metadata" InResponseTo="PHPUnit">
+  <saml:Issuer>https://IdentityProvider.com</saml:Issuer>
+  <samlp:Status>
+    <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
+  </samlp:Status>
+  <saml:Assertion Version="2.0" ID="_93af655219464fb403b34436cfb0c5cb1d9a5502" IssueInstant="1970-01-01T01:33:31Z">
+    <saml:Issuer>Provider</saml:Issuer>
+    <saml:Subject>
+      <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">s00000000:123456789</saml:NameID>
+      <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+        <saml:SubjectConfirmationData NotOnOrAfter="2011-08-31T08:51:05Z" Recipient="https://sp.example.com/assertion_consumer" InResponseTo="_13603a6565a69297e9809175b052d115965121c8"/>
+      </saml:SubjectConfirmation>
+    </saml:Subject>
+    <saml:Conditions NotBefore="2011-08-31T08:51:05Z" NotOnOrAfter="2011-08-31T08:51:05Z">
+      <saml:AudienceRestriction>
+        <saml:Audience>urn:test:ServiceProvider</saml:Audience>
+      </saml:AudienceRestriction>
+    </saml:Conditions>
+    <saml:AuthnStatement AuthnInstant="2011-08-31T08:51:05Z" SessionIndex="_93af655219464fb403b34436cfb0c5cb1d9a5502">
+      <saml:SubjectLocality Address="127.0.0.1"/>
+      <saml:AuthnContext>
+        <saml:AuthnContextClassRef>urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</saml:AuthnContextClassRef>
+      </saml:AuthnContext>
+    </saml:AuthnStatement>
+    <saml:AttributeStatement>
+      <saml:Attribute Name="urn:ServiceID">
+        <saml:AttributeValue>1</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:EntityConcernedID">
+        <saml:AttributeValue>1</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:EntityConcernedSubID">
+        <saml:AttributeValue>1</saml:AttributeValue>
+      </saml:Attribute>
+    </saml:AttributeStatement>
+  </saml:Assertion>
+</samlp:Response>

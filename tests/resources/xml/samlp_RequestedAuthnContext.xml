@@ -1,0 +1,3 @@
+<samlp:RequestedAuthnContext xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" Comparison="exact">
+  <saml:AuthnContextDeclRef xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">https://example.org/relative/path/to/document.xml</saml:AuthnContextDeclRef>
+</samlp:RequestedAuthnContext>

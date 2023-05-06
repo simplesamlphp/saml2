@@ -1,0 +1,56 @@
+<mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute">
+  <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="attrib1" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+    <saml:AttributeValue>is</saml:AttributeValue>
+    <saml:AttributeValue>really</saml:AttributeValue>
+    <saml:AttributeValue>cool</saml:AttributeValue>
+  </saml:Attribute>
+  <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" ID="_93af655219464fb403b34436cfb0c5cb1d9a5502" IssueInstant="2022-10-16T22:51:18Z" Version="2.0">
+    <saml:Issuer>testIssuer</saml:Issuer>
+    <ds:Signature>
+      <ds:SignedInfo>
+        <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+        <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>
+        <ds:Reference URI="#_93af655219464fb403b34436cfb0c5cb1d9a5502">
+          <ds:Transforms>
+            <ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/>
+            <ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
+          </ds:Transforms>
+          <ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
+          <ds:DigestValue>ff96yPQETgkNkMzgPiwzhj7nuDiM18KjpHjL6BwIWbw=</ds:DigestValue>
+        </ds:Reference>
+      </ds:SignedInfo>
+      <ds:SignatureValue>pPdV7FJkhD6MMEVQg1hvq9dPyA0ZwBSGYU67fjgdIdasiTpwAwESW397TJl2w0w6BRK2OPJfmR8VS/tIPF3Mnc1UaUpSNP7LrJe9TthsrND6owWSty+8BBhhPU2Ojz3IwHP7OP3WqSBL+mnfEtEzguAHAXOcF3godyR2vSTOs8U=</ds:SignatureValue>
+    </ds:Signature>
+    <saml:Subject>
+      <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">some:entity</saml:NameID>
+    </saml:Subject>
+    <saml:Conditions>
+      <saml:AudienceRestriction>
+        <saml:Audience>https://simplesamlphp.org/idp/metadata</saml:Audience>
+        <saml:Audience>urn:x-simplesamlphp:phpunit:entity</saml:Audience>
+      </saml:AudienceRestriction>
+    </saml:Conditions>
+    <saml:AttributeStatement>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:uid" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:AttributeValue>student2</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:terena.org:attribute-def:schacHomeOrganization" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:AttributeValue>university.example.org</saml:AttributeValue>
+        <saml:AttributeValue>bbb.cc</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:schac:attribute-def:schacPersonalUniqueCode" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:AttributeValue>urn:schac:personalUniqueCode:nl:local:uvt.nl:memberid:524020</saml:AttributeValue>
+        <saml:AttributeValue>urn:schac:personalUniqueCode:nl:local:surfnet.nl:studentid:12345</saml:AttributeValue>
+      </saml:Attribute>
+      <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonAffiliation" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+        <saml:AttributeValue>member</saml:AttributeValue>
+        <saml:AttributeValue>student</saml:AttributeValue>
+      </saml:Attribute>
+    </saml:AttributeStatement>
+  </saml:Assertion>
+  <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="foo" NameFormat="urn:simplesamlphp:v1:simplesamlphp">
+    <saml:AttributeValue>is</saml:AttributeValue>
+    <saml:AttributeValue>really</saml:AttributeValue>
+    <saml:AttributeValue>cool</saml:AttributeValue>
+  </saml:Attribute>
+</mdattr:EntityAttributes>

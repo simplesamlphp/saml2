@@ -1,0 +1,16 @@
+<md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
+  <shibmd:Scope xmlns:shibmd="urn:mace:shibboleth:metadata:1.0" regexp="false">SomeScope</shibmd:Scope>
+  <mdrpi:RegistrationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" registrationAuthority="SomeAuthority"></mdrpi:RegistrationInfo>
+  <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" publisher="SomePublisher"></mdrpi:PublicationInfo>
+  <mdrpi:PublicationPath xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi">
+    <mdrpi:Publication publisher="SomePublisher"/>
+  </mdrpi:PublicationPath>
+  <mdui:UIInfo xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
+    <mdui:DisplayName xml:lang="en">Example</mdui:DisplayName>
+  </mdui:UIInfo>
+  <mdui:DiscoHints xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
+    <mdui:IPHint>127.0.0.1</mdui:IPHint>
+  </mdui:DiscoHints>
+  <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"></alg:DigestMethod>
+  <alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" MinKeySize="1024" MaxKeySize="4096"></alg:SigningMethod>
+</md:Extensions>

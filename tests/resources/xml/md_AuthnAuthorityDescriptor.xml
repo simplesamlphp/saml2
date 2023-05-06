@@ -1,0 +1,6 @@
+<md:AuthnAuthorityDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol urn:x-simplesamlphp:protocol">
+  <md:AuthnQueryService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="http://www.example.com/aqs" />
+  <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="http://www.example.com/aidrs" />
+  <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:persistent</md:NameIDFormat>
+  <md:NameIDFormat>urn:oasis:names:tc:SAML:2.0:nameid-format:transient</md:NameIDFormat>
+</md:AuthnAuthorityDescriptor>

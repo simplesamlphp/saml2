@@ -1,0 +1,1 @@
+<init:RequestInitiator xmlns:init="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Binding="urn:oasis:names:tc:SAML:profiles:SSO:request-init" Location="https://simplesamlphp.org/some/endpoint" ResponseLocation="https://simplesamlphp.org/other/endpoint" xmlns:test="urn:x-simplesamlphp:namespace" test:attr="value"/>

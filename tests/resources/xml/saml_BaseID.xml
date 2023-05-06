@@ -1,0 +1,3 @@
+<saml:BaseID xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" xmlns:ssp="urn:x-simplesamlphp:namespace" xsi:type="ssp:CustomBaseIDType">
+  <saml:Audience>urn:some:audience</saml:Audience>
+</saml:BaseID>

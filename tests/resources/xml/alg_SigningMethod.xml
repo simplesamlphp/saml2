@@ -1,0 +1,3 @@
+<alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" MinKeySize="1024" MaxKeySize="4096">
+  <ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>
+</alg:SigningMethod>

@@ -1,0 +1,11 @@
+<md:ContactPerson contactType="other" test:attr1="testval1" test:attr2="testval2" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:test="urn:test:something">
+  <md:Extensions>
+    <some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>
+  </md:Extensions>
+  <md:Company>Test Company</md:Company>
+  <md:GivenName>John</md:GivenName>
+  <md:SurName>Doe</md:SurName>
+  <md:EmailAddress>mailto:jdoe@test.company</md:EmailAddress>
+  <md:EmailAddress>mailto:john.doe@test.company</md:EmailAddress>
+  <md:TelephoneNumber>1-234-567-8901</md:TelephoneNumber>
+</md:ContactPerson>

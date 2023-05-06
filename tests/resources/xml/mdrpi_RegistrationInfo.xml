@@ -1,0 +1,4 @@
+<mdrpi:RegistrationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" registrationAuthority="https://ExampleAuthority" registrationInstant="2009-02-13T23:31:30Z">
+  <mdrpi:RegistrationPolicy xml:lang="en">http://www.example.org/aai/metadata/en_registration.html</mdrpi:RegistrationPolicy>
+  <mdrpi:RegistrationPolicy xml:lang="de">http://www.example.org/aai/metadata/de_registration.html</mdrpi:RegistrationPolicy>
+</mdrpi:RegistrationInfo>
