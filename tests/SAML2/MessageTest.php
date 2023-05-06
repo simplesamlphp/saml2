@@ -10,7 +10,7 @@ use SAML2\Message;
 use SAML2\Response;
 use SAML2\XML\saml\Issuer;
 use SAML2\Constants;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -104,7 +104,8 @@ AUTHNREQUEST
         $issuer->setValue('https://gateway.stepup.org/saml20/sp/metadata');
         $response->setIssuer($issuer);
         $xml = $response->toUnsignedXML();
-        $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
+        $xpCache = XPath::getXPath($xml);
+        $xml_issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
         $xml_issuer = $xml_issuer[0];
 
         $this->assertFalse($xml_issuer->hasAttributes());
@@ -117,7 +118,8 @@ AUTHNREQUEST
         $issuer->setSPProvidedID('SomeSPProvidedID');
         $response->setIssuer($issuer);
         $xml = $response->toUnsignedXML();
-        $xml_issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
+        $xpCache = XPath::getXPath($xml);
+        $xml_issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
         $xml_issuer = $xml_issuer[0];
 
         $this->assertTrue($xml_issuer->hasAttributes());
@@ -129,8 +131,8 @@ AUTHNREQUEST
         // finally, make sure we can skip the Issuer by setting it to null
         $response->setIssuer(null);
         $xml = $response->toUnsignedXML();
-
-        $this->assertEmpty(Utils::xpQuery($xml, './saml_assertion:Issuer'));
+        $xpCache = XPath::getXPath($xml);
+        $this->assertEmpty(XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache));
     }
 
 
@@ -244,7 +246,8 @@ AUTHNREQUEST
         $this->assertEquals("Test data!", $exts[0]->getXML()->textContent);
 
         $xml = $message->toUnsignedXML();
-        $xml_exts = Utils::xpQuery($xml, './samlp:Extensions');
+        $xpCache = XPath::getXPath($xml);
+        $xml_exts = XPath::xpQuery($xml, './samlp:Extensions', $xpCache);
         $this->assertCount(1, $xml_exts);
         $this->assertEquals("test", $xml_exts[0]->childNodes->item(0)->localName);
         $this->assertEquals("Test data!", $xml_exts[0]->childNodes->item(0)->textContent);
@@ -361,7 +364,8 @@ XML;
         $this->assertEquals(Constants::CONSENT_PRIOR, $message->getConsent());
 
         $messageElement = $message->toUnsignedXML();
-        $xp = Utils::xpQuery($messageElement, '.');
+        $xpCache = XPath::getXPath($messageElement);
+        $xp = XPath::xpQuery($messageElement, '.', $xpCache);
         $this->assertEquals('somethingNEW', $xp[0]->getAttribute('ID'));
     }
 

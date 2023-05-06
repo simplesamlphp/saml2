@@ -9,6 +9,7 @@ use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Utils\XPath;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\Exception\InvalidArgumentException;
@@ -192,8 +193,10 @@ class AuthnRequest extends Request
      */
     private function parseSubject(DOMElement $xml): void
     {
+        $xpCache = XPath::getXPath($xml);
+
         /** @var \DOMElement[] $subject */
-        $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
+        $subject = XPath::xpQuery($xml, './saml_assertion:Subject', $xpCache);
         if (empty($subject)) {
             return;
         }
@@ -203,10 +206,12 @@ class AuthnRequest extends Request
         }
         $subject = $subject[0];
 
+        $xpCache = XPath::getXPath($subject);
         /** @var \DOMElement[] $nameId */
-        $nameId = Utils::xpQuery(
+        $nameId = XPath::xpQuery(
             $subject,
-            './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData'
+            './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData',
+            $xpCache,
         );
         if (empty($nameId)) {
             throw new Exception('Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
@@ -221,7 +226,7 @@ class AuthnRequest extends Request
         }
 
         /** @var \DOMElement[] $subjectConfirmation */
-        $subjectConfirmation = Utils::xpQuery($subject, './saml_assertion:SubjectConfirmation');
+        $subjectConfirmation = XPath::xpQuery($subject, './saml_assertion:SubjectConfirmation', $xpCache);
         foreach ($subjectConfirmation as $sc) {
             $this->subjectConfirmation[] = new SubjectConfirmation($sc);
         }
@@ -235,8 +240,10 @@ class AuthnRequest extends Request
      */
     protected function parseNameIdPolicy(DOMElement $xml): void
     {
+        $xpCache = XPath::getXPath($xml);
+
         /** @var \DOMElement[] $nameIdPolicy */
-        $nameIdPolicy = Utils::xpQuery($xml, './saml_protocol:NameIDPolicy');
+        $nameIdPolicy = XPath::xpQuery($xml, './saml_protocol:NameIDPolicy', $xpCache);
         if (empty($nameIdPolicy)) {
             return;
         }
@@ -260,8 +267,10 @@ class AuthnRequest extends Request
      */
     protected function parseRequestedAuthnContext(DOMElement $xml): void
     {
+        $xpCache = XPath::getXPath($xml);
+
         /** @var \DOMElement[] $requestedAuthnContext */
-        $requestedAuthnContext = Utils::xpQuery($xml, './saml_protocol:RequestedAuthnContext');
+        $requestedAuthnContext = XPath::xpQuery($xml, './saml_protocol:RequestedAuthnContext', $xpCache);
         if (empty($requestedAuthnContext)) {
             return;
         }
@@ -273,8 +282,9 @@ class AuthnRequest extends Request
             'Comparison'           => Constants::COMPARISON_EXACT,
         ];
 
+        $xpCache = XPath::getXPath($requestedAuthnContext);
         /** @var \DOMElement[] $accr */
-        $accr = Utils::xpQuery($requestedAuthnContext, './saml_assertion:AuthnContextClassRef');
+        $accr = XPath::xpQuery($requestedAuthnContext, './saml_assertion:AuthnContextClassRef', $xpCache);
         foreach ($accr as $i) {
             $rac['AuthnContextClassRef'][] = trim($i->textContent);
         }
@@ -294,8 +304,10 @@ class AuthnRequest extends Request
      */
     protected function parseScoping(DOMElement $xml): void
     {
+        $xpCache = XPath::getXPath($xml);
+
         /** @var \DOMElement[] $scoping */
-        $scoping = Utils::xpQuery($xml, './saml_protocol:Scoping');
+        $scoping = XPath::xpQuery($xml, './saml_protocol:Scoping', $xpCache);
         if (empty($scoping)) {
             return;
         }
@@ -305,8 +317,10 @@ class AuthnRequest extends Request
         if ($scoping->hasAttribute('ProxyCount')) {
             $this->ProxyCount = intval($scoping->getAttribute('ProxyCount'));
         }
+
+        $xpCache = XPath::getXPath($scoping);
         /** @var \DOMElement[] $idpEntries */
-        $idpEntries = Utils::xpQuery($scoping, './saml_protocol:IDPList/saml_protocol:IDPEntry');
+        $idpEntries = XPath::xpQuery($scoping, './saml_protocol:IDPList/saml_protocol:IDPEntry', $xpCache);
 
         foreach ($idpEntries as $idpEntry) {
             if (!$idpEntry->hasAttribute('ProviderID')) {
@@ -316,7 +330,7 @@ class AuthnRequest extends Request
         }
 
         /** @var \DOMElement[] $requesterIDs */
-        $requesterIDs = Utils::xpQuery($scoping, './saml_protocol:RequesterID');
+        $requesterIDs = XPath::xpQuery($scoping, './saml_protocol:RequesterID', $xpCache);
         foreach ($requesterIDs as $requesterID) {
             $this->RequesterID[] = trim($requesterID->textContent);
         }
@@ -329,22 +343,26 @@ class AuthnRequest extends Request
      */
     protected function parseConditions(DOMElement $xml): void
     {
+        $xpCache = XPath::getXPath($xml);
+
         /** @var \DOMElement[] $conditions */
-        $conditions = Utils::xpQuery($xml, './saml_assertion:Conditions');
+        $conditions = XPath::xpQuery($xml, './saml_assertion:Conditions', $xpCache);
         if (empty($conditions)) {
             return;
         }
         $conditions = $conditions[0];
 
+        $xpCache = XPath::getXPath($conditions);
         /** @var \DOMElement[] $ar */
-        $ar = Utils::xpQuery($conditions, './saml_assertion:AudienceRestriction');
+        $ar = XPath::xpQuery($conditions, './saml_assertion:AudienceRestriction', $xpCache);
         if (empty($ar)) {
             return;
         }
         $ar = $ar[0];
 
+        $xpCache = XPath::getXPath($ar);
         /** @var \DOMElement[] $audiences */
-        $audiences = Utils::xpQuery($ar, './saml_assertion:Audience');
+        $audiences = XPath::xpQuery($ar, './saml_assertion:Audience', $xpCache);
         $this->audiences = [];
         foreach ($audiences as $a) {
             $this->audiences[] = trim($a->textContent);

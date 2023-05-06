@@ -9,6 +9,7 @@ use SAML2\CertificatesMock;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\SignedElementHelper;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 
 /**
  * Class \SAML2\SignedElementHelperTest
@@ -59,9 +60,11 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         // Test modification of reference.
         $signedMockElementCopy = Utils::copyElement($this->signedMockElement);
         $signedMockElementCopy->ownerDocument->appendChild($signedMockElementCopy);
-        $digestValueElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($signedMockElementCopy);
+        $digestValueElements = XPath::xpQuery(
             $signedMockElementCopy,
-            '/root/ds:Signature/ds:SignedInfo/ds:Reference/ds:DigestValue'
+            '/root/ds:Signature/ds:SignedInfo/ds:Reference/ds:DigestValue',
+            $xpCache,
         );
         $this->assertCount(1, $digestValueElements);
         $digestValueElements[0]->firstChild->data = 'invalid';
@@ -82,7 +85,12 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         // Test modification of SignatureValue.
         $signedMockElementCopy = Utils::copyElement($this->signedMockElement);
         $signedMockElementCopy->ownerDocument->appendChild($signedMockElementCopy);
-        $digestValueElements = Utils::xpQuery($signedMockElementCopy, '/root/ds:Signature/ds:SignatureValue');
+        $xpCache = XPath::getXPath($signedMockElementCopy);
+        $digestValueElements = XPath::xpQuery(
+            $signedMockElementCopy,
+            '/root/ds:Signature/ds:SignatureValue',
+            $xpCache,
+        );
         $this->assertCount(1, $digestValueElements);
         $digestValueElements[0]->firstChild->data = 'invalid';
         $tmp = new SignedElementHelperMock($signedMockElementCopy);

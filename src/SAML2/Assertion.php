@@ -12,6 +12,7 @@ use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Exception\RuntimeException;
 use SAML2\Utilities\Temporal;
+use SAML2\Utils\XPath;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
@@ -284,8 +285,9 @@ class Assertion extends SignedElement
 
         $this->issueInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
 
+        $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement[] $issuer */
-        $issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
+        $issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
         if (empty($issuer)) {
             throw new Exception('Missing <saml:Issuer> in assertion.');
         }
@@ -310,8 +312,9 @@ class Assertion extends SignedElement
      */
     private function parseSubject(DOMElement $xml): void
     {
+        $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement[] $subject */
-        $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
+        $subject = XPath::xpQuery($xml, './saml_assertion:Subject', $xpCache);
         if (empty($subject)) {
             /* No Subject node. */
 
@@ -321,10 +324,12 @@ class Assertion extends SignedElement
         }
         $subject = $subject[0];
 
+        $xpCache = XPath::getXPath($subject);
         /** @var \DOMElement[] $nameId */
-        $nameId = Utils::xpQuery(
+        $nameId = XPath::xpQuery(
             $subject,
-            './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData'
+            './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData',
+            $xpCache,
         );
         if (count($nameId) > 1) {
             throw new Exception('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
@@ -339,7 +344,7 @@ class Assertion extends SignedElement
         }
 
         /** @var \DOMElement[] $subjectConfirmation */
-        $subjectConfirmation = Utils::xpQuery($subject, './saml_assertion:SubjectConfirmation');
+        $subjectConfirmation = XPath::xpQuery($subject, './saml_assertion:SubjectConfirmation', $xpCache);
         if (empty($subjectConfirmation) && empty($nameId)) {
             throw new Exception('Missing <saml:SubjectConfirmation> in <saml:Subject>.');
         }
@@ -359,8 +364,10 @@ class Assertion extends SignedElement
      */
     private function parseConditions(DOMElement $xml): void
     {
+        $xpCache = XPath::getXPath($xml);
+
         /** @var \DOMElement[] $conditions */
-        $conditions = Utils::xpQuery($xml, './saml_assertion:Conditions');
+        $conditions = XPath::xpQuery($xml, './saml_assertion:Conditions', $xpCache);
         if (empty($conditions)) {
             /* No <saml:Conditions> node. */
 
@@ -426,8 +433,10 @@ class Assertion extends SignedElement
      */
     private function parseAuthnStatement(DOMElement $xml): void
     {
+        $xpCache = XPath::getXPath($xml);
+
         /** @var \DOMElement[] $authnStatements */
-        $authnStatements = Utils::xpQuery($xml, './saml_assertion:AuthnStatement');
+        $authnStatements = XPath::xpQuery($xml, './saml_assertion:AuthnStatement', $xpCache);
         if (empty($authnStatements)) {
             $this->authnInstant = null;
 
@@ -465,9 +474,11 @@ class Assertion extends SignedElement
      */
     private function parseAuthnContext(DOMElement $authnStatementEl): void
     {
+        $xpCache = XPath::getXPath($authnStatementEl);
+
         // Get the AuthnContext element
         /** @var \DOMElement[] $authnContexts */
-        $authnContexts = Utils::xpQuery($authnStatementEl, './saml_assertion:AuthnContext');
+        $authnContexts = XPath::xpQuery($authnStatementEl, './saml_assertion:AuthnContext', $xpCache);
         if (count($authnContexts) > 1) {
             throw new Exception('More than one <saml:AuthnContext> in <saml:AuthnStatement>.');
         } elseif (empty($authnContexts)) {
@@ -477,7 +488,7 @@ class Assertion extends SignedElement
 
         // Get the AuthnContextDeclRef (if available)
         /** @var \DOMElement[] $authnContextDeclRefs */
-        $authnContextDeclRefs = Utils::xpQuery($authnContextEl, './saml_assertion:AuthnContextDeclRef');
+        $authnContextDeclRefs = XPath::xpQuery($authnContextEl, './saml_assertion:AuthnContextDeclRef', $xpCache);
         if (count($authnContextDeclRefs) > 1) {
             throw new Exception(
                 'More than one <saml:AuthnContextDeclRef> found?'
@@ -488,7 +499,7 @@ class Assertion extends SignedElement
 
         // Get the AuthnContextDecl (if available)
         /** @var \DOMElement[] $authnContextDecls */
-        $authnContextDecls = Utils::xpQuery($authnContextEl, './saml_assertion:AuthnContextDecl');
+        $authnContextDecls = XPath::xpQuery($authnContextEl, './saml_assertion:AuthnContextDecl', $xpCache);
         if (count($authnContextDecls) > 1) {
             throw new Exception(
                 'More than one <saml:AuthnContextDecl> found?'
@@ -499,7 +510,7 @@ class Assertion extends SignedElement
 
         // Get the AuthnContextClassRef (if available)
         /** @var \DOMElement[] $authnContextClassRefs */
-        $authnContextClassRefs = Utils::xpQuery($authnContextEl, './saml_assertion:AuthnContextClassRef');
+        $authnContextClassRefs = XPath::xpQuery($authnContextEl, './saml_assertion:AuthnContextClassRef', $xpCache);
         if (count($authnContextClassRefs) > 1) {
             throw new Exception('More than one <saml:AuthnContextClassRef> in <saml:AuthnContext>.');
         } elseif (count($authnContextClassRefs) === 1) {
@@ -531,8 +542,9 @@ class Assertion extends SignedElement
     private function parseAttributes(DOMElement $xml): void
     {
         $firstAttribute = true;
+        $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement[] $attributes */
-        $attributes = Utils::xpQuery($xml, './saml_assertion:AttributeStatement/saml_assertion:Attribute');
+        $attributes = XPath::xpQuery($xml, './saml_assertion:AttributeStatement/saml_assertion:Attribute', $xpCache);
         foreach ($attributes as $attribute) {
             if (!$attribute->hasAttribute('Name')) {
                 throw new Exception('Missing name on <saml:Attribute> element.');
@@ -571,13 +583,17 @@ class Assertion extends SignedElement
      */
     private function parseAttributeValue(DOMNode $attribute, string $attributeName): void
     {
+        $xpCache = XPath::getXPath($attribute);
+
         /** @var \DOMElement[] $values */
-        $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
+        $values = XPath::xpQuery($attribute, './saml_assertion:AttributeValue', $xpCache);
 
         if ($attributeName === Constants::EPTI_URN_MACE || $attributeName === Constants::EPTI_URN_OID) {
             foreach ($values as $index => $eptiAttributeValue) {
+                $xpCache = XPath::getXPath($eptiAttributeValue);
+
                 /** @var \DOMElement[] $eptiNameId */
-                $eptiNameId = Utils::xpQuery($eptiAttributeValue, './saml_assertion:NameID');
+                $eptiNameId = XPath::xpQuery($eptiAttributeValue, './saml_assertion:NameID', $xpCache);
 
                 if (count($eptiNameId) === 1) {
                     $this->attributes[$attributeName][] = new NameID($eptiNameId[0]);
@@ -633,10 +649,13 @@ class Assertion extends SignedElement
      */
     private function parseEncryptedAttributes(DOMElement $xml): void
     {
+        $xpCache = XPath::getXPath($xml);
+
         /** @var \DOMElement[] encryptedAttributes */
-        $this->encryptedAttributes = Utils::xpQuery(
+        $this->encryptedAttributes = XPath::xpQuery(
             $xml,
-            './saml_assertion:AttributeStatement/saml_assertion:EncryptedAttribute'
+            './saml_assertion:AttributeStatement/saml_assertion:EncryptedAttribute',
+            $xpCache,
         );
     }
 
@@ -649,8 +668,10 @@ class Assertion extends SignedElement
      */
     private function parseSignature(DOMElement $xml): void
     {
+        $xpCache = XPath::getXPath($xml);
+
         /** @var \DOMAttr[] $signatureMethod */
-        $signatureMethod = Utils::xpQuery($xml, './ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm');
+        $signatureMethod = XPath::xpQuery($xml, './ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm', $xpCache);
 
         /* Validate the signature element of the message. */
         $sig = Utils::validateElement($xml);

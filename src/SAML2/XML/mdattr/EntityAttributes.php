@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdattr;
 
 use DOMElement;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SAML2\XML\saml\Attribute;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
@@ -44,8 +44,9 @@ class EntityAttributes
             return;
         }
 
+        $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement $node */
-        foreach (Utils::xpQuery($xml, './saml_assertion:Attribute|./saml_assertion:Assertion') as $node) {
+        foreach (XPath::xpQuery($xml, './saml_assertion:Attribute|./saml_assertion:Assertion', $xpCache) as $node) {
             if ($node->localName === 'Attribute') {
                 $this->children[] = new Attribute($node);
             } else {

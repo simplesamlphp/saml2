@@ -6,6 +6,7 @@ namespace SAML2;
 
 use DOMElement;
 use Exception;
+use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
 
 use function array_key_exists;
@@ -74,29 +75,32 @@ abstract class StatusResponse extends Message
             $this->inResponseTo = $xml->getAttribute('InResponseTo');
         }
 
+        $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement[] $status */
-        $status = Utils::xpQuery($xml, './saml_protocol:Status');
+        $status = XPath::xpQuery($xml, './saml_protocol:Status', $xpCache);
         if (empty($status)) {
             throw new Exception('Missing status code on response.');
         }
 
+        $xpCache = XPath::getXPath($status[0]);
         /** @var \DOMElement[] $statusCode */
-        $statusCode = Utils::xpQuery($status[0], './saml_protocol:StatusCode');
+        $statusCode = XPath::xpQuery($status[0], './saml_protocol:StatusCode', $xpCache);
         if (empty($statusCode)) {
             throw new Exception('Missing status code in status element.');
         }
         $this->status['Code'] = $statusCode[0]->getAttribute('Value');
 
-        /** @var \DOMElement[] $subCode */
-        $subCode = Utils::xpQuery($statusCode[0], './saml_protocol:StatusCode');
-        if (!empty($subCode)) {
-            $this->status['SubCode'] = $subCode[0]->getAttribute('Value');
-        }
-
         /** @var \DOMElement[] $message */
-        $message = Utils::xpQuery($status[0], './saml_protocol:StatusMessage');
+        $message = XPath::xpQuery($status[0], './saml_protocol:StatusMessage', $xpCache);
         if (!empty($message)) {
             $this->status['Message'] = trim($message[0]->textContent);
+        }
+
+        $xpCache = XPath::getXPath($statusCode[0]);
+        /** @var \DOMElement[] $subCode */
+        $subCode = XPath::xpQuery($statusCode[0], './saml_protocol:StatusCode', $xpCache);
+        if (!empty($subCode)) {
+            $this->status['SubCode'] = $subCode[0]->getAttribute('Value');
         }
     }
 

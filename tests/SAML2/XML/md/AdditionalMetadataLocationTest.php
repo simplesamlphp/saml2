@@ -6,7 +6,7 @@ namespace SAML2\XML\md;
 
 use SAML2\Constants;
 use SAML2\XML\md\AdditionalMetadataLocation;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -26,9 +26,11 @@ class AdditionalMetadataLocationTest extends \PHPUnit\Framework\TestCase
         $additionalMetadataLocation->setLocation('TheLocation');
         $additionalMetadataLocationElement = $additionalMetadataLocation->toXML($document->firstChild);
 
-        $additionalMetadataLocationElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($additionalMetadataLocationElement);
+        $additionalMetadataLocationElements = XPath::xpQuery(
             $additionalMetadataLocationElement,
-            '/root/saml_metadata:AdditionalMetadataLocation'
+            '/root/saml_metadata:AdditionalMetadataLocation',
+            $xpCache,
         );
         $this->assertCount(1, $additionalMetadataLocationElements);
         $additionalMetadataLocationElement = $additionalMetadataLocationElements[0];

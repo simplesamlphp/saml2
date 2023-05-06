@@ -6,7 +6,7 @@ namespace SAML2\XML\md;
 
 use SAML2\Constants;
 use SAML2\XML\md\EndpointType;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -26,7 +26,8 @@ class EndpointTypeTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $endpointTypeElement = $endpointType->toXML($document->firstChild, 'md:Test');
 
-        $endpointTypeElements = Utils::xpQuery($endpointTypeElement, '/root/saml_metadata:Test');
+        $xpCache = XPath::getXPath($endpointTypeElement);
+        $endpointTypeElements = XPath::xpQuery($endpointTypeElement, '/root/saml_metadata:Test', $xpCache);
         $this->assertCount(1, $endpointTypeElements);
         $endpointTypeElement = $endpointTypeElements[0];
 
@@ -39,7 +40,8 @@ class EndpointTypeTest extends \PHPUnit\Framework\TestCase
         $document->loadXML('<root />');
         $endpointTypeElement = $endpointType->toXML($document->firstChild, 'md:Test');
 
-        $endpointTypeElement = Utils::xpQuery($endpointTypeElement, '/root/saml_metadata:Test');
+        $xpCache = XPath::getXPath($endpointTypeElement);
+        $endpointTypeElement = XPath::xpQuery($endpointTypeElement, '/root/saml_metadata:Test', $xpCache);
         $this->assertCount(1, $endpointTypeElement);
         $endpointTypeElement = $endpointTypeElement[0];
 
@@ -72,7 +74,8 @@ XML
 
         $document->loadXML('<root />');
         $endpointTypeElement = $endpointType->toXML($document->firstChild, 'md:Test');
-        $endpointTypeElements = Utils::xpQuery($endpointTypeElement, '/root/saml_metadata:Test');
+        $xpCache = XPath::getXPath($endpointTypeElement);
+        $endpointTypeElements = XPath::xpQuery($endpointTypeElement, '/root/saml_metadata:Test', $xpCache);
         $this->assertCount(1, $endpointTypeElements);
         $endpointTypeElement = $endpointTypeElements[0];
 

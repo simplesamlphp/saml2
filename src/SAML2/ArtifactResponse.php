@@ -6,6 +6,7 @@ namespace SAML2;
 
 use DOMElement;
 use DOMNode;
+use SAML2\Utils\XPath;
 
 use function is_null;
 
@@ -37,7 +38,8 @@ class ArtifactResponse extends StatusResponse
         parent::__construct('ArtifactResponse', $xml);
 
         if (!is_null($xml)) {
-            $status = Utils::xpQuery($xml, './saml_protocol:Status');
+            $xpCache = XPath::getXPath($xml);
+            $status = XPath::xpQuery($xml, './saml_protocol:Status', $xpCache);
             $status = $status[0];
 
             /** @psalm-suppress RedundantCondition */

@@ -9,6 +9,7 @@ use SAML2\Constants;
 use SAML2\XML\ds\X509Data;
 use SAML2\XML\saml\NameID;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -33,7 +34,8 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
 
         $xml = $aq->toUnsignedXML();
 
-        $nameId_after = Utils::xpQuery($xml, './saml_assertion:Subject/saml_assertion:NameID');
+        $xpCache = XPath::getXPath($xml);
+        $nameId_after = XPath::xpQuery($xml, './saml_assertion:Subject/saml_assertion:NameID', $xpCache);
         $this->assertTrue(count($nameId_after) === 1);
         $this->assertEquals('SomeNameIDFormat', $nameId_after[0]->getAttribute("Format"));
         $this->assertEquals('OurNameQualifier', $nameId_after[0]->getAttribute("NameQualifier"));

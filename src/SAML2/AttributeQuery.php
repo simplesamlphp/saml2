@@ -6,6 +6,7 @@ namespace SAML2;
 
 use DOMElement;
 use Exception;
+use SAML2\Utils\XPath;
 
 use function array_key_exists;
 use function is_int;
@@ -65,8 +66,9 @@ class AttributeQuery extends SubjectQuery
         }
 
         $firstAttribute = true;
+        $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement[] $attributes */
-        $attributes = Utils::xpQuery($xml, './saml_assertion:Attribute');
+        $attributes = XPath::xpQuery($xml, './saml_assertion:Attribute', $xpCache);
         foreach ($attributes as $attribute) {
             if (!$attribute->hasAttribute('Name')) {
                 throw new Exception('Missing name on <saml:Attribute> element.');
@@ -92,7 +94,7 @@ class AttributeQuery extends SubjectQuery
                 $this->attributes[$name] = [];
             }
 
-            $values = Utils::xpQuery($attribute, './saml_assertion:AttributeValue');
+            $values = XPath::xpQuery($attribute, './saml_assertion:AttributeValue', XPath::getXPath($attribute));
             foreach ($values as $value) {
                 $this->attributes[$name][] = trim($value->textContent);
             }

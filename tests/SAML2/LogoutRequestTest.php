@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SAML2;
 
 use SAML2\Constants;
-use SAML2\Utils;
 use SAML2\LogoutRequest;
+use SAML2\Utils\XPath;
 use SAML2\XML\saml\NameID;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -71,12 +71,13 @@ XML;
         $this->assertEquals('LogoutRequest', $logoutRequestElement->localName);
         $this->assertEquals(Constants::NS_SAMLP, $logoutRequestElement->namespaceURI);
 
-        $nameIdElements = Utils::xpQuery($logoutRequestElement, './saml_assertion:NameID');
+        $xpCache = XPath::getXPath($logoutRequestElement);
+        $nameIdElements = XPath::xpQuery($logoutRequestElement, './saml_assertion:NameID', $xpCache);
         $this->assertCount(1, $nameIdElements);
         $nameIdElements = $nameIdElements[0];
         $this->assertEquals('NameIDValue', $nameIdElements->textContent);
 
-        $sessionIndexElements = Utils::xpQuery($logoutRequestElement, './saml_protocol:SessionIndex');
+        $sessionIndexElements = XPath::xpQuery($logoutRequestElement, './saml_protocol:SessionIndex', $xpCache);
         $this->assertCount(1, $sessionIndexElements);
         $this->assertEquals('SessionIndexValue', $sessionIndexElements[0]->textContent);
 
@@ -87,7 +88,8 @@ XML;
         $logoutRequest->setSessionIndexes(['SessionIndexValue1', 'SessionIndexValue2']);
         $logoutRequestElement = $logoutRequest->toUnsignedXML();
 
-        $sessionIndexElements = Utils::xpQuery($logoutRequestElement, './saml_protocol:SessionIndex');
+        $xpCache = XPath::getXPath($logoutRequestElement);
+        $sessionIndexElements = XPath::xpQuery($logoutRequestElement, './saml_protocol:SessionIndex', $xpCache);
         $this->assertCount(2, $sessionIndexElements);
         $this->assertEquals('SessionIndexValue1', $sessionIndexElements[0]->textContent);
         $this->assertEquals('SessionIndexValue2', $sessionIndexElements[1]->textContent);
@@ -129,9 +131,10 @@ XML;
         $logoutRequest->encryptNameId(CertificatesMock::getPublicKey());
 
         $logoutRequestElement = $logoutRequest->toUnsignedXML();
+        $xpCache = XPath::getXPath($logoutRequestElement);
         $this->assertCount(
             1,
-            Utils::xpQuery($logoutRequestElement, './saml_assertion:EncryptedID/xenc:EncryptedData')
+            XPath::xpQuery($logoutRequestElement, './saml_assertion:EncryptedID/xenc:EncryptedData', $xpCache)
         );
     }
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdrpi;
 
 use SAML2\XML\mdrpi\RegistrationInfo;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -29,9 +29,11 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $registrationInfo->toXML($document->firstChild);
 
-        $registrationInfoElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($xml);
+        $registrationInfoElements = XPath::xpQuery(
             $xml,
-            '/root/*[local-name()=\'RegistrationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
+            '/root/*[local-name()=\'RegistrationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']',
+            $xpCache,
         );
         $this->assertCount(1, $registrationInfoElements);
         $registrationInfoElement = $registrationInfoElements[0];
@@ -42,9 +44,11 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
         );
         $this->assertEquals('2009-02-13T23:31:30Z', $registrationInfoElement->getAttribute("registrationInstant"));
 
-        $usagePolicyElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($registrationInfoElement);
+        $usagePolicyElements = XPath::xpQuery(
             $registrationInfoElement,
-            './*[local-name()=\'RegistrationPolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
+            './*[local-name()=\'RegistrationPolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']',
+            $xpCache,
         );
         $this->assertCount(2, $usagePolicyElements);
 

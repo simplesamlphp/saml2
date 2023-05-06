@@ -6,6 +6,7 @@ namespace SAML2\XML\mdui;
 
 use DOMElement;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
 
@@ -85,8 +86,9 @@ class UIInfo
         $this->InformationURL = Utils::extractLocalizedStrings($xml, Common::NS, 'InformationURL');
         $this->PrivacyStatementURL = Utils::extractLocalizedStrings($xml, Common::NS, 'PrivacyStatementURL');
 
+        $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement $node */
-        foreach (Utils::xpQuery($xml, './*') as $node) {
+        foreach (XPath::xpQuery($xml, './*', $xpCache) as $node) {
             if ($node->namespaceURI === Common::NS) {
                 switch ($node->localName) {
                     case 'Keywords':

@@ -9,7 +9,7 @@ use SAML2\Constants;
 use SAML2\XML\saml\SubjectConfirmationData;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\saml\NameID;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -32,16 +32,21 @@ class SubjectConfirmationTest extends \PHPUnit\Framework\TestCase
 
         $document = DOMDocumentFactory::fromString('<root />');
         $subjectConfirmationElement = $subjectConfirmation->toXML($document->firstChild);
-        $subjectConfirmationElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($subjectConfirmationElement);
+        $subjectConfirmationElements = XPath::xpQuery(
             $subjectConfirmationElement,
-            '//saml_assertion:SubjectConfirmation'
+            '//saml_assertion:SubjectConfirmation',
+            $xpCache
         );
         $this->assertCount(1, $subjectConfirmationElements);
         $subjectConfirmationElement = $subjectConfirmationElements[0];
 
         $this->assertEquals('SomeMethod', $subjectConfirmationElement->getAttribute("Method"));
-        $this->assertCount(1, Utils::xpQuery($subjectConfirmationElement, "./saml_assertion:NameID"));
-        $this->assertCount(1, Utils::xpQuery($subjectConfirmationElement, "./saml_assertion:SubjectConfirmationData"));
+        $this->assertCount(1, XPath::xpQuery($subjectConfirmationElement, "./saml_assertion:NameID", $xpCache));
+        $this->assertCount(
+            1,
+            XPath::xpQuery($subjectConfirmationElement, "./saml_assertion:SubjectConfirmationData", $xpCache)
+        );
     }
 
 

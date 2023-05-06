@@ -7,6 +7,7 @@ namespace SAML2;
 use DOMDocument;
 use Exception;
 use SAML2\Exception\Protocol\UnsupportedBindingException;
+use SAML2\Utils\XPath;
 use SAML2\XML\ecp\Response as ECPResponse;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -113,8 +114,9 @@ SOAP;
         /** @var \DOMNode $xml */
         $xml = $document->firstChild;
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
+        $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement[] $results */
-        $results = Utils::xpQuery($xml, '/soap-env:Envelope/soap-env:Body/*[1]');
+        $results = XPath::xpQuery($xml, '/soap-env:Envelope/soap-env:Body/*[1]', $xpCache);
 
         return Message::fromXML($results[0]);
     }

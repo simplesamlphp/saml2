@@ -6,6 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 
 /**
  * Class representing SAML 2 SPSSODescriptor.
@@ -63,13 +64,14 @@ class SPSSODescriptor extends SSODescriptorType
         $this->AuthnRequestsSigned = Utils::parseBoolean($xml, 'AuthnRequestsSigned', null);
         $this->WantAssertionsSigned = Utils::parseBoolean($xml, 'WantAssertionsSigned', null);
 
+        $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:AssertionConsumerService') as $ep) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:AssertionConsumerService', $xpQuery) as $ep) {
             $this->AssertionConsumerService[] = new IndexedEndpointType($ep);
         }
 
         /** @var \DOMElement $acs */
-        foreach (Utils::xpQuery($xml, './saml_metadata:AttributeConsumingService') as $acs) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:AttributeConsumingService', $xpQuery) as $acs) {
             $this->AttributeConsumingService[] = new AttributeConsumingService($acs);
         }
     }

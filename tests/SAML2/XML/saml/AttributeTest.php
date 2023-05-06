@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use SAML2\Constants;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -32,7 +32,8 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $attributeElement = $attribute->toXML($document->firstChild);
 
-        $attributeElements = Utils::xpQuery($attributeElement, '/root/saml_assertion:Attribute');
+        $xpCache = XPath::getXPath($attributeElement);
+        $attributeElements = XPath::xpQuery($attributeElement, '/root/saml_assertion:Attribute', $xpCache);
         $this->assertCount(1, $attributeElements);
         $attributeElement = $attributeElements[0];
 

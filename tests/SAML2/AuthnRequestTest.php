@@ -5,17 +5,19 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMDocument;
+use PHPUnit\Framework\TestCase;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SAML2\AuthnRequestTest
  */
-class AuthnRequestTest extends \PHPUnit\Framework\TestCase
+class AuthnRequestTest extends TestCase
 {
     public function testUnmarshalling(): void
     {
@@ -30,18 +32,22 @@ class AuthnRequestTest extends \PHPUnit\Framework\TestCase
 
         $authnRequestElement = $authnRequest->toUnsignedXML();
 
-        $requestedAuthnContextElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($authnRequestElement);
+        $requestedAuthnContextElements = XPath::xpQuery(
             $authnRequestElement,
-            './saml_protocol:RequestedAuthnContext'
+            './saml_protocol:RequestedAuthnContext',
+            $xpCache,
         );
         $this->assertCount(1, $requestedAuthnContextElements);
 
-        $requestedAuthnConextElement = $requestedAuthnContextElements[0];
-        $this->assertEquals('better', $requestedAuthnConextElement->getAttribute("Comparison"));
+        $requestedAuthnContextElement = $requestedAuthnContextElements[0];
+        $this->assertEquals('better', $requestedAuthnContextElement->getAttribute("Comparison"));
 
-        $authnContextClassRefElements = Utils::xpQuery(
-            $requestedAuthnConextElement,
-            './saml_assertion:AuthnContextClassRef'
+        $xpCache = XPath::getXPath($requestedAuthnContextElement);
+        $authnContextClassRefElements = XPath::xpQuery(
+            $requestedAuthnContextElement,
+            './saml_assertion:AuthnContextClassRef',
+            $xpCache,
         );
         $this->assertCount(2, $authnContextClassRefElements);
         $this->assertEquals('accr1', $authnContextClassRefElements[0]->textContent);
@@ -228,17 +234,22 @@ AUTHNREQUEST;
         $requestStructure = $request->toUnsignedXML();
 
         // Test for an Issuer
-        $issuerElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer');
+        $xpCache = XPath::getXPath($requestStructure);
+        $issuerElements = XPath::xpQuery($requestStructure, './saml_assertion:Issuer', $xpCache);
         $this->assertCount(1, $issuerElements);
         $this->assertEquals('https://gateway.example.org/saml20/sp/metadata', $issuerElements[0]->textContent);
 
         // Test ordering of AuthnRequest contents
-        $requestElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*');
+        $requestElements = XPath::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*', $xpCache);
         $this->assertCount(1, $requestElements);
         $this->assertEquals('saml:Subject', $requestElements[0]->tagName);
 
         // Test existence of EncryptedID
-        $encryptedIdElements = Utils::xpQuery($requestStructure, './saml_assertion:Subject/saml_assertion:EncryptedID');
+        $encryptedIdElements = XPath::xpQuery(
+            $requestStructure,
+            './saml_assertion:Subject/saml_assertion:EncryptedID',
+            $xpCache,
+        );
         $this->assertCount(1, $encryptedIdElements);
     }
 
@@ -266,19 +277,21 @@ AUTHNREQUEST;
         $requestStructure = $request->toUnsignedXML();
 
         // Test for an Issuer
-        $issuerElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer');
+        $xpCache = XPath::getXPath($requestStructure);
+        $issuerElements = XPath::xpQuery($requestStructure, './saml_assertion:Issuer', $xpCache);
         $this->assertCount(1, $issuerElements);
         $this->assertEquals('https://gateway.example.org/saml20/sp/metadata', $issuerElements[0]->textContent);
 
         // Test ordering of AuthnRequest contents
-        $requestElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*');
+        $requestElements = XPath::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*', $xpCache);
         $this->assertCount(1, $requestElements);
         $this->assertEquals('samlp:Scoping', $requestElements[0]->tagName);
 
         // Test existence of IDPEntry
-        $idpEntryElements = Utils::xpQuery(
+        $idpEntryElements = XPath::xpQuery(
             $requestStructure,
             './saml_protocol:Scoping/saml_protocol:IDPList/saml_protocol:IDPEntry',
+            $xpCache,
         );
         $this->assertCount(3, $idpEntryElements);
     }
@@ -366,19 +379,21 @@ AUTHNREQUEST;
         $requestStructure = $request->toUnsignedXML();
 
         // Test for an Issuer
-        $issuerElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer');
+        $xpCache = XPath::getXPath($requestStructure);
+        $issuerElements = XPath::xpQuery($requestStructure, './saml_assertion:Issuer', $xpCache);
         $this->assertCount(1, $issuerElements);
         $this->assertEquals('https://gateway.example.org/saml20/sp/metadata', $issuerElements[0]->textContent);
 
         // Test ordering of AuthnRequest contents
-        $requestElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*');
+        $requestElements = XPath::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*', $xpCache);
         $this->assertCount(1, $requestElements);
         $this->assertEquals('samlp:Scoping', $requestElements[0]->tagName);
 
         // Test existence of RequesterID
-        $requesterIdElements = Utils::xpQuery(
+        $requesterIdElements = XPath::xpQuery(
             $requestStructure,
             './saml_protocol:Scoping/saml_protocol:RequesterID',
+            $xpCache
         );
         $this->assertCount(2, $requesterIdElements);
     }
@@ -438,9 +453,11 @@ AUTHNREQUEST;
         $requestStructure = $request->toUnsignedXML();
 
         // Test existence of RequesterID
-        $scopingElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($requestStructure);
+        $scopingElements = XPath::xpQuery(
             $requestStructure,
             './saml_protocol:Scoping',
+            $xpCache,
         );
         $this->assertCount(1, $scopingElements);
 
@@ -545,12 +562,13 @@ AUTHNREQUEST;
         $requestStructure = $request->toUnsignedXML();
 
         // Test for an Issuer
-        $issuerElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer');
+        $xpCache = XPath::getXPath($requestStructure);
+        $issuerElements = XPath::xpQuery($requestStructure, './saml_assertion:Issuer', $xpCache);
         $this->assertCount(1, $issuerElements);
         $this->assertEquals('https://gateway.example.org/saml20/sp/metadata', $issuerElements[0]->textContent);
 
         // Test ordering of AuthnRequest contents
-        $requestElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*');
+        $requestElements = XPath::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*', $xpCache);
         $this->assertCount(1, $requestElements);
         $this->assertEquals('samlp:NameIDPolicy', $requestElements[0]->tagName);
 
@@ -582,12 +600,13 @@ AUTHNREQUEST;
         $requestStructure = $request->toUnsignedXML();
 
         // Test for an Issuer
-        $issuerElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer');
+        $xpCache = XPath::getXPath($requestStructure);
+        $issuerElements = XPath::xpQuery($requestStructure, './saml_assertion:Issuer', $xpCache);
         $this->assertCount(1, $issuerElements);
         $this->assertEquals('https://gateway.example.org/saml20/sp/metadata', $issuerElements[0]->textContent);
 
         // Test ordering of AuthnRequest contents
-        $requestElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*');
+        $requestElements = XPath::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*', $xpCache);
         $this->assertCount(1, $requestElements);
         $this->assertEquals('samlp:NameIDPolicy', $requestElements[0]->tagName);
 
@@ -994,19 +1013,21 @@ AUTHNREQUEST;
         $requestStructure = $request->toUnsignedXML();
 
         // Test for an Issuer
-        $issuerElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer');
+        $xpCache = XPath::getXPath($requestStructure);
+        $issuerElements = XPath::xpQuery($requestStructure, './saml_assertion:Issuer', $xpCache);
         $this->assertCount(1, $issuerElements);
         $this->assertEquals('https://gateway.example.org/saml20/sp/metadata', $issuerElements[0]->textContent);
 
         // Test ordering of AuthnRequest contents
-        $requestElements = Utils::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*');
+        $requestElements = XPath::xpQuery($requestStructure, './saml_assertion:Issuer/following-sibling::*', $xpCache);
         $this->assertCount(1, $requestElements);
         $this->assertEquals('saml:Conditions', $requestElements[0]->tagName);
 
         // Test existence of Audience
-        $audienceElements = Utils::xpQuery(
+        $audienceElements = XPath::xpQuery(
             $requestStructure,
             './saml_assertion:Conditions/saml_assertion:AudienceRestriction/saml_assertion:Audience',
+            $xpCache,
         );
         $this->assertCount(2, $audienceElements);
         $this->assertEquals('https://sp1.example.org', $audienceElements[0]->textContent);

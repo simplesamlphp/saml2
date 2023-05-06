@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use PHPUnit\Framework\TestCase;
+use SAML2\Utils\XPath;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -11,7 +13,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SAML2\AttributeQueryTest
  */
-class AttributeQueryTest extends \PHPUnit\Framework\TestCase
+class AttributeQueryTest extends TestCase
 {
     public function testMarshalling(): void
     {
@@ -37,20 +39,23 @@ class AttributeQueryTest extends \PHPUnit\Framework\TestCase
         $attributeQueryElement = $attributeQuery->toUnsignedXML();
 
         // Test Attribute Names
-        $attributes = Utils::xpQuery($attributeQueryElement, './saml_assertion:Attribute');
+        $xpCache = XPath::getXPath($attributeQueryElement);
+        $attributes = XPath::xpQuery($attributeQueryElement, './saml_assertion:Attribute', $xpCache);
         $this->assertCount(4, $attributes);
         $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));
         $this->assertEquals('test2', $attributes[1]->getAttribute('Name'));
         $this->assertEquals('test3', $attributes[2]->getAttribute('Name'));
 
         // Test Attribute Values for Attribute 1
-        $av1 = Utils::xpQuery($attributes[0], './saml_assertion:AttributeValue');
+        $xpCache = XPath::getXPath($attributes[0]);
+        $av1 = XPath::xpQuery($attributes[0], './saml_assertion:AttributeValue', $xpCache);
         $this->assertCount(2, $av1);
         $this->assertEquals('test1_attrv1', $av1[0]->textContent);
         $this->assertEquals('test1_attrv2', $av1[1]->textContent);
 
         // Test Attribute Values for Attribute 2
-        $av2 = Utils::xpQuery($attributes[1], './saml_assertion:AttributeValue');
+        $xpCache = XPath::getXPath($attributes[1]);
+        $av2 = XPath::xpQuery($attributes[1], './saml_assertion:AttributeValue', $xpCache);
         $this->assertCount(3, $av2);
         $this->assertEquals('xs:string', $av2[0]->getAttribute('xsi:type'));
         $this->assertEquals('test2_attrv1', $av2[0]->textContent);
@@ -60,11 +65,13 @@ class AttributeQueryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('test2_attrv3', $av2[2]->textContent);
 
         // Test Attribute Values for Attribute 3
-        $av3 = Utils::xpQuery($attributes[2], './saml_assertion:AttributeValue');
+        $xpCache = XPath::getXPath($attributes[2]);
+        $av3 = XPath::xpQuery($attributes[2], './saml_assertion:AttributeValue', $xpCache);
         $this->assertCount(0, $av3);
 
         // Test Attribute Values for Attribute 3
-        $av3 = Utils::xpQuery($attributes[3], './saml_assertion:AttributeValue');
+        $xpCache = XPath::getXPath($attributes[3]);
+        $av3 = XPath::xpQuery($attributes[3], './saml_assertion:AttributeValue', $xpCache);
         $this->assertCount(2, $av3);
         $this->assertEquals('4', $av3[0]->textContent);
         $this->assertEquals('xs:integer', $av3[0]->getAttribute('xsi:type'));
@@ -144,7 +151,8 @@ XML;
         $attributeQueryElement = $attributeQuery->toUnsignedXML();
 
         // Test Attribute Names
-        $attributes = Utils::xpQuery($attributeQueryElement, './saml_assertion:Attribute');
+        $xpCache = XPath::getXPath($attributeQueryElement);
+        $attributes = XPath::xpQuery($attributeQueryElement, './saml_assertion:Attribute', $xpCache);
         $this->assertCount(3, $attributes);
         $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));
         $this->assertEquals($fmt_uri, $attributes[0]->getAttribute('NameFormat'));
@@ -154,7 +162,8 @@ XML;
         $this->assertEquals($fmt_uri, $attributes[2]->getAttribute('NameFormat'));
 
         // Sanity check: test if values are still ok
-        $av1 = Utils::xpQuery($attributes[0], './saml_assertion:AttributeValue');
+        $xpCache = XPath::getXPath($attributes[0]);
+        $av1 = XPath::xpQuery($attributes[0], './saml_assertion:AttributeValue', $xpCache);
         $this->assertCount(2, $av1);
         $this->assertEquals('test1_attrv1', $av1[0]->textContent);
         $this->assertEquals('test1_attrv2', $av1[1]->textContent);

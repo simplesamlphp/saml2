@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2;
 
 use SAML2\Response;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -27,20 +27,23 @@ class StatusResponseTest extends \PHPUnit\Framework\TestCase
 
         $responseElement = $response->toUnsignedXML();
 
-        $statusElements = Utils::xpQuery($responseElement, './saml_protocol:Status');
+        $xpCache = XPath::getXPath($responseElement);
+        $statusElements = XPath::xpQuery($responseElement, './saml_protocol:Status', $xpCache);
         $this->assertCount(1, $statusElements);
 
-        $statusCodeElements = Utils::xpQuery($statusElements[0], './saml_protocol:StatusCode');
+        $xpCache = XPath::getXPath($statusElements[0]);
+        $statusCodeElements = XPath::xpQuery($statusElements[0], './saml_protocol:StatusCode', $xpCache);
         $this->assertCount(1, $statusCodeElements);
         $this->assertEquals('OurStatusCode', $statusCodeElements[0]->getAttribute("Value"));
 
-        $nestedStatusCodeElements = Utils::xpQuery($statusCodeElements[0], './saml_protocol:StatusCode');
-        $this->assertCount(1, $nestedStatusCodeElements);
-        $this->assertEquals('OurSubStatusCode', $nestedStatusCodeElements[0]->getAttribute("Value"));
-
-        $statusMessageElements = Utils::xpQuery($statusElements[0], './saml_protocol:StatusMessage');
+        $statusMessageElements = XPath::xpQuery($statusElements[0], './saml_protocol:StatusMessage', $xpCache);
         $this->assertCount(1, $statusMessageElements);
         $this->assertEquals('OurMessageText', $statusMessageElements[0]->textContent);
+
+        $xpCache = XPath::getXPath($statusCodeElements[0]);
+        $nestedStatusCodeElements = XPath::xpQuery($statusCodeElements[0], './saml_protocol:StatusCode', $xpCache);
+        $this->assertCount(1, $nestedStatusCodeElements);
+        $this->assertEquals('OurSubStatusCode', $nestedStatusCodeElements[0]->getAttribute("Value"));
     }
 
 
@@ -164,7 +167,12 @@ XML;
         $responseStructure = $response->toUnsignedXML();
 
         // Test for a StatusCode
-        $statusCodeElements = Utils::xpQuery($responseStructure, './saml_protocol:Status/saml_protocol:StatusCode');
+        $xpCache = XPath::getXPath($responseStructure);
+        $statusCodeElements = XPath::xpQuery(
+            $responseStructure,
+            './saml_protocol:Status/saml_protocol:StatusCode',
+            $xpCache,
+        );
         $this->assertCount(1, $statusCodeElements);
         $this->assertEquals('OurStatusCode', $statusCodeElements[0]->getAttribute('Value'));
     }

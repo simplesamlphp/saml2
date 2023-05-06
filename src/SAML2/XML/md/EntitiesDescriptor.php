@@ -8,6 +8,7 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\SignedElementHelper;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -79,7 +80,13 @@ class EntitiesDescriptor extends SignedElementHelper
         $this->Extensions = Extensions::getList($xml);
 
         /** @var \DOMElement $node */
-        foreach (Utils::xpQuery($xml, './saml_metadata:EntityDescriptor|./saml_metadata:EntitiesDescriptor') as $node) {
+        foreach (
+            XPath::xpQuery(
+                $xml,
+                './saml_metadata:EntityDescriptor|./saml_metadata:EntitiesDescriptor',
+                XPath::getXPath($xml)
+            ) as $node
+        ) {
             if ($node->localName === 'EntityDescriptor') {
                 $this->children[] = new EntityDescriptor($node);
             } else {

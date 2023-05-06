@@ -8,7 +8,7 @@ use SAML2\XML\mdui\DiscoHints;
 use SAML2\XML\mdui\Keywords;
 use SAML2\XML\mdui\Logo;
 use SAML2\XML\mdui\UIInfo;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -40,16 +40,20 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $uiinfo->toXML($document->firstChild);
 
-        $infoElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($xml);
+        $infoElements = XPath::xpQuery(
             $xml,
-            '/root/*[local-name()=\'UIInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            '/root/*[local-name()=\'UIInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(1, $infoElements);
         $infoElement = $infoElements[0];
 
-        $displaynameElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($infoElement);
+        $displaynameElements = XPath::xpQuery(
             $infoElement,
-            './*[local-name()=\'DisplayName\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            './*[local-name()=\'DisplayName\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(2, $displaynameElements);
         $this->assertEquals("Voorbeeld", $displaynameElements[0]->textContent);
@@ -57,9 +61,10 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("nl", $displaynameElements[0]->getAttribute("xml:lang"));
         $this->assertEquals("en", $displaynameElements[1]->getAttribute("xml:lang"));
 
-        $descriptionElements = Utils::xpQuery(
+        $descriptionElements = XPath::xpQuery(
             $infoElement,
-            './*[local-name()=\'Description\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            './*[local-name()=\'Description\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(2, $descriptionElements);
         $this->assertEquals("Omschrijving", $descriptionElements[0]->textContent);
@@ -67,9 +72,10 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("nl", $descriptionElements[0]->getAttribute("xml:lang"));
         $this->assertEquals("en", $descriptionElements[1]->getAttribute("xml:lang"));
 
-        $infourlElements = Utils::xpQuery(
+        $infourlElements = XPath::xpQuery(
             $infoElement,
-            './*[local-name()=\'InformationURL\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            './*[local-name()=\'InformationURL\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(2, $infourlElements);
         $this->assertEquals("https://voorbeeld.nl/", $infourlElements[0]->textContent);
@@ -77,9 +83,10 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals("nl", $infourlElements[0]->getAttribute("xml:lang"));
         $this->assertEquals("en", $infourlElements[1]->getAttribute("xml:lang"));
 
-        $privurlElements = Utils::xpQuery(
+        $privurlElements = XPath::xpQuery(
             $infoElement,
-            './*[local-name()=\'PrivacyStatementURL\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            './*[local-name()=\'PrivacyStatementURL\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(2, $privurlElements);
         $this->assertEquals("https://voorbeeld.nl/privacy", $privurlElements[0]->textContent);
@@ -116,46 +123,55 @@ class UIInfoTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $uiinfo->toXML($document->firstChild);
 
-        $infoElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($xml);
+        $infoElements = XPath::xpQuery(
             $xml,
-            '/root/*[local-name()=\'UIInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            '/root/*[local-name()=\'UIInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(1, $infoElements);
         $infoElement = $infoElements[0];
 
-        $logoElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($infoElement);
+        $logoElements = XPath::xpQuery(
             $infoElement,
-            './*[local-name()=\'Logo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            './*[local-name()=\'Logo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(1, $logoElements);
         $this->assertEquals("https://example.edu/logo.png", $logoElements[0]->textContent);
 
-        $keywordElements = Utils::xpQuery(
+        $keywordElements = XPath::xpQuery(
             $infoElement,
-            './*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            './*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(1, $keywordElements);
         $this->assertEquals("voorbeeld specimen", $keywordElements[0]->textContent);
         $this->assertEquals("nl", $keywordElements[0]->getAttribute("xml:lang"));
 
-        $discoElements = Utils::xpQuery(
+        $discoElements = XPath::xpQuery(
             $infoElement,
-            './*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            './*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(1, $discoElements);
         $discoElement = $discoElements[0];
 
-        $iphintElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($discoElement);
+        $iphintElements = XPath::xpQuery(
             $discoElement,
-            './*[local-name()=\'IPHint\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            './*[local-name()=\'IPHint\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(2, $iphintElements);
         $this->assertEquals("192.168.6.0/24", $iphintElements[0]->textContent);
         $this->assertEquals("fd00:0123:aa:1001::/64", $iphintElements[1]->textContent);
 
-        $keywordElements = Utils::xpQuery(
+        $keywordElements = XPath::xpQuery(
             $discoElement,
-            './*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            './*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(1, $keywordElements);
         $this->assertEquals("voorbeeld specimen", $keywordElements[0]->textContent);

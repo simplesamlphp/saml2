@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SAML2\XML\saml\Attribute;
 
 /**
@@ -84,25 +85,27 @@ class IDPSSODescriptor extends SSODescriptorType
 
         $this->WantAuthnRequestsSigned = Utils::parseBoolean($xml, 'WantAuthnRequestsSigned', null);
 
+        $xpCache = XPath::getXPath($xml);
+
         /** @var \DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:SingleSignOnService') as $ep) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:SingleSignOnService', $xpCache) as $ep) {
             $this->SingleSignOnService[] = new EndpointType($ep);
         }
 
         /** @var \DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:NameIDMappingService') as $ep) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:NameIDMappingService', $xpCache) as $ep) {
             $this->NameIDMappingService[] = new EndpointType($ep);
         }
 
         /** @var \DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:AssertionIDRequestService', $xpCache) as $ep) {
             $this->AssertionIDRequestService[] = new EndpointType($ep);
         }
 
         $this->AttributeProfile = Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile');
 
         /** @var \DOMElement $a */
-        foreach (Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
+        foreach (XPath::xpQuery($xml, './saml_assertion:Attribute', $xpCache) as $a) {
             $this->Attribute[] = new Attribute($a);
         }
     }

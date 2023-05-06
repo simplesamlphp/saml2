@@ -7,7 +7,7 @@ namespace SAML2\XML\mdattr;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
 use SAML2\XML\mdattr\EntityAttributes;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -41,16 +41,20 @@ class EntityAttributesTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $entityAttributes->toXML($document->firstChild);
 
-        $entityAttributesElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($xml);
+        $entityAttributesElements = XPath::xpQuery(
             $xml,
-            '/root/*[local-name()=\'EntityAttributes\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:attribute\']'
+            '/root/*[local-name()=\'EntityAttributes\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:attribute\']',
+            $xpCache,
         );
         $this->assertCount(1, $entityAttributesElements);
         $entityAttributesElement = $entityAttributesElements[0];
 
-        $attributeElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($entityAttributesElement);
+        $attributeElements = XPath::xpQuery(
             $entityAttributesElement,
-            './*[local-name()=\'Attribute\' and namespace-uri()=\'urn:oasis:names:tc:SAML:2.0:assertion\']'
+            './*[local-name()=\'Attribute\' and namespace-uri()=\'urn:oasis:names:tc:SAML:2.0:assertion\']',
+            $xpCache,
         );
         $this->assertCount(2, $attributeElements);
     }

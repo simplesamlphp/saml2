@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\shibmd;
 
 use SAML2\XML\shibmd\Scope;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -26,7 +26,8 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $scopeElement = $scope->toXML($document->firstChild);
 
-        $scopeElements = Utils::xpQuery($scopeElement, '/root/shibmd:Scope');
+        $xpCache = XPath::getXPath($scopeElement);
+        $scopeElements = XPath::xpQuery($scopeElement, '/root/shibmd:Scope', $xpCache);
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];
 
@@ -49,7 +50,8 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $scopeElement = $scope->toXML($document->firstChild);
 
-        $scopeElements = Utils::xpQuery($scopeElement, '/root/shibmd:Scope');
+        $xpCache = XPath::getXPath($scopeElement);
+        $scopeElements = XPath::xpQuery($scopeElement, '/root/shibmd:Scope', $xpCache);
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];
 
@@ -72,7 +74,8 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $scopeElement = $scope->toXML($document->firstChild);
 
-        $scopeElements = Utils::xpQuery($scopeElement, '/root/shibmd:Scope');
+        $xpCache = XPath::getXPath($scopeElement);
+        $scopeElements = XPath::xpQuery($scopeElement, '/root/shibmd:Scope', $xpCache);
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];
 

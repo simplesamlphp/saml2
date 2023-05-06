@@ -6,7 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SAML2\XML\alg\Common as ALG;
 use SAML2\XML\alg\DigestMethod;
 use SAML2\XML\alg\SigningMethod;
@@ -64,8 +64,9 @@ class Extensions
             ],
         ];
 
+        $nodes = XPath::xpQuery($parent, './saml_metadata:Extensions/*', XPath::getXPath($parent));
         /** @var \DOMElement $node */
-        foreach (Utils::xpQuery($parent, './saml_metadata:Extensions/*') as $node) {
+        foreach ($nodes as $node) {
             if (
                 !is_null($node->namespaceURI) &&
                 array_key_exists($node->namespaceURI, $supported) &&

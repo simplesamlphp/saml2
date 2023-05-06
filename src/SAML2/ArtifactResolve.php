@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMElement;
+use SAML2\Utils\XPath;
 
 use function is_null;
 
@@ -31,7 +32,8 @@ class ArtifactResolve extends Request
         parent::__construct('ArtifactResolve', $xml);
 
         if (!is_null($xml)) {
-            $results = Utils::xpQuery($xml, './saml_protocol:Artifact');
+            $xpCache = XPath::getXPath($xml);
+            $results = XPath::xpQuery($xml, './saml_protocol:Artifact', $xpCache);
             $this->artifact = $results[0]->textContent;
         }
     }

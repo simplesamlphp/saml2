@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 
 /**
  * Class representing SAML 2 SSODescriptorType.
@@ -66,18 +67,20 @@ abstract class SSODescriptorType extends RoleDescriptor
             return;
         }
 
+        $xpCache = XPath::getXPath($xml);
+
         /** @var \DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:ArtifactResolutionService') as $ep) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:ArtifactResolutionService', $xpCache) as $ep) {
             $this->addArtifactResolutionService(new IndexedEndpointType($ep));
         }
 
         /** @var \DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:SingleLogoutService') as $ep) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:SingleLogoutService', $xpCache) as $ep) {
             $this->addSingleLogoutService(new EndpointType($ep));
         }
 
         /** @var \DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:ManageNameIDService') as $ep) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:ManageNameIDService', $xpCache) as $ep) {
             $this->addManageNameIDService(new EndpointType($ep));
         }
 

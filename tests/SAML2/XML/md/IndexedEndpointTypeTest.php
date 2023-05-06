@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use SAML2\XML\md\IndexedEndpointType;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -27,7 +27,8 @@ class IndexedEndpointTypeTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
 
-        $indexedEndpointElements = Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');
+        $xpCache = XPath::getXPath($indexedEndpointTypeElement);
+        $indexedEndpointElements = XPath::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test', $xpCache);
         $this->assertCount(1, $indexedEndpointElements);
         $indexedEndpointElement = $indexedEndpointElements[0];
 
@@ -39,14 +40,20 @@ class IndexedEndpointTypeTest extends \PHPUnit\Framework\TestCase
         $indexedEndpointType->setIsDefault(true);
         $document->loadXML('<root />');
         $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
-        $indexedEndpointTypeElement = Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');
+        $xpCache = XPath::getXPath($indexedEndpointTypeElement);
+        $indexedEndpointTypeElement = XPath::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test', $xpCache);
         $this->assertCount(1, $indexedEndpointTypeElement);
         $this->assertEquals('true', $indexedEndpointTypeElement[0]->getAttribute('isDefault'));
 
         $indexedEndpointType->setIsDefault(null);
         $document->loadXML('<root />');
         $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
-        $indexedEndpointTypeElement = Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');
+        $xpCache = XPath::getXPath($indexedEndpointTypeElement);
+        $indexedEndpointTypeElement = XPath::xpQuery(
+            $indexedEndpointTypeElement,
+            '/root/saml_metadata:Test',
+            $xpCache,
+        );
         $this->assertCount(1, $indexedEndpointTypeElement);
         $this->assertTrue(!$indexedEndpointTypeElement[0]->hasAttribute('isDefault'));
     }

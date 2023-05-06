@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SAML2\XML\saml\Attribute;
 use SimpleSAML\Assert\Assert;
 
@@ -77,8 +78,10 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
             return;
         }
 
+        $xpCache = XPath::getXPath($xml);
+
         /** @var \DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:AttributeService') as $ep) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:AttributeService', $xpCache) as $ep) {
             $this->addAttributeService(new EndpointType($ep));
         }
         if ($this->getAttributeService() === []) {
@@ -86,7 +89,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
         }
 
         /** @var \DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:AssertionIDRequestService', $xpCache) as $ep) {
             $this->addAssertionIDRequestService(new EndpointType($ep));
         }
 
@@ -95,7 +98,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
         $this->setAttributeProfile(Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile'));
 
         /** @var \DOMElement $a */
-        foreach (Utils::xpQuery($xml, './saml_assertion:Attribute') as $a) {
+        foreach (XPath::xpQuery($xml, './saml_assertion:Attribute', $xpCache) as $a) {
             $this->addAttribute(new Attribute($a));
         }
     }

@@ -6,7 +6,7 @@ namespace SAML2\XML\saml;
 
 use SAML2\Constants;
 use SAML2\XML\saml\SubjectConfirmationData;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -29,9 +29,11 @@ class SubjectConfirmationDataTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $subjectConfirmationDataElement = $subjectConfirmationData->toXML($document->firstChild);
 
-        $subjectConfirmationDataElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($subjectConfirmationDataElement);
+        $subjectConfirmationDataElements = XPath::xpQuery(
             $subjectConfirmationDataElement,
-            '//saml_assertion:SubjectConfirmationData'
+            '//saml_assertion:SubjectConfirmationData',
+            $xpCache,
         );
         $this->assertCount(1, $subjectConfirmationDataElements);
         $subjectConfirmationDataElement = $subjectConfirmationDataElements[0];

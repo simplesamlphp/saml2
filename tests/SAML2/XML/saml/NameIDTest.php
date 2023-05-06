@@ -6,7 +6,7 @@ namespace SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants as C;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SAML2\XML\saml\NameID;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -28,7 +28,8 @@ class NameIDTest extends TestCase
         $nameId->setValue('TheNameIDValue');
         $nameIdElement = $nameId->toXML();
 
-        $nameIdElements = Utils::xpQuery($nameIdElement, '/saml_assertion:NameID');
+        $xpCache = XPath::getXPath($nameIdElement);
+        $nameIdElements = XPath::xpQuery($nameIdElement, '/saml_assertion:NameID', $xpCache);
         $this->assertCount(1, $nameIdElements);
         $nameIdElement = $nameIdElements[0];
 

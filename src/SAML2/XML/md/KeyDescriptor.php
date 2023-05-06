@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SAML2\XML\ds\KeyInfo;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
@@ -60,7 +61,9 @@ class KeyDescriptor
             $this->use = $xml->getAttribute('use');
         }
 
-        $keyInfo = Utils::xpQuery($xml, './ds:KeyInfo');
+        $xpCache = XPath::getXPath($xml);
+
+        $keyInfo = XPath::xpQuery($xml, './ds:KeyInfo', $xpCache);
         if (count($keyInfo) > 1) {
             throw new \Exception('More than one ds:KeyInfo in the KeyDescriptor.');
         } elseif (empty($keyInfo)) {
@@ -70,7 +73,7 @@ class KeyDescriptor
         $this->KeyInfo = new KeyInfo($keyInfo[0]);
 
         /** @var \DOMElement $em */
-        foreach (Utils::xpQuery($xml, './saml_metadata:EncryptionMethod') as $em) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:EncryptionMethod', $xpCache) as $em) {
             $this->EncryptionMethod[] = new Chunk($em);
         }
     }

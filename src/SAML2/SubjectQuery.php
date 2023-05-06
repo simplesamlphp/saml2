@@ -6,6 +6,7 @@ namespace SAML2;
 
 use DOMElement;
 use Exception;
+use SAML2\Utils\XPath;
 use SAML2\XML\saml\NameID;
 
 use function count;
@@ -58,16 +59,19 @@ abstract class SubjectQuery extends Request
      */
     private function parseSubject(\DOMElement $xml): void
     {
+        $xpCache = XPath::getXPath($xml);
+
         /** @var \DOMElement[] $subject */
-        $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
+        $subject = XPath::xpQuery($xml, './saml_assertion:Subject', $xpCache);
         if (empty($subject)) {
             throw new Exception('Missing subject in subject query.');
         } elseif (count($subject) > 1) {
             throw new Exception('More than one <saml:Subject> in subject query.');
         }
 
+        $xpCache = XPath::getXPath($subject[0]);
         /** @var \DOMElement[] $nameId */
-        $nameId = Utils::xpQuery($subject[0], './saml_assertion:NameID');
+        $nameId = XPath::xpQuery($subject[0], './saml_assertion:NameID', $xpCache);
         if (empty($nameId)) {
             throw new Exception('Missing <saml:NameID> in <saml:Subject>.');
         } elseif (count($nameId) > 1) {

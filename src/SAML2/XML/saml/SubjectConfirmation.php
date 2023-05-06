@@ -6,7 +6,7 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -55,8 +55,9 @@ class SubjectConfirmation
         }
         $this->Method = $xml->getAttribute('Method');
 
+        $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement[] $nid */
-        $nid = Utils::xpQuery($xml, './saml_assertion:NameID');
+        $nid = XPath::xpQuery($xml, './saml_assertion:NameID', $xpCache);
         if (count($nid) > 1) {
             throw new \Exception('More than one NameID in a SubjectConfirmation element.');
         } elseif (!empty($nid)) {
@@ -64,7 +65,7 @@ class SubjectConfirmation
         }
 
         /** @var \DOMElement[] $scd */
-        $scd = Utils::xpQuery($xml, './saml_assertion:SubjectConfirmationData');
+        $scd = XPath::xpQuery($xml, './saml_assertion:SubjectConfirmationData', $xpCache);
         if (count($scd) > 1) {
             throw new \Exception('More than one SubjectConfirmationData child in a SubjectConfirmation element.');
         } elseif (!empty($scd)) {

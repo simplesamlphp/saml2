@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use SAML2\Constants as C;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -26,7 +26,8 @@ class IssuerXMLShowAllTest extends \PHPUnit\Framework\TestCase
         $issuer->setSPProvidedID('TheSPProvidedID');
         $issuer->setValue('TheIssuerValue');
         $issuerElement = $issuer->toXML();
-        $issuerElements = Utils::xpQuery($issuerElement, '/saml_assertion:Issuer');
+        $xpCache = XPath::getXPath($issuerElement);
+        $issuerElements = XPath::xpQuery($issuerElement, '/saml_assertion:Issuer', $xpCache);
         $this->assertCount(1, $issuerElements);
         $issuerElement = $issuerElements[0];
 

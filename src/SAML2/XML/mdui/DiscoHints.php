@@ -6,6 +6,7 @@ namespace SAML2\XML\mdui;
 
 use DOMElement;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
 
 /**
@@ -62,8 +63,9 @@ class DiscoHints
         $this->DomainHint = Utils::extractStrings($xml, Common::NS, 'DomainHint');
         $this->GeolocationHint = Utils::extractStrings($xml, Common::NS, 'GeolocationHint');
 
+        $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement $node */
-        foreach (Utils::xpQuery($xml, "./*[namespace-uri()!='" . Common::NS . "']") as $node) {
+        foreach (XPath::xpQuery($xml, "./*[namespace-uri()!='" . Common::NS . "']", $xpCache) as $node) {
             $this->children[] = new Chunk($node);
         }
     }

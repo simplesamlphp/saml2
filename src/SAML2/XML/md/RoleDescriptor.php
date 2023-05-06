@@ -8,6 +8,7 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\SignedElementHelper;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
 
 /**
@@ -116,13 +117,13 @@ class RoleDescriptor extends SignedElementHelper
         }
 
         $this->Extensions = Extensions::getList($xml);
-
-        foreach (Utils::xpQuery($xml, './saml_metadata:KeyDescriptor') as $kd) {
+        $xpCache = XPath::getXPath($xml);
+        foreach (XPath::xpQuery($xml, './saml_metadata:KeyDescriptor', $xpCache) as $kd) {
             /** @var \DOMElement $kd */
             $this->KeyDescriptor[] = new KeyDescriptor($kd);
         }
 
-        $organization = Utils::xpQuery($xml, './saml_metadata:Organization');
+        $organization = XPath::xpQuery($xml, './saml_metadata:Organization', $xpCache);
         if (count($organization) > 1) {
             throw new \Exception('More than one Organization in the entity.');
         } elseif (!empty($organization)) {
@@ -130,7 +131,7 @@ class RoleDescriptor extends SignedElementHelper
             $this->Organization = new Organization($organization[0]);
         }
 
-        foreach (Utils::xpQuery($xml, './saml_metadata:ContactPerson') as $cp) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:ContactPerson', $xpCache) as $cp) {
             /** @var \DOMElement $cp */
             $this->ContactPerson[] = new ContactPerson($cp);
         }

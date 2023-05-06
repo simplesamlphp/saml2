@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\alg;
 
 use SAML2\XML\alg\SigningMethod;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -27,10 +27,12 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $signingMethod->toXML($document->firstChild);
 
-        $signingMethodElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($xml);
+        $signingMethodElements = XPath::xpQuery(
             $xml,
             '/root/*[local-name()=\'SigningMethod\' and ' .
-            'namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:algsupport\']'
+            'namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:algsupport\']',
+            $xpCache,
         );
         $this->assertCount(1, $signingMethodElements);
         $signingMethodElement = $signingMethodElements[0];
@@ -44,10 +46,12 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $signingMethod->toXML($document->firstChild);
 
-        $signingMethodElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($xml);
+        $signingMethodElements = XPath::xpQuery(
             $xml,
             '/root/*[local-name()=\'SigningMethod\' and ' .
-            'namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:algsupport\']'
+            'namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:algsupport\']',
+            $xpCache,
         );
         $this->assertCount(1, $signingMethodElements);
         $signingMethodElement = $signingMethodElements[0];

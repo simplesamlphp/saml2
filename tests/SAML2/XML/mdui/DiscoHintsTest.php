@@ -6,7 +6,7 @@ namespace SAML2\XML\mdui;
 
 use SAML2\XML\mdui\DiscoHints;
 use SAML2\XML\mdui\Keywords;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -28,32 +28,38 @@ class DiscoHintsTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $discoHints->toXML($document->firstChild);
 
-        $discoElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($xml);
+        $discoElements = XPath::xpQuery(
             $xml,
-            '/root/*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            '/root/*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(1, $discoElements);
         $discoElement = $discoElements[0];
 
-        $ipHintElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($discoElement);
+        $ipHintElements = XPath::xpQuery(
             $discoElement,
-            './*[local-name()=\'IPHint\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            './*[local-name()=\'IPHint\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(2, $ipHintElements);
         $this->assertEquals("192.168.6.0/24", $ipHintElements[0]->textContent);
         $this->assertEquals("fd00:0123:aa:1001::/64", $ipHintElements[1]->textContent);
 
-        $domainHintElements = Utils::xpQuery(
+        $domainHintElements = XPath::xpQuery(
             $discoElement,
-            './*[local-name()=\'DomainHint\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            './*[local-name()=\'DomainHint\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(2, $domainHintElements);
         $this->assertEquals("example.org", $domainHintElements[0]->textContent);
         $this->assertEquals("student.example.org", $domainHintElements[1]->textContent);
 
-        $geoHintElements = Utils::xpQuery(
+        $geoHintElements = XPath::xpQuery(
             $discoElement,
-            './*[local-name()=\'GeolocationHint\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            './*[local-name()=\'GeolocationHint\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(2, $geoHintElements);
         $this->assertEquals("geo:47.37328,8.531126", $geoHintElements[0]->textContent);
@@ -123,9 +129,11 @@ XML
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $discoHints->toXML($document->firstChild);
 
-        $discoElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($xml);
+        $discoElements = XPath::xpQuery(
             $xml,
-            '/root/*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            '/root/*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(1, $discoElements);
         $discoElement = $discoElements[0];

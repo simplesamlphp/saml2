@@ -7,7 +7,7 @@ namespace SAML2;
 use SAML2\XML\saml\Issuer;
 use SAML2\ArtifactResponse;
 use SAML2\AuthnRequest;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 class MyArtifactResponseTest extends \PHPUnit\Framework\TestCase
@@ -32,11 +32,12 @@ class MyArtifactResponseTest extends \PHPUnit\Framework\TestCase
 
         $artifactResponseElement = $artifactResponse->toUnsignedXML();
 
-        $artifactIssuer = Utils::xpQuery($artifactResponseElement, './saml:Issuer');
+        $xpCache = XPath::getXPath($artifactResponseElement);
+        $artifactIssuer = XPath::xpQuery($artifactResponseElement, './saml:Issuer', $xpCache);
         $this->assertCount(1, $artifactIssuer);
         $this->assertEquals($issuer1->getValue(), $artifactIssuer[0]->textContent);
 
-        $authnelement = Utils::xpQuery($artifactResponseElement, './saml_protocol:AuthnRequest/saml:Issuer');
+        $authnelement = XPath::xpQuery($artifactResponseElement, './saml_protocol:AuthnRequest/saml:Issuer', $xpCache);
         $this->assertCount(1, $authnelement);
         $this->assertEquals($issuer2->getValue(), $authnelement[0]->textContent);
     }

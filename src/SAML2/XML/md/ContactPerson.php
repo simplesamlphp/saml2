@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
 
 /**
@@ -130,7 +131,7 @@ class ContactPerson
      */
     private static function getStringElements(\DOMElement $parent, string $name): array
     {
-        $e = Utils::xpQuery($parent, './saml_metadata:' . $name);
+        $e = XPath::xpQuery($parent, './saml_metadata:' . $name, XPath::getXPath($parent));
 
         $ret = [];
         foreach ($e as $i) {

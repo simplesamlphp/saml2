@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdrpi;
 
 use SAML2\XML\mdrpi\PublicationInfo;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -30,9 +30,11 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $publicationInfo->toXML($document->firstChild);
 
-        $publicationInfoElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($xml);
+        $publicationInfoElements = XPath::xpQuery(
             $xml,
-            '/root/*[local-name()=\'PublicationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
+            '/root/*[local-name()=\'PublicationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']',
+            $xpCache,
         );
         $this->assertCount(1, $publicationInfoElements);
         $publicationInfoElement = $publicationInfoElements[0];
@@ -41,9 +43,11 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('2009-02-13T23:31:30Z', $publicationInfoElement->getAttribute("creationInstant"));
         $this->assertEquals('PublicationIdValue', $publicationInfoElement->getAttribute("publicationId"));
 
-        $usagePolicyElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($publicationInfoElement);
+        $usagePolicyElements = XPath::xpQuery(
             $publicationInfoElement,
-            './*[local-name()=\'UsagePolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
+            './*[local-name()=\'UsagePolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']',
+            $xpCache,
         );
         $this->assertCount(2, $usagePolicyElements);
 

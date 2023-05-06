@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -58,8 +59,10 @@ class PDPDescriptor extends RoleDescriptor
             return;
         }
 
+        $xpCache = XPath::getXPath($xml);
+
         /** @var \DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:AuthzService') as $ep) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:AuthzService', $xpCache) as $ep) {
             $this->AuthzService[] = new EndpointType($ep);
         }
         if ($this->getAuthzService() !== []) {
@@ -67,7 +70,7 @@ class PDPDescriptor extends RoleDescriptor
         }
 
         /** @var \DOMElement $ep */
-        foreach (Utils::xpQuery($xml, './saml_metadata:AssertionIDRequestService') as $ep) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:AssertionIDRequestService', $xpCache) as $ep) {
             $this->AssertionIDRequestService[] = new EndpointType($ep);
         }
 

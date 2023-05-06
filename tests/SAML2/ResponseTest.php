@@ -6,7 +6,7 @@ namespace SAML2;
 
 use SAML2\XML\saml\Issuer;
 use SAML2\Response;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SAML2\Constants;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -31,7 +31,8 @@ class ResponseTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($responseElement->hasAttribute('Consent'));
         $this->assertEquals($responseElement->getAttribute('Consent'), Constants::CONSENT_EXPLICIT);
 
-        $issuerElements = Utils::xpQuery($responseElement, './saml_assertion:Issuer');
+        $xpCache = XPath::getXPath($responseElement);
+        $issuerElements = XPath::xpQuery($responseElement, './saml_assertion:Issuer', $xpCache);
         $this->assertCount(1, $issuerElements);
         $this->assertEquals('SomeIssuer', $issuerElements[0]->textContent);
     }

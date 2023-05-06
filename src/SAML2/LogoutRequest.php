@@ -8,6 +8,7 @@ use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Utils\XPath;
 use SAML2\XML\saml\NameID;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -86,8 +87,13 @@ class LogoutRequest extends Request
             $this->reason = $xml->getAttribute('Reason');
         }
 
+        $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement[] $nameId */
-        $nameId = Utils::xpQuery($xml, './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData');
+        $nameId = XPath::xpQuery(
+            $xml,
+            './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData',
+            $xpCache,
+        );
         if (empty($nameId)) {
             throw new Exception('Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.');
         } elseif (count($nameId) > 1) {
@@ -101,7 +107,7 @@ class LogoutRequest extends Request
         }
 
         /** @var \DOMElement[] $sessionIndexes */
-        $sessionIndexes = Utils::xpQuery($xml, './saml_protocol:SessionIndex');
+        $sessionIndexes = XPath::xpQuery($xml, './saml_protocol:SessionIndex', $xpCache);
         foreach ($sessionIndexes as $sessionIndex) {
             $this->sessionIndexes[] = trim($sessionIndex->textContent);
         }

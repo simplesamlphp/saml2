@@ -8,6 +8,7 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\SignedElementHelper;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -98,7 +99,7 @@ class AffiliationDescriptor extends SignedElementHelper
         }
 
         /** @var \DOMElement $kd */
-        foreach (Utils::xpQuery($xml, './saml_metadata:KeyDescriptor') as $kd) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:KeyDescriptor', XPath::getXPath($xml)) as $kd) {
             $this->addKeyDescriptor(new KeyDescriptor($kd));
         }
     }

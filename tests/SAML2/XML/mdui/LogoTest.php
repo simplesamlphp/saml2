@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use SAML2\XML\mdui\Logo;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -28,9 +28,11 @@ class LogoTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $logo->toXML($document->firstChild);
 
-        $logoElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($xml);
+        $logoElements = XPath::xpQuery(
             $xml,
-            '/root/*[local-name()=\'Logo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
+            '/root/*[local-name()=\'Logo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
+            $xpCache,
         );
         $this->assertCount(1, $logoElements);
         $logoElement = $logoElements[0];

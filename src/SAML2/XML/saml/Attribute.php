@@ -6,7 +6,7 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 
 /**
  * Class representing SAML 2 Attribute.
@@ -71,7 +71,8 @@ class Attribute
             $this->setFriendlyName($xml->getAttribute('FriendlyName'));
         }
 
-        foreach (Utils::xpQuery($xml, './saml_assertion:AttributeValue') as $av) {
+        $xpCache = XPath::getXPath($xml);
+        foreach (XPath::xpQuery($xml, './saml_assertion:AttributeValue', $xpCache) as $av) {
             $this->addAttributeValue(new AttributeValue($av));
         }
     }

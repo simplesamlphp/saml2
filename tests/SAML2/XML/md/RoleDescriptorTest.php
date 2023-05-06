@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 require 'RoleDescriptorMock.php';
@@ -34,7 +35,8 @@ class RoleDescriptorTest extends TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $roleDescriptorElement = $roleDescriptor->toXML($document->firstChild);
 
-        $roleDescriptorElement = Utils::xpQuery($roleDescriptorElement, '/root/md:RoleDescriptor');
+        $xpCache = XPath::getXPath($roleDescriptorElement);
+        $roleDescriptorElement = XPath::xpQuery($roleDescriptorElement, '/root/md:RoleDescriptor', $xpCache);
         $this->assertCount(1, $roleDescriptorElement);
         $roleDescriptorElement = $roleDescriptorElement[0];
 

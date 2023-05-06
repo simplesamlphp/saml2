@@ -9,6 +9,7 @@ use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
+use SAML2\Utils\XPath;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\Extensions;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -176,8 +177,9 @@ abstract class Message extends SignedElement
             $this->consent = $xml->getAttribute('Consent');
         }
 
+        $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement[] $issuer */
-        $issuer = Utils::xpQuery($xml, './saml_assertion:Issuer');
+        $issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
         if (!empty($issuer)) {
             $this->issuer = new Issuer($issuer[0]);
         }
@@ -201,8 +203,13 @@ abstract class Message extends SignedElement
     private function validateSignature(DOMElement $xml): void
     {
         try {
+            $xpCache = XPath::getXPath($xml);
             /** @var \DOMAttr[] $signatureMethod */
-            $signatureMethod = Utils::xpQuery($xml, './ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm');
+            $signatureMethod = XPath::xpQuery(
+                $xml,
+                './ds:Signature/ds:SignedInfo/ds:SignatureMethod/@Algorithm',
+                $xpCache,
+            );
             if (empty($signatureMethod)) {
                 throw new Exception('No Algorithm specified in signature.');
             }

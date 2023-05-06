@@ -6,7 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 
 /**
  * Class representing SAML 2 Metadata AttributeConsumingService element.
@@ -84,7 +84,7 @@ class AttributeConsumingService
         $this->setServiceDescription(Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceDescription'));
 
         /** @var \DOMElement $ra */
-        foreach (Utils::xpQuery($xml, './saml_metadata:RequestedAttribute') as $ra) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:RequestedAttribute', XPath::getXPath($xml)) as $ra) {
             $this->addRequestedAttribute(new RequestedAttribute($ra));
         }
     }

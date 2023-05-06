@@ -6,7 +6,7 @@ namespace SAML2;
 
 use SAML2\XML\saml\Issuer;
 use SAML2\ArtifactResolve;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 class MyArtifactResolveTest extends \PHPUnit\Framework\TestCase
@@ -25,7 +25,8 @@ class MyArtifactResolveTest extends \PHPUnit\Framework\TestCase
         $artifactResolve->setArtifact($artifact);
 
         $artifactResolveElement = $artifactResolve->toUnsignedXML();
-        $artelement = Utils::xpQuery($artifactResolveElement, './saml_protocol:Artifact');
+        $xpCache = XPath::getXPath($artifactResolveElement);
+        $artelement = Xpath::xpQuery($artifactResolveElement, './saml_protocol:Artifact', $xpCache);
 
         $this->assertCount(1, $artelement);
         $this->assertEquals($artifact, $artelement[0]->textContent);

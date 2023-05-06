@@ -11,6 +11,7 @@ use SAML2\Compat\ContainerSingleton;
 use SAML2\Exception\RuntimeException;
 use SAML2\Exception\InvalidArgumentException;
 use SAML2\Exception\UnparseableXmlException;
+use SAML2\Utils\XPath;
 use SimpleSAML\Configuration;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
@@ -161,7 +162,9 @@ class SOAPClient
         } catch (InvalidArgumentException | UnparseableXmlException | RuntimeException $e) {
             throw new Exception($e->getMessage(), 0, $e);
         }
-        $soapresponse = Utils::xpQuery($dom->firstChild, '/soap-env:Envelope/soap-env:Body/*[1]');
+
+        $xpCache = XPath::getXPath($dom->firstChild);
+        $soapresponse = XPath::xpQuery($dom->firstChild, '/soap-env:Envelope/soap-env:Body/*[1]', $xpCache);
         if (empty($soapresponse)) {
             throw new Exception('Not a SOAP response', 0);
         }
@@ -171,9 +174,9 @@ class SOAPClient
         if (isset($soapfault)) {
             throw new Exception($soapfault);
         }
-        //Extract the message from the response
+        // Extract the message from the response
         /** @var \DOMElement[] $samlresponse */
-        $samlresponse = Utils::xpQuery($dom->firstChild, '/soap-env:Envelope/soap-env:Body/*[1]');
+        $samlresponse = XPath::xpQuery($dom->firstChild, '/soap-env:Envelope/soap-env:Body/*[1]', $xpCache);
         $samlresponse = Message::fromXML($samlresponse[0]);
 
         /* Add validator to message which uses the SSL context. */
@@ -263,8 +266,13 @@ class SOAPClient
      */
     private function getSOAPFault(DOMDocument $soapMessage): ?string
     {
+        $xpCache = XPath::getXPath($soapMessage->firstChild);
         /** @psalm-suppress PossiblyNullArgument */
-        $soapFault = Utils::xpQuery($soapMessage->firstChild, '/soap-env:Envelope/soap-env:Body/soap-env:Fault');
+        $soapFault = XPath::xpQuery(
+            $soapMessage->firstChild,
+            '/soap-env:Envelope/soap-env:Body/soap-env:Fault',
+            $xpCache,
+        );
 
         if (empty($soapFault)) {
             /* No fault. */
@@ -276,7 +284,8 @@ class SOAPClient
         // There is a fault element but we haven't found out what the fault string is
         $soapFaultString = "Unknown fault string found";
         // find out the fault string
-        $faultStringElement = Utils::xpQuery($soapFaultElement, './soap-env:faultstring');
+        $xpCache = XPath::getXPath($soapFaultElement);
+        $faultStringElement = XPath::xpQuery($soapFaultElement, './soap-env:faultstring', $xpCache);
         if (!empty($faultStringElement)) {
             return $faultStringElement[0]->textContent;
         }

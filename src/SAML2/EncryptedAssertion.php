@@ -9,6 +9,7 @@ use DOMNode;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Utils\XPath;
 
 use function count;
 
@@ -44,8 +45,9 @@ class EncryptedAssertion
             return;
         }
 
+        $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement[] $data */
-        $data = Utils::xpQuery($xml, './xenc:EncryptedData');
+        $data = XPath::xpQuery($xml, './xenc:EncryptedData', $xpCache);
         if (empty($data)) {
             throw new Exception('Missing encrypted data in <saml:EncryptedAssertion>.');
         } elseif (count($data) > 1) {

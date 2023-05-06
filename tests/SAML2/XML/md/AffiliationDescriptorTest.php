@@ -7,6 +7,7 @@ namespace SAML2\XML\md;
 use SAML2\Constants;
 use SAML2\XML\md\AffiliationDescriptor;
 use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 class AffiliationDescriptorTest extends \PHPUnit\Framework\TestCase
@@ -33,9 +34,11 @@ class AffiliationDescriptorTest extends \PHPUnit\Framework\TestCase
 
         $affiliationDescriptorElement = $affiliationDescriptorElement->toXML($document->firstChild);
 
-        $affiliationDescriptorElements = Utils::xpQuery(
+        $xpCache = XPath::getXPath($affiliationDescriptorElement);
+        $affiliationDescriptorElements = XPath::xpQuery(
             $affiliationDescriptorElement,
-            '/root/saml_metadata:AffiliationDescriptor'
+            '/root/saml_metadata:AffiliationDescriptor',
+            $xpCache,
         );
         $this->assertCount(1, $affiliationDescriptorElements);
         $affiliationDescriptorElement = $affiliationDescriptorElements[0];
@@ -45,7 +48,11 @@ class AffiliationDescriptorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('2009-02-13T23:31:30Z', $affiliationDescriptorElement->getAttribute("validUntil"));
         $this->assertEquals('PT5000S', $affiliationDescriptorElement->getAttribute("cacheDuration"));
 
-        $affiliateMembers = Utils::xpQuery($affiliationDescriptorElement, './saml_metadata:AffiliateMember');
+        $affiliateMembers = XPath::xpQuery(
+            $affiliationDescriptorElement,
+            './saml_metadata:AffiliateMember',
+            $xpCache,
+        );
         $this->assertCount(2, $affiliateMembers);
         $this->assertEquals('Member1', $affiliateMembers[0]->textContent);
         $this->assertEquals('Member2', $affiliateMembers[1]->textContent);

@@ -16,6 +16,7 @@ use SAML2\Compat\AbstractContainer;
 use SAML2\Compat\ContainerSingleton;
 use SAML2\Compat\Ssp\Container;
 use SAML2\Exception\RuntimeException;
+use SAML2\Utils\XPath;
 use SAML2\XML\ds\KeyInfo;
 use SAML2\XML\ds\X509Certificate;
 use SAML2\XML\ds\X509Data;
@@ -74,9 +75,10 @@ class Utils
         /* Both SAML messages and SAML assertions use the 'ID' attribute. */
         $objXMLSecDSig->idKeys[] = 'ID';
 
+        $xpCache = XPath::getXPath($root);
         /* Locate the XMLDSig Signature element to be used. */
         /** @var \DOMElement[] $signatureElement */
-        $signatureElement = self::xpQuery($root, './ds:Signature');
+        $signatureElement = XPath::xpQuery($root, './ds:Signature', $xpCache);
         if (empty($signatureElement)) {
             /* We don't have a signature element ot validate. */
 
@@ -113,8 +115,10 @@ class Utils
         }
 
         /* Now we extract all available X509 certificates in the signature element. */
+        $xpCache = XPath::getXPath($signatureElement);
         $certificates = [];
-        foreach (self::xpQuery($signatureElement, './ds:KeyInfo/ds:X509Data/ds:X509Certificate') as $certNode) {
+        $certNodes = XPath::xpQuery($signatureElement, './ds:KeyInfo/ds:X509Data/ds:X509Certificate', $xpCache);
+        foreach ($certNodes as $certNode) {
             $certData = trim($certNode->textContent);
             $certData = str_replace(["\r", "\n", "\t", ' '], '', $certData);
             $certificates[] = $certData;
@@ -192,11 +196,12 @@ class Utils
         /** @var XMLSecurityDSig $objXMLSecDSig */
         $objXMLSecDSig = $info['Signature'];
 
+        $xpCache = XPath::getXPath($objXMLSecDSig->sigNode);
         /**
          * @var \DOMElement[] $sigMethod
          * @var \DOMElement $objXMLSecDSig->sigNode
          */
-        $sigMethod = self::xpQuery($objXMLSecDSig->sigNode, './ds:SignedInfo/ds:SignatureMethod');
+        $sigMethod = XPath::xpQuery($objXMLSecDSig->sigNode, './ds:SignedInfo/ds:SignatureMethod', $xpCache);
         if (empty($sigMethod)) {
             throw new Exception('Missing SignatureMethod element.');
         }
@@ -218,43 +223,6 @@ class Utils
 
 
     /**
-     * Do an XPath query on an XML node.
-     *
-     * @param \DOMNode $node  The XML node.
-     * @param string $query The query.
-     * @return \DOMNode[] Array with matching DOM nodes.
-     */
-    public static function xpQuery(DOMNode $node, string $query): array
-    {
-        static $xpCache = null;
-
-        if ($node instanceof DOMDocument) {
-            $doc = $node;
-        } else {
-            $doc = $node->ownerDocument;
-        }
-
-        if ($xpCache === null || !$xpCache->document->isSameNode($doc)) {
-            $xpCache = new DOMXPath($doc);
-            $xpCache->registerNamespace('soap-env', Constants::NS_SOAP);
-            $xpCache->registerNamespace('saml_protocol', Constants::NS_SAMLP);
-            $xpCache->registerNamespace('saml_assertion', Constants::NS_SAML);
-            $xpCache->registerNamespace('saml_metadata', Constants::NS_MD);
-            $xpCache->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
-            $xpCache->registerNamespace('xenc', XMLSecEnc::XMLENCNS);
-        }
-
-        $results = $xpCache->query($query, $node);
-        $ret = [];
-        for ($i = 0; $i < $results->length; $i++) {
-            $ret[$i] = $results->item($i);
-        }
-
-        return $ret;
-    }
-
-
-    /**
      * Make an exact copy the specific \DOMElement.
      *
      * @param \DOMElement $element The element we should copy.
@@ -271,7 +239,8 @@ class Utils
 
         $namespaces = [];
         for ($e = $element; $e instanceof DOMNode; $e = $e->parentNode) {
-            foreach (Utils::xpQuery($e, './namespace::*') as $ns) {
+            $xpCache = XPath::getXPath($e);
+            foreach (XPath::xpQuery($e, './namespace::*', $xpCache) as $ns) {
                 $prefix = $ns->localName;
                 if ($prefix === 'xml' || $prefix === 'xmlns') {
                     continue;

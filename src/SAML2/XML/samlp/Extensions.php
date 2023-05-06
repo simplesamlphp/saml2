@@ -6,7 +6,7 @@ namespace SAML2\XML\samlp;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\Utils;
+use SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
 
 /**
@@ -24,9 +24,10 @@ class Extensions
      */
     public static function getList(DOMElement $parent): array
     {
+        $xpCache = XPath::getXPath($parent);
         $ret = [];
         /** @var \DOMElement $node */
-        foreach (Utils::xpQuery($parent, './saml_protocol:Extensions/*') as $node) {
+        foreach (XPath::xpQuery($parent, './saml_protocol:Extensions/*', $xpCache) as $node) {
             $ret[] = new Chunk($node);
         }
 
