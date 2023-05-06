@@ -13,6 +13,7 @@ use SAML2\Utils\XPath;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\Extensions;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 use function call_user_func;
 use function count;
@@ -167,7 +168,7 @@ abstract class Message extends SignedElement
             throw new Exception('Unsupported version: ' . $xml->getAttribute('Version'));
         }
 
-        $this->issueInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
+        $this->issueInstant = XMLUtils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
 
         if ($xml->hasAttribute('Destination')) {
             $this->destination = $xml->getAttribute('Destination');

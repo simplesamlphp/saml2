@@ -7,6 +7,7 @@ namespace SAML2;
 use DOMElement;
 use Exception;
 use SAML2\Utils\XPath;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 use function array_key_exists;
 use function is_int;
@@ -178,7 +179,7 @@ class AttributeQuery extends SubjectQuery
                     $type = null;
                 }
 
-                $attributeValue = Utils::addString(
+                $attributeValue = XMLUtils::addString(
                     $attribute,
                     Constants::NS_SAML,
                     'saml:AttributeValue',

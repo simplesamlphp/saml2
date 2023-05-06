@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use DOMElement;
-use SAML2\Utils;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling the metadata extensions for login and discovery user interface
@@ -59,9 +59,9 @@ class DiscoHints
             return;
         }
 
-        $this->IPHint = Utils::extractStrings($xml, Common::NS, 'IPHint');
-        $this->DomainHint = Utils::extractStrings($xml, Common::NS, 'DomainHint');
-        $this->GeolocationHint = Utils::extractStrings($xml, Common::NS, 'GeolocationHint');
+        $this->IPHint = XMLUtils::extractStrings($xml, Common::NS, 'IPHint');
+        $this->DomainHint = XMLUtils::extractStrings($xml, Common::NS, 'DomainHint');
+        $this->GeolocationHint = XMLUtils::extractStrings($xml, Common::NS, 'GeolocationHint');
 
         $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement $node */
@@ -198,9 +198,9 @@ class DiscoHints
                 $child->toXML($e);
             }
 
-            Utils::addStrings($e, Common::NS, 'mdui:IPHint', false, $this->IPHint);
-            Utils::addStrings($e, Common::NS, 'mdui:DomainHint', false, $this->DomainHint);
-            Utils::addStrings($e, Common::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
+            XMLUtils::addStrings($e, Common::NS, 'mdui:IPHint', false, $this->IPHint);
+            XMLUtils::addStrings($e, Common::NS, 'mdui:DomainHint', false, $this->DomainHint);
+            XMLUtils::addStrings($e, Common::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
 
             return $e;
         }

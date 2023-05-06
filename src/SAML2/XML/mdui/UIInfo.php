@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use DOMElement;
-use SAML2\Utils;
 use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling the metadata extensions for login and discovery user interface
@@ -81,10 +81,10 @@ class UIInfo
             return;
         }
 
-        $this->DisplayName = Utils::extractLocalizedStrings($xml, Common::NS, 'DisplayName');
-        $this->Description = Utils::extractLocalizedStrings($xml, Common::NS, 'Description');
-        $this->InformationURL = Utils::extractLocalizedStrings($xml, Common::NS, 'InformationURL');
-        $this->PrivacyStatementURL = Utils::extractLocalizedStrings($xml, Common::NS, 'PrivacyStatementURL');
+        $this->DisplayName = XMLUtils::extractLocalizedStrings($xml, Common::NS, 'DisplayName');
+        $this->Description = XMLUtils::extractLocalizedStrings($xml, Common::NS, 'Description');
+        $this->InformationURL = XMLUtils::extractLocalizedStrings($xml, Common::NS, 'InformationURL');
+        $this->PrivacyStatementURL = XMLUtils::extractLocalizedStrings($xml, Common::NS, 'PrivacyStatementURL');
 
         $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement $node */
@@ -325,10 +325,10 @@ class UIInfo
             $e = $doc->createElementNS(Common::NS, 'mdui:UIInfo');
             $parent->appendChild($e);
 
-            Utils::addStrings($e, Common::NS, 'mdui:DisplayName', true, $this->DisplayName);
-            Utils::addStrings($e, Common::NS, 'mdui:Description', true, $this->Description);
-            Utils::addStrings($e, Common::NS, 'mdui:InformationURL', true, $this->InformationURL);
-            Utils::addStrings($e, Common::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
+            XMLUtils::addStrings($e, Common::NS, 'mdui:DisplayName', true, $this->DisplayName);
+            XMLUtils::addStrings($e, Common::NS, 'mdui:Description', true, $this->Description);
+            XMLUtils::addStrings($e, Common::NS, 'mdui:InformationURL', true, $this->InformationURL);
+            XMLUtils::addStrings($e, Common::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
 
             foreach ($this->Keywords as $child) {
                 $child->toXML($e);

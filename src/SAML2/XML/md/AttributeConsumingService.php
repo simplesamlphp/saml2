@@ -6,7 +6,9 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
+use SAML2\Utils;
 use SAML2\Utils\XPath;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 Metadata AttributeConsumingService element.
@@ -76,12 +78,12 @@ class AttributeConsumingService
 
         $this->setIsDefault(Utils::parseBoolean($xml, 'isDefault', null));
 
-        $this->setServiceName(Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceName'));
+        $this->setServiceName(XMLUtils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceName'));
         if ($this->getServiceName() === []) {
             throw new \Exception('Missing ServiceName in AttributeConsumingService.');
         }
 
-        $this->setServiceDescription(Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceDescription'));
+        $this->setServiceDescription(XMLUtils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceDescription'));
 
         /** @var \DOMElement $ra */
         foreach (XPath::xpQuery($xml, './saml_metadata:RequestedAttribute', XPath::getXPath($xml)) as $ra) {

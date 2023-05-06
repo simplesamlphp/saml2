@@ -6,9 +6,9 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 Organization element.
@@ -61,15 +61,15 @@ class Organization
 
         $this->Extensions = Extensions::getList($xml);
 
-        $this->OrganizationName = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationName');
+        $this->OrganizationName = XMLUtils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationName');
 
-        $this->OrganizationDisplayName = Utils::extractLocalizedStrings(
+        $this->OrganizationDisplayName = XMLUtils::extractLocalizedStrings(
             $xml,
             Constants::NS_MD,
             'OrganizationDisplayName'
         );
 
-        $this->OrganizationURL = Utils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationURL');
+        $this->OrganizationURL = XMLUtils::extractLocalizedStrings($xml, Constants::NS_MD, 'OrganizationURL');
     }
 
 
@@ -196,9 +196,9 @@ class Organization
 
         Extensions::addList($e, $this->Extensions);
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationName', true, $this->OrganizationName);
-        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationDisplayName', true, $this->OrganizationDisplayName);
-        Utils::addStrings($e, Constants::NS_MD, 'md:OrganizationURL', true, $this->OrganizationURL);
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:OrganizationName', true, $this->OrganizationName);
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:OrganizationDisplayName', true, $this->OrganizationDisplayName);
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:OrganizationURL', true, $this->OrganizationURL);
 
         return $e;
     }

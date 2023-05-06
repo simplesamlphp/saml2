@@ -6,7 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 metadata AdditionalMetadataLocation element.
@@ -105,7 +105,7 @@ class AdditionalMetadataLocation
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        $e = Utils::addString($parent, Constants::NS_MD, 'md:AdditionalMetadataLocation', $this->getLocation());
+        $e = XMLUtils::addString($parent, Constants::NS_MD, 'md:AdditionalMetadataLocation', $this->getLocation());
         $e->setAttribute('namespace', $this->getNamespace());
 
         return $e;

@@ -7,9 +7,9 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\SignedElementHelper;
-use SAML2\Utils;
 use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 AffiliationDescriptor element.
@@ -84,7 +84,7 @@ class AffiliationDescriptor extends SignedElementHelper
         }
 
         if ($xml->hasAttribute('validUntil')) {
-            $this->setValidUntil(Utils::xsDateTimeToTimestamp($xml->getAttribute('validUntil')));
+            $this->setValidUntil(XMLUtils::xsDateTimeToTimestamp($xml->getAttribute('validUntil')));
         }
 
         if ($xml->hasAttribute('cacheDuration')) {
@@ -93,7 +93,7 @@ class AffiliationDescriptor extends SignedElementHelper
 
         $this->setExtensions(Extensions::getList($xml));
 
-        $this->setAffiliateMember(Utils::extractStrings($xml, Constants::NS_MD, 'AffiliateMember'));
+        $this->setAffiliateMember(XMLUtils::extractStrings($xml, Constants::NS_MD, 'AffiliateMember'));
         if (empty($this->AffiliateMember)) {
             throw new \Exception('Missing AffiliateMember in AffiliationDescriptor.');
         }
@@ -273,7 +273,7 @@ class AffiliationDescriptor extends SignedElementHelper
 
         Extensions::addList($e, $this->Extensions);
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:AffiliateMember', false, $this->AffiliateMember);
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:AffiliateMember', false, $this->AffiliateMember);
 
         foreach ($this->KeyDescriptor as $kd) {
             $kd->toXML($e);

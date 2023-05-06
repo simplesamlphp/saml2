@@ -19,6 +19,7 @@ use SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 use function array_intersect;
 use function array_key_exists;
@@ -283,7 +284,7 @@ class Assertion extends SignedElement
             throw new Exception('Unsupported version: ' . $xml->getAttribute('Version'));
         }
 
-        $this->issueInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
+        $this->issueInstant = XMLUtils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
 
         $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement[] $issuer */
@@ -378,13 +379,13 @@ class Assertion extends SignedElement
         $conditions = $conditions[0];
 
         if ($conditions->hasAttribute('NotBefore')) {
-            $notBefore = Utils::xsDateTimeToTimestamp($conditions->getAttribute('NotBefore'));
+            $notBefore = XMLUtils::xsDateTimeToTimestamp($conditions->getAttribute('NotBefore'));
             if ($this->getNotBefore() === null || $this->getNotBefore() < $notBefore) {
                 $this->setNotBefore($notBefore);
             }
         }
         if ($conditions->hasAttribute('NotOnOrAfter')) {
-            $notOnOrAfter = Utils::xsDateTimeToTimestamp($conditions->getAttribute('NotOnOrAfter'));
+            $notOnOrAfter = XMLUtils::xsDateTimeToTimestamp($conditions->getAttribute('NotOnOrAfter'));
             if ($this->getNotOnOrAfter() === null || $this->getNotOnOrAfter() > $notOnOrAfter) {
                 $this->setNotOnOrAfter($notOnOrAfter);
             }
@@ -399,7 +400,7 @@ class Assertion extends SignedElement
             }
             switch ($node->localName) {
                 case 'AudienceRestriction':
-                    $audiences = Utils::extractStrings($node, Constants::NS_SAML, 'Audience');
+                    $audiences = XMLUtils::extractStrings($node, Constants::NS_SAML, 'Audience');
                     if (empty($this->validAudiences)) {
                         /* The first (and probably last) AudienceRestriction element. */
                         $this->validAudiences = $audiences;
@@ -449,10 +450,10 @@ class Assertion extends SignedElement
         if (!$authnStatement->hasAttribute('AuthnInstant')) {
             throw new Exception('Missing required AuthnInstant attribute on <saml:AuthnStatement>.');
         }
-        $this->authnInstant = Utils::xsDateTimeToTimestamp($authnStatement->getAttribute('AuthnInstant'));
+        $this->authnInstant = XMLUtils::xsDateTimeToTimestamp($authnStatement->getAttribute('AuthnInstant'));
 
         if ($authnStatement->hasAttribute('SessionNotOnOrAfter')) {
-            $this->sessionNotOnOrAfter = Utils::xsDateTimeToTimestamp(
+            $this->sessionNotOnOrAfter = XMLUtils::xsDateTimeToTimestamp(
                 $authnStatement->getAttribute('SessionNotOnOrAfter')
             );
         }
@@ -524,7 +525,7 @@ class Assertion extends SignedElement
             );
         }
 
-        $this->AuthenticatingAuthority = Utils::extractStrings(
+        $this->AuthenticatingAuthority = XMLUtils::extractStrings(
             $authnContextEl,
             Constants::NS_SAML,
             'AuthenticatingAuthority'
@@ -798,7 +799,6 @@ class Assertion extends SignedElement
      *
      * The NameId must be a \SAML2\XML\saml\NameID object.
      *
-     * @see \SAML2\Utils::addNameId()
      * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
@@ -1593,7 +1593,7 @@ class Assertion extends SignedElement
             $ar = $document->createElementNS(Constants::NS_SAML, 'saml:AudienceRestriction');
             $conditions->appendChild($ar);
 
-            Utils::addStrings($ar, Constants::NS_SAML, 'saml:Audience', false, $this->validAudiences);
+            XMLUtils::addStrings($ar, Constants::NS_SAML, 'saml:Audience', false, $this->validAudiences);
         }
     }
 
@@ -1640,7 +1640,7 @@ class Assertion extends SignedElement
         $authnStatementEl->appendChild($authnContextEl);
 
         if (!empty($this->authnContextClassRef)) {
-            Utils::addString(
+            XMLUtils::addString(
                 $authnContextEl,
                 Constants::NS_SAML,
                 'saml:AuthnContextClassRef',
@@ -1651,7 +1651,7 @@ class Assertion extends SignedElement
             $this->authnContextDecl->toXML($authnContextEl);
         }
         if (!empty($this->authnContextDeclRef)) {
-            Utils::addString(
+            XMLUtils::addString(
                 $authnContextEl,
                 Constants::NS_SAML,
                 'saml:AuthnContextDeclRef',
@@ -1659,7 +1659,7 @@ class Assertion extends SignedElement
             );
         }
 
-        Utils::addStrings(
+        XMLUtils::addStrings(
             $authnContextEl,
             Constants::NS_SAML,
             'saml:AuthenticatingAuthority',

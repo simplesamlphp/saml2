@@ -6,7 +6,7 @@ namespace SAML2\XML\ds;
 
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
-use SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing a ds:X509Certificate element.
@@ -69,6 +69,6 @@ class X509Certificate
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        return Utils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:X509Certificate', $this->getCertificate());
+        return XMLUtils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:X509Certificate', $this->getCertificate());
     }
 }

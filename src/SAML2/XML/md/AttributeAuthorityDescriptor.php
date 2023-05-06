@@ -6,10 +6,10 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\Utils;
 use SAML2\Utils\XPath;
 use SAML2\XML\saml\Attribute;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 metadata AttributeAuthorityDescriptor.
@@ -93,9 +93,9 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
             $this->addAssertionIDRequestService(new EndpointType($ep));
         }
 
-        $this->setNameIDFormat(Utils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat'));
+        $this->setNameIDFormat(XMLUtils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat'));
 
-        $this->setAttributeProfile(Utils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile'));
+        $this->setAttributeProfile(XMLUtils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile'));
 
         /** @var \DOMElement $a */
         foreach (XPath::xpQuery($xml, './saml_assertion:Attribute', $xpCache) as $a) {
@@ -275,9 +275,9 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
             $ep->toXML($e, 'md:AssertionIDRequestService');
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfile);
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfile);
 
         foreach ($this->Attribute as $a) {
             $a->toXML($e);

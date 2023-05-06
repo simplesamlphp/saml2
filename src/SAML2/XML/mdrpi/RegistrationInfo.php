@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdrpi;
 
 use DOMElement;
-use SAML2\Utils;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling the mdrpi:RegistrationInfo element.
@@ -59,10 +59,10 @@ class RegistrationInfo
         $this->registrationAuthority = $xml->getAttribute('registrationAuthority');
 
         if ($xml->hasAttribute('registrationInstant')) {
-            $this->registrationInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('registrationInstant'));
+            $this->registrationInstant = XMLUtils::xsDateTimeToTimestamp($xml->getAttribute('registrationInstant'));
         }
 
-        $this->RegistrationPolicy = Utils::extractLocalizedStrings($xml, Common::NS_MDRPI, 'RegistrationPolicy');
+        $this->RegistrationPolicy = XMLUtils::extractLocalizedStrings($xml, Common::NS_MDRPI, 'RegistrationPolicy');
     }
 
 
@@ -158,7 +158,7 @@ class RegistrationInfo
             $e->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->registrationInstant));
         }
 
-        Utils::addStrings($e, Common::NS_MDRPI, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
+        XMLUtils::addStrings($e, Common::NS_MDRPI, 'mdrpi:RegistrationPolicy', true, $this->RegistrationPolicy);
 
         return $e;
     }

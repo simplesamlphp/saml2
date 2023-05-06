@@ -10,9 +10,9 @@ use SAML2\AuthnRequest;
 use SAML2\Constants;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
-use SAML2\Utils;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class \SAML2\AuthnRequestTest
@@ -73,7 +73,7 @@ AUTHNREQUEST;
 
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xml)->documentElement);
 
-        $expectedIssueInstant = Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
+        $expectedIssueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
         $this->assertEquals($expectedIssueInstant, $authnRequest->getIssueInstant());
         $this->assertEquals('https://idp.example.org/SAML2/SSO/Artifact', $authnRequest->getDestination());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact', $authnRequest->getProtocolBinding());
@@ -444,7 +444,7 @@ AUTHNREQUEST;
         $request = new AuthnRequest();
         $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
-        $request->setIssueInstant(Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+        $request->setIssueInstant(XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
         $request->setProxyCount(34);
         $request->setRequesterID([
             'https://engine.demo.openconext.org/authentication/sp/metadata',
@@ -550,7 +550,7 @@ AUTHNREQUEST;
         $request = new AuthnRequest();
         $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
-        $request->setIssueInstant(Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+        $request->setIssueInstant(XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
         $nameIdPolicy = [
             "Format" => "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
@@ -592,7 +592,7 @@ AUTHNREQUEST;
         $request = new AuthnRequest();
         $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
-        $request->setIssueInstant(Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+        $request->setIssueInstant(XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
         $nameIdPolicy = ["Format" => "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"];
         $request->setNameIDPolicy($nameIdPolicy);
@@ -739,7 +739,7 @@ AUTHNREQUEST;
         $request = new AuthnRequest();
         $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
-        $request->setIssueInstant(Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+        $request->setIssueInstant(XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
         $request->setForceAuthn(true);
 
@@ -824,7 +824,7 @@ AUTHNREQUEST;
         $request = new AuthnRequest();
         $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
-        $request->setIssueInstant(Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+        $request->setIssueInstant(XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
         $request->setIsPassive(true);
 
@@ -847,7 +847,7 @@ AUTHNREQUEST;
         $request = new AuthnRequest();
         $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
-        $request->setIssueInstant(Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+        $request->setIssueInstant(XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
         $request->setProviderName("My Example SP");
 
@@ -897,7 +897,7 @@ AUTHNREQUEST;
         $request = new AuthnRequest();
         $request->setIssuer($issuer);
         $request->setDestination('https://idp.example.org/idp/profile/saml2/Redirect/SSO');
-        $request->setIssueInstant(Utils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
+        $request->setIssueInstant(XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
         $request->setProtocolBinding("urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST");
         $request->setAssertionConsumerServiceURL("https://sp.example.org/authentication/sp/consume-assertion");

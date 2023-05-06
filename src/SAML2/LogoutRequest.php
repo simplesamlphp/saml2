@@ -11,6 +11,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utils\XPath;
 use SAML2\XML\saml\NameID;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 use function count;
 use function is_null;
@@ -80,7 +81,7 @@ class LogoutRequest extends Request
         }
 
         if ($xml->hasAttribute('NotOnOrAfter')) {
-            $this->notOnOrAfter = Utils::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter'));
+            $this->notOnOrAfter = XMLUtils::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter'));
         }
 
         if ($xml->hasAttribute('Reason')) {
@@ -346,7 +347,7 @@ class LogoutRequest extends Request
         }
 
         foreach ($this->sessionIndexes as $sessionIndex) {
-            Utils::addString($root, Constants::NS_SAMLP, 'SessionIndex', $sessionIndex);
+            XMLUtils::addString($root, Constants::NS_SAMLP, 'SessionIndex', $sessionIndex);
         }
 
         return $root;

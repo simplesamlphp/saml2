@@ -6,9 +6,9 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\Utils;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 ContactPerson.
@@ -421,22 +421,22 @@ class ContactPerson
         Extensions::addList($e, $this->getExtensions());
 
         if ($this->Company !== null) {
-            Utils::addString($e, Constants::NS_MD, 'md:Company', $this->Company);
+            XMLUtils::addString($e, Constants::NS_MD, 'md:Company', $this->Company);
         }
         if ($this->GivenName !== null) {
-            Utils::addString($e, Constants::NS_MD, 'md:GivenName', $this->GivenName);
+            XMLUtils::addString($e, Constants::NS_MD, 'md:GivenName', $this->GivenName);
         }
         if ($this->SurName !== null) {
-            Utils::addString($e, Constants::NS_MD, 'md:SurName', $this->SurName);
+            XMLUtils::addString($e, Constants::NS_MD, 'md:SurName', $this->SurName);
         }
         if (!empty($this->getEmailAddress())) {
             /** @var array $addresses */
             $addresses = preg_filter('/^/', 'mailto:', $this->EmailAddress);
 
-            Utils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $addresses);
+            XMLUtils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $addresses);
         }
         if (!empty($this->getTelephoneNumber())) {
-            Utils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->getTelephoneNumber());
+            XMLUtils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->getTelephoneNumber());
         }
 
         return $e;

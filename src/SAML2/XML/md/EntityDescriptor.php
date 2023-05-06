@@ -7,9 +7,9 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\SignedElementHelper;
-use SAML2\Utils;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 EntityDescriptor element.
@@ -102,7 +102,7 @@ class EntityDescriptor extends SignedElementHelper
             $this->ID = $xml->getAttribute('ID');
         }
         if ($xml->hasAttribute('validUntil')) {
-            $this->validUntil = Utils::xsDateTimeToTimestamp($xml->getAttribute('validUntil'));
+            $this->validUntil = XMLUtils::xsDateTimeToTimestamp($xml->getAttribute('validUntil'));
         }
         if ($xml->hasAttribute('cacheDuration')) {
             $this->cacheDuration = $xml->getAttribute('cacheDuration');

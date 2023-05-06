@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SAML2\XML\mdrpi;
 
 use DOMElement;
-use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling the mdrpi:PublicationInfo element.
@@ -65,14 +65,14 @@ class PublicationInfo
         $this->publisher = $xml->getAttribute('publisher');
 
         if ($xml->hasAttribute('creationInstant')) {
-            $this->creationInstant = Utils::xsDateTimeToTimestamp($xml->getAttribute('creationInstant'));
+            $this->creationInstant = XMLUtils::xsDateTimeToTimestamp($xml->getAttribute('creationInstant'));
         }
 
         if ($xml->hasAttribute('publicationId')) {
             $this->publicationId = $xml->getAttribute('publicationId');
         }
 
-        $this->UsagePolicy = Utils::extractLocalizedStrings($xml, Common::NS_MDRPI, 'UsagePolicy');
+        $this->UsagePolicy = XMLUtils::extractLocalizedStrings($xml, Common::NS_MDRPI, 'UsagePolicy');
     }
 
 
@@ -193,7 +193,7 @@ class PublicationInfo
             $e->setAttribute('publicationId', $this->publicationId);
         }
 
-        Utils::addStrings($e, Common::NS_MDRPI, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
+        XMLUtils::addStrings($e, Common::NS_MDRPI, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
 
         return $e;
     }

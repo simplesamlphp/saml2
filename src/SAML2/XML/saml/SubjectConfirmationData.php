@@ -11,6 +11,7 @@ use SAML2\Utils;
 use SAML2\XML\ds\KeyInfo;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 SubjectConfirmationData element.
@@ -233,10 +234,10 @@ class SubjectConfirmationData
         }
 
         if ($xml->hasAttribute('NotBefore')) {
-            $this->setNotBefore(Utils::xsDateTimeToTimestamp($xml->getAttribute('NotBefore')));
+            $this->setNotBefore(XMLUtils::xsDateTimeToTimestamp($xml->getAttribute('NotBefore')));
         }
         if ($xml->hasAttribute('NotOnOrAfter')) {
-            $this->setNotOnOrAfter(Utils::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter')));
+            $this->setNotOnOrAfter(XMLUtils::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter')));
         }
         if ($xml->hasAttribute('Recipient')) {
             $this->setRecipient($xml->getAttribute('Recipient'));

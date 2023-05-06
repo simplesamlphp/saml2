@@ -8,6 +8,7 @@ use DOMElement;
 use Exception;
 use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 use function array_key_exists;
 use function is_null;
@@ -199,7 +200,7 @@ abstract class StatusResponse extends Message
         }
 
         if (!is_null($this->status['Message'])) {
-            Utils::addString($status, Constants::NS_SAMLP, 'StatusMessage', $this->status['Message']);
+            XMLUtils::addString($status, Constants::NS_SAMLP, 'StatusMessage', $this->status['Message']);
         }
 
         return $root;

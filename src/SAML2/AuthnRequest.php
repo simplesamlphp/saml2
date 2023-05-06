@@ -14,6 +14,7 @@ use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Utils as XMLUtils;
 
 use function count;
 use function intval;
@@ -866,7 +867,7 @@ class AuthnRequest extends Request
                 $e->setAttribute('Comparison', $rac['Comparison']);
             }
             foreach ($rac['AuthnContextClassRef'] as $accr) {
-                Utils::addString($e, Constants::NS_SAML, 'AuthnContextClassRef', $accr);
+                XMLUtils::addString($e, Constants::NS_SAML, 'AuthnContextClassRef', $accr);
             }
         }
 
@@ -904,7 +905,7 @@ class AuthnRequest extends Request
                 $scoping->appendChild($idplist);
             }
             if (count($this->RequesterID) > 0) {
-                Utils::addStrings($scoping, Constants::NS_SAMLP, 'RequesterID', false, $this->RequesterID);
+                XMLUtils::addStrings($scoping, Constants::NS_SAMLP, 'RequesterID', false, $this->RequesterID);
             }
         }
 
@@ -959,7 +960,7 @@ class AuthnRequest extends Request
             $ar = $document->createElementNS(Constants::NS_SAML, 'saml:AudienceRestriction');
             $conditions->appendChild($ar);
 
-            Utils::addStrings($ar, Constants::NS_SAML, 'saml:Audience', false, $this->getAudiences());
+            XMLUtils::addStrings($ar, Constants::NS_SAML, 'saml:Audience', false, $this->getAudiences());
         }
     }
 }

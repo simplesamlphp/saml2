@@ -14,7 +14,6 @@ use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Compat\AbstractContainer;
 use SAML2\Compat\ContainerSingleton;
-use SAML2\Compat\Ssp\Container;
 use SAML2\Exception\RuntimeException;
 use SAML2\Utils\XPath;
 use SAML2\XML\ds\KeyInfo;
@@ -26,11 +25,8 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function count;
-use function gmmktime;
 use function in_array;
-use function intval;
 use function openssl_pkey_get_details;
-use function preg_match;
 use function serialize;
 use function sha1;
 use function strlen;
@@ -38,6 +34,7 @@ use function str_pad;
 use function str_replace;
 use function strtolower;
 use function strval;
+use function substr;
 use function trim;
 use function var_export;
 
@@ -111,7 +108,7 @@ class Utils
             }
         }
         if (!$rootSigned) {
-            throw new \Exception('XMLSec: The root element is not signed.');
+            throw new Exception('XMLSec: The root element is not signed.');
         }
 
         /* Now we extract all available X509 certificates in the signature element. */
@@ -432,7 +429,7 @@ class Utils
                 }
             } catch (Exception $e) {
                 /* We failed to decrypt this key. Log it, and substitute a "random" key. */
-                Utils::getContainer()->getLogger()->error('Failed to decrypt symmetric key: ' . $e->getMessage());
+                self::getContainer()->getLogger()->error('Failed to decrypt symmetric key: ' . $e->getMessage());
                 /* Create a replacement key, so that it looks like we fail in the same way as if the key was correctly
                  * padded. */
 
@@ -499,7 +496,7 @@ class Utils
         /** @psalm-suppress PossiblyNullPropertyFetch */
         $decryptedElement = $newDoc->firstChild->firstChild;
         if (!($decryptedElement instanceof DOMElement)) {
-            throw new \Exception('Missing decrypted element or it was not actually a DOMElement.');
+            throw new Exception('Missing decrypted element or it was not actually a DOMElement.');
         }
 
         return $decryptedElement;
@@ -527,115 +524,8 @@ class Utils
              * Something went wrong during decryption, but for security
              * reasons we cannot tell the user what failed.
              */
-            Utils::getContainer()->getLogger()->error('Decryption failed: ' . $e->getMessage());
+            self::getContainer()->getLogger()->error('Decryption failed: ' . $e->getMessage());
             throw new Exception('Failed to decrypt XML element.', 0, $e);
-        }
-    }
-
-
-    /**
-     * Extract localized strings from a set of nodes.
-     *
-     * @param \DOMElement $parent The element that contains the localized strings.
-     * @param string $namespaceURI The namespace URI the localized strings should have.
-     * @param string $localName The localName of the localized strings.
-     * @return array Localized strings.
-     */
-    public static function extractLocalizedStrings(\DOMElement $parent, string $namespaceURI, string $localName): array
-    {
-        $ret = [];
-        foreach ($parent->childNodes as $node) {
-            if ($node->namespaceURI !== $namespaceURI || $node->localName !== $localName) {
-                continue;
-            } elseif (!($node instanceof DOMElement)) {
-                continue;
-            }
-
-            if ($node->hasAttribute('xml:lang')) {
-                $language = $node->getAttribute('xml:lang');
-            } else {
-                $language = 'en';
-            }
-            $ret[$language] = trim($node->textContent);
-        }
-
-        return $ret;
-    }
-
-
-    /**
-     * Extract strings from a set of nodes.
-     *
-     * @param \DOMElement $parent The element that contains the localized strings.
-     * @param string $namespaceURI The namespace URI the string elements should have.
-     * @param string $localName The localName of the string elements.
-     * @return array The string values of the various nodes.
-     */
-    public static function extractStrings(DOMElement $parent, string $namespaceURI, string $localName): array
-    {
-        $ret = [];
-        foreach ($parent->childNodes as $node) {
-            if ($node->namespaceURI !== $namespaceURI || $node->localName !== $localName) {
-                continue;
-            }
-            $ret[] = trim($node->textContent);
-        }
-
-        return $ret;
-    }
-
-
-    /**
-     * Append string element.
-     *
-     * @param \DOMElement $parent The parent element we should append the new nodes to.
-     * @param string $namespace The namespace of the created element.
-     * @param string $name The name of the created element.
-     * @param string $value The value of the element.
-     * @return \DOMElement The generated element.
-     */
-    public static function addString(
-        DOMElement $parent,
-        string $namespace,
-        string $name,
-        string $value
-    ): DOMElement {
-        $doc = $parent->ownerDocument;
-
-        $n = $doc->createElementNS($namespace, $name);
-        $n->appendChild($doc->createTextNode($value));
-        $parent->appendChild($n);
-
-        return $n;
-    }
-
-
-    /**
-     * Append string elements.
-     *
-     * @param \DOMElement $parent The parent element we should append the new nodes to.
-     * @param string $namespace The namespace of the created elements
-     * @param string $name The name of the created elements
-     * @param bool $localized Whether the strings are localized, and should include the xml:lang attribute.
-     * @param array $values The values we should create the elements from.
-     * @return void
-     */
-    public static function addStrings(
-        DOMElement $parent,
-        string $namespace,
-        string $name,
-        bool $localized,
-        array $values
-    ): void {
-        $doc = $parent->ownerDocument;
-
-        foreach ($values as $index => $value) {
-            $n = $doc->createElementNS($namespace, $name);
-            $n->appendChild($doc->createTextNode($value));
-            if ($localized) {
-                $n->setAttribute('xml:lang', $index);
-            }
-            $parent->appendChild($n);
         }
     }
 
@@ -672,54 +562,6 @@ class Utils
         $keyDescriptor = new KeyDescriptor();
         $keyDescriptor->setKeyInfo($keyInfo);
         return $keyDescriptor;
-    }
-
-
-    /**
-     * This function converts a SAML2 timestamp on the form
-     * yyyy-mm-ddThh:mm:ss(\.s+)?Z to a UNIX timestamp. The sub-second
-     * part is ignored.
-     *
-     * Andreas comments:
-     *  I got this timestamp from Shibboleth 1.3 IdP: 2008-01-17T11:28:03.577Z
-     *  Therefore I added to possibility to have microseconds to the format.
-     * Added: (\.\\d{1,3})? to the regex.
-     *
-     * Note that we always require a 'Z' timezone for the dateTime to be valid.
-     * This is not in the SAML spec but that's considered to be a bug in the
-     * spec. See https://github.com/simplesamlphp/saml2/pull/36 for some
-     * background.
-     *
-     * @param string $time The time we should convert.
-     * @throws \Exception
-     * @return int Converted to a unix timestamp.
-     */
-    public static function xsDateTimeToTimestamp(string $time): int
-    {
-        $matches = [];
-
-        // We use a very strict regex to parse the timestamp.
-        $regex = '/^(\\d\\d\\d\\d)-(\\d\\d)-(\\d\\d)T(\\d\\d):(\\d\\d):(\\d\\d)(?:\\.\\d{1,9})?Z$/D';
-        if (preg_match($regex, $time, $matches) == 0) {
-            throw new Exception(
-                'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: ' . $time
-            );
-        }
-
-        // Extract the different components of the time from the  matches in the regex.
-        // intval will ignore leading zeroes in the string.
-        $year   = intval($matches[1]);
-        $month  = intval($matches[2]);
-        $day    = intval($matches[3]);
-        $hour   = intval($matches[4]);
-        $minute = intval($matches[5]);
-        $second = intval($matches[6]);
-
-        // We use gmmktime because the timestamp will always be given
-        //in UTC.
-        $ts = gmmktime($hour, $minute, $second, $month, $day, $year);
-
-        return $ts;
     }
 
 
