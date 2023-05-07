@@ -26,7 +26,7 @@ use function strval;
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
-final class DiscoveryEndpointTest extends TestCase
+final class DiscoveryResponseTest extends TestCase
 {
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;

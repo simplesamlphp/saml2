@@ -62,7 +62,12 @@ final class SubjectConfirmationTest extends TestCase
 
         $subjectConfirmation = new SubjectConfirmation(
             'urn:test:SomeMethod',
-            new NameID('SomeNameIDValue'),
+            new NameID(
+                'SomeNameIDValue',
+                null,
+                'https://sp.example.org/authentication/sp/metadata',
+                C::NAMEID_TRANSIENT,
+            ),
             new SubjectConfirmationData(
                 987654321,
                 1234567890,

@@ -22,7 +22,7 @@ use function strval;
 /**
  * Class \SAML2\XML\samlp\AssertionIDRequestTest
  *
- * @covers \SimpleSAML\SAML2\XML\samlp\AassertionIDRequestRequest
+ * @covers \SimpleSAML\SAML2\XML\samlp\AssertionIDRequest
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractRequest
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
