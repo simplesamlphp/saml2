@@ -4,34 +4,36 @@ declare(strict_types=1);
 
 namespace SAML2\Signature;
 
+use Mockery\MockInterface;
 use Psr\Log\LoggerInterface;
-use SAML2\Certificate;
+use SAML2\Certificate\Key;
+use SAML2\Certificate\KeyCollection;
+use SAML2\Certificate\KeyLoader;
+use SAML2\Certificate\X509;
 use SAML2\Configuration\CertificateProvider;
 use SAML2\SignedElement;
+
+use function count;
+use function sprintf;
 
 class PublicKeyValidator extends AbstractChainedValidator
 {
     /**
      * @var \SAML2\Certificate\KeyCollection
      */
-    private Certificate\KeyCollection $configuredKeys;
-
-    /**
-     * @var \SAML2\Certificate\KeyLoader
-     */
-    private $keyLoader;
+    private KeyCollection $configuredKeys;
 
 
     /**
      * Constructor for PublicKeyValidator
      *
-     * @param LoggerInterface $logger
-     * @param KeyLoader $keyLoader
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \SAML2\Certificate\KeyLoader $keyLoader
      */
-    public function __construct(LoggerInterface $logger, $keyLoader)
-    {
-        $this->keyLoader = $keyLoader;
-
+    public function __construct(
+        LoggerInterface $logger,
+        private KeyLoader|MockInterface $keyLoader,
+    ) {
         parent::__construct($logger);
     }
 
@@ -63,8 +65,8 @@ class PublicKeyValidator extends AbstractChainedValidator
         CertificateProvider $configuration
     ): bool {
         $logger = $this->logger;
-        $pemCandidates = $this->configuredKeys->filter(function (Certificate\Key $key) use ($logger) {
-            if (!$key instanceof Certificate\X509) {
+        $pemCandidates = $this->configuredKeys->filter(function (Key $key) use ($logger) {
+            if (!$key instanceof X509) {
                 $logger->debug(sprintf('Skipping unknown key type: "%s"', $key['type']));
                 return false;
             }

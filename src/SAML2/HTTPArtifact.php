@@ -14,8 +14,10 @@ use SAML2\XML\saml\Issuer;
 use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
-use SimpleSAML\Store;
+use SimpleSAML\Store\StoreFactory;
 use SimpleSAML\Utils\HTTP;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\MissingElementException;
 
 use function array_key_exists;
 use function base64_decode;
@@ -51,7 +53,10 @@ class HTTPArtifact extends Binding
     public function getRedirectURL(Message $message): string
     {
         /** @psalm-suppress UndefinedClass */
-        $store = Store::getInstance();
+        $config = Configuration::getInstance();
+
+        /** @psalm-suppress UndefinedClass */
+        $store = StoreFactory::getInstance($config->getString('store.type'));
         if ($store === false) {
             throw new Exception('Unable to send artifact without a datastore configured.');
         }
@@ -59,7 +64,7 @@ class HTTPArtifact extends Binding
         $generatedId = pack('H*', bin2hex(openssl_random_pseudo_bytes(20)));
         $issuer = $message->getIssuer();
         if ($issuer === null) {
-            throw new Exception('Cannot get redirect URL, no Issuer set in the message.');
+            throw new MissingElementException('Cannot get redirect URL, no Issuer set in the message.');
         }
         $artifact = base64_encode("\x00\x04\x00\x00" . sha1($issuer->getValue(), true) . $generatedId);
         $artifactData = $message->toUnsignedXML();
@@ -77,7 +82,7 @@ class HTTPArtifact extends Binding
 
         $destination = $message->getDestination();
         if ($destination === null) {
-            throw new Exception('Cannot get redirect URL, no destination set in the message.');
+            throw new MissingAttributeException('Cannot get redirect URL, no destination set in the message.');
         }
         $httpUtils = new HTTP();
         return $httpUtils->addURLparameters($destination, $params);
@@ -92,6 +97,7 @@ class HTTPArtifact extends Binding
      */
     public function send(Message $message): ResponseInterface
     {
+        $destination = $this->getRedirectURL($message);
         return new Response(303, ['Location' => $destination]);
     }
 
@@ -141,7 +147,7 @@ class HTTPArtifact extends Binding
             "ArtifactResolutionService endpoint being used is := " . $endpoint['Location']
         );
 
-        //Construct the ArtifactResolve Request
+        // Construct the ArtifactResolve Request
         $ar = new ArtifactResolve();
 
         /* Set the request attributes */
@@ -159,7 +165,7 @@ class HTTPArtifact extends Binding
         $soap = new SOAPClient();
 
         // Send message through SoapClient
-        /** @var \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $artifactResponse */
+        /** @var \SAML2\ArtifactResponse $artifactResponse */
         $artifactResponse = $soap->send($ar, $this->spMetadata, $idpMetadata);
 
         if (!$artifactResponse->isSuccess()) {

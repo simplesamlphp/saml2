@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMElement;
+use Exception;
 use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\LogoutRequest;
@@ -163,7 +164,7 @@ XML;
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
         $this->assertTrue($logoutRequest->isNameIdEncrypted());
 
-        $this->expectException(\Exception::class, "Attempted to retrieve encrypted NameID without decrypting it first.");
+        $this->expectException(Exception::class, "Attempted to retrieve encrypted NameID without decrypting it first.");
         $nameId = $logoutRequest->getNameId();
     }
 
@@ -204,7 +205,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->logoutRequestElement = $document->firstChild;
 
-        $this->expectException(\Exception::class, "Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.");
+        $this->expectException(Exception::class, "Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.");
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
     }
 
@@ -224,7 +225,7 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
         $this->logoutRequestElement = $document->firstChild;
 
-        $this->expectException(\Exception::class, "More than one <saml:NameID> or <saml:EncryptedD> in <samlp:LogoutRequest>.");
+        $this->expectException(Exception::class, "More than one <saml:NameID> or <saml:EncryptedD> in <samlp:LogoutRequest>.");
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
     }
 

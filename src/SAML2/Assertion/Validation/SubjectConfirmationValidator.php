@@ -17,16 +17,6 @@ class SubjectConfirmationValidator
      */
     protected array $constraints;
 
-    /**
-     * @var \SAML2\Configuration\IdentityProvider
-     */
-    protected IdentityProvider $identityProvider;
-
-    /**
-     * @var \SAML2\Configuration\ServiceProvider
-     */
-    protected ServiceProvider $serviceProvider;
-
 
     /**
      * Constructor for SubjectConfirmationValidator
@@ -35,11 +25,9 @@ class SubjectConfirmationValidator
      * @param ServiceProvider $serviceProvider
      */
     public function __construct(
-        IdentityProvider $identityProvider,
-        ServiceProvider $serviceProvider
+        private IdentityProvider $identityProvider,
+        private ServiceProvider $serviceProvider
     ) {
-        $this->identityProvider = $identityProvider;
-        $this->serviceProvider = $serviceProvider;
     }
 
 

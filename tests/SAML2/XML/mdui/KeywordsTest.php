@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdui;
 
+use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\XML\mdui\Keywords;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -11,7 +13,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\mdrpi\KeywordsTest
  */
-class KeywordsTest extends \PHPUnit\Framework\TestCase
+class KeywordsTest extends TestCase
 {
     /**
      * Test creating a basic Keywords element.
@@ -51,7 +53,7 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
 
         $document = DOMDocumentFactory::fromString('<root />');
 
-        $this->expectException(\Exception::class, 'Keywords may not contain a "+" character');
+        $this->expectException(Exception::class, 'Keywords may not contain a "+" character');
         $xml = $keywords->toXML($document->firstChild);
     }
 
@@ -87,7 +89,7 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing lang on Keywords');
+        $this->expectException(Exception::class, 'Missing lang on Keywords');
         $keywords = new Keywords($document->firstChild);
     }
 
@@ -103,7 +105,7 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing value for Keywords');
+        $this->expectException(Exception::class, 'Missing value for Keywords');
         $keywords = new Keywords($document->firstChild);
     }
 }

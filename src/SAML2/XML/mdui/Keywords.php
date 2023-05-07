@@ -5,7 +5,16 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use DOMElement;
+use SAML2\Constants as C;
+use SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+
+use function explode;
+use function rtrim;
+use function strlen;
+use function strpos;
+use function str_replace;
 
 /**
  * Class for handling the Keywords metadata extensions for login and discovery user interface
@@ -45,10 +54,10 @@ class Keywords
         }
 
         if (!$xml->hasAttribute('xml:lang')) {
-            throw new \Exception('Missing lang on Keywords.');
+            throw new MissingAttributeException('Missing lang on Keywords.');
         }
         if (!strlen($xml->textContent)) {
-            throw new \Exception('Missing value for Keywords.');
+            throw new MissingAttributeException('Missing value for Keywords.');
         }
         foreach (explode(' ', $xml->textContent) as $keyword) {
             $this->Keywords[] = str_replace('+', ' ', $keyword);
@@ -128,12 +137,12 @@ class Keywords
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(Common::NS, 'mdui:Keywords');
+        $e = $doc->createElementNS(C::NS_MDUI, 'mdui:Keywords');
         $e->setAttribute('xml:lang', $this->lang);
         $value = '';
         foreach ($this->Keywords as $keyword) {
             if (strpos($keyword, "+") !== false) {
-                throw new \Exception('Keywords may not contain a "+" character.');
+                throw new ProtocolViolationException('Keywords may not contain a "+" character.');
             }
             $value .= str_replace(' ', '+', $keyword) . ' ';
         }

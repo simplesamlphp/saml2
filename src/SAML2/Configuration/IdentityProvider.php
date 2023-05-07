@@ -4,6 +4,14 @@ declare(strict_types=1);
 
 namespace SAML2\Configuration;
 
+use SAML2\Exception\RuntimeException;
+use Traversable;
+
+use function array_filter;
+use function array_pop;
+use function count;
+use function sprintf;
+
 /**
  * Basic configuration wrapper
  */
@@ -12,7 +20,7 @@ class IdentityProvider extends ArrayAdapter implements CertificateProvider, Decr
     /**
      * @return array|\Traversable|null
      */
-    public function getKeys()
+    public function getKeys(): Traversable|array|null
     {
         return $this->get('keys');
     }
@@ -89,7 +97,7 @@ class IdentityProvider extends ArrayAdapter implements CertificateProvider, Decr
 
         $keyCount = count($key);
         if ($keyCount !== 1 && $required) {
-            throw new \RuntimeException(sprintf(
+            throw new RuntimeException(sprintf(
                 'Attempted to get privateKey by name "%s", found "%d" keys, where only one was expected. Please '
                 . 'verify that your configuration is correct',
                 $name,

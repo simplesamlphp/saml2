@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdui;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\XML\mdui\DiscoHints;
 use SAML2\XML\mdui\Keywords;
 use SAML2\Utils\XPath;
@@ -12,7 +13,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\mdrpi\DiscoHintsTest
  */
-class DiscoHintsTest extends \PHPUnit\Framework\TestCase
+class DiscoHintsTest extends TestCase
 {
     /**
      * Test marshalling a basic DiscoHints element

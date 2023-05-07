@@ -10,8 +10,6 @@ use SAML2\Utils;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
-require 'RoleDescriptorMock.php';
-
 class RoleDescriptorTest extends TestCase
 {
     /**

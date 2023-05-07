@@ -10,6 +10,11 @@ use SAML2\Assertion\Validation\Result;
 use SAML2\Configuration\ServiceProvider;
 use SAML2\Configuration\ServiceProviderAware;
 
+use function implode;
+use function in_array;
+use function sprintf;
+use function strval;
+
 class SpIsValidAudience implements
     AssertionConstraintValidator,
     ServiceProviderAware

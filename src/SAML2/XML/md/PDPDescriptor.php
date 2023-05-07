@@ -8,6 +8,7 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
@@ -66,7 +67,7 @@ class PDPDescriptor extends RoleDescriptor
             $this->AuthzService[] = new EndpointType($ep);
         }
         if ($this->getAuthzService() !== []) {
-            throw new \Exception('Must have at least one AuthzService in PDPDescriptor.');
+            throw new MissingElementException('Must have at least one AuthzService in PDPDescriptor.');
         }
 
         /** @var \DOMElement $ep */

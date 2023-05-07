@@ -4,21 +4,29 @@ declare(strict_types=1);
 
 namespace SAML2\Response;
 
+use DOMDocument;
+use Mockery;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
-use SAML2\CertificatesMock;
+use Psr\Log\NullLogger;
 use SAML2\Assertion;
+use SAML2\Assertion\Processor as AssertionProcessor;
+use SAML2\CertificatesMock;
 use SAML2\Configuration\Destination;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\ServiceProvider;
 use SAML2\Response;
+use SAML2\Response\Exception\UnsignedResponseException;
+use SAML2\Response\Processor as ResponseProcessor;
 use SAML2\Utilities\ArrayCollection;
 use SAML2\Utilities\Certificate;
-use SAML2\Response\Exception\UnsignedResponseException;
+
+use function preg_match;
 
 /**
  * Test that ensures that either the response or the assertion(s) or both must be signed.
  */
-class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class SignatureValidationTest extends MockeryTestCase
 {
     /**
      * @var \SAML2\Configuration\IdentityProvider
@@ -54,8 +62,8 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function setUp(): void
     {
-        $this->assertionProcessorBuilder = \Mockery::mock('alias:SAML2\Assertion\ProcessorBuilder');
-        $this->assertionProcessor = \Mockery::mock(Assertion\Processor::class);
+        $this->assertionProcessorBuilder = Mockery::mock('alias:SAML2\Assertion\ProcessorBuilder');
+        $this->assertionProcessor = Mockery::mock(AssertionProcessor::class);
         $this->assertionProcessorBuilder
             ->shouldReceive('build')
             ->once()
@@ -84,7 +92,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
-        $processor = new Processor(new \Psr\Log\NullLogger());
+        $processor = new ResponseProcessor(new NullLogger());
 
         $processor->process(
             $this->serviceProviderConfiguration,
@@ -108,7 +116,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
-        $processor = new Response\Processor(new \Psr\Log\NullLogger());
+        $processor = new ResponseProcessor(new NullLogger());
 
         $processor->process(
             $this->serviceProviderConfiguration,
@@ -132,7 +140,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $this->assertionProcessor->shouldReceive('processAssertions')->once();
 
-        $processor = new Response\Processor(new \Psr\Log\NullLogger());
+        $processor = new ResponseProcessor(new NullLogger());
 
         $processor->process(
             $this->serviceProviderConfiguration,
@@ -152,7 +160,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     {
         $this->expectException(UnsignedResponseException::class);
 
-        $assertion = \Mockery::mock('SAML2\Assertion');
+        $assertion = Mockery::mock(Assertion::class);
 
         // The processAssertions is called to decrypt possible encrypted assertions,
         // after which it should fail with an exception due to having no signature
@@ -162,7 +170,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
                 $assertion
             ]));
 
-        $processor = new Processor(new \Psr\Log\NullLogger());
+        $processor = new ResponseProcessor(new NullLogger());
 
         $processor->process(
             $this->serviceProviderConfiguration,
@@ -178,7 +186,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     private function getSignedResponseWithUnsignedAssertion(): Response
     {
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $doc->load(__DIR__ . '/response.xml');
         $response = new Response($doc->firstChild);
         $response->setSignatureKey(CertificatesMock::getPrivateKey());
@@ -194,7 +202,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     private function getUnsignedResponseWithSignedAssertion(): Response
     {
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $doc->load(__DIR__ . '/response.xml');
         $response = new Response($doc->firstChild);
 
@@ -215,7 +223,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     private function getSignedResponseWithSignedAssertion(): Response
     {
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $doc->load(__DIR__ . '/response.xml');
         $response = new Response($doc->firstChild);
         $response->setSignatureKey(CertificatesMock::getPrivateKey());
@@ -235,7 +243,7 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     private function getUnsignedResponseWithUnsignedAssertion(): Response
     {
-        $doc = new \DOMDocument();
+        $doc = new DOMDocument();
         $doc->load(__DIR__ . '/response.xml');
         return new Response($doc->firstChild);
     }

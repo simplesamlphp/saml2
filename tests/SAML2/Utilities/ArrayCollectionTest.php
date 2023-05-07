@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Utilities;
 
+use ArrayIterator;
 use PHPUnit\Framework\TestCase;
 use SAML2\Utilities\ArrayCollection;
 use SAML2\Exception\RuntimeException;
@@ -134,7 +135,7 @@ class ArrayCollectionTest extends TestCase
     public function test_getiterator(): void
     {
         $arc = new ArrayCollection(['aap', 'noot']);
-        $this->assertInstanceOf(\ArrayIterator::class, $arc->getIterator());
+        $this->assertInstanceOf(ArrayIterator::class, $arc->getIterator());
     }
 
 

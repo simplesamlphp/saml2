@@ -6,6 +6,8 @@ namespace SAML2\Exception;
 
 use LibXMLError;
 
+use function sprintf;
+
 final class UnparseableXmlException extends RuntimeException
 {
     /** @var array */

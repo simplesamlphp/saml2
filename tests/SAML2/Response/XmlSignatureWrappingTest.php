@@ -14,6 +14,8 @@ use SAML2\Signature\Validator;
 use SAML2\Utilities\Certificate;
 use SimpleSAML\XML\DOMDocumentFactory;
 
+use function preg_match;
+
 class XmlSignatureWrappingTest extends TestCase
 {
     /**

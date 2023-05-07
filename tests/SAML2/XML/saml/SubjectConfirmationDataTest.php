@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\XML\saml\SubjectConfirmationData;
 use SAML2\Utils\XPath;
@@ -12,7 +13,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\saml\SubjectConfirmationDataTest
  */
-class SubjectConfirmationDataTest extends \PHPUnit\Framework\TestCase
+class SubjectConfirmationDataTest extends TestCase
 {
     /**
      * @return void

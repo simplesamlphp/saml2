@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\Configuration;
 
+use function array_key_exists;
+
 /**
  * Default implementation for configuration
  */

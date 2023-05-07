@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Exception;
 use PHPUnit\Framework\TestCase;
 use SAML2\Utils\XPath;
 use SAML2\XML\saml\Issuer;
@@ -259,7 +260,7 @@ XML;
 XML;
         $document = DOMDocumentFactory::fromString($xml);
 
-        $this->expectException(\Exception::class, 'Missing name on <saml:Attribute> element.');
+        $this->expectException(Exception::class, 'Missing name on <saml:Attribute> element.');
         $aq = new AttributeQuery($document->firstChild);
     }
 
@@ -277,7 +278,7 @@ XML;
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->expectException(\Exception::class, 'Missing subject in subject');
+        $this->expectException(Exception::class, 'Missing subject in subject');
         $aq = new AttributeQuery($document->firstChild);
     }
 
@@ -301,7 +302,7 @@ XML;
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->expectException(\Exception::class, 'More than one <saml:Subject> in subject');
+        $this->expectException(Exception::class, 'More than one <saml:Subject> in subject');
         $aq = new AttributeQuery($document->firstChild);
     }
 
@@ -322,7 +323,7 @@ XML;
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->expectException(\Exception::class, 'Missing <saml:NameID> in <saml:Subject>');
+        $this->expectException(Exception::class, 'Missing <saml:NameID> in <saml:Subject>');
         $aq = new AttributeQuery($document->firstChild);
     }
 
@@ -344,7 +345,7 @@ XML;
 </samlp:AttributeQuery>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->expectException(\Exception::class, 'More than one <saml:NameID> in <saml:Subject>');
+        $this->expectException(Exception::class, 'More than one <saml:NameID> in <saml:Subject>');
         $aq = new AttributeQuery($document->firstChild);
     }
 }

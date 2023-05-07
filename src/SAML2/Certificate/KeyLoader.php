@@ -12,6 +12,10 @@ use SAML2\Exception\InvalidArgumentException;
 use SAML2\Utilities\Certificate;
 use SAML2\Utilities\File;
 
+use function count;
+use function preg_match;
+use function sprintf;
+
 /**
  * KeyLoader
  */
@@ -161,6 +165,6 @@ class KeyLoader
      */
     public function hasKeys(): bool
     {
-        return count($this->loadedKeys) && true;
+        return !!count($this->loadedKeys);
     }
 }

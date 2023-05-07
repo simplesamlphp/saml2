@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdattr;
 
 use DOMElement;
+use SAML2\Constants as C;
 use SAML2\Utils\XPath;
 use SAML2\XML\saml\Attribute;
 use SimpleSAML\Assert\Assert;
@@ -21,7 +22,7 @@ class EntityAttributes
     /**
      * The namespace used for the EntityAttributes extension.
      */
-    public const NS = 'urn:oasis:names:tc:SAML:metadata:attribute';
+    public const NS = C::NS_MDATTR;
 
     /**
      * Array with child elements.

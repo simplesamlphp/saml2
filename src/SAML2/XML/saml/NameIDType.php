@@ -13,6 +13,8 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 
+use function trim;
+
 abstract class NameIDType extends BaseIDType
 {
     /**

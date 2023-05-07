@@ -8,11 +8,18 @@ use DOMDocument;
 use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Constants as C;
+use SAML2\Exception\ProtocolViolationException;
+use SAML2\Exception\Protocol\RequestVersionTooHighException;
+use SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SAML2\Utilities\Temporal;
 use SAML2\Utils\XPath;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\Extensions;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function call_user_func;
@@ -159,14 +166,13 @@ abstract class Message extends SignedElement
         }
 
         if (!$xml->hasAttribute('ID')) {
-            throw new Exception('Missing ID attribute on SAML message.');
+            throw new MissingAttributeException('Missing ID attribute on SAML message.');
         }
         $this->id = $xml->getAttribute('ID');
 
-        if ($xml->getAttribute('Version') !== '2.0') {
-            /* Currently a very strict check. */
-            throw new Exception('Unsupported version: ' . $xml->getAttribute('Version'));
-        }
+        $version = $xml->getAttribute('Version');
+        Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
 
         $this->issueInstant = XMLUtils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
 
@@ -212,7 +218,7 @@ abstract class Message extends SignedElement
                 $xpCache,
             );
             if (empty($signatureMethod)) {
-                throw new Exception('No Algorithm specified in signature.');
+                throw new MissingAttributeException('No Algorithm specified in signature.');
             }
 
             $sig = Utils::validateElement($xml);
@@ -574,9 +580,12 @@ abstract class Message extends SignedElement
      */
     public static function fromXML(DOMElement $xml): Message
     {
-        if ($xml->namespaceURI !== Constants::NS_SAMLP) {
-            throw new Exception('Unknown namespace of SAML message: ' . var_export($xml->namespaceURI, true));
-        }
+        Assert::same(
+            $xml->namespaceURI,
+            C::NS_SAMLP,
+            'Unknown namespace of SAML message: ' . var_export($xml->namespaceURI, true),
+            InvalidDOMElementException::class,
+        );
 
         switch ($xml->localName) {
             case 'AttributeQuery':
@@ -594,7 +603,7 @@ abstract class Message extends SignedElement
             case 'ArtifactResolve':
                 return new ArtifactResolve($xml);
             default:
-                throw new Exception('Unknown SAML message: ' . var_export($xml->localName, true));
+                throw new ProtocolViolationException('Unknown SAML message: ' . var_export($xml->localName, true));
         }
     }
 

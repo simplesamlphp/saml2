@@ -8,6 +8,8 @@ use DOMElement;
 use Exception;
 use SAML2\Utils\XPath;
 use SAML2\XML\saml\NameID;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 
 use function count;
 
@@ -57,25 +59,25 @@ abstract class SubjectQuery extends Request
      * @throws \Exception
      * @return void
      */
-    private function parseSubject(\DOMElement $xml): void
+    private function parseSubject(DOMElement $xml): void
     {
         $xpCache = XPath::getXPath($xml);
 
         /** @var \DOMElement[] $subject */
         $subject = XPath::xpQuery($xml, './saml_assertion:Subject', $xpCache);
         if (empty($subject)) {
-            throw new Exception('Missing subject in subject query.');
+            throw new MissingElementException('Missing subject in subject query.');
         } elseif (count($subject) > 1) {
-            throw new Exception('More than one <saml:Subject> in subject query.');
+            throw new TooManyElementsException('More than one <saml:Subject> in subject query.');
         }
 
         $xpCache = XPath::getXPath($subject[0]);
         /** @var \DOMElement[] $nameId */
         $nameId = XPath::xpQuery($subject[0], './saml_assertion:NameID', $xpCache);
         if (empty($nameId)) {
-            throw new Exception('Missing <saml:NameID> in <saml:Subject>.');
+            throw new MissingElementException('Missing <saml:NameID> in <saml:Subject>.');
         } elseif (count($nameId) > 1) {
-            throw new Exception('More than one <saml:NameID> in <saml:Subject>.');
+            throw new TooManyElementsException('More than one <saml:NameID> in <saml:Subject>.');
         }
         $this->nameId = new NameID($nameId[0]);
     }
@@ -112,7 +114,7 @@ abstract class SubjectQuery extends Request
     public function toUnsignedXML(): DOMElement
     {
         if ($this->nameId === null) {
-            throw new Exception('Cannot convert SubjectQuery to XML without a NameID set.');
+            throw new MissingElementException('Cannot convert SubjectQuery to XML without a NameID set.');
         }
         $root = parent::toUnsignedXML();
 

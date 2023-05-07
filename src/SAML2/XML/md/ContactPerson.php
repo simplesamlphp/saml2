@@ -8,7 +8,13 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
+
+use function count;
+use function preg_filter;
+use function preg_replace;
 
 /**
  * Class representing SAML 2 ContactPerson.
@@ -100,7 +106,7 @@ class ContactPerson
         }
 
         if (!$xml->hasAttribute('contactType')) {
-            throw new \Exception('Missing contactType on ContactPerson.');
+            throw new MissingAttributeException('Missing contactType on ContactPerson.');
         }
         $this->setContactType($xml->getAttribute('contactType'));
 
@@ -150,14 +156,14 @@ class ContactPerson
      * @throws \Exception
      * @return string|null The value of the child element.
      */
-    private static function getStringElement(\DOMElement $parent, string $name): ?string
+    private static function getStringElement(DOMElement $parent, string $name): ?string
     {
         $e = self::getStringElements($parent, $name);
         if (empty($e)) {
             return null;
         }
         if (count($e) > 1) {
-            throw new \Exception('More than one ' . $name . ' in ' . $parent->tagName);
+            throw new TooManyElementsException('More than one ' . $name . ' in ' . $parent->tagName);
         }
 
         return $e[0];

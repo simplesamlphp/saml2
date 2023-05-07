@@ -11,6 +11,7 @@ use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 
 use function array_key_exists;
 use function base64_decode;
@@ -34,7 +35,7 @@ class HTTPPost extends Binding
         if ($this->destination === null) {
             $destination = $message->getDestination();
             if ($destination === null) {
-                throw new Exception('Cannot send message, no destination set.');
+                throw new MissingAttributeException('Cannot send message, no destination set.');
             }
         } else {
             $destination = $this->destination;

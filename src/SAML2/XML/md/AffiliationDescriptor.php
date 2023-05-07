@@ -9,7 +9,11 @@ use SAML2\Constants;
 use SAML2\SignedElementHelper;
 use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
+
+use function gmdate;
 
 /**
  * Class representing SAML 2 AffiliationDescriptor element.
@@ -75,7 +79,7 @@ class AffiliationDescriptor extends SignedElementHelper
         }
 
         if (!$xml->hasAttribute('affiliationOwnerID')) {
-            throw new \Exception('Missing affiliationOwnerID on AffiliationDescriptor.');
+            throw new MissingAttributeException('Missing affiliationOwnerID on AffiliationDescriptor.');
         }
         $this->setAffiliationOwnerID($xml->getAttribute('affiliationOwnerID'));
 
@@ -95,7 +99,7 @@ class AffiliationDescriptor extends SignedElementHelper
 
         $this->setAffiliateMember(XMLUtils::extractStrings($xml, Constants::NS_MD, 'AffiliateMember'));
         if (empty($this->AffiliateMember)) {
-            throw new \Exception('Missing AffiliateMember in AffiliationDescriptor.');
+            throw new MissingElementException('Missing AffiliateMember in AffiliationDescriptor.');
         }
 
         /** @var \DOMElement $kd */

@@ -6,9 +6,10 @@ namespace SAML2;
 
 use Exception;
 use Nyholm\Psr7\ServerRequest;
+use PHPUnit\Framework\TestCase;
 use SAML2\HTTPArtifact;
 
-class HTTPArtifactTest extends \PHPUnit\Framework\TestCase
+class HTTPArtifactTest extends TestCase
 {
     /**
      * The Artifact binding depends on simpleSAMLphp, so currently

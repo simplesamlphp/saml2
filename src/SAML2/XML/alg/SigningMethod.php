@@ -5,7 +5,12 @@ declare(strict_types=1);
 namespace SAML2\XML\alg;
 
 use DOMElement;
+use SAML2\Constants as C;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+
+use function intval;
+use function strval;
 
 /**
  * Class for handling the alg:SigningMethod element.
@@ -54,7 +59,7 @@ class SigningMethod
         }
 
         if (!$xml->hasAttribute('Algorithm')) {
-            throw new \Exception('Missing required attribute "Algorithm" in alg:SigningMethod element.');
+            throw new MissingAttributeException('Missing required attribute "Algorithm" in alg:SigningMethod element.');
         }
         $this->Algorithm = $xml->getAttribute('Algorithm');
 
@@ -151,7 +156,7 @@ class SigningMethod
         Assert::nullOrInteger($this->MaxKeySize);
 
         $doc = $parent->ownerDocument;
-        $e = $doc->createElementNS(Common::NS, 'alg:SigningMethod');
+        $e = $doc->createElementNS(C::NS_ALG, 'alg:SigningMethod');
         $parent->appendChild($e);
         $e->setAttribute('Algorithm', $this->Algorithm);
 

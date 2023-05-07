@@ -7,6 +7,7 @@ namespace SAML2;
 use DOMElement;
 use Exception;
 use SAML2\Utils\XPath;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function array_key_exists;
@@ -72,7 +73,7 @@ class AttributeQuery extends SubjectQuery
         $attributes = XPath::xpQuery($xml, './saml_assertion:Attribute', $xpCache);
         foreach ($attributes as $attribute) {
             if (!$attribute->hasAttribute('Name')) {
-                throw new Exception('Missing name on <saml:Attribute> element.');
+                throw new MissingAttributeException('Missing name on <saml:Attribute> element.');
             }
             $name = $attribute->getAttribute('Name');
 

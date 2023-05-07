@@ -9,6 +9,11 @@ use SAML2\Response;
 use SAML2\Response\Validation\ConstraintValidator;
 use SAML2\Response\Validation\Result;
 
+use function sprintf;
+use function strlen;
+use function strpos;
+use function substr;
+
 class IsSuccessful implements ConstraintValidator
 {
     /**

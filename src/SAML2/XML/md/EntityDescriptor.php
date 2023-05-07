@@ -9,7 +9,13 @@ use SAML2\Constants;
 use SAML2\SignedElementHelper;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Utils as XMLUtils;
+
+use function gmdate;
+use function is_null;
 
 /**
  * Class representing SAML 2 EntityDescriptor element.
@@ -94,7 +100,7 @@ class EntityDescriptor extends SignedElementHelper
         }
 
         if (!$xml->hasAttribute('entityID')) {
-            throw new \Exception('Missing required attribute entityID on EntityDescriptor.');
+            throw new MissingAttributeException('Missing required attribute entityID on EntityDescriptor.');
         }
         $this->entityID = $xml->getAttribute('entityID');
 
@@ -140,13 +146,13 @@ class EntityDescriptor extends SignedElementHelper
                     break;
                 case 'AffiliationDescriptor':
                     if ($this->AffiliationDescriptor !== null) {
-                        throw new \Exception('More than one AffiliationDescriptor in the entity.');
+                        throw new TooManyElementsException('More than one AffiliationDescriptor in the entity.');
                     }
                     $this->AffiliationDescriptor = new AffiliationDescriptor($node);
                     break;
                 case 'Organization':
                     if ($this->Organization !== null) {
-                        throw new \Exception('More than one Organization in the entity.');
+                        throw new TooManyElementsException('More than one Organization in the entity.');
                     }
                     $this->Organization = new Organization($node);
                     break;
@@ -160,11 +166,11 @@ class EntityDescriptor extends SignedElementHelper
         }
 
         if (empty($this->RoleDescriptor) && is_null($this->AffiliationDescriptor)) {
-            throw new \Exception(
+            throw new SchemaViolationException(
                 'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
             );
         } elseif (!empty($this->RoleDescriptor) && !is_null($this->AffiliationDescriptor)) {
-            throw new \Exception(
+            throw new SchemaViolationException(
                 'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.'
             );
         }
@@ -453,7 +459,7 @@ class EntityDescriptor extends SignedElementHelper
     public function toXML(DOMElement $parent = null): DOMElement
     {
         if (empty($this->entityID)) {
-            throw new \Exception('Cannot convert EntityDescriptor to XML without an EntityID set.');
+            throw new MissingAttributeException('Cannot convert EntityDescriptor to XML without an EntityID set.');
         }
 
         if ($parent === null) {

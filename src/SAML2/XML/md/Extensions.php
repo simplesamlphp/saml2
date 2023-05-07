@@ -7,18 +7,18 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils\XPath;
-use SAML2\XML\alg\Common as ALG;
 use SAML2\XML\alg\DigestMethod;
 use SAML2\XML\alg\SigningMethod;
 use SAML2\XML\mdattr\EntityAttributes;
-use SAML2\XML\mdrpi\Common as MDRPI;
 use SAML2\XML\mdrpi\PublicationInfo;
 use SAML2\XML\mdrpi\RegistrationInfo;
-use SAML2\XML\mdui\Common as MDUI;
 use SAML2\XML\mdui\DiscoHints;
 use SAML2\XML\mdui\UIInfo;
 use SAML2\XML\shibmd\Scope;
 use SimpleSAML\XML\Chunk;
+
+use function array_key_exists;
+use function is_null;
 
 /**
  * Class for handling SAML2 metadata extensions.
@@ -44,21 +44,21 @@ class Extensions
     {
         $ret = [];
         $supported = [
-            Scope::NS => [
+            Constants::NS_SHIBMD => [
                 'Scope' => Scope::class,
             ],
             EntityAttributes::NS => [
                 'EntityAttributes' => EntityAttributes::class,
             ],
-            MDRPI::NS_MDRPI => [
+            Constants::NS_MDRPI => [
                 'RegistrationInfo' => RegistrationInfo::class,
                 'PublicationInfo' => PublicationInfo::class,
             ],
-            MDUI::NS => [
+            Constants::NS_MDUI => [
                 'UIInfo' => UIInfo::class,
                 'DiscoHints' => DiscoHints::class,
             ],
-            ALG::NS => [
+            Constants::NS_ALG => [
                 'DigestMethod' => DigestMethod::class,
                 'SigningMethod' => SigningMethod::class,
             ],

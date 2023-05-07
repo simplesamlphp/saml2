@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
+use Exception;
 use SAML2\Constants;
+use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 
 /**
  * Class representing SAML 2 EndpointType.
@@ -56,12 +60,12 @@ class EndpointType
         }
 
         if (!$xml->hasAttribute('Binding')) {
-            throw new \Exception('Missing Binding on ' . $xml->tagName);
+            throw new MissingAttributeException('Missing Binding on ' . $xml->tagName);
         }
         $this->Binding = $xml->getAttribute('Binding');
 
         if (!$xml->hasAttribute('Location')) {
-            throw new \Exception('Missing Location on ' . $xml->tagName);
+            throw new MissingAttributeException('Missing Location on ' . $xml->tagName);
         }
         $this->Location = $xml->getAttribute('Location');
 
@@ -127,11 +131,9 @@ class EndpointType
      */
     public function setAttributeNS(string $namespaceURI, string $qualifiedName, string $value): void
     {
-        $name = explode(':', $qualifiedName, 2);
-        if (count($name) < 2) {
-            throw new \Exception('Not a qualified name.');
-        }
-        $localName = $name[1];
+        Assert::validURI($namespaceURI, SchemaViolationException::class);
+        Assert::validQName($qualifiedName, SchemaViolationException::class);
+        list(, $localName) = explode(':', $qualifiedName, 2);
 
         $fullName = '{' . $namespaceURI . '}' . $localName;
         $this->attributes[$fullName] = [
@@ -237,10 +239,10 @@ class EndpointType
         $parent->appendChild($e);
 
         if (empty($this->Binding)) {
-            throw new \Exception('Cannot convert endpoint to XML without a Binding set.');
+            throw new MissingAttributeException('Cannot convert endpoint to XML without a Binding set.');
         }
         if (empty($this->Location)) {
-            throw new \Exception('Cannot convert endpoint to XML without a Location set.');
+            throw new MissingException('Cannot convert endpoint to XML without a Location set.');
         }
 
         $e->setAttribute('Binding', $this->Binding);

@@ -18,6 +18,7 @@ use SimpleSAML\SOAP11\XML\env\Fault;
 use SimpleSAML\SOAP11\Utils\XPath;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
+use SimpleSAML\XML\Chunk;
 use SOAP_1_1;
 
 use function chunk_split;
@@ -135,7 +136,7 @@ class SOAPClient
         $x = new \SoapClient(null, $options);
 
         // Add soap-envelopes
-        $env = (new Envelope(new Body([new Chunk($msg->toXML())])))->toXML();
+        $env = (new Envelope(new Body([new Chunk($msg->toUnsignedXML())])))->toXML();
         $request = $env->ownerDocument?->saveXML();
 
         $container->debugMessage($request, 'out');

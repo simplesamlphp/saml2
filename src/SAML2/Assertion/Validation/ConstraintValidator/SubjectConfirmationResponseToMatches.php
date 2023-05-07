@@ -10,20 +10,19 @@ use SAML2\Response;
 use SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\Assert\Assert;
 
+use function sprintf;
+use function strval;
+
 class SubjectConfirmationResponseToMatches implements
     SubjectConfirmationConstraintValidator
 {
-    /** @var Response */
-    private Response $response;
-
-
     /**
      * Constructor for SubjectConfirmationResponseToMatches
      * @param Response $response
      */
-    public function __construct(Response $response)
-    {
-        $this->response = $response;
+    public function __construct(
+        private Response $response
+    ) {
     }
 
 

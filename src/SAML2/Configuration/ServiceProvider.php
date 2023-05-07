@@ -4,7 +4,14 @@ declare(strict_types=1);
 
 namespace SAML2\Configuration;
 
-use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Constants as C;
+use SAML2\Exception\RuntimeException;
+use Traversable;
+
+use function array_filter;
+use function array_pop;
+use function count;
+use function sprintf;
 
 /**
  * Basic Configuration Wrapper
@@ -14,7 +21,7 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
     /**
      * @return null|array|\Traversable
      */
-    public function getKeys()
+    public function getKeys(): Traversable|array|null
     {
         return $this->get('keys');
     }
@@ -91,7 +98,7 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
 
         $keyCount = count($key);
         if ($keyCount !== 1 && $required) {
-            throw new \RuntimeException(sprintf(
+            throw new RuntimeException(sprintf(
                 'Attempted to get privateKey by name "%s", found "%d" keys, where only one was expected. Please '
                 . 'verify that your configuration is correct',
                 $name,
@@ -112,6 +119,6 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
      */
     public function getBlacklistedAlgorithms(): array
     {
-        return $this->get('blacklistedEncryptionAlgorithms', [XMLSecurityKey::RSA_1_5]);
+        return $this->get('blacklistedEncryptionAlgorithms', [C::KEY_TRANSPORT_RSA_1_5]);
     }
 }

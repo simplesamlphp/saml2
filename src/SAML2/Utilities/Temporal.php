@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\Utilities;
 
+use function time;
+
 class Temporal
 {
     /**

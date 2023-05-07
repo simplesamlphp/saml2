@@ -12,6 +12,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
 
 use function array_key_exists;
 use function base64_decode;
@@ -99,7 +100,7 @@ class HTTPRedirect extends Binding
     /**
      * Send a SAML 2 message using the HTTP-Redirect binding.
      *
-     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message
+     * @param \SAML2\Message $message
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function send(Message $message): ResponseInterface
@@ -212,7 +213,7 @@ class HTTPRedirect extends Binding
         }
 
         if ($key->verifySignature($query, $signature) !== 1) {
-            throw new Exception('Unable to validate signature on query string.');
+            throw new SignatureVerificationFailedException('Unable to validate signature on query string.');
         }
     }
 }

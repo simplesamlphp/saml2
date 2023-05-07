@@ -7,6 +7,10 @@ namespace SAML2\Utilities;
 use SAML2\Exception\InvalidArgumentException;
 use SAML2\Exception\RuntimeException;
 
+use function is_readable;
+use function sprintf;
+use function file_get_contents;
+
 /**
  * Various File Utilities
  */

@@ -8,25 +8,26 @@ use ArrayIterator;
 use Closure;
 use SAML2\Exception\RuntimeException;
 
+use function array_filter;
+use function array_search;
+use function count;
+use function end;
+use function reset;
+use function sprintf;
+
 /**
  * Simple Array implementation of Collection.
  */
 class ArrayCollection implements Collection
 {
     /**
-     * @var array
-     */
-    protected array $elements;
-
-
-    /**
      * ArrayCollection constructor.
      *
      * @param array $elements
      */
-    public function __construct(array $elements = [])
-    {
-        $this->elements = $elements;
+    public function __construct(
+        protected array $elements = [],
+    ) {
     }
 
 

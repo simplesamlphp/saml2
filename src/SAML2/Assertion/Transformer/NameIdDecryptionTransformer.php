@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Transformer;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use SAML2\Assertion;
 use SAML2\Assertion\Exception\NotDecryptedException;
@@ -13,16 +14,14 @@ use SAML2\Configuration\IdentityProviderAware;
 use SAML2\Configuration\ServiceProvider;
 use SAML2\Configuration\ServiceProviderAware;
 
+use function get_class;
+use function sprintf;
+
 final class NameIdDecryptionTransformer implements
     Transformer,
     IdentityProviderAware,
     ServiceProviderAware
 {
-    /**
-     * @var \SAML2\Certificate\PrivateKeyLoader
-     */
-    private PrivateKeyLoader $privateKeyLoader;
-
     /**
      * @var \SAML2\Configuration\IdentityProvider
      */
@@ -33,11 +32,6 @@ final class NameIdDecryptionTransformer implements
      */
     private ServiceProvider $serviceProvider;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private LoggerInterface $logger;
-
 
     /**
      * Constructor for NameIdDecryptionTransformer
@@ -46,11 +40,9 @@ final class NameIdDecryptionTransformer implements
      * @param PrivateKeyLoader $privateKeyLoader
      */
     public function __construct(
-        LoggerInterface $logger,
-        PrivateKeyLoader $privateKeyLoader
+        private LoggerInterface $logger,
+        private PrivateKeyLoader $privateKeyLoader
     ) {
-        $this->logger = $logger;
-        $this->privateKeyLoader = $privateKeyLoader;
     }
 
 
@@ -75,7 +67,7 @@ final class NameIdDecryptionTransformer implements
             try {
                 $assertion->decryptNameId($key, $blacklistedKeys);
                 $this->logger->debug(sprintf('Decrypted assertion NameId with key "#%d"', $index));
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->debug(sprintf(
                     'Decrypting assertion NameId with key "#%d" failed, "%s" thrown: "%s"',
                     $index,

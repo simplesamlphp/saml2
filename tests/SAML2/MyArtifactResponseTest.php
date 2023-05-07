@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\XML\saml\Issuer;
 use SAML2\ArtifactResponse;
 use SAML2\AuthnRequest;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
-class MyArtifactResponseTest extends \PHPUnit\Framework\TestCase
+class MyArtifactResponseTest extends TestCase
 {
     /**
      * @return void

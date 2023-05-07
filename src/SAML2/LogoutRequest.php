@@ -11,6 +11,8 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utils\XPath;
 use SAML2\XML\saml\NameID;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function count;
@@ -96,9 +98,11 @@ class LogoutRequest extends Request
             $xpCache,
         );
         if (empty($nameId)) {
-            throw new Exception('Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.');
+            throw new MissingElementException('Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.');
         } elseif (count($nameId) > 1) {
-            throw new Exception('More than one <saml:NameID> or <saml:EncryptedD> in <samlp:LogoutRequest>.');
+            throw new TooManyElementsException(
+                'More than one <saml:NameID> or <saml:EncryptedD> in <samlp:LogoutRequest>.',
+            );
         }
         if ($nameId[0]->localName === 'EncryptedData') {
             /* The NameID element is encrypted. */
@@ -184,7 +188,7 @@ class LogoutRequest extends Request
     public function encryptNameId(XMLSecurityKey $key): void
     {
         if ($this->nameId === null) {
-            throw new Exception('Cannot encrypt NameID without a NameID set.');
+            throw new MissingElementException('Cannot encrypt NameID without a NameID set.');
         }
         /* First create a XML representation of the NameID. */
         $doc = DOMDocumentFactory::create();
@@ -325,7 +329,7 @@ class LogoutRequest extends Request
     public function toUnsignedXML(): DOMElement
     {
         if ($this->encryptedNameId === null && $this->nameId === null) {
-            throw new Exception('Cannot convert LogoutRequest to XML without a NameID set.');
+            throw new MissingElementException('Cannot convert LogoutRequest to XML without a NameID set.');
         }
 
         $root = parent::toUnsignedXML();

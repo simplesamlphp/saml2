@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\shibmd;
 
 use DOMElement;
+use SAML2\Constants as C;
 use SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
@@ -16,11 +17,6 @@ use SimpleSAML\Assert\Assert;
  */
 class Scope
 {
-    /**
-     * The namespace used for the Scope extension element.
-     */
-    public const NS = 'urn:mace:shibboleth:metadata:1.0';
-
     /**
      * The scope.
      *
@@ -110,7 +106,7 @@ class Scope
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(Scope::NS, 'shibmd:Scope');
+        $e = $doc->createElementNS(C::NS_SHIBMD, 'shibmd:Scope');
         $parent->appendChild($e);
 
         $e->appendChild($doc->createTextNode($this->scope));

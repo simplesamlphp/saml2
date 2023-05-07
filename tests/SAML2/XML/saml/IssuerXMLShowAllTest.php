@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants as C;
 use SAML2\Utils\XPath;
 use SAML2\XML\saml\Issuer;
@@ -12,7 +13,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\md\issuerShowAllTest
  */
-class IssuerXMLShowAllTest extends \PHPUnit\Framework\TestCase
+class IssuerXMLShowAllTest extends TestCase
 {
     /**
      * @return void

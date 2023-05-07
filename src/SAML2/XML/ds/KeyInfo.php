@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\ds;
 
 use DOMElement;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
+use SAML2\Constants;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\Assert\Assert;
 
@@ -50,11 +50,11 @@ class KeyInfo
         }
 
         foreach ($xml->childNodes as $n) {
-            if (!($n instanceof \DOMElement)) {
+            if (!($n instanceof DOMElement)) {
                 continue;
             }
 
-            if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
+            if ($n->namespaceURI !== Constants::NS_XDSIG) {
                 $this->info[] = new Chunk($n);
                 continue;
             }
@@ -147,7 +147,7 @@ class KeyInfo
     {
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(XMLSecurityDSig::XMLDSIGNS, 'ds:KeyInfo');
+        $e = $doc->createElementNS(Constants::NS_XDSIG, 'ds:KeyInfo');
         $parent->appendChild($e);
 
         if ($this->Id !== null) {

@@ -10,6 +10,8 @@ use DOMNodeList;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SAML2\Exception\ProtocolViolationException\RequestVersionTooHighException;
+use SAML2\Exception\ProtocolViolationException\RequestVersionTooLowException;
 use SAML2\Exception\RuntimeException;
 use SAML2\Utilities\Temporal;
 use SAML2\Utils\XPath;
@@ -19,6 +21,9 @@ use SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function array_intersect;
@@ -30,6 +35,7 @@ use function is_string;
 use function sprintf;
 use function strval;
 use function var_export;
+use function version_compare;
 
 /**
  * Class representing a SAML 2 assertion.
@@ -275,14 +281,13 @@ class Assertion extends SignedElement
         }
 
         if (!$xml->hasAttribute('ID')) {
-            throw new Exception('Missing ID attribute on SAML assertion.');
+            throw new MissingAttributeException('Missing ID attribute on SAML assertion.');
         }
         $this->id = $xml->getAttribute('ID');
 
-        if ($xml->getAttribute('Version') !== '2.0') {
-            /* Currently a very strict check. */
-            throw new Exception('Unsupported version: ' . $xml->getAttribute('Version'));
-        }
+        $version = $xml->getAttribute('Version');
+        Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
 
         $this->issueInstant = XMLUtils::xsDateTimeToTimestamp($xml->getAttribute('IssueInstant'));
 
@@ -290,7 +295,7 @@ class Assertion extends SignedElement
         /** @var \DOMElement[] $issuer */
         $issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
         if (empty($issuer)) {
-            throw new Exception('Missing <saml:Issuer> in assertion.');
+            throw new MissingElementException('Missing <saml:Issuer> in assertion.');
         }
 
         $this->issuer = new Issuer($issuer[0]);
@@ -321,7 +326,7 @@ class Assertion extends SignedElement
 
             return;
         } elseif (count($subject) > 1) {
-            throw new Exception('More than one <saml:Subject> in <saml:Assertion>.');
+            throw new TooManyElementsException('More than one <saml:Subject> in <saml:Assertion>.');
         }
         $subject = $subject[0];
 
@@ -347,7 +352,7 @@ class Assertion extends SignedElement
         /** @var \DOMElement[] $subjectConfirmation */
         $subjectConfirmation = XPath::xpQuery($subject, './saml_assertion:SubjectConfirmation', $xpCache);
         if (empty($subjectConfirmation) && empty($nameId)) {
-            throw new Exception('Missing <saml:SubjectConfirmation> in <saml:Subject>.');
+            throw new MissingElementException('Missing <saml:SubjectConfirmation> in <saml:Subject>.');
         }
 
         foreach ($subjectConfirmation as $sc) {
@@ -374,7 +379,7 @@ class Assertion extends SignedElement
 
             return;
         } elseif (count($conditions) > 1) {
-            throw new Exception('More than one <saml:Conditions> in <saml:Assertion>.');
+            throw new TooManyElementsException('More than one <saml:Conditions> in <saml:Assertion>.');
         }
         $conditions = $conditions[0];
 
@@ -443,12 +448,14 @@ class Assertion extends SignedElement
 
             return;
         } elseif (count($authnStatements) > 1) {
-            throw new Exception('More than one <saml:AuthnStatement> in <saml:Assertion> not supported.');
+            throw new TooManyElementsException(
+                'More than one <saml:AuthnStatement> in <saml:Assertion> not supported.',
+            );
         }
         $authnStatement = $authnStatements[0];
 
         if (!$authnStatement->hasAttribute('AuthnInstant')) {
-            throw new Exception('Missing required AuthnInstant attribute on <saml:AuthnStatement>.');
+            throw new MissingAttributeException('Missing required AuthnInstant attribute on <saml:AuthnStatement>.');
         }
         $this->authnInstant = XMLUtils::xsDateTimeToTimestamp($authnStatement->getAttribute('AuthnInstant'));
 
@@ -481,9 +488,9 @@ class Assertion extends SignedElement
         /** @var \DOMElement[] $authnContexts */
         $authnContexts = XPath::xpQuery($authnStatementEl, './saml_assertion:AuthnContext', $xpCache);
         if (count($authnContexts) > 1) {
-            throw new Exception('More than one <saml:AuthnContext> in <saml:AuthnStatement>.');
+            throw new TooManyElementsException('More than one <saml:AuthnContext> in <saml:AuthnStatement>.');
         } elseif (empty($authnContexts)) {
-            throw new Exception('Missing required <saml:AuthnContext> in <saml:AuthnStatement>.');
+            throw new MissingElementException('Missing required <saml:AuthnContext> in <saml:AuthnStatement>.');
         }
         $authnContextEl = $authnContexts[0];
 
@@ -491,7 +498,7 @@ class Assertion extends SignedElement
         /** @var \DOMElement[] $authnContextDeclRefs */
         $authnContextDeclRefs = XPath::xpQuery($authnContextEl, './saml_assertion:AuthnContextDeclRef', $xpCache);
         if (count($authnContextDeclRefs) > 1) {
-            throw new Exception(
+            throw new TooManyElementsException(
                 'More than one <saml:AuthnContextDeclRef> found?'
             );
         } elseif (count($authnContextDeclRefs) === 1) {
@@ -502,7 +509,7 @@ class Assertion extends SignedElement
         /** @var \DOMElement[] $authnContextDecls */
         $authnContextDecls = XPath::xpQuery($authnContextEl, './saml_assertion:AuthnContextDecl', $xpCache);
         if (count($authnContextDecls) > 1) {
-            throw new Exception(
+            throw new TooManyElementsException(
                 'More than one <saml:AuthnContextDecl> found?'
             );
         } elseif (count($authnContextDecls) === 1) {
@@ -513,14 +520,14 @@ class Assertion extends SignedElement
         /** @var \DOMElement[] $authnContextClassRefs */
         $authnContextClassRefs = XPath::xpQuery($authnContextEl, './saml_assertion:AuthnContextClassRef', $xpCache);
         if (count($authnContextClassRefs) > 1) {
-            throw new Exception('More than one <saml:AuthnContextClassRef> in <saml:AuthnContext>.');
+            throw new TooManyElementsException('More than one <saml:AuthnContextClassRef> in <saml:AuthnContext>.');
         } elseif (count($authnContextClassRefs) === 1) {
             $this->setAuthnContextClassRef(trim($authnContextClassRefs[0]->textContent));
         }
 
         // Constraint from XSD: MUST have one of the three
         if (empty($this->authnContextClassRef) && empty($this->authnContextDecl) && empty($this->authnContextDeclRef)) {
-            throw new Exception(
+            throw new MissingElementException(
                 'Missing either <saml:AuthnContextClassRef> or <saml:AuthnContextDeclRef> or <saml:AuthnContextDecl>'
             );
         }
@@ -548,7 +555,7 @@ class Assertion extends SignedElement
         $attributes = XPath::xpQuery($xml, './saml_assertion:AttributeStatement/saml_assertion:Attribute', $xpCache);
         foreach ($attributes as $attribute) {
             if (!$attribute->hasAttribute('Name')) {
-                throw new Exception('Missing name on <saml:Attribute> element.');
+                throw new MissingAttributeException('Missing name on <saml:Attribute> element.');
             }
             $name = $attribute->getAttribute('Name');
 
@@ -918,7 +925,7 @@ class Assertion extends SignedElement
             );
 
             if (!$attribute->hasAttribute('Name')) {
-                throw new Exception('Missing name on <saml:Attribute> element.');
+                throw new MissingAttributeException('Missing name on <saml:Attribute> element.');
             }
             $name = $attribute->getAttribute('Name');
 
@@ -1191,7 +1198,7 @@ class Assertion extends SignedElement
     public function setAuthnContextDecl(Chunk $authnContextDecl): void
     {
         if (!empty($this->authnContextDeclRef)) {
-            throw new Exception(
+            throw new TooManyElementsException(
                 'AuthnContextDeclRef is already registered! May only have either a Decl or a DeclRef, not both!'
             );
         }
@@ -1224,7 +1231,7 @@ class Assertion extends SignedElement
     public function setAuthnContextDeclRef(string $authnContextDeclRef = null): void
     {
         if (!empty($this->authnContextDecl)) {
-            throw new Exception(
+            throw new TooManyElementsException(
                 'AuthnContextDecl is already registered! May only have either a Decl or a DeclRef, not both!'
             );
         }

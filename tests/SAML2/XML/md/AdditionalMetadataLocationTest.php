@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\XML\md\AdditionalMetadataLocation;
 use SAML2\Utils\XPath;
@@ -12,7 +14,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\md\AdditionalMetadataLocationTest
  */
-class AdditionalMetadataLocationTest extends \PHPUnit\Framework\TestCase
+class AdditionalMetadataLocationTest extends TestCase
 {
     /**
      * @return void
@@ -57,7 +59,7 @@ class AdditionalMetadataLocationTest extends \PHPUnit\Framework\TestCase
             '<md:AdditionalMetadataLocation xmlns:md="' . Constants::NS_MD . '"' .
             '>LocationText</md:AdditionalMetadataLocation>'
         );
-        $this->expectException(\Exception::class, 'Missing namespace attribute on AdditionalMetadataLocation element.');
+        $this->expectException(Exception::class, 'Missing namespace attribute on AdditionalMetadataLocation element.');
         new AdditionalMetadataLocation($document->firstChild);
     }
 }

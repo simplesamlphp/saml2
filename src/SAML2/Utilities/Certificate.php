@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SAML2\Utilities;
 
+use function chunk_split;
+use function preg_match;
+
 /**
  * Collection of Utility functions specifically for certificates
  */

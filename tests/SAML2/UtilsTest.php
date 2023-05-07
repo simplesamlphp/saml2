@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\AttributeQuery;
 use SAML2\Constants;
 use SAML2\XML\ds\X509Data;
@@ -16,7 +17,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
 /**
  * Class \SAML2\UtilsTest
  */
-class UtilsTest extends \PHPUnit\Framework\TestCase
+class UtilsTest extends TestCase
 {
     /**
      * Test parseBoolean, XML allows both 1 and true as values.

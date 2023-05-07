@@ -9,6 +9,8 @@ use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
 
+use function is_bool;
+
 /**
  * Class representing SAML 2 metadata RequestedAttribute.
  *

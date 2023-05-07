@@ -11,6 +11,10 @@ use SAML2\Utils\XPath;
 use SAML2\XML\ds\KeyInfo;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+
+use function count;
 
 /**
  * Class representing a KeyDescriptor element.
@@ -65,9 +69,9 @@ class KeyDescriptor
 
         $keyInfo = XPath::xpQuery($xml, './ds:KeyInfo', $xpCache);
         if (count($keyInfo) > 1) {
-            throw new \Exception('More than one ds:KeyInfo in the KeyDescriptor.');
+            throw new TooManyElementsException('More than one ds:KeyInfo in the KeyDescriptor.');
         } elseif (empty($keyInfo)) {
-            throw new \Exception('No ds:KeyInfo in the KeyDescriptor.');
+            throw new MissingElementException('No ds:KeyInfo in the KeyDescriptor.');
         }
         /** @var \DOMElement $keyInfo[0] */
         $this->KeyInfo = new KeyInfo($keyInfo[0]);
@@ -169,7 +173,7 @@ class KeyDescriptor
     public function toXML(DOMElement $parent): DOMElement
     {
         if ($this->KeyInfo === null) {
-            throw new \Exception('Cannot convert KeyDescriptor to XML without KeyInfo set.');
+            throw new MissingElementException('Cannot convert KeyDescriptor to XML without KeyInfo set.');
         }
 
         $doc = $parent->ownerDocument;

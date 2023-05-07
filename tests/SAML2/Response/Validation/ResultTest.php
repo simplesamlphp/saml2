@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace SAML2\Response\Validation;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Response\Validation\Result;
 
-class ResultTest extends \PHPUnit\Framework\TestCase
+class ResultTest extends TestCase
 {
     /**
      * @group response-validation

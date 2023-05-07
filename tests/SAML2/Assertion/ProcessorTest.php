@@ -4,9 +4,20 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion;
 
-use Mockery as m;
+use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
+use Psr\Log\LoggerInterface;
+use SAML2\Assertion;
+use SAML2\Assertion\Exception\InvalidAssertionException;
+use SAML2\Assertion\Transformer\Transformer;
+use SAML2\Assertion\Validation\AssertionValidator;
+use SAML2\Assertion\Validation\SubjectConfirmationValidator;
+use SAML2\Configuration\IdentityProvider;
+use SAML2\EncryptedAssertion;
+use SAML2\Signature\Validator;
+use SAML2\Utilities\ArrayCollection;
+use StdClass;
 
 /**
  * @runTestsInSeparateProcesses
@@ -25,13 +36,13 @@ class ProcessorTest extends MockeryTestCase
 
     protected function setUp(): void
     {
-        $this->decrypter = m::mock(Decrypter::class);
-        $validator = m::mock(\SAML2\Signature\Validator::class);
-        $assertionValidator = m::mock(\SAML2\Assertion\Validation\AssertionValidator::class);
-        $subjectConfirmationValidator = m::mock(\SAML2\Assertion\Validation\SubjectConfirmationValidator::class);
-        $transformer = m::mock(\SAML2\Assertion\Transformer\Transformer::class);
-        $identityProvider = new \SAML2\Configuration\IdentityProvider([]);
-        $logger = m::mock(\Psr\Log\LoggerInterface::class);
+        $this->decrypter = Mockery::mock(Decrypter::class);
+        $validator = Mockery::mock(Validator::class);
+        $assertionValidator = Mockery::mock(AssertionValidator::class);
+        $subjectConfirmationValidator = Mockery::mock(SubjectConfirmationValidator::class);
+        $transformer = Mockery::mock(Transformer::class);
+        $identityProvider = new IdentityProvider([]);
+        $logger = Mockery::mock(LoggerInterface::class);
 
         $this->processor = new Processor(
             $this->decrypter,
@@ -50,22 +61,22 @@ class ProcessorTest extends MockeryTestCase
     public function processor_correctly_encrypts_assertions(): void
     {
         $testData = [
-            [new \SAML2\Assertion()],
-            [new \SAML2\EncryptedAssertion()],
-            [new \SAML2\Assertion(), new \SAML2\EncryptedAssertion(), new \SAML2\Assertion()],
-            [new \SAML2\EncryptedAssertion(), new \SAML2\EncryptedAssertion(), new \SAML2\EncryptedAssertion()],
+            [new Assertion()],
+            [new EncryptedAssertion()],
+            [new Assertion(), new EncryptedAssertion(), new Assertion()],
+            [new EncryptedAssertion(), new EncryptedAssertion(), new EncryptedAssertion()],
         ];
 
         foreach ($testData as $assertions) {
             $this->decrypter
                 ->shouldReceive('decrypt')
-                ->andReturn(new \SAML2\Assertion());
+                ->andReturn(new Assertion());
 
-            $collection = new \SAML2\Utilities\ArrayCollection($assertions);
+            $collection = new ArrayCollection($assertions);
             $result = $this->processor->decryptAssertions($collection);
-            self::assertInstanceOf(\SAML2\Utilities\ArrayCollection::class, $result);
+            self::assertInstanceOf(ArrayCollection::class, $result);
             foreach ($result as $assertion) {
-                self::assertInstanceOf(\SAML2\Assertion::class, $assertion);
+                self::assertInstanceOf(Assertion::class, $assertion);
             }
         }
     }
@@ -75,8 +86,8 @@ class ProcessorTest extends MockeryTestCase
      */
     public function unsuported_assertions_are_rejected(): void
     {
-        $this->expectException('\SAML2\Assertion\Exception\InvalidAssertionException');
+        $this->expectException(InvalidAssertionException::class);
         $this->expectExceptionMessage('The assertion must be of type: EncryptedAssertion or Assertion');
-        $this->processor->decryptAssertions(new \SAML2\Utilities\ArrayCollection([new \stdClass()]));
+        $this->processor->decryptAssertions(new ArrayCollection([new stdClass()]));
     }
 }

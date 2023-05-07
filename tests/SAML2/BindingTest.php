@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use PHPUnit\Framework\TestCase;
 use Nyholm\Psr7\ServerRequest;
 use SAML2\Binding;
 use SAML2\Constants;
@@ -13,7 +14,7 @@ use SAML2\HTTPPost;
 use SAML2\HTTPRedirect;
 use SAML2\SOAP;
 
-class BindingTest extends \PHPUnit\Framework\TestCase
+class BindingTest extends TestCase
 {
     /**
      * Test getting binding objects from string.

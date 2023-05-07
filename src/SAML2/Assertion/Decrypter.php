@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use SAML2\Assertion;
 use SAML2\Assertion\Exception\NotDecryptedException;
@@ -12,29 +13,13 @@ use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\ServiceProvider;
 use SAML2\EncryptedAssertion;
 
+use function count;
+use function get_class;
+use function is_null;
+use function sprintf;
+
 class Decrypter
 {
-    /**
-     * @var \SAML2\Configuration\IdentityProvider
-     */
-    private IdentityProvider $identityProvider;
-
-    /**
-     * @var \SAML2\Configuration\ServiceProvider
-     */
-    private ServiceProvider $serviceProvider;
-
-    /**
-     * @var \SAML2\Certificate\PrivateKeyLoader
-     */
-    private PrivateKeyLoader $privateKeyLoader;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private LoggerInterface $logger;
-
-
     /**
      * Constructor for Decrypter.
      *
@@ -44,15 +29,11 @@ class Decrypter
      * @param PrivateKeyLoader $privateKeyLoader
      */
     public function __construct(
-        LoggerInterface $logger,
-        IdentityProvider $identityProvider,
-        ServiceProvider $serviceProvider,
-        PrivateKeyLoader $privateKeyLoader
+        private LoggerInterface $logger,
+        private IdentityProvider $identityProvider,
+        private ServiceProvider $serviceProvider,
+        private PrivateKeyLoader $privateKeyLoader
     ) {
-        $this->logger = $logger;
-        $this->identityProvider = $identityProvider;
-        $this->serviceProvider = $serviceProvider;
-        $this->privateKeyLoader = $privateKeyLoader;
     }
 
 
@@ -89,7 +70,7 @@ class Decrypter
                 $this->logger->debug(sprintf('Decrypted Assertion with key "#%d"', $index));
 
                 return $decryptedAssertion;
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->debug(sprintf(
                     'Could not decrypt assertion with key "#%d", "%s" thrown: "%s"',
                     $index,

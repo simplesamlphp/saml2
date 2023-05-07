@@ -13,6 +13,8 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function gmdate;
+
 /**
  * Class representing SAML 2 EntitiesDescriptor element.
  *

@@ -4,26 +4,24 @@ declare(strict_types=1);
 
 namespace SAML2\Signature;
 
+use Exception;
 use Psr\Log\LoggerInterface;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\SignedElement;
+use SAML2\Utilities\ArrayCollection;
+
+use function sprintf;
 
 abstract class AbstractChainedValidator implements ChainedValidator
 {
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected LoggerInterface $logger;
-
-
-    /**
      * Constructor for AbstractChainedValidator
      *
-     * @param LoggerInterface $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
+    public function __construct(
+        protected LoggerInterface $logger
+    ) {
     }
 
 
@@ -39,7 +37,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
      */
     protected function validateElementWithKeys(
         SignedElement $element,
-        \SAML2\Utilities\ArrayCollection $pemCandidates
+        ArrayCollection $pemCandidates
     ): bool {
         $lastException = null;
         foreach ($pemCandidates as $index => $candidateKey) {
@@ -56,7 +54,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
                     return true;
                 }
                 $this->logger->debug(sprintf('Validation with key "#%d" failed without exception.', $index));
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $this->logger->debug(sprintf(
                     'Validation with key "#%d" failed with exception: %s',
                     $index,

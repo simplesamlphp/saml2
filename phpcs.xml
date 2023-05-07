@@ -15,7 +15,6 @@
 
     <!-- Ignore files with side effects that we cannot fix -->
     <rule ref="PSR1.Files.SideEffects">
-        <exclude-pattern>src/_autoload.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/md/RoleDescriptorTest.php</exclude-pattern>
     </rule>
 

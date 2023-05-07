@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace SAML2\Signature;
 
+use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Signature\ValidatorChain;
 use SAML2\Response;
 use SAML2\Signature\MissingConfigurationException;
 
-class ValidatorChainTest extends \PHPUnit\Framework\TestCase
+class ValidatorChainTest extends TestCase
 {
     /**
      * @var \SAML2\Signature\ValidatorChain
@@ -22,7 +24,7 @@ class ValidatorChainTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp(): void
     {
-        $this->chain = new ValidatorChain(new \Psr\Log\NullLogger(), []);
+        $this->chain = new ValidatorChain(new NullLogger(), []);
     }
 
 

@@ -7,6 +7,10 @@ namespace SAML2\Compat;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
+use function chmod;
+use function file_get_contents;
+use function sys_get_temp_dir;
+
 /**
  * Class \SAML2\Compat\MockContainer
  */

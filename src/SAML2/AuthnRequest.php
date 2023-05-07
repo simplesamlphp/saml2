@@ -14,6 +14,8 @@ use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function count;
@@ -203,7 +205,7 @@ class AuthnRequest extends Request
         }
 
         if (count($subject) > 1) {
-            throw new Exception('More than one <saml:Subject> in <saml:AuthnRequest>.');
+            throw new TooManyElementsException('More than one <saml:Subject> in <saml:AuthnRequest>.');
         }
         $subject = $subject[0];
 
@@ -215,9 +217,9 @@ class AuthnRequest extends Request
             $xpCache,
         );
         if (empty($nameId)) {
-            throw new Exception('Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
+            throw new MissingElementException('Missing <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
         } elseif (count($nameId) > 1) {
-            throw new Exception('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
+            throw new TooManyElementsException('More than one <saml:NameID> or <saml:EncryptedID> in <saml:Subject>.');
         }
         $nameId = $nameId[0];
         if ($nameId->localName === 'EncryptedData') { // the NameID element is encrypted

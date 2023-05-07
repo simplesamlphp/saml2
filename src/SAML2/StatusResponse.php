@@ -8,6 +8,7 @@ use DOMElement;
 use Exception;
 use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function array_key_exists;
@@ -80,14 +81,14 @@ abstract class StatusResponse extends Message
         /** @var \DOMElement[] $status */
         $status = XPath::xpQuery($xml, './saml_protocol:Status', $xpCache);
         if (empty($status)) {
-            throw new Exception('Missing status code on response.');
+            throw new MissingElementException('Missing status code on response.');
         }
 
         $xpCache = XPath::getXPath($status[0]);
         /** @var \DOMElement[] $statusCode */
         $statusCode = XPath::xpQuery($status[0], './saml_protocol:StatusCode', $xpCache);
         if (empty($statusCode)) {
-            throw new Exception('Missing status code in status element.');
+            throw new MissingElementException('Missing status code in status element.');
         }
         $this->status['Code'] = $statusCode[0]->getAttribute('Value');
 

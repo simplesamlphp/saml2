@@ -8,6 +8,9 @@ use Psr\Log\LoggerInterface;
 use SAML2\Configuration\CertificateProvider;
 use SAML2\SignedElement;
 
+use function get_class;
+use function sprintf;
+
 /**
  * Allows for validation of a signature trying different validators till a validator is found
  * that can validate the signature.
@@ -17,12 +20,7 @@ use SAML2\SignedElement;
 class ValidatorChain implements ValidatorInterface
 {
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private LoggerInterface $logger;
-
-    /**
-     * @var  \SAML2\Signature\ChainedValidator[]
+     * @var \SAML2\Signature\ChainedValidator[]
      */
     private array $validators = [];
 
@@ -31,10 +29,10 @@ class ValidatorChain implements ValidatorInterface
      * @param \Psr\Log\LoggerInterface $logger
      * @param \SAML2\Signature\ChainedValidator[] $validators
      */
-    public function __construct(LoggerInterface $logger, array $validators)
-    {
-        $this->logger = $logger;
-
+    public function __construct(
+        private LoggerInterface $logger,
+        array $validators,
+    ) {
         // should be done through "adder" injection in the container.
         foreach ($validators as $validator) {
             $this->appendValidator($validator);

@@ -8,6 +8,11 @@ use SAML2\Assertion;
 use SAML2\Configuration\IdentityProvider;
 use SAML2\Configuration\IdentityProviderAware;
 
+use function explode;
+use function array_combine;
+use function array_keys;
+use function array_map;
+
 class DecodeBase64Transformer implements
     Transformer,
     IdentityProviderAware
@@ -15,7 +20,7 @@ class DecodeBase64Transformer implements
     /**
      * @var \SAML2\Configuration\IdentityProvider
      */
-    private $identityProvider;
+    private IdentityProvider $identityProvider;
 
 
     /**

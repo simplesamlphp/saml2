@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion;
 
+use Mockery\MockInterface;
 use Psr\Log\LoggerInterface;
 use SAML2\Assertion;
 use SAML2\Assertion\Exception\InvalidAssertionException;
@@ -17,44 +18,11 @@ use SAML2\Response\Exception\InvalidSignatureException;
 use SAML2\Signature\Validator;
 use SAML2\Utilities\ArrayCollection;
 
+use function implode;
+use function sprintf;
+
 class Processor
 {
-    /**
-     * @var \SAML2\Assertion\Decrypter
-     */
-    private Decrypter $decrypter;
-
-    /**
-     * @var \SAML2\Assertion\Validation\AssertionValidator
-     */
-    private AssertionValidator $assertionValidator;
-
-    /**
-     * @var \SAML2\Assertion\Validation\SubjectConfirmationValidator
-     */
-    private SubjectConfirmationValidator $subjectConfirmationValidator;
-
-    /**
-     * @var \SAML2\Assertion\Transformer\Transformer
-     */
-    private $transformer;
-
-    /**
-     * @var \SAML2\Signature\Validator
-     */
-    private Validator $signatureValidator;
-
-    /**
-     * @var \SAML2\Configuration\IdentityProvider
-     */
-    private IdentityProvider $identityProviderConfiguration;
-
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private LoggerInterface $logger;
-
-
     /**
      * @param Decrypter $decrypter
      * @param Validator $signatureValidator
@@ -65,21 +33,14 @@ class Processor
      * @param LoggerInterface $logger
      */
     public function __construct(
-        Decrypter $decrypter,
-        Validator $signatureValidator,
-        AssertionValidator $assertionValidator,
-        SubjectConfirmationValidator $subjectConfirmationValidator,
-        $transformer,
-        IdentityProvider $identityProviderConfiguration,
-        LoggerInterface $logger
+        private Decrypter $decrypter,
+        private Validator $signatureValidator,
+        private AssertionValidator $assertionValidator,
+        private SubjectConfirmationValidator $subjectConfirmationValidator,
+        private Transformer|MockInterface $transformer,
+        private IdentityProvider $identityProviderConfiguration,
+        private LoggerInterface $logger
     ) {
-        $this->assertionValidator            = $assertionValidator;
-        $this->signatureValidator            = $signatureValidator;
-        $this->decrypter                     = $decrypter;
-        $this->subjectConfirmationValidator  = $subjectConfirmationValidator;
-        $this->transformer                   = $transformer;
-        $this->identityProviderConfiguration = $identityProviderConfiguration;
-        $this->logger                        = $logger;
     }
 
 

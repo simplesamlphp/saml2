@@ -8,7 +8,12 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\Utils\XPath;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
+
+use function intval;
+use function strval;
 
 /**
  * Class representing SAML 2 Metadata AttributeConsumingService element.
@@ -72,7 +77,7 @@ class AttributeConsumingService
         }
 
         if (!$xml->hasAttribute('index')) {
-            throw new \Exception('Missing index on AttributeConsumingService.');
+            throw new MissingAttributeException('Missing index on AttributeConsumingService.');
         }
         $this->setIndex(intval($xml->getAttribute('index')));
 
@@ -80,7 +85,7 @@ class AttributeConsumingService
 
         $this->setServiceName(XMLUtils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceName'));
         if ($this->getServiceName() === []) {
-            throw new \Exception('Missing ServiceName in AttributeConsumingService.');
+            throw new MissingElementException('Missing ServiceName in AttributeConsumingService.');
         }
 
         $this->setServiceDescription(XMLUtils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceDescription'));
@@ -240,8 +245,8 @@ class AttributeConsumingService
             $e->setAttribute('isDefault', 'false');
         }
 
-        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceName', true, $this->getServiceName());
-        Utils::addStrings($e, Constants::NS_MD, 'md:ServiceDescription', true, $this->getServiceDescription());
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:ServiceName', true, $this->getServiceName());
+        XMLUtils::addStrings($e, Constants::NS_MD, 'md:ServiceDescription', true, $this->getServiceDescription());
 
         foreach ($this->getRequestedAttribute() as $ra) {
             $ra->toXML($e);

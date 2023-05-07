@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdui;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\XML\mdui\DiscoHints;
 use SAML2\XML\mdui\Keywords;
 use SAML2\XML\mdui\Logo;
@@ -14,7 +15,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\mdrpi\UIInfoTest
  */
-class UIInfoTest extends \PHPUnit\Framework\TestCase
+class UIInfoTest extends TestCase
 {
     /**
      * Test creating a basic UIInfo element.

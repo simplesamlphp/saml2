@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\Configuration;
 
+use Traversable;
+
 /**
  * CertificateProvider interface.
  */
@@ -16,7 +18,7 @@ interface CertificateProvider extends Queryable
      *
      * @return null|array|\Traversable
      */
-    public function getKeys();
+    public function getKeys(): Traversable|array|null;
 
 
     /**

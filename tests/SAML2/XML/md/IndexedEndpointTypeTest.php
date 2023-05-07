@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\XML\md\IndexedEndpointType;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -11,7 +12,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\md\IndexedEndpointTypeTest
  */
-class IndexedEndpointTypeTest extends \PHPUnit\Framework\TestCase
+class IndexedEndpointTypeTest extends TestCase
 {
     /**
      * @return void
@@ -55,6 +56,6 @@ class IndexedEndpointTypeTest extends \PHPUnit\Framework\TestCase
             $xpCache,
         );
         $this->assertCount(1, $indexedEndpointTypeElement);
-        $this->assertTrue(!$indexedEndpointTypeElement[0]->hasAttribute('isDefault'));
+        $this->assertFalse($indexedEndpointTypeElement[0]->hasAttribute('isDefault'));
     }
 }

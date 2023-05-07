@@ -10,22 +10,19 @@ use SAML2\Configuration\Destination;
 use SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\Assert\Assert;
 
+use function sprintf;
+use function strval;
+
 class SubjectConfirmationRecipientMatches implements
     SubjectConfirmationConstraintValidator
 {
     /**
-     * @var \SAML2\Configuration\Destination
-     */
-    private Destination $destination;
-
-
-    /**
      * Constructor for SubjectConfirmationRecipientMatches
      * @param Destination $destination
      */
-    public function __construct(Destination $destination)
-    {
-        $this->destination = $destination;
+    public function __construct(
+        private Destination $destination
+    ) {
     }
 
 

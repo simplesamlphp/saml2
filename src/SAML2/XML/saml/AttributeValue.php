@@ -11,6 +11,11 @@ use Serializable;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\DOMDocumentFactory;
 
+use function array_pop;
+use function is_string;
+use function serialize;
+use function unserialize;
+
 /**
  * Serializable class representing an AttributeValue.
  *

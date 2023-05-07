@@ -5,6 +5,15 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use DOMElement;
+use InvalidArgumentException;
+use SAML2\Constants as C;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+
+use function filter_var;
+use function intval;
+use function strval;
+use function substr;
+use function trim;
 
 /**
  * Class for handling the Logo metadata extensions for login and discovery user interface
@@ -56,13 +65,13 @@ class Logo
         }
 
         if (!$xml->hasAttribute('width')) {
-            throw new \Exception('Missing width of Logo.');
+            throw new MissingAttributeException('Missing width of Logo.');
         }
         if (!$xml->hasAttribute('height')) {
-            throw new \Exception('Missing height of Logo.');
+            throw new MissingAttributeException('Missing height of Logo.');
         }
         if (!strlen($xml->textContent)) {
-            throw new \Exception('Missing url value for Logo.');
+            throw new MissingAttributeException('Missing url value for Logo.');
         }
         $this->setUrl($xml->textContent);
         $this->setWidth(intval($xml->getAttribute('width')));
@@ -93,7 +102,7 @@ class Logo
     public function setUrl(string $url): void
     {
         if (!filter_var(trim($url), FILTER_VALIDATE_URL) && substr(trim($url), 0, 5) !== 'data:') {
-            throw new \InvalidArgumentException('mdui:Logo is not a valid URL.');
+            throw new InvalidArgumentException('mdui:Logo is not a valid URL.');
         }
         $this->url = $url;
     }
@@ -178,7 +187,7 @@ class Logo
     {
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(Common::NS, 'mdui:Logo');
+        $e = $doc->createElementNS(C::NS_MDUI, 'mdui:Logo');
         $e->appendChild($doc->createTextNode($this->url));
         $e->setAttribute('width', strval($this->width));
         $e->setAttribute('height', strval($this->height));

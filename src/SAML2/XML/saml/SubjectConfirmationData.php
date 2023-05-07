@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\ds\KeyInfo;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Utils as XMLUtils;
+
+use function filter_var;
+use function gmdate;
+use function is_null;
+use function sprintf;
 
 /**
  * Class representing SAML 2 SubjectConfirmationData element.
@@ -252,7 +256,7 @@ class SubjectConfirmationData
             if (!($n instanceof DOMElement)) {
                 continue;
             }
-            if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
+            if ($n->namespaceURI !== Constants::NS_XDSIG) {
                 $this->addInfo(new Chunk($n));
                 continue;
             }

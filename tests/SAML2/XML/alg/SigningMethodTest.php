@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\alg;
 
+use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\XML\alg\SigningMethod;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -14,7 +16,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
-class SigningMethodTest extends \PHPUnit\Framework\TestCase
+class SigningMethodTest extends TestCase
 {
     /**
      * @return void
@@ -86,12 +88,12 @@ XML
     public function testMissingAlgorithmThrowsException(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
-<alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" 
+<alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"
                    MinKeySize="1024"
                    MaxKeySize="4096" />
 XML
         );
-        $this->expectException(\Exception::class, 'Missing required attribute "Algorithm"');
+        $this->expectException(Exception::class, 'Missing required attribute "Algorithm"');
         new SigningMethod($document->firstChild);
     }
 }

@@ -11,6 +11,8 @@ use SAML2\Utils\XPath;
 use SAML2\XML\saml\Attribute;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function is_bool;
+
 /**
  * Class representing SAML 2 IDPSSODescriptor.
  *

@@ -9,7 +9,7 @@ namespace SAML2;
  *
  * @package SimpleSAMLphp
  */
-class Constants
+class Constants extends \SimpleSAML\XMLSecurity\Constants
 {
     /**
      * Password authentication context.
@@ -228,6 +228,11 @@ class Constants
     public const NAMEID_ENCRYPTED = 'urn:oasis:names:tc:SAML:2.0:nameid-format:encrypted';
 
     /**
+     * The namespace for the SAML 2 metadata Algorithm Support profile
+     */
+    public const NS_ALG = 'urn:oasis:names:tc:SAML:metadata:algsupport';
+
+    /**
      * The namespace for the ECP protocol.
      */
     public const NS_ECP = 'urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp';
@@ -248,7 +253,27 @@ class Constants
     public const NS_MD = 'urn:oasis:names:tc:SAML:2.0:metadata';
 
     /**
-     * The namespace fox XML schema.
+     * The namespace for the SAML 2 Metadata Extensions for Registration and Publication Information.
+     */
+    public const NS_MDRPI = 'urn:oasis:names:tc:SAML:metadata:rpi';
+
+    /**
+     * The namespace for the SAML 2 Metadata Extensions for Login and Discovery User Interface Version.
+     */
+    public const NS_MDUI = 'urn:oasis:names:tc:SAML:metadata:ui';
+
+    /**
+     * The namespace for the SAML 2 metadata attributes.
+     */
+    public const NS_MDATTR = 'urn:oasis:names:tc:SAML:metadata:attribute';
+
+    /**
+     * The namespace for the Shibboleth Metadata profile.
+     */
+    public const NS_SHIBMD = 'urn:mace:shibboleth:metadata:1.0';
+
+    /**
+     * The namespace for XML schema.
      */
     public const NS_XS = 'http://www.w3.org/2001/XMLSchema';
 

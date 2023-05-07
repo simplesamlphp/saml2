@@ -5,16 +5,20 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMDocument;
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
 use SimpleSAML\XML\DOMDocumentFactory;
 
+use function serialize;
+use function unserialize;
+
 /**
  * Class \SAML2\XML\md\AttributeTest
  */
-class AttributeValueTest extends \PHPUnit\Framework\TestCase
+class AttributeValueTest extends TestCase
 {
     /**
      * Serialize an EncryptedID and unserialize that again.

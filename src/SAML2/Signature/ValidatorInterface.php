@@ -12,7 +12,7 @@ interface ValidatorInterface
     /**
      * Validate the signature of the signed Element based on the configuration
      *
-     * @param \SAML2\SignedElement             $signedElement
+     * @param \SAML2\SignedElement $signedElement
      * @param \SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool

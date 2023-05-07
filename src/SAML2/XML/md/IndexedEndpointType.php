@@ -6,6 +6,11 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Utils;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+
+use function intval;
+use function is_bool;
+use function strval;
 
 /**
  * Class representing SAML 2 IndexedEndpointType.
@@ -44,7 +49,7 @@ class IndexedEndpointType extends EndpointType
         }
 
         if (!$xml->hasAttribute('index')) {
-            throw new \Exception('Missing index on ' . $xml->tagName);
+            throw new MissingAttributeException('Missing index on ' . $xml->tagName);
         }
         $this->index = intval($xml->getAttribute('index'));
 

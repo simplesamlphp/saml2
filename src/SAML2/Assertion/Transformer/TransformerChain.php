@@ -17,16 +17,6 @@ class TransformerChain implements Transformer
      */
     private array $transformers = [];
 
-    /**
-     * @var \SAML2\Configuration\IdentityProvider
-     */
-    private IdentityProvider $identityProvider;
-
-    /**
-     * @var \SAML2\Configuration\ServiceProvider
-     */
-    private ServiceProvider $serviceProvider;
-
 
     /**
      * Constructor for TransformerChain
@@ -35,11 +25,9 @@ class TransformerChain implements Transformer
      * @param ServiceProvider $serviceProvider
      */
     public function __construct(
-        IdentityProvider $identityProvider,
-        ServiceProvider $serviceProvider
+        private IdentityProvider $identityProvider,
+        private ServiceProvider $serviceProvider
     ) {
-        $this->identityProvider = $identityProvider;
-        $this->serviceProvider  = $serviceProvider;
     }
 
 

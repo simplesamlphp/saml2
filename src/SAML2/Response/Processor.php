@@ -18,13 +18,10 @@ use SAML2\Response\Validation\PreconditionValidator;
 use SAML2\Signature\Validator;
 use SAML2\Utilities\ArrayCollection;
 
+use function sprintf;
+
 class Processor
 {
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private LoggerInterface $logger;
-
     /**
      * @var \SAML2\Response\Validation\PreconditionValidator
      */
@@ -53,9 +50,9 @@ class Processor
      * @param \Psr\Log\LoggerInterface $logger
      *
      */
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
+    public function __construct(
+        private LoggerInterface $logger
+    ) {
         $this->signatureValidator = new Validator($logger);
     }
 

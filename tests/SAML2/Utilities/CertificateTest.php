@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace SAML2\Utilities;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\CertificatesMock;
 use SAML2\Utilities\Certificate;
 
-class CertificateTest extends \PHPUnit\Framework\TestCase
+use function str_replace;
+
+class CertificateTest extends TestCase
 {
     /**
      * @group utilities

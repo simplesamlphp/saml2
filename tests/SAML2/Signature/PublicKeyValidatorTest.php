@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace SAML2\Signature;
 
 use Mockery;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
+use Psr\Log\NullLogger;
 use SAML2\CertificatesMock;
 use SAML2\Certificate\Key;
 use SAML2\Certificate\KeyCollection;
@@ -19,7 +21,7 @@ use SAML2\Configuration\CertificateProvider;
 use SAML2\SignedElement;
 use SimpleSAML\XML\DOMDocumentFactory;
 
-class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class PublicKeyValidatorTest extends MockeryTestCase
 {
     private MockInterface $mockSignedElement;
     private MockInterface $mockConfiguration;
@@ -43,7 +45,7 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function itCannotValidateIfNoKeysCanBeLoaded(): void
     {
         $keyloaderMock = $this->prepareKeyLoader(new KeyCollection());
-        $validator = new PublicKeyValidator(new \Psr\Log\NullLogger(), $keyloaderMock);
+        $validator = new PublicKeyValidator(new NullLogger(), $keyloaderMock);
 
         $this->assertFalse($validator->canValidate($this->mockSignedElement, $this->mockConfiguration));
     }
@@ -57,7 +59,7 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function itWillValidateWhenKeysCanBeLoaded(): void
     {
         $keyloaderMock = $this->prepareKeyLoader(new KeyCollection([1, 2]));
-        $validator = new PublicKeyValidator(new \Psr\Log\NullLogger(), $keyloaderMock);
+        $validator = new PublicKeyValidator(new NullLogger(), $keyloaderMock);
 
         $this->assertTrue($validator->canValidate($this->mockSignedElement, $this->mockConfiguration));
     }
@@ -118,7 +120,7 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     private function prepareKeyLoader($returnValue)
     {
-        return \Mockery::mock(KeyLoader::class)
+        return Mockery::mock(KeyLoader::class)
             ->shouldReceive('extractPublicKeys')
             ->andReturn($returnValue)
             ->getMock();

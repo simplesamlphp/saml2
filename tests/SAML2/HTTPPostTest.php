@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Exception;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
 use SAML2\AuthnRequest;
@@ -72,7 +73,7 @@ class HTTPPostTest extends TestCase
         $request = $request->withParsedBody($q);
 
         $hp = new HTTPPost();
-        $this->expectException(\Exception::class, 'Missing SAMLRequest or SAMLResponse parameter');
+        $this->expectException(Exception::class, 'Missing SAMLRequest or SAMLResponse parameter');
         $hp->receive($request);
     }
 

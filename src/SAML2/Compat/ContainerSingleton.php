@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Compat;
 
-use SAML2\Compat\Ssp\Container;
+use SimpleSAML\Assert\Assert;
 
 class ContainerSingleton
 {
@@ -19,9 +19,7 @@ class ContainerSingleton
      */
     public static function getInstance(): AbstractContainer
     {
-        if (!isset(self::$container)) {
-            self::$container = self::initSspContainer();
-        }
+        Assert::notNull(self::$container, 'No container set.');
         return self::$container;
     }
 
@@ -35,14 +33,5 @@ class ContainerSingleton
     public static function setContainer(AbstractContainer $container): void
     {
         self::$container = $container;
-    }
-
-
-    /**
-     * @return \SAML2\Compat\Ssp\Container
-     */
-    public static function initSspContainer(): Container
-    {
-        return new Container();
     }
 }

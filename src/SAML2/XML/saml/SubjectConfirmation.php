@@ -8,6 +8,10 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+
+use function count;
 
 /**
  * Class representing SAML 2 SubjectConfirmation element.
@@ -51,7 +55,7 @@ class SubjectConfirmation
         }
 
         if (!$xml->hasAttribute('Method')) {
-            throw new \Exception('SubjectConfirmation element without Method attribute.');
+            throw new MissingAttributeException('SubjectConfirmation element without Method attribute.');
         }
         $this->Method = $xml->getAttribute('Method');
 
@@ -59,7 +63,7 @@ class SubjectConfirmation
         /** @var \DOMElement[] $nid */
         $nid = XPath::xpQuery($xml, './saml_assertion:NameID', $xpCache);
         if (count($nid) > 1) {
-            throw new \Exception('More than one NameID in a SubjectConfirmation element.');
+            throw new TooManyElementsException('More than one NameID in a SubjectConfirmation element.');
         } elseif (!empty($nid)) {
             $this->NameID = new NameID($nid[0]);
         }
@@ -67,7 +71,9 @@ class SubjectConfirmation
         /** @var \DOMElement[] $scd */
         $scd = XPath::xpQuery($xml, './saml_assertion:SubjectConfirmationData', $xpCache);
         if (count($scd) > 1) {
-            throw new \Exception('More than one SubjectConfirmationData child in a SubjectConfirmation element.');
+            throw new TooManyElementsException(
+                'More than one SubjectConfirmationData child in a SubjectConfirmation element.',
+            );
         } elseif (!empty($scd)) {
             $this->SubjectConfirmationData = new SubjectConfirmationData($scd[0]);
         }

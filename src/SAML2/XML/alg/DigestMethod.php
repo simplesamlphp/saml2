@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace SAML2\XML\alg;
 
 use DOMElement;
+use SAML2\Constants as C;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 
 /**
  * Class for handling the alg:DigestMethod element.
@@ -38,7 +40,7 @@ class DigestMethod
         }
 
         if (!$xml->hasAttribute('Algorithm')) {
-            throw new \Exception('Missing required attribute "Algorithm" in alg:DigestMethod element.');
+            throw new MissingAttributeException('Missing required attribute "Algorithm" in alg:DigestMethod element.');
         }
         $this->setAlgorithm($xml->getAttribute('Algorithm'));
     }
@@ -79,7 +81,7 @@ class DigestMethod
         Assert::notEmpty($this->Algorithm, 'Cannot convert DigestMethod to XML without an Algorithm set.');
 
         $doc = $parent->ownerDocument;
-        $e = $doc->createElementNS(Common::NS, 'alg:DigestMethod');
+        $e = $doc->createElementNS(C::NS_ALG, 'alg:DigestMethod');
         $parent->appendChild($e);
         $e->setAttribute('Algorithm', $this->Algorithm);
 

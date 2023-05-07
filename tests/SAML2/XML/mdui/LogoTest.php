@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdui;
 
+use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\XML\mdui\Logo;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -11,7 +13,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\mdrpi\LogoTest
  */
-class LogoTest extends \PHPUnit\Framework\TestCase
+class LogoTest extends TestCase
 {
     /**
      * Test creating a basic Logo element.
@@ -91,7 +93,7 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing url value for Logo');
+        $this->expectException(Exception::class, 'Missing url value for Logo');
         $logo = new Logo($document->firstChild);
     }
 
@@ -107,7 +109,7 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing width of Logo');
+        $this->expectException(Exception::class, 'Missing width of Logo');
         $logo = new Logo($document->firstChild);
     }
 
@@ -123,7 +125,7 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing height of Logo');
+        $this->expectException(Exception::class, 'Missing height of Logo');
         $logo = new Logo($document->firstChild);
     }
 }

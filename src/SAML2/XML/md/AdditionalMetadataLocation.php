@@ -6,6 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
@@ -43,7 +44,7 @@ class AdditionalMetadataLocation
         }
 
         if (!$xml->hasAttribute('namespace')) {
-            throw new \Exception('Missing namespace attribute on AdditionalMetadataLocation element.');
+            throw new MissingAttributeException('Missing namespace attribute on AdditionalMetadataLocation element.');
         }
         $this->setNamespace($xml->getAttribute('namespace'));
 

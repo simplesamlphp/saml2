@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\ds;
 
 use DOMElement;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
+use SAML2\Constants;
 use SAML2\XML\ds\X509Certificate;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
@@ -44,7 +44,7 @@ class X509Data
                 continue;
             }
 
-            if ($n->namespaceURI !== XMLSecurityDSig::XMLDSIGNS) {
+            if ($n->namespaceURI !== Constants::NS_XDSIG) {
                 $this->addData(new Chunk($n));
                 continue;
             }
@@ -106,7 +106,7 @@ class X509Data
     {
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(XMLSecurityDSig::XMLDSIGNS, 'ds:X509Data');
+        $e = $doc->createElementNS(Constants::NS_XDSIG, 'ds:X509Data');
         $parent->appendChild($e);
 
         /** @var \SimpleSAML\XML\Chunk|\SAML2\XML\ds\X509Certificate $n */

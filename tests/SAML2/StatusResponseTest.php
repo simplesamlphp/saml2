@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Response;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -11,7 +12,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SAML2\StatusResponseTest
  */
-class StatusResponseTest extends \PHPUnit\Framework\TestCase
+class StatusResponseTest extends TestCase
 {
     /**
      * @return void

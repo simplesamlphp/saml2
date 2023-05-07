@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\ds;
 
 use DOMElement;
-use RobRichards\XMLSecLibs\XMLSecurityDSig;
+use SAML2\Constants;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
@@ -69,6 +69,6 @@ class KeyName
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        return XMLUtils::addString($parent, XMLSecurityDSig::XMLDSIGNS, 'ds:KeyName', $this->name);
+        return XMLUtils::addString($parent, Constants::NS_XDSIG, 'ds:KeyName', $this->name);
     }
 }

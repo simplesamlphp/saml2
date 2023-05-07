@@ -8,6 +8,8 @@ use DOMElement;
 use SAML2\Utils;
 use SAML2\Utils\XPath;
 
+use function is_bool;
+
 /**
  * Class representing SAML 2 SPSSODescriptor.
  *
@@ -66,12 +68,12 @@ class SPSSODescriptor extends SSODescriptorType
 
         $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement $ep */
-        foreach (XPath::xpQuery($xml, './saml_metadata:AssertionConsumerService', $xpQuery) as $ep) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:AssertionConsumerService', $xpCache) as $ep) {
             $this->AssertionConsumerService[] = new IndexedEndpointType($ep);
         }
 
         /** @var \DOMElement $acs */
-        foreach (XPath::xpQuery($xml, './saml_metadata:AttributeConsumingService', $xpQuery) as $acs) {
+        foreach (XPath::xpQuery($xml, './saml_metadata:AttributeConsumingService', $xpCache) as $acs) {
             $this->AttributeConsumingService[] = new AttributeConsumingService($acs);
         }
     }

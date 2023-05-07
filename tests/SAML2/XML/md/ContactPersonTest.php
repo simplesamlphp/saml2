@@ -4,15 +4,22 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\XML\md\ContactPerson;
 use SAML2\Utils;
 use SimpleSAML\XML\DOMDocumentFactory;
 
+use function array_pop;
+use function count;
+use function in_array;
+use function preg_replace;
+
 /**
  * Class \SAML2\XML\md\ContactPersonTest
  */
-class ContactPersonTest extends \PHPUnit\Framework\TestCase
+class ContactPersonTest extends TestCase
 {
     /**
      * @return void
@@ -199,7 +206,7 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'More than one GivenName in md:ContactPerson');
+        $this->expectException(Exception::class, 'More than one GivenName in md:ContactPerson');
 
         $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
     }
@@ -246,7 +253,7 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing contactType on ContactPerson.');
+        $this->expectException(Exception::class, 'Missing contactType on ContactPerson.');
 
         $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
     }

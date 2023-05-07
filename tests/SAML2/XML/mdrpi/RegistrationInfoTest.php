@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdrpi;
 
+use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\XML\mdrpi\RegistrationInfo;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -11,7 +13,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\mdrpi\RegistrationInfoTest
  */
-class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
+class RegistrationInfoTest extends TestCase
 {
     /**
      * @return void
@@ -108,7 +110,7 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing required attribute "registrationAuthority"');
+        $this->expectException(Exception::class, 'Missing required attribute "registrationAuthority"');
         $registrationInfo = new RegistrationInfo($document->firstChild);
     }
 

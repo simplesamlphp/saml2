@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\shibmd;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\XML\shibmd\Scope;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -11,7 +12,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\shibmd\Scope
  */
-class ScopeTest extends \PHPUnit\Framework\TestCase
+class ScopeTest extends TestCase
 {
     /**
      * Marshalling a scope in literal (non-regexp) form.

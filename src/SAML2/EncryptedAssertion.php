@@ -10,6 +10,9 @@ use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utils\XPath;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 
 use function count;
 
@@ -49,9 +52,9 @@ class EncryptedAssertion
         /** @var \DOMElement[] $data */
         $data = XPath::xpQuery($xml, './xenc:EncryptedData', $xpCache);
         if (empty($data)) {
-            throw new Exception('Missing encrypted data in <saml:EncryptedAssertion>.');
+            throw new MissingElementException('Missing encrypted data in <saml:EncryptedAssertion>.');
         } elseif (count($data) > 1) {
-            throw new Exception('More than one encrypted data element in <saml:EncryptedAssertion>.');
+            throw new TooManyElementsException('More than one encrypted data element in <saml:EncryptedAssertion>.');
         }
         $this->encryptedData = $data[0];
     }

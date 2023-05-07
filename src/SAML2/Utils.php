@@ -23,6 +23,11 @@ use SAML2\XML\ds\KeyName;
 use SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XMLSecurity\Exception\NoSignatureFoundException;
+use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
 
 use function count;
 use function in_array;
@@ -81,7 +86,7 @@ class Utils
 
             return false;
         } elseif (count($signatureElement) > 1) {
-            throw new Exception('XMLSec: more than one signature element in root.');
+            throw new TooManyElementsException('XMLSec: more than one signature element in root.');
         }
         $signatureElement = $signatureElement[0];
         $objXMLSecDSig->sigNode = $signatureElement;
@@ -101,14 +106,14 @@ class Utils
             if ($signedNode->isSameNode($root)) {
                 $rootSigned = true;
                 break;
-            } elseif ($root->parentNode instanceof \DOMDocument && $signedNode->isSameNode($root->ownerDocument)) {
+            } elseif ($root->parentNode instanceof DOMDocument && $signedNode->isSameNode($root->ownerDocument)) {
                 /* $root is the root element of a signed document. */
                 $rootSigned = true;
                 break;
             }
         }
         if (!$rootSigned) {
-            throw new Exception('XMLSec: The root element is not signed.');
+            throw new NoSignatureFoundException('XMLSec: The root element is not signed.');
         }
 
         /* Now we extract all available X509 certificates in the signature element. */
@@ -200,11 +205,11 @@ class Utils
          */
         $sigMethod = XPath::xpQuery($objXMLSecDSig->sigNode, './ds:SignedInfo/ds:SignatureMethod', $xpCache);
         if (empty($sigMethod)) {
-            throw new Exception('Missing SignatureMethod element.');
+            throw new MissingElementException('Missing SignatureMethod element.');
         }
         $sigMethod = $sigMethod[0];
         if (!$sigMethod->hasAttribute('Algorithm')) {
-            throw new Exception('Missing Algorithm-attribute on SignatureMethod element.');
+            throw new MissingAttributeException('Missing Algorithm-attribute on SignatureMethod element.');
         }
         $algo = $sigMethod->getAttribute('Algorithm');
 
@@ -214,7 +219,7 @@ class Utils
 
         /* Check the signature. */
         if ($objXMLSecDSig->verify($key) !== 1) {
-            throw new Exception("Unable to validate Signature");
+            throw new SignatureVerificationFailedException("Unable to validate Signature");
         }
     }
 

@@ -15,19 +15,13 @@ use SAML2\SignedElement;
 class Validator
 {
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private LoggerInterface $logger;
-
-
-    /**
      * Constructor for Validator
      *
      * @param LoggerInterface $logger
      */
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
+    public function __construct(
+        private LoggerInterface $logger
+    ) {
     }
 
 

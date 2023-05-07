@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\XML\md\EntityDescriptor;
 use SAML2\XML\md\AffiliationDescriptor;
 use SAML2\XML\md\Organization;
@@ -14,7 +15,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\md\EntityDescriptorTest
  */
-class EntityDescriptorTest extends \PHPUnit\Framework\TestCase
+class EntityDescriptorTest extends TestCase
 {
     /**
      * @return void

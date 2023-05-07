@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
+use Exception;
 use SAML2\Constants;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -124,7 +125,7 @@ class Issuer extends NameIDType
         $parent->appendChild($element);
 
         if (empty($this->value)) {
-            throw new \Exception("Cannot convert Issuer to XML with no value.");
+            throw new Exception("Cannot convert Issuer to XML with no value.");
         }
         $value = $element->ownerDocument->createTextNode($this->value);
         $element->appendChild($value);

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\alg;
 
+use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\XML\alg\DigestMethod;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -14,7 +16,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
-class DigestMethodTest extends \PHPUnit\Framework\TestCase
+class DigestMethodTest extends TestCase
 {
     /**
      * @return void
@@ -65,7 +67,7 @@ XML
 <alg:DigestMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" />
 XML
         );
-        $this->expectException(\Exception::class, 'Missing required attribute "Algorithm"');
+        $this->expectException(Exception::class, 'Missing required attribute "Algorithm"');
         new DigestMethod($document->firstChild);
     }
 }

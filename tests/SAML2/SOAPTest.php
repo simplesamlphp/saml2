@@ -6,11 +6,12 @@ namespace SAML2;
 
 use DOMDocument;
 use Nyholm\Psr7\ServerRequest;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SAML2\ArtifactResolve;
 use SAML2\Exception\Protocol\UnsupportedBindingException;
 use SAML2\Message;
 
-class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class SOAPTest extends MockeryTestCase
 {
     /**
      * @return void

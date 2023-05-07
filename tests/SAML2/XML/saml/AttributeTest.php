@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\Utils\XPath;
 use SAML2\XML\saml\Attribute;
@@ -13,7 +15,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Class \SAML2\XML\md\AttributeTest
  */
-class AttributeTest extends \PHPUnit\Framework\TestCase
+class AttributeTest extends TestCase
 {
     /**
      * @return void
@@ -80,7 +82,7 @@ XML
 </saml:Attribute>
 XML
         );
-        $this->expectException(\Exception::class, 'Missing Name on Attribute.');
+        $this->expectException(Exception::class, 'Missing Name on Attribute.');
         new Attribute($document->firstChild);
     }
 }

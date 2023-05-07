@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use DOMElement;
+use SAML2\Constants as C;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -59,13 +60,13 @@ class DiscoHints
             return;
         }
 
-        $this->IPHint = XMLUtils::extractStrings($xml, Common::NS, 'IPHint');
-        $this->DomainHint = XMLUtils::extractStrings($xml, Common::NS, 'DomainHint');
-        $this->GeolocationHint = XMLUtils::extractStrings($xml, Common::NS, 'GeolocationHint');
+        $this->IPHint = XMLUtils::extractStrings($xml, C::NS_MDUI, 'IPHint');
+        $this->DomainHint = XMLUtils::extractStrings($xml, C::NS_MDUI, 'DomainHint');
+        $this->GeolocationHint = XMLUtils::extractStrings($xml, C::NS_MDUI, 'GeolocationHint');
 
         $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement $node */
-        foreach (XPath::xpQuery($xml, "./*[namespace-uri()!='" . Common::NS . "']", $xpCache) as $node) {
+        foreach (XPath::xpQuery($xml, "./*[namespace-uri()!='" . C::NS_MDUI . "']", $xpCache) as $node) {
             $this->children[] = new Chunk($node);
         }
     }
@@ -191,16 +192,16 @@ class DiscoHints
         ) {
             $doc = $parent->ownerDocument;
 
-            $e = $doc->createElementNS(Common::NS, 'mdui:DiscoHints');
+            $e = $doc->createElementNS(C::NS_MDUI, 'mdui:DiscoHints');
             $parent->appendChild($e);
 
             foreach ($this->getChildren() as $child) {
                 $child->toXML($e);
             }
 
-            XMLUtils::addStrings($e, Common::NS, 'mdui:IPHint', false, $this->IPHint);
-            XMLUtils::addStrings($e, Common::NS, 'mdui:DomainHint', false, $this->DomainHint);
-            XMLUtils::addStrings($e, Common::NS, 'mdui:GeolocationHint', false, $this->GeolocationHint);
+            XMLUtils::addStrings($e, C::NS_MDUI, 'mdui:IPHint', false, $this->IPHint);
+            XMLUtils::addStrings($e, C::NS_MDUI, 'mdui:DomainHint', false, $this->DomainHint);
+            XMLUtils::addStrings($e, C::NS_MDUI, 'mdui:GeolocationHint', false, $this->GeolocationHint);
 
             return $e;
         }

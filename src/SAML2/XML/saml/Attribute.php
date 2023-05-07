@@ -7,6 +7,7 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils\XPath;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 
 /**
  * Class representing SAML 2 Attribute.
@@ -59,7 +60,7 @@ class Attribute
         }
 
         if (!$xml->hasAttribute('Name')) {
-            throw new \Exception('Missing Name on Attribute.');
+            throw new MissingAttributeException('Missing Name on Attribute.');
         }
         $this->setName($xml->getAttribute('Name'));
 
@@ -197,7 +198,7 @@ class Attribute
         $parent->appendChild($e);
 
         if (empty($this->Name)) {
-            throw new \Exception('Cannot convert Attribute to XML with no Name set.');
+            throw new MissingAttributeException('Cannot convert Attribute to XML with no Name set.');
         }
         $e->setAttribute('Name', $this->Name);
 

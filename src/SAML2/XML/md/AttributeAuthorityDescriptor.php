@@ -9,6 +9,7 @@ use SAML2\Constants;
 use SAML2\Utils\XPath;
 use SAML2\XML\saml\Attribute;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
@@ -85,7 +86,9 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
             $this->addAttributeService(new EndpointType($ep));
         }
         if ($this->getAttributeService() === []) {
-            throw new \Exception('Must have at least one AttributeService in AttributeAuthorityDescriptor.');
+            throw new MissingElementException(
+                'Must have at least one AttributeService in AttributeAuthorityDescriptor.'
+            );
         }
 
         /** @var \DOMElement $ep */

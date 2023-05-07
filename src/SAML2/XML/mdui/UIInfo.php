@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\mdui;
 
 use DOMElement;
+use SAML2\Constants as C;
 use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
@@ -81,15 +82,15 @@ class UIInfo
             return;
         }
 
-        $this->DisplayName = XMLUtils::extractLocalizedStrings($xml, Common::NS, 'DisplayName');
-        $this->Description = XMLUtils::extractLocalizedStrings($xml, Common::NS, 'Description');
-        $this->InformationURL = XMLUtils::extractLocalizedStrings($xml, Common::NS, 'InformationURL');
-        $this->PrivacyStatementURL = XMLUtils::extractLocalizedStrings($xml, Common::NS, 'PrivacyStatementURL');
+        $this->DisplayName = XMLUtils::extractLocalizedStrings($xml, C::NS_MDUI, 'DisplayName');
+        $this->Description = XMLUtils::extractLocalizedStrings($xml, C::NS_MDUI, 'Description');
+        $this->InformationURL = XMLUtils::extractLocalizedStrings($xml, C::NS_MDUI, 'InformationURL');
+        $this->PrivacyStatementURL = XMLUtils::extractLocalizedStrings($xml, C::NS_MDUI, 'PrivacyStatementURL');
 
         $xpCache = XPath::getXPath($xml);
         /** @var \DOMElement $node */
         foreach (XPath::xpQuery($xml, './*', $xpCache) as $node) {
-            if ($node->namespaceURI === Common::NS) {
+            if ($node->namespaceURI === C::NS_MDUI) {
                 switch ($node->localName) {
                     case 'Keywords':
                         $this->Keywords[] = new Keywords($node);
@@ -322,13 +323,13 @@ class UIInfo
         ) {
             $doc = $parent->ownerDocument;
 
-            $e = $doc->createElementNS(Common::NS, 'mdui:UIInfo');
+            $e = $doc->createElementNS(C::NS_MDUI, 'mdui:UIInfo');
             $parent->appendChild($e);
 
-            XMLUtils::addStrings($e, Common::NS, 'mdui:DisplayName', true, $this->DisplayName);
-            XMLUtils::addStrings($e, Common::NS, 'mdui:Description', true, $this->Description);
-            XMLUtils::addStrings($e, Common::NS, 'mdui:InformationURL', true, $this->InformationURL);
-            XMLUtils::addStrings($e, Common::NS, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
+            XMLUtils::addStrings($e, C::NS_MDUI, 'mdui:DisplayName', true, $this->DisplayName);
+            XMLUtils::addStrings($e, C::NS_MDUI, 'mdui:Description', true, $this->Description);
+            XMLUtils::addStrings($e, C::NS_MDUI, 'mdui:InformationURL', true, $this->InformationURL);
+            XMLUtils::addStrings($e, C::NS_MDUI, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
 
             foreach ($this->Keywords as $child) {
                 $child->toXML($e);

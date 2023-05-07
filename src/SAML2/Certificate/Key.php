@@ -7,6 +7,10 @@ namespace SAML2\Certificate;
 use SAML2\Certificate\Exception\InvalidKeyUsageException;
 use SAML2\Exception\InvalidArgumentException;
 
+use function array_key_exists;
+use function in_array;
+use function is_string;
+
 /**
  * Simple DTO wrapper for (X509) keys. Implements ArrayAccess
  * for easier backwards compatibility.

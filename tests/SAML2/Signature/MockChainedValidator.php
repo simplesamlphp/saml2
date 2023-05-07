@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Signature;
 
+use Psr\Log\NullLogger;
 use SAML2\Signature\AbstractChainedValidator;
 use SAML2\Configuration\CertificateProvider;
 use SAML2\SignedElement;
@@ -36,7 +37,7 @@ class MockChainedValidator extends AbstractChainedValidator
         $this->canValidate = $canValidate;
         $this->isValid = $isValid;
 
-        parent::__construct(new \Psr\Log\NullLogger());
+        parent::__construct(new NullLogger());
     }
 
 

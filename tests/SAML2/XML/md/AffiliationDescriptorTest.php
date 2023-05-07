@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Exception;
+use PHPUnit\Framework\TestCase;
 use SAML2\Constants;
 use SAML2\XML\md\AffiliationDescriptor;
 use SAML2\Utils;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
-class AffiliationDescriptorTest extends \PHPUnit\Framework\TestCase
+class AffiliationDescriptorTest extends TestCase
 {
     /**
      * @return void
@@ -96,7 +98,7 @@ XML
 </md:AffiliationDescriptor>
 XML
         );
-        $this->expectException(\Exception::class, 'Missing AffiliateMember in AffiliationDescriptor.');
+        $this->expectException(Exception::class, 'Missing AffiliateMember in AffiliationDescriptor.');
         new AffiliationDescriptor($document->firstChild);
     }
 
@@ -115,7 +117,7 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing affiliationOwnerID on AffiliationDescriptor.');
+        $this->expectException(Exception::class, 'Missing affiliationOwnerID on AffiliationDescriptor.');
         new AffiliationDescriptor($document->firstChild);
     }
 }

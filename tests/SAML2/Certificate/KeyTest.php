@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace SAML2\Certificate;
 
+use PHPUnit\Framework\TestCase;
 use SAML2\Certificate\Key;
 use SAML2\Certificate\Exception\InvalidKeyUsageException;
 use SAML2\Exception\InvalidArgumentException;
 
-class KeyTest extends \PHPUnit\Framework\TestCase
+class KeyTest extends TestCase
 {
     /**
      * @group certificate

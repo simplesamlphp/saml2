@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace SAML2\Response\Validation\ConstraintValidator;
 
 use Mockery;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
 use SAML2\Constants;
+use SAML2\Response;
 use SAML2\Response\Validation\Result;
 use SAML2\Response\Validation\ConstraintValidator\IsSuccessful;
 
-class IsSuccessfulTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
+class IsSuccessfulTest extends MockeryTestCase
 {
     /**
      * @var \Mockery\MockInterface
@@ -23,7 +25,7 @@ class IsSuccessfulTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function setUp(): void
     {
-        $this->response = Mockery::mock('SAML2\Response');
+        $this->response = Mockery::mock(Response::class);
     }
 
 

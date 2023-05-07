@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace SAML2\XML\mdrpi;
 
 use DOMElement;
+use SAML2\Constants as C;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
+
+use function gmdate;
 
 /**
  * Class for handling the mdrpi:PublicationInfo element.
@@ -60,7 +64,9 @@ class PublicationInfo
         }
 
         if (!$xml->hasAttribute('publisher')) {
-            throw new \Exception('Missing required attribute "publisher" in mdrpi:PublicationInfo element.');
+            throw new MissingAttributeException(
+                'Missing required attribute "publisher" in mdrpi:PublicationInfo element.',
+            );
         }
         $this->publisher = $xml->getAttribute('publisher');
 
@@ -72,7 +78,7 @@ class PublicationInfo
             $this->publicationId = $xml->getAttribute('publicationId');
         }
 
-        $this->UsagePolicy = XMLUtils::extractLocalizedStrings($xml, Common::NS_MDRPI, 'UsagePolicy');
+        $this->UsagePolicy = XMLUtils::extractLocalizedStrings($xml, C::NS_MDRPI, 'UsagePolicy');
     }
 
 
@@ -180,7 +186,7 @@ class PublicationInfo
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(Common::NS_MDRPI, 'mdrpi:PublicationInfo');
+        $e = $doc->createElementNS(C::NS_MDRPI, 'mdrpi:PublicationInfo');
         $parent->appendChild($e);
 
         $e->setAttribute('publisher', $this->publisher);
@@ -193,7 +199,7 @@ class PublicationInfo
             $e->setAttribute('publicationId', $this->publicationId);
         }
 
-        XMLUtils::addStrings($e, Common::NS_MDRPI, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
+        XMLUtils::addStrings($e, C::NS_MDRPI, 'mdrpi:UsagePolicy', true, $this->UsagePolicy);
 
         return $e;
     }

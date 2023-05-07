@@ -11,6 +11,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 
 use function call_user_func;
 use function chunk_split;
+use function count;
 
 /**
  * Helper class for processing signed elements.
@@ -68,7 +69,7 @@ class SignedElementHelper extends SignedElement
                     'Data' => $sig,
                 ];
             }
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             /* Ignore signature validation errors. */
         }
     }

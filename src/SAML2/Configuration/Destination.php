@@ -11,16 +11,12 @@ use SAML2\Exception\InvalidArgumentException;
  */
 class Destination
 {
-    /** @var string */
-    private string $destination;
-
-
     /**
      * @param string $destination
      */
-    public function __construct(string $destination)
-    {
-        $this->destination = $destination;
+    public function __construct(
+        private string $destination
+    ) {
     }
 
 

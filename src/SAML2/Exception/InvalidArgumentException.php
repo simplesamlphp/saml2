@@ -7,6 +7,11 @@ namespace SAML2\Exception;
 use InvalidArgumentException as BuiltinInvalidArgumentException;
 use Throwable;
 
+use function gettype;
+use function get_class;
+use function is_object;
+use function sprintf;
+
 class InvalidArgumentException extends BuiltinInvalidArgumentException implements Throwable
 {
     /**
