@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\Utils;
-use SAML2\XML\ds\KeyInfo;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\ds\KeyInfo;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -65,7 +65,7 @@ class SubjectConfirmationData
      * Array with various elements describing this key.
      * Unknown elements will be represented by \SimpleSAML\XML\Chunk.
      *
-     * @var (\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
+     * @var (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
      */
     private array $info = [];
 
@@ -193,7 +193,7 @@ class SubjectConfirmationData
     /**
      * Collect the value of the info-property
      *
-     * @return (\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
+     * @return (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
      */
     public function getInfo(): array
     {
@@ -204,7 +204,7 @@ class SubjectConfirmationData
     /**
      * Set the value of the info-property
      *
-     * @param (\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[] $info
+     * @param (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[] $info
      * @return void
      */
     public function setInfo(array $info): void
@@ -216,7 +216,7 @@ class SubjectConfirmationData
     /**
      * Add the value to the info-property
      *
-     * @param \SimpleSAML\XML\Chunk|\SAML2\XML\ds\KeyInfo $info
+     * @param \SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\ds\KeyInfo $info
      * @return void
      */
     public function addInfo($info): void
@@ -298,7 +298,6 @@ class SubjectConfirmationData
         if ($this->Address !== null) {
             $e->setAttribute('Address', $this->Address);
         }
-        /** @var \SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk $n */
         foreach ($this->getInfo() as $n) {
             $n->toXML($e);
         }

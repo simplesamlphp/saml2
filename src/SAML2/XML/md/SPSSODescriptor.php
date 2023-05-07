@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Utils;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\Utils\XPath;
 
 use function is_bool;
 
@@ -36,16 +36,16 @@ class SPSSODescriptor extends SSODescriptorType
      *
      * Array with IndexedEndpointType objects.
      *
-     * @var \SAML2\XML\md\IndexedEndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\IndexedEndpointType[]
      */
     private array $AssertionConsumerService = [];
 
     /**
      * List of AttributeConsumingService descriptors for this SP.
      *
-     * Array with \SAML2\XML\md\AttributeConsumingService objects.
+     * Array with \SimpleSAML\SAML2\XML\md\AttributeConsumingService objects.
      *
-     * @var \SAML2\XML\md\AttributeConsumingService[]
+     * @var \SimpleSAML\SAML2\XML\md\AttributeConsumingService[]
      */
     private array $AttributeConsumingService = [];
 
@@ -151,7 +151,7 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Add the value to the AssertionConsumerService-property
      *
-     * @param \SAML2\XML\md\IndexedEndpointType $acs
+     * @param \SimpleSAML\SAML2\XML\md\IndexedEndpointType $acs
      * @return void
      */
     public function addAssertionConsumerService(IndexedEndpointType $acs): void
@@ -163,7 +163,7 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Collect the value of the AttributeConsumingService-property
      *
-     * @return array
+     * @return \SimpleSAML\SAML2\XML\md\AttributeConsumingService[]
      */
     public function getAttributeConsumingService(): array
     {
@@ -174,7 +174,7 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Add the value to the AttributeConsumingService-property
      *
-     * @param \SAML2\XML\md\AttributeConsumingService $acs
+     * @param \SimpleSAML\SAML2\XML\md\AttributeConsumingService $acs
      * @return void
      */
     public function addAttributeConsumingService(AttributeConsumingService $acs): void
@@ -186,7 +186,7 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Set the value of the AttributeConsumingService-property
      *
-     * @param array $acs
+     * @param \SimpleSAML\SAML2\XML\md\AttributeConsumingService[] $acs
      * @return void
      */
     public function setAttributeConsumingService(array $acs): void

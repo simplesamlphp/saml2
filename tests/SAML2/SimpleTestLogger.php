@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use Psr\Log\AbstractLogger;
 

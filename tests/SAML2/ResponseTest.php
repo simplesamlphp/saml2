@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants as C;
-use SAML2\Response;
-use SAML2\Utils\XPath;
-use SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Response;
+use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
- * Class \SAML2\ResponseTest
+ * Class \SimpleSAML\SAML2\ResponseTest
  */
 class ResponseTest extends TestCase
 {

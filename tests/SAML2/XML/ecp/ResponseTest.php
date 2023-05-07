@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\ecp;
+namespace SimpleSAML\Test\SAML2\XML\ecp;
 
 use DOMDocument;
 use DOMElement;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants as C;
-use SAML2\Exception\ProtocolViolationException;
-use SAML2\XML\ecp\Response;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\ecp\Response;
 use SimpleSAML\SOAP\Constants as SOAP;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -21,8 +21,8 @@ use function dirname;
 use function strval;
 
 /**
- * @covers SAML2\XML\ecp\AbstractEcpElement
- * @covers SAML2\XML\ecp\Response
+ * @covers \SimpleSAML\SAML2\XML\ecp\AbstractEcpElement
+ * @covers \SimpleSAML\SAML2\XML\ecp\Response
  * @package simplesamlphp/saml2
  */
 final class ResponseTest extends TestCase

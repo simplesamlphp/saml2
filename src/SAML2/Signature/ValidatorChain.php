@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Signature;
+namespace SimpleSAML\SAML2\Signature;
 
 use Psr\Log\LoggerInterface;
-use SAML2\Configuration\CertificateProvider;
-use SAML2\SignedElement;
+use SimpleSAML\SAML2\Configuration\CertificateProvider;
+use SimpleSAML\SAML2\SignedElement;
 
 use function get_class;
 use function sprintf;
@@ -20,14 +20,14 @@ use function sprintf;
 class ValidatorChain implements ValidatorInterface
 {
     /**
-     * @var \SAML2\Signature\ChainedValidator[]
+     * @var \SimpleSAML\SAML2\Signature\ChainedValidator[]
      */
     private array $validators = [];
 
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \SAML2\Signature\ChainedValidator[] $validators
+     * @param \SimpleSAML\SAML2\Signature\ChainedValidator[] $validators
      */
     public function __construct(
         private LoggerInterface $logger,
@@ -41,7 +41,7 @@ class ValidatorChain implements ValidatorInterface
 
 
     /**
-     * @param \SAML2\Signature\ChainedValidator $validator
+     * @param \SimpleSAML\SAML2\Signature\ChainedValidator $validator
      * @return void
      */
     public function appendValidator(ChainedValidator $validator): void
@@ -51,8 +51,8 @@ class ValidatorChain implements ValidatorInterface
 
 
     /**
-     * @param \SAML2\SignedElement $signedElement
-     * @param \SAML2\Configuration\CertificateProvider $configuration
+     * @param \SimpleSAML\SAML2\SignedElement $signedElement
+     * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
      */

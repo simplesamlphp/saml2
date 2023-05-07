@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\ecp;
+namespace SimpleSAML\SAML2\XML\ecp;
 
 use DOMElement;
-use SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;

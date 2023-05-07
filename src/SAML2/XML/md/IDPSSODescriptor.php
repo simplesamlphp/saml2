@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\Utils;
-use SAML2\Utils\XPath;
-use SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function is_bool;
@@ -32,7 +32,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * Array with EndpointType objects.
      *
-     * @var \SAML2\XML\md\EndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\EndpointType[]
      */
     private array $SingleSignOnService = [];
 
@@ -41,7 +41,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * Array with EndpointType objects.
      *
-     * @var \SAML2\XML\md\EndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\EndpointType[]
      */
     private array $NameIDMappingService = [];
 
@@ -50,7 +50,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * Array with EndpointType objects.
      *
-     * @var \SAML2\XML\md\EndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\EndpointType[]
      */
     private array $AssertionIDRequestService = [];
 
@@ -68,7 +68,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * Array with \SAML2\XML\saml\Attribute objects.
      *
-     * @var \SAML2\XML\saml\Attribute[]
+     * @var \SimpleSAML\SAML2\XML\saml\Attribute[]
      */
     private array $Attribute = [];
 
@@ -140,7 +140,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Collect the value of the SingleSignOnService-property
      *
-     * @return \SAML2\XML\md\EndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\EndpointType[]
      */
     public function getSingleSignOnService(): array
     {
@@ -151,7 +151,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Set the value of the SingleSignOnService-property
      *
-     * @param array $singleSignOnService
+     * @param \SimpleSAML\SAML2\XML\md\EndpointType[] $singleSignOnService
      * @return void
      */
     public function setSingleSignOnService(array $singleSignOnService): void
@@ -163,7 +163,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Add the value to the SingleSignOnService-property
      *
-     * @param \SAML2\XML\md\EndpointType $singleSignOnService
+     * @param \SimpleSAML\SAML2\XML\md\EndpointType $singleSignOnService
      * @return void
      */
     public function addSingleSignOnService(EndpointType $singleSignOnService): void
@@ -175,7 +175,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Collect the value of the NameIDMappingService-property
      *
-     * @return \SAML2\XML\md\EndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\EndpointType[]
      */
     public function getNameIDMappingService(): array
     {
@@ -186,7 +186,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Set the value of the NameIDMappingService-property
      *
-     * @param array $nameIDMappingService
+     * @param \SimpleSAML\SAML2\XML\md\EndpointType[] $nameIDMappingService
      * @return void
      */
     public function setNameIDMappingService(array $nameIDMappingService): void
@@ -198,7 +198,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Add the value to the NameIDMappingService-property
      *
-     * @param \SAML2\XML\md\EndpointType $nameIDMappingService
+     * @param \SimpleSAML\SAML2\XML\md\EndpointType $nameIDMappingService
      * @return void
      */
     public function addNameIDMappingService(EndpointType $nameIDMappingService): void
@@ -210,7 +210,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Collect the value of the AssertionIDRequestService-property
      *
-     * @return \SAML2\XML\md\EndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\EndpointType[]
      */
     public function getAssertionIDRequestService(): array
     {
@@ -221,7 +221,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Set the value of the AssertionIDRequestService-property
      *
-     * @param array $assertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\EndpointType[] $assertionIDRequestService
      * @return void
      */
     public function setAssertionIDRequestService(array $assertionIDRequestService): void
@@ -233,7 +233,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Add the value to the AssertionIDRequestService-property
      *
-     * @param \SAML2\XML\md\EndpointType $assertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\EndpointType $assertionIDRequestService
      * @return void
      */
     public function addAssertionIDRequestService(EndpointType $assertionIDRequestService): void
@@ -267,7 +267,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Collect the value of the Attribute-property
      *
-     * @return \SAML2\XML\saml\Attribute[]
+     * @return \SimpleSAML\SAML2\XML\saml\Attribute[]
      */
     public function getAttribute(): array
     {
@@ -278,7 +278,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Set the value of the Attribute-property
      *
-     * @param array $attribute
+     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attribute
      * @return void
      */
     public function setAttribute(array $attribute): void
@@ -290,7 +290,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Addthe value to the Attribute-property
      *
-     * @param \SAML2\XML\saml\Attribute $attribute
+     * @param \SimpleSAML\SAML2\XML\saml\Attribute $attribute
      * @return void
      */
     public function addAttribute(Attribute $attribute): void

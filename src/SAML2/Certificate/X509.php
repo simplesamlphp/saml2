@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Certificate;
+namespace SimpleSAML\SAML2\Certificate;
 
 use function chunk_split;
 use function preg_replace;

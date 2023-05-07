@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\Test\SAML2\XML\md;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants as C;
-use SAML2\XML\md\AffiliationDescriptor;
-use SAML2\Utils;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 class AffiliationDescriptorTest extends TestCase

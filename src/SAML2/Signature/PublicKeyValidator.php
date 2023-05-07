@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Signature;
+namespace SimpleSAML\SAML2\Signature;
 
 use Mockery\MockInterface;
 use Psr\Log\LoggerInterface;
-use SAML2\Certificate\Key;
-use SAML2\Certificate\KeyCollection;
-use SAML2\Certificate\KeyLoader;
-use SAML2\Certificate\X509;
-use SAML2\Configuration\CertificateProvider;
-use SAML2\SignedElement;
+use SimpleSAML\SAML2\Certificate\Key;
+use SimpleSAML\SAML2\Certificate\KeyCollection;
+use SimpleSAML\SAML2\Certificate\KeyLoader;
+use SimpleSAML\SAML2\Certificate\X509;
+use SimpleSAML\SAML2\Configuration\CertificateProvider;
+use SimpleSAML\SAML2\SignedElement;
 
 use function count;
 use function sprintf;
@@ -19,7 +19,7 @@ use function sprintf;
 class PublicKeyValidator extends AbstractChainedValidator
 {
     /**
-     * @var \SAML2\Certificate\KeyCollection
+     * @var \SimpleSAML\SAML2\Certificate\KeyCollection
      */
     private KeyCollection $configuredKeys;
 
@@ -28,7 +28,7 @@ class PublicKeyValidator extends AbstractChainedValidator
      * Constructor for PublicKeyValidator
      *
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \SAML2\Certificate\KeyLoader $keyLoader
+     * @param \SimpleSAML\SAML2\Certificate\KeyLoader $keyLoader
      */
     public function __construct(
         LoggerInterface $logger,
@@ -39,8 +39,8 @@ class PublicKeyValidator extends AbstractChainedValidator
 
 
     /**
-     * @param \SAML2\SignedElement $signedElement
-     * @param \SAML2\Configuration\CertificateProvider $configuration
+     * @param \SimpleSAML\SAML2\SignedElement $signedElement
+     * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
      */
@@ -55,8 +55,8 @@ class PublicKeyValidator extends AbstractChainedValidator
 
 
     /**
-     * @param \SAML2\SignedElement $signedElement
-     * @param \SAML2\Configuration\CertificateProvider $configuration
+     * @param \SimpleSAML\SAML2\SignedElement $signedElement
+     * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
      */

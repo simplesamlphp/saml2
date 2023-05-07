@@ -2,22 +2,23 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use DOMDocument;
+use DOMNodeList;
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\Assertion;
-use SAML2\Constants as C;
-use SAML2\Utils\XPath;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\saml\NameID;
-use SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\Assertion;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
- * Class \SAML2\AssertionTest
+ * Class \SimpleSAML\SAML2\AssertionTest
  */
 class AssertionTest extends TestCase
 {
@@ -955,7 +956,7 @@ XML;
 
         $attributes = $assertion->getAttributes();
         $this->assertInstanceOf(
-            \DOMNodeList::class,
+            DOMNodeList::class,
             $attributes['urn:some:custom:outer:element'][0]
         );
         $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument->saveXML());
@@ -1040,7 +1041,7 @@ XML;
 
         $attributes = $assertionToVerify->getAttributes();
         $this->assertInstanceOf(
-            \DOMNodeList::class,
+            DOMNodeList::class,
             $attributes['urn:some:custom:outer:element'][0]
         );
         $this->assertXmlStringEqualsXmlString($xml, $assertionToVerify->toXML()->ownerDocument->saveXML());

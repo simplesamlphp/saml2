@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 
@@ -18,7 +18,7 @@ abstract class SignedElement
      *
      * The private key can be null, in which case the message is sent unsigned.
      *
-     * @var XMLSecurityKey|null
+     * @var \RobRichards\XMLSecLibs\XMLSecurityKey|null
      */
     protected ?XMLSecurityKey $signatureKey = null;
 
@@ -36,7 +36,7 @@ abstract class SignedElement
      * If no signature is present, false is returned. If a signature is present,
      * but cannot be verified, an exception will be thrown.
      *
-     * @param  XMLSecurityKey $key The key we should check against.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should check against.
      * @return bool True if successful, false if we don't have a signature that can be verified.
      */
     abstract public function validate(XMLSecurityKey $key): bool;
@@ -69,7 +69,7 @@ abstract class SignedElement
     /**
      * Retrieve the private key we should use to sign the message.
      *
-     * @return XMLSecurityKey|null The key, or NULL if no key is specified
+     * @return \RobRichards\XMLSecLibs\XMLSecurityKey|null The key, or NULL if no key is specified
      */
     public function getSignatureKey(): ?XMLSecurityKey
     {
@@ -82,7 +82,7 @@ abstract class SignedElement
      *
      * If the key is null, the message will be sent unsigned.
      *
-     * @param XMLSecurityKey|null $signatureKey
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|null $signatureKey
      * @return void
      */
     public function setSignatureKey(XMLSecurityKey $signatureKey = null): void

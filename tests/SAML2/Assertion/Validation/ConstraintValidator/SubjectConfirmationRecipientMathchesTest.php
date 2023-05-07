@@ -2,26 +2,26 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Validation\ConstraintValidator;
+namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches;
-use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
-use SAML2\Assertion\Validation\Result;
-use SAML2\Configuration\Destination;
-use SAML2\XML\saml\SubjectConfirmation;
-use SAML2\XML\saml\SubjectConfirmationData;
-use SAML2\XML\saml\SubjectConfirmationMatches;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
+use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\SAML2\Configuration\Destination;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmationMatches;
 
 class SubjectConfirmationRecipientMathchesTest extends TestCase
 {
     /**
-     * @var \SAML2\XML\saml\SubjectConfirmation
+     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation
      */
     private SubjectConfirmation $subjectConfirmation;
 
     /**
-     * @var \SAML2\XML\saml\SubjectConfirmationData
+     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData
      */
     private SubjectConfirmationData $subjectConfirmationData;
 

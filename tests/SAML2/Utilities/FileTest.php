@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Utilities;
+namespace SimpleSAML\Test\SAML2\Utilities;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Utilities\File;
-use SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\Utilities\File;
+use SimpleSAML\SAML2\Exception\RuntimeException;
 
 class FileTest extends TestCase
 {

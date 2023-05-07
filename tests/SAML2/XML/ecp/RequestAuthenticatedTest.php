@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\ecp;
+namespace SimpleSAML\Test\SAML2\XML\ecp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SOAP\Constants as C;
-use SAML2\XML\ecp\RequestAuthenticated;
+use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -18,8 +18,8 @@ use function strval;
 
 /**
  * @package simplesamlphp/saml2
- * @covers \SAML2\XML\ecp\AbstractEcpElement
- * @covers \SAML2\XML\ecp\RequestAuthenticated
+ * @covers \SimpleSAML\SAML2\XML\ecp\AbstractEcpElement
+ * @covers \SimpleSAML\SAML2\XML\ecp\RequestAuthenticated
  */
 final class RequestAuthenticatedTest extends TestCase
 {

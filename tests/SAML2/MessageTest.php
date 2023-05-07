@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use DOMDocument;
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\Message;
-use SAML2\Response;
-use SAML2\XML\saml\Issuer;
-use SAML2\Constants as C;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Message;
+use SimpleSAML\SAML2\Response;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -160,7 +160,7 @@ AUTHNREQUEST
 
     /**
      * @group Message
-     * @covers \SAML2\Message::getExtensions()
+     * @covers \SimpleSAML\SAML2\Message::getExtensions()
      * @return void
      */
     public function testGetExtensions(): void
@@ -203,7 +203,7 @@ AUTHNREQUEST
 
     /**
      * @group Message
-     * @covers \SAML2\Message::setExtensions()
+     * @covers \SimpleSAML\SAML2\Message::setExtensions()
      * @return void
      */
     public function testSetExtensions(): void

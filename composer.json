@@ -33,13 +33,12 @@
     },
     "autoload": {
         "psr-4": {
-            "SAML2\\": "src/SAML2"
+            "SimpleSAML\\SAML2\\": "src/SAML2"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Test\\SAML2\\": "tests/SAML2/",
-            "SAML2\\": "tests/SAML2/"
+            "SimpleSAML\\Test\\SAML2\\": "tests/SAML2/"
         }
     },
     "extra": {

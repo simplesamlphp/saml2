@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\Utils;
 use Serializable;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function array_pop;

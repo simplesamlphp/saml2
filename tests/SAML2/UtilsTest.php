@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\AttributeQuery;
-use SAML2\XML\ds\X509Data;
-use SAML2\XML\saml\NameID;
-use SAML2\Utils;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\AttributeQuery;
+use SimpleSAML\SAML2\XML\ds\X509Data;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
- * Class \SAML2\UtilsTest
+ * Class \SimpleSAML\SAML2\UtilsTest
  */
 class UtilsTest extends TestCase
 {

@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Validation\ConstraintValidator;
+namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod;
-use SAML2\Assertion\Validation\Result;
-use SAML2\Constants as C;
-use SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod;
+use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 
 class SubjectConfirmationMethodTest extends TestCase
 {
     /**
-     * @var \SAML2\XML\saml\SubjectConfirmation
+     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation
      */
     private SubjectConfirmation $subjectConfirmation;
 

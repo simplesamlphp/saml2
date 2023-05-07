@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
 /**
@@ -40,9 +40,9 @@ class Attribute
     /**
      * List of attribute values.
      *
-     * Array of \SAML2\XML\saml\AttributeValue elements.
+     * Array of \SimpleSAML\SAML2\XML\saml\AttributeValue elements.
      *
-     * @var \SAML2\XML\saml\AttributeValue[]
+     * @var \SimpleSAML\SAML2\XML\saml\AttributeValue[]
      */
     private array $AttributeValue = [];
 
@@ -151,7 +151,7 @@ class Attribute
     /**
      * Collect the value of the AttributeValue-property
      *
-     * @return \SAML2\XML\saml\AttributeValue[]
+     * @return \SimpleSAML\SAML2\XML\saml\AttributeValue[]
      */
     public function getAttributeValue(): array
     {
@@ -174,7 +174,7 @@ class Attribute
     /**
      * Add the value to the AttributeValue-property
      *
-     * @param \SAML2\XML\saml\AttributeValue $attributeValue
+     * @param \SimpleSAML\SAML2\XML\saml\AttributeValue $attributeValue
      * @return void
      */
     public function addAttributeValue(AttributeValue $attributeValue): void

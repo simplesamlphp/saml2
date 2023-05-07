@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Utils;
+namespace SimpleSAML\SAML2\Utils;
 
 use DOMNode;
 use DOMXPath;
-use SAML2\Constants as C;
+use SimpleSAML\SAML2\Constants as C;
 
 /**
  * Compilation of utilities for XPath.

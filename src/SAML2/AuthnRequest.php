@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Utils\XPath;
-use SAML2\XML\saml\NameID;
-use SAML2\XML\saml\SubjectConfirmation;
-use SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\InvalidArgumentException;
+use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -129,7 +129,7 @@ class AuthnRequest extends Request
     private array $audiences = [];
 
     /**
-     * @var \SAML2\XML\saml\SubjectConfirmation[]
+     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
      */
     private array $subjectConfirmation = [];
 
@@ -139,7 +139,7 @@ class AuthnRequest extends Request
     private ?DOMElement $encryptedNameId = null;
 
     /**
-     * @var \SAML2\XML\saml\NameID|null
+     * @var \SimpleSAML\SAML2\XML\saml\NameID|null
      */
     private ?NameID $nameId = null;
 
@@ -376,7 +376,7 @@ class AuthnRequest extends Request
     /**
      * Retrieve the NameIdPolicy.
      *
-     * @see \SAML2\AuthnRequest::setNameIdPolicy()
+     * @see \SimpleSAML\SAML2\AuthnRequest::setNameIdPolicy()
      * @return array The NameIdPolicy.
      */
     public function getNameIdPolicy(): array
@@ -697,7 +697,7 @@ class AuthnRequest extends Request
      * Retrieve the NameId of the subject in the assertion.
      *
      * @throws \Exception
-     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
+     * @return \SimpleSAML\SAML2\XML\saml\NameID|null The name identifier of the assertion.
      */
     public function getNameId(): ?NameID
     {
@@ -712,7 +712,7 @@ class AuthnRequest extends Request
     /**
      * Set the NameId of the subject in the assertion.
      *
-     * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
+     * @param \SimpleSAML\SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
     public function setNameId(NameID $nameId = null): void
@@ -724,7 +724,7 @@ class AuthnRequest extends Request
     /**
      * Encrypt the NameID in the AuthnRequest.
      *
-     * @param XMLSecurityKey $key The encryption key.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The encryption key.
      * @return void
      */
     public function encryptNameId(XMLSecurityKey $key): void
@@ -754,7 +754,6 @@ class AuthnRequest extends Request
         $enc->encryptKey($key, $symmetricKey);
 
         /**
-         * @var \DOMElement encryptedNameId
          * @psalm-suppress UndefinedClass
          */
         $this->encryptedNameId = $enc->encryptNode($symmetricKey);
@@ -765,8 +764,8 @@ class AuthnRequest extends Request
     /**
      * Decrypt the NameId of the subject in the assertion.
      *
-     * @param XMLSecurityKey $key       The decryption key.
-     * @param array          $blacklist Blacklisted decryption algorithms.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The decryption key.
+     * @param array $blacklist Blacklisted decryption algorithms.
      * @return void
      */
     public function decryptNameId(XMLSecurityKey $key, array $blacklist = []): void
@@ -787,7 +786,7 @@ class AuthnRequest extends Request
     /**
      * Retrieve the SubjectConfirmation elements we have in our Subject element.
      *
-     * @return \SAML2\XML\saml\SubjectConfirmation[]
+     * @return \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
      */
     public function getSubjectConfirmation(): array
     {
@@ -798,7 +797,7 @@ class AuthnRequest extends Request
     /**
      * Set the SubjectConfirmation elements that should be included in the assertion.
      *
-     * @param array \SAML2\XML\saml\SubjectConfirmation[]
+     * @param array \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
      * @return void
      */
     public function setSubjectConfirmation(array $subjectConfirmation): void

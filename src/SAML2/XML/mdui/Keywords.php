@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdui;
+namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
 use function explode;

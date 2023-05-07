@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Utilities;
+namespace SimpleSAML\Test\SAML2\Utilities;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\CertificatesMock;
-use SAML2\Utilities\Certificate;
+use SimpleSAML\SAML2\Utilities\Certificate;
+use SimpleSAML\Test\SAML2\CertificatesMock;
 
 use function str_replace;
 

@@ -2,10 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Certificate;
+namespace SimpleSAML\Test\SAML2\Certificate;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Certificate\KeyCollection;
 
 class KeyCollectionTest extends TestCase
 {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -30,14 +30,14 @@ class SubjectConfirmation
     /**
      * The NameID of the entity that can use this element to verify the Subject.
      *
-     * @var \SAML2\XML\saml\NameID|null
+     * @var \SimpleSAML\SAML2\XML\saml\NameID|null
      */
     private ?NameID $NameID = null;
 
     /**
      * SubjectConfirmationData element with extra data for verification of the Subject.
      *
-     * @var \SAML2\XML\saml\SubjectConfirmationData|null
+     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData|null
      */
     private ?SubjectConfirmationData $SubjectConfirmationData = null;
 
@@ -106,7 +106,7 @@ class SubjectConfirmation
     /**
      * Collect the value of the NameID-property
      *
-     * @return \SAML2\XML\saml\NameID|null
+     * @return \SimpleSAML\SAML2\XML\saml\NameID|null
      */
     public function getNameID(): ?NameID
     {
@@ -117,7 +117,7 @@ class SubjectConfirmation
     /**
      * Set the value of the NameID-property
      *
-     * @param \SAML2\XML\saml\NameID $nameId
+     * @param \SimpleSAML\SAML2\XML\saml\NameID $nameId
      * @return void
      */
     public function setNameID(NameID $nameId = null): void
@@ -129,7 +129,7 @@ class SubjectConfirmation
     /**
      * Collect the value of the SubjectConfirmationData-property
      *
-     * @return \SAML2\XML\saml\SubjectConfirmationData|null
+     * @return \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData|null
      */
     public function getSubjectConfirmationData(): ?SubjectConfirmationData
     {
@@ -140,7 +140,7 @@ class SubjectConfirmation
     /**
      * Set the value of the SubjectConfirmationData-property
      *
-     * @param \SAML2\XML\saml\SubjectConfirmationData|null $subjectConfirmationData
+     * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData|null $subjectConfirmationData
      * @return void
      */
     public function setSubjectConfirmationData(SubjectConfirmationData $subjectConfirmationData = null): void
@@ -152,7 +152,7 @@ class SubjectConfirmation
     /**
      * Convert this element to XML.
      *
-     * @param  \DOMElement $parent The parent element we should append this element to.
+     * @param \DOMElement $parent The parent element we should append this element to.
      * @return \DOMElement This element, as XML.
      */
     public function toXML(DOMElement $parent): DOMElement

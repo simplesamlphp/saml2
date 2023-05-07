@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\Utils;
-use SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\saml\Attribute;
 
 use function is_bool;
 

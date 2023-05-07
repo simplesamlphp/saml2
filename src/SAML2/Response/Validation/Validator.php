@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Response\Validation;
+namespace SimpleSAML\SAML2\Response\Validation;
 
-use SAML2\Response;
+use SimpleSAML\SAML2\Response;
 
 class Validator
 {
     /**
-     * @var \SAML2\Response\Validation\ConstraintValidator[]
+     * @var \SimpleSAML\SAML2\Response\Validation\ConstraintValidator[]
      */
     protected array $constraints;
 
 
     /**
-     * @param ConstraintValidator $constraint
+     * @param \SimpleSAML\SAML2\Response\Validation\ConstraintValidator $constraint
      * @return void
      */
     public function addConstraintValidator(ConstraintValidator $constraint): void
@@ -25,7 +25,7 @@ class Validator
 
 
     /**
-     * @param Response $response
+     * @param \SimpleSAML\SAML2\Response $response
      * @return Result
      */
     public function validate(Response $response): Result

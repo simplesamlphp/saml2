@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\LogoutResponse;
+use SimpleSAML\SAML2\LogoutResponse;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
- * Class \SAML2\LogoutResponseTest
+ * Class \SimpleSAML\SAML2\LogoutResponseTest
  */
 class LogoutResponseTest extends TestCase
 {

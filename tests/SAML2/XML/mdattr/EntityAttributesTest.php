@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdattr;
+namespace SimpleSAML\Test\SAML2\XML\mdattr;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\XML\saml\Attribute;
-use SAML2\XML\saml\AttributeValue;
-use SAML2\XML\mdattr\EntityAttributes;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
- * Class \SAML2\XML\mdattr\EntityAttributesTest
+ * Class \SimpleSAML\SAML2\XML\mdattr\EntityAttributesTest
  */
 class EntityAttributesTest extends TestCase
 {

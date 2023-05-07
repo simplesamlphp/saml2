@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdui;
+namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -21,7 +21,7 @@ class DiscoHints
     /**
      * Array with child elements.
      *
-     * The elements can be any of the other \SAML2\XML\mdui\* elements.
+     * The elements can be any of the other \SimpleSAML\SAML2\XML\mdui\* elements.
      *
      * @var \SimpleSAML\XML\Chunk[]
      */

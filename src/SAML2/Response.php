@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMElement;
 
@@ -16,7 +16,7 @@ class Response extends StatusResponse
     /**
      * The assertions in this response.
      *
-     * @var (Assertion|EncryptedAssertion)[]
+     * @var (\SimpleSAML\SAML2\Assertion|\SimpleSAML\SAML2\EncryptedAssertion)[]
      */
     private array $assertions;
 
@@ -55,7 +55,7 @@ class Response extends StatusResponse
     /**
      * Retrieve the assertions in this response.
      *
-     * @return \SAML2\Assertion[]|\SAML2\EncryptedAssertion[]
+     * @return \SimpleSAML\SAML2\Assertion[]|\SimpleSAML\SAML2\EncryptedAssertion[]
      */
     public function getAssertions(): array
     {
@@ -66,7 +66,7 @@ class Response extends StatusResponse
     /**
      * Set the assertions that should be included in this response.
      *
-     * @param \SAML2\Assertion[]|\SAML2\EncryptedAssertion[] $assertions The assertions.
+     * @param \SimpleSAML\SAML2\Assertion[]|\SimpleSAML\SAML2\EncryptedAssertion[] $assertions The assertions.
      * @return void
      */
     public function setAssertions(array $assertions): void
@@ -84,7 +84,6 @@ class Response extends StatusResponse
     {
         $root = parent::toUnsignedXML();
 
-        /** @var \SAML2\Assertion|\SAML2\EncryptedAssertion $assertion */
         foreach ($this->assertions as $assertion) {
             $assertion->toXML($root);
         }

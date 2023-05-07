@@ -2,25 +2,26 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\Test\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants as C;
-use SAML2\XML\alg\DigestMethod;
-use SAML2\XML\alg\SigningMethod;
-use SAML2\XML\mdattr\EntityAttributes;
-use SAML2\XML\mdrpi\PublicationInfo;
-use SAML2\XML\mdrpi\RegistrationInfo;
-use SAML2\XML\mdui\DiscoHints;
-use SAML2\XML\mdui\UIInfo;
-use SAML2\XML\shibmd\Scope;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\alg\DigestMethod;
+use SimpleSAML\SAML2\XML\alg\SigningMethod;
+use SimpleSAML\SAML2\XML\md\Extensions;
+use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
+use SimpleSAML\SAML2\XML\mdui\DiscoHints;
+use SimpleSAML\SAML2\XML\mdui\UIInfo;
+use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function trim;
 
 /**
- * Class \SAML2\XML\md\ExtensionsTest.
+ * Class \SimpleSAML\SAML2\XML\md\ExtensionsTest.
  *
  * This class tests for currently supported metadata extensions.
  *

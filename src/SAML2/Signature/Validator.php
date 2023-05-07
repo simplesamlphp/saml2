@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Signature;
+namespace SimpleSAML\SAML2\Signature;
 
 use Psr\Log\LoggerInterface;
-use SAML2\Certificate\KeyLoader;
-use SAML2\Configuration\CertificateProvider;
-use SAML2\SignedElement;
+use SimpleSAML\SAML2\Certificate\KeyLoader;
+use SimpleSAML\SAML2\Configuration\CertificateProvider;
+use SimpleSAML\SAML2\SignedElement;
 
 /**
  * Signature Validator.
@@ -17,7 +17,7 @@ class Validator
     /**
      * Constructor for Validator
      *
-     * @param LoggerInterface $logger
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         private LoggerInterface $logger
@@ -26,8 +26,8 @@ class Validator
 
 
     /**
-     * @param SignedElement $signedElement
-     * @param CertificateProvider $configuration
+     * @param \SimpleSAML\SAML2\SignedElement $signedElement
+     * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
      */

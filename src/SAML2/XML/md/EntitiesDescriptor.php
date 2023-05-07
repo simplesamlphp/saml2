@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\SignedElementHelper;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\SignedElementHelper;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -48,7 +48,7 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Child EntityDescriptor and EntitiesDescriptor elements.
      *
-     * @var (\SAML2\XML\md\EntityDescriptor|\SAML2\XML\md\EntitiesDescriptor)[]
+     * @var (\SimpleSAML\SAML2\XML\md\EntityDescriptor|\SimpleSAML\SAML2\XML\md\EntitiesDescriptor)[]
      */
     private array $children = [];
 
@@ -224,7 +224,7 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Collect the value of the children property.
      *
-     * @return (\SAML2\XML\md\EntityDescriptor|\SAML2\XML\md\EntitiesDescriptor)[]
+     * @return (\SimpleSAML\SAML2\XML\md\EntityDescriptor|\SimpleSAML\SAML2\XML\md\EntitiesDescriptor)[]
      */
     public function getChildren(): array
     {
@@ -247,7 +247,7 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Add the value to the children property.
      *
-     * @param \SAML2\XML\md\EntityDescriptor|\SAML2\XML\md\EntitiesDescriptor $child
+     * @param \SimpleSAML\SAML2\XML\md\EntityDescriptor|\SimpleSAML\SAML2\XML\md\EntitiesDescriptor $child
      * @return void
      */
     public function addChildren($child): void
@@ -292,7 +292,6 @@ class EntitiesDescriptor extends SignedElementHelper
 
         Extensions::addList($e, $this->Extensions);
 
-        /** @var \SAML2\XML\md\EntityDescriptor|\SAML2\XML\md\EntitiesDescriptor $node */
         foreach ($this->children as $node) {
             $node->toXML($e);
         }

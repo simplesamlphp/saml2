@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMElement;
 use Exception;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
 

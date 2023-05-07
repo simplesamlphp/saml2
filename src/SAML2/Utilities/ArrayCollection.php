@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Utilities;
+namespace SimpleSAML\SAML2\Utilities;
 
 use ArrayIterator;
 use Closure;
-use SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\Exception\RuntimeException;
 
 use function array_filter;
 use function array_search;
@@ -91,7 +91,7 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @throws RuntimeException
+     * @throws \SimpleSAML\SAML2\Exception\RuntimeException
      * @return bool|mixed
      */
     public function getOnlyElement()

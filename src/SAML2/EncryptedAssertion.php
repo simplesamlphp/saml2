@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMElement;
 use DOMNode;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -71,8 +71,8 @@ class EncryptedAssertion
     /**
      * Set the assertion.
      *
-     * @param \SAML2\Assertion $assertion The assertion.
-     * @param XMLSecurityKey  $key       The key we should use to encrypt the assertion.
+     * @param \SimpleSAML\SAML2\Assertion $assertion The assertion.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey  $key       The key we should use to encrypt the assertion.
      * @throws \Exception
      * @return void
      */
@@ -84,22 +84,22 @@ class EncryptedAssertion
 
         $enc = new XMLSecEnc();
         $enc->setNode($xml);
-        $enc->type = XMLSecEnc::Element;
+        $enc->type = Constants::XMLENC_ELEMENT;
 
         switch ($key->type) {
-            case XMLSecurityKey::TRIPLEDES_CBC:
-            case XMLSecurityKey::AES128_CBC:
-            case XMLSecurityKey::AES192_CBC:
-            case XMLSecurityKey::AES256_CBC:
-            case XMLSecurityKey::AES128_GCM:
-            case XMLSecurityKey::AES192_GCM:
-            case XMLSecurityKey::AES256_GCM:
+            case Constants::BLOCK_ENC_3DES:
+            case Constants::BLOCK_ENC_AES128:
+            case Constants::BLOCK_ENC_AES192:
+            case Constants::BLOCK_ENC_AES256:
+            case Constants::BLOCK_ENC_AES128_GCM:
+            case Constants::BLOCK_ENC_AES192_GCM:
+            case Constants::BLOCK_ENC_AES256_GCM:
                 $symmetricKey = $key;
                 break;
 
-            case XMLSecurityKey::RSA_1_5:
-            case XMLSecurityKey::RSA_OAEP_MGF1P:
-                $symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
+            case Constants::KEY_TRANSPORT_RSA_1_5:
+            case Constants::KEY_TRANSPORT_OAEP_MGF1P:
+                $symmetricKey = new XMLSecurityKey(Constants::BLOCK_ENC_AES128);
                 $symmetricKey->generateSessionKey();
 
                 $enc->encryptKey($key, $symmetricKey);
@@ -111,7 +111,6 @@ class EncryptedAssertion
         }
 
         /**
-         * @var \DOMElement encryptedData
          * @psalm-suppress UndefinedClass
          */
         $this->encryptedData = $enc->encryptNode($symmetricKey);
@@ -121,9 +120,9 @@ class EncryptedAssertion
     /**
      * Retrieve the assertion.
      *
-     * @param  XMLSecurityKey  $inputKey  The key we should use to decrypt the assertion.
-     * @param  array           $blacklist Blacklisted decryption algorithms.
-     * @return \SAML2\Assertion The decrypted assertion.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $inputKey  The key we should use to decrypt the assertion.
+     * @param array $blacklist Blacklisted decryption algorithms.
+     * @return \SimpleSAML\SAML2\Assertion The decrypted assertion.
      */
     public function getAssertion(XMLSecurityKey $inputKey, array $blacklist = []): Assertion
     {

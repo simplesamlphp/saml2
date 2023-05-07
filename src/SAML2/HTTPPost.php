@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use DOMElement;
@@ -27,7 +27,7 @@ class HTTPPost extends Binding
     /**
      * Send a SAML 2 message using the HTTP-POST binding.
      *
-     * @param \SAML2\Message $message The message we should send.
+     * @param \SimpleSAML\SAML2\Message $message The message we should send.
      * @return \Psr\Http\Message\ResponseInterface The response
      */
     public function send(Message $message): ResponseInterface
@@ -73,7 +73,7 @@ class HTTPPost extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @return \SAML2\Message The received message.
+     * @return \SimpleSAML\SAML2\Message The received message.
      * @throws \Exception
      */
     public function receive(ServerRequestInterface $request): Message

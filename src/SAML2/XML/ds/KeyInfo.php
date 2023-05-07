@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\ds;
+namespace SimpleSAML\SAML2\XML\ds;
 
 use DOMElement;
-use SAML2\Constants as C;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\Assert\Assert;
 
@@ -29,7 +29,7 @@ class KeyInfo
      * Array with various elements describing this key.
      * Unknown elements will be represented by \SimpleSAML\XML\Chunk.
      *
-     * @var (\SimpleSAML\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[]
+     * @var (\SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\ds\KeyName|\SimpleSAML\SAML2\XML\ds\X509Data)[]
      */
     private array $info = [];
 
@@ -122,7 +122,7 @@ class KeyInfo
     /**
      * Add the value to the info-property
      *
-     * @param \SimpleSAML\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data $info
+     * @param \SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\ds\KeyName|\SimpleSAML\SAML2\XML\ds\X509Data $info
      * @throws \Exception
      * @return void
      */

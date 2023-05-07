@@ -2,14 +2,23 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\SignedElementHelper;
-use SAML2\Utils\XPath;
+use Exception;
+use InvalidArgumentException;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\SignedElementHelper;
+use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Utils as XMLUtils;
+
+use function count;
+use function filter_var;
+use function gmdate;
+use function implode;
+use function is_null;
 
 /**
  * Class representing SAML 2 RoleDescriptor element.
@@ -58,25 +67,25 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * KeyDescriptor elements.
      *
-     * Array of \SAML2\XML\md\KeyDescriptor elements.
+     * Array of \SimpleSAML\SAML2\XML\md\KeyDescriptor elements.
      *
-     * @var \SAML2\XML\md\KeyDescriptor[]
+     * @var \SimpleSAML\SAML2\XML\md\KeyDescriptor[]
      */
     private array $KeyDescriptor = [];
 
     /**
      * Organization of this role.
      *
-     * @var \SAML2\XML\md\Organization|null
+     * @var \SimpleSAML\SAML2\XML\md\Organization|null
      */
     private ?Organization $Organization = null;
 
     /**
      * ContactPerson elements for this role.
      *
-     * Array of \SAML2\XML\md\ContactPerson objects.
+     * Array of \SimpleSAML\SAML2\XML\md\ContactPerson objects.
      *
-     * @var \SAML2\XML\md\ContactPerson[]
+     * @var \SimpleSAML\SAML2\XML\md\ContactPerson[]
      */
     private array $ContactPerson = [];
 
@@ -108,7 +117,7 @@ class RoleDescriptor extends SignedElementHelper
         }
 
         if (!$xml->hasAttribute('protocolSupportEnumeration')) {
-            throw new \Exception('Missing protocolSupportEnumeration attribute on ' . $xml->localName);
+            throw new MissingAttributeException('Missing protocolSupportEnumeration attribute on ' . $xml->localName);
         }
         $this->protocolSupportEnumeration = preg_split('/[\s]+/', $xml->getAttribute('protocolSupportEnumeration'));
 
@@ -125,7 +134,7 @@ class RoleDescriptor extends SignedElementHelper
 
         $organization = XPath::xpQuery($xml, './saml_metadata:Organization', $xpCache);
         if (count($organization) > 1) {
-            throw new \Exception('More than one Organization in the entity.');
+            throw new Exception('More than one Organization in the entity.');
         } elseif (!empty($organization)) {
             /** @var \DOMElement $organization[0] */
             $this->Organization = new Organization($organization[0]);
@@ -247,7 +256,7 @@ class RoleDescriptor extends SignedElementHelper
     public function setErrorURL(string $errorURL = null): void
     {
         if (!is_null($errorURL) && !filter_var($errorURL, FILTER_VALIDATE_URL)) {
-            throw new \InvalidArgumentException('RoleDescriptor errorURL is not a valid URL.');
+            throw new InvalidArgumentException('RoleDescriptor errorURL is not a valid URL.');
         }
         $this->errorURL = $errorURL;
     }
@@ -302,7 +311,7 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * Collect the value of the Organization property.
      *
-     * @return \SAML2\XML\md\Organization|null
+     * @return \SimpleSAML\SAML2\XML\md\Organization|null
      */
     public function getOrganization(): ?Organization
     {
@@ -313,7 +322,7 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * Set the value of the Organization property.
      *
-     * @param \SAML2\XML\md\Organization|null $organization
+     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
      * @return void
      */
     public function setOrganization(Organization $organization = null): void
@@ -325,7 +334,7 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * Collect the value of the ContactPerson property.
      *
-     * @return \SAML2\XML\md\ContactPerson[]
+     * @return \SimpleSAML\SAML2\XML\md\ContactPerson[]
      */
     public function getContactPerson(): array
     {
@@ -336,7 +345,7 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * Set the value of the ContactPerson property.
      *
-     * @param array $contactPerson
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contactPerson
      * @return void
      */
     public function setContactPerson(array $contactPerson): void
@@ -348,7 +357,7 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * Add the value to the ContactPerson property.
      *
-     * @param \SAML2\XML\md\ContactPerson $contactPerson
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson $contactPerson
      * @return void
      */
     public function addContactPerson(ContactPerson $contactPerson): void
@@ -360,7 +369,7 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * Collect the value of the KeyDescriptor property.
      *
-     * @return \SAML2\XML\md\KeyDescriptor[]
+     * @return \SimpleSAML\SAML2\XML\md\KeyDescriptor[]
      */
     public function getKeyDescriptor(): array
     {
@@ -371,7 +380,7 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * Set the value of the KeyDescriptor property.
      *
-     * @param array $keyDescriptor
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor
      * @return void
      */
     public function setKeyDescriptor(array $keyDescriptor): void
@@ -383,7 +392,7 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * Add the value to the KeyDescriptor property.
      *
-     * @param \SAML2\XML\md\KeyDescriptor $keyDescriptor
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor $keyDescriptor
      * @return void
      */
     public function addKeyDescriptor(KeyDescriptor $keyDescriptor): void

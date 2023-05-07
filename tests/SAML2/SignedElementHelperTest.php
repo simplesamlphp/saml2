@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
-use SAML2\CertificatesMock;
-use SAML2\SignedElementHelperMock;
-use SAML2\SignedElementHelper;
-use SAML2\Utils;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\SignedElementHelper;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\Test\SAML2\CertificatesMock;
+use SimpleSAML\Test\SAML2\SignedElementHelperMock;
 
 /**
- * Class \SAML2\SignedElementHelperTest
+ * Class \SimpleSAML\SAML2\SignedElementHelperTest
  */
 class SignedElementHelperTest extends MockeryTestCase
 {

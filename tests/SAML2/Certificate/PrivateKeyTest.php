@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Certificate;
+namespace SimpleSAML\Test\SAML2\Certificate;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\CertificatesMock;
-use SAML2\Certificate\PrivateKey;
+use SimpleSAML\SAML2\Certificate\PrivateKey;
+use SimpleSAML\Test\SAML2\CertificatesMock;
 
 class PrivateKeyTest extends TestCase
 {

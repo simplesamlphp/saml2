@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdrpi;
+namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\XML\mdrpi\PublicationInfo;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
- * Class \SAML2\XML\mdrpi\PublicationInfoTest
+ * Class \SimpleSAML\SAML2\XML\mdrpi\PublicationInfoTest
  */
 class PublicationInfoTest extends TestCase
 {

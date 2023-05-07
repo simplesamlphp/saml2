@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Signature;
+namespace SimpleSAML\Test\SAML2\Signature;
 
 use Psr\Log\NullLogger;
-use SAML2\Signature\AbstractChainedValidator;
-use SAML2\Configuration\CertificateProvider;
-use SAML2\SignedElement;
+use SimpleSAML\SAML2\Signature\AbstractChainedValidator;
+use SimpleSAML\SAML2\Configuration\CertificateProvider;
+use SimpleSAML\SAML2\SignedElement;
 
 /**
  * MockChainedValidator, to be able to test the validatorchain without having to use

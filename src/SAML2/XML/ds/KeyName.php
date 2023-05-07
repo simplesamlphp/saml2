@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\ds;
+namespace SimpleSAML\SAML2\XML\ds;
 
 use DOMElement;
-use SAML2\Constants as C;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 /**

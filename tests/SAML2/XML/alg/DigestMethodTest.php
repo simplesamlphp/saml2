@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\alg;
+namespace SimpleSAML\Test\SAML2\XML\alg;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\XML\alg\DigestMethod;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\alg\DigestMethod;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
- * Class \SAML2\XML\alg\DigestMethodTest
+ * Class \SimpleSAML\SAML2\XML\alg\DigestMethodTest
  *
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2

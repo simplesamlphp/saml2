@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\SignedElementHelper;
-use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\SignedElementHelper;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -57,9 +57,9 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * KeyDescriptor elements.
      *
-     * Array of \SAML2\XML\md\KeyDescriptor elements.
+     * Array of \SimpleSAML\SAML2\XML\md\KeyDescriptor elements.
      *
-     * @var \SAML2\XML\md\KeyDescriptor[]
+     * @var \SimpleSAML\SAML2\XML\md\KeyDescriptor[]
      */
     private array $KeyDescriptor = [];
 
@@ -216,7 +216,7 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Collect the value of the KeyDescriptor-property
      *
-     * @return \SAML2\XML\md\KeyDescriptor[]
+     * @return \SimpleSAML\SAML2\XML\md\KeyDescriptor[]
      */
     public function getKeyDescriptor(): array
     {
@@ -227,7 +227,7 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Set the value of the KeyDescriptor-property
      *
-     * @param array $keyDescriptor
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor
      * @return void
      */
     public function setKeyDescriptor(array $keyDescriptor): void
@@ -239,7 +239,7 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Add the value to the KeyDescriptor-property
      *
-     * @param \SAML2\XML\md\KeyDescriptor $keyDescriptor
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor $keyDescriptor
      * @return void
      */
     public function addKeyDescriptor(KeyDescriptor $keyDescriptor): void

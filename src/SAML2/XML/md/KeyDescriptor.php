@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\Utils;
-use SAML2\Utils\XPath;
-use SAML2\XML\ds\KeyInfo;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\ds\KeyInfo;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -35,7 +35,7 @@ class KeyDescriptor
     /**
      * The KeyInfo for this key.
      *
-     * @var \SAML2\XML\ds\KeyInfo|null
+     * @var \SimpleSAML\SAML2\XML\ds\KeyInfo|null
      */
     private ?KeyInfo $KeyInfo = null;
 
@@ -109,7 +109,7 @@ class KeyDescriptor
     /**
      * Collect the value of the KeyInfo property.
      *
-     * @return \SAML2\XML\ds\KeyInfo|null
+     * @return \SimpleSAML\SAML2\XML\ds\KeyInfo|null
      */
     public function getKeyInfo(): ?KeyInfo
     {
@@ -120,7 +120,7 @@ class KeyDescriptor
     /**
      * Set the value of the KeyInfo property.
      *
-     * @param \SAML2\XML\ds\KeyInfo $keyInfo
+     * @param \SimpleSAML\SAML2\XML\ds\KeyInfo $keyInfo
      * @return void
      */
     public function setKeyInfo(KeyInfo $keyInfo): void

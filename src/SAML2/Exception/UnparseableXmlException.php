@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Exception;
+namespace SimpleSAML\SAML2\Exception;
 
 use LibXMLError;
 

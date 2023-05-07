@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\shibmd;
+namespace SimpleSAML\Test\SAML2\XML\shibmd;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\XML\shibmd\Scope;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\shibmd\Scope;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
- * Class \SAML2\XML\shibmd\Scope
+ * Class \SimpleSAML\SAML2\XML\shibmd\Scope
  */
 class ScopeTest extends TestCase
 {

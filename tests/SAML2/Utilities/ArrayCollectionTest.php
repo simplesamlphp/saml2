@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Utilities;
+namespace SimpleSAML\Test\SAML2\Utilities;
 
 use ArrayIterator;
 use PHPUnit\Framework\TestCase;
-use SAML2\Utilities\ArrayCollection;
-use SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\Exception\RuntimeException;
 
 use function ucfirst;
 

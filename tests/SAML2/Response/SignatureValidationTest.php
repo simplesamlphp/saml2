@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Response;
+namespace SimpleSAML\Test\SAML2\Response;
 
 use DOMDocument;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
 use Psr\Log\NullLogger;
-use SAML2\Assertion;
-use SAML2\Assertion\Processor as AssertionProcessor;
-use SAML2\CertificatesMock;
-use SAML2\Configuration\Destination;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Configuration\ServiceProvider;
-use SAML2\Response;
-use SAML2\Response\Exception\UnsignedResponseException;
-use SAML2\Response\Processor as ResponseProcessor;
-use SAML2\Utilities\ArrayCollection;
-use SAML2\Utilities\Certificate;
+use SimpleSAML\SAML2\Assertion;
+use SimpleSAML\SAML2\Assertion\Processor as AssertionProcessor;
+use SimpleSAML\SAML2\Configuration\Destination;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\Response;
+use SimpleSAML\SAML2\Response\Exception\UnsignedResponseException;
+use SimpleSAML\SAML2\Response\Processor as ResponseProcessor;
+use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\Utilities\Certificate;
+use SimpleSAML\Test\SAML2\CertificatesMock;
 
 use function preg_match;
 
@@ -29,22 +29,22 @@ use function preg_match;
 class SignatureValidationTest extends MockeryTestCase
 {
     /**
-     * @var \SAML2\Configuration\IdentityProvider
+     * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
      */
     private IdentityProvider $identityProviderConfiguration;
 
     /**
-     * @var \SAML2\Configuration\ServiceProvider
+     * @var \SimpleSAML\SAML2\Configuration\ServiceProvider
      */
     private ServiceProvider $serviceProviderConfiguration;
 
     /**
-     * @var \Mockery\MockInterface Mock of \SAML2\Assertion\ProcessorBuilder
+     * @var \Mockery\MockInterface Mock of \SimpleSAML\SAML2\Assertion\ProcessorBuilder
      */
     private MockInterface $assertionProcessorBuilder;
 
     /**
-     * @var \Mockery\MockInterface Mock of \SAML2\Assertion\Processor
+     * @var \Mockery\MockInterface Mock of \SimpleSAML\SAML2\Assertion\Processor
      */
     private MockInterface $assertionProcessor;
 
@@ -62,7 +62,7 @@ class SignatureValidationTest extends MockeryTestCase
      */
     public function setUp(): void
     {
-        $this->assertionProcessorBuilder = Mockery::mock('alias:SAML2\Assertion\ProcessorBuilder');
+        $this->assertionProcessorBuilder = Mockery::mock('alias:SimpleSAML\SAML2\Assertion\ProcessorBuilder');
         $this->assertionProcessor = Mockery::mock(AssertionProcessor::class);
         $this->assertionProcessorBuilder
             ->shouldReceive('build')
@@ -182,7 +182,7 @@ class SignatureValidationTest extends MockeryTestCase
 
 
     /**
-     * @return \SAML2\Response
+     * @return \SimpleSAML\SAML2\Response
      */
     private function getSignedResponseWithUnsignedAssertion(): Response
     {
@@ -198,7 +198,7 @@ class SignatureValidationTest extends MockeryTestCase
 
 
     /**
-     * @return \SAML2\Response
+     * @return \SimpleSAML\SAML2\Response
      */
     private function getUnsignedResponseWithSignedAssertion(): Response
     {
@@ -219,7 +219,7 @@ class SignatureValidationTest extends MockeryTestCase
 
 
     /**
-     * @return \SAML2\Response
+     * @return \SimpleSAML\SAML2\Response
      */
     private function getSignedResponseWithSignedAssertion(): Response
     {
@@ -239,7 +239,7 @@ class SignatureValidationTest extends MockeryTestCase
 
 
     /**
-     * @return \SAML2\Response
+     * @return \SimpleSAML\SAML2\Response
      */
     private function getUnsignedResponseWithUnsignedAssertion(): Response
     {

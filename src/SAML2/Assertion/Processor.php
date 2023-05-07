@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion;
+namespace SimpleSAML\SAML2\Assertion;
 
 use Mockery\MockInterface;
 use Psr\Log\LoggerInterface;
-use SAML2\Assertion;
-use SAML2\Assertion\Exception\InvalidAssertionException;
-use SAML2\Assertion\Exception\InvalidSubjectConfirmationException;
-use SAML2\Assertion\Transformer\Transformer;
-use SAML2\Assertion\Validation\AssertionValidator;
-use SAML2\Assertion\Validation\SubjectConfirmationValidator;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\EncryptedAssertion;
-use SAML2\Response\Exception\InvalidSignatureException;
-use SAML2\Signature\Validator;
-use SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\Assertion;
+use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
+use SimpleSAML\SAML2\Assertion\Exception\InvalidSubjectConfirmationException;
+use SimpleSAML\SAML2\Assertion\Transformer\Transformer;
+use SimpleSAML\SAML2\Assertion\Validation\AssertionValidator;
+use SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationValidator;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\EncryptedAssertion;
+use SimpleSAML\SAML2\Response\Exception\InvalidSignatureException;
+use SimpleSAML\SAML2\Signature\Validator;
+use SimpleSAML\SAML2\Utilities\ArrayCollection;
 
 use function implode;
 use function sprintf;
@@ -24,16 +24,16 @@ use function sprintf;
 class Processor
 {
     /**
-     * @param Decrypter $decrypter
-     * @param Validator $signatureValidator
-     * @param AssertionValidator $assertionValidator
-     * @param SubjectConfirmationValidator $subjectConfirmationValidator
-     * @param Transformer $transformer
-     * @param IdentityProvider $identityProviderConfiguration
-     * @param LoggerInterface $logger
+     * @param \SimpleSAML\SAML2\Assertion\Decrypter|\Mockery\MockInterface $decrypter
+     * @param \SimpleSAML\SAML2\Signature\Validator $signatureValidator
+     * @param \SimpleSAML\SAML2\Assertion\Validation\AssertionValidator $assertionValidator
+     * @param \SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationValidator $subjectConfirmationValidator
+     * @param \SimpleSAML\SAML2\Assertion\Transformer\Transformer $transformer
+     * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProviderConfiguration
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
-        private Decrypter $decrypter,
+        private Decrypter|MockInterface $decrypter,
         private Validator $signatureValidator,
         private AssertionValidator $assertionValidator,
         private SubjectConfirmationValidator $subjectConfirmationValidator,
@@ -47,8 +47,8 @@ class Processor
     /**
      * Decrypt assertions, or do nothing if assertions are already decrypted.
      *
-     * @param \SAML2\Utilities\ArrayCollection $assertions
-     * @return \SAML2\Utilities\ArrayCollection Collection of processed assertions
+     * @param \SimpleSAML\SAML2\Utilities\ArrayCollection $assertions
+     * @return \SimpleSAML\SAML2\Utilities\ArrayCollection Collection of processed assertions
      */
     public function decryptAssertions(ArrayCollection $assertions)
     {
@@ -67,8 +67,8 @@ class Processor
     }
 
     /**
-     * @param \SAML2\Utilities\ArrayCollection $assertions Collection of decrypted assertions
-     * @return \SAML2\Utilities\ArrayCollection Collection of processed assertions
+     * @param \SimpleSAML\SAML2\Utilities\ArrayCollection $assertions Collection of decrypted assertions
+     * @return \SimpleSAML\SAML2\Utilities\ArrayCollection Collection of processed assertions
      */
     public function processAssertions(ArrayCollection $assertions): ArrayCollection
     {
@@ -82,8 +82,8 @@ class Processor
 
 
     /**
-     * @param \SAML2\Assertion $assertion
-     * @return \SAML2\Assertion
+     * @param \SimpleSAML\SAML2\Assertion $assertion
+     * @return \SimpleSAML\SAML2\Assertion
      */
     public function process(Assertion $assertion): Assertion
     {
@@ -111,8 +111,8 @@ class Processor
 
 
     /**
-     * @param \SAML2\EncryptedAssertion $assertion
-     * @return \SAML2\Assertion
+     * @param \SimpleSAML\SAML2\EncryptedAssertion $assertion
+     * @return \SimpleSAML\SAML2\Assertion
      */
     private function decryptAssertion(EncryptedAssertion $assertion): Assertion
     {
@@ -121,7 +121,7 @@ class Processor
 
 
     /**
-     * @param \SAML2\Assertion $assertion
+     * @param \SimpleSAML\SAML2\Assertion $assertion
      * @return void
      */
     public function validateAssertion(Assertion $assertion): void
@@ -149,8 +149,8 @@ class Processor
 
 
     /**
-     * @param \SAML2\Assertion $assertion
-     * @return \SAML2\Assertion
+     * @param \SimpleSAML\SAML2\Assertion $assertion
+     * @return \SimpleSAML\SAML2\Assertion
      */
     private function transformAssertion(Assertion $assertion): Assertion
     {

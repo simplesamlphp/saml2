@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use Exception;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
-use SAML2\HTTPRedirect;
-use SAML2\AuthnRequest;
-use SAML2\Request;
-use SAML2\Response;
-use SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\HTTPRedirect;
+use SimpleSAML\SAML2\AuthnRequest;
+use SimpleSAML\SAML2\Request;
+use SimpleSAML\SAML2\Response;
+use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;

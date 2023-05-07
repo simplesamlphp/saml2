@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Validation\ConstraintValidator;
+namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
-use SAML2\Assertion;
-use SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience;
-use SAML2\Assertion\Validation\Result;
-use SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\Assertion;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience;
+use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\SAML2\Configuration\ServiceProvider;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other

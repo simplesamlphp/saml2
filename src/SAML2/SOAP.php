@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use SAML2\Exception\Protocol\UnsupportedBindingException;
-use SAML2\Response as SAML2_Response;
-use SAML2\XML\ecp\RequestAuthenticated;
-use SAML2\XML\ecp\Response as ECPResponse;
+use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
+use SimpleSAML\SAML2\Response as SAML2_Response;
+use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
+use SimpleSAML\SAML2\XML\ecp\Response as ECPResponse;
 use SimpleSAML\SOAP\Constants as SOAPC;
 use SimpleSAML\SOAP11\Utils\XPath;
 use SimpleSAML\SOAP11\XML\env\Body;
@@ -31,7 +31,7 @@ use function file_get_contents;
 class SOAP extends Binding
 {
     /**
-     * @param Message $message
+     * @param \SimpleSAML\SAML2\Message $message
      * @throws \Exception
      * @return string|false The XML or false on error
      */
@@ -67,7 +67,7 @@ class SOAP extends Binding
     /**
      * Send a SAML 2 message using the SOAP binding.
      *
-     * @param \SAML2\Message $message The message we should send.
+     * @param \SimpleSAML\SAML2\Message $message The message we should send.
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function send(Message $message): ResponseInterface
@@ -83,7 +83,7 @@ class SOAP extends Binding
      * Receive a SAML 2 message sent using the HTTP-POST binding.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @return \SAML2\Message The received message.
+     * @return \SimpleSAML\SAML2\Message The received message.
      *
      * @throws \Exception If unable to receive the message
      */

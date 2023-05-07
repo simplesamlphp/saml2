@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMElement;
 use Exception;
@@ -40,7 +40,7 @@ class HTTPRedirect extends Binding
     /**
      * Create the redirect URL for a message.
      *
-     * @param \SAML2\Message $message The message.
+     * @param \SimpleSAML\SAML2\Message $message The message.
      * @return string The URL the user should be redirected to in order to send a message.
      */
     public function getRedirectURL(Message $message): string
@@ -100,7 +100,7 @@ class HTTPRedirect extends Binding
     /**
      * Send a SAML 2 message using the HTTP-Redirect binding.
      *
-     * @param \SAML2\Message $message
+     * @param \SimpleSAML\SAML2\Message $message
      * @return \Psr\Http\Message\ResponseInterface
      */
     public function send(Message $message): ResponseInterface
@@ -119,7 +119,7 @@ class HTTPRedirect extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @return \SAML2\Message The received message.
+     * @return \SimpleSAML\SAML2\Message The received message.
      * @throws \Exception
      *
      * NPath is currently too high but solving that just moves code around.
@@ -188,8 +188,8 @@ class HTTPRedirect extends Binding
      *
      * Throws an exception if we are unable to validate the signature.
      *
-     * @param array          $data The data we need to validate the query string.
-     * @param XMLSecurityKey $key  The key we should validate the query against.
+     * @param array $data  The data we need to validate the query string.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key  The key we should validate the query against.
      * @throws \Exception
      * @return void
      */

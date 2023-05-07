@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Signature;
+namespace SimpleSAML\SAML2\Signature;
 
 use Exception;
 use Psr\Log\LoggerInterface;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\SignedElement;
-use SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\SignedElement;
+use SimpleSAML\SAML2\Utilities\ArrayCollection;
 
 use function sprintf;
 
@@ -28,8 +28,8 @@ abstract class AbstractChainedValidator implements ChainedValidator
     /**
      * BC compatible version of the signature check
      *
-     * @param \SAML2\SignedElement      $element
-     * @param \SAML2\Utilities\ArrayCollection $pemCandidates
+     * @param \SimpleSAML\SAML2\SignedElement      $element
+     * @param \SimpleSAML\SAML2\Utilities\ArrayCollection $pemCandidates
      *
      * @throws \Exception
      *

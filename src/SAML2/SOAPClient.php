@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Compat\ContainerSingleton;
-use SAML2\Exception\RuntimeException;
-use SAML2\Exception\InvalidArgumentException;
-use SAML2\Exception\UnparseableXmlException;
 use SimpleSAML\Configuration;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\Exception\InvalidArgumentException;
+use SimpleSAML\SAML2\Exception\UnparseableXmlException;
+use SimpleSAML\SAML2\Message;
 use SimpleSAML\SOAP11\XML\env\Body;
 use SimpleSAML\SOAP11\XML\env\Envelope;
 use SimpleSAML\SOAP11\XML\env\Fault;
@@ -19,6 +20,8 @@ use SimpleSAML\SOAP11\Utils\XPath;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SoapClient as BuiltinSoapClient;
 use SOAP_1_1;
 
 use function chunk_split;
@@ -40,11 +43,11 @@ class SOAPClient
     /**
      * This function sends the SOAP message to the service location and returns SOAP response
      *
-     * @param \SAML2\Message $msg The request that should be sent.
+     * @param \SimpleSAML\SAML2\Message $msg The request that should be sent.
      * @param \SimpleSAML\Configuration $srcMetadata The metadata of the issuer of the message.
      * @param \SimpleSAML\Configuration $dstMetadata The metadata of the destination of the message.
      * @throws \Exception
-     * @return \SAML2\Message The response we received.
+     * @return \SimpleSAML\SAML2\Message The response we received.
      *
      * @psalm-suppress UndefinedClass
      */
@@ -133,7 +136,10 @@ class SOAPClient
             $options['proxy_port'] = $srcMetadata->getValue('saml.SOAPClient.proxyport');
         }
 
-        $x = new \SoapClient(null, $options);
+        $destination = $msg->getDestination();
+        if ($destination === null) {
+            throw new Exception('Cannot send SOAP message, no destination set.');
+        }
 
         // Add soap-envelopes
         $env = (new Envelope(new Body([new Chunk($msg->toUnsignedXML())])))->toXML();
@@ -169,7 +175,7 @@ class SOAPClient
         }
 
         // Extract the message from the response
-        $samlresponse = MessageFactory::fromXML($env->getBody()->getElements()[0]->toXML());
+        $samlresponse = Message::fromXML($env->getBody()->getElements()[0]->toXML());
 
         /* Add validator to message which uses the SSL context. */
         self::addSSLValidator($samlresponse, $context);
@@ -183,7 +189,7 @@ class SOAPClient
     /**
      * Add a signature validator based on a SSL context.
      *
-     * @param \SAML2\Message $msg The message we should add a validator to.
+     * @param \SimpleSAML\SAML2\Message $msg The message we should add a validator to.
      * @param resource $context The stream context.
      * @return void
      */
@@ -223,7 +229,7 @@ class SOAPClient
      * Validate a SOAP message against the certificate on the SSL connection.
      *
      * @param string $data The public key that was used on the connection.
-     * @param XMLSecurityKey $key The key we should validate the certificate against.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should validate the certificate against.
      * @throws \Exception
      * @return void
      */

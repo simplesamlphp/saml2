@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Signature;
+namespace SimpleSAML\Test\SAML2\Signature;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
 use Psr\Log\NullLogger;
-use SAML2\CertificatesMock;
-use SAML2\Certificate\Key;
-use SAML2\Certificate\KeyCollection;
-use SAML2\Certificate\KeyLoader;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Response;
-use SAML2\SimpleTestLogger;
-use SAML2\Utilities\Certificate;
-use SAML2\Signature\PublicKeyValidator;
-use SAML2\Configuration\CertificateProvider;
-use SAML2\SignedElement;
+use SimpleSAML\SAML2\Certificate\Key;
+use SimpleSAML\SAML2\Certificate\KeyCollection;
+use SimpleSAML\SAML2\Certificate\KeyLoader;
+use SimpleSAML\SAML2\Configuration\CertificateProvider;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Response;
+use SimpleSAML\SAML2\Signature\PublicKeyValidator;
+use SimpleSAML\SAML2\SignedElement;
+use SimpleSAML\SAML2\Utilities\Certificate;
+use SimpleSAML\Test\SAML2\CertificatesMock;
+use SimpleSAML\Test\SAML2\SimpleTestLogger;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 class PublicKeyValidatorTest extends MockeryTestCase
@@ -116,7 +116,7 @@ class PublicKeyValidatorTest extends MockeryTestCase
 
 
     /**
-     * @return \SAML2\Certificate\KeyLoader
+     * @return \SimpleSAML\SAML2\Certificate\KeyLoader
      */
     private function prepareKeyLoader($returnValue)
     {

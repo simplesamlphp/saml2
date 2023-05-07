@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Validation;
+namespace SimpleSAML\SAML2\Assertion\Validation;
 
-use SAML2\Exception\InvalidArgumentException;
+use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 
 /**
  * Simple Result object

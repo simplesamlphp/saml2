@@ -2,25 +2,26 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Validation\ConstraintValidator;
+namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
-use SAML2\Assertion\Validation\Result;
-use SAML2\Response;
-use SAML2\XML\saml\SubjectConfirmation;
-use SAML2\XML\saml\SubjectConfirmationData;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
+use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\SAML2\Response;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 
 class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
 {
     /**
-     * @var \SAML2\XML\saml\SubjectConfirmation
+     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation
      */
     private SubjectConfirmation $subjectConfirmation;
 
     /**
-     * @var \SAML2\XML\saml\SubjectConfirmationData
+     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData
      */
     private SubjectConfirmationData $subjectConfirmationData;
 

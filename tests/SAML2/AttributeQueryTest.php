@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\Utils\XPath;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\AttributeQuery;
+use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
- * Class \SAML2\AttributeQueryTest
+ * Class \SimpleSAML\SAML2\AttributeQueryTest
  */
 class AttributeQueryTest extends TestCase
 {

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\ecp;
+namespace SimpleSAML\SAML2\XML\ecp;
 
-use SAML2\Constants as C;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\AbstractElement;
 
 /**

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMElement;
 use DOMNode;
@@ -135,7 +135,7 @@ class SignedElementHelper extends SignedElement
     /**
      * Retrieve the private key we should use to sign the message.
      *
-     * @return XMLSecurityKey|null The key, or NULL if no key is specified.
+     * @return \RobRichards\XMLSecLibs\XMLSecurityKey|null The key, or NULL if no key is specified.
      */
     public function getSignatureKey(): ?XMLSecurityKey
     {
@@ -148,7 +148,7 @@ class SignedElementHelper extends SignedElement
      *
      * If the key is null, the message will be sent unsigned.
      *
-     * @param XMLSecurityKey|null $signatureKey
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|null $signatureKey
      * @return void
      */
     public function setSignatureKey(XMLSecurityKey $signatureKey = null): void

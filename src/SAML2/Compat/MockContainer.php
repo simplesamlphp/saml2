@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Compat;
+namespace SimpleSAML\SAML2\Compat;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -12,7 +12,7 @@ use function file_get_contents;
 use function sys_get_temp_dir;
 
 /**
- * Class \SAML2\Compat\MockContainer
+ * Class \SimpleSAML\SAML2\Compat\MockContainer
  */
 class MockContainer extends AbstractContainer
 {
@@ -69,12 +69,12 @@ class MockContainer extends AbstractContainer
     /**
      * Trigger the user to perform a POST to the given URL with the given data.
      *
-     * @param string|null $url
+     * @param string $url
      * @param array $data
      * @return string
      */
     public function getPostRedirectURL(
-        /** @scrutinizer ignore-unused */string $url = null,
+        /** @scrutinizer ignore-unused */string $url,
         /** @scrutinizer ignore-unused */array $data = []
     ): string {
         return $url;

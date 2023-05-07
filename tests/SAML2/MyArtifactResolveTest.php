@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\XML\saml\Issuer;
-use SAML2\ArtifactResolve;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\ArtifactResolve;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 class MyArtifactResolveTest extends TestCase

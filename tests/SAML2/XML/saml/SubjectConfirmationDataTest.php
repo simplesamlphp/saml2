@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants as C;
-use SAML2\XML\saml\SubjectConfirmationData;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
- * Class \SAML2\XML\saml\SubjectConfirmationDataTest
+ * Class \SimpleSAML\SAML2\XML\saml\SubjectConfirmationDataTest
  */
 class SubjectConfirmationDataTest extends TestCase
 {

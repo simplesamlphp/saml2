@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\Utils\XPath;
-use SAML2\XML\alg\DigestMethod;
-use SAML2\XML\alg\SigningMethod;
-use SAML2\XML\mdattr\EntityAttributes;
-use SAML2\XML\mdrpi\PublicationInfo;
-use SAML2\XML\mdrpi\RegistrationInfo;
-use SAML2\XML\mdui\DiscoHints;
-use SAML2\XML\mdui\UIInfo;
-use SAML2\XML\shibmd\Scope;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\alg\DigestMethod;
+use SimpleSAML\SAML2\XML\alg\SigningMethod;
+use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
+use SimpleSAML\SAML2\XML\mdui\DiscoHints;
+use SimpleSAML\SAML2\XML\mdui\UIInfo;
+use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\XML\Chunk;
 
 use function array_key_exists;
@@ -30,14 +30,14 @@ class Extensions
      * Get a list of Extensions in the given element.
      *
      * @param \DOMElement $parent The element that may contain the md:Extensions element.
-     * @return (\SAML2\XML\shibmd\Scope|
-     *          \SAML2\XML\mdattr\EntityAttributes|
-     *          \SAML2\XML\mdrpi\RegistrationInfo|
-     *          \SAML2\XML\mdrpi\PublicationInfo|
-     *          \SAML2\XML\mdui\UIInfo|
-     *          \SAML2\XML\mdui\DiscoHints|
-     *          \SAML2\XML\alg\DigestMethod|
-     *          \SAML2\XML\alg\SigningMethod|
+     * @return (\SimpleSAML\SAML2\XML\shibmd\Scope|
+     *          \SimpleSAML\SAML2\XML\mdattr\EntityAttributes|
+     *          \SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo|
+     *          \SimpleSAML\SAML2\XML\mdrpi\PublicationInfo|
+     *          \SimpleSAML\SAML2\XML\mdui\UIInfo|
+     *          \SimpleSAML\SAML2\XML\mdui\DiscoHints|
+     *          \SimpleSAML\SAML2\XML\alg\DigestMethod|
+     *          \SimpleSAML\SAML2\XML\alg\SigningMethod|
      *          \SimpleSAML\XML\Chunk)[]  Array of extensions.
      */
     public static function getList(DOMElement $parent): array

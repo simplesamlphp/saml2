@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Response\Validation;
+namespace SimpleSAML\Test\SAML2\Response\Validation;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Response\Validation\Result;
+use SimpleSAML\SAML2\Response\Validation\Result;
 
 class ResultTest extends TestCase
 {

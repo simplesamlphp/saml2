@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Transformer;
+namespace SimpleSAML\SAML2\Assertion\Transformer;
 
-use SAML2\Assertion;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Configuration\IdentityProviderAware;
-use SAML2\Configuration\ServiceProvider;
-use SAML2\Configuration\ServiceProviderAware;
+use SimpleSAML\SAML2\Assertion;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Configuration\IdentityProviderAware;
+use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\Configuration\ServiceProviderAware;
 
 class TransformerChain implements Transformer
 {
     /**
-     * @var \SAML2\Assertion\Transformer\Transformer[]
+     * @var \SimpleSAML\SAML2\Assertion\Transformer\Transformer[]
      */
     private array $transformers = [];
 
@@ -21,8 +21,8 @@ class TransformerChain implements Transformer
     /**
      * Constructor for TransformerChain
      *
-     * @param IdentityProvider $identityProvider
-     * @param ServiceProvider $serviceProvider
+     * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProvider
+     * @param \SimpleSAML\SAML2\Configuration\ServiceProvider $serviceProvider
      */
     public function __construct(
         private IdentityProvider $identityProvider,
@@ -32,7 +32,7 @@ class TransformerChain implements Transformer
 
 
     /**
-     * @param Transformer $transformer
+     * @param \SimpleSAML\SAML2\Assertion\Transformer\Transformer $transformer
      * @return void
      */
     public function addTransformerStep(Transformer $transformer): void
@@ -50,9 +50,9 @@ class TransformerChain implements Transformer
 
 
     /**
-     * @param \SAML2\Assertion $assertion
+     * @param \SimpleSAML\SAML2\Assertion $assertion
      *
-     * @return \SAML2\Assertion
+     * @return \SimpleSAML\SAML2\Assertion
      */
     public function transform(Assertion $assertion): Assertion
     {

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\SignedElementHelper;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\SignedElementHelper;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -50,37 +50,37 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Array with all roles for this entity.
      *
-     * Array of \SAML2\XML\md\RoleDescriptor objects (and subclasses of RoleDescriptor).
+     * Array of \SimpleSAML\SAML2\XML\md\RoleDescriptor objects (and subclasses of RoleDescriptor).
      *
-     * @var \SAML2\XML\md\RoleDescriptor[]
+     * @var \SimpleSAML\SAML2\XML\md\RoleDescriptor[]
      */
     private array $RoleDescriptor = [];
 
     /**
      * AffiliationDescriptor of this entity.
      *
-     * @var \SAML2\XML\md\AffiliationDescriptor|null
+     * @var \SimpleSAML\SAML2\XML\md\AffiliationDescriptor|null
      */
     private ?AffiliationDescriptor $AffiliationDescriptor = null;
 
     /**
      * Organization of this entity.
      *
-     * @var \SAML2\XML\md\Organization|null
+     * @var \SimpleSAML\SAML2\XML\md\Organization|null
      */
     private ?Organization $Organization = null;
 
     /**
      * ContactPerson elements for this entity.
      *
-     * @var \SAML2\XML\md\ContactPerson[]
+     * @var \SimpleSAML\SAML2\XML\md\ContactPerson[]
      */
     private array $ContactPerson = [];
 
     /**
      * AdditionalMetadataLocation elements for this entity.
      *
-     * @var \SAML2\XML\md\AdditionalMetadataLocation[]
+     * @var \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation[]
      */
     private array $AdditionalMetadataLocation = [];
 
@@ -302,7 +302,7 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Collect the value of the RoleDescriptor property.
      *
-     * @return \SAML2\XML\md\RoleDescriptor[]
+     * @return \SimpleSAML\SAML2\XML\md\RoleDescriptor[]
      */
     public function getRoleDescriptor(): array
     {
@@ -313,7 +313,7 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Set the value of the RoleDescriptor property.
      *
-     * @param \SAML2\XML\md\RoleDescriptor[] $roleDescriptor
+     * @param \SimpleSAML\SAML2\XML\md\RoleDescriptor[] $roleDescriptor
      * @return void
      */
     public function setRoleDescriptor(array $roleDescriptor): void
@@ -325,7 +325,7 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Add the value to the RoleDescriptor property.
      *
-     * @param \SAML2\XML\md\RoleDescriptor $roleDescriptor
+     * @param \SimpleSAML\SAML2\XML\md\RoleDescriptor $roleDescriptor
      * @return void
      */
     public function addRoleDescriptor(RoleDescriptor $roleDescriptor): void
@@ -337,7 +337,7 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Collect the value of the AffiliationDescriptor property.
      *
-     * @return \SAML2\XML\md\AffiliationDescriptor|null
+     * @return \SimpleSAML\SAML2\XML\md\AffiliationDescriptor|null
      */
     public function getAffiliationDescriptor(): ?AffiliationDescriptor
     {
@@ -348,7 +348,7 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Set the value of the AffliationDescriptor property.
      *
-     * @param \SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor
+     * @param \SimpleSAML\SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor
      * @return void
      */
     public function setAffiliationDescriptor(AffiliationDescriptor $affiliationDescriptor = null): void
@@ -360,7 +360,7 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Collect the value of the Organization property.
      *
-     * @return \SAML2\XML\md\Organization|null
+     * @return \SimpleSAML\SAML2\XML\md\Organization|null
      */
     public function getOrganization(): ?Organization
     {
@@ -371,7 +371,7 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Set the value of the Organization property.
      *
-     * @param \SAML2\XML\md\Organization|null $organization
+     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
      * @return void
      */
     public function setOrganization(Organization $organization = null): void
@@ -383,7 +383,7 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Collect the value of the ContactPerson property.
      *
-     * @return \SAML2\XML\md\ContactPerson[]
+     * @return \SimpleSAML\SAML2\XML\md\ContactPerson[]
      */
     public function getContactPerson(): array
     {
@@ -394,7 +394,7 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Set the value of the ContactPerson property.
      *
-     * @param array $contactPerson
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contactPerson
      * @return void
      */
     public function setContactPerson(array $contactPerson): void
@@ -406,7 +406,7 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Add the value to the ContactPerson property.
      *
-     * @param \SAML2\XML\md\ContactPerson $contactPerson
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson $contactPerson
      * @return void
      */
     public function addContactPerson(ContactPerson $contactPerson): void
@@ -418,7 +418,7 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Collect the value of the AdditionalMetadataLocation property.
      *
-     * @return \SAML2\XML\md\AdditionalMetadataLocation[]
+     * @return \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation[]
      */
     public function getAdditionalMetadataLocation(): array
     {
@@ -429,7 +429,7 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Set the value of the AdditionalMetadataLocation property.
      *
-     * @param array $additionalMetadataLocation
+     * @param \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation[] $additionalMetadataLocation
      * @return void
      */
     public function setAdditionalMetadataLocation(array $additionalMetadataLocation): void
@@ -441,7 +441,7 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Add the value to the AdditionalMetadataLocation property.
      *
-     * @param AdditionalMetadataLocation $additionalMetadataLocation
+     * @param \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation $additionalMetadataLocation
      * @return void
      */
     public function addAdditionalMetadataLocation(AdditionalMetadataLocation $additionalMetadataLocation): void

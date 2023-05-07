@@ -2,21 +2,22 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion;
+namespace SimpleSAML\Test\SAML2\Assertion;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
 use Psr\Log\LoggerInterface;
-use SAML2\Assertion;
-use SAML2\Assertion\Exception\InvalidAssertionException;
-use SAML2\Assertion\Transformer\Transformer;
-use SAML2\Assertion\Validation\AssertionValidator;
-use SAML2\Assertion\Validation\SubjectConfirmationValidator;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\EncryptedAssertion;
-use SAML2\Signature\Validator;
-use SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\Assertion;
+use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
+use SimpleSAML\SAML2\Assertion\Processor;
+use SimpleSAML\SAML2\Assertion\Transformer\Transformer;
+use SimpleSAML\SAML2\Assertion\Validation\AssertionValidator;
+use SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationValidator;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\EncryptedAssertion;
+use SimpleSAML\SAML2\Signature\Validator;
+use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use StdClass;
 
 /**
@@ -25,7 +26,7 @@ use StdClass;
 class ProcessorTest extends MockeryTestCase
 {
     /**
-     * @var Processor
+     * @var \SimpleSAML\SAML2\Assertion\Processor
      */
     private Processor $processor;
 

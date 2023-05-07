@@ -2,17 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Certificate;
+namespace SimpleSAML\Test\SAML2\Certificate;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
-use SAML2\Utilities\Certificate;
-use SAML2\Certificate\Key;
-use SAML2\Certificate\KeyLoader;
-use SAML2\Certificate\Exception\InvalidCertificateStructureException;
-use SAML2\Certificate\Exception\NoKeysFoundException;
-use SAML2\Configuration\CertificateProvider;
+use SimpleSAML\SAML2\Utilities\Certificate;
+use SimpleSAML\SAML2\Certificate\Exception\InvalidCertificateStructureException;
+use SimpleSAML\SAML2\Certificate\Exception\NoKeysFoundException;
+use SimpleSAML\SAML2\Certificate\Key;
+use SimpleSAML\SAML2\Certificate\KeyLoader;
+use SimpleSAML\SAML2\Certificate\X509;
+use SimpleSAML\SAML2\Configuration\CertificateProvider;
 
 use function dirname;
 use function preg_replace;
@@ -20,7 +21,7 @@ use function preg_replace;
 class KeyLoaderTest extends MockeryTestCase
 {
     /**
-     * @var \SAML2\Certificate\KeyLoader
+     * @var \SimpleSAML\SAML2\Certificate\KeyLoader
      */
     private KeyLoader $keyLoader;
 
@@ -82,7 +83,7 @@ class KeyLoaderTest extends MockeryTestCase
         $loadedKeys = $this->keyLoader->getKeys();
 
         $this->assertCount(1, $loadedKeys);
-        $this->assertInstanceOf(\SAML2\Certificate\X509::class, $loadedKeys->get(0));
+        $this->assertInstanceOf(X509::class, $loadedKeys->get(0));
     }
 
 

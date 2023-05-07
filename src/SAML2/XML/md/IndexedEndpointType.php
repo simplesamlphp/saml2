@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Utils;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
 use function intval;

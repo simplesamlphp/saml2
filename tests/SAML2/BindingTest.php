@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use PHPUnit\Framework\TestCase;
 use Nyholm\Psr7\ServerRequest;
-use SAML2\Binding;
-use SAML2\Constants as C;
-use SAML2\Exception\Protocol\UnsupportedBindingException;
-use SAML2\HTTPArtifact;
-use SAML2\HTTPPost;
-use SAML2\HTTPRedirect;
-use SAML2\SOAP;
+use SimpleSAML\SAML2\Binding;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
+use SimpleSAML\SAML2\HTTPArtifact;
+use SimpleSAML\SAML2\HTTPPost;
+use SimpleSAML\SAML2\HTTPRedirect;
+use SimpleSAML\SAML2\SOAP;
 
 class BindingTest extends TestCase
 {

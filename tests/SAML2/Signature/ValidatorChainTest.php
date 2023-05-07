@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Signature;
+namespace SimpleSAML\Test\SAML2\Signature;
 
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Signature\ValidatorChain;
-use SAML2\Response;
-use SAML2\Signature\MissingConfigurationException;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Signature\ValidatorChain;
+use SimpleSAML\SAML2\Response;
+use SimpleSAML\SAML2\Signature\MissingConfigurationException;
 
 class ValidatorChainTest extends TestCase
 {
     /**
-     * @var \SAML2\Signature\ValidatorChain
+     * @var \SimpleSAML\SAML2\Signature\ValidatorChain
      */
     private ValidatorChain $chain;
 

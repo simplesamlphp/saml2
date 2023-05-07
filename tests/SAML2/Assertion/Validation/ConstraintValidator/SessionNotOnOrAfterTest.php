@@ -2,31 +2,32 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Validation\ConstraintValidator;
+namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
 use Mockery;
-use Mockery\MockInterface;
-use SAML2\Assertion;
-use SAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter;
-use SAML2\Assertion\Validation\Result;
-use Test\SAML2\AbstractControlledTime;
+use SimpleSAML\SAML2\Assertíon;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter;
+use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\Test\SAML2\AbstractControlledTimeTestCase;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
  * tests.
  *
+ * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter
+ * @package simplesamlphp/saml2
+ *
  * @runTestsInSeparateProcesses
  */
-class SessionNotOnOrAfterTest extends AbstractControlledTime
+final class SessionNotOnOrAfterTest extends AbstractControlledTimeTestCase
 {
     /**
      * @var \Mockery\MockInterface
      */
-    private MockInterface $assertion;
+    private $assertion;
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -38,9 +39,8 @@ class SessionNotOnOrAfterTest extends AbstractControlledTime
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
-    public function timestamp_in_the_past_before_graceperiod_is_not_valid(): void
+    public function timestampInThePastBeforeGraceperiodIsNotValid(): void
     {
         $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime - 60);
 
@@ -58,7 +58,7 @@ class SessionNotOnOrAfterTest extends AbstractControlledTime
      * @group assertion-validation
      * @test
      */
-    public function time_within_graceperiod_is_valid()
+    public function timeWithinGraceperiodIsValid(): void
     {
         $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime - 59);
 
@@ -74,9 +74,8 @@ class SessionNotOnOrAfterTest extends AbstractControlledTime
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
-    public function current_time_is_valid(): void
+    public function currentTimeIsValid(): void
     {
         $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime);
 

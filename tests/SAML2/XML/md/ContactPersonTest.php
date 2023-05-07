@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\Test\SAML2\XML\md;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants as C;
-use SAML2\XML\md\ContactPerson;
-use SAML2\Utils;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\md\ContactPerson;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function array_pop;
@@ -17,7 +17,7 @@ use function in_array;
 use function preg_replace;
 
 /**
- * Class \SAML2\XML\md\ContactPersonTest
+ * Class \SimpleSAML\SAML2\XML\md\ContactPersonTest
  */
 class ContactPersonTest extends TestCase
 {

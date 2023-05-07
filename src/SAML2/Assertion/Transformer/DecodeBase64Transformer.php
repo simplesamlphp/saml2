@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Transformer;
+namespace SimpleSAML\SAML2\Assertion\Transformer;
 
-use SAML2\Assertion;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Configuration\IdentityProviderAware;
+use SimpleSAML\SAML2\Assertion;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Configuration\IdentityProviderAware;
 
 use function explode;
 use function array_combine;
@@ -18,13 +18,13 @@ class DecodeBase64Transformer implements
     IdentityProviderAware
 {
     /**
-     * @var \SAML2\Configuration\IdentityProvider
+     * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
      */
     private IdentityProvider $identityProvider;
 
 
     /**
-     * @param IdentityProvider $identityProvider
+     * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProvider
      * @return void
      */
     public function setIdentityProvider(IdentityProvider $identityProvider): void
@@ -34,8 +34,8 @@ class DecodeBase64Transformer implements
 
 
     /**
-     * @param Assertion $assertion
-     * @return Assertion
+     * @param \SimpleSAML\SAML2\Assertion $assertion
+     * @return \SimpleSAML\SAML2\Assertion
      */
     public function transform(Assertion $assertion): Assertion
     {

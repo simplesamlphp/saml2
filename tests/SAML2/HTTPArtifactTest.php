@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use Exception;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
-use SAML2\HTTPArtifact;
+use SimpleSAML\SAML2\HTTPArtifact;
 
 class HTTPArtifactTest extends TestCase
 {

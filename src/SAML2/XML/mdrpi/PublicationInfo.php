@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdrpi;
+namespace SimpleSAML\SAML2\XML\mdrpi;
 
 use DOMElement;
-use SAML2\Constants as C;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
 

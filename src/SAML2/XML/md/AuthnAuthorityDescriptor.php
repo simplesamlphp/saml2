@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -23,7 +23,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      *
      * Array with EndpointType objects.
      *
-     * @var \SAML2\XML\md\EndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\EndpointType[]
      */
     private array $AuthnQueryService = [];
 
@@ -32,7 +32,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      *
      * Array with EndpointType objects.
      *
-     * @var \SAML2\XML\md\EndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\EndpointType[]
      */
     private array $AssertionIDRequestService = [];
 
@@ -82,7 +82,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Collect the value of the AuthnQueryService-property
      *
-     * @return \SAML2\XML\md\EndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\EndpointType[]
      */
     public function getAuthnQueryService(): array
     {
@@ -93,7 +93,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Set the value of the AuthnQueryService-property
      *
-     * @param \SAML2\XML\md\EndpointType[] $authnQueryService
+     * @param \SimpleSAML\SAML2\XML\md\EndpointType[] $authnQueryService
      * @return void
      */
     public function setAuthnQueryService(array $authnQueryService): void
@@ -105,7 +105,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Add the value to the AuthnQueryService-property
      *
-     * @param \SAML2\XML\md\EndpointType $authnQueryService
+     * @param \SimpleSAML\SAML2\XML\md\EndpointType $authnQueryService
      * @return void
      */
     public function addAuthnQueryService(EndpointType $authnQueryService): void
@@ -117,7 +117,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Collect the value of the AssertionIDRequestService-property
      *
-     * @return \SAML2\XML\md\EndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\EndpointType[]
      */
     public function getAssertionIDRequestService(): array
     {
@@ -128,7 +128,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Set the value of the AssertionIDRequestService-property
      *
-     * @param \SAML2\XML\md\EndpointType[] $assertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\EndpointType[] $assertionIDRequestService
      * @return void
      */
     public function setAssertionIDRequestService(array $assertionIDRequestService): void
@@ -140,7 +140,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Add the value to the AssertionIDRequestService-property
      *
-     * @param \SAML2\XML\md\EndpointType $assertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\EndpointType $assertionIDRequestService
      * @return void
      */
     public function addAssertionIDRequestService(EndpointType $assertionIDRequestService): void

@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMElement;
 use Exception;
-use SAML2\Utils\XPath;
-use SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 
@@ -29,7 +29,7 @@ abstract class SubjectQuery extends Request
     /**
      * The NameId of the subject in the query.
      *
-     * @var \SAML2\XML\saml\NameID|null
+     * @var \SimpleSAML\SAML2\XML\saml\NameID|null
      */
     private ?NameID $nameId = null;
 
@@ -86,7 +86,7 @@ abstract class SubjectQuery extends Request
     /**
      * Retrieve the NameId of the subject in the query.
      *
-     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
+     * @return \SimpleSAML\SAML2\XML\saml\NameID|null The name identifier of the assertion.
      */
     public function getNameId(): ?NameID
     {
@@ -97,7 +97,7 @@ abstract class SubjectQuery extends Request
     /**
      * Set the NameId of the subject in the query.
      *
-     * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
+     * @param \SimpleSAML\SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
     public function setNameId(NameID $nameId = null): void

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Response\Exception;
+namespace SimpleSAML\SAML2\Response\Exception;
 
-use SAML2\Response\Validation\Result;
+use SimpleSAML\SAML2\Response\Validation\Result;
 
 use function implode;
 use function sprintf;

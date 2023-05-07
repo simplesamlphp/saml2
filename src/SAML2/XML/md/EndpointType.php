@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use Exception;
-use SAML2\Constants as C;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 
@@ -242,7 +242,7 @@ class EndpointType
             throw new MissingAttributeException('Cannot convert endpoint to XML without a Binding set.');
         }
         if (empty($this->Location)) {
-            throw new MissingException('Cannot convert endpoint to XML without a Location set.');
+            throw new MissingAttributeException('Cannot convert endpoint to XML without a Location set.');
         }
 
         $e->setAttribute('Binding', $this->Binding);

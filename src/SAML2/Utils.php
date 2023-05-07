@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use DOMElement;
@@ -12,16 +12,16 @@ use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Compat\AbstractContainer;
-use SAML2\Compat\ContainerSingleton;
-use SAML2\Exception\RuntimeException;
-use SAML2\Utils\XPath;
-use SAML2\XML\ds\KeyInfo;
-use SAML2\XML\ds\X509Certificate;
-use SAML2\XML\ds\X509Data;
-use SAML2\XML\ds\KeyName;
-use SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Compat\AbstractContainer;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\ds\KeyInfo;
+use SimpleSAML\SAML2\XML\ds\X509Certificate;
+use SimpleSAML\SAML2\XML\ds\X509Data;
+use SimpleSAML\SAML2\XML\ds\KeyName;
+use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -138,10 +138,10 @@ class Utils
     /**
      * Helper function to convert a XMLSecurityKey to the correct algorithm.
      *
-     * @param XMLSecurityKey $key The key.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key.
      * @param string $algorithm The desired algorithm.
      * @param string $type Public or private key, defaults to public.
-     * @return XMLSecurityKey The new key.
+     * @return \RobRichards\XMLSecLibs\XMLSecurityKey The new key.
      */
     public static function castKey(XMLSecurityKey $key, string $algorithm, string $type = null): XMLSecurityKey
     {
@@ -187,7 +187,7 @@ class Utils
      * An exception is thrown if we are unable to validate the signature.
      *
      * @param array $info The information returned by the validateElement() function.
-     * @param XMLSecurityKey $key The publickey that should validate the Signature object.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The publickey that should validate the Signature object.
      * @throws \Exception
      * @return void
      */
@@ -199,10 +199,7 @@ class Utils
         $objXMLSecDSig = $info['Signature'];
 
         $xpCache = XPath::getXPath($objXMLSecDSig->sigNode);
-        /**
-         * @var \DOMElement[] $sigMethod
-         * @var \DOMElement $objXMLSecDSig->sigNode
-         */
+        /** @var \DOMElement[] $sigMethod */
         $sigMethod = XPath::xpQuery($objXMLSecDSig->sigNode, './ds:SignedInfo/ds:SignatureMethod', $xpCache);
         if (empty($sigMethod)) {
             throw new MissingElementException('Missing SignatureMethod element.');
@@ -301,7 +298,7 @@ class Utils
     /**
      * Insert a Signature node.
      *
-     * @param XMLSecurityKey $key The key we should use to sign the message.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should use to sign the message.
      * @param array $certificates The certificates we should add to the signature node.
      * @param \DOMElement $root The XML node we should sign.
      * @param \DOMNode $insertBefore  The XML element we should insert the signature element before.
@@ -353,7 +350,7 @@ class Utils
      * This is an internal helper function.
      *
      * @param \DOMElement $encryptedData The encrypted data.
-     * @param XMLSecurityKey $inputKey The decryption key.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $inputKey The decryption key.
      * @param array &$blacklist Blacklisted decryption algorithms.
      * @throws \Exception
      * @return \DOMElement The decrypted element.
@@ -512,7 +509,7 @@ class Utils
      * Decrypt an encrypted element.
      *
      * @param \DOMElement $encryptedData The encrypted data.
-     * @param XMLSecurityKey $inputKey The decryption key.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $inputKey The decryption key.
      * @param array $blacklist Blacklisted decryption algorithms.
      * @throws \Exception
      * @return \DOMElement The decrypted element.
@@ -540,7 +537,7 @@ class Utils
      *
      * @param string|null $x509Data The certificate, as a base64-encoded DER data.
      * @param string|null $keyName The name of the key as specified in the KeyInfo
-     * @return \SAML2\XML\md\KeyDescriptor The keydescriptor.
+     * @return \SimpleSAML\SAML2\XML\md\KeyDescriptor The keydescriptor.
      */
     public static function createKeyDescriptor(?string $x509Data = null, ?string $keyName = null): KeyDescriptor
     {
@@ -571,7 +568,7 @@ class Utils
 
 
     /**
-     * @return \SAML2\Compat\AbstractContainer
+     * @return \SimpleSAML\SAML2\Compat\AbstractContainer
      */
     public static function getContainer(): AbstractContainer
     {

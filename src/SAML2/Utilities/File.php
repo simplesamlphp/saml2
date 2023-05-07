@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Utilities;
+namespace SimpleSAML\SAML2\Utilities;
 
-use SAML2\Exception\InvalidArgumentException;
-use SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\Exception\InvalidArgumentException;
+use SimpleSAML\SAML2\Exception\RuntimeException;
 
 use function is_readable;
 use function sprintf;

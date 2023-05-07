@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMElement;
 use DOMNode;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Utils\XPath;
 
 use function is_null;
 
 /**
- * The \SAML2\ArtifactResponse, is the response to the \SAML2\ArtifactResolve.
+ * The \SimpleSAML\SAML2\ArtifactResponse, is the response to the \SimpleSAML\SAML2\ArtifactResolve.
  *
  * @author Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
  * @package SimpleSAMLphp

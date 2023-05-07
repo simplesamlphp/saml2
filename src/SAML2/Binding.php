@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use SAML2\Exception\Protocol\UnsupportedBindingException;
+use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 
 use function array_key_exist;
 use function array_keys;
@@ -36,8 +36,8 @@ abstract class Binding
      * Will throw an exception if it is unable to locate the binding.
      *
      * @param string $urn The URN of the binding.
-     * @throws \SAML2\Exception\Protocol\UnsupportedBindingException
-     * @return \SAML2\Binding The binding.
+     * @throws \SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException
+     * @return \SimpleSAML\SAML2\Binding The binding.
      */
     public static function getBinding(string $urn): Binding
     {
@@ -64,13 +64,13 @@ abstract class Binding
      * Guess the current binding.
      *
      * This function guesses the current binding and creates an instance
-     * of \SAML2\Binding matching that binding.
+     * of \SimpleSAML\SAML2\Binding matching that binding.
      *
      * An exception will be thrown if it is unable to guess the binding.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @throws \SAML2\Exception\Protocol\UnsupportedBindingException
-     * @return \SAML2\Binding The binding.
+     * @throws \SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException
+     * @return \SimpleSAML\SAML2\Binding The binding.
      */
     public static function getCurrentBinding(ServerRequestInterface $request): Binding
     {
@@ -165,7 +165,7 @@ abstract class Binding
      * This function will send a message using the specified binding.
      * The message will be delivered to the destination set in the message.
      *
-     * @param \SAML2\Message $message The message which should be sent.
+     * @param \SimpleSAML\SAML2\Message $message The message which should be sent.
      * @return \Psr\Http\Message\ResponseInterface
      */
     abstract public function send(Message $message): ResponseInterface;
@@ -178,7 +178,7 @@ abstract class Binding
      * An exception will be thrown if we are unable to process the message.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @return \SAML2\Message The received message.
+     * @return \SimpleSAML\SAML2\Message The received message.
      */
     abstract public function receive(ServerRequestInterface $request): Message;
 }

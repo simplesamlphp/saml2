@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\Utils;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -59,7 +59,7 @@ class AttributeConsumingService
      *
      * This is an array of SAML_RequestedAttributeType elements.
      *
-     * @var \SAML2\XML\md\RequestedAttribute[]
+     * @var \SimpleSAML\SAML2\XML\md\RequestedAttribute[]
      */
     private array $RequestedAttribute = [];
 
@@ -192,7 +192,7 @@ class AttributeConsumingService
     /**
      * Collect the value of the RequestedAttribute-property
      *
-     * @return \SAML2\XML\md\RequestedAttribute[]
+     * @return \SimpleSAML\SAML2\XML\md\RequestedAttribute[]
      */
     public function getRequestedAttribute(): array
     {
@@ -203,7 +203,7 @@ class AttributeConsumingService
     /**
      * Set the value of the RequestedAttribute-property
      *
-     * @param \SAML2\XML\md\RequestedAttribute[] $requestedAttribute
+     * @param \SimpleSAML\SAML2\XML\md\RequestedAttribute[] $requestedAttribute
      * @return void
      */
     public function setRequestedAttribute(array $requestedAttribute): void
@@ -215,7 +215,7 @@ class AttributeConsumingService
     /**
      * Add the value to the RequestedAttribute-property
      *
-     * @param \SAML2\XML\md\RequestedAttribute $requestedAttribute
+     * @param \SimpleSAML\SAML2\XML\md\RequestedAttribute $requestedAttribute
      * @return void
      */
     public function addRequestedAttribute(RequestedAttribute $requestedAttribute): void

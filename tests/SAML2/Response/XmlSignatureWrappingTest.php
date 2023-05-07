@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Response;
+namespace SimpleSAML\Test\SAML2\Response;
 
 use Exception;
 use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
-use SAML2\CertificatesMock;
-use SAML2\Assertion;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Signature\Validator;
-use SAML2\Utilities\Certificate;
+use SimpleSAML\SAML2\Assertion;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Signature\Validator;
+use SimpleSAML\SAML2\Utilities\Certificate;
+use SimpleSAML\Test\SAML2\CertificatesMock;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function preg_match;
@@ -19,12 +19,12 @@ use function preg_match;
 class XmlSignatureWrappingTest extends TestCase
 {
     /**
-     * @var \SAML2\Signature\Validator
+     * @var \SimpleSAML\SAML2\Signature\Validator
      */
     private Validator $signatureValidator;
 
     /**
-     * @var \SAML2\Configuration\IdentityProvider
+     * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
      */
     private IdentityProvider $identityProviderConfiguration;
 
@@ -70,7 +70,7 @@ class XmlSignatureWrappingTest extends TestCase
 
 
     /**
-     * @return \SAML2\Assertion
+     * @return \SimpleSAML\SAML2\Assertion
      */
     private function getSignedAssertionWithSignatureThatReferencesAnotherAssertion(): Assertion
     {
@@ -82,7 +82,7 @@ class XmlSignatureWrappingTest extends TestCase
 
 
     /**
-     * @return \SAML2\Assertion
+     * @return \SimpleSAML\SAML2\Assertion
      */
     private function getSignedAssertionWithEmbeddedAssertionReferencedInSignature(): Assertion
     {

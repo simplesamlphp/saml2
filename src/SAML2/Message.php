@@ -2,21 +2,21 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Constants as C;
-use SAML2\Exception\ProtocolViolationException;
-use SAML2\Exception\Protocol\RequestVersionTooHighException;
-use SAML2\Exception\Protocol\RequestVersionTooLowException;
-use SAML2\Utilities\Temporal;
-use SAML2\Utils\XPath;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\samlp\Extensions;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
+use SimpleSAML\SAML2\Utilities\Temporal;
+use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\samlp\Extensions;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -82,7 +82,7 @@ abstract class Message extends SignedElement
     /**
      * The entity id of the issuer of this message, or null if unknown.
      *
-     * @var \SAML2\XML\saml\Issuer|null
+     * @var \SimpleSAML\SAML2\XML\saml\Issuer|null
      */
     private ?Issuer $issuer = null;
 
@@ -108,7 +108,7 @@ abstract class Message extends SignedElement
      *
      * The private key can be null, in which case the message is sent unsigned.
      *
-     * @var XMLSecurityKey|null
+     * @var \RobRichards\XMLSecLibs\XMLSecurityKey|null
      */
     protected ?XMLSecurityKey $signatureKey = null;
 
@@ -227,7 +227,7 @@ abstract class Message extends SignedElement
                 $this->messageContainedSignatureUponConstruction = true;
                 $this->certificates = $sig['Certificates'];
                 $this->validators[] = [
-                    'Function' => ['\SAML2\Utils', 'validateSignature'],
+                    'Function' => [Utils::class, 'validateSignature'],
                     'Data' => $sig,
                 ];
                 $this->signatureMethod = $signatureMethod[0]->value;
@@ -264,7 +264,7 @@ abstract class Message extends SignedElement
      * signature we can validate. An exception is thrown if the signature
      * validation fails.
      *
-     * @param XMLSecurityKey $key The key we should check against
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should check against
      * @throws \Exception
      * @return bool true on success, false when we don't have a signature
      */
@@ -368,7 +368,7 @@ abstract class Message extends SignedElement
      * Set the given consent for this message.
      * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
      *
-     * @see \SAML2\Constants
+     * @see \SimpleSAML\SAML2\Constants
      * @param string $consent
      * @return void
      */
@@ -382,7 +382,7 @@ abstract class Message extends SignedElement
      * Get the given consent for this message.
      * Most likely (though not required) a value of urn:oasis:names:tc:SAML:2.0:consent.
      *
-     * @see \SAML2\Constants
+     * @see \SimpleSAML\SAML2\Constants
      * @return string|null Consent
      */
     public function getConsent(): ?string
@@ -394,7 +394,7 @@ abstract class Message extends SignedElement
     /**
      * Retrieve the issuer if this message.
      *
-     * @return \SAML2\XML\saml\Issuer|null The issuer of this message, or NULL if no issuer is given
+     * @return \SimpleSAML\SAML2\XML\saml\Issuer|null The issuer of this message, or NULL if no issuer is given
      */
     public function getIssuer(): ?Issuer
     {
@@ -405,7 +405,7 @@ abstract class Message extends SignedElement
     /**
      * Set the issuer of this message.
      *
-     * @param \SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
+     * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
      * @return void
      */
     public function setIssuer(Issuer $issuer = null): void
@@ -526,7 +526,7 @@ abstract class Message extends SignedElement
     /**
      * Retrieve the private key we should use to sign the message.
      *
-     * @return XMLSecurityKey|null The key, or NULL if no key is specified
+     * @return \RobRichards\XMLSecLibs\XMLSecurityKey|null The key, or NULL if no key is specified
      */
     public function getSignatureKey(): ?XMLSecurityKey
     {
@@ -538,7 +538,7 @@ abstract class Message extends SignedElement
      * Set the private key we should use to sign the message.
      * If the key is null, the message will be sent unsigned.
      *
-     * @param XMLSecurityKey|null $signatureKey
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|null $signatureKey
      * @return void
      */
     public function setSignatureKey(XMLSecurityKey $signatureKey = null): void
@@ -576,7 +576,7 @@ abstract class Message extends SignedElement
      *
      * @param \DOMElement $xml The root XML element
      * @throws \Exception
-     * @return \SAML2\Message The message
+     * @return \SimpleSAML\SAML2\Message The message
      */
     public static function fromXML(DOMElement $xml): Message
     {
@@ -611,7 +611,7 @@ abstract class Message extends SignedElement
     /**
      * Retrieve the Extensions.
      *
-     * @return \SAML2\XML\samlp\Extensions[]
+     * @return \SimpleSAML\SAML2\XML\samlp\Extensions[]
      */
     public function getExtensions(): array
     {
@@ -622,7 +622,7 @@ abstract class Message extends SignedElement
     /**
      * Set the Extensions.
      *
-     * @param array $extensions The Extensions
+     * @param \SimpleSAML\SAML2\XML\samlp\Extensions[] $extensions The Extensions
      * @return void
      */
     public function setExtensions(array $extensions): void
@@ -634,7 +634,7 @@ abstract class Message extends SignedElement
     /**
      * Add an Extension.
      *
-     * @param \SAML2\XML\samlp\Extensions $extensions The Extensions
+     * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions The Extensions
      * @return void
      */
     public function addExtension(Extensions $extension): void

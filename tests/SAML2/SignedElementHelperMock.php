@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
-use SAML2\SignedElementHelper;
+use SimpleSAML\SAML2\SignedElementHelper;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
- * Class \SAML2\SignedElementHelperMock
+ * Class \SimpleSAML\SAML2\SignedElementHelperMock
  */
 class SignedElementHelperMock extends SignedElementHelper
 {

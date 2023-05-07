@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Response\Validation\ConstraintValidator;
+namespace SimpleSAML\SAML2\Response\Validation\ConstraintValidator;
 
-use SAML2\Constants as C;
-use SAML2\Response;
-use SAML2\Response\Validation\ConstraintValidator;
-use SAML2\Response\Validation\Result;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Response;
+use SimpleSAML\SAML2\Response\Validation\ConstraintValidator;
+use SimpleSAML\SAML2\Response\Validation\Result;
 
 use function sprintf;
 use function strlen;
@@ -17,8 +17,8 @@ use function substr;
 class IsSuccessful implements ConstraintValidator
 {
     /**
-     * @param \SAML2\Response $response
-     * @param \SAML2\Response\Validation\Result $result
+     * @param \SimpleSAML\SAML2\Response $response
+     * @param \SimpleSAML\SAML2\Response\Validation\Result $result
      * @return void
      */
     public function validate(

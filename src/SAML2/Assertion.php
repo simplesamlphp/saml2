@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMElement;
 use DOMNode;
@@ -10,15 +10,15 @@ use DOMNodeList;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Exception\ProtocolViolationException\RequestVersionTooHighException;
-use SAML2\Exception\ProtocolViolationException\RequestVersionTooLowException;
-use SAML2\Exception\RuntimeException;
-use SAML2\Utilities\Temporal;
-use SAML2\Utils\XPath;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\saml\NameID;
-use SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
+use SimpleSAML\SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\Utilities\Temporal;
+use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -61,10 +61,10 @@ class Assertion extends SignedElement
     /**
      * The issuer of this assertion.
      *
-     * If the issuer's format is \SAML2\Constants::NAMEID_ENTITY, this property will just take the issuer's string
-     * value.
+     * If the issuer's format is \SimpleSAML\SAML2\Constants::NAMEID_ENTITY,
+     * this property will just take the issuer's string value.
      *
-     * @var \SAML2\XML\saml\Issuer
+     * @var \SimpleSAML\SAML2\XML\saml\Issuer
      */
     private Issuer $issuer;
 
@@ -73,7 +73,7 @@ class Assertion extends SignedElement
      *
      * If the NameId is null, no subject was included in the assertion.
      *
-     * @var \SAML2\XML\saml\NameID|null
+     * @var \SimpleSAML\SAML2\XML\saml\NameID|null
      */
     private ?NameID $nameId = null;
 
@@ -98,7 +98,7 @@ class Assertion extends SignedElement
     /**
      * Private key we should use to encrypt the attributes.
      *
-     * @var XMLSecurityKey|null
+     * @var \RobRichards\XMLSecLibs\XMLSecurityKey|null
      */
     private ?XMLSecurityKey $encryptionKey = null;
 
@@ -188,7 +188,7 @@ class Assertion extends SignedElement
      *
      * To ease handling, all attribute values are represented as an array of values, also for values with a multiplicity
      * of single. There are 5 possible variants of datatypes for the values: a string, an integer, an array, a
-     * DOMNodeList or a SAML2\XML\saml\NameID object.
+     * DOMNodeList or a \SimpleSAML\SAML2\XML\saml\NameID object.
      *
      * If the attribute is an eduPersonTargetedID, the values will be SAML2\XML\saml\NameID objects.
      * If the attribute value has an type-definition (xsi:string or xsi:int), the values will be of that type.
@@ -197,7 +197,7 @@ class Assertion extends SignedElement
      *
      * **WARNING** a DOMNodeList cannot be serialized without data-loss and should be handled explicitly
      *
-     * @var array multi-dimensional array of \DOMNodeList|\SAML2\XML\saml\NameID|string|int|array
+     * @var array multi-dimensional array of \DOMNodeList|\SimpleSAML\SAML2\XML\saml\NameID|string|int|array
      */
     private array $attributes = [];
 
@@ -245,7 +245,7 @@ class Assertion extends SignedElement
     /**
      * The SubjectConfirmation elements of the Subject in the assertion.
      *
-     * @var \SAML2\XML\saml\SubjectConfirmation[]
+     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[]
      */
     private array $SubjectConfirmation = [];
 
@@ -622,7 +622,6 @@ class Assertion extends SignedElement
         foreach ($values as $value) {
             $hasNonTextChildElements = false;
             foreach ($value->childNodes as $childNode) {
-                /** @var \DOMNode $childNode */
                 if ($childNode->nodeType !== XML_TEXT_NODE) {
                     $hasNonTextChildElements = true;
                     break;
@@ -699,7 +698,7 @@ class Assertion extends SignedElement
      * Otherwise, true will be returned. An exception is thrown if the
      * signature validation fails.
      *
-     * @param  XMLSecurityKey $key The key we should check against.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should check against.
      * @return boolean        true if successful, false if it is unsigned.
      */
     public function validate(XMLSecurityKey $key): bool
@@ -765,7 +764,7 @@ class Assertion extends SignedElement
     /**
      * Retrieve the issuer if this assertion.
      *
-     * @return \SAML2\XML\saml\Issuer The issuer of this assertion.
+     * @return \SimpleSAML\SAML2\XML\saml\Issuer The issuer of this assertion.
      */
     public function getIssuer(): Issuer
     {
@@ -776,7 +775,7 @@ class Assertion extends SignedElement
     /**
      * Set the issuer of this message.
      *
-     * @param \SAML2\XML\saml\Issuer $issuer The new issuer of this assertion.
+     * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer The new issuer of this assertion.
      * @return void
      */
     public function setIssuer(Issuer $issuer): void
@@ -789,7 +788,7 @@ class Assertion extends SignedElement
      * Retrieve the NameId of the subject in the assertion.
      *
      * @throws \Exception
-     * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
+     * @return \SimpleSAML\SAML2\XML\saml\NameID|null The name identifier of the assertion.
      */
     public function getNameId(): ?NameID
     {
@@ -804,9 +803,9 @@ class Assertion extends SignedElement
     /**
      * Set the NameId of the subject in the assertion.
      *
-     * The NameId must be a \SAML2\XML\saml\NameID object.
+     * The NameId must be a \SimpleSAML\SAML2\XML\saml\NameID object.
      *
-     * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
+     * @param \SimpleSAML\SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
     public function setNameId(NameID $nameId = null): void
@@ -829,7 +828,7 @@ class Assertion extends SignedElement
     /**
      * Encrypt the NameID in the Assertion.
      *
-     * @param XMLSecurityKey $key The encryption key.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The encryption key.
      * @return void
      */
     public function encryptNameId(XMLSecurityKey $key): void
@@ -859,7 +858,6 @@ class Assertion extends SignedElement
         $enc->encryptKey($key, $symmetricKey);
 
         /**
-         * @var \DOMElement encryptedNameId
          * @psalm-suppress UndefinedClass
          */
         $this->encryptedNameId = $enc->encryptNode($symmetricKey);
@@ -870,8 +868,8 @@ class Assertion extends SignedElement
     /**
      * Decrypt the NameId of the subject in the assertion.
      *
-     * @param XMLSecurityKey $key       The decryption key.
-     * @param array          $blacklist Blacklisted decryption algorithms.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The decryption key.
+     * @param array $blacklist Blacklisted decryption algorithms.
      * @return void
      */
     public function decryptNameId(XMLSecurityKey $key, array $blacklist = []): void
@@ -904,7 +902,7 @@ class Assertion extends SignedElement
     /**
      * Decrypt the assertion attributes.
      *
-     * @param XMLSecurityKey $key
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key
      * @param array $blacklist
      * @throws \Exception
      * @return void
@@ -1370,7 +1368,7 @@ class Assertion extends SignedElement
     /**
      * Retrieve the SubjectConfirmation elements we have in our Subject element.
      *
-     * @return array Array of \SAML2\XML\saml\SubjectConfirmation elements.
+     * @return array Array of \SimpleSAML\SAML2\XML\saml\SubjectConfirmation elements.
      */
     public function getSubjectConfirmation(): array
     {
@@ -1381,7 +1379,7 @@ class Assertion extends SignedElement
     /**
      * Set the SubjectConfirmation elements that should be included in the assertion.
      *
-     * @param array $SubjectConfirmation Array of \SAML2\XML\saml\SubjectConfirmation elements.
+     * @param array $SubjectConfirmation Array of \SimpleSAML\SAML2\XML\saml\SubjectConfirmation elements.
      * @return void
      */
     public function setSubjectConfirmation(array $SubjectConfirmation): void
@@ -1416,7 +1414,7 @@ class Assertion extends SignedElement
     /**
      * Retrieve the private key we should use to sign the assertion.
      *
-     * @return XMLSecurityKey|null The key, or NULL if no key is specified.
+     * @return \RobRichards\XMLSecLibs\XMLSecurityKey|null The key, or NULL if no key is specified.
      */
     public function getSignatureKey(): ?XMLSecurityKey
     {
@@ -1429,7 +1427,7 @@ class Assertion extends SignedElement
      *
      * If the key is null, the assertion will be sent unsigned.
      *
-     * @param XMLSecurityKey|null $signatureKey
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|null $signatureKey
      * @return void
      */
     public function setSignatureKey(XMLSecurityKey $signatureKey = null): void
@@ -1441,7 +1439,7 @@ class Assertion extends SignedElement
     /**
      * Return the key we should use to encrypt the assertion.
      *
-     * @return XMLSecurityKey|null The key, or NULL if no key is specified..
+     * @return \RobRichards\XMLSecLibs\XMLSecurityKey|null The key, or NULL if no key is specified..
      *
      */
     public function getEncryptionKey(): ?XMLSecurityKey
@@ -1453,7 +1451,7 @@ class Assertion extends SignedElement
     /**
      * Set the private key we should use to encrypt the attributes.
      *
-     * @param XMLSecurityKey|null $Key
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey|null $Key
      * @return void
      */
     public function setEncryptionKey(XMLSecurityKey $Key = null): void
@@ -1838,12 +1836,12 @@ class Assertion extends SignedElement
             /*Once the attribute nodes are built, the are encrypted*/
             $EncAssert = new XMLSecEnc();
             $EncAssert->setNode($document2->documentElement);
-            $EncAssert->type = 'http://www.w3.org/2001/04/xmlenc#Element';
+            $EncAssert->type = Constants::XMLENC_ELEMENT;
             /*
              * Attributes are encrypted with a session key and this one with
              * $EncryptionKey
              */
-            $symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES256_CBC);
+            $symmetricKey = new XMLSecurityKey(Constants::BLOCK_ENC_AES256);
             $symmetricKey->generateSessionKey();
             /** @psalm-suppress PossiblyNullArgument */
             $EncAssert->encryptKey($this->encryptionKey, $symmetricKey);

@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdui;
+namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -22,7 +22,7 @@ class UIInfo
     /**
      * Array with child elements.
      *
-     * The elements can be any of the other \SAML2\XML\mdui\* elements.
+     * The elements can be any of the other \SimpleSAML\SAML2\XML\mdui\* elements.
      *
      * @var \SimpleSAML\XML\Chunk[]
      */
@@ -59,14 +59,14 @@ class UIInfo
     /**
      * The Keywords, as an array of Keywords objects
      *
-     * @var \SAML2\XML\mdui\Keywords[]
+     * @var \SimpleSAML\SAML2\XML\mdui\Keywords[]
      */
     private array $Keywords = [];
 
     /**
      * The Logo, as an array of Logo objects
      *
-     * @var \SAML2\XML\mdui\Logo[]
+     * @var \SimpleSAML\SAML2\XML\mdui\Logo[]
      */
     private array $Logo = [];
 
@@ -109,7 +109,7 @@ class UIInfo
     /**
      * Collect the value of the Keywords-property
      *
-     * @return \SAML2\XML\mdui\Keywords[]
+     * @return \SimpleSAML\SAML2\XML\mdui\Keywords[]
      */
     public function getKeywords(): array
     {
@@ -120,7 +120,7 @@ class UIInfo
     /**
      * Set the value of the Keywords-property
      *
-     * @param \SAML2\XML\mdui\Keywords[] $keywords
+     * @param \SimpleSAML\SAML2\XML\mdui\Keywords[] $keywords
      * @return void
      */
     public function setKeywords(array $keywords): void
@@ -133,7 +133,7 @@ class UIInfo
     /**
      * Add the value to the Keywords-property
      *
-     * @param \SAML2\XML\mdui\Keywords $keyword
+     * @param \SimpleSAML\SAML2\XML\mdui\Keywords $keyword
      * @return void
      */
     public function addKeyword(Keywords $keyword): void
@@ -236,7 +236,7 @@ class UIInfo
     /**
      * Collect the value of the Logo-property
      *
-     * @return \SAML2\XML\mdui\Logo[]
+     * @return \SimpleSAML\SAML2\XML\mdui\Logo[]
      */
     public function getLogo(): array
     {
@@ -247,7 +247,7 @@ class UIInfo
     /**
      * Set the value of the Logo-property
      *
-     * @param \SAML2\XML\mdui\Logo[] $logo
+     * @param \SimpleSAML\SAML2\XML\mdui\Logo[] $logo
      * @return void
      */
     public function setLogo(array $logo): void
@@ -259,7 +259,7 @@ class UIInfo
     /**
      * Add the value to the Logo-property
      *
-     * @param \SAML2\XML\mdui\Logo $logo
+     * @param \SimpleSAML\SAML2\XML\mdui\Logo $logo
      * @return void
      */
     public function addLogo(Logo $logo): void

@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Compat;
+namespace SimpleSAML\SAML2\Compat;
 
 use SimpleSAML\Assert\Assert;
 
 class ContainerSingleton
 {
     /**
-     * @var \SAML2\Compat\AbstractContainer
+     * @var \SimpleSAML\SAML2\Compat\AbstractContainer
      */
     protected static AbstractContainer $container;
 
 
     /**
-     * @return \SAML2\Compat\AbstractContainer
+     * @return \SimpleSAML\SAML2\Compat\AbstractContainer
      */
     public static function getInstance(): AbstractContainer
     {
@@ -27,7 +27,7 @@ class ContainerSingleton
     /**
      * Set a container to use.
      *
-     * @param \SAML2\Compat\AbstractContainer $container
+     * @param \SimpleSAML\SAML2\Compat\AbstractContainer $container
      * @return void
      */
     public static function setContainer(AbstractContainer $container): void

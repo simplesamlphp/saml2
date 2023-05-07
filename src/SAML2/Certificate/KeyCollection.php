@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Certificate;
+namespace SimpleSAML\SAML2\Certificate;
 
-use SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\Assert\Assert;
 
 /**
@@ -16,7 +16,7 @@ class KeyCollection extends ArrayCollection
      * Add a key to the collection
      *
      * @psalm-suppress MoreSpecificImplementedParamType
-     * @param \SAML2\Certificate\Key $key
+     * @param \SimpleSAML\SAML2\Certificate\Key $key
      * @return void
      *
      * Type hint not possible due to upstream method signature

@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Validation\ConstraintValidator;
+namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
 use Mockery;
 use Mockery\MockInterface;
-use SAML2\Assertion;
-use SAML2\Assertion\Validation\ConstraintValidator\NotBefore;
-use SAML2\Assertion\Validation\Result;
-use Test\SAML2\AbstractControlledTime;
+use SimpleSAML\SAML2\Assertion;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\NotBefore;
+use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\Test\SAML2\AbstractControlledTimeTestCase;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
@@ -17,17 +17,12 @@ use Test\SAML2\AbstractControlledTime;
  *
  * @runTestsInSeparateProcesses
  */
-class NotBeforeTest extends AbstractControlledTime
+class NotBeforeTest extends AbstractControlledTimeTestCase
 {
     /**
      * @var \Mockery\MockInterface
      */
     private MockInterface $assertion;
-
-    /**
-     * @var int
-     */
-    protected int $currentTime = 1;
 
 
     /**

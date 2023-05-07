@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SAML2\Utils\XPath;
-use SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -45,7 +45,7 @@ class LogoutRequest extends Request
     /**
      * The name identifier of the session that should be terminated.
      *
-     * @var \SAML2\XML\saml\NameID|null
+     * @var \SimpleSAML\SAML2\XML\saml\NameID|null
      */
     private ?NameID $nameId = null;
 
@@ -58,7 +58,7 @@ class LogoutRequest extends Request
 
     /**
      * The optional reason for the logout, typically a URN
-     * See \SAML2\Constants::LOGOUT_REASON_*
+     * See \SimpleSAML\SAML2\Constants::LOGOUT_REASON_*
      * From the standard section 3.7.3: "other values MAY be agreed on between participants"
      *
      * @var string|null
@@ -182,7 +182,7 @@ class LogoutRequest extends Request
     /**
      * Encrypt the NameID in the LogoutRequest.
      *
-     * @param XMLSecurityKey $key The encryption key.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The encryption key.
      * @return void
      */
     public function encryptNameId(XMLSecurityKey $key): void
@@ -210,7 +210,6 @@ class LogoutRequest extends Request
         $enc->encryptKey($key, $symmetricKey);
 
         /**
-         * @var \DOMElement encryptedNameId
          * @psalm-suppress UndefinedClass
          */
         $this->encryptedNameId = $enc->encryptNode($symmetricKey);
@@ -221,7 +220,7 @@ class LogoutRequest extends Request
     /**
      * Decrypt the NameID in the LogoutRequest.
      *
-     * @param XMLSecurityKey $key The decryption key.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The decryption key.
      * @param array $blacklist Blacklisted decryption algorithms.
      * @return void
      */
@@ -243,7 +242,7 @@ class LogoutRequest extends Request
      * Retrieve the name identifier of the session that should be terminated.
      *
      * @throws \Exception
-     * @return \SAML2\XML\saml\NameID|null The name identifier of the session that should be terminated.
+     * @return \SimpleSAML\SAML2\XML\saml\NameID|null The name identifier of the session that should be terminated.
      */
     public function getNameId(): ?NameID
     {
@@ -258,7 +257,7 @@ class LogoutRequest extends Request
     /**
      * Set the name identifier of the session that should be terminated.
      *
-     * @param \SAML2\XML\saml\NameID $nameId The name identifier of the session that should be terminated.
+     * @param \SimpleSAML\SAML2\XML\saml\NameID $nameId The name identifier of the session that should be terminated.
      * @return void
      */
     public function setNameId(NameID $nameId): void

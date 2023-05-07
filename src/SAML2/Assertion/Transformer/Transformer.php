@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Transformer;
+namespace SimpleSAML\SAML2\Assertion\Transformer;
 
-use SAML2\Assertion;
+use SimpleSAML\SAML2\Assertion;
 
 interface Transformer
 {
     /**
-     * @param \SAML2\Assertion $assertion
+     * @param \SimpleSAML\SAML2\Assertion $assertion
      *
-     * @return \SAML2\Assertion
+     * @return \SimpleSAML\SAML2\Assertion
      */
     public function transform(Assertion $assertion): Assertion;
 }

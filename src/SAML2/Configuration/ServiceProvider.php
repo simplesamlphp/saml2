@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Configuration;
+namespace SimpleSAML\SAML2\Configuration;
 
-use SAML2\Constants as C;
-use SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\RuntimeException;
 use Traversable;
 
 use function array_filter;

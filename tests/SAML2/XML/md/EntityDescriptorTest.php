@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\Test\SAML2\XML\md;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\XML\md\EntityDescriptor;
-use SAML2\XML\md\AffiliationDescriptor;
-use SAML2\XML\md\Organization;
-use SAML2\XML\md\AttributeAuthorityDescriptor;
+use SimpleSAML\SAML2\XML\md\EntityDescriptor;
+use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
+use SimpleSAML\SAML2\XML\md\Organization;
+use SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
- * Class \SAML2\XML\md\EntityDescriptorTest
+ * Class \SimpleSAML\SAML2\XML\md\EntityDescriptorTest
  */
 class EntityDescriptorTest extends TestCase
 {

@@ -2,57 +2,45 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion\Validation\ConstraintValidator;
+namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
-use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
-use SAML2\Assertion\Validation\Result;
-use SAML2\XML\saml\SubjectConfirmation;
-use SAML2\XML\saml\SubjectConfirmationData;
-use Test\SAML2\AbstractControlledTime;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
+use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
+use SimpleSAML\Test\SAML2\AbstractControlledTimeTestCase;
 
 /**
+ * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
+ * tests.
+ *
+ * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore
+ * @package simplesamlphp/saml2
+ *
+ * @runTestsInSeparateProcesses
  */
-class SubjectConfirmationNotBeforeTest extends AbstractControlledTime
+final class SubjectConfirmationNotBeforeTest extends AbstractControlledTimeTestCase
 {
-    /**
-     * @var \SAML2\XML\saml\SubjectConfirmation
-     */
-    private SubjectConfirmation $subjectConfirmation;
-
-    /**
-     * @var \SAML2\XML\saml\SubjectConfirmationData
-     */
-    private SubjectConfirmationData $subjectConfirmationData;
-
-
-    /**
-     * @return void
-     */
-    public function setUp(): void
-    {
-        parent::setUp();
-        $this->subjectConfirmation = new SubjectConfirmation();
-        $this->subjectConfirmationData = new SubjectConfirmationData();
-        $this->subjectConfirmation->setSubjectConfirmationData($this->subjectConfirmationData);
-    }
-
-
     /**
      * @group assertion-validation
      * @test
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
-    public function timestamp_in_the_future_beyond_graceperiod_is_not_valid(): void
+    public function timestampInTheFutureBeyondGraceperiodIsNotValid(): void
     {
-        $this->subjectConfirmation->getSubjectConfirmationData()->setNotBefore($this->currentTime + 61);
+        $subjectConfirmationData = new SubjectConfirmationData();
+        $subjectConfirmationData->setNotBefore($this->currentTime + 61);
+        $subjectConfirmation = new SubjectConfirmation();
+        $subjectConfirmation->setMethod(C::CM_HOK);
+        $subjectConfirmation->setSubjectConfirmationData($subjectConfirmationData);
 
         $validator = new SubjectConfirmationNotBefore();
-        $result    = new Result();
+        $result = new Result();
 
-        $validator->validate($this->subjectConfirmation, $result);
+        $validator->validate($subjectConfirmation, $result);
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
@@ -65,16 +53,19 @@ class SubjectConfirmationNotBeforeTest extends AbstractControlledTime
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
-    public function time_within_graceperiod_is_valid(): void
+    public function timeWithinGraceperiodIsValid(): void
     {
-        $this->subjectConfirmation->getSubjectConfirmationData()->setNotBefore($this->currentTime + 60);
+        $subjectConfirmationData = new SubjectConfirmationData();
+        $subjectConfirmationData->setNotBefore($this->currentTime + 60);
+        $subjectConfirmation = new SubjectConfirmation();
+        $subjectConfirmation->setMethod(C::CM_HOK);
+        $subjectConfirmation->setSubjectConfirmationData($subjectConfirmationData);
 
         $validator = new SubjectConfirmationNotBefore();
-        $result    = new Result();
+        $result = new Result();
 
-        $validator->validate($this->subjectConfirmation, $result);
+        $validator->validate($subjectConfirmation, $result);
 
         $this->assertTrue($result->isValid());
     }
@@ -86,16 +77,19 @@ class SubjectConfirmationNotBeforeTest extends AbstractControlledTime
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
-     * @return void
      */
-    public function current_time_is_valid(): void
+    public function currentTimeIsValid(): void
     {
-        $this->subjectConfirmation->getSubjectConfirmationData()->setNotBefore($this->currentTime);
+        $subjectConfirmationData = new SubjectConfirmationData();
+        $subjectConfirmationData->setNotBefore($this->currentTime);
+        $subjectConfirmation = new SubjectConfirmation();
+        $subjectConfirmation->setMethod(C::CM_HOK);
+        $subjectConfirmation->setSubjectConfirmationData($subjectConfirmationData);
 
         $validator = new SubjectConfirmationNotBefore();
-        $result    = new Result();
+        $result = new Result();
 
-        $validator->validate($this->subjectConfirmation, $result);
+        $validator->validate($subjectConfirmation, $result);
 
         $this->assertTrue($result->isValid());
     }

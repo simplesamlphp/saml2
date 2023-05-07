@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Compat;
+namespace SimpleSAML\SAML2\Compat;
 
 use Psr\Log\LoggerInterface;
 

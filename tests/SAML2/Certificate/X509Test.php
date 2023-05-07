@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Certificate;
+namespace SimpleSAML\Test\SAML2\Certificate;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Certificate\X509;
+use SimpleSAML\SAML2\Certificate\X509;
 
 class X509Test extends TestCase
 {

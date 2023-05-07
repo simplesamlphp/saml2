@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdui;
+namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
 use InvalidArgumentException;
-use SAML2\Constants as C;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
 use function filter_var;

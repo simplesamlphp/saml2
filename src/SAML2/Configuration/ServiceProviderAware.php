@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Configuration;
+namespace SimpleSAML\SAML2\Configuration;
 
 /**
  * Interface for triggering setter injection
@@ -10,7 +10,7 @@ namespace SAML2\Configuration;
 interface ServiceProviderAware
 {
     /**
-     * @param ServiceProvider $serviceProvider
+     * @param \SimpleSAML\SAML2\Configuration\ServiceProvider $serviceProvider
      * @return void
      */
     public function setServiceProvider(ServiceProvider $serviceProvider): void;

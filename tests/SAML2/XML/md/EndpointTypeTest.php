@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\Test\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants as C;
-use SAML2\XML\md\EndpointType;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\md\EndpointType;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
- * Class \SAML2\XML\md\EndpointType
+ * Class \SimpleSAML\SAML2\XML\md\EndpointType
  */
 class EndpointTypeTest extends TestCase
 {

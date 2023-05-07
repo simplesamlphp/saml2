@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\shibmd;
+namespace SimpleSAML\SAML2\XML\shibmd;
 
 use DOMElement;
-use SAML2\Constants as C;
-use SAML2\Utils;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Assert\Assert;
 
 /**

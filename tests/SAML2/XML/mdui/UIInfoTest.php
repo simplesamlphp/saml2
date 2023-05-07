@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\mdui;
+namespace SimpleSAML\Test\SAML2\XML\mdui;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\XML\mdui\DiscoHints;
-use SAML2\XML\mdui\Keywords;
-use SAML2\XML\mdui\Logo;
-use SAML2\XML\mdui\UIInfo;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\mdui\DiscoHints;
+use SimpleSAML\SAML2\XML\mdui\Keywords;
+use SimpleSAML\SAML2\XML\mdui\Logo;
+use SimpleSAML\SAML2\XML\mdui\UIInfo;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
- * Class \SAML2\XML\mdrpi\UIInfoTest
+ * Class \SimpleSAML\SAML2\XML\mdrpi\UIInfoTest
  */
 class UIInfoTest extends TestCase
 {

@@ -2,20 +2,20 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\md;
+namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SAML2\Utils;
-use SAML2\XML\saml\Attribute;
-use SAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function serialize;
 use function unserialize;
 
 /**
- * Class \SAML2\XML\md\AttributeTest
+ * Class \SimpleSAML\SAML2\XML\md\AttributeTest
  */
 class AttributeValueTest extends TestCase
 {

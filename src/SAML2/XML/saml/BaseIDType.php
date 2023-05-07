@@ -9,10 +9,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2\XML\saml;
+namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Constants as C;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 abstract class BaseIDType

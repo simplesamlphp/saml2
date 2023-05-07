@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants as C;
-use SAML2\LogoutRequest;
-use SAML2\Utils\XPath;
-use SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\LogoutRequest;
+use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
- * Class \SAML2\LogoutRequestTest
+ * Class \SimpleSAML\SAML2\LogoutRequestTest
  */
 class LogoutRequestTest extends TestCase
 {
@@ -257,7 +257,7 @@ XML;
         $nameId = new NameID();
         $nameId->setValue('NameIDValue');
         $time = time();
-        $nameId = new XML\saml\NameID();
+        $nameId = new NameID();
         $nameId->setValue('NameIDValue');
 
         $logoutRequest = new LogoutRequest();
@@ -295,7 +295,7 @@ XML;
     public function testSetReason(): void
     {
         $reason = "urn:simplesamlphp:reason-test";
-        $nameId = new XML\saml\NameID();
+        $nameId = new NameID();
         $nameId->setValue('NameIDValue');
 
         $logoutRequest = new LogoutRequest();

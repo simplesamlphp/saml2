@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\Test\SAML2;
 
 use DOMDocument;
 use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use SAML2\AuthnRequest;
-use SAML2\Constants as C;
-use SAML2\XML\saml\Issuer;
-use SAML2\XML\saml\NameID;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\AuthnRequest;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function md5;
 
 /**
- * Class \SAML2\AuthnRequestTest
+ * Class \SimpleSAML\SAML2\AuthnRequestTest
  */
 class AuthnRequestTest extends TestCase
 {

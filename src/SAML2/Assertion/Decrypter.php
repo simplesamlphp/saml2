@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SAML2\Assertion;
+namespace SimpleSAML\SAML2\Assertion;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use SAML2\Assertion;
-use SAML2\Assertion\Exception\NotDecryptedException;
-use SAML2\Certificate\PrivateKeyLoader;
-use SAML2\Configuration\IdentityProvider;
-use SAML2\Configuration\ServiceProvider;
-use SAML2\EncryptedAssertion;
+use SimpleSAML\SAML2\Assertion;
+use SimpleSAML\SAML2\Assertion\Exception\NotDecryptedException;
+use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\EncryptedAssertion;
 
 use function count;
 use function get_class;
@@ -23,10 +23,10 @@ class Decrypter
     /**
      * Constructor for Decrypter.
      *
-     * @param LoggerInterface $logger
-     * @param IdentityProvider $identityProvider
-     * @param ServiceProvider $serviceProvider
-     * @param PrivateKeyLoader $privateKeyLoader
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProvider
+     * @param \SimpleSAML\SAML2\Configuration\ServiceProvider $serviceProvider
+     * @param \SimpleSAML\SAML2\Certificate\PrivateKeyLoader $privateKeyLoader
      */
     public function __construct(
         private LoggerInterface $logger,
@@ -50,9 +50,9 @@ class Decrypter
 
 
     /**
-     * @param \SAML2\EncryptedAssertion $assertion
+     * @param \SimpleSAML\SAML2\EncryptedAssertion $assertion
      *
-     * @return \SAML2\Assertion
+     * @return \SimpleSAML\SAML2\Assertion
      */
     public function decrypt(EncryptedAssertion $assertion): Assertion
     {

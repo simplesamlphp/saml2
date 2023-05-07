@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace SAML2;
+namespace SimpleSAML\SAML2;
 
 use DOMElement;
-use SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Utils\XPath;
 
 use function is_null;
 
