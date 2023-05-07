@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use Exception;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\TestCase;
 use Nyholm\Psr7\ServerRequest;
-use PHPUnit\Framework\Error\Warning;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\HTTPRedirect;
@@ -27,7 +26,7 @@ use function urldecode;
  * @covers \SimpleSAML\SAML2\HTTPRedirect
  * @package simplesamlphp\saml2
  */
-final class HTTPRedirectTest extends MockeryTestCase
+final class HTTPRedirectTest extends TestCase
 {
     /**
      */

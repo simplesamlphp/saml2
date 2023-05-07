@@ -18,15 +18,14 @@ use SimpleSAML\Test\SAML2\ControlledTimeTest;
  *
  * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotOnOrAfter
  * @package simplesamlphp/saml2
+ *
+ * @runTestsInSeparateProcesses
  */
 final class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
 {
     /**
      * @group assertion-validation
      * @test
-     *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
     public function timestampInThePastBeforeGraceperiodIsNotValid(): void
     {
@@ -34,7 +33,7 @@ final class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
         $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationNotOnOrAfter();
-        $result    = new Result();
+        $result = new Result();
 
         $validator->validate($subjectConfirmation, $result);
 
@@ -46,9 +45,6 @@ final class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
     /**
      * @group assertion-validation
      * @test
-     *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
     public function timeWithinGraceperiodIsValid(): void
     {
@@ -56,7 +52,7 @@ final class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
         $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationNotOnOrAfter();
-        $result    = new Result();
+        $result = new Result();
 
         $validator->validate($subjectConfirmation, $result);
 
@@ -67,9 +63,6 @@ final class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
     /**
      * @group assertion-validation
      * @test
-     *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
     public function currentTimeIsValid(): void
     {
@@ -77,7 +70,7 @@ final class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
         $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationNotBefore();
-        $result    = new Result();
+        $result = new Result();
 
         $validator->validate($subjectConfirmation, $result);
 

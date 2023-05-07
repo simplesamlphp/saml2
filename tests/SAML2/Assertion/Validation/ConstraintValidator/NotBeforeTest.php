@@ -29,12 +29,12 @@ final class NotBeforeTest extends ControlledTimeTest
     /**
      * @var \SAML2\XML\saml\Issuer
      */
-    private $issuer;
+    private Issuer $issuer;
 
     /**
      * @var \SAML2\XML\saml\AuthnStatement
      */
-    private $authnStatement;
+    private AuthnStatement $authnStatement;
 
 
     /**

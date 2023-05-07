@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use DOMElement;
+use PHPUnit\Framework\TestCase;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
@@ -48,7 +49,7 @@ use function strval;
  * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
-final class LogoutRequestTest extends MockeryTestCase
+final class LogoutRequestTest extends TestCase
 {
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;

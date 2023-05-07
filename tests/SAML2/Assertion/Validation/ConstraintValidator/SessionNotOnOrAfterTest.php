@@ -28,7 +28,7 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTest
     /**
      * @var \SAML2\XML\saml\Issuer
      */
-    private $issuer;
+    private Issuer $issuer;
 
 
     /**

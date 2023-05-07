@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
-use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Constants as C;
@@ -14,7 +14,7 @@ use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
  * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod
  * @package simplesamlphp/saml2
  */
-final class SubjectConfirmationMethodTest extends MockeryTestCase
+final class SubjectConfirmationMethodTest extends TestCase
 {
     /**
      * @group assertion-validation

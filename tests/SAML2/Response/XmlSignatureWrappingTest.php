@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Response;
 
-use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Signature\Validator;
@@ -19,7 +19,7 @@ use function preg_match;
 /**
  * @package simplesamlphp/saml2
  */
-final class XmlSignatureWrappingTest extends MockeryTestCase
+final class XmlSignatureWrappingTest extends TestCase
 {
     /**
      * @var \SimpleSAML\SAML2\Signature\Validator

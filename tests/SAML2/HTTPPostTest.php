@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use Exception;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\TestCase;
 use Nyholm\Psr7\ServerRequest;
-use PHPUnit\Framework\Error\Warning;
 use SimpleSAML\SAML2\HTTPPost;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
@@ -24,7 +23,7 @@ use SimpleSAML\XMLSecurity\Key\PrivateKey;
  * @covers \SimpleSAML\SAML2\HTTPPost
  * @package simplesamlphp\saml2
  */
-final class HTTPPostTest extends MockeryTestCase
+final class HTTPPostTest extends TestCase
 {
     /**
      * test parsing of basic query string with authnrequest and

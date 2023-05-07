@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Assertion;
 
-use Mockery as m;
+use Mockery;
 use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\LoggerInterface;
@@ -42,13 +42,13 @@ final class ProcessorTest extends MockeryTestCase
 
     protected function setUp(): void
     {
-        $this->decrypter = m::mock(Decrypter::class);
-        $validator = m::mock(Validator::class);
-        $assertionValidator = m::mock(AssertionValidator::class);
-        $subjectConfirmationValidator = m::mock(SubjectConfirmationValidator::class);
-        $transformer = m::mock(TransformerInterface::class);
+        $this->decrypter = Mockery::mock(Decrypter::class);
+        $validator = Mockery::mock(Validator::class);
+        $assertionValidator = Mockery::mock(AssertionValidator::class);
+        $subjectConfirmationValidator = Mockery::mock(SubjectConfirmationValidator::class);
+        $transformer = Mockery::mock(TransformerInterface::class);
         $identityProvider = new IdentityProvider([]);
-        $logger = m::mock(LoggerInterface::class);
+        $logger = Mockery::mock(LoggerInterface::class);
 
         $this->processor = new Processor(
             $this->decrypter,

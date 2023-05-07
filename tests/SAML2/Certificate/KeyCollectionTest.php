@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Certificate;
 
-use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Certificate\KeyCollection;
 
@@ -12,7 +12,7 @@ use SimpleSAML\SAML2\Certificate\KeyCollection;
  * @covers \SimpleSAML\SAML2\Certificate\KeyCollection
  * @package simplesamlphp/saml2
  */
-final class KeyCollectionTest extends MockeryTestCase
+final class KeyCollectionTest extends TestCase
 {
     /**
      * @group certificate

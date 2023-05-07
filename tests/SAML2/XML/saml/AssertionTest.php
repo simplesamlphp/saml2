@@ -7,7 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use DOMDocument;
 use DOMNodeList;
 use Exception;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Utils\XPath;
@@ -59,7 +59,7 @@ use function time;
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
-final class AssertionTest extends MockeryTestCase
+final class AssertionTest extends TestCase
 {
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
