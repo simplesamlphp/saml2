@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Utils;
 use SAML2\Utils\XPath;
 use SAML2\XML\saml\Attribute;
@@ -105,7 +105,7 @@ class IDPSSODescriptor extends SSODescriptorType
             $this->AssertionIDRequestService[] = new EndpointType($ep);
         }
 
-        $this->AttributeProfile = XMLUtils::extractStrings($xml, Constants::NS_MD, 'AttributeProfile');
+        $this->AttributeProfile = XMLUtils::extractStrings($xml, C::NS_MD, 'AttributeProfile');
 
         /** @var \DOMElement $a */
         foreach (XPath::xpQuery($xml, './saml_assertion:Attribute', $xpCache) as $a) {
@@ -325,7 +325,7 @@ class IDPSSODescriptor extends SSODescriptorType
             $ep->toXML($e, 'md:AssertionIDRequestService');
         }
 
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfile);
+        XMLUtils::addStrings($e, C::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfile);
 
         foreach ($this->Attribute as $a) {
             $a->toXML($e);

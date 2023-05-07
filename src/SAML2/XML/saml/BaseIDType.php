@@ -12,7 +12,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 abstract class BaseIDType
@@ -128,7 +128,7 @@ abstract class BaseIDType
         } else {
             $doc = $parent->ownerDocument;
         }
-        $element = $doc->createElementNS(Constants::NS_SAML, $this->nodeName);
+        $element = $doc->createElementNS(C::NS_SAML, $this->nodeName);
         $parent->appendChild($element);
 
         if ($this->NameQualifier !== null) {
@@ -151,7 +151,7 @@ abstract class BaseIDType
     public function __toString()
     {
         $doc = DOMDocumentFactory::create();
-        $root = $doc->createElementNS(Constants::NS_SAML, 'root');
+        $root = $doc->createElementNS(C::NS_SAML, 'root');
         $ele = $this->toXML($root);
 
         return $doc->saveXML($ele);

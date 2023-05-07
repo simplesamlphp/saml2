@@ -20,11 +20,6 @@ use SimpleSAML\XML\Chunk;
 class EntityAttributes
 {
     /**
-     * The namespace used for the EntityAttributes extension.
-     */
-    public const NS = C::NS_MDATTR;
-
-    /**
      * Array with child elements.
      *
      * The elements can be \SAML2\XML\saml\Attribute or \SimpleSAML\XML\Chunk elements.
@@ -103,7 +98,7 @@ class EntityAttributes
     {
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(EntityAttributes::NS, 'mdattr:EntityAttributes');
+        $e = $doc->createElementNS(C::NS_MDATTR, 'mdattr:EntityAttributes');
         $parent->appendChild($e);
 
         /** @var \SAML2\XML\saml\Attribute|\SimpleSAML\XML\Chunk $child */

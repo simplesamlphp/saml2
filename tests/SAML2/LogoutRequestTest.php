@@ -7,7 +7,7 @@ namespace SAML2;
 use DOMElement;
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\LogoutRequest;
 use SAML2\Utils\XPath;
 use SAML2\XML\saml\NameID;
@@ -72,7 +72,7 @@ XML;
 
         $logoutRequestElement = $logoutRequest->toUnsignedXML();
         $this->assertEquals('LogoutRequest', $logoutRequestElement->localName);
-        $this->assertEquals(Constants::NS_SAMLP, $logoutRequestElement->namespaceURI);
+        $this->assertEquals(C::NS_SAMLP, $logoutRequestElement->namespaceURI);
 
         $xpCache = XPath::getXPath($logoutRequestElement);
         $nameIdElements = XPath::xpQuery($logoutRequestElement, './saml_assertion:NameID', $xpCache);

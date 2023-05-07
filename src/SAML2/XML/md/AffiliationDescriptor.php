@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\SignedElementHelper;
 use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
@@ -97,7 +97,7 @@ class AffiliationDescriptor extends SignedElementHelper
 
         $this->setExtensions(Extensions::getList($xml));
 
-        $this->setAffiliateMember(XMLUtils::extractStrings($xml, Constants::NS_MD, 'AffiliateMember'));
+        $this->setAffiliateMember(XMLUtils::extractStrings($xml, C::NS_MD, 'AffiliateMember'));
         if (empty($this->AffiliateMember)) {
             throw new MissingElementException('Missing AffiliateMember in AffiliationDescriptor.');
         }
@@ -258,7 +258,7 @@ class AffiliationDescriptor extends SignedElementHelper
     {
         Assert::notEmpty($this->affiliationOwnerID);
 
-        $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, 'md:AffiliationDescriptor');
+        $e = $parent->ownerDocument->createElementNS(C::NS_MD, 'md:AffiliationDescriptor');
         $parent->appendChild($e);
 
         $e->setAttribute('affiliationOwnerID', $this->affiliationOwnerID);
@@ -277,7 +277,7 @@ class AffiliationDescriptor extends SignedElementHelper
 
         Extensions::addList($e, $this->Extensions);
 
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:AffiliateMember', false, $this->AffiliateMember);
+        XMLUtils::addStrings($e, C::NS_MD, 'md:AffiliateMember', false, $this->AffiliateMember);
 
         foreach ($this->KeyDescriptor as $kd) {
             $kd->toXML($e);

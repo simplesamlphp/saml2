@@ -6,7 +6,7 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use Exception;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -235,7 +235,7 @@ class EndpointType
      */
     public function toXML(DOMElement $parent, string $name): DOMElement
     {
-        $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, $name);
+        $e = $parent->ownerDocument->createElementNS(C::NS_MD, $name);
         $parent->appendChild($e);
 
         if (empty($this->Binding)) {

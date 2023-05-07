@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\XML\saml\SubjectConfirmationData;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -52,7 +52,7 @@ class SubjectConfirmationDataTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmationData
     xmlns:saml="{$samlNamespace}"

@@ -6,7 +6,7 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 use Exception;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -63,7 +63,7 @@ class Issuer extends NameIDType
          *
          * @var string
          */
-        $this->setFormat(Constants::NAMEID_ENTITY);
+        $this->setFormat(C::NAMEID_ENTITY);
 
         parent::__construct($xml);
     }
@@ -101,8 +101,8 @@ class Issuer extends NameIDType
     public function toXML(DOMElement $parent = null): DOMElement
     {
         if (
-            ($this->Saml2IssuerShowAll && ($this->Format === Constants::NAMEID_ENTITY))
-            || ($this->Format !== Constants::NAMEID_ENTITY)
+            ($this->Saml2IssuerShowAll && ($this->Format === C::NAMEID_ENTITY))
+            || ($this->Format !== C::NAMEID_ENTITY)
         ) {
             return parent::toXML($parent);
         }
@@ -121,7 +121,7 @@ class Issuer extends NameIDType
         } else {
             $doc = $parent->ownerDocument;
         }
-        $element = $doc->createElementNS(Constants::NS_SAML, 'saml:Issuer');
+        $element = $doc->createElementNS(C::NS_SAML, 'saml:Issuer');
         $parent->appendChild($element);
 
         if (empty($this->value)) {

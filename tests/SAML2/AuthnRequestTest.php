@@ -9,7 +9,7 @@ use Exception;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SAML2\AuthnRequest;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\Utils\XPath;
@@ -157,7 +157,7 @@ AUTHNREQUEST;
         $request = new AuthnRequest();
         $nameId = new NameID();
         $nameId->setValue('user@example.org');
-        $nameId->setFormat(Constants::NAMEID_UNSPECIFIED);
+        $nameId->setFormat(C::NAMEID_UNSPECIFIED);
         $request->setNameId($nameId);
 
         $requestAsXML = $request->toUnsignedXML()->ownerDocument->saveXML();
@@ -205,7 +205,7 @@ AUTHNREQUEST;
 
         $nameId = $authnRequest->getNameId();
         $this->assertEquals(md5('Arthur Dent'), $nameId->getValue());
-        $this->assertEquals(Constants::NAMEID_ENCRYPTED, $nameId->getFormat());
+        $this->assertEquals(C::NAMEID_ENCRYPTED, $nameId->getFormat());
     }
 
 
@@ -219,7 +219,7 @@ AUTHNREQUEST;
         // the NameID we're going to encrypt
         $nameId = new NameID();
         $nameId->setValue(md5('Arthur Dent'));
-        $nameId->setFormat(Constants::NAMEID_ENCRYPTED);
+        $nameId->setFormat(C::NAMEID_ENCRYPTED);
 
         // the Issuer
         $issuer = new Issuer();

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Utils;
 use SAML2\XML\ds\KeyInfo;
 use SimpleSAML\Assert\Assert;
@@ -256,7 +256,7 @@ class SubjectConfirmationData
             if (!($n instanceof DOMElement)) {
                 continue;
             }
-            if ($n->namespaceURI !== Constants::NS_XDSIG) {
+            if ($n->namespaceURI !== C::NS_XDSIG) {
                 $this->addInfo(new Chunk($n));
                 continue;
             }
@@ -280,7 +280,7 @@ class SubjectConfirmationData
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmationData');
+        $e = $parent->ownerDocument->createElementNS(C::NS_SAML, 'saml:SubjectConfirmationData');
         $parent->appendChild($e);
 
         if ($this->NotBefore !== null) {

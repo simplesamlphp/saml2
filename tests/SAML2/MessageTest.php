@@ -10,7 +10,7 @@ use PHPUnit\Framework\TestCase;
 use SAML2\Message;
 use SAML2\Response;
 use SAML2\XML\saml\Issuer;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -113,7 +113,7 @@ AUTHNREQUEST
         $this->assertEquals($issuer->getValue(), $xml_issuer->textContent);
 
         // now, try an Issuer with another format and attributes
-        $issuer->setFormat(Constants::NAMEID_UNSPECIFIED);
+        $issuer->setFormat(C::NAMEID_UNSPECIFIED);
         $issuer->setNameQualifier('SomeNameQualifier');
         $issuer->setSPNameQualifier('SomeSPNameQualifier');
         $issuer->setSPProvidedID('SomeSPProvidedID');
@@ -362,7 +362,7 @@ XML;
 
         $this->assertEquals('https://example.org/', $message->getIssuer()->getValue());
         $this->assertEquals('somethingNEW', $message->getId());
-        $this->assertEquals(Constants::CONSENT_PRIOR, $message->getConsent());
+        $this->assertEquals(C::CONSENT_PRIOR, $message->getConsent());
 
         $messageElement = $message->toUnsignedXML();
         $xpCache = XPath::getXPath($messageElement);

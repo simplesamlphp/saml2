@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\SignedElementHelper;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
@@ -400,7 +400,7 @@ class RoleDescriptor extends SignedElementHelper
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, $this->elementName);
+        $e = $parent->ownerDocument->createElementNS(C::NS_MD, $this->elementName);
         $parent->appendChild($e);
 
         if ($this->ID !== null) {

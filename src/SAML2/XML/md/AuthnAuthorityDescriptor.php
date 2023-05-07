@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -75,7 +75,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
             $this->addAssertionIDRequestService(new EndpointType($ep));
         }
 
-        $this->setNameIDFormat(XMLUtils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat'));
+        $this->setNameIDFormat(XMLUtils::extractStrings($xml, C::NS_MD, 'NameIDFormat'));
     }
 
 
@@ -192,7 +192,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
             $ep->toXML($e, 'md:AssertionIDRequestService');
         }
 
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
+        XMLUtils::addStrings($e, C::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
 
         return $e;
     }

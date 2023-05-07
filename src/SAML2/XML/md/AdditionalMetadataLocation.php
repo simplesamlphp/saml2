@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -106,7 +106,7 @@ class AdditionalMetadataLocation
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        $e = XMLUtils::addString($parent, Constants::NS_MD, 'md:AdditionalMetadataLocation', $this->getLocation());
+        $e = XMLUtils::addString($parent, C::NS_MD, 'md:AdditionalMetadataLocation', $this->getLocation());
         $e->setAttribute('namespace', $this->getNamespace());
 
         return $e;

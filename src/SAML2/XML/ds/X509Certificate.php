@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\ds;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function str_replace;
@@ -71,6 +71,6 @@ class X509Certificate
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        return XMLUtils::addString($parent, Constants::NS_XDSIG, 'ds:X509Certificate', $this->getCertificate());
+        return XMLUtils::addString($parent, C::NS_XDSIG, 'ds:X509Certificate', $this->getCertificate());
     }
 }

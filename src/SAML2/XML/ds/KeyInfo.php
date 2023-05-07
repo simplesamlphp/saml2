@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\ds;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\Assert\Assert;
 
@@ -54,7 +54,7 @@ class KeyInfo
                 continue;
             }
 
-            if ($n->namespaceURI !== Constants::NS_XDSIG) {
+            if ($n->namespaceURI !== C::NS_XDSIG) {
                 $this->info[] = new Chunk($n);
                 continue;
             }
@@ -147,7 +147,7 @@ class KeyInfo
     {
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(Constants::NS_XDSIG, 'ds:KeyInfo');
+        $e = $doc->createElementNS(C::NS_XDSIG, 'ds:KeyInfo');
         $parent->appendChild($e);
 
         if ($this->Id !== null) {

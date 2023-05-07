@@ -8,7 +8,7 @@ use DOMDocument;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use SAML2\Assertion;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Utils\XPath;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
@@ -411,7 +411,7 @@ XML;
         $this->assertEquals($issuer->getValue(), $xml_issuer->textContent);
 
         // now, try an Issuer with another format and attributes
-        $issuer->setFormat(Constants::NAMEID_UNSPECIFIED);
+        $issuer->setFormat(C::NAMEID_UNSPECIFIED);
         $issuer->setNameQualifier('SomeNameQualifier');
         $issuer->setSPNameQualifier('SomeSPNameQualifier');
         $issuer->setSPProvidedID('SomeSPProvidedID');

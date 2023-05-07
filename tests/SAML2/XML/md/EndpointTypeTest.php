@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\XML\md\EndpointType;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -55,7 +55,7 @@ class EndpointTypeTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $mdNamespace = Constants::NS_MD;
+        $mdNamespace = C::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:Test xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" xmlns:test="urn:test" test:attr="value" />
 XML

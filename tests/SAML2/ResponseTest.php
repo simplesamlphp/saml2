@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Response;
 use SAML2\Utils\XPath;
 use SAML2\XML\saml\Issuer;
@@ -25,12 +25,12 @@ class ResponseTest extends TestCase
         $issuer->setValue('SomeIssuer');
 
         $response = new Response();
-        $response->setConsent(Constants::CONSENT_EXPLICIT);
+        $response->setConsent(C::CONSENT_EXPLICIT);
         $response->setIssuer($issuer);
         $responseElement = $response->toUnsignedXML();
 
         $this->assertTrue($responseElement->hasAttribute('Consent'));
-        $this->assertEquals($responseElement->getAttribute('Consent'), Constants::CONSENT_EXPLICIT);
+        $this->assertEquals($responseElement->getAttribute('Consent'), C::CONSENT_EXPLICIT);
 
         $xpCache = XPath::getXPath($responseElement);
         $issuerElements = XPath::xpQuery($responseElement, './saml_assertion:Issuer', $xpCache);

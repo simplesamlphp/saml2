@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -159,7 +159,7 @@ class SubjectConfirmation
     {
         Assert::notNull($this->Method, "Cannot convert SubjectConfirmation to XML without a Method set.");
 
-        $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmation');
+        $e = $parent->ownerDocument->createElementNS(C::NS_SAML, 'saml:SubjectConfirmation');
         $parent->appendChild($e);
 
         /** @psalm-suppress PossiblyNullArgument */

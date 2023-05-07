@@ -6,7 +6,7 @@ namespace SAML2\XML\md;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\XML\md\AdditionalMetadataLocation;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -48,7 +48,7 @@ class AdditionalMetadataLocationTest extends TestCase
     public function testUnmarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(
-            '<md:AdditionalMetadataLocation xmlns:md="' . Constants::NS_MD . '"' .
+            '<md:AdditionalMetadataLocation xmlns:md="' . C::NS_MD . '"' .
             ' namespace="TheNamespaceAttribute">LocationText</md:AdditionalMetadataLocation>'
         );
         $additionalMetadataLocation = new AdditionalMetadataLocation($document->firstChild);
@@ -56,7 +56,7 @@ class AdditionalMetadataLocationTest extends TestCase
         $this->assertEquals('LocationText', $additionalMetadataLocation->getLocation());
 
         $document->loadXML(
-            '<md:AdditionalMetadataLocation xmlns:md="' . Constants::NS_MD . '"' .
+            '<md:AdditionalMetadataLocation xmlns:md="' . C::NS_MD . '"' .
             '>LocationText</md:AdditionalMetadataLocation>'
         );
         $this->expectException(Exception::class, 'Missing namespace attribute on AdditionalMetadataLocation element.');

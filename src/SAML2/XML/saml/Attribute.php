@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
@@ -226,6 +226,6 @@ class Attribute
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        return $this->toXMLInternal($parent, Constants::NS_SAML, 'saml:Attribute');
+        return $this->toXMLInternal($parent, C::NS_SAML, 'saml:Attribute');
     }
 }

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
 
@@ -74,7 +74,7 @@ class RequestedAttribute extends Attribute
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        $e = $this->toXMLInternal($parent, Constants::NS_MD, 'md:RequestedAttribute');
+        $e = $this->toXMLInternal($parent, C::NS_MD, 'md:RequestedAttribute');
 
         if (is_bool($this->isRequired)) {
             $e->setAttribute('isRequired', $this->isRequired ? 'true' : 'false');

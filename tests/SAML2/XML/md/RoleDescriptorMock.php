@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 
 class RoleDescriptorMock extends RoleDescriptor
 {
@@ -21,7 +21,7 @@ class RoleDescriptorMock extends RoleDescriptor
     public function toXML(DOMElement $parent): DOMElement
     {
         $xml = parent::toXML($parent);
-        $xml->setAttributeNS(Constants::NS_XSI, 'xsi:type', 'myns:MyElement');
+        $xml->setAttributeNS(C::NS_XSI, 'xsi:type', 'myns:MyElement');
         $xml->setAttributeNS('http://example.org/mynsdefinition', 'myns:tmp', 'tmp');
         $xml->removeAttributeNS('http://example.org/mynsdefinition', 'tmp');
         return $xml;

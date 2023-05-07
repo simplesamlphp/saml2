@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Utils;
 use SAML2\Utils\XPath;
 use SAML2\XML\ds\KeyInfo;
@@ -178,7 +178,7 @@ class KeyDescriptor
 
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(Constants::NS_MD, 'md:KeyDescriptor');
+        $e = $doc->createElementNS(C::NS_MD, 'md:KeyDescriptor');
         $parent->appendChild($e);
 
         if ($this->use !== null) {

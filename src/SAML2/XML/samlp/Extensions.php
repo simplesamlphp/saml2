@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\samlp;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
 
@@ -48,7 +48,7 @@ class Extensions
             return;
         }
 
-        $extElement = $parent->ownerDocument->createElementNS(Constants::NS_SAMLP, 'samlp:Extensions');
+        $extElement = $parent->ownerDocument->createElementNS(C::NS_SAMLP, 'samlp:Extensions');
         $parent->appendChild($extElement);
 
         foreach ($extensions as $ext) {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\SignedElementHelper;
 use SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
@@ -267,10 +267,10 @@ class EntitiesDescriptor extends SignedElementHelper
     {
         if ($parent === null) {
             $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS(Constants::NS_MD, 'md:EntitiesDescriptor');
+            $e = $doc->createElementNS(C::NS_MD, 'md:EntitiesDescriptor');
             $doc->appendChild($e);
         } else {
-            $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, 'md:EntitiesDescriptor');
+            $e = $parent->ownerDocument->createElementNS(C::NS_MD, 'md:EntitiesDescriptor');
             $parent->appendChild($e);
         }
 

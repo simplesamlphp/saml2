@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -415,7 +415,7 @@ class ContactPerson
     {
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(Constants::NS_MD, 'md:ContactPerson');
+        $e = $doc->createElementNS(C::NS_MD, 'md:ContactPerson');
         $parent->appendChild($e);
 
         $e->setAttribute('contactType', $this->getContactType());
@@ -427,22 +427,22 @@ class ContactPerson
         Extensions::addList($e, $this->getExtensions());
 
         if ($this->Company !== null) {
-            XMLUtils::addString($e, Constants::NS_MD, 'md:Company', $this->Company);
+            XMLUtils::addString($e, C::NS_MD, 'md:Company', $this->Company);
         }
         if ($this->GivenName !== null) {
-            XMLUtils::addString($e, Constants::NS_MD, 'md:GivenName', $this->GivenName);
+            XMLUtils::addString($e, C::NS_MD, 'md:GivenName', $this->GivenName);
         }
         if ($this->SurName !== null) {
-            XMLUtils::addString($e, Constants::NS_MD, 'md:SurName', $this->SurName);
+            XMLUtils::addString($e, C::NS_MD, 'md:SurName', $this->SurName);
         }
         if (!empty($this->getEmailAddress())) {
             /** @var array $addresses */
             $addresses = preg_filter('/^/', 'mailto:', $this->EmailAddress);
 
-            XMLUtils::addStrings($e, Constants::NS_MD, 'md:EmailAddress', false, $addresses);
+            XMLUtils::addStrings($e, C::NS_MD, 'md:EmailAddress', false, $addresses);
         }
         if (!empty($this->getTelephoneNumber())) {
-            XMLUtils::addStrings($e, Constants::NS_MD, 'md:TelephoneNumber', false, $this->getTelephoneNumber());
+            XMLUtils::addStrings($e, C::NS_MD, 'md:TelephoneNumber', false, $this->getTelephoneNumber());
         }
 
         return $e;

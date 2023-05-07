@@ -6,7 +6,7 @@ namespace SAML2\XML\md;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\XML\md\ContactPerson;
 use SAML2\Utils;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -34,7 +34,7 @@ class ContactPersonTest extends TestCase
         $TelephoneNumber = ['1-234-567-8901'];
         $ContactPersonAttributes = ['testattr' => 'testval', 'testattr2' => 'testval2'];
 
-        $mdNamespace = Constants::NS_MD;
+        $mdNamespace = C::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:Test xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" xmlns:test="urn:test" test:attr="value">
 </md:Test>
@@ -98,7 +98,7 @@ XML
         $ContactPersonAttributes = ['testattr' => 'testval', 'testattr2' => 'testval2'];
         $ExtraAttribute = ['another' => 'this'];
 
-        $mdNamespace = Constants::NS_MD;
+        $mdNamespace = C::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:Test xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" xmlns:test="urn:test" test:attr="value">
 </md:Test>
@@ -155,7 +155,7 @@ XML
      */
     public function testContactPersonFromXML(): void
     {
-        $mdNamespace = Constants::NS_MD;
+        $mdNamespace = C::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <?xml version="1.0"?>
 <md:Test xmlns:md="{$mdNamespace}" xmlns:test="urn:test" Binding="urn:something" Location="https://whatever/" test:attr="value">
@@ -189,7 +189,7 @@ XML
      */
     public function testMultipleNamesXML(): void
     {
-        $mdNamespace = Constants::NS_MD;
+        $mdNamespace = C::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <?xml version="1.0"?>
 <md:Test xmlns:md="{$mdNamespace}" xmlns:test="urn:test" Binding="urn:something" Location="https://whatever/" test:attr="value">
@@ -217,7 +217,7 @@ XML
      */
     public function testEmptySurNameXML(): void
     {
-        $mdNamespace = Constants::NS_MD;
+        $mdNamespace = C::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <?xml version="1.0"?>
 <md:Test xmlns:md="{$mdNamespace}" xmlns:test="urn:test" Binding="urn:something" Location="https://whatever/" test:attr="value">
@@ -243,7 +243,7 @@ XML
      */
     public function testMissingContactTypeXML(): void
     {
-        $mdNamespace = Constants::NS_MD;
+        $mdNamespace = C::NS_MD;
         $document = DOMDocumentFactory::fromString(<<<XML
 <?xml version="1.0"?>
 <md:Test xmlns:md="{$mdNamespace}" xmlns:test="urn:test" Binding="urn:something" Location="https://whatever/" test:attr="value">

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Utils;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -83,12 +83,12 @@ class AttributeConsumingService
 
         $this->setIsDefault(Utils::parseBoolean($xml, 'isDefault', null));
 
-        $this->setServiceName(XMLUtils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceName'));
+        $this->setServiceName(XMLUtils::extractLocalizedStrings($xml, C::NS_MD, 'ServiceName'));
         if ($this->getServiceName() === []) {
             throw new MissingElementException('Missing ServiceName in AttributeConsumingService.');
         }
 
-        $this->setServiceDescription(XMLUtils::extractLocalizedStrings($xml, Constants::NS_MD, 'ServiceDescription'));
+        $this->setServiceDescription(XMLUtils::extractLocalizedStrings($xml, C::NS_MD, 'ServiceDescription'));
 
         /** @var \DOMElement $ra */
         foreach (XPath::xpQuery($xml, './saml_metadata:RequestedAttribute', XPath::getXPath($xml)) as $ra) {
@@ -234,7 +234,7 @@ class AttributeConsumingService
     {
         $doc = $parent->ownerDocument;
 
-        $e = $doc->createElementNS(Constants::NS_MD, 'md:AttributeConsumingService');
+        $e = $doc->createElementNS(C::NS_MD, 'md:AttributeConsumingService');
         $parent->appendChild($e);
 
         $e->setAttribute('index', strval($this->getIndex()));
@@ -245,8 +245,8 @@ class AttributeConsumingService
             $e->setAttribute('isDefault', 'false');
         }
 
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:ServiceName', true, $this->getServiceName());
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:ServiceDescription', true, $this->getServiceDescription());
+        XMLUtils::addStrings($e, C::NS_MD, 'md:ServiceName', true, $this->getServiceName());
+        XMLUtils::addStrings($e, C::NS_MD, 'md:ServiceDescription', true, $this->getServiceDescription());
 
         foreach ($this->getRequestedAttribute() as $ra) {
             $ra->toXML($e);

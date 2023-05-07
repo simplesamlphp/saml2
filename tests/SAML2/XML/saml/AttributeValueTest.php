@@ -6,7 +6,6 @@ namespace SAML2\XML\md;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;

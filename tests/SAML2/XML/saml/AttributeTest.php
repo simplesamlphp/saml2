@@ -6,7 +6,7 @@ namespace SAML2\XML\md;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Utils\XPath;
 use SAML2\XML\saml\Attribute;
 use SAML2\XML\saml\AttributeValue;
@@ -50,7 +50,7 @@ class AttributeTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:Attribute xmlns:saml="{$samlNamespace}" Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
     <saml:AttributeValue>FirstValue</saml:AttributeValue>
@@ -74,7 +74,7 @@ XML
      */
     public function testUnmarshallingFailure(): void
     {
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:Attribute xmlns:saml="{$samlNamespace}" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
     <saml:AttributeValue>FirstValue</saml:AttributeValue>

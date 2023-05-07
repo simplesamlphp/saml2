@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Utils\XPath;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -84,7 +84,7 @@ abstract class SSODescriptorType extends RoleDescriptor
             $this->addManageNameIDService(new EndpointType($ep));
         }
 
-        $this->setNameIDFormat(XMLUtils::extractStrings($xml, Constants::NS_MD, 'NameIDFormat'));
+        $this->setNameIDFormat(XMLUtils::extractStrings($xml, C::NS_MD, 'NameIDFormat'));
     }
 
 
@@ -238,7 +238,7 @@ abstract class SSODescriptorType extends RoleDescriptor
             $ep->toXML($e, 'md:ManageNameIDService');
         }
 
-        XMLUtils::addStrings($e, Constants::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
+        XMLUtils::addStrings($e, C::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
 
         return $e;
     }

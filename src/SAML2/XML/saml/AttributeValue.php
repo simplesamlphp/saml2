@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Utils;
 use Serializable;
 use SimpleSAML\Assert\Assert;
@@ -45,24 +45,24 @@ class AttributeValue implements Serializable
 
         if (is_string($value)) {
             $doc = DOMDocumentFactory::create();
-            $this->element = $doc->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
-            $this->element->setAttributeNS(Constants::NS_XSI, 'xsi:type', 'xs:string');
+            $this->element = $doc->createElementNS(C::NS_SAML, 'saml:AttributeValue');
+            $this->element->setAttributeNS(C::NS_XSI, 'xsi:type', 'xs:string');
             $this->element->appendChild($doc->createTextNode($value));
 
             /* Make sure that the xs-namespace is available in the AttributeValue (for xs:string). */
-            $this->element->setAttributeNS(Constants::NS_XS, 'xs:tmp', 'tmp');
-            $this->element->removeAttributeNS(Constants::NS_XS, 'tmp');
+            $this->element->setAttributeNS(C::NS_XS, 'xs:tmp', 'tmp');
+            $this->element->removeAttributeNS(C::NS_XS, 'tmp');
             return;
         }
 
         $doc = DOMDocumentFactory::create();
-        if ($value->namespaceURI === Constants::NS_SAML && $value->localName === 'AttributeValue') {
+        if ($value->namespaceURI === C::NS_SAML && $value->localName === 'AttributeValue') {
             $doc->appendChild($doc->importNode($value, true));
             $this->element = $doc->documentElement;
             return;
         }
 
-        $this->element = $doc->createElementNS(Constants::NS_SAML, 'saml:AttributeValue');
+        $this->element = $doc->createElementNS(C::NS_SAML, 'saml:AttributeValue');
         Utils::copyElement($value, $this->element);
     }
 
@@ -98,7 +98,7 @@ class AttributeValue implements Serializable
      */
     public function toXML(DOMElement $parent): DOMElement
     {
-        Assert::same($this->getElement()->namespaceURI, Constants::NS_SAML);
+        Assert::same($this->getElement()->namespaceURI, C::NS_SAML);
         Assert::same($this->getElement()->localName, "AttributeValue");
 
         return $parent->appendChild($parent->ownerDocument->importNode($this->element, true));

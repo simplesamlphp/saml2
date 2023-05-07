@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\Utils\XPath;
 use SAML2\XML\alg\DigestMethod;
 use SAML2\XML\alg\SigningMethod;
@@ -44,21 +44,21 @@ class Extensions
     {
         $ret = [];
         $supported = [
-            Constants::NS_SHIBMD => [
+            C::NS_SHIBMD => [
                 'Scope' => Scope::class,
             ],
-            EntityAttributes::NS => [
+            C::NS_MDATTR => [
                 'EntityAttributes' => EntityAttributes::class,
             ],
-            Constants::NS_MDRPI => [
+            C::NS_MDRPI => [
                 'RegistrationInfo' => RegistrationInfo::class,
                 'PublicationInfo' => PublicationInfo::class,
             ],
-            Constants::NS_MDUI => [
+            C::NS_MDUI => [
                 'UIInfo' => UIInfo::class,
                 'DiscoHints' => DiscoHints::class,
             ],
-            Constants::NS_ALG => [
+            C::NS_ALG => [
                 'DigestMethod' => DigestMethod::class,
                 'SigningMethod' => SigningMethod::class,
             ],
@@ -95,7 +95,7 @@ class Extensions
             return;
         }
 
-        $extElement = $parent->ownerDocument->createElementNS(Constants::NS_MD, 'md:Extensions');
+        $extElement = $parent->ownerDocument->createElementNS(C::NS_MD, 'md:Extensions');
         $parent->appendChild($extElement);
 
         foreach ($extensions as $ext) {

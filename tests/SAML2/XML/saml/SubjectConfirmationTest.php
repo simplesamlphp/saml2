@@ -6,7 +6,7 @@ namespace SAML2\XML\saml;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\XML\saml\SubjectConfirmationData;
 use SAML2\XML\saml\SubjectConfirmation;
 use SAML2\XML\saml\NameID;
@@ -56,7 +56,7 @@ class SubjectConfirmationTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
   <saml:NameID>SomeNameIDValue</saml:NameID>
@@ -78,7 +78,7 @@ XML
      */
     public function testMethodMissingThrowsException(): void
     {
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}">
   <saml:NameID>SomeNameIDValue</saml:NameID>
@@ -97,7 +97,7 @@ XML
      */
     public function testManyNameIDThrowsException(): void
     {
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
   <saml:NameID>SomeNameIDValue</saml:NameID>
@@ -117,7 +117,7 @@ XML
      */
     public function testManySubjectConfirmationDataThrowsException(): void
     {
-        $samlNamespace = Constants::NS_SAML;
+        $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
   <saml:NameID>SomeNameIDValue</saml:NameID>

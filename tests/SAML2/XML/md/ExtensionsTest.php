@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
-use SAML2\Constants;
+use SAML2\Constants as C;
 use SAML2\XML\alg\DigestMethod;
 use SAML2\XML\alg\SigningMethod;
 use SAML2\XML\mdattr\EntityAttributes;
@@ -36,7 +36,7 @@ class ExtensionsTest extends TestCase
     public function testExtensionAddEmpty(): void
     {
         $d = DOMDocumentFactory::create();
-        $r = $d->createElementNS(Constants::NS_MD, 'md:Extensions');
+        $r = $d->createElementNS(C::NS_MD, 'md:Extensions');
         $r = $d->createElement('root');
         $d->appendChild($r);
         $d->formatOutput = true;
@@ -55,7 +55,7 @@ XML
         );
 
         // add an empty list on a non-empty Extensions element
-        $e = $d->createElementNS(Constants::NS_MD, 'md:Extensions');
+        $e = $d->createElementNS(C::NS_MD, 'md:Extensions');
         $chunk = $d->createElementNS("urn:some:ns", 'ns:SomeChunk', 'Contents');
         $chunk->setAttribute('foo', 'bar');
         $e->appendChild($chunk);
