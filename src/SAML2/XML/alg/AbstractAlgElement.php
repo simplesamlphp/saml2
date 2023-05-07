@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\alg;
 
+use SAML2\Constants as C;
 use SimpleSAML\XML\AbstractElement;
 
 /**
@@ -14,7 +15,7 @@ use SimpleSAML\XML\AbstractElement;
 abstract class AbstractAlgElement extends AbstractElement
 {
     /** @var string */
-    public const NS = 'urn:oasis:names:tc:SAML:metadata:algsupport';
+    public const NS = C::NS_ALG;
 
     /** @var string */
     public const NS_PREFIX = 'alg';

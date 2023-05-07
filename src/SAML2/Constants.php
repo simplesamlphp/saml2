@@ -238,6 +238,11 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const NAMEID_X509_SUBJECT_NAME = 'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName';
 
     /**
+     * The namespace for the SAML 2 metadata Algorithm Support profile
+     */
+    public const NS_ALG = 'urn:oasis:names:tc:SAML:metadata:algsupport';
+
+    /**
      * The namespace for the ECP protocol.
      */
     public const NS_ECP = 'urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp';
