@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\shibmd;
 
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\AbstractElement;
 
 /**
@@ -14,7 +15,7 @@ use SimpleSAML\XML\AbstractElement;
 abstract class AbstractShibmdElement extends AbstractElement
 {
     /** @var string */
-    public const NS = 'urn:mace:shibboleth:metadata:1.0';
+    public const NS = C::NS_SHIBMD;
 
     /** @var string */
     public const NS_PREFIX = 'shibmd';

@@ -258,6 +258,26 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const NS_MD = 'urn:oasis:names:tc:SAML:2.0:metadata';
 
     /**
+     * The namespace for the SAML 2 Metadata Extensions for Registration and Publication Information.
+     */
+    public const NS_MDRPI = 'urn:oasis:names:tc:SAML:metadata:rpi';
+
+    /**
+     * The namespace for the SAML 2 Metadata Extensions for Login and Discovery User Interface Version.
+     */
+    public const NS_MDUI = 'urn:oasis:names:tc:SAML:metadata:ui';
+
+    /**
+     * The namespace for the SAML 2 metadata attributes.
+     */
+    public const NS_MDATTR = 'urn:oasis:names:tc:SAML:metadata:attribute';
+
+    /**
+     * The namespace for the Shibboleth Metadata profile.
+     */
+    public const NS_SHIBMD = 'urn:mace:shibboleth:metadata:1.0';
+
+    /**
      * The namespace for the SAML 2 assertions.
      */
     public const NS_SAML = 'urn:oasis:names:tc:SAML:2.0:assertion';

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdrpi;
 
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\AbstractElement;
 
 /**
@@ -16,7 +17,7 @@ use SimpleSAML\XML\AbstractElement;
 abstract class AbstractMdrpiElement extends AbstractElement
 {
     /** @var string */
-    public const NS = 'urn:oasis:names:tc:SAML:metadata:rpi';
+    public const NS = C::NS_MDRPI;
 
     /** @var string */
     public const NS_PREFIX = 'mdrpi';
