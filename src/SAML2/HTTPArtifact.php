@@ -130,7 +130,7 @@ class HTTPArtifact extends Binding
         }
 
         /** @psalm-suppress UndefinedClass */
-        $metadataHandler = MetaDataStorageHandler::getMetadataHandler();
+        $metadataHandler = MetaDataStorageHandler::getMetadataHandler(Configuration::getInstance());
 
         $idpMetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
 
