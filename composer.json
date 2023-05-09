@@ -13,11 +13,13 @@
         "ext-date": "*",
         "ext-dom": "*",
         "ext-filter": "*",
+        "ext-libxml": "*",
         "ext-openssl": "*",
         "ext-pcre": "*",
         "ext-soap": "*",
         "ext-zlib": "*",
 
+        "nyholm/psr7": "^1.8",
         "psr/http-message": "^2.0",
         "psr/log": "^2.0 || ^3.0",
         "robrichards/xmlseclibs": "^3.1.1",
@@ -28,8 +30,8 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.5",
-        "nyholm/psr7": "^1.8",
-        "simplesamlphp/simplesamlphp-test-framework": "^1.5.4"
+        "simplesamlphp/simplesamlphp-test-framework": "^1.5.4",
+        "vimeo/psalm": "^5.11"
     },
     "autoload": {
         "psr-4": {

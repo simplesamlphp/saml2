@@ -1,0 +1,15 @@
+{
+  "symbol-whitelist": [
+    "SimpleSAML\\Configuration",
+    "SimpleSAML\\Error\\BadRequest",
+    "SimpleSAML\\Error\\Error",
+    "SimpleSAML\\Error\\Exception",
+    "SimpleSAML\\Metadata\\MetaDataStorageHandler",
+    "SimpleSAML\\Module\\saml\\Message",
+    "SimpleSAML\\Session",
+    "SimpleSAML\\Store\\StoreFactory",
+    "SimpleSAML\\Utils\\Config",
+    "SimpleSAML\\Utils\\Crypto",
+    "SimpleSAML\\Utils\\HTTP"
+  ]
+}
