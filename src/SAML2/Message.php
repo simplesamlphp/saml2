@@ -286,6 +286,7 @@ abstract class Message extends SignedElement
 
                 return true;
             } catch (Exception $e) {
+var_dump($e->getMessage());
                 $exceptions[] = $e;
             }
         }
