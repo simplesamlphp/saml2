@@ -22,7 +22,7 @@
     <import namespace="urn:oasis:names:tc:SAML:2.0:assertion"
         schemaLocation="saml-schema-assertion-2.0.xsd"/>
     <import namespace="http://schemas.xmlsoap.org/soap/envelope/"
-        schemaLocation="../../vendor/simplesamlphp/xml-soap/resources/schemas/soap-envelope-1.1.xsd"/>
+        schemaLocation="soap-envelope-1.1.xsd"/>
     <annotation>
         <documentation>
             Document identifier: saml-schema-ecp-2.0

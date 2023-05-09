@@ -36,7 +36,7 @@
   <import namespace="urn:oasis:names:tc:SAML:2.0:metadata"
     schemaLocation="saml-schema-metadata-2.0.xsd"/>
   <import namespace="http://www.w3.org/XML/1998/namespace"
-    schemaLocation="../../vendor/simplesamlphp/xml-common/resources/schemas/xml.xsd"/>
+    schemaLocation="xml.xsd"/>
 
   <element name="UIInfo" type="mdui:UIInfoType" />
   <complexType name="UIInfoType">
