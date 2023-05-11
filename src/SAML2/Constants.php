@@ -36,6 +36,11 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
      */
     public const ATTR_PAIRWISE_ID = 'urn:oasis:names:tc:SAML:attribute:pairwise-id';
 
+    /*
+     * The URN for the IdP Discovery Protocol binding
+     */
+    public const BINDING_IDPDISC = 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol';
+
     /**
      * The URN for the HTTP-POST binding.
      */

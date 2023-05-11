@@ -11,6 +11,7 @@
   <mdui:DiscoHints xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
     <mdui:IPHint>127.0.0.1</mdui:IPHint>
   </mdui:DiscoHints>
+  <idpdisc:DiscoveryResponse xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Location="https://example.org/authenticate/sp" index="1"/>
   <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"></alg:DigestMethod>
   <alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256" MinKeySize="1024" MaxKeySize="4096"></alg:SigningMethod>
 </md:Extensions>
