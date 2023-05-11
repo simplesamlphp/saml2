@@ -4,108 +4,103 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
-use Exception;
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\mdui\Keywords;
-use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Utils as XMLUtils;
+
+use function dirname;
+use function strval;
 
 /**
- * Class \SimpleSAML\SAML2\XML\mdrpi\KeywordsTest
+ * Class \SAML2\XML\mdui\KeywordsTest
+ *
+ * @covers \SimpleSAML\SAML2\XML\mdui\Keywords
+ * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
+ * @package simplesamlphp/saml2
  */
-class KeywordsTest extends TestCase
+final class KeywordsTest extends TestCase
 {
+    use ArrayizableElementTestTrait;
+    use SchemaValidationTestTrait;
+    use SerializableElementTestTrait;
+
+
+    /**
+     */
+    public function setUp(): void
+    {
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+
+        $this->testedClass = Keywords::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/mdui_Keywords.xml',
+        );
+
+        $this->arrayRepresentation = [
+            'en' => ["KLM", "royal", "Dutch"],
+        ];
+    }
+
+
     /**
      * Test creating a basic Keywords element.
-     * @return void
      */
     public function testMarshalling(): void
     {
-        $keywords = new Keywords();
-        $keywords->setLanguage("en");
-        $keywords->setKeywords(["KLM", "royal", "Dutch", "air lines"]);
+        $keywords = new Keywords("nl", ["KLM", "koninklijke luchtvaart"]);
+        $keywords->addKeyword("maatschappij");
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $keywords->toXML($document->firstChild);
-
-        $xpCache = XPath::getXPath($xml);
-        $keywordElements = XPath::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
-            $xpCache,
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($keywords),
         );
-        $this->assertCount(1, $keywordElements);
-        $keywordElement = $keywordElements[0];
-        $this->assertEquals("KLM royal Dutch air+lines", $keywordElement->textContent);
-        $this->assertEquals("en", $keywordElement->getAttribute('xml:lang'));
     }
 
 
     /**
      * Keyword may not contain a "+", Exception expected.
-     * @return void
      */
     public function testKeywordWithPlusSignThrowsException(): void
     {
-        $keywords = new Keywords();
-        $keywords->setLanguage("en");
-        $keywords->setKeywords(["csharp", "pascal", "c++"]);
+        $this->expectException(AssertionFailedException::class);
+        $this->expectExceptionMessage('Keywords may not contain a "+" character');
 
-        $document = DOMDocumentFactory::fromString('<root />');
-
-        $this->expectException(Exception::class, 'Keywords may not contain a "+" character');
-        $xml = $keywords->toXML($document->firstChild);
+        new Keywords("en", ["csharp", "pascal", "c++"]);
     }
 
 
     /**
      * Unmarshalling of a keywords tag
-     * @return void
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Keywords xml:lang="nl">KLM koninklijke luchtvaart+maatschappij</mdui:Keywords>
-XML
+        $keywords = Keywords::fromXML($this->xmlRepresentation->documentElement);
+
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($keywords),
         );
-
-        $keywords = new Keywords($document->firstChild);
-        $this->assertEquals("nl", $keywords->getLanguage());
-        $this->assertCount(3, $keywords->getKeywords());
-        $this->assertEquals("KLM", $keywords->getKeywords()[0]);
-        $this->assertEquals("koninklijke", $keywords->getKeywords()[1]);
-        $this->assertEquals("luchtvaart maatschappij", $keywords->getKeywords()[2]);
-    }
-
-
-    /**
-     * Unmarshalling fails if lang attribute not present
-     * @return void
-     */
-    public function testUnmarshallingFailsMissingLanguage(): void
-    {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Keywords>KLM koninklijke luchtvaart+maatschappij</mdui:Keywords>
-XML
-        );
-
-        $this->expectException(Exception::class, 'Missing lang on Keywords');
-        $keywords = new Keywords($document->firstChild);
     }
 
 
     /**
      * Unmarshalling fails if attribute is empty
-     * @return void
      */
     public function testUnmarshallingFailsMissingKeywords(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Keywords xml:lang="nl"></mdui:Keywords>
-XML
-        );
+        $document = $this->xmlRepresentation;
+        $document->documentElement->textContent = '';
 
-        $this->expectException(Exception::class, 'Missing value for Keywords');
-        $keywords = new Keywords($document->firstChild);
+        $this->expectException(AssertionFailedException::class);
+        $this->expectExceptionMessage('Missing value for Keywords');
+        Keywords::fromXML($document->documentElement);
     }
 }

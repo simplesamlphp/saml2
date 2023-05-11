@@ -5,104 +5,89 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XML\Constants as C;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\ExtendableElementTrait;
+
+use function array_map;
+use function array_merge;
+use function array_unique;
 
 /**
  * Class for handling the metadata extensions for login and discovery user interface
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
-class UIInfo
+final class UIInfo extends AbstractMduiElement
 {
-    /**
-     * Array with child elements.
-     *
-     * The elements can be any of the other \SimpleSAML\SAML2\XML\mdui\* elements.
-     *
-     * @var \SimpleSAML\XML\Chunk[]
-     */
-    private array $children = [];
+    use ExtendableElementTrait;
 
-    /**
-     * The DisplayName, as an array of language => translation.
-     *
-     * @var array
-     */
-    private array $DisplayName = [];
-
-    /**
-     * The Description, as an array of language => translation.
-     *
-     * @var array
-     */
-    private array $Description = [];
-
-    /**
-     * The InformationURL, as an array of language => url.
-     *
-     * @var array
-     */
-    private array $InformationURL = [];
-
-    /**
-     * The PrivacyStatementURL, as an array of language => url.
-     *
-     * @var array
-     */
-    private array $PrivacyStatementURL = [];
-
-    /**
-     * The Keywords, as an array of Keywords objects
-     *
-     * @var \SimpleSAML\SAML2\XML\mdui\Keywords[]
-     */
-    private array $Keywords = [];
-
-    /**
-     * The Logo, as an array of Logo objects
-     *
-     * @var \SimpleSAML\SAML2\XML\mdui\Logo[]
-     */
-    private array $Logo = [];
-
+    /** The namespace-attribute for the xs:any element */
+    public const NAMESPACE = C::XS_ANY_NS_OTHER;
 
     /**
      * Create a UIInfo element.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @param \SimpleSAML\SAML2\XML\mdui\DisplayName[] $displayName
+     * @param \SimpleSAML\SAML2\XML\mdui\Description[] $description
+     * @param \SimpleSAML\SAML2\XML\mdui\InformationURL[] $informationURL
+     * @param \SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL[] $privacyStatementURL
+     * @param \SimpleSAML\SAML2\XML\mdui\Keywords[] $keywords
+     * @param \SimpleSAML\SAML2\XML\mdui\Logo[] $logo
+     * @param \SimpleSAML\XML\Chunk[] $children
      */
-    public function __construct(DOMElement $xml = null)
-    {
-        if ($xml === null) {
-            return;
-        }
+    public function __construct(
+        protected array $displayName = [],
+        protected array $description = [],
+        protected array $informationURL = [],
+        protected array $privacyStatementURL = [],
+        protected array $keywords = [],
+        protected array $logo = [],
+        array $children = [],
+    ) {
+        Assert::allIsInstanceOf($displayName, DisplayName::class);
+        /**
+         * 2.1.2:  There MUST NOT be more than one <mdui:DisplayName>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $this->testLocalizedElements($displayName);
 
-        $this->DisplayName = XMLUtils::extractLocalizedStrings($xml, C::NS_MDUI, 'DisplayName');
-        $this->Description = XMLUtils::extractLocalizedStrings($xml, C::NS_MDUI, 'Description');
-        $this->InformationURL = XMLUtils::extractLocalizedStrings($xml, C::NS_MDUI, 'InformationURL');
-        $this->PrivacyStatementURL = XMLUtils::extractLocalizedStrings($xml, C::NS_MDUI, 'PrivacyStatementURL');
+        Assert::allIsInstanceOf($description, Description::class);
+        /**
+         * 2.1.3:  There MUST NOT be more than one <mdui:Description>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $this->testLocalizedElements($description);
 
-        $xpCache = XPath::getXPath($xml);
-        /** @var \DOMElement $node */
-        foreach (XPath::xpQuery($xml, './*', $xpCache) as $node) {
-            if ($node->namespaceURI === C::NS_MDUI) {
-                switch ($node->localName) {
-                    case 'Keywords':
-                        $this->Keywords[] = new Keywords($node);
-                        break;
-                    case 'Logo':
-                        $this->Logo[] = new Logo($node);
-                        break;
-                }
-            } else {
-                $this->children[] = new Chunk($node);
-            }
-        }
+        Assert::allIsInstanceOf($keywords, Keywords::class);
+        /**
+         * 2.1.4:  There MUST NOT be more than one <mdui:Keywords>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $this->testLocalizedElements($keywords);
+
+        Assert::allIsInstanceOf($informationURL, InformationURL::class);
+        /**
+         * 2.1.6:  There MUST NOT be more than one <mdui:InformationURL>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $this->testLocalizedElements($informationURL);
+
+        Assert::allIsInstanceOf($privacyStatementURL, PrivacyStatementURL::class);
+        /**
+         * 2.1.7:  There MUST NOT be more than one <mdui:PrivacyStatementURL>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $this->testLocalizedElements($privacyStatementURL);
+
+        Assert::allIsInstanceOf($logo, Logo::class);
+
+        $this->setElements($children);
     }
 
 
@@ -113,20 +98,7 @@ class UIInfo
      */
     public function getKeywords(): array
     {
-        return $this->Keywords;
-    }
-
-
-    /**
-     * Set the value of the Keywords-property
-     *
-     * @param \SimpleSAML\SAML2\XML\mdui\Keywords[] $keywords
-     * @return void
-     */
-    public function setKeywords(array $keywords): void
-    {
-        Assert::allIsInstanceOf($keywords, Keywords::class);
-        $this->Keywords = $keywords;
+        return $this->keywords;
     }
 
 
@@ -134,102 +106,59 @@ class UIInfo
      * Add the value to the Keywords-property
      *
      * @param \SimpleSAML\SAML2\XML\mdui\Keywords $keyword
-     * @return void
      */
     public function addKeyword(Keywords $keyword): void
     {
-        $this->Keywords[] = $keyword;
+        /**
+         * 2.1.4:  There MUST NOT be more than one <mdui:Keywords>,
+         *         within a given <mdui:UIInfo>, for a given language
+         */
+        $keywords = array_merge($this->keywords, [$keyword]);
+        $this->testLocalizedElements($keywords);
+        $this->keywords = $keywords;
     }
 
 
     /**
      * Collect the value of the DisplayName-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\mdui\DisplayName[]
      */
     public function getDisplayName(): array
     {
-        return $this->DisplayName;
-    }
-
-
-    /**
-     * Set the value of the DisplayName-property
-     *
-     * @param array $displayName
-     * @return void
-     */
-    public function setDisplayName(array $displayName): void
-    {
-        $this->DisplayName = $displayName;
+        return $this->displayName;
     }
 
 
     /**
      * Collect the value of the Description-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\mdui\Description[]
      */
     public function getDescription(): array
     {
-        return $this->Description;
-    }
-
-
-    /**
-     * Set the value of the Description-property
-     *
-     * @param array $description
-     * @return void
-     */
-    public function setDescription(array $description): void
-    {
-        $this->Description = $description;
+        return $this->description;
     }
 
 
     /**
      * Collect the value of the InformationURL-property
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\mdui\InformationURL[]
      */
     public function getInformationURL(): array
     {
-        return $this->InformationURL;
-    }
-
-
-    /**
-     * Set the value of the InformationURL-property
-     *
-     * @param array $informationURL
-     * @return void
-     */
-    public function setInformationURL(array $informationURL): void
-    {
-        $this->InformationURL = $informationURL;
+        return $this->informationURL;
     }
 
 
     /**
      * Collect the value of the PrivacyStatementURL-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL[]
      */
     public function getPrivacyStatementURL(): array
     {
-        return $this->PrivacyStatementURL;
-    }
-
-
-    /**
-     * Set the value of the PrivacyStatementURL-property
-     *
-     * @param array $privacyStatementURL
-     * @return void
-     */
-    public function setPrivacyStatementURL(array $privacyStatementURL): void
-    {
-        $this->PrivacyStatementURL = $privacyStatementURL;
+        return $this->privacyStatementURL;
     }
 
 
@@ -240,19 +169,7 @@ class UIInfo
      */
     public function getLogo(): array
     {
-        return $this->Logo;
-    }
-
-
-    /**
-     * Set the value of the Logo-property
-     *
-     * @param \SimpleSAML\SAML2\XML\mdui\Logo[] $logo
-     * @return void
-     */
-    public function setLogo(array $logo): void
-    {
-        $this->Logo = $logo;
+        return $this->logo;
     }
 
 
@@ -260,90 +177,263 @@ class UIInfo
      * Add the value to the Logo-property
      *
      * @param \SimpleSAML\SAML2\XML\mdui\Logo $logo
-     * @return void
      */
     public function addLogo(Logo $logo): void
     {
-        $this->Logo[] = $logo;
+        $this->logo[] = $logo;
     }
 
 
     /**
-     * Collect the value of the children-property
-     *
-     * @return \SimpleSAML\XML\Chunk[]
-     */
-    public function getChildren(): array
-    {
-        return $this->children;
-    }
-
-
-    /**
-     * Set the value of the childen-property
-     *
-     * @param array $children
-     * @return void
-     */
-    public function setChildren(array $children): void
-    {
-        $this->children = $children;
-    }
-
-
-    /**
-     * Add the value to the children-property
+     * Add the value to the elements-property
      *
      * @param \SimpleSAML\XML\Chunk $child
+     */
+    public function addChild(Chunk $child): void
+    {
+        $this->elements[] = $child;
+    }
+
+
+    /**
+     * Test if an object, at the state it's in, would produce an empty XML-element
+     *
+     * @return bool
+     */
+    public function isEmptyElement(): bool
+    {
+        return empty($this->displayName)
+            && empty($this->description)
+            && empty($this->informationURL)
+            && empty($this->privacyStatementURL)
+            && empty($this->keywords)
+            && empty($this->logo)
+            && empty($this->elements);
+    }
+
+
+    /**
+     * Test localized elements for multiple items with the same language
+     *
+     * @param (\SimpleSAML\SAML2\XML\md\AbstractLocalizedURL|
+     *         \SimpleSAML\SAML2\XML\md\AbstractLocalizedName|
+     *         \SimpleSAML\XML\SAML2\mdui\Keywords)[] $items
      * @return void
      */
-    public function addChildren(Chunk $child): void
+    private function testLocalizedElements(array $elements)
     {
-        $this->children[] = $child;
+        if (!empty($elements)) {
+            $types = array_map('get_class', $elements);
+            Assert::maxCount(array_unique($types), 1, 'Multiple class types cannot be used.');
+
+            $languages = array_map(
+                function ($elt) {
+                    return $elt->getLanguage();
+                },
+                $elements,
+            );
+            Assert::uniqueValues(
+                $languages,
+                'There MUST NOT be more than one <' . $elements[0]->getQualifiedName() . '>,'
+                . ' within a given <mdui:UIInfo>, for a given language',
+                ProtocolViolationException::class,
+            );
+        }
+    }
+
+
+    /**
+     * Convert XML into a UIInfo
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return static
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     */
+    public static function fromXML(DOMElement $xml): static
+    {
+        Assert::same($xml->localName, 'UIInfo', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, UIInfo::NS, InvalidDOMElementException::class);
+
+        $DisplayName = DisplayName::getChildrenOfClass($xml);
+        $Description = Description::getChildrenOfClass($xml);
+        $InformationURL = InformationURL::getChildrenOfClass($xml);
+        $PrivacyStatementURL = PrivacyStatementURL::getChildrenOfClass($xml);
+        $Keywords = Keywords::getChildrenOfClass($xml);
+        $Logo = Logo::getChildrenOfClass($xml);
+        $children = [];
+
+        /** @var \DOMElement $node */
+        foreach (XPath::xpQuery($xml, './*', XPath::getXPath($xml)) as $node) {
+            if ($node->namespaceURI !== UIInfo::NS) {
+                $children[] = new Chunk($node);
+            }
+        }
+
+        return new static(
+            $DisplayName,
+            $Description,
+            $InformationURL,
+            $PrivacyStatementURL,
+            $Keywords,
+            $Logo,
+            $children,
+        );
     }
 
 
     /**
      * Convert this UIInfo to XML.
      *
-     * @param \DOMElement $parent The element we should append to.
-     * @return \DOMElement|null
+     * @param \DOMElement|null $parent The element we should append to.
+     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent): ?DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        $e = null;
-        if (
-            !empty($this->DisplayName)
-            || !empty($this->Description)
-            || !empty($this->InformationURL)
-            || !empty($this->PrivacyStatementURL)
-            || !empty($this->Keywords)
-            || !empty($this->Logo)
-            || !empty($this->children)
-        ) {
-            $doc = $parent->ownerDocument;
+        $e = $this->instantiateParentElement($parent);
 
-            $e = $doc->createElementNS(C::NS_MDUI, 'mdui:UIInfo');
-            $parent->appendChild($e);
+        foreach ($this->getDisplayName() as $child) {
+            $child->toXML($e);
+        }
 
-            XMLUtils::addStrings($e, C::NS_MDUI, 'mdui:DisplayName', true, $this->DisplayName);
-            XMLUtils::addStrings($e, C::NS_MDUI, 'mdui:Description', true, $this->Description);
-            XMLUtils::addStrings($e, C::NS_MDUI, 'mdui:InformationURL', true, $this->InformationURL);
-            XMLUtils::addStrings($e, C::NS_MDUI, 'mdui:PrivacyStatementURL', true, $this->PrivacyStatementURL);
+        foreach ($this->getDescription() as $child) {
+            $child->toXML($e);
+        }
 
-            foreach ($this->Keywords as $child) {
-                $child->toXML($e);
-            }
+        foreach ($this->getInformationURL() as $child) {
+            $child->toXML($e);
+        }
 
-            foreach ($this->Logo as $child) {
-                $child->toXML($e);
-            }
+        foreach ($this->getPrivacyStatementURL() as $child) {
+            $child->toXML($e);
+        }
 
-            foreach ($this->children as $child) {
-                $child->toXML($e);
-            }
+        foreach ($this->getKeywords() as $child) {
+            $child->toXML($e);
+        }
+
+        foreach ($this->getLogo() as $child) {
+            $child->toXML($e);
+        }
+
+        foreach ($this->getElements() as $child) {
+            $child->toXML($e);
         }
 
         return $e;
+    }
+
+
+    /**
+     * Create a class from an array
+     *
+     * NOTE: this method does not support passing additional child-objects
+     *
+     * @param array $data
+     * @return static
+     */
+    public static function fromArray(array $data): static
+    {
+        $DisplayName = [];
+        if (!empty($data['DisplayName'])) {
+            foreach ($data['DisplayName'] as $l => $k) {
+                $DisplayName[] = DisplayName::fromArray([$l => $k]);
+            }
+        }
+
+        $Description = [];
+        if (!empty($data['Description'])) {
+            foreach ($data['Description'] as $l => $k) {
+                $Description[] = Description::fromArray([$l => $k]);
+            }
+        }
+
+        $InformationURL = [];
+        if (!empty($data['InformationURL'])) {
+            foreach ($data['InformationURL'] as $l => $k) {
+                $InformationURL[] = InformationURL::fromArray([$l => $k]);
+            }
+        }
+
+        $PrivacyStatementURL = [];
+        if (!empty($data['PrivacyStatementURL'])) {
+            foreach ($data['PrivacyStatementURL'] as $l => $k) {
+                $PrivacyStatementURL[] = PrivacyStatementURL::fromArray([$l => $k]);
+            }
+        }
+
+        $Keywords = [];
+        if (!empty($data['Keywords'])) {
+            foreach ($data['Keywords'] as $l => $k) {
+                $Keywords[] = Keywords::fromArray([$l => $k]);
+            }
+        }
+
+        $Logo = [];
+        if (!empty($data['Logo'])) {
+            foreach ($data['Logo'] as $l) {
+                $Logo[] = Logo::fromArray($l);
+            }
+        }
+
+        return new static(
+            $DisplayName,
+            $Description,
+            $InformationURL,
+            $PrivacyStatementURL,
+            $Keywords,
+            $Logo,
+        );
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * NOTE: this method does not support passing additional child-objects
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $displayName = [];
+        foreach ($this->getDisplayName() as $child) {
+            $displayName = array_merge($displayName, $child->toArray());
+        }
+
+        $description = [];
+        foreach ($this->getDescription() as $child) {
+            $description = array_merge($description, $child->toArray());
+        }
+
+        $infoUrl = [];
+        foreach ($this->getInformationURL() as $child) {
+            $infoUrl = array_merge($infoUrl, $child->toArray());
+        }
+
+        $privacyUrl = [];
+        foreach ($this->getPrivacyStatementURL() as $child) {
+            $privacyUrl = array_merge($privacyUrl, $child->toArray());
+        }
+
+        $keywords = [];
+        foreach ($this->getKeywords() as $child) {
+            $keywords = array_merge($keywords, $child->toArray());
+        }
+
+        $logo = [];
+        foreach ($this->getLogo() as $child) {
+            $logo[] = $child->toArray();
+        }
+
+        return [
+            'DisplayName' => $displayName,
+            'Description' => $description,
+            'InformationURL' => $infoUrl,
+            'PrivacyStatementURL' => $privacyUrl,
+            'Keywords' => $keywords,
+            'Logo' => $logo,
+        ];
     }
 }

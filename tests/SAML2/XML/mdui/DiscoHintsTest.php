@@ -4,164 +4,152 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\mdui\DiscoHints;
-use SimpleSAML\SAML2\XML\mdui\Keywords;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\mdui\DiscoHints;
+use SimpleSAML\SAML2\XML\mdui\DomainHint;
+use SimpleSAML\SAML2\XML\mdui\GeolocationHint;
+use SimpleSAML\SAML2\XML\mdui\IPHint;
+use SimpleSAML\SAML2\XML\mdui\Keywords;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+
+use function dirname;
+use function strval;
 
 /**
- * Class \SimpleSAML\SAML2\XML\mdrpi\DiscoHintsTest
+ * Class \SAML2\XML\mdui\DiscoHintsTest
+ *
+ * @covers \SimpleSAML\SAML2\XML\mdui\DiscoHints
+ * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
+ * @package simplesamlphp/saml2
  */
-class DiscoHintsTest extends TestCase
+final class DiscoHintsTest extends TestCase
 {
+    use ArrayizableElementTestTrait;
+    use SchemaValidationTestTrait;
+    use SerializableElementTestTrait;
+
+
     /**
-     * Test marshalling a basic DiscoHints element
-     * @return void
      */
-    public function testMarshalling(): void
+    protected function setUp(): void
     {
-        $discoHints = new DiscoHints();
-        $discoHints->setIPHint(["192.168.6.0/24", "fd00:0123:aa:1001::/64"]);
-        $discoHints->setDomainHint(["example.org", "student.example.org"]);
-        $discoHints->setGeolocationHint(["geo:47.37328,8.531126", "geo:19.34343,12.342514"]);
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $discoHints->toXML($document->firstChild);
+        $this->testedClass = DiscoHints::class;
 
-        $xpCache = XPath::getXPath($xml);
-        $discoElements = XPath::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
-            $xpCache,
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/mdui_DiscoHints.xml',
         );
-        $this->assertCount(1, $discoElements);
-        $discoElement = $discoElements[0];
 
-        $xpCache = XPath::getXPath($discoElement);
-        $ipHintElements = XPath::xpQuery(
-            $discoElement,
-            './*[local-name()=\'IPHint\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
-            $xpCache,
-        );
-        $this->assertCount(2, $ipHintElements);
-        $this->assertEquals("192.168.6.0/24", $ipHintElements[0]->textContent);
-        $this->assertEquals("fd00:0123:aa:1001::/64", $ipHintElements[1]->textContent);
-
-        $domainHintElements = XPath::xpQuery(
-            $discoElement,
-            './*[local-name()=\'DomainHint\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
-            $xpCache,
-        );
-        $this->assertCount(2, $domainHintElements);
-        $this->assertEquals("example.org", $domainHintElements[0]->textContent);
-        $this->assertEquals("student.example.org", $domainHintElements[1]->textContent);
-
-        $geoHintElements = XPath::xpQuery(
-            $discoElement,
-            './*[local-name()=\'GeolocationHint\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
-            $xpCache,
-        );
-        $this->assertCount(2, $geoHintElements);
-        $this->assertEquals("geo:47.37328,8.531126", $geoHintElements[0]->textContent);
-        $this->assertEquals("geo:19.34343,12.342514", $geoHintElements[1]->textContent);
+        $this->arrayRepresentation = [
+            'IPHint' => ["130.59.0.0/16", "2001:620::0/96"],
+            'DomainHint' => ["example.com", "www.example.com"],
+            'GeolocationHint' => ["geo:47.37328,8.531126", "geo:19.34343,12.342514"],
+        ];
     }
 
 
     /**
-     * Create an empty discoHints element
-     * @return void
+     * Test marshalling a basic DiscoHints element
      */
-    public function testMarshallingEmpty(): void
+    public function testMarshalling(): void
     {
-        $discoHints = new DiscoHints();
+        $discoHints = new DiscoHints(
+            ipHint: [new IPHint("130.59.0.0/16"), new IPHint("2001:620::0/96")],
+            domainHint: [new DomainHint("example.com"), new DomainHint("www.example.com")],
+            geolocationHint: [
+                new GeolocationHint("geo:47.37328,8.531126"),
+                new GeolocationHint("geo:19.34343,12.342514"),
+            ],
+        );
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $discoHints->toXML($document->firstChild);
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($discoHints),
+        );
+    }
 
-        $this->assertNull($xml);
+
+    /**
+     * Adding an empty DiscoHints element should yield an empty element.
+     */
+    public function testMarshallingEmptyElement(): void
+    {
+        $mduins = DiscoHints::NS;
+        $discohints = new DiscoHints([]);
+        $this->assertEquals(
+            "<mdui:DiscoHints xmlns:mdui=\"$mduins\"/>",
+            strval($discohints),
+        );
+        $this->assertTrue($discohints->isEmptyElement());
     }
 
 
     /**
      * Test unmarshalling a basic DiscoHints element
-     * @return void
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:DiscoHints xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
-  <mdui:IPHint>130.59.0.0/16</mdui:IPHint>
-  <mdui:IPHint>2001:620::0/96</mdui:IPHint>
-  <mdui:DomainHint>example.com</mdui:DomainHint>
-  <mdui:DomainHint>www.example.com</mdui:DomainHint>
-  <mdui:GeolocationHint>geo:47.37328,8.531126</mdui:GeolocationHint>
-  <mdui:GeolocationHint>geo:19.34343,12.342514</mdui:GeolocationHint>
-</mdui:DiscoHints>
-XML
+        $discoHints = DiscoHints::fromXML($this->xmlRepresentation->documentElement);
+
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($discoHints),
         );
-
-        $disco = new DiscoHints($document->firstChild);
-
-        $this->assertCount(2, $disco->getIPHint());
-        $this->assertEquals('130.59.0.0/16', $disco->getIPHint()[0]);
-        $this->assertEquals('2001:620::0/96', $disco->getIPHint()[1]);
-        $this->assertCount(2, $disco->getDomainHint());
-        $this->assertEquals('example.com', $disco->getDomainHint()[0]);
-        $this->assertEquals('www.example.com', $disco->getDomainHint()[1]);
-        $this->assertCount(2, $disco->getGeolocationHint());
-        $this->assertEquals('geo:47.37328,8.531126', $disco->getGeolocationHint()[0]);
-        $this->assertEquals('geo:19.34343,12.342514', $disco->getGeolocationHint()[1]);
     }
 
 
     /**
      * Add a Keywords element to the children attribute
-     * @return void
      */
     public function testMarshallingChildren(): void
     {
+        $keywords = new Keywords("nl", ["voorbeeld", "specimen"]);
         $discoHints = new DiscoHints();
-        $keywords = new Keywords();
-        $keywords->setLanguage("nl");
-        $keywords->setKeywords(["voorbeeld", "specimen"]);
-        $discoHints->setChildren([$keywords]);
+        $discoHints->addChild(new Chunk($keywords->toXML()));
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $discoHints->toXML($document->firstChild);
+        $xml = $discoHints->toXML($document->documentElement);
 
-        $xpCache = XPath::getXPath($xml);
+        /** @var \DOMElement[] $discoElements */
         $discoElements = XPath::xpQuery(
             $xml,
             '/root/*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
-            $xpCache,
+            XPath::getXPath($xml),
         );
         $this->assertCount(1, $discoElements);
-        $discoElement = $discoElements[0];
-        $this->assertEquals("mdui:Keywords", $discoElement->firstChild->nodeName);
-        $this->assertEquals("voorbeeld specimen", $discoElement->firstChild->textContent);
+        /** @var \DOMNode $discoElement */
+        $discoElement = $discoElements[0]->firstChild;
+
+        $this->assertEquals("mdui:Keywords", $discoElement->nodeName);
+        $this->assertEquals("voorbeeld+specimen", $discoElement->textContent);
     }
 
 
     /**
      * Unmarshal a DiscoHints attribute with extra children
-     * @return void
      */
-    public function testUnmarshallingChildren()
+    public function testUnmarshallingChildren(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdui:DiscoHints xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
   <mdui:GeolocationHint>geo:47.37328,8.531126</mdui:GeolocationHint>
-  <child1>content of tag</child1>
+  <ssp:child1 xmlns:ssp="urn:custom:ssp">content of tag</ssp:child1>
 </mdui:DiscoHints>
 XML
         );
 
-        $disco = new DiscoHints($document->firstChild);
+        $disco = DiscoHints::fromXML($document->documentElement);
 
         $this->assertCount(1, $disco->getGeolocationHint());
-        $this->assertEquals('geo:47.37328,8.531126', $disco->getGeolocationHint()[0]);
-        $this->assertCount(1, $disco->getChildren());
-        $this->assertEquals('content of tag', $disco->getChildren()[0]->getXML()->textContent);
+        $this->assertEquals('geo:47.37328,8.531126', $disco->getGeolocationHint()[0]->getContent());
+        $this->assertCount(1, $disco->getElements());
+        $this->assertEquals('content of tag', $disco->getElements()[0]->getXML()->textContent);
     }
 }

@@ -4,128 +4,178 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
-use Exception;
+use DOMDocument;
+use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\mdui\Logo;
-use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Utils as XMLUtils;
+
+use function dirname;
+use function strval;
 
 /**
- * Class \SimpleSAML\SAML2\XML\mdrpi\LogoTest
+ * Class \SAML2\XML\mdui\LogoTest
+ *
+ * @covers \SimpleSAML\SAML2\XML\mdui\Logo
+ * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
+ * @package simplesamlphp/saml2
  */
-class LogoTest extends TestCase
+final class LogoTest extends TestCase
 {
+    use ArrayizableElementTestTrait;
+    use SchemaValidationTestTrait;
+    use SerializableElementTestTrait;
+
+
+    /** @var string */
+    private string $data = <<<IMG
+data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=
+IMG;
+
+    /** @var string */
+    private string $url = 'https://static.example.org/images/logos/logo300x200.png';
+
+
+    /**
+     */
+    public function setUp(): void
+    {
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+
+        $this->testedClass = Logo::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/mdui_Logo.xml',
+        );
+
+        $this->arrayRepresentation = [
+            'url' => 'https://static.example.org/images/logos/logo300x200.png',
+            'width' => 300,
+            'height' => 200,
+            'lang' => 'en',
+        ];
+    }
+
+
     /**
      * Test creating a basic Logo element.
-     * @return void
      */
     public function testMarshalling(): void
     {
-        $logo = new Logo();
-        $logo->setLanguage("nl");
-        $logo->setWidth(300);
-        $logo->setHeight(200);
-        $logo->setUrl("https://static.example.org/images/logos/logo300x200.png");
+        $logo = new Logo($this->url, 200, 300, "nl");
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $logo->toXML($document->firstChild);
-
-        $xpCache = XPath::getXPath($xml);
-        $logoElements = XPath::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'Logo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',
-            $xpCache,
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($logo),
         );
-        $this->assertCount(1, $logoElements);
-        $logoElement = $logoElements[0];
-        $this->assertEquals("https://static.example.org/images/logos/logo300x200.png", $logoElement->textContent);
-        $this->assertEquals("nl", $logoElement->getAttribute("xml:lang"));
-        $this->assertEquals(300, $logoElement->getAttribute("width"));
-        $this->assertEquals(200, $logoElement->getAttribute("height"));
     }
 
 
     /**
      * Unmarshalling of a logo tag
-     * @return void
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Logo height="200" width="300" xml:lang="nl">https://static.example.org/images/logos/logo300x200.png</mdui:Logo>
-XML
-        );
+        $logo = Logo::fromXML($this->xmlRepresentation->documentElement);
 
-        $logo = new Logo($document->firstChild);
-        $this->assertEquals("nl", $logo->getLanguage());
-        $this->assertEquals(300, $logo->getWidth());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($logo),
+        );
+    }
+
+
+    /**
+     * Unmarshalling of a logo tag without a language
+     */
+    public function testUnmarshallingWithoutLanguage(): void
+    {
+        $xmlRepresentation = $this->xmlRepresentation->documentElement;
+        $xmlRepresentation->removeAttribute('xml:lang');
+
+        $logo = Logo::fromXML($xmlRepresentation);
+        $this->assertNull($logo->getLanguage());
         $this->assertEquals(200, $logo->getHeight());
-        $this->assertEquals("https://static.example.org/images/logos/logo300x200.png", $logo->getUrl());
+        $this->assertEquals(300, $logo->getWidth());
+        $this->assertEquals($this->url, $logo->getContent());
     }
 
 
     /**
      * Unmarshalling of a logo tag with a data: URL
-     * @return void
      */
     public function testUnmarshallingDataURL(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Logo height="1" width="1">data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=</mdui:Logo>
-XML
-        );
+        $document = $this->xmlRepresentation;
+        $document->documentElement->textContent = $this->data;
+        $document->documentElement->setAttribute('height', '1');
+        $document->documentElement->setAttribute('width', '1');
 
-        $logo = new Logo($document->firstChild);
-        $this->assertEquals(1, $logo->getWidth());
+        $logo = Logo::fromXML($document->documentElement);
         $this->assertEquals(1, $logo->getHeight());
-        $this->assertEquals("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=", $logo->getUrl());
+        $this->assertEquals(1, $logo->getWidth());
+        $this->assertEquals($this->data, $logo->getContent());
     }
 
 
     /**
      * Unmarshalling fails if url attribute not present
-     * @return void
      */
     public function testUnmarshallingFailsEmptyURL(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Logo height="200" width="300"></mdui:Logo>
-XML
-        );
+        $document = $this->xmlRepresentation;
+        $document->documentElement->textContent = '';
 
-        $this->expectException(Exception::class, 'Missing url value for Logo');
-        $logo = new Logo($document->firstChild);
+        $this->expectException(AssertionFailedException::class);
+        $this->expectExceptionMessage('Missing url value for Logo');
+        Logo::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Unmarshalling fails if url attribute is invalid
+     */
+    public function testUnmarshallingFailsInvalidURL(): void
+    {
+        $document = $this->xmlRepresentation;
+        $document->documentElement->textContent = 'this is no url';
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('mdui:Logo is not a valid URL.');
+        Logo::fromXML($document->documentElement);
     }
 
 
     /**
      * Unmarshalling fails if width attribute not present
-     * @return void
      */
     public function testUnmarshallingFailsMissingWidth(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Logo height="200">https://static.example.org/images/logos/logo300x200.png</mdui:Logo>
-XML
-        );
+        $document = $this->xmlRepresentation;
+        $document->documentElement->removeAttribute('width');
 
-        $this->expectException(Exception::class, 'Missing width of Logo');
-        $logo = new Logo($document->firstChild);
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage("Missing 'width' attribute on mdui:Logo.");
+        Logo::fromXML($document->documentElement);
     }
 
 
     /**
      * Unmarshalling fails if height attribute not present
-     * @return void
      */
     public function testUnmarshallingFailsMissingHeight(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdui:Logo width="300" xml:lang="nl">https://static.example.org/images/logos/logo300x200.png</mdui:Logo>
-XML
-        );
+        $document = $this->xmlRepresentation;
+        $document->documentElement->removeAttribute('height');
 
-        $this->expectException(Exception::class, 'Missing height of Logo');
-        $logo = new Logo($document->firstChild);
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage("Missing 'height' attribute on mdui:Logo.");
+        Logo::fromXML($document->documentElement);
     }
 }
