@@ -4,96 +4,94 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\alg;
 
-use Exception;
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\alg\SigningMethod;
-use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+
+use function dirname;
+use function strval;
 
 /**
- * Class \SimpleSAML\SAML2\XML\alg\SigningMethodTest
+ * Class \SAML2\XML\alg\SigningMethodTest
  *
- * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
+ * @covers \SimpleSAML\SAML2\XML\alg\AbstractAlgElement
+ * @covers \SimpleSAML\SAML2\XML\alg\SigningMethod
+ *
  * @package simplesamlphp/saml2
  */
-class SigningMethodTest extends TestCase
+final class SigningMethodTest extends TestCase
 {
+    use SerializableElementTestTrait;
+    use SchemaValidationTestTrait;
+
+
     /**
-     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->schema = dirname(__FILE__, 5)
+            . '/resources/schemas/sstc-saml-metadata-algsupport-v1.0.xsd';
+
+        $this->testedClass = SigningMethod::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/alg_SigningMethod.xml'
+        );
+    }
+
+
+    /**
      */
     public function testMarshalling(): void
     {
-        $signingMethod = new SigningMethod();
-        $signingMethod->setAlgorithm('http://exampleAlgorithm');
-
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $signingMethod->toXML($document->firstChild);
-
-        $xpCache = XPath::getXPath($xml);
-        $signingMethodElements = XPath::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'SigningMethod\' and ' .
-            'namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:algsupport\']',
-            $xpCache,
+        $signingMethod = new SigningMethod(
+            C::SIG_RSA_SHA256,
+            1024,
+            4096,
+            [
+                new Chunk(DOMDocumentFactory::fromString(
+                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>'
+                )->documentElement),
+            ],
         );
-        $this->assertCount(1, $signingMethodElements);
-        $signingMethodElement = $signingMethodElements[0];
-        $this->assertEquals('http://exampleAlgorithm', $signingMethodElement->getAttribute('Algorithm'));
-        $this->assertFalse($signingMethodElement->hasAttribute('MinKeySize'));
-        $this->assertFalse($signingMethodElement->hasAttribute('MaxKeySize'));
 
-        $signingMethod->setMinKeySize(1024);
-        $signingMethod->setMaxKeySize(4096);
-
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $signingMethod->toXML($document->firstChild);
-
-        $xpCache = XPath::getXPath($xml);
-        $signingMethodElements = XPath::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'SigningMethod\' and ' .
-            'namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:algsupport\']',
-            $xpCache,
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($signingMethod),
         );
-        $this->assertCount(1, $signingMethodElements);
-        $signingMethodElement = $signingMethodElements[0];
-        $this->assertEquals(1024, $signingMethodElement->getAttribute('MinKeySize'));
-        $this->assertEquals(4096, $signingMethodElement->getAttribute('MaxKeySize'));
     }
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"
-                   Algorithm="http://exampleAlgorithm"
-                   MinKeySize="1024"
-                   MaxKeySize="4096" />
-XML
-        );
+        $signingMethod = SigningMethod::fromXML($this->xmlRepresentation->documentElement);
 
-        $signingMethod = new SigningMethod($document->firstChild);
-        $this->assertEquals('http://exampleAlgorithm', $signingMethod->getAlgorithm());
-        $this->assertEquals(1024, $signingMethod->getMinKeySize());
-        $this->assertEquals(4096, $signingMethod->getMaxKeySize());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($signingMethod),
+        );
     }
 
 
     /**
-     * @return void
      */
     public function testMissingAlgorithmThrowsException(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<alg:SigningMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"
-                   MinKeySize="1024"
-                   MaxKeySize="4096" />
-XML
-        );
-        $this->expectException(Exception::class, 'Missing required attribute "Algorithm"');
-        new SigningMethod($document->firstChild);
+        $document = $this->xmlRepresentation->documentElement;
+        $document->removeAttribute('Algorithm');
+
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage("Missing 'Algorithm' attribute on alg:SigningMethod.");
+
+        SigningMethod::fromXML($document);
     }
 }

@@ -4,70 +4,92 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\alg;
 
-use Exception;
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
-use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+
+use function dirname;
+use function strval;
 
 /**
- * Class \SimpleSAML\SAML2\XML\alg\DigestMethodTest
+ * Class \SAML2\XML\alg\DigestMethodTest
  *
- * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
+ * @covers \SimpleSAML\SAML2\XML\alg\AbstractAlgElement
+ * @covers \SimpleSAML\SAML2\XML\alg\DigestMethod
+ *
  * @package simplesamlphp/saml2
  */
-class DigestMethodTest extends TestCase
+final class DigestMethodTest extends TestCase
 {
+    use SerializableElementTestTrait;
+    use SchemaValidationTestTrait;
+
+
     /**
-     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->schema = dirname(__FILE__, 5)
+            . '/resources/schemas/sstc-saml-metadata-algsupport-v1.0.xsd';
+
+        $this->testedClass = DigestMethod::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/alg_DigestMethod.xml'
+        );
+    }
+
+
+    /**
      */
     public function testMarshalling(): void
     {
-        $digestMethod = new DigestMethod();
-        $digestMethod->setAlgorithm('http://exampleAlgorithm');
-
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $digestMethod->toXML($document->firstChild);
-
-        $xpCache = XPath::getXPath($xml);
-        $digestMethodElements = XPath::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'DigestMethod\'' .
-            ' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:algsupport\']',
-            $xpCache,
+        $digestMethod = new DigestMethod(
+            C::DIGEST_SHA256,
+            [
+                new Chunk(DOMDocumentFactory::fromString(
+                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>'
+                )->documentElement)
+            ],
         );
-        $this->assertCount(1, $digestMethodElements);
-        $digestMethodElement = $digestMethodElements[0];
-        $this->assertEquals('http://exampleAlgorithm', $digestMethodElement->getAttribute('Algorithm'));
+
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($digestMethod),
+        );
     }
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<alg:DigestMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"
-                  Algorithm="http://exampleAlgorithm" />
-XML
-        );
+        $digestMethod = DigestMethod::fromXML($this->xmlRepresentation->documentElement);
 
-        $digestMethod = new DigestMethod($document->firstChild);
-        $this->assertEquals('http://exampleAlgorithm', $digestMethod->getAlgorithm());
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($digestMethod),
+        );
     }
 
 
     /**
-     * @return void
      */
-    public function testMissingAlgorithmThrowsException(): void
+    public function testUnmarshallingMissingAlgorithmThrowsException(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<alg:DigestMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" />
-XML
-        );
-        $this->expectException(Exception::class, 'Missing required attribute "Algorithm"');
-        new DigestMethod($document->firstChild);
+        $document = $this->xmlRepresentation->documentElement;
+        $document->removeAttribute('Algorithm');
+
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage("Missing 'Algorithm' attribute on alg:DigestMethod.");
+
+        DigestMethod::fromXML($document);
     }
 }
