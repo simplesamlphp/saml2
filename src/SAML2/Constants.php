@@ -237,6 +237,11 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
      */
     public const NS_ECP = 'urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp';
 
+    /*
+     * The namespace for the IdP Discovery Protocol binding
+     */
+    public const NS_IDPDISC = 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol';
+
     /**
      * The namespace for the SAML 2 protocol.
      */
