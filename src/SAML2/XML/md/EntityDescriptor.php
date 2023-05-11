@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\SignedElementHelper;
 use SimpleSAML\XML\Chunk;
@@ -14,6 +15,7 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_pop;
 use function gmdate;
 use function is_null;
 
@@ -43,9 +45,9 @@ class EntityDescriptor extends SignedElementHelper
      *
      * Array of extension elements.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\md\Extensions|null
      */
-    private array $Extensions = [];
+    private ?Extensions $Extensions = null;
 
     /**
      * Array with all roles for this entity.
@@ -114,7 +116,14 @@ class EntityDescriptor extends SignedElementHelper
             $this->cacheDuration = $xml->getAttribute('cacheDuration');
         }
 
-        $this->Extensions = Extensions::getList($xml);
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount(
+            $extensions,
+            1,
+            'Only one md:Extensions element is allowed.',
+            TooManyElementsException::class,
+        );
+        $this->Extensions = array_pop($extensions);
 
         foreach ($xml->childNodes as $node) {
             if (!($node instanceof DOMElement)) {
@@ -267,9 +276,9 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Collect the value of the Extensions property.
      *
-     * @return \SimpleSAML\XML\Chunk[]
+     * @return \SimpleSAML\SAML2\XML\md\Extensions|null
      */
-    public function getExtensions(): array
+    public function getExtensions(): ?Extensions
     {
         return $this->Extensions;
     }
@@ -278,24 +287,12 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Set the value of the Extensions property.
      *
-     * @param array $extensions
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @return void
      */
-    public function setExtensions(array $extensions): void
+    public function setExtensions(?Extensions $extensions): void
     {
         $this->Extensions = $extensions;
-    }
-
-
-    /**
-     * Add an Extension.
-     *
-     * @param \SimpleSAML\XML\Chunk $extensions The Extensions
-     * @return void
-     */
-    public function addExtension(Extensions $extension): void
-    {
-        $this->Extensions[] = $extension;
     }
 
 
@@ -485,7 +482,7 @@ class EntityDescriptor extends SignedElementHelper
             $e->setAttribute('cacheDuration', $this->cacheDuration);
         }
 
-        Extensions::addList($e, $this->Extensions);
+        $this->Extensions?->toXML($e);
 
         foreach ($this->RoleDescriptor as $n) {
             $n->toXML($e);

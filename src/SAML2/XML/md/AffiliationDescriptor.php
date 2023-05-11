@@ -11,8 +11,10 @@ use SimpleSAML\SAML2\SignedElementHelper;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_pop;
 use function gmdate;
 
 /**
@@ -41,9 +43,9 @@ class AffiliationDescriptor extends SignedElementHelper
      *
      * Array of extension elements.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\md\Extensions|null
      */
-    private array $Extensions = [];
+    private ?Extensions $Extensions = null;
 
     /**
      * The AffiliateMember(s).
@@ -95,7 +97,14 @@ class AffiliationDescriptor extends SignedElementHelper
             $this->setCacheDuration($xml->getAttribute('cacheDuration'));
         }
 
-        $this->setExtensions(Extensions::getList($xml));
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount(
+            $extensions,
+            1,
+            'Only one md:Extensions element is allowed.',
+            TooManyElementsException::class,
+        );
+        $this->Extensions = array_pop($extensions);
 
         $this->setAffiliateMember(XMLUtils::extractStrings($xml, C::NS_MD, 'AffiliateMember'));
         if (empty($this->AffiliateMember)) {
@@ -156,37 +165,25 @@ class AffiliationDescriptor extends SignedElementHelper
 
 
     /**
-     * Collect the value of the Extensions-property
+     * Collect the value of the Extensions property.
      *
-     * @return \SimpleSAML\XML\Chunk[]
+     * @return \SimpleSAML\SAML2\XML\md\Extensions|null
      */
-    public function getExtensions(): array
+    public function getExtensions(): ?Extensions
     {
         return $this->Extensions;
     }
 
 
     /**
-     * Set the value of the Extensions-property
+     * Set the value of the Extensions property.
      *
-     * @param array $extensions
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @return void
      */
-    public function setExtensions(array $extensions): void
+    public function setExtensions(?Extensions $extensions): void
     {
         $this->Extensions = $extensions;
-    }
-
-
-    /**
-     * Add an Extension.
-     *
-     * @param Extensions $extensions The Extensions
-     * @return void
-     */
-    public function addExtension(Extensions $extension): void
-    {
-        $this->Extensions[] = $extension;
     }
 
 
@@ -275,7 +272,7 @@ class AffiliationDescriptor extends SignedElementHelper
             $e->setAttribute('cacheDuration', $this->cacheDuration);
         }
 
-        Extensions::addList($e, $this->Extensions);
+        $this->Extensions?->toXML($e);
 
         XMLUtils::addStrings($e, C::NS_MD, 'md:AffiliateMember', false, $this->AffiliateMember);
 

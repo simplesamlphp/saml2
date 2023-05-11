@@ -7,13 +7,16 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use Exception;
 use InvalidArgumentException;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\SignedElementHelper;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_pop;
 use function count;
 use function filter_var;
 use function gmdate;
@@ -60,9 +63,9 @@ class RoleDescriptor extends SignedElementHelper
      *
      * Array of extension elements.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\md\Extensions|null
      */
-    private array $Extensions = [];
+    private ?Extensions $Extensions = null;
 
     /**
      * KeyDescriptor elements.
@@ -125,7 +128,15 @@ class RoleDescriptor extends SignedElementHelper
             $this->errorURL = $xml->getAttribute('errorURL');
         }
 
-        $this->Extensions = Extensions::getList($xml);
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount(
+            $extensions,
+            1,
+            'Only one md:Extensions element is allowed.',
+            TooManyElementsException::class,
+        );
+        $this->Extensions = array_pop($extensions);
+
         $xpCache = XPath::getXPath($xml);
         foreach (XPath::xpQuery($xml, './saml_metadata:KeyDescriptor', $xpCache) as $kd) {
             /** @var \DOMElement $kd */
@@ -215,9 +226,9 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * Collect the value of the Extensions property.
      *
-     * @return \SimpleSAML\XML\Chunk[]
+     * @return \SimpleSAML\SAML2\XML\md\Extensions|null
      */
-    public function getExtensions(): array
+    public function getExtensions(): ?Extensions
     {
         return $this->Extensions;
     }
@@ -226,24 +237,12 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * Set the value of the Extensions property.
      *
-     * @param array $extensions
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @return void
      */
-    public function setExtensions(array $extensions): void
+    public function setExtensions(?Extensions $extensions): void
     {
         $this->Extensions = $extensions;
-    }
-
-
-    /**
-     * Add an Extension.
-     *
-     * @param \SimpleSAML\XML\Chunk $extensions The Extensions
-     * @return void
-     */
-    public function addExtension(Extensions $extension): void
-    {
-        $this->Extensions[] = $extension;
     }
 
 
@@ -430,7 +429,9 @@ class RoleDescriptor extends SignedElementHelper
             $e->setAttribute('errorURL', $this->errorURL);
         }
 
-        Extensions::addList($e, $this->Extensions);
+        if ($this->Extensions !== null) {
+            $this->Extensions->toXML($e);
+        }
 
         foreach ($this->KeyDescriptor as $kd) {
             $kd->toXML($e);

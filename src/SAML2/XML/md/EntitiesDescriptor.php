@@ -9,10 +9,12 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\SignedElementHelper;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_pop;
 use function gmdate;
 
 /**
@@ -41,9 +43,9 @@ class EntitiesDescriptor extends SignedElementHelper
      *
      * Array of extension elements.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\md\Extensions|null
      */
-    private array $Extensions = [];
+    private ?Extensions $Extensions = null;
 
     /**
      * Child EntityDescriptor and EntitiesDescriptor elements.
@@ -79,7 +81,8 @@ class EntitiesDescriptor extends SignedElementHelper
             $this->Name = $xml->getAttribute('Name');
         }
 
-        $this->Extensions = Extensions::getList($xml);
+        $extensions = Extensions::getChildrenOfClass($xml);
+        $this->Extensions = array_pop($extensions);
 
         /** @var \DOMElement $node */
         foreach (
@@ -189,9 +192,9 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Collect the value of the Extensions property.
      *
-     * @return \SimpleSAML\XML\Chunk[]
+     * @return \SimpleSAML\SAML2\XML\md\Extensions|null
      */
-    public function getExtensions(): array
+    public function getExtensions(): ?Extensions
     {
         return $this->Extensions;
     }
@@ -200,24 +203,12 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Set the value of the Extensions property.
      *
-     * @param array $extensions
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @return void
      */
-    public function setExtensions(array $extensions): void
+    public function setExtensions(?Extensions $extensions): void
     {
         $this->Extensions = $extensions;
-    }
-
-
-    /**
-     * Add an Extension.
-     *
-     * @param \SimpleSAML\XML\Chunk $extensions The Extensions
-     * @return void
-     */
-    public function addExtension(Extensions $extension): void
-    {
-        $this->Extensions[] = $extension;
     }
 
 
@@ -290,7 +281,7 @@ class EntitiesDescriptor extends SignedElementHelper
             $e->setAttribute('Name', $this->Name);
         }
 
-        Extensions::addList($e, $this->Extensions);
+        $this->Extensions?->toXML($e);
 
         foreach ($this->children as $node) {
             $node->toXML($e);

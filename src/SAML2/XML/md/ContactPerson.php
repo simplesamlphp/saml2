@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
@@ -12,6 +13,7 @@ use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_pop;
 use function count;
 use function preg_filter;
 use function preg_replace;
@@ -46,9 +48,9 @@ class ContactPerson
      *
      * Array of extension elements.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\md\Extensions|null
      */
-    private array $Extensions = [];
+    private ?Extensions $Extensions = null;
 
     /**
      * The Company of this contact.
@@ -110,7 +112,14 @@ class ContactPerson
         }
         $this->setContactType($xml->getAttribute('contactType'));
 
-        $this->setExtensions(Extensions::getList($xml));
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount(
+            $extensions,
+            1,
+            'Only one md:Extensions element is allowed.',
+            TooManyElementsException::class,
+        );
+        $this->Extensions = array_pop($extensions);
 
         $this->setCompany(self::getStringElement($xml, 'Company'));
         $this->setGivenName(self::getStringElement($xml, 'GivenName'));
@@ -335,37 +344,25 @@ class ContactPerson
 
 
     /**
-     * Collect the value of the Extensions-property
+     * Collect the value of the Extensions property.
      *
-     * @return \SimpleSAML\XML\Chunk[]
+     * @return \SimpleSAML\SAML2\XML\md\Extensions|null
      */
-    public function getExtensions(): array
+    public function getExtensions(): ?Extensions
     {
         return $this->Extensions;
     }
 
 
     /**
-     * Set the value of the Extensions-property
+     * Set the value of the Extensions property.
      *
-     * @param array $extensions
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @return void
      */
-    public function setExtensions(array $extensions): void
+    public function setExtensions(?Extensions $extensions): void
     {
         $this->Extensions = $extensions;
-    }
-
-
-    /**
-     * Add an Extension.
-     *
-     * @param \SimpleSAML\XML\Chunk $extensions The Extensions
-     * @return void
-     */
-    public function addExtension(Chunk $extension): void
-    {
-        $this->Extensions[] = $extension;
     }
 
 
@@ -424,7 +421,7 @@ class ContactPerson
             $e->setAttribute($attr, $val);
         }
 
-        Extensions::addList($e, $this->getExtensions());
+        $this->Extensions?->toXML($e);
 
         if ($this->Company !== null) {
             XMLUtils::addString($e, C::NS_MD, 'md:Company', $this->Company);

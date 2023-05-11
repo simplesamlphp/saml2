@@ -5,101 +5,110 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\alg\AbstractAlgElement as ALG;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
 use SimpleSAML\SAML2\XML\alg\SigningMethod;
+use SimpleSAML\SAML2\XML\ExtensionsTrait;
+use SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponse;
+use SimpleSAML\SAML2\XML\init\RequestInitiator;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
+use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement as MDRPI;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationPath;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
+use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement as MDUI;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
 use SimpleSAML\SAML2\XML\mdui\UIInfo;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 use function array_key_exists;
-use function is_null;
 
 /**
  * Class for handling SAML2 metadata extensions.
- * @package SimpleSAMLphp
+ *
+ * @package simplesamlphp/saml2
  */
-class Extensions
+final class Extensions extends AbstractMdElement
 {
+    use ExtensionsTrait;
+
+
     /**
-     * Get a list of Extensions in the given element.
+     * Create an Extensions object from its md:Extensions XML representation.
      *
-     * @param \DOMElement $parent The element that may contain the md:Extensions element.
-     * @return (\SimpleSAML\SAML2\XML\shibmd\Scope|
-     *          \SimpleSAML\SAML2\XML\mdattr\EntityAttributes|
-     *          \SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo|
-     *          \SimpleSAML\SAML2\XML\mdrpi\PublicationInfo|
-     *          \SimpleSAML\SAML2\XML\mdui\UIInfo|
-     *          \SimpleSAML\SAML2\XML\mdui\DiscoHints|
-     *          \SimpleSAML\SAML2\XML\alg\DigestMethod|
-     *          \SimpleSAML\SAML2\XML\alg\SigningMethod|
-     *          \SimpleSAML\XML\Chunk)[]  Array of extensions.
+     * For those supported extensions, an object of the corresponding class will be created.
+     * The rest will be added as a \SimpleSAML\XML\Chunk object.
+     *
+     * @param \DOMElement $xml
+     * @return \SimpleSAML\SAML2\XML\md\Extensions
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
      */
-    public static function getList(DOMElement $parent): array
+    public static function fromXML(DOMElement $xml): static
     {
+        Assert::eq(
+            $xml->namespaceURI,
+            self::NS,
+            'Unknown namespace \'' . strval($xml->namespaceURI) . '\' for Extensions element.',
+            InvalidDOMElementException::class,
+        );
+        Assert::eq(
+            $xml->localName,
+            static::getClassName(static::class),
+            'Invalid Extensions element \'' . $xml->localName . '\'',
+            InvalidDOMElementException::class,
+        );
         $ret = [];
         $supported = [
-            C::NS_SHIBMD => [
+            DiscoveryResponse::NS => [
+                'DiscoveryResponse' => DiscoveryResponse::class,
+            ],
+            Scope::NS => [
                 'Scope' => Scope::class,
             ],
             C::NS_MDATTR => [
                 'EntityAttributes' => EntityAttributes::class,
             ],
-            C::NS_MDRPI => [
+            MDRPI::NS => [
                 'RegistrationInfo' => RegistrationInfo::class,
                 'PublicationInfo' => PublicationInfo::class,
+                'PublicationPath' => PublicationPath::class,
             ],
-            C::NS_MDUI => [
+            MDUI::NS => [
                 'UIInfo' => UIInfo::class,
                 'DiscoHints' => DiscoHints::class,
             ],
-            C::NS_ALG => [
+            ALG::NS => [
                 'DigestMethod' => DigestMethod::class,
                 'SigningMethod' => SigningMethod::class,
             ],
+            RequestInitiator::NS => [
+                'RequestInitiator' => RequestInitiator::class,
+            ],
         ];
 
-        $nodes = XPath::xpQuery($parent, './saml_metadata:Extensions/*', XPath::getXPath($parent));
         /** @var \DOMElement $node */
-        foreach ($nodes as $node) {
+        foreach (XPath::xpQuery($xml, './*', XPath::getXPath($xml)) as $node) {
             if (
-                !is_null($node->namespaceURI) &&
-                array_key_exists($node->namespaceURI, $supported) &&
-                array_key_exists($node->localName, $supported[$node->namespaceURI])
+                array_key_exists($node->namespaceURI, $supported)
+                && array_key_exists($node->localName, $supported[$node->namespaceURI])
             ) {
-                $ret[] = new $supported[$node->namespaceURI][$node->localName]($node);
+                if ($node->namespaceURI === C::NS_MDATTR) {
+                    $ret[] = new $supported[$node->namespaceURI][$node->localName]($node);
+                } else {
+                    $ret[] = $supported[$node->namespaceURI][$node->localName]::fromXML($node);
+                }
             } else {
                 $ret[] = new Chunk($node);
             }
         }
 
-        return $ret;
-    }
-
-
-    /**
-     * Add a list of Extensions to the given element.
-     *
-     * @param \DOMElement $parent The element we should add the extensions to.
-     * @param \SimpleSAML\XML\Chunk[] $extensions List of extension objects.
-     * @return void
-     */
-    public static function addList(DOMElement $parent, array $extensions): void
-    {
-        if (empty($extensions)) {
-            return;
-        }
-
-        $extElement = $parent->ownerDocument->createElementNS(C::NS_MD, 'md:Extensions');
-        $parent->appendChild($extElement);
-
-        foreach ($extensions as $ext) {
-            $ext->toXML($extElement);
-        }
+        return new static($ret);
     }
 }
