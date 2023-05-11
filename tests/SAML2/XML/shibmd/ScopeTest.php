@@ -4,54 +4,71 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\shibmd;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+
+use function dirname;
+use function strval;
 
 /**
  * Class \SimpleSAML\SAML2\XML\shibmd\Scope
+ *
+ * @covers \SimpleSAML\SAML2\XML\shibmd\Scope
+ * @covers \SimpleSAML\SAML2\XML\shibmd\AbstractShibmdElement
+ * @package simplesamlphp/saml2
  */
-class ScopeTest extends TestCase
+final class ScopeTest extends TestCase
 {
+    use SchemaValidationTestTrait;
+    use SerializableElementTestTrait;
+
+
+    /**
+     */
+    public function setUp(): void
+    {
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-shibmd-v1.0.xsd';
+
+        $this->testedClass = Scope::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/shibmd_Scope.xml',
+        );
+    }
+
+
     /**
      * Marshalling a scope in literal (non-regexp) form.
-     * @return void
      */
     public function testMarshallingLiteral(): void
     {
-        $scope = new Scope();
-        $scope->setScope("example.org");
-        $scope->setIsRegexpScope(false);
+        $scope = new Scope("example.org", false);
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $scopeElement = $scope->toXML($document->firstChild);
-
-        $xpCache = XPath::getXPath($scopeElement);
-        $scopeElements = XPath::xpQuery($scopeElement, '/root/shibmd:Scope', $xpCache);
-        $this->assertCount(1, $scopeElements);
-        $scopeElement = $scopeElements[0];
-
-        $this->assertEquals('example.org', $scopeElement->nodeValue);
-        $this->assertEquals('urn:mace:shibboleth:metadata:1.0', $scopeElement->namespaceURI);
-        $this->assertEquals('false', $scopeElement->getAttribute('regexp'));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($scope),
+        );
     }
 
 
     /**
      * Marshalling a scope which does not specificy the value for
      * regexp explicitly (expect it to default to 'false').
-     * @return void
      */
     public function testMarshallingImplicitRegexpValue(): void
     {
-        $scope = new Scope();
-        $scope->setScope("example.org");
+        $scope = new Scope("example.org");
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $scopeElement = $scope->toXML($document->firstChild);
+        $scopeElement = $scope->toXML($document->documentElement);
 
         $xpCache = XPath::getXPath($scopeElement);
+        /** @var \DOMElement[] $scopeElements */
         $scopeElements = XPath::xpQuery($scopeElement, '/root/shibmd:Scope', $xpCache);
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];
@@ -64,18 +81,16 @@ class ScopeTest extends TestCase
 
     /**
      * Marshalling a scope which is in regexp form.
-     * @return void
      */
     public function testMarshallingRegexp(): void
     {
-        $scope = new Scope();
-        $scope->setScope("^(.*\.)?example\.edu$");
-        $scope->setIsRegexpScope(true);
+        $scope = new Scope("^(.*\.)?example\.edu$", true);
 
         $document = DOMDocumentFactory::fromString('<root />');
-        $scopeElement = $scope->toXML($document->firstChild);
+        $scopeElement = $scope->toXML($document->documentElement);
 
         $xpCache = XPath::getXPath($scopeElement);
+        /** @var \DOMElement[] $scopeElements */
         $scopeElements = XPath::xpQuery($scopeElement, '/root/shibmd:Scope', $xpCache);
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];
@@ -88,17 +103,12 @@ class ScopeTest extends TestCase
 
     /**
      * Unmarshalling a scope in literal (non-regexp) form.
-     * @return void
      */
     public function testUnmarshallingLiteral(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<shibmd:Scope regexp="false">example.org</shibmd:Scope>
-XML
-        );
-        $scope = new Scope($document->firstChild);
+        $scope = Scope::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('example.org', $scope->getScope());
+        $this->assertEquals('example.org', $scope->getContent());
         $this->assertFalse($scope->isRegexpScope());
     }
 
@@ -106,34 +116,27 @@ XML
     /**
      * Unmarshalling a scope that does not specify an explicit
      * regexp value (assumed to be false).
-     * @return void
      */
     public function testUnmarshallingWithoutRegexpValue(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<shibmd:Scope>example.org</shibmd:Scope>
-XML
-        );
-        $scope = new Scope($document->firstChild);
+        $scope = Scope::fromXML($this->xmlRepresentation->documentElement);
 
-        $this->assertEquals('example.org', $scope->getScope());
+        $this->assertEquals('example.org', $scope->getContent());
         $this->assertFalse($scope->isRegexpScope());
     }
 
 
     /**
      * Unmarshalling a scope in regexp form.
-     * @return void
      */
     public function testUnmarshallingRegexp(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<shibmd:Scope regexp="true">^(.*|)example.edu$</shibmd:Scope>
-XML
-        );
-        $scope = new Scope($document->firstChild);
+        $document = $this->xmlRepresentation;
+        $document->documentElement->setAttribute('regexp', 'true');
+        $document->documentElement->textContent = '^(.*|)example.edu$';
 
-        $this->assertEquals('^(.*|)example.edu$', $scope->getScope());
+        $scope = Scope::fromXML($document->documentElement);
+        $this->assertEquals('^(.*|)example.edu$', $scope->getContent());
         $this->assertTrue($scope->isRegexpScope());
     }
 }

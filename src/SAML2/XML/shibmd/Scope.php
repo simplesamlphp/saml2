@@ -5,69 +5,46 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\shibmd;
 
 use DOMElement;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\StringElementTrait;
 
 /**
  * Class which represents the Scope element found in Shibboleth metadata.
  *
- * @link https://wiki.shibboleth.net/confluence/display/SHIB/ShibbolethMetadataProfile
- * @package SimpleSAMLphp
+ * @link https://wiki.shibboleth.net/confluence/display/SC/ShibMetaExt+V1.0
+ * @package simplesamlphp/saml2
  */
-class Scope
+final class Scope extends AbstractShibmdElement
 {
-    /**
-     * The scope.
-     *
-     * @var string
-     */
-    private string $scope = '';
-
-    /**
-     * Whether this is a regexp scope.
-     *
-     * @var bool
-     */
-    private bool $regexp = false;
+    use StringElementTrait;
 
 
     /**
      * Create a Scope.
      *
-     * @param \DOMElement|null $xml The XML element we should load.
-     */
-    public function __construct(DOMElement $xml = null)
-    {
-        if ($xml === null) {
-            return;
-        }
-
-        $this->scope = $xml->textContent;
-        $this->regexp = Utils::parseBoolean($xml, 'regexp', false);
-    }
-
-
-    /**
-     * Collect the value of the scope-property
-     *
-     * @return string
-     */
-    public function getScope(): string
-    {
-        return $this->scope;
-    }
-
-
-    /**
-     * Set the value of the scope-property
-     *
      * @param string $scope
+     * @param bool $regexp
+     */
+    public function __construct(
+        string $scope,
+        protected bool $regexp = false,
+    ) {
+        $this->setContent($scope);
+    }
+
+
+    /**
+     * Validate the content of the element.
+     *
+     * @param string $content  The value to go in the XML textContent
+     * @throws \Exception on failure
      * @return void
      */
-    public function setScope(string $scope): void
+    protected function validateContent(string $content): void
     {
-        $this->scope = $scope;
+        Assert::notWhitespaceOnly($content);
     }
 
 
@@ -83,39 +60,38 @@ class Scope
 
 
     /**
-     * Set the value of the regexp-property
+     * Convert XML into a Scope
      *
-     * @param bool $regexp
-     * @return void
+     * @param \DOMElement $xml The XML element we should load
+     * @return static
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
      */
-    public function setIsRegexpScope(bool $regexp): void
+    public static function fromXML(DOMElement $xml): static
     {
-        $this->regexp = $regexp;
+        Assert::same($xml->localName, 'Scope', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Scope::NS, InvalidDOMElementException::class);
+
+        $scope = $xml->textContent;
+        $regexp = self::getBooleanAttribute($xml, 'regexp', false);
+
+        return new static($scope, $regexp);
     }
 
 
     /**
      * Convert this Scope to XML.
      *
-     * @param \DOMElement $parent The element we should append this Scope to.
+     * @param \DOMElement|null $parent The element we should append this Scope to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::notEmpty($this->scope);
-
-        $doc = $parent->ownerDocument;
-
-        $e = $doc->createElementNS(C::NS_SHIBMD, 'shibmd:Scope');
-        $parent->appendChild($e);
-
-        $e->appendChild($doc->createTextNode($this->scope));
-
-        if ($this->regexp === true) {
-            $e->setAttribute('regexp', 'true');
-        } else {
-            $e->setAttribute('regexp', 'false');
-        }
+        /** @psalm-var \DOMDocument $e->ownerDocument */
+        $e = $this->instantiateParentElement($parent);
+        $e->textContent = $this->getContent();
+        $e->setAttribute('regexp', $this->isRegexpScope() ? 'true' : 'false');
 
         return $e;
     }
