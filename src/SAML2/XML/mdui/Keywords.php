@@ -74,7 +74,7 @@ final class Keywords extends AbstractMduiElement
      * Convert XML into a Keywords
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -118,7 +118,7 @@ final class Keywords extends AbstractMduiElement
      * Create a class from an array
      *
      * @param array $data
-     * @return self
+     * @return static
      */
     public static function fromArray(array $data): static
     {

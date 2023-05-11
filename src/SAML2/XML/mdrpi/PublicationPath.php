@@ -56,7 +56,7 @@ final class PublicationPath extends AbstractMdrpiElement
      * Convert XML into a PublicationPath
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
