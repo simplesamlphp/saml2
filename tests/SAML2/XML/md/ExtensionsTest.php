@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
 use SimpleSAML\SAML2\XML\alg\SigningMethod;
+use SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponse;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
@@ -77,6 +78,7 @@ final class ExtensionsTest extends TestCase
             ],
         );
         $uiinfo = new UIInfo([new DisplayName('en', 'Example')]);
+        $idpdisc = new DiscoveryResponse(1, C::NS_IDPDISC, 'https://example.org/authenticate/sp');
         $discoHints = new DiscoHints([], [new IPHint('127.0.0.1')]);
         $digestMethod = new DigestMethod(C::DIGEST_SHA256);
         $signingMethod = new SigningMethod(C::SIG_RSA_SHA256, 1024, 4096);
@@ -87,6 +89,7 @@ final class ExtensionsTest extends TestCase
             $pubInfo,
             $pubPath,
             $uiinfo,
+            $idpdisc,
             $discoHints,
             $digestMethod,
             $signingMethod,
@@ -153,7 +156,8 @@ final class ExtensionsTest extends TestCase
                xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
                xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui"
                xmlns:ns="urn:some:ns"
-               xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport">
+               xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"
+               xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol">
   <shibmd:Scope>SomeScope</shibmd:Scope>
   <mdattr:EntityAttributes>SomeAttribute</mdattr:EntityAttributes>
   <mdrpi:RegistrationInfo registrationAuthority="SomeAuthority"/>
@@ -167,6 +171,7 @@ final class ExtensionsTest extends TestCase
   <mdui:DiscoHints>
     <mdui:IPHint>127.0.0.1</mdui:IPHint>
   </mdui:DiscoHints>
+  <idpdisc:DiscoveryResponse Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Location="https://example.org/authenticate/sp" index="1"/>
   <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
   <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha224" MinKeySize="1024" MaxKeySize="4096"/>
   <ns:SomeChunk foo="bar">SomeText</ns:SomeChunk>
@@ -175,7 +180,7 @@ XML
         );
         $extensions = Extensions::fromXML($document->documentElement);
         $list = $extensions->getList();
-        $this->assertCount(10, $list);
+        $this->assertCount(11, $list);
         $this->assertInstanceOf(Scope::class, $list[0]);
         $this->assertInstanceOf(EntityAttributes::class, $list[1]);
         $this->assertInstanceOf(RegistrationInfo::class, $list[2]);
@@ -183,9 +188,10 @@ XML
         $this->assertInstanceOf(PublicationPath::class, $list[4]);
         $this->assertInstanceOf(UIInfo::class, $list[5]);
         $this->assertInstanceOf(DiscoHints::class, $list[6]);
-        $this->assertInstanceOf(DigestMethod::class, $list[7]);
-        $this->assertInstanceOf(SigningMethod::class, $list[8]);
-        $this->assertInstanceOf(Chunk::class, $list[9]);
+        $this->assertInstanceOf(DiscoveryResponse::class, $list[7]);
+        $this->assertInstanceOf(DigestMethod::class, $list[8]);
+        $this->assertInstanceOf(SigningMethod::class, $list[9]);
+        $this->assertInstanceOf(Chunk::class, $list[10]);
         $this->assertFalse($extensions->isEmptyElement());
     }
 
