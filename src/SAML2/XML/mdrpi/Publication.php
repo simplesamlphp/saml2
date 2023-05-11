@@ -11,12 +11,12 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
- * Class for handling the mdrpi:PublicationInfo element.
+ * Class for handling the mdrpi:Publication element.
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
  * @package simplesamlphp/saml2
  */
-final class PublicationInfo extends AbstractMdrpiElement
+final class Publication extends AbstractMdrpiElement
 {
     /**
      * Create/parse a mdrpi:PublicationInfo element.
@@ -24,32 +24,12 @@ final class PublicationInfo extends AbstractMdrpiElement
      * @param string $publisher
      * @param int|null $creationInstant
      * @param string|null $publicationId
-     * @param \SimpleSAML\SAML2\XML\mdrpi\UsagePolicy[] $usagePolicy
      */
     public function __construct(
         protected string $publisher,
         protected ?int $creationInstant = null,
         protected ?string $publicationId = null,
-        protected array $usagePolicy = [],
     ) {
-        Assert::allIsInstanceOf($usagePolicy, UsagePolicy::class);
-
-        /**
-         * 2.2.1:  There MUST NOT be more than one <mdrpi:UsagePolicy>,
-         *         within a given <mdrpi:UsageInfo>, for a given language
-         */
-        $languages = array_map(
-            function ($up) {
-                return $up->getLanguage();
-            },
-            $usagePolicy,
-        );
-        Assert::uniqueValues(
-            $languages,
-            'There MUST NOT be more than one <mdrpi:UsagePolicy>,'
-            . ' within a given <mdrpi:PublicationInfo>, for a given language',
-            ProtocolViolationException::class,
-        );
     }
 
 
@@ -87,18 +67,7 @@ final class PublicationInfo extends AbstractMdrpiElement
 
 
     /**
-     * Collect the value of the UsagePolicy-property
-     *
-     * @return \SimpleSAML\SAML2\XML\mdrpi\UsagePolicy[]
-     */
-    public function getUsagePolicy(): array
-    {
-        return $this->usagePolicy;
-    }
-
-
-    /**
-     * Convert XML into a PublicationInfo
+     * Convert XML into a Publication
      *
      * @param \DOMElement $xml The XML element we should load
      * @return static
@@ -110,8 +79,8 @@ final class PublicationInfo extends AbstractMdrpiElement
      */
     public static function fromXML(DOMElement $xml): static
     {
-        Assert::same($xml->localName, 'PublicationInfo', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, PublicationInfo::NS, InvalidDOMElementException::class);
+        Assert::same($xml->localName, 'Publication', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Publication::NS, InvalidDOMElementException::class);
 
         $publisher = self::getAttribute($xml, 'publisher');
         $creationInstant = self::getAttribute($xml, 'creationInstant', null);
@@ -126,9 +95,8 @@ final class PublicationInfo extends AbstractMdrpiElement
         }
 
         $publicationId = self::getAttribute($xml, 'publicationId', null);
-        $UsagePolicy = UsagePolicy::getChildrenOfClass($xml);
 
-        return new static($publisher, $creationInstant, $publicationId, $UsagePolicy);
+        return new static($publisher, $creationInstant, $publicationId);
     }
 
 
@@ -151,10 +119,6 @@ final class PublicationInfo extends AbstractMdrpiElement
             $e->setAttribute('publicationId', $this->getPublicationId());
         }
 
-        foreach ($this->getUsagePolicy() as $up) {
-            $up->toXML($e);
-        }
-
         return $e;
     }
 
@@ -163,7 +127,7 @@ final class PublicationInfo extends AbstractMdrpiElement
      * Create a class from an array
      *
      * @param array $data
-     * @return static
+     * @return self
      */
     public static function fromArray(array $data): static
     {
@@ -178,15 +142,7 @@ final class PublicationInfo extends AbstractMdrpiElement
         $publicationId = $data['publicationId'] ?? null;
         Assert::nullOrString($publicationId);
 
-        $up = $data['usagePolicy'] ?? [];
-        Assert::isArray($up);
-
-        $usagePolicy = [];
-        foreach ($up as $k => $v) {
-            $usagePolicy[] = UsagePolicy::fromArray([$k => $v]);
-        }
-
-        return new static($publisher, $creationInstant, $publicationId, $usagePolicy);
+        return new static($publisher, $creationInstant, $publicationId);
     }
 
 
@@ -208,12 +164,6 @@ final class PublicationInfo extends AbstractMdrpiElement
             $data['publicationId'] = $this->getPublicationId();
         }
 
-        if (!empty($this->getUsagePolicy())) {
-            $data['usagePolicy'] = [];
-            foreach ($this->getUsagePolicy() as $up) {
-                $data['usagePolicy'] = array_merge($data['usagePolicy'], $up->toArray());
-            }
-        }
         return $data;
     }
 }

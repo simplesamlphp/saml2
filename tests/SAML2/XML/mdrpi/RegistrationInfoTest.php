@@ -4,102 +4,93 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
-use Exception;
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
-use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Utils as XMLUtils;
+
+use function dirname;
+use function strval;
 
 /**
- * Class \SimpleSAML\SAML2\XML\mdrpi\RegistrationInfoTest
+ * Class \SAML2\XML\mdrpi\RegistrationInfoTest
+ *
+ * @covers \SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo
+ * @covers \SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement
+ *
+ * @package simplesamlphp/saml2
  */
-class RegistrationInfoTest extends TestCase
+final class RegistrationInfoTest extends TestCase
 {
+    use ArrayizableElementTestTrait;
+    use SchemaValidationTestTrait;
+    use SerializableElementTestTrait;
+
+
     /**
-     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
+
+        $this->testedClass = RegistrationInfo::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/mdrpi_RegistrationInfo.xml',
+        );
+
+        $this->arrayRepresentation = [
+            'registrationAuthority' => 'https://ExampleAuthority',
+            'registrationInstant' => 1234567890,
+            'registrationPolicy' => [
+                'en' => 'http://www.example.org/aai/metadata/en_registration.html',
+                'de' => 'http://www.example.org/aai/metadata/de_registration.html',
+            ],
+        ];
+    }
+
+
+    /**
      */
     public function testMarshalling(): void
     {
-        $registrationInfo = new RegistrationInfo();
-        $registrationInfo->setRegistrationAuthority('https://ExampleAuthority');
-        $registrationInfo->setRegistrationInstant(1234567890);
-        $registrationInfo->setRegistrationPolicy([
-            'en' => 'http://EnglishRegistrationPolicy',
-            'nl' => 'https://DutchRegistratiebeleid',
-        ]);
-
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $registrationInfo->toXML($document->firstChild);
-
-        $xpCache = XPath::getXPath($xml);
-        $registrationInfoElements = XPath::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'RegistrationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']',
-            $xpCache,
-        );
-        $this->assertCount(1, $registrationInfoElements);
-        $registrationInfoElement = $registrationInfoElements[0];
-
-        $this->assertEquals(
+        $registrationInfo = new RegistrationInfo(
             'https://ExampleAuthority',
-            $registrationInfoElement->getAttribute("registrationAuthority")
+            1234567890,
+            [
+                new RegistrationPolicy('en', 'http://www.example.org/aai/metadata/en_registration.html'),
+                new RegistrationPolicy('de', 'http://www.example.org/aai/metadata/de_registration.html'),
+            ],
         );
-        $this->assertEquals('2009-02-13T23:31:30Z', $registrationInfoElement->getAttribute("registrationInstant"));
-
-        $xpCache = XPath::getXPath($registrationInfoElement);
-        $usagePolicyElements = XPath::xpQuery(
-            $registrationInfoElement,
-            './*[local-name()=\'RegistrationPolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']',
-            $xpCache,
-        );
-        $this->assertCount(2, $usagePolicyElements);
 
         $this->assertEquals(
-            'en',
-            $usagePolicyElements[0]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang")
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($registrationInfo),
         );
-        $this->assertEquals('http://EnglishRegistrationPolicy', $usagePolicyElements[0]->textContent);
-        $this->assertEquals(
-            'nl',
-            $usagePolicyElements[1]->getAttributeNS("http://www.w3.org/XML/1998/namespace", "lang")
-        );
-        $this->assertEquals('https://DutchRegistratiebeleid', $usagePolicyElements[1]->textContent);
     }
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdrpi:RegistrationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
-                        registrationAuthority="urn:example:example.org"
-                        registrationInstant="2006-05-29T11:34:27Z">
-        <mdrpi:RegistrationPolicy xml:lang="en">
-          http://www.example.org/aai/metadata/en_registration.html
-        </mdrpi:RegistrationPolicy>
-        <mdrpi:RegistrationPolicy xml:lang="de">
-          http://www.example.org/aai/metadata/de_registration.html
-        </mdrpi:RegistrationPolicy>
-</mdrpi:RegistrationInfo>
-XML
+        $registrationInfo = RegistrationInfo::fromXML($this->xmlRepresentation->documentElement);
+
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($registrationInfo),
         );
-
-        $registrationInfo = new RegistrationInfo($document->firstChild);
-
-        $this->assertEquals('urn:example:example.org', $registrationInfo->getRegistrationAuthority());
-        $this->assertEquals(1148902467, $registrationInfo->getRegistrationInstant());
-
-        $registrationPolicy = $registrationInfo->getRegistrationPolicy();
-        $this->assertCount(2, $registrationPolicy);
-        $this->assertEquals('http://www.example.org/aai/metadata/en_registration.html', $registrationPolicy["en"]);
-        $this->assertEquals('http://www.example.org/aai/metadata/de_registration.html', $registrationPolicy["de"]);
     }
 
 
     /**
-     * @return void
      */
     public function testMissingPublisherThrowsException(): void
     {
@@ -110,22 +101,40 @@ XML
 XML
         );
 
-        $this->expectException(Exception::class, 'Missing required attribute "registrationAuthority"');
-        $registrationInfo = new RegistrationInfo($document->firstChild);
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage("Missing 'registrationAuthority' attribute on mdrpi:RegistrationInfo.");
+        RegistrationInfo::fromXML($document->documentElement);
     }
 
 
     /**
-     * @return void
      */
-    public function testEmptyRegistrationAuthorityOutboundThrowsException(): void
+    public function testRegistrationInstantTimezoneNotZuluThrowsException(): void
     {
-        $registrationInfo = new RegistrationInfo();
-        $registrationInfo->setRegistrationAuthority('');
+        $document = $this->xmlRepresentation->documentElement;
+        $document->setAttribute('registrationInstant', '2011-01-01T00:00:00WT');
 
-        $document = DOMDocumentFactory::fromString('<root />');
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage("'2011-01-01T00:00:00WT' is not a valid DateTime");
+        RegistrationInfo::fromXML($document);
+    }
 
-        $this->expectException(\Exception::class, 'Missing required registration authority.');
-        $xml = $registrationInfo->toXML($document->firstChild);
+
+    /**
+     */
+    public function testMultipleRegistrationPoliciesWithSameLanguageThrowsException(): void
+    {
+        $document = $this->xmlRepresentation;
+
+        // Append another 'en' RegistrationPolicy to the document
+        $x = new RegistrationPolicy('en', 'https://example.org');
+        $x->toXML($document->documentElement);
+
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage(
+            'There MUST NOT be more than one <mdrpi:RegistrationPolicy>,'
+            . ' within a given <mdrpi:RegistrationInfo>, for a given language'
+        );
+        RegistrationInfo::fromXML($document->documentElement);
     }
 }
