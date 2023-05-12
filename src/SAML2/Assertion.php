@@ -1033,9 +1033,9 @@ class Assertion extends SignedElement
     /**
      * Retrieve the audiences that are allowed to receive this assertion.
      *
-     * This may be null, in which case all audiences are allowed.
+     * This may be an empty array, in which case all audiences are allowed.
      *
-     * @return array|null The allowed audiences.
+     * @return array The allowed audiences.
      */
     public function getValidAudiences(): array
     {
@@ -1046,7 +1046,7 @@ class Assertion extends SignedElement
     /**
      * Set the audiences that are allowed to receive this assertion.
      *
-     * This may be null, in which case all audiences are allowed.
+     * This may be an empty array, in which case all audiences are allowed.
      *
      * @param array $validAudiences The allowed audiences.
      * @return void
