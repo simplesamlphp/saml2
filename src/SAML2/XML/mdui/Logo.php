@@ -181,11 +181,12 @@ final class Logo extends AbstractMduiElement
      */
     public function toArray(): array
     {
+        $lang = $this->getLanguage();
+
         return [
             'url' => $this->getContent(),
             'width' => $this->getWidth(),
             'height' => $this->getHeight(),
-            'lang' => $this->getLanguage(),
-        ];
+        ] + (isset($lang) ? ['lang' => $lang] : []);
     }
 }
