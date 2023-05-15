@@ -427,13 +427,12 @@ final class UIInfo extends AbstractMduiElement
             $logo[] = $child->toArray();
         }
 
-        return [
-            'DisplayName' => $displayName,
-            'Description' => $description,
-            'InformationURL' => $infoUrl,
-            'PrivacyStatementURL' => $privacyUrl,
-            'Keywords' => $keywords,
-            'Logo' => $logo,
-        ];
+        return [] +
+            (empty($displayName) ? [] : ['DisplayName' => $displayName]) +
+            (empty($description) ? [] : ['Description' => $description]) +
+            (empty($infoUrl) ? [] : ['InformationURL' => $infoUrl]) +
+            (empty($privacyUrl) ? [] : ['PrivacyStatementURL' => $privacyUrl]) +
+            (empty($keywords) ? [] : ['Keywords' => $keywords]) +
+            (empty($logo) ? [] : ['Logo' => $logo]);
     }
 }
