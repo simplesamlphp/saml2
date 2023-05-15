@@ -17,10 +17,6 @@ use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Exception\RuntimeException;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\ds\KeyInfo;
-use SimpleSAML\SAML2\XML\ds\X509Certificate;
-use SimpleSAML\SAML2\XML\ds\X509Data;
-use SimpleSAML\SAML2\XML\ds\KeyName;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -28,6 +24,10 @@ use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\Exception\NoSignatureFoundException;
 use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\ds\KeyName;
+use SimpleSAML\XMLSecurity\XML\ds\X509Certificate;
+use SimpleSAML\XMLSecurity\XML\ds\X509Data;
 
 use function count;
 use function in_array;
@@ -545,23 +545,16 @@ class Utils
             throw new Exception('KeyDescriptor should contain either x509Data and/or keyName!');
         }
 
-        $keyInfo = new KeyInfo();
-
+        $info = [];
         if ($keyName !== null) {
-            $keynameEl = new KeyName();
-            $keynameEl->setName($keyName);
-            $keyInfo->addInfo($keynameEl);
+            $info[] = new KeyName($keyName);
         }
 
         if ($x509Data !== null) {
-            $x509Certificate = new X509Certificate();
-            $x509Certificate->setCertificate($x509Data);
-            $x509Data = new X509Data();
-            $x509Data->addData($x509Certificate);
-            $keyInfo->addInfo($x509Data);
+            $info[] = new X509Data([new X509Certificate($x509Data)]);
         }
 
-        $keyDescriptor = new KeyDescriptor($keyInfo);
+        $keyDescriptor = new KeyDescriptor(new KeyInfo($info));
         return $keyDescriptor;
     }
 

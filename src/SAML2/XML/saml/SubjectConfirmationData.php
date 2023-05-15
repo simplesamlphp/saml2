@@ -8,8 +8,8 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\ds\KeyInfo;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function filter_var;
@@ -65,7 +65,7 @@ class SubjectConfirmationData
      * Array with various elements describing this key.
      * Unknown elements will be represented by \SimpleSAML\XML\Chunk.
      *
-     * @var (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
+     * @var (\SimpleSAML\XMLSecurity\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
      */
     private array $info = [];
 
@@ -193,7 +193,7 @@ class SubjectConfirmationData
     /**
      * Collect the value of the info-property
      *
-     * @return (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
+     * @return (\SimpleSAML\XMLSecurity\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
      */
     public function getInfo(): array
     {
@@ -204,7 +204,7 @@ class SubjectConfirmationData
     /**
      * Set the value of the info-property
      *
-     * @param (\SimpleSAML\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[] $info
+     * @param (\SimpleSAML\XMLSecurity\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[] $info
      * @return void
      */
     public function setInfo(array $info): void
@@ -216,7 +216,7 @@ class SubjectConfirmationData
     /**
      * Add the value to the info-property
      *
-     * @param \SimpleSAML\XML\Chunk|\SimpleSAML\SAML2\XML\ds\KeyInfo $info
+     * @param \SimpleSAML\XML\Chunk|\SimpleSAML\XMLSecurity\XML\ds\KeyInfo $info
      * @return void
      */
     public function addInfo($info): void
@@ -262,7 +262,7 @@ class SubjectConfirmationData
             }
             switch ($n->localName) {
                 case 'KeyInfo':
-                    $this->addInfo(new KeyInfo($n));
+                    $this->addInfo(KeyInfo::fromXML($n));
                     break;
                 default:
                     $this->addInfo(new Chunk($n));

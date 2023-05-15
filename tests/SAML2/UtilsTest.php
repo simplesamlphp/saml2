@@ -6,12 +6,12 @@ namespace SimpleSAML\Test\SAML2;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\AttributeQuery;
-use SimpleSAML\SAML2\XML\ds\X509Data;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\XML\ds\X509Data;
 
 /**
  * Class \SimpleSAML\SAML2\UtilsTest
