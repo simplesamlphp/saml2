@@ -163,7 +163,7 @@ class EntityDescriptor extends SignedElementHelper
                     if ($this->Organization !== null) {
                         throw new TooManyElementsException('More than one Organization in the entity.');
                     }
-                    $this->Organization = new Organization($node);
+                    $this->Organization = Organization::fromXML($node);
                     break;
                 case 'ContactPerson':
                     $this->ContactPerson[] = new ContactPerson($node);

@@ -158,8 +158,8 @@ XML
         <OrganizationName xml:lang="en">orgNameTest (en)</OrganizationName>
         <OrganizationDisplayName xml:lang="no">orgDispNameTest (no)</OrganizationDisplayName>
         <OrganizationDisplayName xml:lang="en">orgDispNameTest (en)</OrganizationDisplayName>
-        <OrganizationURL xml:lang="no">orgURL (no)</OrganizationURL>
-        <OrganizationURL xml:lang="en">orgURL (en)</OrganizationURL>
+        <OrganizationURL xml:lang="no">https://example.org/no</OrganizationURL>
+        <OrganizationURL xml:lang="en">https://example.org/en</OrganizationURL>
     </Organization>
 </EntityDescriptor>
 XML
@@ -179,13 +179,19 @@ XML
         $o = $entityDescriptor->getOrganization();
         $this->assertTrue($o instanceof Organization);
         $this->assertCount(2, $o->getOrganizationName());
-        $this->assertEquals('orgNameTest (no)', $o->getOrganizationName()["no"]);
-        $this->assertEquals('orgNameTest (en)', $o->getOrganizationName()["en"]);
+        $this->assertEquals('no', $o->getOrganizationName()[0]->getLanguage());
+        $this->assertEquals('orgNameTest (no)', $o->getOrganizationName()[0]->getContent());
+        $this->assertEquals('en', $o->getOrganizationName()[1]->getLanguage());
+        $this->assertEquals('orgNameTest (en)', $o->getOrganizationName()[1]->getContent());
         $this->assertCount(2, $o->getOrganizationDisplayName());
-        $this->assertEquals('orgDispNameTest (no)', $o->getOrganizationDisplayName()["no"]);
-        $this->assertEquals('orgDispNameTest (en)', $o->getOrganizationDisplayName()["en"]);
+        $this->assertEquals('no', $o->getOrganizationDisplayName()[0]->getLanguage());
+        $this->assertEquals('orgDispNameTest (no)', $o->getOrganizationDisplayName()[0]->getContent());
+        $this->assertEquals('en', $o->getOrganizationDisplayName()[1]->getLanguage());
+        $this->assertEquals('orgDispNameTest (en)', $o->getOrganizationDisplayName()[1]->getContent());
         $this->assertCount(2, $o->getOrganizationURL());
-        $this->assertEquals('orgURL (no)', $o->getOrganizationURL()["no"]);
-        $this->assertEquals('orgURL (en)', $o->getOrganizationURL()["en"]);
+        $this->assertEquals('no', $o->getOrganizationURL()[0]->getLanguage());
+        $this->assertEquals('https://example.org/no', $o->getOrganizationURL()[0]->getContent());
+        $this->assertEquals('en', $o->getOrganizationURL()[1]->getLanguage());
+        $this->assertEquals('https://example.org/en', $o->getOrganizationURL()[1]->getContent());
     }
 }

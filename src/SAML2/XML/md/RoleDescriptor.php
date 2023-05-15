@@ -143,13 +143,14 @@ class RoleDescriptor extends SignedElementHelper
             $this->KeyDescriptor[] = new KeyDescriptor($kd);
         }
 
-        $organization = XPath::xpQuery($xml, './saml_metadata:Organization', $xpCache);
-        if (count($organization) > 1) {
-            throw new Exception('More than one Organization in the entity.');
-        } elseif (!empty($organization)) {
-            /** @var \DOMElement $organization[0] */
-            $this->Organization = new Organization($organization[0]);
-        }
+        $organization = Organization::getChildrenOfClass($xml);
+        Assert::maxCount(
+            $organization,
+            1,
+            'Only one md:Organization element is allowed.',
+            TooManyElementsException::class,
+        );
+        $this->Organization = array_pop($organization);
 
         foreach (XPath::xpQuery($xml, './saml_metadata:ContactPerson', $xpCache) as $cp) {
             /** @var \DOMElement $cp */
