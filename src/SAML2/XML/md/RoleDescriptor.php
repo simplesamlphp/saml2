@@ -137,11 +137,7 @@ class RoleDescriptor extends SignedElementHelper
         );
         $this->Extensions = array_pop($extensions);
 
-        $xpCache = XPath::getXPath($xml);
-        foreach (XPath::xpQuery($xml, './saml_metadata:KeyDescriptor', $xpCache) as $kd) {
-            /** @var \DOMElement $kd */
-            $this->KeyDescriptor[] = new KeyDescriptor($kd);
-        }
+        $this->KeyDescriptor = KeyDescriptor::getChildrenOfClass($xml);
 
         $organization = Organization::getChildrenOfClass($xml);
         Assert::maxCount(

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE schema
+  PUBLIC "-//W3C//DTD XMLSchema 200102//EN" "http://www.w3.org/2001/XMLSchema.dtd"
+ [
+   <!ATTLIST schema 
+     xmlns:ds CDATA #FIXED "urn:x-simplesamlphp:namespace">
+   <!ENTITY ssp 'urn:x-simplesamlphp:namespace'>
+   <!ENTITY % p ''>
+   <!ENTITY % s ''>
+  ]>
+
+<!-- Schema for SimpleSAMLphp dummy classes -->
+
+
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:ssp="urn:x-simplesamlphp:namespace"
+        xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
+        xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
+        targetNamespace="urn:x-simplesamlphp:namespace"
+        version="0.1" elementFormDefault="qualified"> 
+
+<include schemaLocation='../../../vendor/simplesamlphp/xml-common/tests/resources/schemas/simplesamlphp.xsd'/>
+<import namespace='urn:oasis:names:tc:SAML:2.0:assertion'
+          schemaLocation='../../../resources/schemas/saml-schema-assertion-2.0.xsd'/>
+<import namespace='urn:oasis:names:tc:SAML:2.0:metadata'
+          schemaLocation='../../../resources/schemas/saml-schema-metadata-2.0.xsd'/>
+
+<!-- Start CustomRoleDescriptor -->
+
+<element name="CustomRoleDescriptor" type="ssp:CustomRoleDescriptorType"/>
+<complexType name="CustomRoleDescriptorType">
+    <complexContent>
+        <extension base="md:RoleDescriptorType">
+            <sequence>
+                <element ref="ssp:Chunk" maxOccurs="unbounded"/>
+            </sequence>
+        </extension>
+    </complexContent>
+</complexType>
+
+<!-- End CustomRoleDescriptor -->
+
+<!-- Start CustomStatement -->
+
+<element name="CustomStatement" type="ssp:CustomStatementType"/>
+<complexType name="CustomStatementType">
+    <complexContent>
+        <extension base="saml:StatementAbstractType">
+            <sequence>
+                <element ref="saml:Audience" maxOccurs="unbounded"/>
+            </sequence>
+        </extension>
+    </complexContent>
+</complexType>
+
+<!-- End CustomStatement -->
+
+<!-- Start CustomBaseID -->
+
+<element name="CustomBaseID" type="ssp:CustomBaseIDType"/>
+<complexType name="CustomBaseIDType">
+    <complexContent>
+        <extension base="saml:BaseIDAbstractType">
+            <sequence>
+                <element ref="saml:Audience" maxOccurs="unbounded"/>
+            </sequence>
+        </extension>
+    </complexContent>
+</complexType>
+
+<!-- End CustomBaseID -->
+
+<!-- Start CustomCondition -->
+
+<element name="CustomCondition" type="ssp:CustomConditionType"/>
+<complexType name="CustomConditionType">
+    <complexContent>
+        <extension base="saml:ConditionAbstractType">
+            <sequence>
+                <element ref="saml:Audience" maxOccurs="unbounded"/>
+            </sequence>
+        </extension>
+    </complexContent>
+</complexType>
+
+<!-- End CustomCondition -->
+
+</schema>
+
