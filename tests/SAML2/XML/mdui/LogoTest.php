@@ -104,6 +104,10 @@ IMG;
         $this->assertEquals(200, $logo->getHeight());
         $this->assertEquals(300, $logo->getWidth());
         $this->assertEquals($this->url, $logo->getContent());
+        $this->assertEquals(
+            $logo->toArray(),
+            ['url' => $logo->getContent(), 'width' => $logo->getWidth(), 'height' => $logo->getHeight()],
+        );
     }
 
 
