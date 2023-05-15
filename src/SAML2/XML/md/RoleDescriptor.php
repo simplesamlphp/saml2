@@ -152,10 +152,7 @@ class RoleDescriptor extends SignedElementHelper
         );
         $this->Organization = array_pop($organization);
 
-        foreach (XPath::xpQuery($xml, './saml_metadata:ContactPerson', $xpCache) as $cp) {
-            /** @var \DOMElement $cp */
-            $this->ContactPerson[] = new ContactPerson($cp);
-        }
+        $this->ContactPerson = ContactPerson::getChildrenOfClass($xml);
     }
 
 
