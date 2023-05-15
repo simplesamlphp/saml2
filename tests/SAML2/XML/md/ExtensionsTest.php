@@ -171,7 +171,9 @@ final class ExtensionsTest extends TestCase
   <mdui:DiscoHints>
     <mdui:IPHint>127.0.0.1</mdui:IPHint>
   </mdui:DiscoHints>
-  <idpdisc:DiscoveryResponse Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Location="https://example.org/authenticate/sp" index="1"/>
+  <idpdisc:DiscoveryResponse Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol"
+    Location="https://example.org/authenticate/sp"
+    index="1"/>
   <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
   <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha224" MinKeySize="1024" MaxKeySize="4096"/>
   <ns:SomeChunk foo="bar">SomeText</ns:SomeChunk>
