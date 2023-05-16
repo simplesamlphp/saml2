@@ -533,33 +533,6 @@ class Utils
 
 
     /**
-     * Create a KeyDescriptor with the given certificate.
-     *
-     * @param string|null $x509Data The certificate, as a base64-encoded DER data.
-     * @param string|null $keyName The name of the key as specified in the KeyInfo
-     * @return \SimpleSAML\SAML2\XML\md\KeyDescriptor The keydescriptor.
-     */
-    public static function createKeyDescriptor(?string $x509Data = null, ?string $keyName = null): KeyDescriptor
-    {
-        if ($keyName === null && $x509Data === null) {
-            throw new Exception('KeyDescriptor should contain either x509Data and/or keyName!');
-        }
-
-        $info = [];
-        if ($keyName !== null) {
-            $info[] = new KeyName($keyName);
-        }
-
-        if ($x509Data !== null) {
-            $info[] = new X509Data([new X509Certificate($x509Data)]);
-        }
-
-        $keyDescriptor = new KeyDescriptor(new KeyInfo($info));
-        return $keyDescriptor;
-    }
-
-
-    /**
      * @return \SimpleSAML\SAML2\Compat\AbstractContainer
      */
     public static function getContainer(): AbstractContainer

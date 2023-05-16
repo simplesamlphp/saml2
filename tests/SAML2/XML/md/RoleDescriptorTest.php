@@ -8,7 +8,11 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\ds\X509Certificate;
+use SimpleSAML\XMLSecurity\XML\ds\X509Data;
 
 class RoleDescriptorTest extends TestCase
 {
@@ -26,9 +30,10 @@ class RoleDescriptorTest extends TestCase
             'protocol2',
         ]);
         $roleDescriptor->setErrorURL('https://example.org/error');
-        $roleDescriptor->setKeyDescriptor([
-            Utils::createKeyDescriptor("testCert")
-        ]);
+        $kd = new KeyDescriptor(new KeyInfo([new X509Data([new X509Certificate(
+            '/CTj03d1DB5e2t7CTo9BEzCf5S9NRzwnBgZRlm32REI='
+        )])]));
+        $roleDescriptor->setKeyDescriptor([$kd]);
 
         $document = DOMDocumentFactory::fromString('<root />');
         $roleDescriptorElement = $roleDescriptor->toXML($document->firstChild);
