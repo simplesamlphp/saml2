@@ -10,6 +10,7 @@ use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
+use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -24,7 +25,7 @@ use function array_merge;
  *
  * @package simplesamlphp/saml2
  */
-final class Organization extends AbstractMdElement
+final class Organization extends AbstractMdElement implements ArrayizableElementInterface
 {
     use ExtendableAttributesTrait;
     use ExtendableElementTrait;

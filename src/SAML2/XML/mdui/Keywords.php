@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 use function array_key_first;
@@ -18,7 +19,7 @@ use function implode;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package simplesamlphp/saml2
  */
-final class Keywords extends AbstractMduiElement
+final class Keywords extends AbstractMduiElement implements ArrayizableElementInterface
 {
     /**
      * Initialize a Keywords.

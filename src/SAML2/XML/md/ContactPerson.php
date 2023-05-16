@@ -11,6 +11,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
+use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
@@ -28,7 +29,7 @@ use function var_export;
  *
  * @package simplesamlphp/saml2
  */
-final class ContactPerson extends AbstractMdElement
+final class ContactPerson extends AbstractMdElement implements ArrayizableElementInterface
 {
     use ExtendableElementTrait;
     use ExtendableAttributesTrait;

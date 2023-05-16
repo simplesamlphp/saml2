@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\StringElementTrait;
 
 /**
@@ -13,7 +14,7 @@ use SimpleSAML\XML\StringElementTrait;
  *
  * @package simplesamlphp/saml2
  */
-final class TelephoneNumber extends AbstractMdElement
+final class TelephoneNumber extends AbstractMdElement implements ArrayizableElementInterface
 {
     use StringElementTrait;
 
