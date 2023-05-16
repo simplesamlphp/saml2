@@ -8,6 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -23,7 +24,7 @@ use function array_unique;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package simplesamlphp/saml2
  */
-final class UIInfo extends AbstractMduiElement
+final class UIInfo extends AbstractMduiElement implements ArrayizableElementInterface
 {
     use ExtendableElementTrait;
 

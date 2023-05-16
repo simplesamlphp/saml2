@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\mdrpi;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -16,7 +17,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
  * @package simplesamlphp/saml2
  */
-final class RegistrationInfo extends AbstractMdrpiElement
+final class RegistrationInfo extends AbstractMdrpiElement implements ArrayizableElementInterface
 {
     /**
      * Create/parse a mdrpi:RegistrationInfo element.

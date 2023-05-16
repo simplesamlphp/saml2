@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\mdui;
 use DOMElement;
 use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\StringElementTrait;
@@ -22,7 +23,7 @@ use function trim;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package simplesamlphp/saml2
  */
-final class Logo extends AbstractMduiElement
+final class Logo extends AbstractMduiElement implements ArrayizableElementInterface
 {
     use StringElementTrait;
 
