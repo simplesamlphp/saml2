@@ -250,27 +250,15 @@ final class ContactPerson extends AbstractMdElement
             $TelephoneNumber[] = new TelephoneNumber($telephone);
         }
 
-        // Anything after this should be (namespaced) attributes
-        unset(
-            $data['ContactType'],
-            $data['Company'],
-            $data['GivenName'],
-            $data['SurName'],
-            $data['Extensions'],
-            $data['EmailAddress'],
-            $data['TelephoneNumber'],
-        );
-
         $attributes = [];
-        foreach ($data as $ns => $attribute) {
-            $name = array_key_first($attribute);
-            $value = $attribute[$name];
-
+        foreach ($data['attributes'] as $attrName => $attrValue) {
+//$attributes[] = new \DOMAttr($attrName, $attrValue);
             $doc = new DOMDocument('1.0', 'UTF-8');
             $elt = $doc->createElement("placeholder");
-            $elt->setAttributeNS($ns, $name, $value);
+            $elt->setAttribute($attrName, $attrValue);
+//            $elt->setAttributeNS($ns, $attrName, $attrValue);
 
-            $attributes[] = $elt->getAttributeNode($name);
+/            $attributes[] = $elt->getAttributeNode($attrName);
         }
 
         return new static(
@@ -301,6 +289,7 @@ final class ContactPerson extends AbstractMdElement
             'EmailAddress' => [],
             'TelephoneNumber' => [],
             'Extensions' => $this->Extensions,
+            'attributes' => [],
         ];
 
         foreach ($this->getEmailAddress() as $mail) {
@@ -313,7 +302,7 @@ final class ContactPerson extends AbstractMdElement
 
         /** @psalm-suppress PossiblyNullReference */
         foreach ($this->getAttributesNS() as $a) {
-            $data[$a['namespaceURI']] = [$a['qualifiedName'] => $a['value']];
+            $data['attributes'][$a['namespaceURI']] = [$a['qualifiedName'] => $a['value']];
         }
 
         return $data;

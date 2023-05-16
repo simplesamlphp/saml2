@@ -61,7 +61,10 @@ final class ContactPersonTest extends TestCase
             'Extensions' => null,
             'EmailAddress' => ['mailto:lead.developer@example.org'],
             'TelephoneNumber' => ['+1234567890'],
-            'urn:test:something' => ['test:attr' => 'value'],
+            'attributes' => [
+                'xmlns:test' => 'urn:test:something',
+                'test:attr' => 'value',
+            ],
         ];
     }
 
