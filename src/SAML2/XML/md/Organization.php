@@ -8,6 +8,7 @@ use DOMDocument;
 use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -48,6 +49,11 @@ final class Organization extends AbstractMdElement
         Assert::allIsInstanceOf($organizationName, OrganizationName::class);
         Assert::allIsInstanceOf($organizationDisplayName, OrganizationDisplayName::class);
         Assert::allIsInstanceOf($organizationURL, OrganizationURL::class);
+
+        // [One or More]
+        Assert::minCount($organizationName, 1, ProtocolViolationException::class);
+        Assert::minCount($organizationDisplayName, 1, ProtocolViolationException::class);
+        Assert::minCount($organizationURL, 1, ProtocolViolationException::class);
 
         $this->setExtensions($extensions);
         $this->setAttributesNS($namespacedAttributes);
