@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DOMDocument;
 use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
@@ -13,6 +14,9 @@ use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
+
+use function array_key_exists;
+use function array_merge;
 
 /**
  * Class representing SAML 2 Organization element.
@@ -160,5 +164,101 @@ final class Organization extends AbstractMdElement
         }
 
         return $e;
+    }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array $data
+     * @return static
+     */
+    public static function fromArray(array $data): static
+    {
+        $orgNames = [];
+        if (array_key_exists('OrganizationName', $data)) {
+            Assert::count($data['OrganizationName'], 1);
+            $orgNames[] = OrganizationName::fromArray($data['OrganizationName']);
+        }
+
+        $orgDisplayNames = [];
+        if (array_key_exists('OrganizationDisplayName', $data)) {
+            Assert::count($data['OrganizationDisplayName'], 1);
+            $orgDisplayNames[] = OrganizationDisplayName::fromArray($data['OrganizationDisplayName']);
+        }
+
+        $orgURLs = [];
+        if (array_key_exists('OrganizationURL', $data)) {
+            Assert::count($data['OrganizationURL'], 1);
+            $orgURLs[] = OrganizationURL::fromArray($data['OrganizationURL']);
+        }
+
+        $Extensions = $data['Extensions'] ?? null;
+
+        // Anything after this should be (namespaced) attributes
+        unset(
+            $data['OrganizationName'],
+            $data['OrganizationDisplayName'],
+            $data['OrganizationURL'],
+            $data['Extensions'],
+        );
+
+        $attributes = [];
+        foreach ($data as $ns => $attribute) {
+            $name = array_key_first($attribute);
+            $value = $attribute[$name];
+
+            $doc = new DOMDocument('1.0', 'UTF-8');
+            $elt = $doc->createElement("placeholder");
+            $elt->setAttributeNS($ns, $name, $value);
+
+            $attributes[] = $elt->getAttributeNode($name);
+        }
+
+        return new static(
+            $orgNames,
+            $orgDisplayNames,
+            $orgURLs,
+            $Extensions,
+            $attributes,
+        );
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $data = [
+            'OrganizationName' => [],
+            'OrganizationDisplayName' => [],
+            'OrganizationURL' => [],
+            'Extensions' => $this->getExtensions(),
+        ];
+
+        foreach ($this->getOrganizationName() as $orgName) {
+            $data['OrganizationName'] = array_merge($data['OrganizationName'], $orgName->toArray());
+        }
+
+        foreach ($this->getOrganizationDisplayName() as $orgDisplayName) {
+            $data['OrganizationDisplayName'] = array_merge(
+                $data['OrganizationDisplayName'],
+                $orgDisplayName->toArray(),
+            );
+        }
+
+        foreach ($this->getOrganizationURL() as $orgURL) {
+            $data['OrganizationURL'] = array_merge($data['OrganizationURL'], $orgURL->toArray());
+        }
+
+        /** @psalm-suppress PossiblyNullReference */
+        foreach ($this->getAttributesNS() as $a) {
+            $data[$a['namespaceURI']] = [$a['qualifiedName'] => $a['value']];
+        }
+
+        return $data;
     }
 }
