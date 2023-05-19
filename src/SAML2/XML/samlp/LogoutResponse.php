@@ -15,6 +15,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
+use function preg_replace;
 
 /**
  * Class for SAML 2 LogoutResponse messages.
@@ -114,9 +115,9 @@ final class LogoutResponse extends AbstractStatusResponse
             $id,
             $version,
             $issueInstant,
-            self::getAttribute($xml, 'InResponseTo', null),
-            self::getAttribute($xml, 'Destination', null),
-            self::getAttribute($xml, 'Consent', null),
+            self::getOptionalAttribute($xml, 'InResponseTo', null),
+            self::getOptionalAttribute($xml, 'Destination', null),
+            self::getOptionalAttribute($xml, 'Consent', null),
             empty($extensions) ? null : array_pop($extensions),
         );
 

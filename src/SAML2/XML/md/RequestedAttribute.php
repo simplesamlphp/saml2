@@ -62,7 +62,7 @@ final class RequestedAttribute extends Attribute
      * Convert XML into a RequestedAttribute
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -76,9 +76,9 @@ final class RequestedAttribute extends Attribute
 
         return new static(
             self::getAttribute($xml, 'Name'),
-            self::getBooleanAttribute($xml, 'isRequired', null),
-            self::getAttribute($xml, 'NameFormat', null),
-            self::getAttribute($xml, 'FriendlyName', null),
+            self::getOptionalBooleanAttribute($xml, 'isRequired', null),
+            self::getOptionalAttribute($xml, 'NameFormat', null),
+            self::getOptionalAttribute($xml, 'FriendlyName', null),
             AttributeValue::getChildrenOfClass($xml),
         );
     }

@@ -246,7 +246,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
 
     /**
-     * @return array|null
+     * @return string[]|null
      */
     public function getBlacklistedAlgorithms(): ?array
     {

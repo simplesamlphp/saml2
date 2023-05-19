@@ -102,9 +102,9 @@ class ArtifactResponse extends AbstractStatusResponse
         $id = self::getAttribute($xml, 'ID');
         Assert::validNCName($id); // Covers the empty string
 
-        $inResponseTo = self::getAttribute($xml, 'InResponseTo', null);
-        $destination = self::getAttribute($xml, 'Destination', null);
-        $consent = self::getAttribute($xml, 'Consent', null);
+        $inResponseTo = self::getOptionalAttribute($xml, 'InResponseTo', null);
+        $destination = self::getOptionalAttribute($xml, 'Destination', null);
+        $consent = self::getOptionalAttribute($xml, 'Consent', null);
 
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications

@@ -10,7 +10,9 @@ use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\ArrayizableElementInterface;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -30,6 +32,9 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
     use ExtendableAttributesTrait;
     use ExtendableElementTrait;
 
+    /** The namespace-attribute for the xs:anyAttribute element */
+    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
+
 
     /**
      * Organization constructor.
@@ -38,7 +43,7 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
      * @param \SimpleSAML\SAML2\XML\md\OrganizationDisplayName[] $organizationDisplayName
      * @param \SimpleSAML\SAML2\XML\md\OrganizationURL[] $organizationURL
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
-     * @param \DOMAttr[] $namespacedAttributes
+     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
         protected array $organizationName,
@@ -98,7 +103,7 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
      * Initialize an Organization element.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -153,7 +158,7 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
         $e = $this->instantiateParentElement($parent);
 
         foreach ($this->getAttributesNS() as $attr) {
-            $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
+            $attr->toXML($e);
         }
 
         $this->getExtensions()?->toXML($e);
@@ -202,24 +207,21 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
 
         $Extensions = $data['Extensions'] ?? null;
 
-        // Anything after this should be (namespaced) attributes
-        unset(
-            $data['OrganizationName'],
-            $data['OrganizationDisplayName'],
-            $data['OrganizationURL'],
-            $data['Extensions'],
-        );
-
         $attributes = [];
-        foreach ($data as $ns => $attribute) {
-            $name = array_key_first($attribute);
-            $value = $attribute[$name];
+        if (array_key_exists('attributes', $data)) {
+            foreach ($data['attributes'] as $attr) {
+                Assert::keyExists($attr, 'namespaceURI');
+                Assert::keyExists($attr, 'namespacePrefix');
+                Assert::keyExists($attr, 'attrName');
+                Assert::keyExists($attr, 'attrValue');
 
-            $doc = new DOMDocument('1.0', 'UTF-8');
-            $elt = $doc->createElement("placeholder");
-            $elt->setAttributeNS($ns, $name, $value);
-
-            $attributes[] = $elt->getAttributeNode($name);
+                $attributes[] = new XMLAttribute(
+                    $attr['namespaceURI'],
+                    $attr['namespacePrefix'],
+                    $attr['attrName'],
+                    $attr['attrValue'],
+                );
+            }
         }
 
         return new static(
@@ -244,6 +246,7 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
             'OrganizationDisplayName' => [],
             'OrganizationURL' => [],
             'Extensions' => $this->getExtensions(),
+            'attributes' => [],
         ];
 
         foreach ($this->getOrganizationName() as $orgName) {
@@ -261,9 +264,8 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
             $data['OrganizationURL'] = array_merge($data['OrganizationURL'], $orgURL->toArray());
         }
 
-        /** @psalm-suppress PossiblyNullReference */
-        foreach ($this->getAttributesNS() as $a) {
-            $data[$a['namespaceURI']] = [$a['qualifiedName'] => $a['value']];
+        foreach ($this->getAttributesNS() as $attr) {
+            $data['attributes'][] = $attr->toArray();
         }
 
         return $data;

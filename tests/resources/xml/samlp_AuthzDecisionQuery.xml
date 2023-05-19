@@ -5,7 +5,7 @@
   </saml:Subject>
   <saml:Action Namespace="urn:x-simplesamlphp:namespace">SomeAction</saml:Action>
   <saml:Action Namespace="urn:x-simplesamlphp:alt-namespace">SomeOtherAction</saml:Action>
-  <saml:Evidence xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+  <saml:Evidence>
     <saml:Assertion Version="2.0" ID="_93af655219464fb403b34436cfb0c5cb1d9a5502" IssueInstant="1970-01-01T01:33:31Z">
       <saml:Issuer>Provider</saml:Issuer>
       <saml:Subject>

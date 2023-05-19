@@ -146,7 +146,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
      * Initialize an IDPSSODescriptor.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -163,7 +163,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
         Assert::same($xml->namespaceURI, AttributeAuthorityDescriptor::NS, InvalidDOMElementException::class);
 
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
+        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
 
         $attrServices = AttributeService::getChildrenOfClass($xml);
         Assert::notEmpty(
@@ -208,11 +208,11 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
             $nameIDFormats,
             $attrProfiles,
             $attributes,
-            self::getAttribute($xml, 'ID', null),
+            self::getOptionalAttribute($xml, 'ID', null),
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
-            self::getAttribute($xml, 'cacheDuration', null),
+            self::getOptionalAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
-            self::getAttribute($xml, 'errorURL', null),
+            self::getOptionalAttribute($xml, 'errorURL', null),
             !empty($orgs) ? $orgs[0] : null,
             KeyDescriptor::getChildrenOfClass($xml),
             ContactPerson::getChildrenOfClass($xml),

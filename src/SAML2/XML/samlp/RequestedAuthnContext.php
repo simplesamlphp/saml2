@@ -94,7 +94,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
                 AuthnContextClassRef::getChildrenOfClass($xml),
                 AuthnContextDeclRef::getChildrenOfClass($xml),
             ),
-            self::getAttribute($xml, 'Comparison', null),
+            self::getOptionalAttribute($xml, 'Comparison', null),
         );
     }
 

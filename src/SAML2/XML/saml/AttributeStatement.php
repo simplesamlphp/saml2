@@ -51,22 +51,6 @@ class AttributeStatement extends AbstractStatementType
 
 
     /**
-     * @param \SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface
-     * @param array $blacklist
-     *
-     * @throws \Exception
-     */
-    public function decryptAttributes(EncryptionAlgorithmInterface $decryptor, array $blacklist = []): void
-    {
-        Assert::allStringNotEmpty($blacklist);
-
-        foreach ($this->encryptedAttributes as $encryptedAttribute) {
-            $this->attributes[] = $encryptedAttribute->decrypt($key, $blacklist);
-        }
-    }
-
-
-    /**
      * @return bool
      */
     public function hasEncryptedAttributes(): bool
@@ -77,7 +61,7 @@ class AttributeStatement extends AbstractStatementType
 
     /**
      * @param \DOMElement $xml
-     * @return \SimpleSAML\SAML2\XML\saml\AttributeStatement
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong

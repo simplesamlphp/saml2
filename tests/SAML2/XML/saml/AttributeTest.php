@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\EncryptedAttribute;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -62,10 +63,8 @@ final class AttributeTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
-        $attr1->value = 'testval1';
-        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr2');
-        $attr2->value = 'testval2';
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
 
         $attribute = new Attribute(
             'TheName',

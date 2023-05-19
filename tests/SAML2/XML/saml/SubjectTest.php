@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\CustomBaseID;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -42,6 +43,9 @@ final class SubjectTest extends TestCase
     private DOMDocument $subject;
 
     /** @var \DOMDocument */
+    private DOMDocument $subjectWithBaseID;
+
+    /** @var \DOMDocument */
     private DOMDocument $baseId;
 
     /** @var \DOMDocument */
@@ -65,6 +69,9 @@ final class SubjectTest extends TestCase
 <saml:Subject xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"></saml:Subject>
 XML
         );
+        $this->subjectWithBaseID = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/saml_Subject_with_BaseID.xml',
+        );
         $this->baseId = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_BaseID.xml',
         );
@@ -86,11 +93,8 @@ XML
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 
-        $doc = DOMDocumentFactory::fromString('<root/>');
-        $attr1 = $doc->createAttributeNS('urn:test:something', 'test:attr1');
-        $attr1->value = 'testval1';
-        $attr2 = $doc->createAttributeNS('urn:test:something', 'test:attr2');
-        $attr2->value = 'testval2';
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
 
         $subjectConfirmationData = new SubjectConfirmationData(
             987654321,
@@ -137,11 +141,8 @@ XML
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 
-        $doc = DOMDocumentFactory::fromString('<root/>');
-        $attr1 = $doc->createAttributeNS('urn:test:something', 'test:attr1');
-        $attr1->value = 'testval1';
-        $attr2 = $doc->createAttributeNS('urn:test:something', 'test:attr2');
-        $attr2->value = 'testval2';
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
 
         $subjectConfirmationData = new SubjectConfirmationData(
             987654321,
@@ -197,11 +198,8 @@ XML
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 
-        $doc = DOMDocumentFactory::fromString('<root/>');
-        $attr1 = $doc->createAttributeNS('urn:test:something', 'test:attr1');
-        $attr1->value = 'testval1';
-        $attr2 = $doc->createAttributeNS('urn:test:something', 'test:attr2');
-        $attr2->value = 'testval2';
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
 
         $subjectConfirmationData = new SubjectConfirmationData(
             987654321,
@@ -219,7 +217,8 @@ XML
         $subject = new Subject(
             new CustomBaseID(
                 [new Audience('urn:some:audience')],
-                'https://sp.example.org/authentication/sp/metadata',
+                'TheNameQualifier',
+                'TheSPNameQualifier',
             ),
             [
                 new SubjectConfirmation(
@@ -240,14 +239,9 @@ XML
         $subjectConfirmation = $subject->getSubjectConfirmation();
         $this->assertNotEmpty($subjectConfirmation);
 
-        $document = $this->subject;
-        $document->documentElement->appendChild($document->importNode($this->baseId->documentElement, true));
-        $document->documentElement->appendChild(
-            $document->importNode($this->subjectConfirmation->documentElement, true),
-        );
+        $document = $this->subjectWithBaseID;
 
         $this->assertXmlStringEqualsXmlString($document->saveXML(), strval($subject));
-//        $this->assertEqualXMLStructure($document->documentElement, $subject->toXML());
     }
 
 

@@ -259,8 +259,8 @@ class AuthnRequest extends AbstractRequest
         Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
         $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
 
-        $attributeConsumingServiceIndex = self::getIntegerAttribute($xml, 'AttributeConsumingServiceIndex', null);
-        $assertionConsumerServiceIndex = self::getIntegerAttribute($xml, 'AssertionConsumerServiceIndex', null);
+        $attributeConsumingServiceIndex = self::getOptionalIntegerAttribute($xml, 'AttributeConsumingServiceIndex', null);
+        $assertionConsumerServiceIndex = self::getOptionalIntegerAttribute($xml, 'AssertionConsumerServiceIndex', null);
 
         $conditions = Conditions::getChildrenOfClass($xml);
         Assert::maxCount(
@@ -316,19 +316,19 @@ class AuthnRequest extends AbstractRequest
             array_pop($subject),
             array_pop($nameIdPolicy),
             array_pop($conditions),
-            self::getBooleanAttribute($xml, 'ForceAuthn', null),
-            self::getBooleanAttribute($xml, 'IsPassive', null),
-            self::getAttribute($xml, 'AssertionConsumerServiceURL', null),
+            self::getOptionalBooleanAttribute($xml, 'ForceAuthn', null),
+            self::getOptionalBooleanAttribute($xml, 'IsPassive', null),
+            self::getOptionalAttribute($xml, 'AssertionConsumerServiceURL', null),
             $assertionConsumerServiceIndex,
-            self::getAttribute($xml, 'ProtocolBinding', null),
+            self::getOptionalAttribute($xml, 'ProtocolBinding', null),
             $attributeConsumingServiceIndex,
-            self::getAttribute($xml, 'ProviderName', null),
+            self::getOptionalAttribute($xml, 'ProviderName', null),
             array_pop($issuer),
             $id,
             $version,
             $issueInstant,
-            self::getAttribute($xml, 'Destination', null),
-            self::getAttribute($xml, 'Consent', null),
+            self::getOptionalAttribute($xml, 'Destination', null),
+            self::getOptionalAttribute($xml, 'Consent', null),
             array_pop($extensions),
             array_pop($scoping),
         );
@@ -357,7 +357,7 @@ class AuthnRequest extends AbstractRequest
             $e->setAttribute('ForceAuthn', 'true');
         }
 
-        if (!empty($this->getProviderName())) {
+        if ($this->getProviderName() !== null) {
             $e->setAttribute('ProviderName', $this->getProviderName());
         }
 

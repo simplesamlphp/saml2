@@ -104,7 +104,7 @@ final class AuthnContext extends AbstractSamlElement
      * Convert XML into a AuthnContext
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\saml\AuthnContext
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong

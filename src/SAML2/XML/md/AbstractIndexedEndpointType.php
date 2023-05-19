@@ -71,21 +71,16 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
             InvalidDOMElementException::class,
         );
 
-        /** @var int $index */
         $index = self::getIntegerAttribute($xml, 'index');
-
-        /** @var string $binding */
         $binding = self::getAttribute($xml, 'Binding');
-
-        /** @var string $location */
         $location = self::getAttribute($xml, 'Location');
 
         return new static(
             $index,
             $binding,
             $location,
-            self::getBooleanAttribute($xml, 'isDefault', null),
-            self::getAttribute($xml, 'ResponseLocation', null),
+            self::getOptionalBooleanAttribute($xml, 'isDefault', null),
+            self::getOptionalAttribute($xml, 'ResponseLocation', null),
             self::getAttributesNSFromXML($xml),
         );
     }

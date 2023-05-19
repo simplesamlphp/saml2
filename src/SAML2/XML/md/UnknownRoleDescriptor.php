@@ -28,7 +28,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
      * Initialize an unknown RoleDescriptor.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return \SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -41,7 +41,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
     {
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
 
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
+        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
             $orgs,
@@ -63,11 +63,11 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
 
         $descriptor = new static(
             preg_split('/[\s]+/', trim($protocols)),
-            self::getAttribute($xml, 'ID', null),
+            self::getOptionalAttribute($xml, 'ID', null),
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
-            self::getAttribute($xml, 'cacheDuration', null),
+            self::getOptionalAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
-            self::getAttribute($xml, 'errorURL', null),
+            self::getOptionalAttribute($xml, 'errorURL', null),
             KeyDescriptor::getChildrenOfClass($xml),
             !empty($orgs) ? $orgs[0] : null,
             ContactPerson::getChildrenOfClass($xml),
@@ -93,7 +93,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
         if ($this->isSigned() === true && $this->signer === null) {
             // We already have a signed document and no signer was set to re-sign it
             if ($parent === null) {
-                return $this->xml;
+                return $this->getXML();
             }
 
             $node = $parent->ownerDocument?->importNode($this->getXML(), true);

@@ -123,8 +123,8 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery
         $id = self::getAttribute($xml, 'ID');
         Assert::validNCName($id); // Covers the empty string
 
-        $destination = self::getAttribute($xml, 'Destination', null);
-        $consent = self::getAttribute($xml, 'Consent', null);
+        $destination = self::getOptionalAttribute($xml, 'Destination', null);
+        $consent = self::getOptionalAttribute($xml, 'Consent', null);
 
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications

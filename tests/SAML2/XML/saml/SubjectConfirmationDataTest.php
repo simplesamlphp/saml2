@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -53,10 +54,8 @@ final class SubjectConfirmationDataTest extends TestCase
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 
-        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
-        $attr1->value = 'testval1';
-        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr2');
-        $attr2->value = 'testval2';
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
 
         $subjectConfirmationData = new SubjectConfirmationData(
             987654321,
@@ -84,10 +83,8 @@ final class SubjectConfirmationDataTest extends TestCase
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 
-        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
-        $attr1->value = 'testval1';
-        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr2');
-        $attr2->value = 'testval2';
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
 
         $subjectConfirmationData = new SubjectConfirmationData(
             987654321,
@@ -108,8 +105,10 @@ final class SubjectConfirmationDataTest extends TestCase
         $this->assertEquals('SomeRequestID', $subjectConfirmationData->getInResponseTo());
         $this->assertEquals('non-IP', $subjectConfirmationData->getAddress());
 
-        $this->assertEquals('testval1', $subjectConfirmationData->getAttributeNS('urn:test:something', 'attr1'));
-        $this->assertEquals('testval2', $subjectConfirmationData->getAttributeNS('urn:test:something', 'attr2'));
+        $attributes = $subjectConfirmationData->getAttributesNS();
+        $this->assertCount(2, $attributes);
+        $this->assertEquals('testval1', $attributes[0]->getAttrValue());
+        $this->assertEquals('testval2', $attributes[1]->getAttrValue());
 
         $document = $this->xmlRepresentation->documentElement;
         $document->setAttribute('Address', 'non-IP');

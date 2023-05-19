@@ -24,7 +24,7 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
     use ExtendableElementTrait;
 
     /** The namespace-attribute for the xs:any element */
-    public const NAMESPACE = C::XS_ANY_NS_OTHER;
+    public const XS_ANY_ELT_NAMESPACE = C::XS_ANY_NS_OTHER;
 
 
     /**
@@ -146,10 +146,6 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        foreach ($this->getElements() as $child) {
-            $child->toXML($e);
-        }
-
         foreach ($this->getIPHint() as $hint) {
             $hint->toXML($e);
         }
@@ -160,6 +156,11 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
 
         foreach ($this->getGeolocationHint() as $hint) {
             $hint->toXML($e);
+        }
+
+        /** @var \SimpleSAML\XML\SerializableElementInterface $child */
+        foreach ($this->getElements() as $child) {
+            $child->toXML($e);
         }
 
         return $e;

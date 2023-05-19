@@ -69,7 +69,7 @@ final class SubjectLocality extends AbstractSamlElement
      * Convert XML into a SubjectLocality
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\saml\SubjectLocality
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -80,8 +80,8 @@ final class SubjectLocality extends AbstractSamlElement
         Assert::same($xml->namespaceURI, SubjectLocality::NS, InvalidDOMElementException::class);
 
         return new static(
-            self::getAttribute($xml, 'Address', null),
-            self::getAttribute($xml, 'DNSName', null),
+            self::getOptionalAttribute($xml, 'Address', null),
+            self::getOptionalAttribute($xml, 'DNSName', null),
         );
     }
 

@@ -48,7 +48,7 @@ final class NameID extends NameIDType implements EncryptableElementInterface
      * Convert XML into an NameID
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -58,10 +58,10 @@ final class NameID extends NameIDType implements EncryptableElementInterface
         Assert::same($xml->localName, 'NameID', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, NameID::NS, InvalidDOMElementException::class);
 
-        $NameQualifier = self::getAttribute($xml, 'NameQualifier', null);
-        $SPNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);
-        $Format = self::getAttribute($xml, 'Format', null);
-        $SPProvidedID = self::getAttribute($xml, 'SPProvidedID', null);
+        $NameQualifier = self::getOptionalAttribute($xml, 'NameQualifier', null);
+        $SPNameQualifier = self::getOptionalAttribute($xml, 'SPNameQualifier', null);
+        $Format = self::getOptionalAttribute($xml, 'Format', null);
+        $SPProvidedID = self::getOptionalAttribute($xml, 'SPProvidedID', null);
 
         return new static($xml->textContent, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
     }

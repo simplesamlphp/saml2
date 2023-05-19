@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\shibmd;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\shibmd\KeyAuthority;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -72,8 +73,7 @@ final class KeyAuthorityTest extends TestCase
                 'def456',
             ),
         ];
-        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
-        $attr1->value = 'testval1';
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
         $keyAuthority = new KeyAuthority($keys, 2, [$attr1]);
 
         $this->assertEquals(
@@ -97,15 +97,18 @@ final class KeyAuthorityTest extends TestCase
         $this->assertEquals('abc123', $keys[0]->getId());
         $this->assertEquals('def456', $keys[1]->getId());
 
+        $attributes = $keyAuthority->getAttributesNS();
+        $this->assertCount(1, $attributes);
+
+        $attribute = array_pop($attributes);
         $this->assertEquals(
             [
-                '{urn:test:something}attr1' => [
-                    'qualifiedName' => 'test:attr1',
-                    'namespaceURI' => 'urn:test:something',
-                    'value' => 'testval1',
-                ],
+                'namespaceURI' => 'urn:test:something',
+                'namespacePrefix' => 'test',
+                'attrName' => 'attr1',
+                'attrValue' => 'testval1',
             ],
-            $keyAuthority->getAttributesNS(),
+            $attribute->toArray(),
         );
     }
 }

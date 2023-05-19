@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
@@ -22,6 +23,12 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
  */
 final class AffiliationDescriptor extends AbstractMetadataDocument
 {
+    use ExtendableAttributesTrait;
+
+    /** The namespace-attribute for the xs:anyAttribute element */
+    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
+
+
     /**
      * Generic constructor for SAML metadata documents.
      *
@@ -34,7 +41,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to an empty array.
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $KeyDescriptor
      *   An optional array of KeyDescriptors. Defaults to an empty array.
-     * @param \DOMAttr[] $namespacedAttribute
+     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttribute
      */
     public function __construct(
         protected string $affiliationOwnerId,
@@ -57,7 +64,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         Assert::allIsInstanceOf($affiliateMember, AffiliateMember::class);
         Assert::allIsInstanceOf($keyDescriptor, KeyDescriptor::class);
 
-        parent::__construct($ID, $validUntil, $cacheDuration, $extensions, $namespacedAttribute);
+        parent::__construct($ID, $validUntil, $cacheDuration, $extensions);
+
+        $this->setAttributesNS($namespacedAttribute);
     }
 
 
@@ -98,7 +107,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      * Initialize a AffiliationDescriptor.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return \SimpleSAML\SAML2\XML\md\AffiliationDescriptor
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -116,7 +125,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         $members = AffiliateMember::getChildrenOfClass($xml);
         $keyDescriptors = KeyDescriptor::getChildrenOfClass($xml);
 
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
+        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
             $orgs,
@@ -144,9 +153,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         $afd = new static(
             $owner,
             $members,
-            self::getAttribute($xml, 'ID', null),
+            self::getOptionalAttribute($xml, 'ID', null),
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
-            self::getAttribute($xml, 'cacheDuration', null),
+            self::getOptionalAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             $keyDescriptors,
             self::getAttributesNSFromXML($xml),
@@ -171,6 +180,10 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
     {
         $e = parent::toUnsignedXML($parent);
         $e->setAttribute('affiliationOwnerID', $this->getAffiliationOwnerId());
+
+        foreach ($this->getAttributesNS() as $attr) {
+            $attr->toXML($e);
+        }
 
         foreach ($this->getAffiliateMember() as $am) {
             $am->toXML($e);

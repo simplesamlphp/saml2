@@ -35,7 +35,10 @@ abstract class AbstractEndpointType extends AbstractMdElement
     use ExtendableElementTrait;
 
     /** The namespace-attribute for the xs:any element */
-    public const NAMESPACE = C::XS_ANY_NS_OTHER;
+    public const XS_ANY_ELT_NAMESPACE = C::XS_ANY_NS_OTHER;
+
+    /** The namespace-attribute for the xs:anyAttribute element */
+    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
 
 
     /**
@@ -44,8 +47,8 @@ abstract class AbstractEndpointType extends AbstractMdElement
      * @param string $binding
      * @param string $location
      * @param string|null $responseLocation
-     * @param array $attributes
-     * @param array $children
+     * @param list<\SimpleSAML\XML\Attribute> $attributes
+     * @param \SimpleSAML\XML\ElementInterface[] $children
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
@@ -121,10 +124,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
             InvalidDOMElementException::class,
         );
 
-        /** @var string $binding */
         $binding = self::getAttribute($xml, 'Binding');
-
-        /** @var string $location */
         $location = self::getAttribute($xml, 'Location');
 
         $children = [];
@@ -141,7 +141,7 @@ abstract class AbstractEndpointType extends AbstractMdElement
         return new static(
             $binding,
             $location,
-            self::getAttribute($xml, 'ResponseLocation', null),
+            self::getOptionalAttribute($xml, 'ResponseLocation', null),
             self::getAttributesNSFromXML($xml),
             $children,
         );
@@ -165,10 +165,11 @@ abstract class AbstractEndpointType extends AbstractMdElement
             $e->setAttribute('ResponseLocation', $this->getResponseLocation());
         }
 
-        foreach ($this->getAttributesNS() as $a) {
-            $e->setAttributeNS($a['namespaceURI'], $a['qualifiedName'], $a['value']);
+        foreach ($this->getAttributesNS() as $attr) {
+            $attr->toXML($e);
         }
 
+        /** @var \SimpleSAML\XML\SerializableElementInterface $child */
         foreach ($this->getElements() as $child) {
             if (!$child->isEmptyElement()) {
                 $child->toXML($e);

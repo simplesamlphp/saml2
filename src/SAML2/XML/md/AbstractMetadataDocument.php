@@ -19,16 +19,7 @@ use function gmdate;
  */
 abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 {
-    use ExtendableAttributesTrait;
     use ExtendableElementTrait;
-
-
-    /**
-     * The original signed XML
-     *
-     * @var \DOMElement
-     */
-    protected DOMElement $xml;
 
 
     /**
@@ -38,20 +29,17 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      * @param int|null    $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to null.
-     * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
         protected ?string $id = null,
         protected ?int $validUntil = null,
         protected ?string $cacheDuration = null,
         ?Extensions $extensions = null,
-        $namespacedAttributes = []
     ) {
         Assert::nullOrValidNCName($id, SchemaViolationException::class);
         Assert::nullOrValidDuration($cacheDuration, SchemaViolationException::class);
 
         $this->setExtensions($extensions);
-        $this->setAttributesNS($namespacedAttributes);
     }
 
 
@@ -89,28 +77,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 
 
     /**
-     * Get the XML element.
-     *
-     * @return \DOMElement
-     */
-    public function getXML(): DOMElement
-    {
-        return $this->xml;
-    }
-
-
-    /**
-     * Set the XML element.
-     *
-     * @param \DOMElement $xml
-     */
-    protected function setXML(DOMElement $xml): void
-    {
-        $this->xml = $xml;
-    }
-
-
-    /**
      * @return \DOMElement
      */
     protected function getOriginalXML(): DOMElement
@@ -127,10 +93,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     public function toUnsignedXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-
-        foreach ($this->getAttributesNS() as $attr) {
-            $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
-        }
 
         if ($this->getId() !== null) {
             $e->setAttribute('ID', $this->getId());

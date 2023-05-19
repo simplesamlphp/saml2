@@ -78,8 +78,8 @@ final class IDPEntry extends AbstractSamlpElement
         Assert::same($xml->namespaceURI, IDPEntry::NS, InvalidDOMElementException::class);
 
         $providerId = self::getAttribute($xml, 'ProviderID');
-        $name = self::getAttribute($xml, 'Name', null);
-        $loc = self::getAttribute($xml, 'Loc', null);
+        $name = self::getOptionalAttribute($xml, 'Name', null);
+        $loc = self::getOptionalAttribute($xml, 'Loc', null);
 
         return new static($providerId, $name, $loc);
     }

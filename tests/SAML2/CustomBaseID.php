@@ -74,8 +74,8 @@ final class CustomBaseID extends AbstractBaseID
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');
         Assert::same($type, self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME);
 
-        $nameQualifier = self::getAttribute($xml, 'NameQualifier', null);
-        $spNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);
+        $nameQualifier = self::getOptionalAttribute($xml, 'NameQualifier', null);
+        $spNameQualifier = self::getOptionalAttribute($xml, 'SPNameQualifier', null);
 
         return new static(Audience::getChildrenOfClass($xml), $nameQualifier, $spNameQualifier);
     }

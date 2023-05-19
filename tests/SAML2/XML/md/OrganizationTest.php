@@ -48,7 +48,14 @@ final class OrganizationTest extends TestCase
             'OrganizationDisplayName' => ['en' => 'SimpleSAMLphp'],
             'OrganizationURL' => ['en' => 'https://simplesamlphp.org'],
             'Extensions' => null,
-            'urn:test:something' => ['test:attr' => 'value'],
+            'attributes' => [
+                [
+                    'namespaceURI' => 'urn:test:something',
+                    'namespacePrefix' => 'test',
+                    'attrName' => 'attr',
+                    'attrValue' => 'value',
+                ],
+            ],
         ];
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(

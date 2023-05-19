@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 use SimpleSAML\SAML2\XML\ExtensionPointTrait;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -54,7 +55,7 @@ abstract class AbstractCondition extends AbstractConditionType implements Extens
      * Convert an XML element into a Condition.
      *
      * @param \DOMElement $xml The root XML element
-     * @return \SimpleSAML\SAML2\XML\saml\AbstractCondition The condition
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -108,9 +109,12 @@ abstract class AbstractCondition extends AbstractConditionType implements Extens
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
+        $e->setAttributeNS(
+            'http://www.w3.org/2000/xmlns/','xmlns:' . static::getXsiTypePrefix(), static::getXsiTypeNamespaceURI()
+        );
 
-        $e->setAttribute('xmlns:' . static::getXsiTypePrefix(), static::getXsiTypeNamespaceURI());
-        $e->setAttributeNS(C::NS_XSI, 'xsi:type', $this->getXsiType());
+        $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', $this->getXsiType());
+        $type->toXML($e);
 
         return $e;
     }

@@ -114,7 +114,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
      * Initialize an IDPSSODescriptor from a given XML document.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return \SimpleSAML\SAML2\XML\md\PDPDescriptor
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -129,7 +129,7 @@ final class PDPDescriptor extends AbstractRoleDescriptor
         Assert::same($xml->namespaceURI, PDPDescriptor::NS, InvalidDOMElementException::class);
 
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
+        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
             $orgs,
@@ -154,11 +154,11 @@ final class PDPDescriptor extends AbstractRoleDescriptor
             preg_split('/[\s]+/', trim($protocols)),
             AssertionIDRequestService::getChildrenOfClass($xml),
             NameIDFormat::getChildrenOfClass($xml),
-            self::getAttribute($xml, 'ID', null),
+            self::getOptionalAttribute($xml, 'ID', null),
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
-            self::getAttribute($xml, 'cacheDuration', null),
+            self::getOptionalAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
-            self::getAttribute($xml, 'errorURL', null),
+            self::getOptionalAttribute($xml, 'errorURL', null),
             !empty($orgs) ? $orgs[0] : null,
             KeyDescriptor::getChildrenOfClass($xml),
             ContactPerson::getChildrenOfClass($xml),

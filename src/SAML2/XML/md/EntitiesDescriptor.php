@@ -29,7 +29,6 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
      * @param int|null $validUntil
      * @param string|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
-     * @param \DOMAttr[] $namespacedAttributes
      */
     public function __construct(
         protected array $entityDescriptors = [],
@@ -39,7 +38,6 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         ?int $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
-        array $namespacedAttributes = [],
     ) {
         Assert::true(
             !empty($entitiesDescriptors) || !empty($entityDescriptors),
@@ -49,7 +47,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         Assert::allIsInstanceOf($entitiesDescriptors, EntitiesDescriptor::class);
         Assert::allIsInstanceOf($entityDescriptors, EntityDescriptor::class);
 
-        parent::__construct($ID, $validUntil, $cacheDuration, $extensions, $namespacedAttributes);
+        parent::__construct($ID, $validUntil, $cacheDuration, $extensions);
     }
 
 
@@ -90,7 +88,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
      * Initialize an EntitiesDescriptor from an existing XML document.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return \SimpleSAML\SAML2\XML\md\EntitiesDescriptor
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -102,7 +100,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         Assert::same($xml->localName, 'EntitiesDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, EntitiesDescriptor::NS, InvalidDOMElementException::class);
 
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
+        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
             $orgs,
@@ -130,12 +128,11 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         $entities = new static(
             EntityDescriptor::getChildrenOfClass($xml),
             EntitiesDescriptor::getChildrenOfClass($xml),
-            self::getAttribute($xml, 'Name', null),
-            self::getAttribute($xml, 'ID', null),
+            self::getOptionalAttribute($xml, 'Name', null),
+            self::getOptionalAttribute($xml, 'ID', null),
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
-            self::getAttribute($xml, 'cacheDuration', null),
+            self::getOptionalAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
-            self::getAttributesNSFromXML($xml),
         );
 
         if (!empty($signature)) {
@@ -156,10 +153,6 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toUnsignedXML($parent);
-
-        foreach ($this->getAttributesNS() as $attr) {
-            $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
-        }
 
         if ($this->Name !== null) {
             $e->setAttribute('Name', $this->Name);

@@ -176,7 +176,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
      * Initialize an IDPSSODescriptor.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return \SimpleSAML\SAML2\XML\md\IDPSSODescriptor
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -191,7 +191,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
         Assert::same($xml->namespaceURI, IDPSSODescriptor::NS, InvalidDOMElementException::class);
 
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
+        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
             $orgs,
@@ -219,16 +219,16 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
         $idpssod = new static(
             SingleSignOnService::getChildrenOfClass($xml),
             preg_split('/[\s]+/', trim($protocols)),
-            self::getBooleanAttribute($xml, 'WantAuthnRequestsSigned', null),
+            self::getOptionalBooleanAttribute($xml, 'WantAuthnRequestsSigned', null),
             NameIDMappingService::getChildrenOfClass($xml),
             AssertionIDRequestService::getChildrenOfClass($xml),
             AttributeProfile::getChildrenOfClass($xml),
             Attribute::getChildrenOfClass($xml),
-            self::getAttribute($xml, 'ID', null),
+            self::getOptionalAttribute($xml, 'ID', null),
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
-            self::getAttribute($xml, 'cacheDuration', null),
+            self::getOptionalAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
-            self::getAttribute($xml, 'errorURL', null),
+            self::getOptionalAttribute($xml, 'errorURL', null),
             KeyDescriptor::getChildrenOfClass($xml),
             !empty($orgs) ? $orgs[0] : null,
             ContactPerson::getChildrenOfClass($xml),

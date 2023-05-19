@@ -130,7 +130,7 @@ final class Conditions extends AbstractSamlElement
      * Convert XML into a Conditions object
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -140,7 +140,7 @@ final class Conditions extends AbstractSamlElement
         Assert::same($xml->localName, 'Conditions', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Conditions::NS, InvalidDOMElementException::class);
 
-        $notBefore = self::getAttribute($xml, 'NotBefore', null);
+        $notBefore = self::getOptionalAttribute($xml, 'NotBefore', null);
         if ($notBefore !== null) {
             // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
             $notBefore = preg_replace('/([.][0-9]+Z)$/', 'Z', $notBefore, 1);
@@ -148,7 +148,7 @@ final class Conditions extends AbstractSamlElement
             Assert::validDateTimeZulu($notBefore, ProtocolViolationException::class);
         }
 
-        $notOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
+        $notOnOrAfter = self::getOptionalAttribute($xml, 'NotOnOrAfter', null);
         if ($notOnOrAfter !== null) {
             // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
             $notOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $notOnOrAfter, 1);

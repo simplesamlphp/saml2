@@ -91,12 +91,12 @@ final class Scoping extends AbstractSamlpElement
         Assert::same($xml->localName, 'Scoping', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Scoping::NS, InvalidDOMElementException::class);
 
-        $proxyCount = self::getAttribute($xml, 'ProxyCount', null);
+        $proxyCount = self::getOptionalIntegerAttribute($xml, 'ProxyCount', null);
         $idpList = IDPList::getChildrenOfClass($xml);
         $requesterId = RequesterID::getChildrenOfClass($xml);
 
         return new static(
-            is_null($proxyCount) ? null : intval($proxyCount),
+            is_null($proxyCount) ? null : $proxyCount,
             array_pop($idpList),
             $requesterId,
         );

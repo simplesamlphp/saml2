@@ -96,7 +96,7 @@ class AttributeValue extends AbstractSamlElement
      * Convert XML into a AttributeValue
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\saml\AttributeValue
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong

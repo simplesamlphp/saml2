@@ -31,6 +31,7 @@ use SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -84,8 +85,7 @@ final class EntityDescriptorTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
-        $attr1->value = 'testval1';
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
 
         $entityid = C::ENTITY_IDP;
         $id = "_5A3CHB081";
@@ -366,15 +366,18 @@ XML
         $pdpd->parentNode->insertBefore($newline, $customd);
         $entityDescriptor = EntityDescriptor::fromXML($this->xmlRepresentation->documentElement);
 
+        $attributes = $entityDescriptor->getAttributesNS();
+        $this->assertCount(1, $attributes);
+
+        $attribute = array_pop($attributes);
         $this->assertEquals(
             [
-                '{urn:test:something}attr1' => [
-                    'qualifiedName' => 'test:attr1',
-                    'namespaceURI' => 'urn:test:something',
-                    'value' => 'testval1',
-                ],
+                'namespaceURI' => 'urn:test:something',
+                'namespacePrefix' => 'test',
+                'attrName' => 'attr1',
+                'attrValue' => 'testval1',
             ],
-            $entityDescriptor->getAttributesNS(),
+            $attribute->toArray(),
         );
         $this->assertEquals(C::ENTITY_IDP, $entityDescriptor->getEntityID());
         $this->assertEquals('_5A3CHB081', $entityDescriptor->getID());

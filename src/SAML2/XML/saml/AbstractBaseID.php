@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 use SimpleSAML\SAML2\XML\ExtensionPointTrait;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -68,7 +69,7 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
      * Convert XML into an BaseID
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\saml\BaseIdentifierInterface
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -104,8 +105,8 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
             return new UnknownID(
                 new Chunk($xml),
                 $type,
-                self::getAttribute($xml, 'NameQualifier', null),
-                self::getAttribute($xml, 'SPNameQualifier', null),
+                self::getOptionalAttribute($xml, 'NameQualifier', null),
+                self::getOptionalAttribute($xml, 'SPNameQualifier', null),
             );
         }
 
@@ -127,13 +128,12 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
+        $e->setAttributeNS(
+            'http://www.w3.org/2000/xmlns/','xmlns:' . static::getXsiTypePrefix(), static::getXsiTypeNamespaceURI()
+        );
 
-        /** @psalm-var \DOMDocument $e->ownerDocument */
-        $xsiType = $e->ownerDocument->createAttributeNS(C::NS_XSI, 'xsi:type');
-        $xsiType->value = $this->getXsiType();
-        $e->setAttributeNodeNS($xsiType);
-
-        $e->setAttribute('xmlns:' . static::getXsiTypePrefix(), static::getXsiTypeNamespaceURI());
+        $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', $this->getXsiType());
+        $type->toXML($e);
 
         if ($this->getNameQualifier() !== null) {
             $e->setAttribute('NameQualifier', $this->getNameQualifier());

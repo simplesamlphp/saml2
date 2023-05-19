@@ -150,6 +150,8 @@ XML
         $this->assertCount(1, $disco->getGeolocationHint());
         $this->assertEquals('geo:47.37328,8.531126', $disco->getGeolocationHint()[0]->getContent());
         $this->assertCount(1, $disco->getElements());
-        $this->assertEquals('content of tag', $disco->getElements()[0]->getXML()->textContent);
+        /** @var \SimpleSAML\XML\Chunk[] $elements */
+        $elements = $disco->getElements();
+        $this->assertEquals('content of tag', $elements[0]->getXML()->textContent);
     }
 }

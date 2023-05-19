@@ -8,6 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\ExtendableAttributesTrait;
 
 use function implode;
 
@@ -18,6 +19,12 @@ use function implode;
  */
 abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
 {
+    use ExtendableAttributesTrait;
+
+    /** The namespace-attribute for the xs:anyAttribute element */
+    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
+
+
     /**
      * Initialize a RoleDescriptor.
      *
@@ -33,7 +40,7 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
      *   The organization running this entity. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contactPerson
      *   An array of contacts for this entity. Defaults to an empty array.
-     * @param \DOMAttr[] $namespacedAttributes
+     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
         protected array $protocolSupportEnumeration,
@@ -65,7 +72,9 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
             'All key descriptors must be an instance of md:KeyDescriptor',
         );
 
-        parent::__construct($ID, $validUntil, $cacheDuration, $extensions, $namespacedAttributes);
+        parent::__construct($ID, $validUntil, $cacheDuration, $extensions);
+
+        $this->setAttributesNS($namespacedAttributes);
     }
 
 
@@ -133,8 +142,11 @@ abstract class AbstractRoleDescriptor extends AbstractMetadataDocument
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toUnsignedXML($parent);
-
         $e->setAttribute('protocolSupportEnumeration', implode(' ', $this->protocolSupportEnumeration));
+
+        foreach ($this->getAttributesNS() as $attr) {
+            $attr->toXML($e);
+        }
 
         if ($this->getErrorURL() !== null) {
             $e->setAttribute('errorURL', $this->getErrorURL());

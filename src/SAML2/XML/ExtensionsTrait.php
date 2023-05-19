@@ -33,6 +33,7 @@ trait ExtensionsTrait
         Assert::allIsInstanceOf($extensions, ElementInterface::class);
 
         foreach ($extensions as $extension) {
+            /** @var \SimpleSAML\XML\AbstractElement $extension */
             $namespace = $extension->getNamespaceURI();
 
             Assert::notNull(
@@ -93,11 +94,13 @@ trait ExtensionsTrait
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
+
         foreach ($this->extensions as $extension) {
             if (!$extension->isEmptyElement()) {
                 $extension->toXML($e);
             }
         }
+
         return $e;
     }
 

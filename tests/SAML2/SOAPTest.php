@@ -86,6 +86,7 @@ SOAP
         $message = MessageFactory::fromXML($artifact->documentElement);
 
         $doc = DOMDocumentFactory::fromString(<<<SOAP
+<?xml version="1.0" encoding="UTF-8"?>
 <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"><env:Body /></env:Envelope>
 SOAP
         );
@@ -111,6 +112,7 @@ SOAP
         $message = MessageFactory::fromXML($response->documentElement);
 
         $doc = DOMDocumentFactory::fromString(<<<SOAP
+<?xml version="1.0" encoding="UTF-8"?>
 <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"><env:Header /><env:Body /></env:Envelope>
 SOAP
         );

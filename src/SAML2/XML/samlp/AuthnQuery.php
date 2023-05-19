@@ -20,6 +20,8 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
 use function in_array;
+use function preg_replace;
+use function version_compare;
 
 /**
  * Class for SAML 2 AuthnQuery query messages.
@@ -100,7 +102,6 @@ final class AuthnQuery extends AbstractSubjectQuery
         Assert::same($xml->localName, 'AuthnQuery', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AuthnQuery::NS, InvalidDOMElementException::class);
 
-        /** @psalm-var string $version */
         $version = self::getAttribute($xml, 'Version');
         Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
         Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
@@ -108,11 +109,10 @@ final class AuthnQuery extends AbstractSubjectQuery
         $id = self::getAttribute($xml, 'ID');
         Assert::validNCName($id); // Covers the empty string
 
-        $destination = self::getAttribute($xml, 'Destination', null);
-        $consent = self::getAttribute($xml, 'Consent', null);
-        $sessionIndex = self::getAttribute($xml, 'SessionIndex', null);
+        $destination = self::getOptionalAttribute($xml, 'Destination', null);
+        $consent = self::getOptionalAttribute($xml, 'Consent', null);
+        $sessionIndex = self::getOptionalAttribute($xml, 'SessionIndex', null);
 
-        /** @psalm-var string $issueInstant */
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
         $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);

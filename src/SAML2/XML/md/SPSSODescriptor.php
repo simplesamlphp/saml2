@@ -152,8 +152,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
      * Convert XML into a SPSSODescriptor
      *
      * @param \DOMElement $xml The XML element we should load
-     *
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -168,7 +167,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
         Assert::same($xml->namespaceURI, SPSSODescriptor::NS, InvalidDOMElementException::class);
 
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
+        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
             $orgs,
@@ -196,14 +195,14 @@ final class SPSSODescriptor extends AbstractSSODescriptor
         $spssod = new static(
             AssertionConsumerService::getChildrenOfClass($xml),
             preg_split('/[\s]+/', trim($protocols)),
-            self::getBooleanAttribute($xml, 'AuthnRequestsSigned', null),
-            self::getBooleanAttribute($xml, 'WantAssertionsSigned', null),
+            self::getOptionalBooleanAttribute($xml, 'AuthnRequestsSigned', null),
+            self::getOptionalBooleanAttribute($xml, 'WantAssertionsSigned', null),
             AttributeConsumingService::getChildrenOfClass($xml),
-            self::getAttribute($xml, 'ID', null),
+            self::getOptionalAttribute($xml, 'ID', null),
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
-            self::getAttribute($xml, 'cacheDuration', null),
+            self::getOptionalAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
-            self::getAttribute($xml, 'errorURL', null),
+            self::getOptionalAttribute($xml, 'errorURL', null),
             KeyDescriptor::getChildrenOfClass($xml),
             !empty($orgs) ? $orgs[0] : null,
             ContactPerson::getChildrenOfClass($xml),

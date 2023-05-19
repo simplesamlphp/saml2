@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
 use SimpleSAML\SAML2\XML\alg\SigningMethod;
@@ -26,7 +27,6 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XMLSecurity\Constants as C;
 
 use function dirname;
 use function strval;
@@ -89,8 +89,8 @@ final class ExtensionsTest extends TestCase
             $pubInfo,
             $pubPath,
             $uiinfo,
-            $idpdisc,
             $discoHints,
+            $idpdisc,
             $digestMethod,
             $signingMethod,
         ]);

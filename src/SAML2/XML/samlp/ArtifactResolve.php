@@ -18,6 +18,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
+use function preg_replace;
 
 /**
  * The Artifact is part of the SAML 2.0 IdP code, and it builds an artifact object.
@@ -126,8 +127,8 @@ class ArtifactResolve extends AbstractRequest
             $id,
             $version,
             $issueInstant,
-            self::getAttribute($xml, 'Destination', null),
-            self::getAttribute($xml, 'Consent', null),
+            self::getOptionalAttribute($xml, 'Destination', null),
+            self::getOptionalAttribute($xml, 'Consent', null),
             array_pop($extensions),
         );
 

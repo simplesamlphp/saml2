@@ -176,7 +176,9 @@ class SOAPClient
         }
 
         // Extract the message from the response
-        $samlresponse = MessageFactory::fromXML($env->getBody()->getElements()[0]->toXML());
+        /** @var \SimpleSAML\XML\SerializableElementInterface[] $messages */
+        $messages = $env->getBody()->getElements();
+        $samlresponse = MessageFactory::fromXML($messages[0]->toXML());
 
         /* Add validator to message which uses the SSL context. */
         self::addSSLValidator($samlresponse, $context);

@@ -68,7 +68,7 @@ final class SubjectConfirmation extends AbstractSamlElement
      * Convert XML into a SubjectConfirmation
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -112,7 +112,9 @@ final class SubjectConfirmation extends AbstractSamlElement
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Method', $this->getMethod());
 
-        $this->getIdentifier()?->toXML($e);
+        /** @var \SimpleSAML\XML\SerializableElementInterface|null $identifier */
+        $identifier = $this->getIdentifier();
+        $identifier?->toXML($e);
 
         if ($this->getSubjectConfirmationData() !== null && !$this->getSubjectConfirmationData()->isEmptyElement()) {
             $this->getSubjectConfirmationData()->toXML($e);

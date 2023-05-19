@@ -59,7 +59,7 @@ final class Subject extends AbstractSamlElement
      * Convert XML into a Subject
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -98,7 +98,9 @@ final class Subject extends AbstractSamlElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        $this->getIdentifier()?->toXML($e);
+        /** @var \SimpleSAML\XML\SerializableElementInterface|null $identifier */
+        $identifier = $this->getIdentifier();
+        $identifier?->toXML($e);
 
         foreach ($this->getSubjectConfirmation() as $sc) {
             $sc->toXML($e);

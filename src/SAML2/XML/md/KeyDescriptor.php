@@ -76,7 +76,7 @@ final class KeyDescriptor extends AbstractMdElement
      * Initialize an KeyDescriptor.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return \SimpleSAML\SAML2\XML\md\KeyDescriptor
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -106,7 +106,7 @@ final class KeyDescriptor extends AbstractMdElement
 
         return new static(
             $keyInfoElements[0],
-            self::getAttribute($xml, 'use', null),
+            self::getOptionalAttribute($xml, 'use', null),
             EncryptionMethod::getChildrenOfClass($xml),
         );
     }

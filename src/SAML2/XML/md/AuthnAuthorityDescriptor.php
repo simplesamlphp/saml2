@@ -114,7 +114,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
      * Initialize an IDPSSODescriptor from an existing XML document.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -134,7 +134,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
         $assertionIDRequestServices = AssertionIDRequestService::getChildrenOfClass($xml);
         $nameIDFormats = NameIDFormat::getChildrenOfClass($xml);
 
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
+        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
 
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
@@ -165,11 +165,11 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
             preg_split('/[\s]+/', trim($protocols)),
             $assertionIDRequestServices,
             $nameIDFormats,
-            self::getAttribute($xml, 'ID', null),
+            self::getOptionalAttribute($xml, 'ID', null),
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
-            self::getAttribute($xml, 'cacheDuration', null),
+            self::getOptionalAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
-            self::getAttribute($xml, 'errorURL', null),
+            self::getOptionalAttribute($xml, 'errorURL', null),
             !empty($orgs) ? $orgs[0] : null,
             KeyDescriptor::getChildrenOfClass($xml),
             ContactPerson::getChildrenOfClass($xml),

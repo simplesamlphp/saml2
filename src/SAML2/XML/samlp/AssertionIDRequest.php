@@ -98,7 +98,6 @@ final class AssertionIDRequest extends AbstractRequest
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::maxCount($issuer, 1, 'Only one <saml:Issuer> element is allowed.', TooManyElementsException::class);
 
-        /** @psalm-var string $version */
         $version = self::getAttribute($xml, 'Version');
         Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
         Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
@@ -106,7 +105,6 @@ final class AssertionIDRequest extends AbstractRequest
         $id = self::getAttribute($xml, 'ID');
         Assert::validNCName($id); // Covers the empty string
 
-        /** @psalm-var string $issueInstant */
         $issueInstant = self::getAttribute($xml, 'IssueInstant');
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
         $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
@@ -136,8 +134,8 @@ final class AssertionIDRequest extends AbstractRequest
             $id,
             $version,
             $issueInstant,
-            self::getAttribute($xml, 'Destination', null),
-            self::getAttribute($xml, 'Consent', null),
+            self::getOptionalAttribute($xml, 'Destination', null),
+            self::getOptionalAttribute($xml, 'Consent', null),
             array_pop($extensions),
         );
 

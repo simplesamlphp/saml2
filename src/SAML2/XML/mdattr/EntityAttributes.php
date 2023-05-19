@@ -82,6 +82,7 @@ final class EntityAttributes extends AbstractMdattrElement
                 ProtocolViolationException::class,
             );
 
+            /** @var \SimpleSAML\SAML2\XML\saml\NameID|null $nameId */
             $nameId = $subject?->getIdentifier();
             Assert::isInstanceOf(
                 $nameId,
@@ -127,7 +128,7 @@ final class EntityAttributes extends AbstractMdattrElement
      * Convert XML into a EntityAttributes
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong

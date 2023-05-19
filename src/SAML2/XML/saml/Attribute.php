@@ -24,6 +24,9 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
     use EncryptableElementTrait;
     use ExtendableAttributesTrait;
 
+    /** The namespace-attribute for the xs:anyAttribute element */
+    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
+
 
     /**
      * Initialize an Attribute.
@@ -32,7 +35,7 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
      * @param string|null $nameFormat
      * @param string|null $friendlyName
      * @param \SimpleSAML\SAML2\XML\saml\AttributeValue[] $attributeValue
-     * @param \DOMAttr[] $namespacedAttribute
+     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttribute
      */
     public function __construct(
         protected string $name,
@@ -115,7 +118,7 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
      * Convert XML into a Attribute
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\saml\Attribute
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -129,8 +132,8 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
 
         return new static(
             self::getAttribute($xml, 'Name'),
-            self::getAttribute($xml, 'NameFormat', null),
-            self::getAttribute($xml, 'FriendlyName', null),
+            self::getOptionalAttribute($xml, 'NameFormat', null),
+            self::getOptionalAttribute($xml, 'FriendlyName', null),
             AttributeValue::getChildrenOfClass($xml),
             self::getAttributesNSFromXML($xml),
         );
@@ -157,7 +160,7 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
         }
 
         foreach ($this->getAttributesNS() as $attr) {
-            $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
+            $attr->toXML($e);
         }
 
         foreach ($this->getAttributeValues() as $av) {

@@ -703,6 +703,7 @@ XML;
         /** @psalm-var \SimpleSAML\SAML2\XML\saml\Subject $subject */
         $subject = $verified->getSubject();
 
+        /** @var \SimpleSAML\SAML2\XML\saml\NameID $identifier */
         $identifier = $subject->getIdentifier();
         $this->assertEquals("SomeNameIDValue", $identifier->getContent());
     }

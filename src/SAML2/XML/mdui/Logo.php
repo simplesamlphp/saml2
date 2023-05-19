@@ -114,11 +114,9 @@ final class Logo extends AbstractMduiElement implements ArrayizableElementInterf
         Assert::stringNotEmpty($xml->textContent, 'Missing url value for Logo.');
 
         $Url = $xml->textContent;
-        /** @var int $Width */
         $Width = self::getIntegerAttribute($xml, 'width');
-        /** @var int $Height */
         $Height = self::getIntegerAttribute($xml, 'height');
-        $lang = self::getAttribute($xml, 'xml:lang', null);
+        $lang = self::getOptionalAttribute($xml, 'xml:lang', null);
 
         return new static($Url, $Height, $Width, $lang);
     }
@@ -150,7 +148,7 @@ final class Logo extends AbstractMduiElement implements ArrayizableElementInterf
      * Create a class from an array
      *
      * @param array $data
-     * @return self
+     * @return static
      */
     public static function fromArray(array $data): static
     {

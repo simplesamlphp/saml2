@@ -28,6 +28,9 @@ final class SubjectConfirmationData extends AbstractSamlElement
 {
     use ExtendableAttributesTrait;
 
+    /** The namespace-attribute for the xs:anyAttribute element */
+    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
+
 
     /**
      * Initialize (and parse) a SubjectConfirmationData element.
@@ -38,7 +41,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * @param string|null $inResponseTo
      * @param string|null $address
      * @param (\SimpleSAML\XMLSecurity\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[] $info
-     * @param \DOMAttr[] $namespacedAttributes
+     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
         protected ?int $notBefore = null,
@@ -151,7 +154,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * Convert XML into a SubjectConfirmationData
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -165,7 +168,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
         Assert::same($xml->localName, 'SubjectConfirmationData', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SubjectConfirmationData::NS, InvalidDOMElementException::class);
 
-        $NotBefore = self::getAttribute($xml, 'NotBefore', null);
+        $NotBefore = self::getOptionalAttribute($xml, 'NotBefore', null);
         if ($NotBefore !== null) {
             // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
             $NotBefore = preg_replace('/([.][0-9]+Z)$/', 'Z', $NotBefore, 1);
@@ -174,7 +177,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
             $NotBefore = XMLUtils::xsDateTimeToTimestamp($NotBefore);
         }
 
-        $NotOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
+        $NotOnOrAfter = self::getOptionalAttribute($xml, 'NotOnOrAfter', null);
         if ($NotOnOrAfter !== null) {
             // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
             $NotOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $NotOnOrAfter, 1);
@@ -183,9 +186,9 @@ final class SubjectConfirmationData extends AbstractSamlElement
             $NotOnOrAfter = XMLUtils::xsDateTimeToTimestamp($NotOnOrAfter);
         }
 
-        $Recipient = self::getAttribute($xml, 'Recipient', null);
-        $InResponseTo = self::getAttribute($xml, 'InResponseTo', null);
-        $Address = self::getAttribute($xml, 'Address', null);
+        $Recipient = self::getOptionalAttribute($xml, 'Recipient', null);
+        $InResponseTo = self::getOptionalAttribute($xml, 'InResponseTo', null);
+        $Address = self::getOptionalAttribute($xml, 'Address', null);
 
         $info = [];
         foreach ($xml->childNodes as $n) {
@@ -239,7 +242,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
         }
 
         foreach ($this->getAttributesNS() as $attr) {
-            $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
+            $attr->toXML($e);
         }
 
         foreach ($this->getInfo() as $n) {

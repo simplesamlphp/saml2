@@ -38,6 +38,9 @@ final class AuthzDecisionQueryTest extends TestCase
     use SerializableElementTestTrait;
     use SignedElementTestTrait;
 
+    /** @var \DOMDocument */
+    protected DOMDocument $assertion;
+
 
     /**
      */

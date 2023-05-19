@@ -71,7 +71,7 @@ final class Issuer extends NameIDType
      * Convert XML into an Issuer
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\saml\Issuer
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -81,10 +81,10 @@ final class Issuer extends NameIDType
         Assert::same($xml->localName, 'Issuer', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Issuer::NS, InvalidDOMElementException::class);
 
-        $Format = self::getAttribute($xml, 'Format', null);
-        $SPProvidedID = self::getAttribute($xml, 'SPProvidedID', null);
-        $NameQualifier = self::getAttribute($xml, 'NameQualifier', null);
-        $SPNameQualifier = self::getAttribute($xml, 'SPNameQualifier', null);
+        $Format = self::getOptionalAttribute($xml, 'Format', null);
+        $SPProvidedID = self::getOptionalAttribute($xml, 'SPProvidedID', null);
+        $NameQualifier = self::getOptionalAttribute($xml, 'NameQualifier', null);
+        $SPNameQualifier = self::getOptionalAttribute($xml, 'SPNameQualifier', null);
 
         return new static($xml->textContent, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
     }

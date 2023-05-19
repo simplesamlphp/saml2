@@ -247,7 +247,7 @@ final class Assertion extends AbstractSamlElement implements
      * Convert XML into an Assertion
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\saml\Assertion
+     * @return static
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException

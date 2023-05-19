@@ -141,7 +141,7 @@ final class LogoutRequest extends AbstractRequest
         Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
         $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
 
-        $notOnOrAfter = self::getAttribute($xml, 'NotOnOrAfter', null);
+        $notOnOrAfter = self::getOptionalAttribute($xml, 'NotOnOrAfter', null);
         if ($notOnOrAfter !== null) {
             // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
             $notOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $notOnOrAfter, 1);
@@ -177,14 +177,14 @@ final class LogoutRequest extends AbstractRequest
         $request = new static(
             $identifier,
             $notOnOrAfter,
-            self::getAttribute($xml, 'Reason', null),
+            self::getOptionalAttribute($xml, 'Reason', null),
             $sessionIndex,
             array_pop($issuer),
             $id,
             $version,
             $issueInstant,
-            self::getAttribute($xml, 'Destination', null),
-            self::getAttribute($xml, 'Consent', null),
+            self::getOptionalAttribute($xml, 'Destination', null),
+            self::getOptionalAttribute($xml, 'Consent', null),
             array_pop($extensions),
         );
 

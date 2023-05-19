@@ -23,6 +23,35 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements
     use SignableElementTrait;
     use SignedElementTrait;
 
+    /**
+     * The original signed XML
+     *
+     * @var \DOMElement
+     */
+    protected DOMElement $xml;
+
+
+    /**
+     * Get the XML element.
+     *
+     * @return \DOMElement
+     */
+    public function getXML(): DOMElement
+    {
+        return $this->xml;
+    }
+
+
+    /**
+     * Set the XML element.
+     *
+     * @param \DOMElement $xml
+     */
+    protected function setXML(DOMElement $xml): void
+    {
+        $this->xml = $xml;
+    }
+
 
     /**
      * @return array|null

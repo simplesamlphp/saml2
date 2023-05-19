@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\init\RequestInitiator;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -53,8 +54,7 @@ final class RequestInitiatorTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr = $this->xmlRepresentation->createAttributeNS(C::NAMESPACE, 'test:attr');
-        $attr->value = 'value';
+        $attr = new XMLAttribute(C::NAMESPACE, 'test', 'attr', 'value');
 
         $requestInitiator = new RequestInitiator(C::LOCATION_A, C::LOCATION_B, [$attr]);
 

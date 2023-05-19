@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
@@ -23,6 +24,12 @@ use function is_null;
  */
 final class EntityDescriptor extends AbstractMetadataDocument
 {
+    use ExtendableAttributesTrait;
+
+    /** The namespace-attribute for the xs:anyAttribute element */
+    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
+
+
     /**
      * Initialize an EntitiyDescriptor.
      *
@@ -38,7 +45,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contactPerson A list of contact persons for this SAML entity.
      * @param \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation[] $additionalMetadataLocation A list of
      *   additional metadata locations.
-     * @param \DOMAttr[] $namespacedAttribute
+     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttribute
      *
      * @throws \Exception
      */
@@ -83,7 +90,9 @@ final class EntityDescriptor extends AbstractMetadataDocument
             'All md:AdditionalMetadataLocation elements must be an instance of AdditionalMetadataLocation',
         );
 
-        parent::__construct($id, $validUntil, $cacheDuration, $extensions, $namespacedAttribute);
+        parent::__construct($id, $validUntil, $cacheDuration, $extensions);
+
+        $this->setAttributesNS($namespacedAttribute);
     }
 
 
@@ -91,7 +100,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * Convert an existing XML into an EntityDescriptor object
      *
      * @param \DOMElement $xml An existing EntityDescriptor XML document.
-     * @return \SimpleSAML\SAML2\XML\md\EntityDescriptor An object representing the given document.
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -105,7 +114,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
         Assert::same($xml->localName, 'EntityDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, EntityDescriptor::NS, InvalidDOMElementException::class);
 
-        $validUntil = self::getAttribute($xml, 'validUntil', null);
+        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
 
@@ -180,9 +189,9 @@ final class EntityDescriptor extends AbstractMetadataDocument
 
         $entity = new static(
             $entityID,
-            self::getAttribute($xml, 'ID', null),
+            self::getOptionalAttribute($xml, 'ID', null),
             $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
-            self::getAttribute($xml, 'cacheDuration', null),
+            self::getOptionalAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             $roleDescriptors,
             $affiliationDescriptor,
@@ -280,7 +289,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
         $e->setAttribute('entityID', $this->getEntityId());
 
         foreach ($this->getAttributesNS() as $attr) {
-            $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
+            $attr->toXML($e);
         }
 
         foreach ($this->getRoleDescriptor() as $n) {

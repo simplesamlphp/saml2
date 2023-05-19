@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -54,14 +55,11 @@ final class SubjectConfirmationTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $doc = DOMDocumentFactory::fromString('<root/>');
-        $attr1 = $doc->createAttributeNS('urn:test:something', 'test:attr1');
-        $attr1->value = 'testval1';
-        $attr2 = $doc->createAttributeNS('urn:test:something', 'test:attr2');
-        $attr2->value = 'testval2';
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
 
         $subjectConfirmation = new SubjectConfirmation(
-            'urn:test:SomeMethod',
+            C::CM_BEARER,
             new NameID(
                 'SomeNameIDValue',
                 null,
@@ -94,14 +92,14 @@ final class SubjectConfirmationTest extends TestCase
     public function testMarshallingEmptySubjectConfirmationData(): void
     {
         $subjectConfirmation = new SubjectConfirmation(
-            'urn:test:SomeMethod',
+            C::CM_BEARER,
             new NameID('SomeNameIDValue'),
             new SubjectConfirmationData(),
         );
         $ns_saml = C::NS_SAML;
 
         $doc = DOMDocumentFactory::fromString(<<<XML
-<saml:SubjectConfirmation xmlns:saml="{$ns_saml}" Method="urn:test:SomeMethod">
+<saml:SubjectConfirmation xmlns:saml="{$ns_saml}" Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
   <saml:NameID>SomeNameIDValue</saml:NameID>
 </saml:SubjectConfirmation>
 XML
@@ -119,7 +117,7 @@ XML
     public function testMarshallingElementOrdering(): void
     {
         $subjectConfirmation = new SubjectConfirmation(
-            'urn:test:SomeMethod',
+            C::CM_BEARER,
             new NameID('SomeNameIDValue'),
             new SubjectConfirmationData(time()),
         );
@@ -180,7 +178,7 @@ XML
     {
         $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
-<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
+<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
   <saml:NameID>SomeNameIDValue</saml:NameID>
   <saml:NameID>AnotherNameIDValue</saml:NameID>
   <saml:SubjectConfirmationData/>
@@ -201,7 +199,7 @@ XML
     {
         $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
-<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
+<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
   <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="someType">SomeNameIDValue</saml:BaseID>
   <saml:NameID>AnotherNameIDValue</saml:NameID>
   <saml:SubjectConfirmationData/>
@@ -224,7 +222,7 @@ XML
     {
         $samlNamespace = C::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
-<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:test:SomeMethod">
+<saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
   <saml:NameID>SomeNameIDValue</saml:NameID>
   <saml:SubjectConfirmationData Recipient="Me" />
   <saml:SubjectConfirmationData Recipient="Someone Else" />

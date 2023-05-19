@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\shibmd;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
@@ -23,13 +24,16 @@ final class KeyAuthority extends AbstractShibmdElement
 {
     use ExtendableAttributesTrait;
 
+    /** The namespace-attribute for the xs:anyAttribute element */
+    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
+
 
     /**
      * Create a KeyAuthority.
      *
      * @param \SimpleSAML\XMLSecurity\XML\ds\KeyInfo[] $keys
      * @param int|null $verifyDepth
-     * @param \DOMAttr[] $namespacedAttributes
+     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
         protected array $keys,
@@ -78,7 +82,7 @@ final class KeyAuthority extends AbstractShibmdElement
         Assert::same($xml->localName, 'KeyAuthority', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, KeyAuthority::NS, InvalidDOMElementException::class);
 
-        $verifyDepth = self::getIntegerAttribute($xml, 'VerifyDepth', null);
+        $verifyDepth = self::getOptionalIntegerAttribute($xml, 'VerifyDepth', 1);
         Assert::natural($verifyDepth);
 
         $keys = KeyInfo::getChildrenOfClass($xml);
@@ -100,7 +104,7 @@ final class KeyAuthority extends AbstractShibmdElement
         $e = $this->instantiateParentElement($parent);
 
         foreach ($this->getAttributesNS() as $attr) {
-            $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
+            $attr->toXML($e);
         }
 
         if ($this->getVerifyDepth() !== null) {

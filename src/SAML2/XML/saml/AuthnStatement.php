@@ -14,6 +14,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
 
 use function array_pop;
 use function gmdate;
+use function preg_replace;
 
 /**
  * Class representing a SAML2 AuthnStatement
@@ -135,7 +136,7 @@ final class AuthnStatement extends AbstractStatementType
         Assert::validDateTimeZulu($authnInstant, ProtocolViolationException::class);
         $authnInstant = XMLUtils::xsDateTimeToTimestamp($authnInstant);
 
-        $sessionNotOnOrAfter = self::getAttribute($xml, 'SessionNotOnOrAfter', null);
+        $sessionNotOnOrAfter = self::getOptionalAttribute($xml, 'SessionNotOnOrAfter', null);
         if ($sessionNotOnOrAfter !== null) {
             // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
             $sessionNotOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $sessionNotOnOrAfter, 1);
@@ -150,7 +151,7 @@ final class AuthnStatement extends AbstractStatementType
             array_pop($authnContext),
             $authnInstant,
             $sessionNotOnOrAfter,
-            self::getAttribute($xml, 'SessionIndex', null),
+            self::getOptionalAttribute($xml, 'SessionIndex', null),
             array_pop($subjectLocality),
         );
     }

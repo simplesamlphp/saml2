@@ -64,19 +64,15 @@ final class RequestInitiator extends AbstractEndpointType
         );
 
         Assert::eq(
-            /** @var string $binding */
             self::getAttribute($xml, 'Binding'),
             self::NS,
             "The Binding of a RequestInitiator must be 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'.",
             ProtocolViolationException::class,
         );
 
-        /** @var string $location */
-        $location = self::getAttribute($xml, 'Location');
-
         return new static(
-            $location,
-            self::getAttribute($xml, 'ResponseLocation', null),
+            self::getAttribute($xml, 'Location'),
+            self::getOptionalAttribute($xml, 'ResponseLocation', null),
             self::getAttributesNSFromXML($xml),
         );
     }

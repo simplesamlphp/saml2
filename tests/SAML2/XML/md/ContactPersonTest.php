@@ -16,6 +16,7 @@ use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\md\GivenName;
 use SimpleSAML\SAML2\XML\md\SurName;
 use SimpleSAML\SAML2\XML\md\TelephoneNumber;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -61,7 +62,14 @@ final class ContactPersonTest extends TestCase
             'Extensions' => null,
             'EmailAddress' => ['mailto:lead.developer@example.org'],
             'TelephoneNumber' => ['+1234567890'],
-            'urn:test:something' => ['test:attr' => 'value'],
+            'attributes' => [
+                [
+                    'namespaceURI' => 'urn:test:something',
+                    'namespacePrefix' => 'test',
+                    'attrName' => 'attr',
+                    'attrValue' => 'value',
+                ],
+            ],
         ];
     }
 
@@ -78,10 +86,9 @@ final class ContactPersonTest extends TestCase
             '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>',
         );
 
-        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
-        $attr1->value = 'testval1';
-        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr2');
-        $attr2->value = 'testval2';
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
+
         $contactPerson = new ContactPerson(
             'other',
             new Company('Test Company'),
