@@ -19,11 +19,16 @@
         targetNamespace="urn:x-simplesamlphp:namespace"
         version="0.1" elementFormDefault="qualified"> 
 
-<include schemaLocation='../../../vendor/simplesamlphp/xml-common/tests/resources/schemas/simplesamlphp.xsd'/>
 <import namespace='urn:oasis:names:tc:SAML:2.0:assertion'
           schemaLocation='../../../resources/schemas/saml-schema-assertion-2.0.xsd'/>
 <import namespace='urn:oasis:names:tc:SAML:2.0:metadata'
           schemaLocation='../../../resources/schemas/saml-schema-metadata-2.0.xsd'/>
+
+<!-- Start Chunk -->
+
+<element name="Chunk" type="string"/>
+
+<!-- End Chunk -->
 
 <!-- Start CustomRoleDescriptor -->
 

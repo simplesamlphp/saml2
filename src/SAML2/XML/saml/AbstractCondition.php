@@ -110,7 +110,9 @@ abstract class AbstractCondition extends AbstractConditionType implements Extens
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttributeNS(
-            'http://www.w3.org/2000/xmlns/','xmlns:' . static::getXsiTypePrefix(), static::getXsiTypeNamespaceURI()
+            'http://www.w3.org/2000/xmlns/',
+            'xmlns:' . static::getXsiTypePrefix(),
+            static::getXsiTypeNamespaceURI(),
         );
 
         $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', $this->getXsiType());

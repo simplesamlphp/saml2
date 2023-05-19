@@ -20,7 +20,7 @@ use function preg_split;
  *
  * @package simplesamlphp/saml2
  */
-final class AttributeAuthorityDescriptor extends AbstractRoleDescriptor
+final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType
 {
     /**
      * AttributeAuthorityDescriptor constructor.

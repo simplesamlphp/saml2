@@ -18,7 +18,7 @@ use function preg_split;
  *
  * @package simplesamlphp/saml2
  */
-final class AuthnAuthorityDescriptor extends AbstractRoleDescriptor
+final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType
 {
     /**
      * AuthnAuthorityDescriptor constructor.

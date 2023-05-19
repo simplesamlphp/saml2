@@ -14,7 +14,7 @@ use SimpleSAML\XML\Utils as XMLUtils;
  *
  * @package simplesamlphp/saml2
  */
-abstract class AbstractSSODescriptor extends AbstractRoleDescriptor
+abstract class AbstractSSODescriptor extends AbstractRoleDescriptorType
 {
     /**
      * Initialize a RoleDescriptor.

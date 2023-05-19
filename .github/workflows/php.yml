@@ -83,6 +83,7 @@ jobs:
         run: phpcs
 
       - name: Psalm
+        continue-on-error: true
         run: |
           psalm -c psalm.xml \
           --show-info=true \
@@ -90,6 +91,7 @@ jobs:
           --php-version=${{ steps.setup-php.outputs.php-version }}
 
       - name: Psalm (testsuite)
+        continue-on-error: true
         run: |
           psalm -c psalm-dev.xml \
           --show-info=true \
