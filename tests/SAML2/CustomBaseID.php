@@ -64,6 +64,7 @@ final class CustomBaseID extends AbstractBaseID
     public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'BaseID', InvalidDOMElementException::class);
+        Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AbstractBaseID::NS, InvalidDOMElementException::class);
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),

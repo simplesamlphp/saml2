@@ -355,8 +355,17 @@ XML
     public function testUnmarshalling(): void
     {
         $pdpd = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'PDPDescriptor')->item(0);
-        $customd = $this->xmlRepresentation->createElementNS(C::NS_MD, 'md:CustomRoleDescriptor');
+        $customd = $this->xmlRepresentation->createElementNS(C::NS_MD, 'md:RoleDescriptor');
         $customd->setAttribute('protocolSupportEnumeration', 'urn:oasis:names:tc:SAML:2.0:protocol');
+        $customd->setAttributeNS(
+            'http://www.w3.org/2000/xmlns/',
+            'xmlns:ssp',
+            'urn:x-simplesamlphp:namespace',
+        );
+
+        $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', 'ssp:UnknownRoleDescriptor');
+        $type->toXML($customd);
+
         $newline = new DOMText("\n  ");
         /**
          * @psalm-suppress PossiblyNullPropertyFetch
@@ -390,10 +399,10 @@ XML
         $this->assertInstanceOf(AttributeAuthorityDescriptor::class, $roleDescriptors[1]);
         $this->assertInstanceOf(AuthnAuthorityDescriptor::class, $roleDescriptors[2]);
         $this->assertInstanceOf(PDPDescriptor::class, $roleDescriptors[3]);
-        $this->assertInstanceOf(UnknownRoleDescriptor::class, $roleDescriptors[4]);
 
-        $chunk = $roleDescriptors[4]->getXML();
-        $this->assertEquals('CustomRoleDescriptor', $chunk->localName);
+        $chunk = $roleDescriptors[4];
+        $this->assertInstanceOf(UnknownRoleDescriptor::class, $chunk);
+        $this->assertEquals('RoleDescriptor', $chunk->getLocalName());
 
         $this->assertInstanceOf(Organization::class, $entityDescriptor->getOrganization());
 

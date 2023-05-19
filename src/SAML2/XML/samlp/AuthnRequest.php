@@ -259,8 +259,16 @@ class AuthnRequest extends AbstractRequest
         Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
         $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
 
-        $attributeConsumingServiceIndex = self::getOptionalIntegerAttribute($xml, 'AttributeConsumingServiceIndex', null);
-        $assertionConsumerServiceIndex = self::getOptionalIntegerAttribute($xml, 'AssertionConsumerServiceIndex', null);
+        $attributeConsumingServiceIndex = self::getOptionalIntegerAttribute(
+            $xml,
+            'AttributeConsumingServiceIndex',
+            null,
+        );
+        $assertionConsumerServiceIndex = self::getOptionalIntegerAttribute(
+            $xml,
+            'AssertionConsumerServiceIndex',
+            null,
+        );
 
         $conditions = Conditions::getChildrenOfClass($xml);
         Assert::maxCount(

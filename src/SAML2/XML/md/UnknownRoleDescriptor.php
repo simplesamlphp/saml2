@@ -27,88 +27,71 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
     /**
      * Initialize an unknown RoleDescriptor.
      *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
-     *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
-     *   if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
-     *   if too many child-elements of a type are specified
+     * @param \SimpleSAML\XML\Chunk $chunk The whole RoleDescriptor element as a chunk object.
+     * @param string $type
+     * @param string[] $protocolSupportEnumeration A set of URI specifying the protocols supported.
+     * @param string|null $ID The ID for this document. Defaults to null.
+     * @param int|null $validUntil Unix time of validity for this document. Defaults to null.
+     * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An Extensions object. Defaults to null.
+     * @param string|null $errorURL An URI where to redirect users for support. Defaults to null.
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors An array of KeyDescriptor elements.
+     *   Defaults to an empty array.
+     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
+     *   The organization running this entity. Defaults to null.
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts
+     *   An array of contacts for this entity. Defaults to an empty array.
+     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
-    public static function fromXML(DOMElement $xml): static
-    {
-        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-
-        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
-        $orgs = Organization::getChildrenOfClass($xml);
-        Assert::maxCount(
-            $orgs,
-            1,
-            'More than one Organization found in this descriptor',
-            TooManyElementsException::class,
-        );
-
-        $signature = Signature::getChildrenOfClass($xml);
-        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
-
-        $extensions = Extensions::getChildrenOfClass($xml);
-        Assert::maxCount(
+    protected function __construct(
+        protected Chunk $chunk,
+        string $type,
+        array $protocolSupportEnumeration,
+        ?string $ID = null,
+        ?int $validUntil = null,
+        ?string $cacheDuration = null,
+        ?Extensions $extensions = null,
+        ?string $errorURL = null,
+        array $keyDescriptors = [],
+        ?Organization $organization = null,
+        array $contacts = [],
+        array $namespacedAttributes = []
+    ) {
+        parent::__construct(
+            $type,
+            $protocolSupportEnumeration,
+            $ID,
+            $validUntil,
+            $cacheDuration,
             $extensions,
-            1,
-            'Only one md:Extensions element is allowed.',
-            TooManyElementsException::class,
+            $errorURL,
+            $keyDescriptors,
+            $organization,
+            $contacts,
+            $namespacedAttributes,
         );
-
-        $descriptor = new static(
-            preg_split('/[\s]+/', trim($protocols)),
-            self::getOptionalAttribute($xml, 'ID', null),
-            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
-            self::getOptionalAttribute($xml, 'cacheDuration', null),
-            !empty($extensions) ? $extensions[0] : null,
-            self::getOptionalAttribute($xml, 'errorURL', null),
-            KeyDescriptor::getChildrenOfClass($xml),
-            !empty($orgs) ? $orgs[0] : null,
-            ContactPerson::getChildrenOfClass($xml),
-        );
-
-        if (!empty($signature)) {
-            $descriptor->setSignature($signature[0]);
-        }
-
-        $descriptor->setXML($xml);
-        return $descriptor;
     }
 
 
     /**
-     * Add this RoleDescriptor to an EntityDescriptor.
+     * Get the raw version of this RoleDescriptor as a Chunk.
      *
-     * @param \DOMElement|null $parent The EntityDescriptor we should append this RoleDescriptor to.
-     * @return \DOMElement
+     * @return \SimpleSAML\XML\Chunk
+     */
+    public function getRawRoleDescriptor(): Chunk
+    {
+        return $this->chunk;
+    }
+
+
+    /**
+     * Convert this RoleDescriptor to XML.
+     *
+     * @param \DOMElement|null $parent The element we are converting to XML.
+     * @return \DOMElement The XML element after adding the data corresponding to this unknown RoleDescriptor.
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        if ($this->isSigned() === true && $this->signer === null) {
-            // We already have a signed document and no signer was set to re-sign it
-            if ($parent === null) {
-                return $this->getXML();
-            }
-
-            $node = $parent->ownerDocument?->importNode($this->getXML(), true);
-            $parent->appendChild($node);
-            return $parent;
-        }
-
-        $e = (new Chunk($this->xml))->toXML($parent);
-
-        if ($this->signer !== null) {
-            $signedXML = $this->doSign($e);
-            $signedXML->insertBefore($this->signature?->toXML($signedXML), $signedXML->firstChild);
-            return $signedXML;
-        }
-
-        return $e;
+        return $this->getRawRoleDescriptor()->toXML($parent);
     }
 }

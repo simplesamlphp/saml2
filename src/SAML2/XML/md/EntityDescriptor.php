@@ -38,7 +38,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @param int|null $validUntil Unix time of validify for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions.
-     * @param \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor[] $roleDescriptor An array of role descriptors.
+     * @param \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType[] $roleDescriptor An array of role descriptors.
      * @param \SimpleSAML\SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor An affiliation descriptor to
      *   use instead of role descriptors.
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization The organization responsible for the SAML entity.
@@ -76,7 +76,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
         );
         Assert::allIsInstanceOf(
             $roleDescriptor,
-            AbstractRoleDescriptor::class,
+            AbstractRoleDescriptorType::class,
             'All role descriptors must extend AbstractRoleDescriptor.',
         );
         Assert::allIsInstanceOf(
@@ -225,7 +225,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
     /**
      * Collect the value of the RoleDescriptor property.
      *
-     * @return \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor[]
+     * @return \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType[]
      */
     public function getRoleDescriptor(): array
     {
