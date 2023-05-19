@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Audience;
+use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
@@ -43,9 +44,6 @@ final class SubjectTest extends TestCase
     private DOMDocument $subject;
 
     /** @var \DOMDocument */
-    private DOMDocument $subjectWithBaseID;
-
-    /** @var \DOMDocument */
     private DOMDocument $baseId;
 
     /** @var \DOMDocument */
@@ -69,9 +67,7 @@ final class SubjectTest extends TestCase
 <saml:Subject xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"></saml:Subject>
 XML
         );
-        $this->subjectWithBaseID = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_Subject_with_BaseID.xml',
-        );
+
         $this->baseId = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_BaseID.xml',
         );
@@ -224,7 +220,7 @@ XML
                 new SubjectConfirmation(
                     'urn:oasis:names:tc:SAML:2.0:cm:bearer',
                     new NameID(
-                        value: 'SomeOtherNameIDValue',
+                        value: 'SomeNameIDValue',
                         SPNameQualifier: 'https://sp.example.org/authentication/sp/metadata',
                         Format: C::NAMEID_TRANSIENT,
                     ),
@@ -239,7 +235,9 @@ XML
         $subjectConfirmation = $subject->getSubjectConfirmation();
         $this->assertNotEmpty($subjectConfirmation);
 
-        $document = $this->subjectWithBaseID;
+        $document = $this->subject;
+        AbstractBaseID::fromXML($this->baseId->documentElement)->toXML($document->documentElement);
+        SubjectConfirmation::fromXML($this->subjectConfirmation->documentElement)->toXML($document->documentElement);
 
         $this->assertXmlStringEqualsXmlString($document->saveXML(), strval($subject));
     }

@@ -9,7 +9,7 @@ use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
-use SimpleSAML\Test\SAML2\ControlledTimeTest;
+use SimpleSAML\TestUtils\SAML2\ControlledTimeTestCase;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
@@ -20,7 +20,7 @@ use SimpleSAML\Test\SAML2\ControlledTimeTest;
  *
  * @runTestsInSeparateProcesses
  */
-final class SubjectConfirmationNotBeforeTest extends ControlledTimeTest
+final class SubjectConfirmationNotBeforeTest extends ControlledTimeTestCase
 {
     /**
      * @group assertion-validation

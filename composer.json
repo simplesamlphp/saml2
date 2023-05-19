@@ -36,7 +36,7 @@
     },
     "require-dev": {
         "mockery/mockery": "^1.5.1",
-        "simplesamlphp/simplesamlphp-test-framework": "^1.5.4"
+        "simplesamlphp/simplesamlphp-test-framework": "^1.5.5"
     },
     "autoload": {
         "psr-4": {
@@ -45,7 +45,8 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "SimpleSAML\\Test\\SAML2\\": "tests/SAML2/"
+            "SimpleSAML\\Test\\SAML2\\": "tests/SAML2/",
+            "SimpleSAML\\TestUtils\\SAML2\\": "tests/TestUtils/"
         }
     },
     "extra": {

@@ -17,7 +17,7 @@ use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Signature\PublicKeyValidator;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\Response;
-use SimpleSAML\Test\SAML2\SimpleTestLogger;
+use SimpleSAML\TestUtils\SimpleTestLogger;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Key\PrivateKey;

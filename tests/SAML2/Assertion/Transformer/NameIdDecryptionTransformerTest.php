@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
 use SimpleSAML\SAML2\Assertion\Processor;
@@ -153,15 +155,16 @@ final class NameIdDecryptionTransformerTest extends TestCase
 
 
     /**
-     * @TODO: Fix \SimpleSAML\SAML2\Certificate\PrivateKeyLoader
-     *
      * Verifies that we can create decrypted NameIDs.
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      * @return void
+     */
     public function testBasicNameIdDecryption(): void
     {
+        $this->markTestSkipped();
+
         $assertion = Assertion::fromXML($this->document->documentElement);
         $processed = $this->assertionProcessor->process($assertion);
         $identifier = $processed->getSubject()->getIdentifier();
@@ -170,19 +173,19 @@ final class NameIdDecryptionTransformerTest extends TestCase
         $this->assertEquals('value', $identifier->getContent());
         $this->assertEquals('name_qualifier', $identifier->getNameQualifier());
     }
-     */
 
 
     /**
-     * @TODO: Fix \SimpleSAML\SAML2\Certificate\PrivateKeyLoader
-     *
      * Run the decoder through processAssertions.
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      * @return void
+     */
     public function testDecryptionProcessAssertions(): void
     {
+        $this->markTestSkipped();
+
         $assertion = Assertion::fromXML($this->document->documentElement);
         $assertions = new ArrayCollection([$assertion]);
 
@@ -194,5 +197,4 @@ final class NameIdDecryptionTransformerTest extends TestCase
         $this->assertEquals('value', $identifier->getContent());
         $this->assertEquals('name_qualifier', $identifier->getNameQualifier());
     }
-     */
 }
