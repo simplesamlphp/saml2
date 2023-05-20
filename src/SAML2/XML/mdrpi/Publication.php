@@ -138,7 +138,8 @@ final class Publication extends AbstractMdrpiElement implements ArrayizableEleme
         Assert::string($publisher);
 
         $creationInstant = $data['creationInstant'] ?? null;
-        Assert::nullOrInteger($creationInstant);
+        Assert::nullOrString($creationInstant);
+        $creationInstant = is_null($creationInstant) ? null : XMLUtils::xsDateTimeToTimestamp($creationInstant);
 
         $publicationId = $data['publicationId'] ?? null;
         Assert::nullOrString($publicationId);
@@ -158,7 +159,7 @@ final class Publication extends AbstractMdrpiElement implements ArrayizableEleme
         $data['publisher'] = $this->getPublisher();
 
         if ($this->getCreationInstant() !== null) {
-            $data['creationInstant'] = $this->getCreationInstant();
+            $data['creationInstant'] = gmdate('Y-m-d\TH:i:s\Z', $this->getCreationInstant());
         }
 
         if ($this->getPublicationId() !== null) {
