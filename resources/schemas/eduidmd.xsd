@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="US-ASCII"?>
+<!-- $Id: eduidmd.xsd,v 1.2 2014-09-09 13:28:46 semik Exp $ -->
+<schema targetNamespace="http://eduid.cz/schema/metadata/1.0"
+	xmlns="http://www.w3.org/2001/XMLSchema"
+	xmlns:emd="http://eduid.cz/schema/metadata/1.0"
+	elementFormDefault="qualified"
+	attributeFormDefault="unqualified"
+	version="1.0">
+
+  <simpleType name="RepublishTargetType">
+    <restriction base="anyURI">
+      <enumeration value="http://edugain.org/">
+	<annotation>
+	  <documentation>
+	    Request export EntityDescriptor in eduGAIN.
+	  </documentation>
+	</annotation>
+      </enumeration>
+    </restriction>
+  </simpleType>
+
+
+  <element name="RepublishRequest">
+    <annotation>
+      <documentation>
+      Requests the federation metadata aggregator to republish the enclosing EntityDescriptor to other aggregator(s).
+      </documentation>
+    </annotation>
+    <complexType>
+      <sequence>
+	<element name="RepublishTarget" type="emd:RepublishTargetType"/>
+      </sequence>
+    </complexType>
+  </element>
+</schema>

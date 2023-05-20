@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\alg\AbstractAlgElement as ALG;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
 use SimpleSAML\SAML2\XML\alg\SigningMethod;
+use SimpleSAML\SAML2\XML\emd\RepublishRequest;
 use SimpleSAML\SAML2\XML\ExtensionsTrait;
 use SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponse;
 use SimpleSAML\SAML2\XML\init\RequestInitiator;
@@ -66,6 +67,9 @@ final class Extensions extends AbstractMdElement
         );
         $ret = [];
         $supported = [
+            RepublishRequest::NS => [
+                'RepublishRequest' => RepublishRequest::class,
+            ],
             DiscoveryResponse::NS => [
                 'DiscoveryResponse' => DiscoveryResponse::class,
             ],

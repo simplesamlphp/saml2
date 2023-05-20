@@ -10,6 +10,8 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
 use SimpleSAML\SAML2\XML\alg\SigningMethod;
+use SimpleSAML\SAML2\XML\emd\RepublishRequest;
+use SimpleSAML\SAML2\XML\emd\RepublishTarget;
 use SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponse;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
@@ -82,6 +84,7 @@ final class ExtensionsTest extends TestCase
         $discoHints = new DiscoHints([], [new IPHint('127.0.0.1')]);
         $digestMethod = new DigestMethod(C::DIGEST_SHA256);
         $signingMethod = new SigningMethod(C::SIG_RSA_SHA256, 1024, 4096);
+        $republishRequest = new RepublishRequest(new RepublishTarget('http://edugain.org/'));
 
         $extensions = new Extensions([
             $scope,
@@ -93,6 +96,7 @@ final class ExtensionsTest extends TestCase
             $idpdisc,
             $digestMethod,
             $signingMethod,
+            $republishRequest,
         ]);
 
         $this->assertEquals(
@@ -175,13 +179,16 @@ final class ExtensionsTest extends TestCase
     Location="https://example.org/authenticate/sp" index="1"/>
   <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
   <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha224" MinKeySize="1024" MaxKeySize="4096"/>
+  <emd:RepublishRequest xmlns:emd="http://eduid.cz/schema/metadata/1.0">
+    <emd:RepublishTarget>http://edugain.org/</emd:RepublishTarget>
+  </emd:RepublishRequest>
   <ns:SomeChunk foo="bar">SomeText</ns:SomeChunk>
 </md:Extensions>
 XML
         );
         $extensions = Extensions::fromXML($document->documentElement);
         $list = $extensions->getList();
-        $this->assertCount(11, $list);
+        $this->assertCount(12, $list);
         $this->assertInstanceOf(Scope::class, $list[0]);
         $this->assertInstanceOf(EntityAttributes::class, $list[1]);
         $this->assertInstanceOf(RegistrationInfo::class, $list[2]);
@@ -192,7 +199,8 @@ XML
         $this->assertInstanceOf(DiscoveryResponse::class, $list[7]);
         $this->assertInstanceOf(DigestMethod::class, $list[8]);
         $this->assertInstanceOf(SigningMethod::class, $list[9]);
-        $this->assertInstanceOf(Chunk::class, $list[10]);
+        $this->assertInstanceOf(RepublishRequest::class, $list[10]);
+        $this->assertInstanceOf(Chunk::class, $list[11]);
         //$this->assertFalse($extensions->isEmptyElement());
     }
 

@@ -242,6 +242,11 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
      */
     public const NS_ECP = 'urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp';
 
+    /**
+     * The namespace for the EduID metadata  protocol.
+     */
+    public const NS_EMD = 'http://eduid.cz/schema/metadata/1.0';
+
     /*
      * The namespace for the IdP Discovery Protocol binding
      */
