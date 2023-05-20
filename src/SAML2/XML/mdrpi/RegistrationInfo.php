@@ -158,7 +158,9 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
 
         $registrationInstant = $data['registrationInstant'] ?? null;
         Assert::nullOrString($registrationInstant);
-        $registrationInstant = is_null($registrationInstant) ? null : XMLUtils::xsDateTimeToTimestamp($registrationInstant);
+        $registrationInstant = is_null($registrationInstant)
+           ? null
+           : XMLUtils::xsDateTimeToTimestamp($registrationInstant);
 
         $rp = $data['registrationPolicy'] ?? [];
         Assert::isArray($rp);

@@ -1,0 +1,3 @@
+<emd:RepublishRequest xmlns:emd="http://eduid.cz/schema/metadata/1.0">
+  <emd:RepublishTarget>http://edugain.org/</emd:RepublishTarget>
+</emd:RepublishRequest>
