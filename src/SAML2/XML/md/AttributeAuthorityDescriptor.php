@@ -42,7 +42,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      *
      * Array of strings.
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
     private array $NameIDFormat = [];
 
@@ -96,7 +96,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
             $this->addAssertionIDRequestService(new EndpointType($ep));
         }
 
-        $this->setNameIDFormat(XMLUtils::extractStrings($xml, C::NS_MD, 'NameIDFormat'));
+        $this->setNameIDFormat(NameIDFormat::getChildrenOfClass($xml));
 
         $this->setAttributeProfile(XMLUtils::extractStrings($xml, C::NS_MD, 'AttributeProfile'));
 
@@ -145,7 +145,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Collect the value of the NameIDFormat-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
     public function getNameIDFormat(): array
     {
@@ -156,11 +156,12 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Set the value of the NameIDFormat-property
      *
-     * @param string[] $nameIDFormat
+     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
      * @return void
      */
     public function setNameIDFormat(array $nameIDFormat): void
     {
+        Assert::allIsInstanceOf($nameIDFormat, NameIDFormat::class);
         $this->NameIDFormat = $nameIDFormat;
     }
 
@@ -278,7 +279,9 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
             $ep->toXML($e, 'md:AssertionIDRequestService');
         }
 
-        XMLUtils::addStrings($e, C::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
+        foreach ($this->NameIDFormat as $nid) {
+            $nid->toXML($e);
+        }
 
         XMLUtils::addStrings($e, C::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfile);
 

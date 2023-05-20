@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 SSODescriptorType.
@@ -48,7 +48,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      *
      * Array of strings.
      *
-     * @var string[]
+     * @var \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
     private array $NameIDFormat = [];
 
@@ -84,7 +84,7 @@ abstract class SSODescriptorType extends RoleDescriptor
             $this->addManageNameIDService(new EndpointType($ep));
         }
 
-        $this->setNameIDFormat(XMLUtils::extractStrings($xml, C::NS_MD, 'NameIDFormat'));
+        $this->setNameIDFormat(NameIDFormat::getChildrenOfClass($xml));
     }
 
 
@@ -196,7 +196,7 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Collect the value of the NameIDFormat-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
     public function getNameIDFormat(): array
     {
@@ -207,11 +207,12 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Set the value of the NameIDFormat-property
      *
-     * @param string[] $nameIDFormat
+     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
      * @return void
      */
     public function setNameIDFormat(array $nameIDFormat): void
     {
+        Assert::allIsInstanceOf($nameIDFormat, NameIDFormat::class);
         $this->NameIDFormat = $nameIDFormat;
     }
 
@@ -238,7 +239,9 @@ abstract class SSODescriptorType extends RoleDescriptor
             $ep->toXML($e, 'md:ManageNameIDService');
         }
 
-        XMLUtils::addStrings($e, C::NS_MD, 'md:NameIDFormat', false, $this->NameIDFormat);
+        foreach($this->NameIDFormat as $nid) {
+            $nid->toXML($e);
+        }
 
         return $e;
     }
