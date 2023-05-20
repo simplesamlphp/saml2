@@ -140,7 +140,8 @@ final class Publication extends AbstractMdrpiElement implements ArrayizableEleme
         Assert::string($publisher);
 
         $creationInstant = $data['creationInstant'] ?? null;
-        Assert::nullOrInteger($creationInstant);
+        Assert::nullOrString($creationInstant);
+        $creationInstant = is_null($creationInstant) ? null : XMLUtils::xsDateTimeToTimestamp($creationInstant);
 
         $publicationId = $data['publicationId'] ?? null;
         Assert::nullOrString($publicationId);
