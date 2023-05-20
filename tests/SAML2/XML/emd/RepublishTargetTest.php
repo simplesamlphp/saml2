@@ -57,7 +57,9 @@ final class RepublishTargetTest extends TestCase
     public function testMarshallingIncorrectValueThrowsException(): void
     {
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Expected a value identical to "http://edugain.org/". Got: "http://example.org/"');
+        $this->expectExceptionMessage(
+            'Expected a value identical to "http://edugain.org/". Got: "http://example.org/"',
+        );
 
         new RepublishTarget('http://example.org/');
     }
