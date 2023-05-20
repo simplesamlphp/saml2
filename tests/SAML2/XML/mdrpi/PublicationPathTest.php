@@ -50,12 +50,12 @@ final class PublicationPathTest extends TestCase
         $this->arrayRepresentation = [
             [
                 'publisher' => 'SomePublisher',
-                'creationInstant' => 1293840000,
+                'creationInstant' => '2011-01-01T00:00:00Z',
                 'publicationId' => 'SomePublicationId',
             ],
             [
                 'publisher' => 'SomeOtherPublisher',
-                'creationInstant' => 1293840000,
+                'creationInstant' => '2011-01-01T00:00:00Z',
                 'publicationId' => 'SomeOtherPublicationId',
             ],
         ];

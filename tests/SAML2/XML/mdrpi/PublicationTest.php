@@ -47,7 +47,7 @@ final class PublicationTest extends TestCase
 
         $this->arrayRepresentation = [
             'publisher' => 'SomePublisher',
-            'creationInstant' => 1234567890,
+            'creationInstant' => '2011-01-01T00:00:00Z',
             'publicationId' => 'SomePublicationId',
         ];
     }

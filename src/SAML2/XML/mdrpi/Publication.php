@@ -161,7 +161,7 @@ final class Publication extends AbstractMdrpiElement implements ArrayizableEleme
         $data['publisher'] = $this->getPublisher();
 
         if ($this->getCreationInstant() !== null) {
-            $data['creationInstant'] = $this->getCreationInstant();
+            $data['creationInstant'] = gmdate('Y-m-d\TH:i:s\Z', $this->getCreationInstant());
         }
 
         if ($this->getPublicationId() !== null) {

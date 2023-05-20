@@ -157,7 +157,7 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
         Assert::string($registrationAuthority);
 
         $registrationInstant = $data['registrationInstant'] ?? null;
-        Assert::nullOrInteger($registrationInstant);
+        Assert::nullOrString($registrationInstant);
         $registrationInstant = is_null($registrationInstant) ? null : XMLUtils::xsDateTimeToTimestamp($registrationInstant);
 
         $rp = $data['registrationPolicy'] ?? [];
@@ -183,7 +183,7 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
         $data['registrationAuthority'] = $this->getRegistrationAuthority();
 
         if ($this->getRegistrationInstant() !== null) {
-            $data['registrationInstant'] = $this->getRegistrationInstant();
+            $data['registrationInstant'] = gmdate('Y-m-d\TH:i:s\Z', $this->getRegistrationInstant());
         }
 
         if (!empty($this->getRegistrationPolicy())) {
