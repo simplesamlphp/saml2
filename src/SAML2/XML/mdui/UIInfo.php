@@ -29,7 +29,7 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
     use ExtendableElementTrait;
 
     /** The namespace-attribute for the xs:any element */
-    public const NAMESPACE = C::XS_ANY_NS_OTHER;
+    public const XS_ANY_ELT_NAMESPACE = C::XS_ANY_NS_OTHER;
 
     /**
      * Create a UIInfo element.
@@ -318,6 +318,7 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
             $child->toXML($e);
         }
 
+        /** @var \SimpleSAML\XML\SerializableElementInterface $child */
         foreach ($this->getElements() as $child) {
             $child->toXML($e);
         }

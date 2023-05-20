@@ -102,7 +102,7 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
         Assert::same($xml->namespaceURI, RegistrationInfo::NS, InvalidDOMElementException::class);
 
         $registrationAuthority = self::getAttribute($xml, 'registrationAuthority');
-        $registrationInstant = self::getAttribute($xml, 'registrationInstant', null);
+        $registrationInstant = self::getOptionalAttribute($xml, 'registrationInstant', null);
 
         // 2.1.1:  Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier
         if ($registrationInstant !== null) {

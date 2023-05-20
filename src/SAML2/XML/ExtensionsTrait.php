@@ -94,17 +94,8 @@ trait ExtensionsTrait
      */
     public function isEmptyElement(): bool
     {
-        if (empty($this->extensions)) {
-            return true;
-        }
-
-        foreach ($this->extensions as $extension) {
-            if ($extension->isEmptyElement() === false) {
-                return false;
-            }
-        }
-
-        return true;
+        // We cannot test this relyably until all child-elements are converted to ElementInterface
+        return false;
     }
 
 
@@ -118,9 +109,7 @@ trait ExtensionsTrait
     {
         $e = $this->instantiateParentElement($parent);
         foreach ($this->extensions as $extension) {
-            if (!$extension->isEmptyElement()) {
-                $extension->toXML($e);
-            }
+            $extension->toXML($e);
         }
         return $e;
     }

@@ -105,7 +105,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
      * Create a class from an array
      *
      * @param array $data
-     * @return self
+     * @return static
      */
     public static function fromArray(array $data): static
     {

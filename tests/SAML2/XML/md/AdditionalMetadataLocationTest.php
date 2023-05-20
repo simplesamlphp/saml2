@@ -35,6 +35,7 @@ class AdditionalMetadataLocationTest extends TestCase
             $xpCache,
         );
         $this->assertCount(1, $additionalMetadataLocationElements);
+        /** @var \DOMElement $additionalMetadataLocationElement */
         $additionalMetadataLocationElement = $additionalMetadataLocationElements[0];
 
         $this->assertEquals('TheLocation', $additionalMetadataLocationElement->textContent);
@@ -59,7 +60,8 @@ class AdditionalMetadataLocationTest extends TestCase
             '<md:AdditionalMetadataLocation xmlns:md="' . C::NS_MD . '"' .
             '>LocationText</md:AdditionalMetadataLocation>'
         );
-        $this->expectException(Exception::class, 'Missing namespace attribute on AdditionalMetadataLocation element.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing namespace attribute on AdditionalMetadataLocation element.');
         new AdditionalMetadataLocation($document->firstChild);
     }
 }

@@ -7,12 +7,11 @@ namespace SimpleSAML\SAML2\XML\alg;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\ExtendableElementTrait;
-use SimpleSAML\XMLSecurity\Constants as C;
-use SimpleSAML\XMLSecurity\Exception\InvalidArgumentException;
 
 /**
  * Class for handling the alg:DigestMethod element.
@@ -25,7 +24,7 @@ final class DigestMethod extends AbstractAlgElement
     use ExtendableElementTrait;
 
     /** The namespace-attribute for the xs:any element */
-    public const NAMESPACE = C::XS_ANY_NS_ANY;
+    public const XS_ANY_ELT_NAMESPACE = C::XS_ANY_NS_ANY;
 
 
     /**
@@ -96,6 +95,7 @@ final class DigestMethod extends AbstractAlgElement
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Algorithm', $this->getAlgorithm());
 
+        /** @var \SimpleSAML\XML\SerializableElementInterface $element */
         foreach ($this->getElements() as $element) {
             $element->toXML($e);
         }

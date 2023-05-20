@@ -45,7 +45,7 @@ final class Extensions extends AbstractMdElement
      * The rest will be added as a \SimpleSAML\XML\Chunk object.
      *
      * @param \DOMElement $xml
-     * @return \SimpleSAML\SAML2\XML\md\Extensions
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong

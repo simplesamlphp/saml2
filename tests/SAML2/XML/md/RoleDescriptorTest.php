@@ -41,6 +41,7 @@ class RoleDescriptorTest extends TestCase
         $xpCache = XPath::getXPath($roleDescriptorElement);
         $roleDescriptorElement = XPath::xpQuery($roleDescriptorElement, '/root/md:RoleDescriptor', $xpCache);
         $this->assertCount(1, $roleDescriptorElement);
+        /** @var \DOMElement $roleDescriptorElement */
         $roleDescriptorElement = $roleDescriptorElement[0];
 
         $this->assertEquals('SomeID', $roleDescriptorElement->getAttribute("ID"));

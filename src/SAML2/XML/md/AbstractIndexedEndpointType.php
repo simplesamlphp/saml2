@@ -33,7 +33,7 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
      * @param string $location
      * @param bool|null $isDefault
      * @param string|null $responseLocation
-     * @param array $attributes
+     * @param list<\SimpleSAML\XML\Attribute> $attributes
      */
     public function __construct(
         int $index,
@@ -84,8 +84,8 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
             $index,
             $binding,
             $location,
-            self::getBooleanAttribute($xml, 'isDefault', null),
-            self::getAttribute($xml, 'ResponseLocation', null),
+            self::getOptionalBooleanAttribute($xml, 'isDefault', null),
+            self::getOptionalAttribute($xml, 'ResponseLocation', null),
             self::getAttributesNSFromXML($xml),
         );
     }

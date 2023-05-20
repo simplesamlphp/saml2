@@ -30,6 +30,7 @@ class EndpointTypeTest extends TestCase
         $xpCache = XPath::getXPath($endpointTypeElement);
         $endpointTypeElements = XPath::xpQuery($endpointTypeElement, '/root/saml_metadata:Test', $xpCache);
         $this->assertCount(1, $endpointTypeElements);
+        /** @var \DOMElement $endpointTypeElement */
         $endpointTypeElement = $endpointTypeElements[0];
 
         $this->assertEquals('TestBinding', $endpointTypeElement->getAttribute('Binding'));
@@ -44,6 +45,7 @@ class EndpointTypeTest extends TestCase
         $xpCache = XPath::getXPath($endpointTypeElement);
         $endpointTypeElement = XPath::xpQuery($endpointTypeElement, '/root/saml_metadata:Test', $xpCache);
         $this->assertCount(1, $endpointTypeElement);
+        /** @var \DOMElement $endpointTypeElement */
         $endpointTypeElement = $endpointTypeElement[0];
 
         $this->assertEquals('TestResponseLocation', $endpointTypeElement->getAttribute('ResponseLocation'));
@@ -78,6 +80,7 @@ XML
         $xpCache = XPath::getXPath($endpointTypeElement);
         $endpointTypeElements = XPath::xpQuery($endpointTypeElement, '/root/saml_metadata:Test', $xpCache);
         $this->assertCount(1, $endpointTypeElements);
+        /** @var \DOMElement $endpointTypeElement */
         $endpointTypeElement = $endpointTypeElements[0];
 
         $this->assertEquals('value2', $endpointTypeElement->getAttributeNS('urn:test2', 'attr2'));

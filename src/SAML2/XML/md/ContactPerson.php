@@ -12,11 +12,15 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\ArrayizableElementInterface;
+use SimpleSAML\XML\Attribute as XMLAttribute;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_filter;
+use function array_key_exists;
 use function array_map;
 use function array_pop;
 use function count;
@@ -33,6 +37,10 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
 {
     use ExtendableElementTrait;
     use ExtendableAttributesTrait;
+
+    /** The namespace-attribute for the xs:anyAttribute element */
+    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
+
 
     /**
      * The several different contact types as defined per specification
@@ -56,7 +64,7 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @param \SimpleSAML\SAML2\XML\md\EmailAddress[] $emailAddress
      * @param \SimpleSAML\SAML2\XML\md\TelephoneNumber[] $telephoneNumber
-     * @param \DOMAttr[] $namespacedAttribute
+     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttribute
      */
     public function __construct(
         protected string $contactType,
@@ -147,7 +155,7 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
      * Initialize a ContactPerson element.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -205,7 +213,7 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
         $e->setAttribute('contactType', $this->getContactType());
 
         foreach ($this->getAttributesNS() as $attr) {
-            $e->setAttributeNS($attr['namespaceURI'], $attr['qualifiedName'], $attr['value']);
+            $attr->toXML($e);
         }
 
         $this->getExtensions()?->toXML($e);
@@ -239,27 +247,37 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
         $Company = isset($data['Company']) ? new Company($data['Company']) : null;
         $GivenName = isset($data['GivenName']) ? new GivenName($data['GivenName']) : null;
         $SurName = isset($data['SurName']) ? new SurName($data['SurName']) : null;
-        $Extensions = $data['Extensions'] ?? null;
+        $Extensions = array_key_exists('Extensions', $data) ? new Extensions($data['Extensions']) : null;
 
         $EmailAddress = [];
-        foreach ($data['EmailAddress'] as $mail) {
-            $EmailAddress[] = new EmailAddress($mail);
+        if (array_key_exists('EmailAddress', $data)) {
+            foreach ($data['EmailAddress'] as $mail) {
+                $EmailAddress[] = new EmailAddress($mail);
+            }
         }
 
         $TelephoneNumber = [];
-        foreach ($data['TelephoneNumber'] as $telephone) {
-            $TelephoneNumber[] = new TelephoneNumber($telephone);
+        if (array_key_exists('TelephoneNumber', $data)) {
+            foreach ($data['TelephoneNumber'] as $telephone) {
+                $TelephoneNumber[] = new TelephoneNumber($telephone);
+            }
         }
 
         $attributes = [];
-        foreach ($data['attributes'] as $attrName => $attrValue) {
-//$attributes[] = new \DOMAttr($attrName, $attrValue);
-            $doc = new DOMDocument('1.0', 'UTF-8');
-            $elt = $doc->createElement("placeholder");
-            $elt->setAttribute($attrName, $attrValue);
-//            $elt->setAttributeNS($ns, $attrName, $attrValue);
+        if (array_key_exists('attributes', $data)) {
+            foreach ($data['attributes'] as $attr) {
+                Assert::keyExists($attr, 'namespaceURI');
+                Assert::keyExists($attr, 'namespacePrefix');
+                Assert::keyExists($attr, 'attrName');
+                Assert::keyExists($attr, 'attrValue');
 
-/            $attributes[] = $elt->getAttributeNode($attrName);
+                $attributes[] = new XMLAttribute(
+                    $attr['namespaceURI'],
+                    $attr['namespacePrefix'],
+                    $attr['attrName'],
+                    $attr['attrValue'],
+                );
+            }
         }
 
         return new static(
@@ -289,7 +307,7 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
             'SurName' => $this->getSurName()?->getContent(),
             'EmailAddress' => [],
             'TelephoneNumber' => [],
-            'Extensions' => $this->Extensions,
+            'Extensions' => $this->Extensions?->getList(),
             'attributes' => [],
         ];
 
@@ -302,10 +320,10 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
         }
 
         /** @psalm-suppress PossiblyNullReference */
-        foreach ($this->getAttributesNS() as $a) {
-            $data['attributes'][$a['namespaceURI']] = [$a['qualifiedName'] => $a['value']];
+        foreach ($this->getAttributesNS() as $attr) {
+            $data['attributes'][] = $attr->toArray();
         }
 
-        return $data;
+        return array_filter($data);
     }
 }

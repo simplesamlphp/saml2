@@ -37,6 +37,7 @@ class AttributeTest extends TestCase
         $xpCache = XPath::getXPath($attributeElement);
         $attributeElements = XPath::xpQuery($attributeElement, '/root/saml_assertion:Attribute', $xpCache);
         $this->assertCount(1, $attributeElements);
+        /** @var \DOMElement $attributeElement */
         $attributeElement = $attributeElements[0];
 
         $this->assertEquals('TheName', $attributeElement->getAttribute('Name'));
@@ -82,7 +83,8 @@ XML
 </saml:Attribute>
 XML
         );
-        $this->expectException(Exception::class, 'Missing Name on Attribute.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing Name on Attribute.');
         new Attribute($document->firstChild);
     }
 }

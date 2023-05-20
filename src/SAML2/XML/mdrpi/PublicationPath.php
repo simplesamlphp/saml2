@@ -97,7 +97,7 @@ final class PublicationPath extends AbstractMdrpiElement implements ArrayizableE
      * Create a class from an array
      *
      * @param array $data
-     * @return self
+     * @return static
      */
     public static function fromArray(array $data): static
     {

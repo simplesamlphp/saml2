@@ -111,9 +111,8 @@ class AffiliationDescriptor extends SignedElementHelper
             throw new MissingElementException('Missing AffiliateMember in AffiliationDescriptor.');
         }
 
-        /** @var \DOMElement $kd */
-        foreach (XPath::xpQuery($xml, './saml_metadata:KeyDescriptor', XPath::getXPath($xml)) as $kd) {
-            $this->addKeyDescriptor(new KeyDescriptor($kd));
+        foreach (KeyDescriptor::getChildrenOfClass($xml) as $kd) {
+            $this->addKeyDescriptor($kd);
         }
     }
 

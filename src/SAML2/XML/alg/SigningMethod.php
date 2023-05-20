@@ -7,13 +7,12 @@ namespace SimpleSAML\SAML2\XML\alg;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\ExtendableElementTrait;
-use SimpleSAML\XMLSecurity\Constants as C;
-use SimpleSAML\XMLSecurity\Exception\InvalidArgumentException;
 
 use function strval;
 
@@ -28,7 +27,7 @@ final class SigningMethod extends AbstractAlgElement
     use ExtendableElementTrait;
 
     /** The namespace-attribute for the xs:any element */
-    public const NAMESPACE = C::XS_ANY_NS_ANY;
+    public const XS_ANY_ELT_NAMESPACE = C::XS_ANY_NS_ANY;
 
 
     /**
@@ -90,7 +89,7 @@ final class SigningMethod extends AbstractAlgElement
      * Convert XML into a SigningMethod
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -103,8 +102,8 @@ final class SigningMethod extends AbstractAlgElement
         Assert::same($xml->namespaceURI, SigningMethod::NS, InvalidDOMElementException::class);
 
         $Algorithm = self::getAttribute($xml, 'Algorithm');
-        $MinKeySize = self::getIntegerAttribute($xml, 'MinKeySize', null);
-        $MaxKeySize = self::getIntegerAttribute($xml, 'MaxKeySize', null);
+        $MinKeySize = self::getOptionalIntegerAttribute($xml, 'MinKeySize', null);
+        $MaxKeySize = self::getOptionalIntegerAttribute($xml, 'MaxKeySize', null);
 
         $elements = [];
         foreach ($xml->childNodes as $element) {
@@ -139,6 +138,7 @@ final class SigningMethod extends AbstractAlgElement
             $e->setAttribute('MaxKeySize', strval($this->getMaxKeySize()));
         }
 
+        /** @var \SimpleSAML\XML\SerializableElementInterface $element */
         foreach ($this->getElements() as $element) {
             $element->toXML($e);
         }

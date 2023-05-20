@@ -31,6 +31,7 @@ class IndexedEndpointTypeTest extends TestCase
         $xpCache = XPath::getXPath($indexedEndpointTypeElement);
         $indexedEndpointElements = XPath::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test', $xpCache);
         $this->assertCount(1, $indexedEndpointElements);
+        /** @var \DOMElement $indexedEndpointElement */
         $indexedEndpointElement = $indexedEndpointElements[0];
 
         $this->assertEquals('TestBinding', $indexedEndpointElement->getAttribute('Binding'));
@@ -40,14 +41,17 @@ class IndexedEndpointTypeTest extends TestCase
 
         $indexedEndpointType->setIsDefault(true);
         $document->loadXML('<root />');
+        /** @var \DOMElement $indexedEndpointTypeElement */
         $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
         $xpCache = XPath::getXPath($indexedEndpointTypeElement);
+        /** @var \DOMElement[] $indexedEndpointTypeElement */
         $indexedEndpointTypeElement = XPath::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test', $xpCache);
         $this->assertCount(1, $indexedEndpointTypeElement);
         $this->assertEquals('true', $indexedEndpointTypeElement[0]->getAttribute('isDefault'));
 
         $indexedEndpointType->setIsDefault(null);
         $document->loadXML('<root />');
+        /** @var \DOMElement $indexedEndpointTypeElement */
         $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
         $xpCache = XPath::getXPath($indexedEndpointTypeElement);
         $indexedEndpointTypeElement = XPath::xpQuery(

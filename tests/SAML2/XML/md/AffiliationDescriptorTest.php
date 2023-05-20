@@ -48,6 +48,7 @@ class AffiliationDescriptorTest extends TestCase
             $xpCache,
         );
         $this->assertCount(1, $affiliationDescriptorElements);
+        /** @var \DOMElement $affiliationDescriptorElement */
         $affiliationDescriptorElement = $affiliationDescriptorElements[0];
 
         $this->assertEquals('TheOwner', $affiliationDescriptorElement->getAttribute("affiliationOwnerID"));
@@ -103,7 +104,8 @@ XML
 </md:AffiliationDescriptor>
 XML
         );
-        $this->expectException(Exception::class, 'Missing AffiliateMember in AffiliationDescriptor.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing AffiliateMember in AffiliationDescriptor.');
         new AffiliationDescriptor($document->firstChild);
     }
 
@@ -122,7 +124,8 @@ XML
 XML
         );
 
-        $this->expectException(Exception::class, 'Missing affiliationOwnerID on AffiliationDescriptor.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing affiliationOwnerID on AffiliationDescriptor.');
         new AffiliationDescriptor($document->firstChild);
     }
 }

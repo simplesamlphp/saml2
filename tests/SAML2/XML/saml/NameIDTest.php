@@ -31,6 +31,7 @@ class NameIDTest extends TestCase
         $xpCache = XPath::getXPath($nameIdElement);
         $nameIdElements = XPath::xpQuery($nameIdElement, '/saml_assertion:NameID', $xpCache);
         $this->assertCount(1, $nameIdElements);
+        /** @var \DOMElement $nameIdElement */
         $nameIdElement = $nameIdElements[0];
 
         $this->assertEquals('TheNameQualifier', $nameIdElement->getAttribute("NameQualifier"));

@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\EntityDescriptor;
 use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
 use SimpleSAML\SAML2\XML\md\Organization;
@@ -30,7 +31,8 @@ class EntityDescriptorTest extends TestCase
 </EntityDescriptor>
 XML
         );
-        $this->expectException(Exception::class, 'Missing affiliationOwnerID on AffiliationDescriptor.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing affiliationOwnerID on AffiliationDescriptor.');
         new EntityDescriptor($document->firstChild);
     }
 
@@ -48,7 +50,8 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(Exception::class, 'Missing required attribute entityID on EntityDescriptor.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing required attribute entityID on EntityDescriptor.');
         new EntityDescriptor($document->firstChild);
     }
 
@@ -65,7 +68,8 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(Exception::class, 'Missing AffiliateMember in AffiliationDescriptor.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing AffiliateMember in AffiliationDescriptor.');
         new EntityDescriptor($document->firstChild);
     }
 
@@ -80,8 +84,8 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(
-            Exception::class,
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.'
         );
         new EntityDescriptor($document->firstChild);
@@ -101,7 +105,7 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(Exception::Class, 'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: asdf');
+        $this->expectException(AssertionFailedException::class);
         new EntityDescriptor($document->firstChild);
     }
 
@@ -122,14 +126,14 @@ XML
         );
         $entityDescriptor = new EntityDescriptor($document->firstChild);
 
-        $this->assertTrue($entityDescriptor instanceof EntityDescriptor);
+        $this->assertInstanceOf(EntityDescriptor::class, $entityDescriptor);
         $this->assertEquals('theEntityID', $entityDescriptor->getEntityID());
 
         $roleDescriptor = $entityDescriptor->getRoleDescriptor();
         $this->assertTrue(empty($roleDescriptor));
 
         $affiliationDescriptor = $entityDescriptor->getAffiliationDescriptor();
-        $this->assertTrue($affiliationDescriptor instanceof AffiliationDescriptor);
+        $this->assertInstanceOf(AffiliationDescriptor::class, $affiliationDescriptor);
         $this->assertEquals('asdf', $affiliationDescriptor->getAffiliationOwnerID());
         $this->assertEquals('theAffiliationDescriptorID', $affiliationDescriptor->getID());
         $this->assertEquals(1265027696, $affiliationDescriptor->getValidUntil());
@@ -166,7 +170,7 @@ XML
         );
         $entityDescriptor = new EntityDescriptor($document->firstChild);
 
-        $this->assertTrue($entityDescriptor instanceof EntityDescriptor);
+        $this->assertInstanceOf(EntityDescriptor::class, $entityDescriptor);
         $this->assertEquals('theEntityID', $entityDescriptor->getEntityID());
         $this->assertEquals('theID', $entityDescriptor->getID());
         $this->assertEquals(1262349296, $entityDescriptor->getValidUntil());
@@ -174,7 +178,7 @@ XML
 
         $roleDescriptor = $entityDescriptor->getRoleDescriptor();
         $this->assertCount(1, $roleDescriptor);
-        $this->assertTrue($roleDescriptor[0] instanceof AttributeAuthorityDescriptor);
+        $this->assertInstanceOf(AttributeAuthorityDescriptor::class, $roleDescriptor[0]);
 
         $o = $entityDescriptor->getOrganization();
         $this->assertTrue($o instanceof Organization);

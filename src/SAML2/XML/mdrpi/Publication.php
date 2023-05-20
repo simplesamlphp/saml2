@@ -84,7 +84,7 @@ final class Publication extends AbstractMdrpiElement implements ArrayizableEleme
         Assert::same($xml->namespaceURI, Publication::NS, InvalidDOMElementException::class);
 
         $publisher = self::getAttribute($xml, 'publisher');
-        $creationInstant = self::getAttribute($xml, 'creationInstant', null);
+        $creationInstant = self::getOptionalAttribute($xml, 'creationInstant', null);
 
         // 2.2.1:  Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier
         if ($creationInstant !== null) {
@@ -95,7 +95,7 @@ final class Publication extends AbstractMdrpiElement implements ArrayizableEleme
             $creationInstant = XMLUtils::xsDateTimeToTimestamp($creationInstant);
         }
 
-        $publicationId = self::getAttribute($xml, 'publicationId', null);
+        $publicationId = self::getOptionalAttribute($xml, 'publicationId', null);
 
         return new static($publisher, $creationInstant, $publicationId);
     }
@@ -128,7 +128,7 @@ final class Publication extends AbstractMdrpiElement implements ArrayizableEleme
      * Create a class from an array
      *
      * @param array $data
-     * @return self
+     * @return static
      */
     public static function fromArray(array $data): static
     {

@@ -115,7 +115,7 @@ final class PublicationInfo extends AbstractMdrpiElement implements ArrayizableE
         Assert::same($xml->namespaceURI, PublicationInfo::NS, InvalidDOMElementException::class);
 
         $publisher = self::getAttribute($xml, 'publisher');
-        $creationInstant = self::getAttribute($xml, 'creationInstant', null);
+        $creationInstant = self::getOptionalAttribute($xml, 'creationInstant', null);
 
         // 2.2.1:  Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier
         if ($creationInstant !== null) {
@@ -126,7 +126,7 @@ final class PublicationInfo extends AbstractMdrpiElement implements ArrayizableE
             $creationInstant = XMLUtils::xsDateTimeToTimestamp($creationInstant);
         }
 
-        $publicationId = self::getAttribute($xml, 'publicationId', null);
+        $publicationId = self::getOptionalAttribute($xml, 'publicationId', null);
         $UsagePolicy = UsagePolicy::getChildrenOfClass($xml);
 
         return new static($publisher, $creationInstant, $publicationId, $UsagePolicy);

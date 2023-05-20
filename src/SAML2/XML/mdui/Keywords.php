@@ -88,8 +88,7 @@ final class Keywords extends AbstractMduiElement implements ArrayizableElementIn
         Assert::same($xml->namespaceURI, Keywords::NS, InvalidDOMElementException::class);
         Assert::stringNotEmpty($xml->textContent, 'Missing value for Keywords.');
 
-        /** @var string $lang */
-        $lang = self::getAttribute($xml, 'xml:lang');
+        $lang = self::getOptionalAttribute($xml, 'xml:lang');
 
         $Keywords = explode('+', $xml->textContent);
 

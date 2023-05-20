@@ -71,12 +71,11 @@ final class RequestInitiator extends AbstractEndpointType
             ProtocolViolationException::class,
         );
 
-        /** @var string $location */
         $location = self::getAttribute($xml, 'Location');
 
         return new static(
             $location,
-            self::getAttribute($xml, 'ResponseLocation', null),
+            self::getOptionalAttribute($xml, 'ResponseLocation', null),
             self::getAttributesNSFromXML($xml),
         );
     }

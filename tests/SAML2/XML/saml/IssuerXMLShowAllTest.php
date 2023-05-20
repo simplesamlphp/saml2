@@ -30,6 +30,7 @@ class IssuerXMLShowAllTest extends TestCase
         $xpCache = XPath::getXPath($issuerElement);
         $issuerElements = XPath::xpQuery($issuerElement, '/saml_assertion:Issuer', $xpCache);
         $this->assertCount(1, $issuerElements);
+        /** @var \DOMElement $issuerElement */
         $issuerElement = $issuerElements[0];
 
         $this->assertEquals('TheNameQualifier', $issuerElement->getAttribute("NameQualifier"));

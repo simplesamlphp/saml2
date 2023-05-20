@@ -16,6 +16,7 @@ use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\md\GivenName;
 use SimpleSAML\SAML2\XML\md\SurName;
 use SimpleSAML\SAML2\XML\md\TelephoneNumber;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -40,6 +41,9 @@ final class ContactPersonTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+    /** @var \DOMDocument */
+    protected DOMDocument $ext;
+
 
     /**
      */
@@ -53,17 +57,25 @@ final class ContactPersonTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/md_ContactPerson.xml',
         );
 
+        $this->ext = DOMDocumentFactory::fromString(
+            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>'
+        );
+
         $this->arrayRepresentation = [
             'ContactType' => 'administrative',
             'Company' => 'SimpleSAMLphp',
             'GivenName' => 'Lead',
             'SurName' => 'Developer',
-            'Extensions' => null,
+            'Extensions' => [new Chunk($this->ext->documentElement)],
             'EmailAddress' => ['mailto:lead.developer@example.org'],
             'TelephoneNumber' => ['+1234567890'],
             'attributes' => [
-                'xmlns:test' => 'urn:test:something',
-                'test:attr' => 'value',
+                [
+                    'namespaceURI' => 'urn:test:something',
+                    'namespacePrefix' => 'test',
+                    'attrName' => 'attr',
+                    'attrValue' => 'value',
+                ],
             ],
         ];
     }
@@ -77,14 +89,9 @@ final class ContactPersonTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $ext = DOMDocumentFactory::fromString(
-            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>',
-        );
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
 
-        $attr1 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr1');
-        $attr1->value = 'testval1';
-        $attr2 = $this->xmlRepresentation->createAttributeNS('urn:test:something', 'test:attr2');
-        $attr2->value = 'testval2';
         $contactPerson = new ContactPerson(
             'other',
             new Company('Test Company'),
@@ -92,7 +99,7 @@ final class ContactPersonTest extends TestCase
             new SurName('Doe'),
             new Extensions(
                 [
-                    new Chunk($ext->documentElement),
+                    new Chunk($this->ext->documentElement),
                 ],
             ),
             [new EmailAddress('jdoe@test.company'), new EmailAddress('john.doe@test.company')],

@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\XML\md\Organization;
 use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
 use SimpleSAML\SAML2\XML\md\OrganizationName;
 use SimpleSAML\SAML2\XML\md\OrganizationURL;
+use SimpleSAML\XML\Attribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -34,6 +35,9 @@ final class OrganizationTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+    /** @var \DOMDocument */
+    protected DOMDocument $ext;
+
 
     /**
      */
@@ -43,12 +47,23 @@ final class OrganizationTest extends TestCase
 
         $this->testedClass = Organization::class;
 
+        $this->ext = DOMDocumentFactory::fromString(
+            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>'
+        );
+
         $this->arrayRepresentation = [
             'OrganizationName' => ['en' => 'SSP'],
             'OrganizationDisplayName' => ['en' => 'SimpleSAMLphp'],
             'OrganizationURL' => ['en' => 'https://simplesamlphp.org'],
-            'Extensions' => null,
-            'urn:test:something' => ['test:attr' => 'value'],
+            'Extensions' => [new Chunk($this->ext->documentElement)],
+            'attributes' => [
+                [
+                    'namespaceURI' => 'urn:test:something',
+                    'namespacePrefix' => 'test',
+                    'attrName' => 'attr',
+                    'attrValue' => 'value',
+                ],
+            ],
         ];
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -65,17 +80,13 @@ final class OrganizationTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $ext = DOMDocumentFactory::fromString(
-            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>'
-        );
-
         $org = new Organization(
             [new OrganizationName('en', 'Identity Providers R US')],
             [new OrganizationDisplayName('en', 'Identity Providers R US, a Division of Lerxst Corp.')],
             [new OrganizationURL('en', 'https://IdentityProvider.com')],
             new Extensions(
                 [
-                    new Chunk($ext->documentElement),
+                    new Chunk($this->ext->documentElement),
                 ],
             ),
         );

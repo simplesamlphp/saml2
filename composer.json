@@ -24,14 +24,13 @@
         "psr/log": "^2.0 || ^3.0",
         "robrichards/xmlseclibs": "^3.1.1",
         "simplesamlphp/assert": "^1.0.4",
-        "simplesamlphp/xml-common": "^1.7.3",
-        "simplesamlphp/xml-security": "^1.6.1",
-        "simplesamlphp/xml-soap": "^1.1.0"
+        "simplesamlphp/xml-common": "^1.9.0",
+        "simplesamlphp/xml-security": "^1.6.3",
+        "simplesamlphp/xml-soap": "^1.2.0"
     },
     "require-dev": {
         "mockery/mockery": "^1.5",
-        "simplesamlphp/simplesamlphp-test-framework": "^1.5.4",
-        "vimeo/psalm": "^5.11"
+        "simplesamlphp/simplesamlphp-test-framework": "^1.5.3"
     },
     "autoload": {
         "psr-4": {

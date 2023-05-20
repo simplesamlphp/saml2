@@ -18,7 +18,7 @@ use SimpleSAML\SAML2\Signature\PublicKeyValidator;
 use SimpleSAML\SAML2\SignedElement;
 use SimpleSAML\SAML2\Utilities\Certificate;
 use SimpleSAML\Test\SAML2\CertificatesMock;
-use SimpleSAML\Test\SAML2\SimpleTestLogger;
+use SimpleSAML\TestUtils\SimpleTestLogger;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 class PublicKeyValidatorTest extends MockeryTestCase
