@@ -19,6 +19,7 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_filter;
 use function array_key_exists;
 use function array_map;
 use function array_pop;
@@ -246,7 +247,7 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
         $Company = isset($data['Company']) ? new Company($data['Company']) : null;
         $GivenName = isset($data['GivenName']) ? new GivenName($data['GivenName']) : null;
         $SurName = isset($data['SurName']) ? new SurName($data['SurName']) : null;
-        $Extensions = $data['Extensions'] ?? null;
+        $Extensions = array_key_exists('Extensions', $data) ? new Extensions($data['Extensions']) : null;
 
         $EmailAddress = [];
         if (array_key_exists('EmailAddress', $data)) {
@@ -306,7 +307,7 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
             'SurName' => $this->getSurName()?->getContent(),
             'EmailAddress' => [],
             'TelephoneNumber' => [],
-            'Extensions' => $this->Extensions,
+            'Extensions' => $this->Extensions->getList(),
             'attributes' => [],
         ];
 
@@ -322,6 +323,6 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
             $data['attributes'][] = $attr->toArray();
         }
 
-        return $data;
+        return array_filter($data);
     }
 }

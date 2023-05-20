@@ -19,6 +19,7 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_filter;
 use function array_key_exists;
 use function array_merge;
 
@@ -205,7 +206,7 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
             $orgURLs[] = OrganizationURL::fromArray($data['OrganizationURL']);
         }
 
-        $Extensions = $data['Extensions'] ?? null;
+        $Extensions = array_key_exists('Extensions', $data) ? new Extensions($data['Extensions']) : null;
 
         $attributes = [];
         if (array_key_exists('attributes', $data)) {
@@ -245,7 +246,7 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
             'OrganizationName' => [],
             'OrganizationDisplayName' => [],
             'OrganizationURL' => [],
-            'Extensions' => $this->getExtensions(),
+            'Extensions' => $this->getExtensions()?->getList(),
             'attributes' => [],
         ];
 
@@ -268,6 +269,6 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
             $data['attributes'][] = $attr->toArray();
         }
 
-        return $data;
+        return array_filter($data);
     }
 }
