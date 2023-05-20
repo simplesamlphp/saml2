@@ -190,20 +190,23 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
     {
         $orgNames = [];
         if (array_key_exists('OrganizationName', $data)) {
-            Assert::count($data['OrganizationName'], 1);
-            $orgNames[] = OrganizationName::fromArray($data['OrganizationName']);
+            foreach ($data['OrganizationName'] as $lang => $orgName) {
+                $orgNames[] = new OrganizationName($lang, $orgName);
+            }
         }
 
         $orgDisplayNames = [];
         if (array_key_exists('OrganizationDisplayName', $data)) {
-            Assert::count($data['OrganizationDisplayName'], 1);
-            $orgDisplayNames[] = OrganizationDisplayName::fromArray($data['OrganizationDisplayName']);
+            foreach ($data['OrganizationDisplayName'] as $lang => $orgDisplayName) {
+                $orgDisplayNames[] = new OrganizationDisplayName($lang, $orgDisplayName);
+            }
         }
 
         $orgURLs = [];
         if (array_key_exists('OrganizationURL', $data)) {
-            Assert::count($data['OrganizationURL'], 1);
-            $orgURLs[] = OrganizationURL::fromArray($data['OrganizationURL']);
+            foreach ($data['OrganizationURL'] as $lang => $orgURL) {
+                $orgURLs[] = new OrganizationURL($lang, $orgURL);
+            }
         }
 
         $Extensions = array_key_exists('Extensions', $data) ? new Extensions($data['Extensions']) : null;
