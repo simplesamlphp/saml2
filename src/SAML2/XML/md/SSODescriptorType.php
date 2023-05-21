@@ -28,9 +28,9 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * List of SingleLogoutService endpoints.
      *
-     * Array with EndpointType objects.
+     * Array with SingleLogoutService objects.
      *
-     * @var \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\SingleLogoutService[]
      */
     private array $SingleLogoutService = [];
 
@@ -73,11 +73,7 @@ abstract class SSODescriptorType extends RoleDescriptor
             $this->addArtifactResolutionService($ars);
         }
 
-        /** @var \DOMElement $ep */
-        foreach (XPath::xpQuery($xml, './saml_metadata:SingleLogoutService', $xpCache) as $ep) {
-            $this->addSingleLogoutService(new EndpointType($ep));
-        }
-
+        $this->setSingleLogoutService(SingleLogoutService::getChildrenOfClass($xml));
         $this->setManageNameIDService(ManageNameIDService::getChildrenOfClass($xml));
         $this->setNameIDFormat(NameIDFormat::getChildrenOfClass($xml));
     }
@@ -122,7 +118,7 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Collect the value of the SingleLogoutService-property
      *
-     * @return \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\SingleLogoutService[]
      */
     public function getSingleLogoutService(): array
     {
@@ -133,11 +129,12 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Set the value of the SingleLogoutService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType[] $singleLogoutService
+     * @param \SimpleSAML\SAML2\XML\md\SingleLogoutService[] $singleLogoutService
      * @return void
      */
     public function setSingleLogoutService(array $singleLogoutService): void
     {
+        Assert::allIsInstanceOf($singleLogoutService, SingleLogoutService::class);
         $this->SingleLogoutService = $singleLogoutService;
     }
 
@@ -145,10 +142,10 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Add the value to the SingleLogoutService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType $singleLogoutService
+     * @param \SimpleSAML\SAML2\XML\md\SingleLogoutService $singleLogoutService
      * @return void
      */
-    public function addSingleLogoutService(EndpointType $singleLogoutService): void
+    public function addSingleLogoutService(SingleLogoutService $singleLogoutService): void
     {
         $this->SingleLogoutService[] = $singleLogoutService;
     }
@@ -228,8 +225,8 @@ abstract class SSODescriptorType extends RoleDescriptor
             $ars->toXML($e);
         }
 
-        foreach ($this->SingleLogoutService as $ep) {
-            $ep->toXML($e, 'md:SingleLogoutService');
+        foreach ($this->SingleLogoutService as $sls) {
+            $sls->toXML($e);
         }
 
         foreach ($this->ManageNameIDService as $mnids) {
