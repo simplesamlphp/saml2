@@ -49,7 +49,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * Array with EndpointType objects.
      *
-     * @var \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
     private array $AssertionIDRequestService = [];
 
@@ -99,11 +99,7 @@ class IDPSSODescriptor extends SSODescriptorType
             $this->NameIDMappingService[] = new EndpointType($ep);
         }
 
-        /** @var \DOMElement $ep */
-        foreach (XPath::xpQuery($xml, './saml_metadata:AssertionIDRequestService', $xpCache) as $ep) {
-            $this->AssertionIDRequestService[] = new EndpointType($ep);
-        }
-
+        $this->AssertionIDRequestService = AssertionIDRequestService::getChildrenOfClass($xml);
         $this->AttributeProfile = AttributeProfile::getChildrenOfClass($xml);
 
         /** @var \DOMElement $a */
@@ -209,7 +205,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Collect the value of the AssertionIDRequestService-property
      *
-     * @return \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
     public function getAssertionIDRequestService(): array
     {
@@ -220,11 +216,12 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Set the value of the AssertionIDRequestService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType[] $assertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
      * @return void
      */
     public function setAssertionIDRequestService(array $assertionIDRequestService): void
     {
+        Assert::allIsInstanceOf($assertionIDRequestService, AssertionIDRequestService::class);
         $this->AssertionIDRequestService = $assertionIDRequestService;
     }
 
@@ -232,10 +229,10 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Add the value to the AssertionIDRequestService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType $assertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService $assertionIDRequestService
      * @return void
      */
-    public function addAssertionIDRequestService(EndpointType $assertionIDRequestService): void
+    public function addAssertionIDRequestService(AssertionIDRequestService $assertionIDRequestService): void
     {
         $this->AssertionIDRequestService[] = $assertionIDRequestService;
     }
@@ -321,8 +318,8 @@ class IDPSSODescriptor extends SSODescriptorType
             $ep->toXML($e, 'md:NameIDMappingService');
         }
 
-        foreach ($this->AssertionIDRequestService as $ep) {
-            $ep->toXML($e, 'md:AssertionIDRequestService');
+        foreach ($this->AssertionIDRequestService as $aidrs) {
+            $aidrs->toXML($e);
         }
 
         foreach ($this->AttributeProfile as $ap) {

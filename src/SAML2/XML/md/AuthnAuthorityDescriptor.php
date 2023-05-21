@@ -31,7 +31,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
      *
      * Array with EndpointType objects.
      *
-     * @var \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
     private array $AssertionIDRequestService = [];
 
@@ -69,11 +69,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
             throw new MissingElementException('Must have at least one AuthnQueryService in AuthnAuthorityDescriptor.');
         }
 
-        /** @var \DOMElement $ep */
-        foreach (XPath::xpQuery($xml, './saml_metadata:AssertionIDRequestService', $xpCache) as $ep) {
-            $this->addAssertionIDRequestService(new EndpointType($ep));
-        }
-
+        $this->setAssertionIDRequestService(AssertionIDRequestService::getChildrenOfClass($xml));
         $this->setNameIDFormat(NameIDFormat::getChildrenOfClass($xml));
     }
 
@@ -116,7 +112,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Collect the value of the AssertionIDRequestService-property
      *
-     * @return \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
     public function getAssertionIDRequestService(): array
     {
@@ -127,11 +123,12 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Set the value of the AssertionIDRequestService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType[] $assertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
      * @return void
      */
     public function setAssertionIDRequestService(array $assertionIDRequestService): void
     {
+        Assertion::allIsInstanceOf($assertionIDRequestService, AssertionIDRequestService::class);
         $this->AssertionIDRequestService = $assertionIDRequestService;
     }
 
@@ -139,10 +136,10 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Add the value to the AssertionIDRequestService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType $assertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService $assertionIDRequestService
      * @return void
      */
-    public function addAssertionIDRequestService(EndpointType $assertionIDRequestService): void
+    public function addAssertionIDRequestService(AssertionIDRequestService $assertionIDRequestService): void
     {
         $this->AssertionIDRequestService[] = $assertionIDRequestService;
     }
@@ -188,8 +185,8 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
             $ep->toXML($e, 'md:AuthnQueryService');
         }
 
-        foreach ($this->AssertionIDRequestService as $ep) {
-            $ep->toXML($e, 'md:AssertionIDRequestService');
+        foreach ($this->AssertionIDRequestService as $aidrs) {
+            $aidrs->toXML($e);
         }
 
         foreach ($this->NameIDFormat as $nid) {
