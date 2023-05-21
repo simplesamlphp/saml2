@@ -48,9 +48,9 @@ class AttributeConsumingService
     /**
      * The ServiceDescription of this AttributeConsumingService.
      *
-     * This is an associative array with language => translation.
+     * This is an array of ServiceDescription objects.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\md\ServiceDescription[]
      */
     private array $ServiceDescription = [];
 
@@ -88,7 +88,7 @@ class AttributeConsumingService
             throw new MissingElementException('Missing ServiceName in AttributeConsumingService.');
         }
 
-        $this->setServiceDescription(XMLUtils::extractLocalizedStrings($xml, C::NS_MD, 'ServiceDescription'));
+        $this->setServiceDescription(ServiceDescriptor::getChildrenOfClass($xml));
 
         /** @var \DOMElement $ra */
         foreach (XPath::xpQuery($xml, './saml_metadata:RequestedAttribute', XPath::getXPath($xml)) as $ra) {
@@ -170,7 +170,7 @@ class AttributeConsumingService
     /**
      * Collect the value of the ServiceDescription-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\md\ServiceDescription[]
      */
     public function getServiceDescription(): array
     {
@@ -181,11 +181,12 @@ class AttributeConsumingService
     /**
      * Set the value of the ServiceDescription-property
      *
-     * @param string[] $serviceDescription
+     * @param \SimpleSAML\SAML2\XML\md\ServiceDescription[] $serviceDescription
      * @return void
      */
     public function setServiceDescription(array $serviceDescription): void
     {
+        Assert::allIsInstanceOf($serviceDescription, ServiceDescription::class);
         $this->ServiceDescription = $serviceDescription;
     }
 
@@ -249,7 +250,10 @@ class AttributeConsumingService
         foreach ($this->getServiceName() as $sn) {
             $sn->toXML($e);
         }
-        XMLUtils::addStrings($e, C::NS_MD, 'md:ServiceDescription', true, $this->getServiceDescription());
+
+        foreach ($this->getServiceDescription() as $sd) {
+            $sd->toXML($e);
+        }
 
         foreach ($this->getRequestedAttribute() as $ra) {
             $ra->toXML($e);
