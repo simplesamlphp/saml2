@@ -67,11 +67,7 @@ class SPSSODescriptor extends SSODescriptorType
         $this->WantAssertionsSigned = Utils::parseBoolean($xml, 'WantAssertionsSigned', null);
 
         $this->AssertionConsumerService = AssertionConsumerService::getChildrenOfClass($xml);
-
-        /** @var \DOMElement $acs */
-        foreach (XPath::xpQuery($xml, './saml_metadata:AttributeConsumingService', $xpCache) as $acs) {
-            $this->AttributeConsumingService[] = new AttributeConsumingService($acs);
-        }
+        $this->AttributeConsumingService = AttributeConsumingService::getChildrenOfClass($xml);
     }
 
 
@@ -140,6 +136,7 @@ class SPSSODescriptor extends SSODescriptorType
      */
     public function setAssertionConsumerService(array $acs): void
     {
+        Assert::allIsInstanceOf($acs, AttributeConsumingService::class);
         $this->AssertionConsumerService = $acs;
     }
 
