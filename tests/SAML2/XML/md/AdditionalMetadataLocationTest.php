@@ -4,64 +4,103 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use Exception;
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation;
-use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+
+use function dirname;
+use function strval;
 
 /**
- * Class \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocationTest
+ * Tests for the AdditionalMetadataLocation class
+ *
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
+ * @covers \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation
+ * @package simplesamlphp/saml2
  */
-class AdditionalMetadataLocationTest extends TestCase
+final class AdditionalMetadataLocationTest extends TestCase
 {
+    use SchemaValidationTestTrait;
+    use SerializableElementTestTrait;
+
+
     /**
-     * @return void
+     */
+    public function setUp(): void
+    {
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+
+        $this->testedClass = AdditionalMetadataLocation::class;
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/md_AdditionalMetadataLocation.xml',
+        );
+    }
+
+
+    // test marshalling
+
+
+    /**
+     * Test creating an AdditionalMetadataLocation object from scratch.
      */
     public function testMarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString('<root/>');
-
-        $additionalMetadataLocation = new AdditionalMetadataLocation();
-        $additionalMetadataLocation->setNamespace('NamespaceAttribute');
-        $additionalMetadataLocation->setLocation('TheLocation');
-        $additionalMetadataLocationElement = $additionalMetadataLocation->toXML($document->firstChild);
-
-        $xpCache = XPath::getXPath($additionalMetadataLocationElement);
-        $additionalMetadataLocationElements = XPath::xpQuery(
-            $additionalMetadataLocationElement,
-            '/root/saml_metadata:AdditionalMetadataLocation',
-            $xpCache,
+        $additionalMetadataLocation = new AdditionalMetadataLocation(
+            'urn:x-simplesamlphp:namespace',
+            'https://simplesamlphp.org/some/endpoint',
         );
-        $this->assertCount(1, $additionalMetadataLocationElements);
-        /** @var \DOMElement $additionalMetadataLocationElement */
-        $additionalMetadataLocationElement = $additionalMetadataLocationElements[0];
 
-        $this->assertEquals('TheLocation', $additionalMetadataLocationElement->textContent);
-        $this->assertEquals('NamespaceAttribute', $additionalMetadataLocationElement->getAttribute("namespace"));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($additionalMetadataLocation),
+        );
     }
 
 
     /**
-     * @return void
+     * Test that creating an AdditionalMetadataLocation from scratch with an empty namespace fails.
+     */
+    public function testMarshallingWithEmptyNamespace(): void
+    {
+        $this->expectException(SchemaViolationException::class);
+        new AdditionalMetadataLocation('', 'https://simplesamlphp.org/some/endpoint');
+    }
+
+
+    // test unmarshalling
+
+
+    /**
+     * Test creating an AdditionalMetadataLocation object from XML.
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(
-            '<md:AdditionalMetadataLocation xmlns:md="' . C::NS_MD . '"' .
-            ' namespace="TheNamespaceAttribute">LocationText</md:AdditionalMetadataLocation>'
-        );
-        $additionalMetadataLocation = new AdditionalMetadataLocation($document->firstChild);
-        $this->assertEquals('TheNamespaceAttribute', $additionalMetadataLocation->getNamespace());
-        $this->assertEquals('LocationText', $additionalMetadataLocation->getLocation());
+        $additionalMetadataLocation = AdditionalMetadataLocation::fromXML($this->xmlRepresentation->documentElement);
 
-        $document->loadXML(
-            '<md:AdditionalMetadataLocation xmlns:md="' . C::NS_MD . '"' .
-            '>LocationText</md:AdditionalMetadataLocation>'
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($additionalMetadataLocation),
         );
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing namespace attribute on AdditionalMetadataLocation element.');
-        new AdditionalMetadataLocation($document->firstChild);
+    }
+
+
+    /**
+     * Test that creating an AdditionalMetadataLocation from XML fails if "namespace" is missing.
+     */
+    public function testUnmarshallingWithoutNamespace(): void
+    {
+        $document = $this->xmlRepresentation->documentElement;
+        $document->removeAttribute('namespace');
+
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage("Missing 'namespace' attribute on md:AdditionalMetadataLocation.");
+        AdditionalMetadataLocation::fromXML($document);
     }
 }
