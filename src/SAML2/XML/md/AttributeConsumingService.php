@@ -39,9 +39,9 @@ class AttributeConsumingService
     /**
      * The ServiceName of this AttributeConsumingService.
      *
-     * This is an associative array with language => translation.
+     * This is an array of ServiceName objects.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\md\ServiceName[]
      */
     private array $ServiceName = [];
 
@@ -83,7 +83,7 @@ class AttributeConsumingService
 
         $this->setIsDefault(Utils::parseBoolean($xml, 'isDefault', null));
 
-        $this->setServiceName(XMLUtils::extractLocalizedStrings($xml, C::NS_MD, 'ServiceName'));
+        $this->setServiceName(ServiceName::getChildrenOfClass($xml));
         if ($this->getServiceName() === []) {
             throw new MissingElementException('Missing ServiceName in AttributeConsumingService.');
         }
@@ -146,7 +146,7 @@ class AttributeConsumingService
     /**
      * Collect the value of the ServiceName-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\md\ServiceName[]
      */
     public function getServiceName(): array
     {
@@ -157,11 +157,12 @@ class AttributeConsumingService
     /**
      * Set the value of the ServiceName-property
      *
-     * @param string[] $serviceName
+     * @param \SimpleSAML\SAML2\XML\md\ServiceName[] $serviceName
      * @return void
      */
     public function setServiceName(array $serviceName): void
     {
+        Assert::allIsInstanceOf($serviceName, ServiceName::class);
         $this->ServiceName = $serviceName;
     }
 
@@ -245,7 +246,9 @@ class AttributeConsumingService
             $e->setAttribute('isDefault', 'false');
         }
 
-        XMLUtils::addStrings($e, C::NS_MD, 'md:ServiceName', true, $this->getServiceName());
+        foreach ($this->getServiceName() as $sn) {
+            $sn->toXML($e);
+        }
         XMLUtils::addStrings($e, C::NS_MD, 'md:ServiceDescription', true, $this->getServiceDescription());
 
         foreach ($this->getRequestedAttribute() as $ra) {
