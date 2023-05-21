@@ -29,9 +29,9 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * List of SingleSignOnService endpoints.
      *
-     * Array with EndpointType objects.
+     * Array with SingleSignOnService objects.
      *
-     * @var \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\SingleSignOnService[]
      */
     private array $SingleSignOnService = [];
 
@@ -87,16 +87,12 @@ class IDPSSODescriptor extends SSODescriptorType
 
         $this->WantAuthnRequestsSigned = Utils::parseBoolean($xml, 'WantAuthnRequestsSigned', null);
 
-        $xpCache = XPath::getXPath($xml);
-
-        /** @var \DOMElement $ep */
-        foreach (XPath::xpQuery($xml, './saml_metadata:SingleSignOnService', $xpCache) as $ep) {
-            $this->SingleSignOnService[] = new EndpointType($ep);
-        }
-
+        $this->setSingleSignOnService(SingleSignOnService::getChildrenOfClass($xml));
         $this->setNameIDMappingService(NameIDMappingService::getChildrenOfClass());
-        $this->AssertionIDRequestService = AssertionIDRequestService::getChildrenOfClass($xml);
-        $this->AttributeProfile = AttributeProfile::getChildrenOfClass($xml);
+        $this->setAssertionIDRequestService(AssertionIDRequestService::getChildrenOfClass($xml));
+        $this->setAttributeProfile(AttributeProfile::getChildrenOfClass($xml));
+
+        $xpCache = XPath::getXPath($xml);
 
         /** @var \DOMElement $a */
         foreach (XPath::xpQuery($xml, './saml_assertion:Attribute', $xpCache) as $a) {
@@ -131,7 +127,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Collect the value of the SingleSignOnService-property
      *
-     * @return \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\SingleSignOnService[]
      */
     public function getSingleSignOnService(): array
     {
@@ -142,11 +138,12 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Set the value of the SingleSignOnService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType[] $singleSignOnService
+     * @param \SimpleSAML\SAML2\XML\md\SingleSignOnService[] $singleSignOnService
      * @return void
      */
     public function setSingleSignOnService(array $singleSignOnService): void
     {
+        Assert::isInstanceOf($singleSignOnService, SingleSignOnService::class);
         $this->SingleSignOnService = $singleSignOnService;
     }
 
@@ -154,7 +151,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Add the value to the SingleSignOnService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType $singleSignOnService
+     * @param \SimpleSAML\SAML2\XML\md\SingleSignOnService $singleSignOnService
      * @return void
      */
     public function addSingleSignOnService(EndpointType $singleSignOnService): void
@@ -307,8 +304,8 @@ class IDPSSODescriptor extends SSODescriptorType
             $e->setAttribute('WantAuthnRequestsSigned', $this->WantAuthnRequestsSigned ? 'true' : 'false');
         }
 
-        foreach ($this->SingleSignOnService as $ep) {
-            $ep->toXML($e, 'md:SingleSignOnService');
+        foreach ($this->SingleSignOnService as $ssos) {
+            $ssos->toXML($e);
         }
 
         foreach ($this->NameIDMappingService as $nidms) {
