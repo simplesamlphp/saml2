@@ -23,7 +23,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
      *
      * Array with EndpointType objects.
      *
-     * @var \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\AttributeService[]
      */
     private array $AttributeService = [];
 
@@ -80,10 +80,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
         $xpCache = XPath::getXPath($xml);
 
-        /** @var \DOMElement $ep */
-        foreach (XPath::xpQuery($xml, './saml_metadata:AttributeService', $xpCache) as $ep) {
-            $this->addAttributeService(new EndpointType($ep));
-        }
+        $this->setAttributeService(AttributeService::getChildrenOfClass($xml));
         if ($this->getAttributeService() === []) {
             throw new MissingElementException(
                 'Must have at least one AttributeService in AttributeAuthorityDescriptor.'
@@ -109,7 +106,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Collect the value of the AttributeService-property
      *
-     * @return \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\AttributeService[]
      */
     public function getAttributeService(): array
     {
@@ -120,11 +117,12 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Set the value of the AttributeService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType[] $attributeService
+     * @param \SimpleSAML\SAML2\XML\md\AttributeService[] $attributeService
      * @return void
      */
     public function setAttributeService(array $attributeService): void
     {
+        Assert::allIsInstanceOf($attributeService, AttributeService::class);
         $this->AttributeService = $attributeService;
     }
 
@@ -132,10 +130,10 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Add the value to the AttributeService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType $attributeService
+     * @param \SimpleSAML\SAML2\XML\md\AttributeService $attributeService
      * @return void
      */
-    public function addAttributeService(EndpointType $attributeService): void
+    public function addAttributeService(AttributeService $attributeService): void
     {
         $this->AttributeService[] = $attributeService;
     }
@@ -271,8 +269,8 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
         $e = parent::toXML($parent);
 
-        foreach ($this->AttributeService as $ep) {
-            $ep->toXML($e, 'md:AttributeService');
+        foreach ($this->AttributeService as $as) {
+            $as->toXML($e);
         }
 
         foreach ($this->AssertionIDRequestService as $ep) {
