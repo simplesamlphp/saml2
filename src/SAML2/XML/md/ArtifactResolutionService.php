@@ -23,7 +23,9 @@ final class ArtifactResolutionService extends AbstractIndexedEndpointType
      * @param string $location
      * @param bool|null $isDefault
      * @param string|null $unused
-     * @param array $attributes
+     * @param list<\SimpleSAML\XML\Attribute> $attributes
+     * @param array children
+     *
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function __construct(
@@ -33,11 +35,12 @@ final class ArtifactResolutionService extends AbstractIndexedEndpointType
         ?bool $isDefault = null,
         ?string $unused = null,
         array $attributes = [],
+        array $children = [],
     ) {
         Assert::null(
             $unused,
             'The \'ResponseLocation\' attribute must be omitted for md:ArtifactResolutionService.',
         );
-        parent::__construct($index, $binding, $location, $isDefault, null, $attributes);
+        parent::__construct($index, $binding, $location, $isDefault, null, $attributes, $children);
     }
 }

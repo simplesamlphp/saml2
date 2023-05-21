@@ -6,6 +6,8 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 use function strval;
@@ -33,7 +35,8 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
      * @param string $location
      * @param bool|null $isDefault
      * @param string|null $responseLocation
-     * @param array $attributes
+     * @param list<\SimpleSAML\XML\Attribute> $attributes
+>>>>>>> 905e2061 (Fix: allow AbstractIndexedEndpointType to pass arbitrary child-elements)
      */
     public function __construct(
         int $index,
@@ -42,8 +45,9 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
         ?bool $isDefault = null,
         ?string $responseLocation = null,
         array $attributes = [],
+        array $children = [],
     ) {
-        parent::__construct($binding, $location, $responseLocation, $attributes);
+        parent::__construct($binding, $location, $responseLocation, $attributes, $children);
 
         $this->setIndex($index);
         $this->setIsDefault($isDefault);
@@ -75,6 +79,17 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
         $binding = self::getAttribute($xml, 'Binding');
         $location = self::getAttribute($xml, 'Location');
 
+        $children = [];
+        foreach ($xml->childNodes as $child) {
+            if ($child->namespaceURI === C::NS_MD) {
+                continue;
+            } elseif (!($child instanceof DOMElement)) {
+                continue;
+            }
+
+            $children[] = new Chunk($child);
+        }
+
         return new static(
             $index,
             $binding,
@@ -82,6 +97,7 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
             self::getOptionalBooleanAttribute($xml, 'isDefault', null),
             self::getOptionalAttribute($xml, 'ResponseLocation', null),
             self::getAttributesNSFromXML($xml),
+            $children,
         );
     }
 
@@ -94,11 +110,29 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $e = parent::toXML($parent);
+        $e = parent::instantiateParentElement($parent);
+
+        $e->setAttribute('Binding', $this->getBinding());
+        $e->setAttribute('Location', $this->getLocation());
+        if ($this->getResponseLocation() !== null) {
+            $e->setAttribute('ResponseLocation', $this->getResponseLocation());
+        }
+
         $e->setAttribute('index', strval($this->getIndex()));
 
         if (is_bool($this->getIsDefault())) {
             $e->setAttribute('isDefault', $this->getIsDefault() ? 'true' : 'false');
+        }
+
+        foreach ($this->getAttributesNS() as $attr) {
+            $attr->toXML($e);
+        }
+
+        /** @var \SimpleSAML\XML\SerializableElementInterface $child */
+        foreach ($this->getElements() as $child) {
+            if (!$child->isEmptyElement()) {
+                $child->toXML($e);
+            }
         }
 
         return $e;
