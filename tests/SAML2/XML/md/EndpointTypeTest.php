@@ -4,86 +4,214 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\XML\md\EndpointType;
-use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
+use SimpleSAML\SAML2\XML\md\AttributeService;
+use SimpleSAML\XML\Attribute as XMLAttribute;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+
+use function dirname;
+use function strval;
 
 /**
- * Class \SimpleSAML\SAML2\XML\md\EndpointType
+ * Class \SAML2\XML\md\EndpointTypeTest
+ *
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractEndpointType
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
+ * @package simplesamlphp/saml2
  */
-class EndpointTypeTest extends TestCase
+final class EndpointTypeTest extends TestCase
 {
+    use ArrayizableElementTestTrait;
+    use SchemaValidationTestTrait;
+    use SerializableElementTestTrait;
+
+    /** @var \DOMDocument */
+    protected DOMDocument $ext;
+
+
     /**
-     * @return void
+     */
+    protected function setUp(): void
+    {
+        $this->ext = DOMDocumentFactory::fromString(
+            '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
+        );
+
+        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+
+        $this->testedClass = AttributeService::class;
+
+        $this->arrayRepresentation = [
+            'Binding' => C::BINDING_HTTP_POST,
+            'Location' => 'https://whatever/',
+            'ResponseLocation' => 'https://foo.bar/',
+            'Extensions' => [new Chunk($this->ext->documentElement)],
+            'attributes' => [(new XMLAttribute('urn:x-simplesamlphp:namespace', 'test', 'attr', 'value'))->toArray()],
+        ];
+
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/md_AttributeService.xml',
+        );
+    }
+
+
+    // test marshalling
+
+
+    /**
+     * Test creating an EndpointType from scratch.
      */
     public function testMarshalling(): void
     {
-        $endpointType = new EndpointType();
-        $endpointType->setBinding('TestBinding');
-        $endpointType->setLocation('TestLocation');
+        $attr = new XMLAttribute('urn:x-simplesamlphp:namespace', 'test', 'attr', 'value');
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $endpointTypeElement = $endpointType->toXML($document->firstChild, 'md:Test');
+        $endpointType = new AttributeService(
+            C::BINDING_HTTP_POST,
+            'https://whatever/',
+            'https://foo.bar/',
+            [$attr],
+            [new Chunk($this->ext->documentElement)],
+        );
 
-        $xpCache = XPath::getXPath($endpointTypeElement);
-        $endpointTypeElements = XPath::xpQuery($endpointTypeElement, '/root/saml_metadata:Test', $xpCache);
-        $this->assertCount(1, $endpointTypeElements);
-        /** @var \DOMElement $endpointTypeElement */
-        $endpointTypeElement = $endpointTypeElements[0];
-
-        $this->assertEquals('TestBinding', $endpointTypeElement->getAttribute('Binding'));
-        $this->assertEquals('TestLocation', $endpointTypeElement->getAttribute('Location'));
-        $this->assertFalse($endpointTypeElement->hasAttribute('ResponseLocation'));
-
-        $endpointType->setResponseLocation('TestResponseLocation');
-
-        $document->loadXML('<root />');
-        $endpointTypeElement = $endpointType->toXML($document->firstChild, 'md:Test');
-
-        $xpCache = XPath::getXPath($endpointTypeElement);
-        $endpointTypeElement = XPath::xpQuery($endpointTypeElement, '/root/saml_metadata:Test', $xpCache);
-        $this->assertCount(1, $endpointTypeElement);
-        /** @var \DOMElement $endpointTypeElement */
-        $endpointTypeElement = $endpointTypeElement[0];
-
-        $this->assertEquals('TestResponseLocation', $endpointTypeElement->getAttribute('ResponseLocation'));
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($endpointType),
+        );
     }
 
 
     /**
-     * @return void
+     * Test that creating an EndpointType from scratch with an empty Binding fails.
+     */
+    public function testMarshallingWithEmptyBinding(): void
+    {
+        $this->expectException(SchemaViolationException::class);
+        new AttributeService('', 'https://simplesamlphp.org/some/endpoint');
+    }
+
+
+    /**
+     * Test that creating an EndpointType from scratch with an empty Location fails.
+     */
+    public function testMarshallingWithEmptyLocation(): void
+    {
+        $this->expectException(SchemaViolationException::class);
+        new AttributeService(C::BINDING_HTTP_POST, '');
+    }
+
+
+    /**
+     * Test that creating an EndpointType from scratch without optional attributes works.
+     */
+    public function testMarshallingWithoutOptionalAttributes(): void
+    {
+        $endpointType = new AttributeService(C::BINDING_HTTP_POST, 'https://simplesamlphp.org/some/endpoint');
+        $this->assertNull($endpointType->getResponseLocation());
+        $this->assertEmpty($endpointType->getAttributesNS());
+    }
+
+
+    // test unmarshalling
+
+
+    /**
+     * Test creating an EndpointType from XML.
      */
     public function testUnmarshalling(): void
     {
+        $endpointType = AttributeService::fromXML($this->xmlRepresentation->documentElement);
+
+        $this->assertEquals(
+            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            strval($endpointType),
+        );
+    }
+
+
+    /**
+     * Test that creating an EndpointType from XML checks the actual name of the endpoint.
+     */
+    public function testUnmarshallingUnexpectedEndpoint(): void
+    {
+        $this->expectException(InvalidDOMElementException::class);
+        $this->expectExceptionMessage(
+            'Unexpected name for endpoint: AttributeService. Expected: AssertionIDRequestService.',
+        );
+        AssertionIDRequestService::fromXML($this->xmlRepresentation->documentElement);
+    }
+
+
+    /**
+     * Test that creating an EndpointType from XML without a Binding attribute fails.
+     */
+    public function testUnmarshallingWithoutBinding(): void
+    {
+        $this->xmlRepresentation->documentElement->removeAttribute('Binding');
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage('Missing \'Binding\' attribute on md:AttributeService.');
+        AttributeService::fromXML($this->xmlRepresentation->documentElement);
+    }
+
+
+    /**
+     * Test that creating an EndpointType from XML with an empty Binding attribute fails.
+     */
+    public function testUnmarshallingWithEmptyBinding(): void
+    {
+        $this->xmlRepresentation->documentElement->setAttribute('Binding', '');
+        $this->expectException(SchemaViolationException::class);
+        AttributeService::fromXML($this->xmlRepresentation->documentElement);
+    }
+
+
+    /**
+     * Test that creating an EndpointType from XML without a Location attribute fails.
+     */
+    public function testUnmarshallingWithoutLocation(): void
+    {
+        $this->xmlRepresentation->documentElement->removeAttribute('Location');
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage('Missing \'Location\' attribute on md:AttributeService.');
+        AttributeService::fromXML($this->xmlRepresentation->documentElement);
+    }
+
+
+    /**
+     * Test that creating an EndpointType from XML with an empty Location attribute fails.
+     */
+    public function testUnmarshallingWithEmptyLocation(): void
+    {
+        $this->xmlRepresentation->documentElement->setAttribute('Location', '');
+        $this->expectException(SchemaViolationException::class);
+        AttributeService::fromXML($this->xmlRepresentation->documentElement);
+    }
+
+
+    /**
+     * Test that creating an EndpointType from XML without the optional attributes works.
+     */
+    public function testUnmarshallingWithoutOptionalAttributes(): void
+    {
         $mdNamespace = C::NS_MD;
+        $location = 'https://simplesamlphp.org/some/endpoint';
+
         $document = DOMDocumentFactory::fromString(<<<XML
-<md:Test xmlns:md="{$mdNamespace}" Binding="urn:something" Location="https://whatever/" xmlns:test="urn:test" test:attr="value" />
+<md:AttributeService xmlns:md="{$mdNamespace}" Binding="urn:x-simplesamlphp:namespace" Location="{$location}" />
 XML
         );
-        $endpointType = new EndpointType($document->firstChild);
-        $this->assertEquals(true, $endpointType->hasAttributeNS('urn:test', 'attr'));
-        $this->assertEquals('value', $endpointType->getAttributeNS('urn:test', 'attr'));
-        $this->assertEquals(false, $endpointType->hasAttributeNS('urn:test', 'invalid'));
-        $this->assertEquals('', $endpointType->getAttributeNS('urn:test', 'invalid'));
-
-        $endpointType->removeAttributeNS('urn:test', 'attr');
-        $this->assertEquals(false, $endpointType->hasAttributeNS('urn:test', 'attr'));
-        $this->assertEquals('', $endpointType->getAttributeNS('urn:test', 'attr'));
-
-        $endpointType->setAttributeNS('urn:test2', 'test2:attr2', 'value2');
-        $this->assertEquals('value2', $endpointType->getAttributeNS('urn:test2', 'attr2'));
-
-        $document->loadXML('<root />');
-        $endpointTypeElement = $endpointType->toXML($document->firstChild, 'md:Test');
-        $xpCache = XPath::getXPath($endpointTypeElement);
-        $endpointTypeElements = XPath::xpQuery($endpointTypeElement, '/root/saml_metadata:Test', $xpCache);
-        $this->assertCount(1, $endpointTypeElements);
-        /** @var \DOMElement $endpointTypeElement */
-        $endpointTypeElement = $endpointTypeElements[0];
-
-        $this->assertEquals('value2', $endpointTypeElement->getAttributeNS('urn:test2', 'attr2'));
-        $this->assertEquals(false, $endpointTypeElement->hasAttributeNS('urn:test', 'attr'));
+        $as = AttributeService::fromXML($document->documentElement);
+        $this->assertNull($as->getResponseLocation());
+        $this->assertEmpty($as->getAttributesNS());
     }
 }

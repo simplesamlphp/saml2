@@ -7,9 +7,11 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\ExtendableElementTrait;
 
@@ -29,7 +31,7 @@ use SimpleSAML\XML\ExtendableElementTrait;
  *
  * @package simplesamlphp/saml2
  */
-abstract class AbstractEndpointType extends AbstractMdElement
+abstract class AbstractEndpointType extends AbstractMdElement implements ArrayizableElementInterface
 {
     use ExtendableAttributesTrait;
     use ExtendableElementTrait;
@@ -180,5 +182,63 @@ abstract class AbstractEndpointType extends AbstractMdElement
         }
 
         return $e;
+    }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array $data
+     * @return static
+     */
+    public static function fromArray(array $data): static
+    {
+        Assert::keyExists($data, 'Binding');
+        Assert::keyExists($data, 'Location');
+
+        $responseLocation = array_key_exists('ResponseLocation', $data) ? $data['ResponseLocation'] : null;
+
+        $Extensions = array_key_exists('Extensions', $data) ? $data['Extensions'] : null;
+
+        $attributes = [];
+        if (array_key_exists('attributes', $data)) {
+            foreach ($data['attributes'] as $attr) {
+                Assert::keyExists($attr, 'namespaceURI');
+                Assert::keyExists($attr, 'namespacePrefix');
+                Assert::keyExists($attr, 'attrName');
+                Assert::keyExists($attr, 'attrValue');
+
+                $attributes[] = new XMLAttribute(
+                    $attr['namespaceURI'],
+                    $attr['namespacePrefix'],
+                    $attr['attrName'],
+                    $attr['attrValue'],
+                );
+            }
+        }
+
+        return new static($data['Binding'], $data['Location'], $responseLocation, $attributes, $Extensions);
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $data = [
+            'Binding' => $this->getBinding(),
+            'Location' => $this->getLocation(),
+            'ResponseLocation' => $this->getResponseLocation(),
+            'Extensions' => $this->getElements(),
+        ];
+
+        foreach ($this->getAttributesNS() as $a) {
+            $data['attributes'][] = $a->toArray();
+        }
+
+        return array_filter($data);
     }
 }

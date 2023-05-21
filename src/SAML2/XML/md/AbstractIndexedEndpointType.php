@@ -7,6 +7,8 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\XML\ArrayizableElementInterface;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
@@ -17,7 +19,7 @@ use function strval;
  *
  * @package simplesamlphp/saml2
  */
-abstract class AbstractIndexedEndpointType extends AbstractEndpointType
+abstract class AbstractIndexedEndpointType extends AbstractEndpointType implements ArrayizableElementInterface
 {
     use IndexedElementTrait;
 
@@ -141,5 +143,65 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType
         }
 
         return $e;
+    }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array $data
+     * @return static
+     */
+    public static function fromArray(array $data): static
+    {
+        Assert::keyExists($data, 'Binding');
+        Assert::keyExists($data, 'Location');
+        Assert::keyExists($data, 'index');
+
+        $responseLocation = array_key_exists('ResponseLocation', $data) ? $data['ResponseLocation'] : null;
+
+        $Extensions = array_key_exists('Extensions', $data) ? $data['Extensions'] : null;
+
+        $attributes = [];
+        if (array_key_exists('attributes', $data)) {
+            foreach ($data['attributes'] as $attr) {
+                Assert::keyExists($attr, 'namespaceURI');
+                Assert::keyExists($attr, 'namespacePrefix');
+                Assert::keyExists($attr, 'attrName');
+                Assert::keyExists($attr, 'attrValue');
+
+                $attributes[] = new XMLAttribute(
+                    $attr['namespaceURI'],
+                    $attr['namespacePrefix'],
+                    $attr['attrName'],
+                    $attr['attrValue'],
+                );
+            }
+        }
+
+        return new static(
+            $data['index'],
+            $data['Binding'],
+            $data['Location'],
+            array_key_exists('isDefault', $data) ? $data['isDefault'] : null,
+            $responseLocation,
+            $attributes,
+            $Extensions,
+        );
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $data = parent::toArray();
+        $data['index'] = $this->getIndex();
+        $data['isDefault'] = $this->getIsDefault();
+
+        return array_filter($data);
     }
 }
