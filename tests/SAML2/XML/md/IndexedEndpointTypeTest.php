@@ -10,9 +10,12 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
 use SimpleSAML\SAML2\XML\md\AssertionConsumerService;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
@@ -28,17 +31,35 @@ use function strval;
  */
 final class IndexedEndpointTypeTest extends TestCase
 {
+    use ArrayizableElementTestTrait;
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
+
+    /** @var \DOMDocument */
+    protected DOMDocument $ext;
 
 
     /**
      */
     protected function setUp(): void
     {
+        $this->ext = DOMDocumentFactory::fromString(
+            '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
+        );
+
         $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
         $this->testedClass = AssertionConsumerService::class;
+
+        $this->arrayRepresentation = [
+            'index' => 1,
+            'Binding' => C::BINDING_HTTP_POST,
+            'Location' => 'https://whatever/',
+            'isDefault' => true,
+            'ResponseLocation' => 'https://foo.bar/',
+            'Extensions' => [new Chunk($this->ext->documentElement)],
+            'attributes' => [(new XMLAttribute('urn:x-simplesamlphp:namespace', 'test', 'attr', 'value'))->toArray()],
+        ];
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_AssertionConsumerService.xml',

@@ -17,6 +17,7 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
@@ -31,17 +32,33 @@ use function strval;
  */
 final class EndpointTypeTest extends TestCase
 {
+    use ArrayizableElementTestTrait;
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
+
+    /** @var \DOMDocument */
+    protected DOMDocument $ext;
 
 
     /**
      */
     protected function setUp(): void
     {
+        $this->ext = DOMDocumentFactory::fromString(
+            '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
+        );
+
         $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
         $this->testedClass = AttributeService::class;
+
+        $this->arrayRepresentation = [
+            'Binding' => C::BINDING_HTTP_POST,
+            'Location' => 'https://whatever/',
+            'ResponseLocation' => 'https://foo.bar/',
+            'Extensions' => [new Chunk($this->ext->documentElement)],
+            'attributes' => [(new XMLAttribute('urn:x-simplesamlphp:namespace', 'test', 'attr', 'value'))->toArray()],
+        ];
 
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_AttributeService.xml',
@@ -59,18 +76,12 @@ final class EndpointTypeTest extends TestCase
     {
         $attr = new XMLAttribute(C::NAMESPACE, 'test', 'attr', 'value');
 
-        $child = new Chunk(
-            DOMDocumentFactory::fromString(
-                '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>'
-            )->documentElement
-        );
-
         $endpointType = new AttributeService(
             C::BINDING_HTTP_POST,
             'https://whatever/',
             'https://foo.bar/',
             [$attr],
-            [$child],
+            [new Chunk($this->ext->documentElement)],
         );
 
         $this->assertEquals(
