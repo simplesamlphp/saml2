@@ -34,9 +34,9 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * List of AssertionConsumerService endpoints for this SP.
      *
-     * Array with IndexedEndpointType objects.
+     * Array with AssertionConsumerService objects.
      *
-     * @var \SimpleSAML\SAML2\XML\md\IndexedEndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\AssertionConsumerService[]
      */
     private array $AssertionConsumerService = [];
 
@@ -66,11 +66,7 @@ class SPSSODescriptor extends SSODescriptorType
         $this->AuthnRequestsSigned = Utils::parseBoolean($xml, 'AuthnRequestsSigned', null);
         $this->WantAssertionsSigned = Utils::parseBoolean($xml, 'WantAssertionsSigned', null);
 
-        $xpCache = XPath::getXPath($xml);
-        /** @var \DOMElement $ep */
-        foreach (XPath::xpQuery($xml, './saml_metadata:AssertionConsumerService', $xpCache) as $ep) {
-            $this->AssertionConsumerService[] = new IndexedEndpointType($ep);
-        }
+        $this->AssertionConsumerService = AssertionConsumerService::getChildrenOfClass($xml);
 
         /** @var \DOMElement $acs */
         foreach (XPath::xpQuery($xml, './saml_metadata:AttributeConsumingService', $xpCache) as $acs) {
@@ -128,7 +124,7 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Collect the value of the AssertionConsumerService-property
      *
-     * @return array
+     * @return \SimpleSAML\SAML2\XML\md\AssertionConsumerService
      */
     public function getAssertionConsumerService(): array
     {
@@ -139,7 +135,7 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Set the value of the AssertionConsumerService-property
      *
-     * @param array $acs
+     * @param \SimpleSAML\SAML2\XML\md\AssertionConsumerService[] $acs
      * @return void
      */
     public function setAssertionConsumerService(array $acs): void
@@ -151,10 +147,10 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Add the value to the AssertionConsumerService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\IndexedEndpointType $acs
+     * @param \SimpleSAML\SAML2\XML\md\AssertionConsumerService $acs
      * @return void
      */
-    public function addAssertionConsumerService(IndexedEndpointType $acs): void
+    public function addAssertionConsumerService(AssertionConsumerService $acs): void
     {
         $this->AssertionConsumerService[] = $acs;
     }
@@ -213,8 +209,8 @@ class SPSSODescriptor extends SSODescriptorType
             $e->setAttribute('WantAssertionsSigned', $this->WantAssertionsSigned ? 'true' : 'false');
         }
 
-        foreach ($this->AssertionConsumerService as $ep) {
-            $ep->toXML($e, 'md:AssertionConsumerService');
+        foreach ($this->AssertionConsumerService as $acs) {
+            $acs->toXML($e);
         }
 
         foreach ($this->AttributeConsumingService as $acs) {
