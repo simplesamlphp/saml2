@@ -20,16 +20,16 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * List of AuthnQueryService endpoints.
      *
-     * Array with EndpointType objects.
+     * Array with AuthnQuery objects.
      *
-     * @var \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\AuthnQueryService[]
      */
     private array $AuthnQueryService = [];
 
     /**
      * List of AssertionIDRequestService endpoints.
      *
-     * Array with EndpointType objects.
+     * Array with AssertionIDRequestService objects.
      *
      * @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
@@ -61,10 +61,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
 
         $xpCache = XPath::getXPath($xml);
 
-        /** @var \DOMElement $ep */
-        foreach (XPath::xpQuery($xml, './saml_metadata:AuthnQueryService', $xpCache) as $ep) {
-            $this->addAuthnQueryService(new EndpointType($ep));
-        }
+        $this->setAuthnQueryService(AuthnQueryService::getChildrenOfClass($xml));
         if ($this->getAuthnQueryService() === []) {
             throw new MissingElementException('Must have at least one AuthnQueryService in AuthnAuthorityDescriptor.');
         }
@@ -77,7 +74,7 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Collect the value of the AuthnQueryService-property
      *
-     * @return \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\AuthnQueryService[]
      */
     public function getAuthnQueryService(): array
     {
@@ -88,11 +85,12 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Set the value of the AuthnQueryService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType[] $authnQueryService
+     * @param \SimpleSAML\SAML2\XML\md\AuthnQueryService[] $authnQueryService
      * @return void
      */
     public function setAuthnQueryService(array $authnQueryService): void
     {
+        Assert::allIsInstanceOf($authnQueryService, AuthnQueryService::class);
         $this->AuthnQueryService = $authnQueryService;
     }
 
@@ -100,10 +98,10 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
     /**
      * Add the value to the AuthnQueryService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType $authnQueryService
+     * @param \SimpleSAML\SAML2\XML\md\AuthnQueryService $authnQueryService
      * @return void
      */
-    public function addAuthnQueryService(EndpointType $authnQueryService): void
+    public function addAuthnQueryService(AuthnQueryService $authnQueryService): void
     {
         $this->AuthnQueryService[] = $authnQueryService;
     }
@@ -181,8 +179,8 @@ class AuthnAuthorityDescriptor extends RoleDescriptor
 
         $e = parent::toXML($parent);
 
-        foreach ($this->AuthnQueryService as $ep) {
-            $ep->toXML($e, 'md:AuthnQueryService');
+        foreach ($this->AuthnQueryService as $aqs) {
+            $aqs->toXML($e);
         }
 
         foreach ($this->AssertionIDRequestService as $aidrs) {
