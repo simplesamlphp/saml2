@@ -9,7 +9,6 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function is_bool;
 
@@ -57,9 +56,9 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * List of supported attribute profiles.
      *
-     * Array with strings.
+     * Array with AttributeProfile objects.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\md\AttributeProfile
      */
     private array $AttributeProfile = [];
 
@@ -105,7 +104,7 @@ class IDPSSODescriptor extends SSODescriptorType
             $this->AssertionIDRequestService[] = new EndpointType($ep);
         }
 
-        $this->AttributeProfile = XMLUtils::extractStrings($xml, C::NS_MD, 'AttributeProfile');
+        $this->AttributeProfile = AttributeProfile::getChildrenOfClass($xml);
 
         /** @var \DOMElement $a */
         foreach (XPath::xpQuery($xml, './saml_assertion:Attribute', $xpCache) as $a) {
@@ -244,7 +243,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Collect the value of the AttributeProfile-property
-     * @return array
+     * @return \SimpleSAML\SAML2\XML\md\AttributeProfile[]
      */
     public function getAttributeProfile(): array
     {
@@ -255,11 +254,12 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Set the value of the AttributeProfile-property
      *
-     * @param array $attributeProfile
+     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile $attributeProfile
      * @return void
      */
     public function setAttributeProfile(array $attributeProfile): void
     {
+        Assert::allIsInstanceOf($attributeProfile, AttributeProfile::class);
         $this->AttributeProfile = $attributeProfile;
     }
 
@@ -325,7 +325,9 @@ class IDPSSODescriptor extends SSODescriptorType
             $ep->toXML($e, 'md:AssertionIDRequestService');
         }
 
-        XMLUtils::addStrings($e, C::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfile);
+        foreach ($this->AttributeProfile as $ap) {
+            $ap->toXML($e);
+        }
 
         foreach ($this->Attribute as $a) {
             $a->toXML($e);

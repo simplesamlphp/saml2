@@ -10,7 +10,6 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 metadata AttributeAuthorityDescriptor.
@@ -40,7 +39,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * List of supported NameID formats.
      *
-     * Array of strings.
+     * Array with NameIDFormat objects.
      *
      * @var \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
@@ -49,9 +48,9 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * List of supported attribute profiles.
      *
-     * Array with strings.
+     * Array with AttributeProfile objects.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\md\AttributeProfile[]
      */
     private array $AttributeProfile = [];
 
@@ -98,7 +97,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
 
         $this->setNameIDFormat(NameIDFormat::getChildrenOfClass($xml));
 
-        $this->setAttributeProfile(XMLUtils::extractStrings($xml, C::NS_MD, 'AttributeProfile'));
+        $this->setAttributeProfile(AttributeProfile::getChildrenOfClass($xml));
 
         /** @var \DOMElement $a */
         foreach (XPath::xpQuery($xml, './saml_assertion:Attribute', $xpCache) as $a) {
@@ -204,7 +203,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Collect the value of the AttributeProfile-property
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\XML\md\AttributeProfile[]
      */
     public function getAttributeProfile(): array
     {
@@ -215,11 +214,12 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Set the value of the AttributeProfile-property
      *
-     * @param string[] $attributeProfile
+     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfile
      * @return void
      */
     public function setAttributeProfile(array $attributeProfile): void
     {
+        Assert::allIsInstanceOf($attributeProfile, AttributeProfile::class);
         $this->AttributeProfile = $attributeProfile;
     }
 
@@ -283,7 +283,9 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
             $nid->toXML($e);
         }
 
-        XMLUtils::addStrings($e, C::NS_MD, 'md:AttributeProfile', false, $this->AttributeProfile);
+        foreach ($this->AttributeProfile as $ap) {
+            $ap->toXML($e);
+        }
 
         foreach ($this->Attribute as $a) {
             $a->toXML($e);
