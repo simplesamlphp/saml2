@@ -69,9 +69,8 @@ abstract class SSODescriptorType extends RoleDescriptor
 
         $xpCache = XPath::getXPath($xml);
 
-        /** @var \DOMElement $ep */
-        foreach (XPath::xpQuery($xml, './saml_metadata:ArtifactResolutionService', $xpCache) as $ep) {
-            $this->addArtifactResolutionService(new IndexedEndpointType($ep));
+        foreach (ArtifactResolutionService::getChildrenOfClass($xml) as $ars) {
+            $this->addArtifactResolutionService($ars);
         }
 
         /** @var \DOMElement $ep */
@@ -91,7 +90,7 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Collect the value of the ArtifactResolutionService-property
      *
-     * @return \SimpleSAML\SAML2\XML\md\IndexedEndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\ArtifactResolutionService[]
      */
     public function getArtifactResolutionService(): array
     {
@@ -102,11 +101,12 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Set the value of the ArtifactResolutionService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\IndexedEndpointType[] $artifactResolutionService
+     * @param \SimpleSAML\SAML2\XML\md\ArtifactResolutionService[] $artifactResolutionService
      * @return void
      */
     public function setArtifactResolutionService(array $artifactResolutionService): void
     {
+        Assert::allIsInstanceOf($artifactResolutionService, ArtifactResolutionService::class);
         $this->ArtifactResolutionService = $artifactResolutionService;
     }
 
@@ -114,10 +114,10 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Add the value to the ArtifactResolutionService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\IndexedEndpointType $artifactResolutionService
+     * @param \SimpleSAML\SAML2\XML\md\ArtifactResolutionService $artifactResolutionService
      * @return void
      */
-    public function addArtifactResolutionService(IndexedEndpointType $artifactResolutionService): void
+    public function addArtifactResolutionService(ArtifactResolutionService $artifactResolutionService): void
     {
         $this->ArtifactResolutionService[] = $artifactResolutionService;
     }
@@ -227,8 +227,8 @@ abstract class SSODescriptorType extends RoleDescriptor
     {
         $e = parent::toXML($parent);
 
-        foreach ($this->ArtifactResolutionService as $ep) {
-            $ep->toXML($e, 'md:ArtifactResolutionService');
+        foreach ($this->ArtifactResolutionService as $ars) {
+            $ars->toXML($e);
         }
 
         foreach ($this->SingleLogoutService as $ep) {
