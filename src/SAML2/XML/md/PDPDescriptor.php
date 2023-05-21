@@ -22,7 +22,7 @@ class PDPDescriptor extends RoleDescriptor
      *
      * Array with EndpointType objects.
      *
-     * @var \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\AuthzService[]
      */
     private array $AuthzService = [];
 
@@ -61,23 +61,20 @@ class PDPDescriptor extends RoleDescriptor
 
         $xpCache = XPath::getXPath($xml);
 
-        /** @var \DOMElement $ep */
-        foreach (XPath::xpQuery($xml, './saml_metadata:AuthzService', $xpCache) as $ep) {
-            $this->AuthzService[] = new EndpointType($ep);
-        }
+        $this->setAuthzService(AuthzService::getChildrenOfClass($xml));
         if ($this->getAuthzService() !== []) {
             throw new MissingElementException('Must have at least one AuthzService in PDPDescriptor.');
         }
 
-        $this->AssertionIDRequestService = AssertionIDRequestService::getChildrenOfClass($xml);
-        $this->NameIDFormat = NameIDFormat::getChildrenOfClass($xml);
+        $this->setAssertionIDRequestService(AssertionIDRequestService::getChildrenOfClass($xml));
+        $this->setNameIDFormat(NameIDFormat::getChildrenOfClass($xml));
     }
 
 
     /**
      * Collect the value of the AuthzService-property
      *
-     * @return \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\AuthzService[]
      */
     public function getAuthzService(): array
     {
@@ -88,11 +85,12 @@ class PDPDescriptor extends RoleDescriptor
     /**
      * Set the value of the AuthzService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType[] $authzService
+     * @param \SimpleSAML\SAML2\XML\md\AuthzService[] $authzService
      * @return void
      */
     public function setAuthzService(array $authzService = []): void
     {
+        Assert::allIsInstanceOf($authzService, AuthzService::class);
         $this->AuthzService = $authzService;
     }
 
@@ -100,10 +98,10 @@ class PDPDescriptor extends RoleDescriptor
     /**
      * Add the value to the AuthzService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType $authzService
+     * @param \SimpleSAML\SAML2\XML\md\AuthzService $authzService
      * @return void
      */
-    public function addAuthzService(EndpointType $authzService): void
+    public function addAuthzService(AuthzService $authzService): void
     {
         $this->AuthzService[] = $authzService;
     }
@@ -181,8 +179,8 @@ class PDPDescriptor extends RoleDescriptor
 
         $e = parent::toXML($parent);
 
-        foreach ($this->AuthzService as $ep) {
-            $ep->toXML($e, 'md:AuthzService');
+        foreach ($this->AuthzService as $as) {
+            $as->toXML($e);
         }
 
         foreach ($this->AssertionIDRequestService as $aidrs) {
