@@ -38,16 +38,16 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * List of NameIDMappingService endpoints.
      *
-     * Array with EndpointType objects.
+     * Array with NameIDMappingService objects.
      *
-     * @var \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\NameIDMappingService[]
      */
     private array $NameIDMappingService = [];
 
     /**
      * List of AssertionIDRequestService endpoints.
      *
-     * Array with EndpointType objects.
+     * Array with AssertionIDRequestService objects.
      *
      * @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
@@ -94,11 +94,7 @@ class IDPSSODescriptor extends SSODescriptorType
             $this->SingleSignOnService[] = new EndpointType($ep);
         }
 
-        /** @var \DOMElement $ep */
-        foreach (XPath::xpQuery($xml, './saml_metadata:NameIDMappingService', $xpCache) as $ep) {
-            $this->NameIDMappingService[] = new EndpointType($ep);
-        }
-
+        $this->setNameIDMappingService(NameIDMappingService::getChildrenOfClass());
         $this->AssertionIDRequestService = AssertionIDRequestService::getChildrenOfClass($xml);
         $this->AttributeProfile = AttributeProfile::getChildrenOfClass($xml);
 
@@ -170,7 +166,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Collect the value of the NameIDMappingService-property
      *
-     * @return \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\NameIDMappingService[]
      */
     public function getNameIDMappingService(): array
     {
@@ -181,11 +177,12 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Set the value of the NameIDMappingService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType[] $nameIDMappingService
+     * @param \SimpleSAML\SAML2\XML\md\NameIDMappingService[] $nameIDMappingService
      * @return void
      */
     public function setNameIDMappingService(array $nameIDMappingService): void
     {
+        Assert::allIsInstanceOf($nameIdMappingService, NameIDMappingService::class);
         $this->NameIDMappingService = $nameIDMappingService;
     }
 
@@ -193,10 +190,10 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Add the value to the NameIDMappingService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType $nameIDMappingService
+     * @param \SimpleSAML\SAML2\XML\md\NameIDMappingService $nameIDMappingService
      * @return void
      */
-    public function addNameIDMappingService(EndpointType $nameIDMappingService): void
+    public function addNameIDMappingService(NameIDMappingService $nameIDMappingService): void
     {
         $this->NameIDMappingService[] = $nameIDMappingService;
     }
@@ -314,8 +311,8 @@ class IDPSSODescriptor extends SSODescriptorType
             $ep->toXML($e, 'md:SingleSignOnService');
         }
 
-        foreach ($this->NameIDMappingService as $ep) {
-            $ep->toXML($e, 'md:NameIDMappingService');
+        foreach ($this->NameIDMappingService as $nidms) {
+            $nidms->toXML($e);
         }
 
         foreach ($this->AssertionIDRequestService as $aidrs) {
