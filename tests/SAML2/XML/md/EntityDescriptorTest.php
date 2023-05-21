@@ -140,8 +140,8 @@ XML
         $this->assertEquals('PT9000S', $affiliationDescriptor->getCacheDuration());
         $affiliateMember = $affiliationDescriptor->getAffiliateMember();
         $this->assertCount(2, $affiliateMember);
-        $this->assertEquals('test', $affiliateMember[0]);
-        $this->assertEquals('test2', $affiliateMember[1]);
+        $this->assertEquals('test', $affiliateMember[0]->getContent());
+        $this->assertEquals('test2', $affiliateMember[1]->getContent());
     }
 
 

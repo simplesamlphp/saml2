@@ -50,9 +50,9 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * The AffiliateMember(s).
      *
-     * Array of entity ID strings.
+     * Array of AffiliateMember objects.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\md\AffiliateMember[]
      */
     private array $AffiliateMember = [];
 
@@ -106,7 +106,7 @@ class AffiliationDescriptor extends SignedElementHelper
         );
         $this->Extensions = array_pop($extensions);
 
-        $this->setAffiliateMember(XMLUtils::extractStrings($xml, C::NS_MD, 'AffiliateMember'));
+        $this->setAffiliateMember(AffiliateMember::getChildrenOfClass($xml));
         if (empty($this->AffiliateMember)) {
             throw new MissingElementException('Missing AffiliateMember in AffiliationDescriptor.');
         }
@@ -189,7 +189,7 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Collect the value of the AffiliateMember-property
      *
-     * @return array
+     * @return \SimpleSAML\SAML2\XML\md\AffiliateMember[]
      */
     public function getAffiliateMember(): array
     {
@@ -200,11 +200,12 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Set the value of the AffiliateMember-property
      *
-     * @param array $affiliateMember
+     * @param \SimpleSAML\SAML2\XML\md\AffiliateMember $affiliateMember
      * @return void
      */
     public function setAffiliateMember(array $affiliateMember): void
     {
+        Assert::allIsInstanceOf($affiliateMember, AffiliateMember::class);
         $this->AffiliateMember = $affiliateMember;
     }
 
@@ -273,7 +274,9 @@ class AffiliationDescriptor extends SignedElementHelper
 
         $this->Extensions?->toXML($e);
 
-        XMLUtils::addStrings($e, C::NS_MD, 'md:AffiliateMember', false, $this->AffiliateMember);
+        foreach ($this->AffiliateMember as $am) {
+            $am->toXML($e);
+        }
 
         foreach ($this->KeyDescriptor as $kd) {
             $kd->toXML($e);

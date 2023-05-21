@@ -8,6 +8,7 @@ use Exception;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
+use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
@@ -31,8 +32,8 @@ class AffiliationDescriptorTest extends TestCase
         $affiliationDescriptorElement->setValidUntil(1234567890);
         $affiliationDescriptorElement->setCacheDuration('PT5000S');
         $affiliationDescriptorElement->setAffiliateMember([
-            'Member1',
-            'Member2',
+            new AffiliateMember('Member1'),
+            new AffiliateMember('Member2'),
         ]);
         $kd = new KeyDescriptor(new KeyInfo([new X509Data([new X509Certificate(
             '/CTj03d1DB5e2t7CTo9BEzCf5S9NRzwnBgZRlm32REI='
@@ -88,8 +89,8 @@ XML
         $this->assertEquals('PT5000S', $affiliateDescriptor->getCacheDuration());
         $affiliateMember = $affiliateDescriptor->getAffiliateMember();
         $this->assertCount(2, $affiliateMember);
-        $this->assertEquals('Member', $affiliateMember[0]);
-        $this->assertEquals('OtherMember', $affiliateMember[1]);
+        $this->assertEquals('Member', $affiliateMember[0]->getContent());
+        $this->assertEquals('OtherMember', $affiliateMember[1]->getContent());
     }
 
 
