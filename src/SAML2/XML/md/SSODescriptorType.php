@@ -19,9 +19,9 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * List of ArtifactResolutionService endpoints.
      *
-     * Array with IndexedEndpointType objects.
+     * Array with ArtifactResolutionService objects.
      *
-     * @var \SimpleSAML\SAML2\XML\md\IndexedEndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\ArtifactResolutionService[]
      */
     private array $ArtifactResolutionService = [];
 
@@ -37,9 +37,9 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * List of ManageNameIDService endpoints.
      *
-     * Array with EndpointType objects.
+     * Array with ManageNameIDService objects.
      *
-     * @var \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @var \SimpleSAML\SAML2\XML\md\ManageNameIDService[]
      */
     private array $ManageNameIDService = [];
 
@@ -78,11 +78,7 @@ abstract class SSODescriptorType extends RoleDescriptor
             $this->addSingleLogoutService(new EndpointType($ep));
         }
 
-        /** @var \DOMElement $ep */
-        foreach (XPath::xpQuery($xml, './saml_metadata:ManageNameIDService', $xpCache) as $ep) {
-            $this->addManageNameIDService(new EndpointType($ep));
-        }
-
+        $this->setManageNameIDService(ManageNameIDService::getChildrenOfClass($xml));
         $this->setNameIDFormat(NameIDFormat::getChildrenOfClass($xml));
     }
 
@@ -161,7 +157,7 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Collect the value of the ManageNameIDService-property
      *
-     * @return \SimpleSAML\SAML2\XML\md\EndpointType[]
+     * @return \SimpleSAML\SAML2\XML\md\ManageNameIDService[]
      */
     public function getManageNameIDService(): array
     {
@@ -172,11 +168,12 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Set the value of the ManageNameIDService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType[] $manageNameIDService
+     * @param \SimpleSAML\SAML2\XML\md\ManageNameIDService[] $manageNameIDService
      * @return void
      */
     public function setManageNameIDService(array $manageNameIDService): void
     {
+        Assert::allIsInstanceOf($manageNameIDService, ManageNameIDService::class);
         $this->ManageNameIDService = $manageNameIDService;
     }
 
@@ -184,10 +181,10 @@ abstract class SSODescriptorType extends RoleDescriptor
     /**
      * Add the value to the ManageNameIDService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\EndpointType $manageNameIDService
+     * @param \SimpleSAML\SAML2\XML\md\ManageNameIDService $manageNameIDService
      * @return void
      */
-    public function addManageNameIDService(EndpointType $manageNameIDService): void
+    public function addManageNameIDService(ManageNameIDService $manageNameIDService): void
     {
         $this->ManageNameIDService[] = $manageNameIDService;
     }
@@ -235,8 +232,8 @@ abstract class SSODescriptorType extends RoleDescriptor
             $ep->toXML($e, 'md:SingleLogoutService');
         }
 
-        foreach ($this->ManageNameIDService as $ep) {
-            $ep->toXML($e, 'md:ManageNameIDService');
+        foreach ($this->ManageNameIDService as $mnids) {
+            $mnids->toXML($e);
         }
 
         foreach ($this->NameIDFormat as $nid) {
