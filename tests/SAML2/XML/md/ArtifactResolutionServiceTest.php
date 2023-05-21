@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\XML\Attribute as XMLAttribute;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -28,6 +30,9 @@ final class ArtifactResolutionServiceTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+    /** @var \DOMDocument */
+    protected DOMDocument $ext;
+
 
     /**
      */
@@ -40,6 +45,10 @@ final class ArtifactResolutionServiceTest extends TestCase
         $this->xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_ArtifactResolutionService.xml',
         );
+
+        $this->ext = DOMDocumentFactory::fromString(
+            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>'
+        );
     }
 
 
@@ -51,11 +60,16 @@ final class ArtifactResolutionServiceTest extends TestCase
      */
     public function testMarshalling(): void
     {
+        $attr = new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'attr1', 'testval1');
+
         $ars = new ArtifactResolutionService(
             42,
             C::BINDING_HTTP_ARTIFACT,
             'https://simplesamlphp.org/some/endpoint',
             false,
+            null,
+            [$attr],
+            [new Chunk($this->ext->documentElement)],
         );
 
         $this->assertEquals(
