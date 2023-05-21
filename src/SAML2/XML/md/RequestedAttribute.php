@@ -5,41 +5,85 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 
 use function is_bool;
 
 /**
  * Class representing SAML 2 metadata RequestedAttribute.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
-class RequestedAttribute extends Attribute
+final class RequestedAttribute extends AbstractMdElement
 {
     /**
-     * Whether this attribute is required.
+     * RequestedAttribute constructor.
      *
-     * @var bool|null
+     * @param string $Name
+     * @param bool|null $isRequired
+     * @param string|null $NameFormat
+     * @param string|null $FriendlyName
+     * @param \SimpleSAML\SAML2\XML\saml\AttributeValue[] $AttributeValues
      */
-    private ?bool $isRequired = null;
+    public function __construct(
+        protected string $Name,
+        protected ?bool $isRequired = null,
+        protected ?string $NameFormat = null,
+        protected ?string $FriendlyName = null,
+        protected array $AttributeValues = [],
+    ) {
+        Assert::notWhitespaceOnly($Name, 'Cannot specify an empty name for an Attribute.');
+        Assert::nullOrValidURI($NameFormat); // Covers the empty string
+        Assert::nullOrNotWhitespaceOnly($FriendlyName, 'FriendlyName cannot be an empty string.');
+        Assert::allIsInstanceOf($AttributeValues, AttributeValue::class, 'Invalid AttributeValue.');
+    }
 
 
     /**
-     * Initialize an RequestedAttribute.
+     * Collect the value of the Name-property
      *
-     * @param \DOMElement|null $xml The XML element we should load.
+     * @return string
      */
-    public function __construct(DOMElement $xml = null)
+    public function getName(): string
     {
-        parent::__construct($xml);
+        return $this->Name;
+    }
 
-        if ($xml === null) {
-            return;
-        }
 
-        $this->isRequired = Utils::parseBoolean($xml, 'isRequired', null);
+    /**
+     * Collect the value of the NameFormat-property
+     *
+     * @return string|null
+     */
+    public function getNameFormat(): ?string
+    {
+        return $this->NameFormat;
+    }
+
+
+    /**
+     * Collect the value of the FriendlyName-property
+     *
+     * @return string|null
+     */
+    public function getFriendlyName(): ?string
+    {
+        return $this->FriendlyName;
+    }
+
+
+    /**
+     * Collect the value of the attributeValues-property
+     *
+     * @return \SimpleSAML\SAML2\XML\saml\AttributeValue[]
+     */
+    public function getAttributeValues(): array
+    {
+        return $this->AttributeValues;
     }
 
 
@@ -55,29 +99,58 @@ class RequestedAttribute extends Attribute
 
 
     /**
-     * Set the value of the isRequired-property
+     * Convert XML into a RequestedAttribute
      *
-     * @param bool|null $flag
-     * @return void
+     * @param \DOMElement $xml The XML element we should load
+     * @return self
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     *   if the supplied element is missing one of the mandatory attributes
      */
-    public function setIsRequired(bool $flag = null): void
+    public static function fromXML(DOMElement $xml): static
     {
-        $this->isRequired = $flag;
+        Assert::same($xml->localName, 'RequestedAttribute', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, RequestedAttribute::NS, InvalidDOMElementException::class);
+
+        $attribute = new Attribute($xml);
+
+        return new static(
+            self::getAttribute($xml, 'Name'),
+            self::getOptionalBooleanAttribute($xml, 'isRequired', null),
+            self::getOptionalAttribute($xml, 'NameFormat', null),
+            self::getOptionalAttribute($xml, 'FriendlyName', null),
+            $attribute->getAttributeValue(),
+        );
     }
 
 
     /**
      * Convert this RequestedAttribute to XML.
      *
-     * @param \DOMElement $parent The element we should append this RequestedAttribute to.
+     * @param \DOMElement|null $parent The element we should append this RequestedAttribute to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        $e = $this->toXMLInternal($parent, C::NS_MD, 'md:RequestedAttribute');
+        $e = $this->instantiateParentElement($parent);
+        $e->setAttribute('Name', $this->getName());
 
-        if (is_bool($this->isRequired)) {
-            $e->setAttribute('isRequired', $this->isRequired ? 'true' : 'false');
+        if ($this->getNameFormat() !== null) {
+            $e->setAttribute('NameFormat', $this->getNameFormat());
+        }
+
+        if ($this->getFriendlyName() !== null) {
+            $e->setAttribute('FriendlyName', $this->getFriendlyName());
+        }
+
+        if ($this->getIsRequired() !== null) {
+            $e->setAttribute('isRequired', $this->getIsRequired() ? 'true' : 'false');
+        }
+
+        foreach ($this->getAttributeValues() as $av) {
+            $av->toXML($e);
         }
 
         return $e;

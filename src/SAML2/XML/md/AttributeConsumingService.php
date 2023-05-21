@@ -90,10 +90,7 @@ class AttributeConsumingService
 
         $this->setServiceDescription(ServiceDescriptor::getChildrenOfClass($xml));
 
-        /** @var \DOMElement $ra */
-        foreach (XPath::xpQuery($xml, './saml_metadata:RequestedAttribute', XPath::getXPath($xml)) as $ra) {
-            $this->addRequestedAttribute(new RequestedAttribute($ra));
-        }
+        $this->setRequestedAttribute(RequestedAttribute::getChildrenOfClass($xml));
     }
 
 
@@ -210,6 +207,7 @@ class AttributeConsumingService
      */
     public function setRequestedAttribute(array $requestedAttribute): void
     {
+        Assert::allIsInstanceOf($requestedAttribute, RequestedAttribute::class);
         $this->RequestedAttribute = $requestedAttribute;
     }
 
