@@ -77,13 +77,8 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
             InvalidDOMElementException::class,
         );
 
-        /** @var int $index */
         $index = self::getIntegerAttribute($xml, 'index');
-
-        /** @var string $binding */
         $binding = self::getAttribute($xml, 'Binding');
-
-        /** @var string $location */
         $location = self::getAttribute($xml, 'Location');
 
         $children = [];
