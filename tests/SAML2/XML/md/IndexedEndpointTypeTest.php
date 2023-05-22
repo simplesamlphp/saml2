@@ -7,19 +7,16 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponse;
 use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
 use SimpleSAML\SAML2\XML\md\AssertionConsumerService;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
+use function sprintf;
 use function strval;
 
 /**
@@ -31,39 +28,16 @@ use function strval;
  */
 final class IndexedEndpointTypeTest extends TestCase
 {
-    use ArrayizableElementTestTrait;
-    use SchemaValidationTestTrait;
-    use SerializableElementTestTrait;
+    protected static string $resourcePath;
 
-    /** @var \DOMDocument */
-    protected DOMDocument $ext;
+    protected DOMDocument $xmlRepresentation;
 
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->ext = DOMDocumentFactory::fromString(
-            '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
-        );
-
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
-        $this->testedClass = AssertionConsumerService::class;
-
-        $this->arrayRepresentation = [
-            'index' => 1,
-            'Binding' => C::BINDING_HTTP_POST,
-            'Location' => 'https://whatever/',
-            'isDefault' => true,
-            'ResponseLocation' => 'https://foo.bar/',
-            'Extensions' => [new Chunk($this->ext->documentElement)],
-            'attributes' => [(new XMLAttribute('urn:x-simplesamlphp:namespace', 'test', 'attr', 'value'))->toArray()],
-        ];
-
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/md_AssertionConsumerService.xml',
-        );
+        self::$resourcePath = dirname(__FILE__, 4) . '/resources/xml/';
     }
 
 
@@ -71,30 +45,15 @@ final class IndexedEndpointTypeTest extends TestCase
 
 
     /**
-     * Test creating an IndexedEndpointType from scratch.
-     */
-    public function testMarshalling(): void
-    {
-        $idxep = new AssertionConsumerService(42, C::BINDING_HTTP_POST, C::LOCATION_A, false);
-
-        $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($idxep),
-        );
-    }
-
-
-    /**
      * Test that creating an IndexedEndpointType from scratch without specifying isDefault works.
+     *
+     * @param class-string $class
+     *
+     * @dataProvider classProvider
      */
-    public function testMarshallingWithoutIsDefault(): void
+    public function testMarshallingWithoutIsDefault(string $class): void
     {
-        $idxep = new AssertionConsumerService(42, C::BINDING_HTTP_POST, C::LOCATION_A);
-        $this->xmlRepresentation->documentElement->removeAttribute('isDefault');
-        $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($idxep),
-        );
+        $idxep = new $class(42, C::BINDING_HTTP_POST, C::LOCATION_A);
         $this->assertNull($idxep->getIsDefault());
     }
 
@@ -103,24 +62,14 @@ final class IndexedEndpointTypeTest extends TestCase
 
 
     /**
-     * Test creating an IndexedEndpointType from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $idxep = AssertionConsumerService::fromXML($this->xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
-            strval($idxep),
-        );
-    }
-
-
-    /**
-     * Test that creating an EndpointType from XML checks the actual name of the endpoint.
+     * Test that creating an IndexedEndpointType from XML checks the actual name of the endpoint.
      */
     public function testUnmarshallingUnexpectedEndpoint(): void
     {
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+            self::$resourcePath . 'md_AssertionConsumerService.xml',
+        );
+
         $this->expectException(InvalidDOMElementException::class);
         $this->expectExceptionMessage(
             'Unexpected name for endpoint: AssertionConsumerService. Expected: ArtifactResolutionService.',
@@ -131,47 +80,108 @@ final class IndexedEndpointTypeTest extends TestCase
 
     /**
      * Test that creating an IndexedEndpointType from XML without an index fails.
+     *
+     * @param class-string $class
+     * @param string $xmlRepresentation
+     *
+     * @dataProvider classProvider
      */
-    public function testUnmarshallingWithoutIndex(): void
+    public function testUnmarshallingWithoutIndex(string $class, string $xmlRepresentation): void
     {
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+            self::$resourcePath . $xmlRepresentation,
+        );
+
         $this->expectException(MissingAttributeException::class);
-        $this->expectExceptionMessage('Missing \'index\' attribute on md:AssertionConsumerService');
+        $this->expectExceptionMessage(sprintf(
+            'Missing \'index\' attribute on %s:%s',
+            $class::getNamespacePrefix(),
+            $class::getLocalName(),
+        ));
         $this->xmlRepresentation->documentElement->removeAttribute('index');
-        AssertionConsumerService::fromXML($this->xmlRepresentation->documentElement);
+        $class::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
     /**
      * Test that creating an IndexedEndpointType from XML with a non-numeric index fails.
+     *
+     * @param class-string $class
+     * @param string $xmlRepresentation
+     *
+     * @dataProvider classProvider
      */
-    public function testUnmarshallingWithWrongIndex(): void
+    public function testUnmarshallingWithWrongIndex(string $class, string $xmlRepresentation): void
     {
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+            self::$resourcePath . $xmlRepresentation,
+        );
+
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The \'index\' attribute of md:AssertionConsumerService must be numerical.');
+        $this->expectExceptionMessage(sprintf(
+            'The \'index\' attribute of %s:%s must be numerical.',
+            $class::getNamespacePrefix(),
+            $class::getLocalName(),
+        ));
         $this->xmlRepresentation->documentElement->setAttribute('index', 'value');
-        AssertionConsumerService::fromXML($this->xmlRepresentation->documentElement);
+        $class::fromXML($this->xmlRepresentation->documentElement);
     }
 
 
     /**
      * Test that creating an IndexedEndpointType from XML without isDefault works.
+     *
+     * @param class-string $class
+     * @param string $xmlRepresentation
+     *
+     * @dataProvider classProvider
      */
-    public function testUnmarshallingWithoutIsDefault(): void
+    public function testUnmarshallingWithoutIsDefault(string $class, string $xmlRepresentation): void
     {
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+            self::$resourcePath . $xmlRepresentation,
+        );
+
+
         $this->xmlRepresentation->documentElement->removeAttribute('isDefault');
-        AssertionConsumerService::fromXML($this->xmlRepresentation->documentElement);
-        $this->assertTrue(true);
+        $acs = $class::fromXML($this->xmlRepresentation->documentElement);
+        $this->assertNull($acs->getIsDefault());
     }
 
 
     /**
      * Test that creating an IndexedEndpointType from XML with isDefault of a non-boolean value fails.
+     *
+     * @param class-string $class
+     * @param string $xmlRepresentation
+     *
+     * @dataProvider classProvider
      */
-    public function testUnmarshallingWithWrongIsDefault(): void
+    public function testUnmarshallingWithWrongIsDefault(string $class, string $xmlRepresentation): void
     {
+        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+            self::$resourcePath . $xmlRepresentation,
+        );
+
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The \'isDefault\' attribute of md:AssertionConsumerService must be a boolean.');
+        $this->expectExceptionMessage(sprintf(
+            'The \'isDefault\' attribute of %s:%s must be a boolean.',
+            $class::getNamespacePrefix(),
+            $class::getLocalName(),
+        ));
         $this->xmlRepresentation->documentElement->setAttribute('isDefault', 'non-bool');
-        AssertionConsumerService::fromXML($this->xmlRepresentation->documentElement);
+        $class::fromXML($this->xmlRepresentation->documentElement);
+    }
+
+
+    /**
+     */
+    public static function classProvider(): array
+    {
+        return [
+            'md:ArtifactResolutionService' => [ArtifactResolutionService::class, 'md_ArtifactResolutionService.xml'],
+            'md:AssertionConsumerService' => [AssertionConsumerService::class, 'md_AssertionConsumerService.xml'],
+            'idpdisc:DiscoveryResponse' => [DiscoveryResponse::class, 'idpdisc_DiscoveryResponse.xml'],
+        ];
     }
 }

@@ -24,7 +24,7 @@ final class ArtifactResolutionService extends AbstractIndexedEndpointType
      * @param bool|null $isDefault
      * @param string|null $unused
      * @param list<\SimpleSAML\XML\Attribute> $attributes
-     * @param array children
+     * @param array $children
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
