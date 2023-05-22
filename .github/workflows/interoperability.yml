@@ -61,14 +61,21 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
+      - name: Get current date
+        id: date
+        run: |
+          echo "{date}={$(date +'%Y-%m-%d')}" >> "$GITHUB_STATE"
+
       - name: Cache eduGAIN metadata
+        id: cache-metadata
         uses: actions/cache@v3
         with:
           path: /tmp/metadata
-          key: ${{ runner.os }}-metadata-${{ hashFiles('**/edugain-v2.lock') }}
+          key: ${{ runner.os }}-metadata-${{ env.date }}
           restore-keys: ${{ runner.os }}-metadata-
 
       - name: Download eduGAIN metadata & public key
+        if: steps.cache-metadata.outputs.cache-hit != 'true'
         run: |
             mkdir -p /tmp/metadata
             wget https://mds.edugain.org/edugain-v2.xml -O /tmp/metadata/edugain.xml
