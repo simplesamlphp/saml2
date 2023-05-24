@@ -27,20 +27,16 @@ use function preg_replace;
  */
 final class KeyLoaderTest extends MockeryTestCase
 {
-    /**
-     * @var \SimpleSAML\SAML2\Certificate\KeyLoader
-     */
+    /** @var \SimpleSAML\SAML2\Certificate\KeyLoader */
     private KeyLoader $keyLoader;
 
-    /**
-     * @var \Mockery\MockInterface
-     */
+    /** @var \Mockery\MockInterface */
     private MockInterface $configurationMock;
 
 
-    /*
+    /**
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->keyLoader = new KeyLoader();
         $this->configurationMock = Mockery::mock(CertificateProvider::class);

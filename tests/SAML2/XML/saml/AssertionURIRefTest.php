@@ -29,13 +29,13 @@ final class AssertionURIRefTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = AssertionURIRef::class;
+        self::$testedClass = AssertionURIRef::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_AssertionURIRef.xml',
         );
     }
@@ -47,11 +47,8 @@ final class AssertionURIRefTest extends TestCase
     {
         $assertionURIRef = new AssertionURIRef('urn:x-simplesamlphp:reference');
 
-        $assertionURIRefElement = $assertionURIRef->toXML();
-        $this->assertEquals('urn:x-simplesamlphp:reference', $assertionURIRefElement->textContent);
-
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($assertionURIRef),
         );
     }
@@ -61,10 +58,10 @@ final class AssertionURIRefTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $assertionURIRef = AssertionURIRef::fromXML($this->xmlRepresentation->documentElement);
+        $assertionURIRef = AssertionURIRef::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($assertionURIRef),
         );
     }

@@ -21,24 +21,20 @@ use function preg_match;
  */
 final class XmlSignatureWrappingTest extends TestCase
 {
-    /**
-     * @var \SimpleSAML\SAML2\Signature\Validator
-     */
-    private Validator $signatureValidator;
+    /** @var \SimpleSAML\SAML2\Signature\Validator */
+    private static Validator $signatureValidator;
 
-    /**
-     * @var \SimpleSAML\SAML2\Configuration\IdentityProvider
-     */
-    private IdentityProvider $identityProviderConfiguration;
+    /** @var \SimpleSAML\SAML2\Configuration\IdentityProvider */
+    private static IdentityProvider $identityProviderConfiguration;
 
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->signatureValidator = new Validator(new NullLogger());
+        self::$signatureValidator = new Validator(new NullLogger());
 
-        $this->identityProviderConfiguration = new IdentityProvider(
+        self::$identityProviderConfiguration = new IdentityProvider(
             ['certificateData' => PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE)],
         );
     }
@@ -52,7 +48,7 @@ final class XmlSignatureWrappingTest extends TestCase
         $this->expectExceptionMessage('Reference does not point to given element.');
 
         $assertion = $this->getSignedAssertionWithEmbeddedAssertionReferencedInSignature();
-        $this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration);
+        self::$signatureValidator->hasValidSignature($assertion, self::$identityProviderConfiguration);
     }
 
 
@@ -64,7 +60,7 @@ final class XmlSignatureWrappingTest extends TestCase
         $this->expectExceptionMessage('Reference does not point to given element.');
 
         $assertion = $this->getSignedAssertionWithSignatureThatReferencesAnotherAssertion();
-        $this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration);
+        self::$signatureValidator->hasValidSignature($assertion, self::$identityProviderConfiguration);
     }
 
 
@@ -74,9 +70,7 @@ final class XmlSignatureWrappingTest extends TestCase
     private function getSignedAssertionWithSignatureThatReferencesAnotherAssertion(): Assertion
     {
         $doc = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionWithInvalidReferencedId.xml');
-        $assertion = Assertion::fromXML($doc->firstChild);
-
-        return $assertion;
+        return Assertion::fromXML($doc->firstChild);
     }
 
 
@@ -86,8 +80,6 @@ final class XmlSignatureWrappingTest extends TestCase
     private function getSignedAssertionWithEmbeddedAssertionReferencedInSignature(): Assertion
     {
         $document = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionReferencedEmbeddedAssertion.xml');
-        $assertion = Assertion::fromXML($document->firstChild);
-
-        return $assertion;
+        return Assertion::fromXML($document->firstChild);
     }
 }

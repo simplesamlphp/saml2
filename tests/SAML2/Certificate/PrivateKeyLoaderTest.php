@@ -19,17 +19,15 @@ use function file_get_content;
  */
 final class PrivateKeyLoaderTest extends TestCase
 {
-    /**
-     * @var \SimpleSAML\SAML2\Certificate\PrivateKeyLoader
-     */
-    private PrivateKeyLoader $privateKeyLoader;
+    /** @var \SimpleSAML\SAML2\Certificate\PrivateKeyLoader */
+    private static PrivateKeyLoader $privateKeyLoader;
 
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->privateKeyLoader = new PrivateKeyLoader();
+        self::$privateKeyLoader = new PrivateKeyLoader();
     }
 
 
@@ -43,7 +41,7 @@ final class PrivateKeyLoaderTest extends TestCase
     public function loadingAConfiguredPrivateKeyReturnsACertificatePrivateKey(
         ConfPrivateKey $configuredKey
     ): void {
-        $resultingKey = $this->privateKeyLoader->loadPrivateKey($configuredKey);
+        $resultingKey = self::$privateKeyLoader->loadPrivateKey($configuredKey);
 
         $this->assertInstanceOf(PrivateKey::class, $resultingKey);
         $this->assertEquals(

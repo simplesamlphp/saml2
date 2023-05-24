@@ -37,13 +37,13 @@ final class BaseIDTest extends TestCase
 
     /**
      */
-    public function setup(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
+        self::$schemaFile = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
 
-        $this->testedClass = AbstractBaseID::class;
+        self::$testedClass = AbstractBaseID::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_BaseID.xml',
         );
 
@@ -67,7 +67,7 @@ final class BaseIDTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($baseId),
         );
     }
@@ -80,7 +80,7 @@ final class BaseIDTest extends TestCase
      */
     public function testUnmarshallingRegistered(): void
     {
-        $baseId = AbstractBaseID::fromXML($this->xmlRepresentation->documentElement);
+        $baseId = AbstractBaseID::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertInstanceOf(CustomBaseID::class, $baseId);
         $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
@@ -92,7 +92,7 @@ final class BaseIDTest extends TestCase
         $this->assertEquals('urn:some:audience', $audience[0]->getContent());
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($baseId),
         );
     }
@@ -102,7 +102,7 @@ final class BaseIDTest extends TestCase
      */
     public function testUnmarshallingUnregistered(): void
     {
-        $element = $this->xmlRepresentation->documentElement;
+        $element = clone self::$xmlRepresentation->documentElement;
         $element->setAttributeNS(C::NS_XSI, 'xsi:type', 'ssp:UnknownBaseIDType');
 
         $baseId = AbstractBaseID::fromXML($element);

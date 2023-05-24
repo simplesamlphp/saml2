@@ -34,13 +34,13 @@ final class AffiliateMemberTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = AffiliateMember::class;
+        self::$testedClass = AffiliateMember::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_AffiliateMember.xml',
         );
     }
@@ -57,7 +57,7 @@ final class AffiliateMemberTest extends TestCase
         $affiliateMember = new AffiliateMember('https://some.entity.org/id');
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($affiliateMember),
         );
     }
@@ -94,10 +94,10 @@ final class AffiliateMemberTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $affiliateMember = AffiliateMember::fromXML($this->xmlRepresentation->documentElement);
+        $affiliateMember = AffiliateMember::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($affiliateMember),
         );
     }

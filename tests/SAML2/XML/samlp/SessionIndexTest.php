@@ -29,13 +29,13 @@ final class SessionIndexTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = SessionIndex::class;
+        self::$testedClass = SessionIndex::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_SessionIndex.xml',
         );
     }
@@ -47,11 +47,8 @@ final class SessionIndexTest extends TestCase
     {
         $sessionIndex = new SessionIndex('SomeSessionIndex1');
 
-        $sessionIndexElement = $sessionIndex->toXML();
-        $this->assertEquals('SomeSessionIndex1', $sessionIndexElement->textContent);
-
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($sessionIndex),
         );
     }
@@ -61,10 +58,10 @@ final class SessionIndexTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $sessionIndex = SessionIndex::fromXML($this->xmlRepresentation->documentElement);
+        $sessionIndex = SessionIndex::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($sessionIndex),
         );
     }

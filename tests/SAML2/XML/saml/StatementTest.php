@@ -37,13 +37,13 @@ final class StatementTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
+        self::$schemaFile = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
 
-        $this->testedClass = CustomStatement::class;
+        self::$testedClass = CustomStatement::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Statement.xml',
         );
 
@@ -65,7 +65,7 @@ final class StatementTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($statement),
         );
     }
@@ -78,7 +78,7 @@ final class StatementTest extends TestCase
      */
     public function testUnmarshallingRegistered(): void
     {
-        $statement = CustomStatement::fromXML($this->xmlRepresentation->documentElement);
+        $statement = CustomStatement::fromXML(self::$xmlRepresentation->documentElement);
         $this->assertInstanceOf(CustomStatement::class, $statement);
 
         $this->assertEquals('ssp:CustomStatementType', $statement->getXsiType());
@@ -87,7 +87,7 @@ final class StatementTest extends TestCase
         $this->assertEquals('urn:some:audience', $audience[0]->getContent());
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($statement),
         );
     }
@@ -97,7 +97,7 @@ final class StatementTest extends TestCase
      */
     public function testUnmarshallingUnregistered(): void
     {
-        $element = $this->xmlRepresentation->documentElement;
+        $element = clone self::$xmlRepresentation->documentElement;
         $element->setAttributeNS(C::NS_XSI, 'xsi:type', 'ssp:UnknownStatementType');
 
         $statement = AbstractStatement::fromXML($element);

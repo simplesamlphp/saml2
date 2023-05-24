@@ -10,6 +10,7 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\ServiceDescription;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
@@ -26,27 +27,24 @@ use function strval;
  */
 final class ServiceDescriptionTest extends TestCase
 {
+    use ArrayizableElementTestTrait;
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
 
-    /** @var array */
-    protected array $arrayDocument;
-
-
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = ServiceDescription::class;
+        self::$testedClass = ServiceDescription::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_ServiceDescription.xml',
         );
 
-        $this->arrayDocument = ['en' => 'Academic Journals R US and only us'];
+        self::$arrayRepresentation = ['en' => 'Academic Journals R US and only us'];
     }
 
 
@@ -61,7 +59,7 @@ final class ServiceDescriptionTest extends TestCase
         $name = new ServiceDescription('en', 'Academic Journals R US and only us');
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
     }
@@ -75,10 +73,10 @@ final class ServiceDescriptionTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $name = ServiceDescription::fromXML($this->xmlRepresentation->documentElement);
+        $name = ServiceDescription::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
     }

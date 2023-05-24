@@ -38,29 +38,30 @@ final class PDPDescriptorTest extends TestCase
 
 
     /** @var \SimpleSAML\SAML2\XML\md\AuthzService */
-    protected AuthzService $authzService;
+    private static AuthzService $authzService;
 
     /** @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService */
-    protected AssertionIDRequestService $assertionIDRequestService;
+    private static AssertionIDRequestService $assertionIDRequestService;
 
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = PDPDescriptor::class;
+        self::$testedClass = PDPDescriptor::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_PDPDescriptor.xml',
         );
 
-        $this->authzService = new AuthzService(
+        self::$authzService = new AuthzService(
             C::BINDING_SOAP,
             'https://IdentityProvider.com/SAML/AA/SOAP',
         );
-        $this->assertionIDRequestService = new AssertionIDRequestService(
+
+        self::$assertionIDRequestService = new AssertionIDRequestService(
             C::BINDING_URI,
             'https://IdentityProvider.com/SAML/AA/URI',
         );
@@ -76,9 +77,9 @@ final class PDPDescriptorTest extends TestCase
     public function testMarshalling(): void
     {
         $pdpd = new PDPDescriptor(
-            [$this->authzService],
+            [self::$authzService],
             ["urn:oasis:names:tc:SAML:2.0:protocol"],
-            [$this->assertionIDRequestService],
+            [self::$assertionIDRequestService],
             [
                 new NameIDFormat(C::NAMEID_X509_SUBJECT_NAME),
                 new NameIDFormat(C::NAMEID_PERSISTENT),
@@ -87,7 +88,7 @@ final class PDPDescriptorTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($pdpd),
         );
     }
@@ -103,7 +104,7 @@ final class PDPDescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new PDPDescriptor(
-            [$this->authzService, $this->assertionIDRequestService],
+            [self::$authzService, self::$assertionIDRequestService],
             ["urn:oasis:names:tc:SAML:2.0:protocol"],
         );
     }
@@ -121,9 +122,9 @@ final class PDPDescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new PDPDescriptor(
-            [$this->authzService],
+            [self::$authzService],
             ["urn:oasis:names:tc:SAML:2.0:protocol"],
-            [$this->assertionIDRequestService, $this->authzService],
+            [self::$assertionIDRequestService, self::$authzService],
         );
     }
 
@@ -134,7 +135,7 @@ final class PDPDescriptorTest extends TestCase
     public function testMarshallingWithoutOptionalArguments(): void
     {
         $pdpd = new PDPDescriptor(
-            [$this->authzService],
+            [self::$authzService],
             ["urn:oasis:names:tc:SAML:2.0:protocol"],
         );
         $this->assertEmpty($pdpd->getAssertionIDRequestService());
@@ -150,10 +151,10 @@ final class PDPDescriptorTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $pdpd = PDPDescriptor::fromXML($this->xmlRepresentation->documentElement);
+        $pdpd = PDPDescriptor::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($pdpd),
         );
     }
@@ -164,18 +165,19 @@ final class PDPDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutAuthzServiceDescriptors(): void
     {
+        $xmlRepresentation = clone self::$xmlRepresentation;
         /**
          * @psalm-suppress PossiblyNullArgument
          * @psalm-suppress PossiblyNullPropertyFetch
          */
-        $this->xmlRepresentation->documentElement->removeChild(
-            $this->xmlRepresentation->documentElement->firstChild->nextSibling,
+        $xmlRepresentation->documentElement->removeChild(
+            $xmlRepresentation->documentElement->firstChild->nextSibling,
         );
 
         $this->expectException(AssertionFailedException::class);
-
         $this->expectExceptionMessage('At least one md:AuthzService endpoint must be present.');
-        PDPDescriptor::fromXML($this->xmlRepresentation->documentElement);
+
+        PDPDescriptor::fromXML($xmlRepresentation->documentElement);
     }
 
 

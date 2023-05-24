@@ -31,13 +31,13 @@ final class NameIDMappingServiceTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = NameIDMappingService::class;
+        self::$testedClass = NameIDMappingService::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_NameIDMappingService.xml',
         );
     }
@@ -54,7 +54,7 @@ final class NameIDMappingServiceTest extends TestCase
         $nidmsep = new NameIDMappingService(C::BINDING_HTTP_POST, C::LOCATION_A);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($nidmsep),
         );
     }
@@ -81,10 +81,10 @@ final class NameIDMappingServiceTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $nidmsep = NameIDMappingService::fromXML($this->xmlRepresentation->documentElement);
+        $nidmsep = NameIDMappingService::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($nidmsep),
         );
     }
@@ -95,12 +95,14 @@ final class NameIDMappingServiceTest extends TestCase
      */
     public function testUnmarshallingWithResponseLocation(): void
     {
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
+
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.',
         );
 
-        $this->xmlRepresentation->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
-        NameIDMappingService::fromXML($this->xmlRepresentation->documentElement);
+        NameIDMappingService::fromXML($xmlRepresentation->documentElement);
     }
 }

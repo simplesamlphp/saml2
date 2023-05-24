@@ -33,13 +33,13 @@ final class ArtifactResolveTest extends TestCase
 
     /**
      */
-    public function setup(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = ArtifactResolve::class;
+        self::$testedClass = ArtifactResolve::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_ArtifactResolve.xml',
         );
     }
@@ -55,7 +55,7 @@ final class ArtifactResolveTest extends TestCase
         $artifactResolve = new ArtifactResolve($artifact, $issuer, '_6c3a4f8b9c2d', '2.0', 1074711649);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($artifactResolve),
         );
     }
@@ -65,13 +65,9 @@ final class ArtifactResolveTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $id = '_6c3a4f8b9c2d';
-        $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
-        $issuer = new Issuer('https://ServiceProvider.com/SAML');
-
-        $ar = ArtifactResolve::fromXML($this->xmlRepresentation->documentElement);
+        $ar = ArtifactResolve::fromXML(self::$xmlRepresentation->documentElement);
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($ar),
         );
     }

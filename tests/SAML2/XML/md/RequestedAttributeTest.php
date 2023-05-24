@@ -32,13 +32,13 @@ final class RequestedAttributeTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = RequestedAttribute::class;
+        self::$testedClass = RequestedAttribute::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_RequestedAttribute.xml',
         );
     }
@@ -61,7 +61,7 @@ final class RequestedAttributeTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($ra),
         );
     }
@@ -89,10 +89,10 @@ final class RequestedAttributeTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $ra = RequestedAttribute::fromXML($this->xmlRepresentation->documentElement);
+        $ra = RequestedAttribute::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($ra),
         );
     }
@@ -103,8 +103,9 @@ final class RequestedAttributeTest extends TestCase
      */
     public function testUnmarshallingWithoutIsRequired(): void
     {
-        $this->xmlRepresentation->documentElement->removeAttribute('isRequired');
-        $ra = RequestedAttribute::fromXML($this->xmlRepresentation->documentElement);
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->removeAttribute('isRequired');
+        $ra = RequestedAttribute::fromXML($xmlRepresentation->documentElement);
         $this->assertNull($ra->getIsRequired());
     }
 
@@ -114,9 +115,12 @@ final class RequestedAttributeTest extends TestCase
      */
     public function testUnmarshallingWithWrongIsRequired(): void
     {
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttribute('isRequired', 'wrong');
+
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The \'isRequired\' attribute of md:RequestedAttribute must be a boolean.');
-        $this->xmlRepresentation->documentElement->setAttribute('isRequired', 'wrong');
-        RequestedAttribute::fromXML($this->xmlRepresentation->documentElement);
+
+        RequestedAttribute::fromXML($xmlRepresentation->documentElement);
     }
 }

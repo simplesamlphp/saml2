@@ -44,13 +44,13 @@ final class AuthnQueryTest extends TestCase
 
     /**
      */
-    public function setup(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = AuthnQuery::class;
+        self::$testedClass = AuthnQuery::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_AuthnQuery.xml',
         );
     }
@@ -77,7 +77,7 @@ final class AuthnQueryTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($authnQuery),
         );
     }
@@ -85,10 +85,10 @@ final class AuthnQueryTest extends TestCase
 
     public function testUnmarshalling(): void
     {
-        $authnQuery = AuthnQuery::fromXML($this->xmlRepresentation->documentElement);
+        $authnQuery = AuthnQuery::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($authnQuery),
         );
     }

@@ -29,13 +29,13 @@ final class AuthnContextDeclTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = AuthnContextDecl::class;
+        self::$testedClass = AuthnContextDecl::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextDecl.xml',
         );
     }
@@ -48,10 +48,10 @@ final class AuthnContextDeclTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $authnContextDecl = new AuthnContextDecl($this->xmlRepresentation->documentElement->childNodes);
+        $authnContextDecl = new AuthnContextDecl(self::$xmlRepresentation->documentElement->childNodes);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($authnContextDecl),
         );
     }
@@ -64,10 +64,10 @@ final class AuthnContextDeclTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $authnContextDecl = AuthnContextDecl::fromXML($this->xmlRepresentation->documentElement);
+        $authnContextDecl = AuthnContextDecl::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($authnContextDecl),
         );
     }

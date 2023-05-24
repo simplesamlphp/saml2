@@ -14,7 +14,7 @@ use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 /**
- * Tests for SurName.
+ * Tests for EmailAddress.
  *
  * @covers \SimpleSAML\SAML2\XML\md\EmailAddress
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
@@ -29,15 +29,15 @@ final class EmailAddressTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = EmailAddress::class;
+        self::$testedClass = EmailAddress::class;
 
-        $this->arrayRepresentation = ['mailto:john.doe@example.org'];
+        self::$arrayRepresentation = ['mailto:john.doe@example.org'];
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_EmailAddress.xml',
         );
     }
@@ -54,7 +54,7 @@ final class EmailAddressTest extends TestCase
         $name = new EmailAddress('john.doe@example.org');
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
     }
@@ -78,10 +78,10 @@ final class EmailAddressTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $name = EmailAddress::fromXML($this->xmlRepresentation->documentElement);
+        $name = EmailAddress::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
     }
@@ -92,7 +92,7 @@ final class EmailAddressTest extends TestCase
      */
     public function testUnmarshallingWithInvalidEmail(): void
     {
-        $document = $this->xmlRepresentation;
+        $document = clone self::$xmlRepresentation;
         $document->documentElement->textContent = 'not so valid';
 
         $this->expectException(AssertionFailedException::class);

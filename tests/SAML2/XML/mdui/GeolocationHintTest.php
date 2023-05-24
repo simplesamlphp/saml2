@@ -29,13 +29,13 @@ final class GeolocationHintTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
 
-        $this->testedClass = GeolocationHint::class;
+        self::$testedClass = GeolocationHint::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/mdui_GeolocationHint.xml',
         );
     }
@@ -52,7 +52,7 @@ final class GeolocationHintTest extends TestCase
         $hint = new GeolocationHint('geo:47.37328,8.531126');
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($hint),
         );
     }
@@ -66,10 +66,10 @@ final class GeolocationHintTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $hint = GeolocationHint::fromXML($this->xmlRepresentation->documentElement);
+        $hint = GeolocationHint::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($hint),
         );
     }

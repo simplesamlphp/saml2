@@ -61,13 +61,13 @@ final class RoleDescriptorTest extends TestCase
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/schemas/simplesamlphp.xsd';
+        self::$schemaFile = dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/schemas/simplesamlphp.xsd';
 
-        $this->testedClass = AbstractRoleDescriptor::class;
+        self::$testedClass = AbstractRoleDescriptor::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_RoleDescriptor.xml',
         );
 
@@ -142,7 +142,7 @@ final class RoleDescriptorTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($roleDescriptor),
         );
     }
@@ -156,7 +156,7 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingRegistered(): void
     {
-        $descriptor = AbstractRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);
+        $descriptor = AbstractRoleDescriptor::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertInstanceOf(CustomRoleDescriptor::class, $descriptor);
         $this->assertCount(2, $descriptor->getKeyDescriptor());
@@ -185,7 +185,7 @@ final class RoleDescriptorTest extends TestCase
         $this->assertEquals('Chunk', $extensions[0]->getLocalName());
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($descriptor),
         );
     }
@@ -195,7 +195,7 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingUnregistered(): void
     {
-        $element = $this->xmlRepresentation->documentElement;
+        $element = clone self::$xmlRepresentation->documentElement;
         $element->setAttributeNS(
             'http://www.w3.org/2000/xmlns/',
             'xmlns:ssp',
@@ -246,14 +246,15 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutSupportedProtocols(): void
     {
-        $this->xmlRepresentation->documentElement->removeAttribute('protocolSupportEnumeration');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->removeAttribute('protocolSupportEnumeration');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage(
             'Missing \'protocolSupportEnumeration\' attribute on md:RoleDescriptor.',
         );
 
-        UnknownRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);
+        UnknownRoleDescriptor::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -262,11 +263,12 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithEmptySupportedProtocols(): void
     {
-        $this->xmlRepresentation->documentElement->setAttribute('protocolSupportEnumeration', '');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttribute('protocolSupportEnumeration', '');
 
         $this->expectException(SchemaViolationException::class);
 
-        UnknownRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);
+        UnknownRoleDescriptor::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -275,10 +277,11 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithInvalidErrorURL(): void
     {
-        $this->xmlRepresentation->documentElement->setAttribute('errorURL', 'not a URL');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttribute('errorURL', 'not a URL');
 
         $this->expectException(SchemaViolationException::class);
 
-        UnknownRoleDescriptor::fromXML($this->xmlRepresentation->documentElement);
+        UnknownRoleDescriptor::fromXML($xmlRepresentation->documentElement);
     }
 }

@@ -59,13 +59,13 @@ final class SPSSODescriptorTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = SPSSODescriptor::class;
+        self::$testedClass = SPSSODescriptor::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_SPSSODescriptor.xml',
         );
     }
@@ -157,7 +157,7 @@ final class SPSSODescriptorTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($spssod),
         );
     }
@@ -239,10 +239,10 @@ final class SPSSODescriptorTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $spssod = SPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
+        $spssod = SPSSODescriptor::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($spssod),
         );
     }
@@ -253,18 +253,19 @@ final class SPSSODescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutAssertionConsumerService(): void
     {
-        $acseps = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AssertionConsumerService');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $acseps = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AssertionConsumerService');
 
         /** @psalm-suppress PossiblyNullArgument */
-        $this->xmlRepresentation->documentElement->removeChild($acseps->item(1));
+        $xmlRepresentation->documentElement->removeChild($acseps->item(1));
 
         /** @psalm-suppress PossiblyNullArgument */
-        $this->xmlRepresentation->documentElement->removeChild($acseps->item(0));
+        $xmlRepresentation->documentElement->removeChild($acseps->item(0));
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('At least one AssertionConsumerService must be specified.');
 
-        SPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
+        SPSSODescriptor::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -273,12 +274,13 @@ final class SPSSODescriptorTest extends TestCase
      */
     public function testUnmarshallingWithNonBooleanAuthnRequestsSigned(): void
     {
-        $this->xmlRepresentation->documentElement->setAttribute('AuthnRequestsSigned', 'not a boolean');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttribute('AuthnRequestsSigned', 'not a boolean');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The \'AuthnRequestsSigned\' attribute of md:SPSSODescriptor must be a boolean.');
 
-        SPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
+        SPSSODescriptor::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -287,14 +289,15 @@ final class SPSSODescriptorTest extends TestCase
      */
     public function testUnmarshallingWithNonBooleanWantAssertionsSigned(): void
     {
-        $this->xmlRepresentation->documentElement->setAttribute('WantAssertionsSigned', 'not a boolean');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttribute('WantAssertionsSigned', 'not a boolean');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'The \'WantAssertionsSigned\' attribute of md:SPSSODescriptor must be a boolean.'
         );
 
-        SPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
+        SPSSODescriptor::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -325,13 +328,14 @@ XML
      */
     public function testUnmarshallingTwoDefaultACS(): void
     {
-        $acs = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AttributeConsumingService');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $acs = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AttributeConsumingService');
         /** @psalm-suppress PossiblyNullReference */
         $acs->item(1)->setAttribute('isDefault', 'true');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Only one md:AttributeConsumingService can be set as default.');
 
-        SPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
+        SPSSODescriptor::fromXML($xmlRepresentation->documentElement);
     }
 }

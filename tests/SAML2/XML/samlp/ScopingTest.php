@@ -36,13 +36,13 @@ final class ScopingTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = Scoping::class;
+        self::$testedClass = Scoping::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_Scoping.xml',
         );
     }
@@ -60,7 +60,7 @@ final class ScopingTest extends TestCase
         $scoping = new Scoping(2, $list, [new RequesterID($requesterId)]);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($scoping),
         );
     }
@@ -113,10 +113,10 @@ final class ScopingTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $scoping = Scoping::fromXML($this->xmlRepresentation->documentElement);
+        $scoping = Scoping::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($scoping),
         );
     }

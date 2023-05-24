@@ -30,13 +30,13 @@ final class IDPEntryTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = IDPentry::class;
+        self::$testedClass = IDPentry::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_IDPEntry.xml',
         );
     }
@@ -49,16 +49,17 @@ final class IDPEntryTest extends TestCase
         $entry = new IDPEntry('urn:some:requester', 'testName', 'urn:test:testLoc');
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($entry),
         );
     }
+
 
     /**
      */
     public function testMarshallingNullables(): void
     {
-        $document = $this->xmlRepresentation;
+        $document = clone self::$xmlRepresentation;
         $document->documentElement->removeAttribute('Name');
         $document->documentElement->removeAttribute('Loc');
 
@@ -69,7 +70,7 @@ final class IDPEntryTest extends TestCase
         $this->assertNull($entry->getLoc());
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($document->documentElement),
+            $document->saveXML($document->documentElement),
             strval($entry),
         );
     }
@@ -79,10 +80,10 @@ final class IDPEntryTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $entry = IDPEntry::fromXML($this->xmlRepresentation->documentElement);
+        $entry = IDPEntry::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($entry),
         );
     }

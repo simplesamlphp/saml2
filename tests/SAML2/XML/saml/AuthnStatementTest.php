@@ -39,13 +39,13 @@ final class AuthnStatementTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = AuthnStatement::class;
+        self::$testedClass = AuthnStatement::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_AuthnStatement.xml',
         );
     }
@@ -72,7 +72,7 @@ final class AuthnStatementTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($authnStatement),
         );
     }
@@ -122,10 +122,10 @@ final class AuthnStatementTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $authnStatement = AuthnStatement::fromXML($this->xmlRepresentation->documentElement);
+        $authnStatement = AuthnStatement::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($authnStatement),
         );
     }
@@ -157,7 +157,7 @@ XML
      */
     public function testUnmarshallingMissingAuthnInstantThrowsException(): void
     {
-        $document = $this->xmlRepresentation->documentElement;
+        $document = clone self::$xmlRepresentation->documentElement;
         $document->removeAttribute('AuthnInstant');
 
         $this->expectException(MissingAttributeException::class);

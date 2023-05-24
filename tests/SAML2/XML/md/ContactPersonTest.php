@@ -42,31 +42,31 @@ final class ContactPersonTest extends TestCase
     use SerializableElementTestTrait;
 
     /** @var \DOMDocument */
-    protected DOMDocument $ext;
+    private static DOMDocument $ext;
 
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = ContactPerson::class;
+        self::$testedClass = ContactPerson::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_ContactPerson.xml',
         );
 
-        $this->ext = DOMDocumentFactory::fromString(
+        self::$ext = DOMDocumentFactory::fromString(
             '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>',
         );
 
-        $this->arrayRepresentation = [
+        self::$arrayRepresentation = [
             'ContactType' => 'administrative',
             'Company' => 'SimpleSAMLphp',
             'GivenName' => 'Lead',
             'SurName' => 'Developer',
-            'Extensions' => [new Chunk($this->ext->documentElement)],
+            'Extensions' => [new Chunk(self::$ext->documentElement)],
             'EmailAddress' => ['mailto:lead.developer@example.org'],
             'TelephoneNumber' => ['+1234567890'],
             'attributes' => [
@@ -99,7 +99,7 @@ final class ContactPersonTest extends TestCase
             new SurName('Doe'),
             new Extensions(
                 [
-                    new Chunk($this->ext->documentElement),
+                    new Chunk(self::$ext->documentElement),
                 ],
             ),
             [new EmailAddress('jdoe@test.company'), new EmailAddress('john.doe@test.company')],
@@ -108,7 +108,7 @@ final class ContactPersonTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($contactPerson),
         );
     }
@@ -135,10 +135,10 @@ final class ContactPersonTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $contactPerson = ContactPerson::fromXML($this->xmlRepresentation->documentElement);
+        $contactPerson = ContactPerson::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($contactPerson),
         );
     }
@@ -151,8 +151,10 @@ final class ContactPersonTest extends TestCase
     {
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage("Missing 'contactType' attribute on md:ContactPerson.");
-        $this->xmlRepresentation->documentElement->removeAttribute('contactType');
-        ContactPerson::fromXML($this->xmlRepresentation->documentElement);
+
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->removeAttribute('contactType');
+        ContactPerson::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -161,12 +163,15 @@ final class ContactPersonTest extends TestCase
      */
     public function testUnmarshallingWithWrongType(): void
     {
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttribute('contactType', 'wrong');
+
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'Expected one of: "technical", "support", "administrative", "billing", "other". Got: "wrong"',
         );
-        $this->xmlRepresentation->documentElement->setAttribute('contactType', 'wrong');
-        ContactPerson::fromXML($this->xmlRepresentation->documentElement);
+
+        ContactPerson::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -175,13 +180,16 @@ final class ContactPersonTest extends TestCase
      */
     public function testUnmarshallingMultipleCompanies(): void
     {
-        $company = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'Company');
-        $newCompany = $this->xmlRepresentation->createElementNS(C::NS_MD, 'Company', 'Alt. Co.');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $company = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'Company');
+        $newCompany = $xmlRepresentation->createElementNS(C::NS_MD, 'Company', 'Alt. Co.');
         /** @psalm-suppress PossiblyNullPropertyFetch */
-        $this->xmlRepresentation->documentElement->insertBefore($newCompany, $company->item(0)->nextSibling);
+        $xmlRepresentation->documentElement->insertBefore($newCompany, $company->item(0)->nextSibling);
+
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('More than one Company in md:ContactPerson');
-        ContactPerson::fromXML($this->xmlRepresentation->documentElement);
+
+        ContactPerson::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -190,13 +198,16 @@ final class ContactPersonTest extends TestCase
      */
     public function testUnmarshallingMultipleGivenNames(): void
     {
-        $givenName = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'GivenName');
-        $newName = $this->xmlRepresentation->createElementNS(C::NS_MD, 'GivenName', 'New Name');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $givenName = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'GivenName');
+        $newName = $xmlRepresentation->createElementNS(C::NS_MD, 'GivenName', 'New Name');
         /** @psalm-suppress PossiblyNullPropertyFetch */
-        $this->xmlRepresentation->documentElement->insertBefore($newName, $givenName->item(0)->nextSibling);
+        $xmlRepresentation->documentElement->insertBefore($newName, $givenName->item(0)->nextSibling);
+
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('More than one GivenName in md:ContactPerson');
-        ContactPerson::fromXML($this->xmlRepresentation->documentElement);
+
+        ContactPerson::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -205,13 +216,16 @@ final class ContactPersonTest extends TestCase
      */
     public function testUnmarshallingMultipleSurNames(): void
     {
-        $surName = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'SurName');
-        $newName = $this->xmlRepresentation->createElementNS(C::NS_MD, 'SurName', 'New Name');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $surName = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'SurName');
+        $newName = $xmlRepresentation->createElementNS(C::NS_MD, 'SurName', 'New Name');
         /** @psalm-suppress PossiblyNullPropertyFetch */
-        $this->xmlRepresentation->documentElement->insertBefore($newName, $surName->item(0)->nextSibling);
+        $xmlRepresentation->documentElement->insertBefore($newName, $surName->item(0)->nextSibling);
+
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('More than one SurName in md:ContactPerson');
-        ContactPerson::fromXML($this->xmlRepresentation->documentElement);
+
+        ContactPerson::fromXML($xmlRepresentation->documentElement);
     }
 
 

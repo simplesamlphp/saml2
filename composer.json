@@ -29,8 +29,8 @@
         "nyholm/psr7": "^1.5.1",
         "psr/http-message": "^2.0",
         "psr/log": "^2.0 || ^3.0",
-        "simplesamlphp/xml-common": "^1.9.3",
-        "simplesamlphp/xml-security": "^1.6.3",
+        "simplesamlphp/xml-common": "^1.10.0",
+        "simplesamlphp/xml-security": "^1.6.4",
         "simplesamlphp/xml-soap": "^1.2.0",
         "simplesamlphp/assert": "^1.0.4"
     },

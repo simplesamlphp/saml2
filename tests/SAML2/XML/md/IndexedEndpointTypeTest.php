@@ -28,9 +28,7 @@ use function strval;
  */
 final class IndexedEndpointTypeTest extends TestCase
 {
-    protected static string $resourcePath;
-
-    protected DOMDocument $xmlRepresentation;
+    private static string $resourcePath;
 
 
     /**
@@ -66,7 +64,7 @@ final class IndexedEndpointTypeTest extends TestCase
      */
     public function testUnmarshallingUnexpectedEndpoint(): void
     {
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        $xmlRepresentation = DOMDocumentFactory::fromFile(
             self::$resourcePath . 'md_AssertionConsumerService.xml',
         );
 
@@ -74,7 +72,8 @@ final class IndexedEndpointTypeTest extends TestCase
         $this->expectExceptionMessage(
             'Unexpected name for endpoint: AssertionConsumerService. Expected: ArtifactResolutionService.',
         );
-        ArtifactResolutionService::fromXML($this->xmlRepresentation->documentElement);
+
+        ArtifactResolutionService::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -88,9 +87,10 @@ final class IndexedEndpointTypeTest extends TestCase
      */
     public function testUnmarshallingWithoutIndex(string $class, string $xmlRepresentation): void
     {
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        $xmlRepresentation = DOMDocumentFactory::fromFile(
             self::$resourcePath . $xmlRepresentation,
         );
+        $xmlRepresentation->documentElement->removeAttribute('index');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage(sprintf(
@@ -98,8 +98,8 @@ final class IndexedEndpointTypeTest extends TestCase
             $class::getNamespacePrefix(),
             $class::getLocalName(),
         ));
-        $this->xmlRepresentation->documentElement->removeAttribute('index');
-        $class::fromXML($this->xmlRepresentation->documentElement);
+
+        $class::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -113,9 +113,10 @@ final class IndexedEndpointTypeTest extends TestCase
      */
     public function testUnmarshallingWithWrongIndex(string $class, string $xmlRepresentation): void
     {
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        $xmlRepresentation = DOMDocumentFactory::fromFile(
             self::$resourcePath . $xmlRepresentation,
         );
+        $xmlRepresentation->documentElement->setAttribute('index', 'value');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(sprintf(
@@ -123,8 +124,8 @@ final class IndexedEndpointTypeTest extends TestCase
             $class::getNamespacePrefix(),
             $class::getLocalName(),
         ));
-        $this->xmlRepresentation->documentElement->setAttribute('index', 'value');
-        $class::fromXML($this->xmlRepresentation->documentElement);
+
+        $class::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -138,13 +139,12 @@ final class IndexedEndpointTypeTest extends TestCase
      */
     public function testUnmarshallingWithoutIsDefault(string $class, string $xmlRepresentation): void
     {
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        $xmlRepresentation = DOMDocumentFactory::fromFile(
             self::$resourcePath . $xmlRepresentation,
         );
 
-
-        $this->xmlRepresentation->documentElement->removeAttribute('isDefault');
-        $acs = $class::fromXML($this->xmlRepresentation->documentElement);
+        $xmlRepresentation->documentElement->removeAttribute('isDefault');
+        $acs = $class::fromXML($xmlRepresentation->documentElement);
         $this->assertNull($acs->getIsDefault());
     }
 
@@ -159,9 +159,10 @@ final class IndexedEndpointTypeTest extends TestCase
      */
     public function testUnmarshallingWithWrongIsDefault(string $class, string $xmlRepresentation): void
     {
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        $xmlRepresentation = DOMDocumentFactory::fromFile(
             self::$resourcePath . $xmlRepresentation,
         );
+        $xmlRepresentation->documentElement->setAttribute('isDefault', 'non-bool');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(sprintf(
@@ -169,8 +170,8 @@ final class IndexedEndpointTypeTest extends TestCase
             $class::getNamespacePrefix(),
             $class::getLocalName(),
         ));
-        $this->xmlRepresentation->documentElement->setAttribute('isDefault', 'non-bool');
-        $class::fromXML($this->xmlRepresentation->documentElement);
+
+        $class::fromXML($xmlRepresentation->documentElement);
     }
 
 

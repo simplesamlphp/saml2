@@ -30,13 +30,13 @@ final class AudienceTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = Audience::class;
+        self::$testedClass = Audience::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Audience.xml',
         );
     }
@@ -48,11 +48,8 @@ final class AudienceTest extends TestCase
     {
         $audience = new Audience('urn:test:audience1');
 
-        $audienceElement = $audience->toXML();
-        $this->assertEquals('urn:test:audience1', $audienceElement->textContent);
-
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($audience),
         );
     }
@@ -62,10 +59,10 @@ final class AudienceTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $audience = Audience::fromXML($this->xmlRepresentation->documentElement);
+        $audience = Audience::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($audience),
         );
     }

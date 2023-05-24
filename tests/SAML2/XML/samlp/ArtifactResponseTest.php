@@ -39,13 +39,13 @@ final class ArtifactResponseTest extends TestCase
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = ArtifactResponse::class;
+        self::$testedClass = ArtifactResponse::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_ArtifactResponse.xml',
         );
     }
@@ -88,7 +88,7 @@ final class ArtifactResponseTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($artifactResponse),
         );
     }
@@ -98,10 +98,10 @@ final class ArtifactResponseTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $ar = ArtifactResponse::fromXML($this->xmlRepresentation->documentElement);
+        $ar = ArtifactResponse::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($ar),
         );
     }

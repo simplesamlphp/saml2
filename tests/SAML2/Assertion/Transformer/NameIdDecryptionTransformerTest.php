@@ -45,42 +45,28 @@ use function getcwd;
 final class NameIdDecryptionTransformerTest extends TestCase
 {
     /** @var \DOMDocument */
-    protected DOMDocument $document;
+    protected static DOMDocument $document;
 
-    /**
-     * @var \SAML2\Assertion\Processor
-     */
-    protected Processor $assertionProcessor;
+    /** @var \SimpleSAML\SAML2\Assertion\Processor */
+    protected static Processor $assertionProcessor;
 
-    /**
-     * @var \SAML2\Configuration\IdentityProvider
-     */
-    protected IdentityProvider $identityProviderConfiguration;
+    /** @var \SimpleSAML\SAML2\Configuration\IdentityProvider */
+    protected static IdentityProvider $identityProviderConfiguration;
 
-    /**
-     * @var \SAML2\Configuration\ServiceProvider
-     */
-    protected ServiceProvider $serviceProviderConfiguration;
+    /** @var \SimpleSAML\SAML2\Configuration\ServiceProvider */
+    protected static ServiceProvider $serviceProviderConfiguration;
 
-    /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected LoggerInterface $logger;
+    /** @var \Psr\Log\LoggerInterface */
+    protected static LoggerInterface $logger;
 
-    /**
-     * @var \SAML2\Response\Validation\Validator
-     */
-    protected Validator $validator;
+    /** @var \SimpleSAML\SAML2\Response\Validation\Validator */
+    protected static Validator $validator;
 
-    /**
-     * @var \SAML2\Configuration\Destination
-     */
-    protected Destination $destination;
+    /** @var \SimpleSAML\SAML2\Configuration\Destination */
+    protected static Destination $destination;
 
-    /**
-     * @var \SAML2\xml\samlp\Response
-     */
-    protected Response $response;
+    /** @var \SimpleSAML\SAML2\xml\samlp\Response */
+    protected static Response $response;
 
     /** @var string */
     private const FRAMEWORK = 'vendor/simplesamlphp/xml-security';
@@ -89,20 +75,20 @@ final class NameIdDecryptionTransformerTest extends TestCase
     /**
      * @return void
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
         $container = ContainerSingleton::getInstance();
         $container->setBlacklistedAlgorithms(null);
 
-        $this->logger = new NullLogger();
-        $this->validator = new Validator($this->logger);
-        $this->destination = new Destination(C::ENTITY_SP);
-        $this->response = new Response(new Status(new StatusCode()));
+        self::$logger = new NullLogger();
+        self::$validator = new Validator(self::$logger);
+        self::$destination = new Destination(C::ENTITY_SP);
+        self::$response = new Response(new Status(new StatusCode()));
 
-        $this->identityProviderConfiguration = new IdentityProvider(['assertionEncryptionEnabled' => true]);
+        self::$identityProviderConfiguration = new IdentityProvider(['assertionEncryptionEnabled' => true]);
         $base = getcwd() . DIRECTORY_SEPARATOR . self::FRAMEWORK;
         $keysDir = 'tests' . DIRECTORY_SEPARATOR . PEMCertificatesMock::KEYS_DIR;
-        $this->serviceProviderConfiguration = new ServiceProvider(
+        self::$serviceProviderConfiguration = new ServiceProvider(
             [
                 'entityId' => C::ENTITY_SP,
                 'blacklistedEncryptionAlgorithms' => [],
@@ -117,13 +103,13 @@ final class NameIdDecryptionTransformerTest extends TestCase
             ],
         );
 
-        $this->assertionProcessor = ProcessorBuilder::build(
-            $this->logger,
-            $this->validator,
-            $this->destination,
-            $this->identityProviderConfiguration,
-            $this->serviceProviderConfiguration,
-            $this->response
+        self::$assertionProcessor = ProcessorBuilder::build(
+            self::$logger,
+            self::$validator,
+            self::$destination,
+            self::$identityProviderConfiguration,
+            self::$serviceProviderConfiguration,
+            self::$response
         );
 
         $encryptor = (new KeyTransportAlgorithmFactory([]))->getAlgorithm(
@@ -150,7 +136,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
             ],
         );
 
-        $this->document = $assertion->toXML()->ownerDocument;
+        self::$document = $assertion->toXML()->ownerDocument;
     }
 
 
@@ -165,8 +151,8 @@ final class NameIdDecryptionTransformerTest extends TestCase
     {
         $this->markTestSkipped();
 
-        $assertion = Assertion::fromXML($this->document->documentElement);
-        $processed = $this->assertionProcessor->process($assertion);
+        $assertion = Assertion::fromXML(self::$document->documentElement);
+        $processed = self::$assertionProcessor->process($assertion);
         $identifier = $processed->getSubject()->getIdentifier();
 
         $this->assertInstanceOf(NameID::class, $identifier);
@@ -186,10 +172,10 @@ final class NameIdDecryptionTransformerTest extends TestCase
     {
         $this->markTestSkipped();
 
-        $assertion = Assertion::fromXML($this->document->documentElement);
+        $assertion = Assertion::fromXML(self::$document->documentElement);
         $assertions = new ArrayCollection([$assertion]);
 
-        $processed = $this->assertionProcessor->processAssertions($assertions);
+        $processed = self::$assertionProcessor->processAssertions($assertions);
         $this->assertCount(1, $processed);
         $identifier = $processed->getOnlyElement()->getSubject()->getIdentifier();
 

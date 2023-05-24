@@ -37,17 +37,17 @@ final class DiscoHintsTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
 
-        $this->testedClass = DiscoHints::class;
+        self::$testedClass = DiscoHints::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/mdui_DiscoHints.xml',
         );
 
-        $this->arrayRepresentation = [
+        self::$arrayRepresentation = [
             'IPHint' => ["130.59.0.0/16", "2001:620::0/96"],
             'DomainHint' => ["example.com", "www.example.com"],
             'GeolocationHint' => ["geo:47.37328,8.531126", "geo:19.34343,12.342514"],
@@ -70,7 +70,7 @@ final class DiscoHintsTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($discoHints),
         );
     }
@@ -96,10 +96,10 @@ final class DiscoHintsTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $discoHints = DiscoHints::fromXML($this->xmlRepresentation->documentElement);
+        $discoHints = DiscoHints::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($discoHints),
         );
     }

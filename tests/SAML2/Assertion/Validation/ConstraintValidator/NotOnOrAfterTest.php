@@ -26,28 +26,22 @@ use SimpleSAML\TestUtils\SAML2\ControlledTimeTestCase;
  */
 final class NotOnOrAfterTest extends ControlledTimeTestCase
 {
-    /**
-     * @var \SAML2\XML\saml\Issuer
-     */
-    private Issuer $issuer;
+    /** @var \SimpleSAML\SAML2\XML\saml\Issuer */
+    private static Issuer $issuer;
 
-    /**
-     * @var \SAML2\XML\saml\AuthnStatement
-     */
-    private AuthnStatement $authnStatement;
+    /** @var \SimpleSAML\SAML2\XML\saml\AuthnStatement */
+    private static AuthnStatement $authnStatement;
 
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        parent::setUp();
-
         // Create an Issuer
-        $this->issuer = new Issuer('testIssuer');
+        self::$issuer = new Issuer('testIssuer');
 
         // Create the statements
-        $this->authnStatement = new AuthnStatement(
+        self::$authnStatement = new AuthnStatement(
             new AuthnContext(
                 new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_URN),
                 null,
@@ -68,7 +62,7 @@ final class NotOnOrAfterTest extends ControlledTimeTestCase
         $conditions = new Conditions(null, $this->currentTime - 60);
 
         // Create an assertion
-        $assertion = new Assertion($this->issuer, null, null, null, $conditions, [$this->authnStatement]);
+        $assertion = new Assertion(self::$issuer, null, null, null, $conditions, [self::$authnStatement]);
 
         $validator = new NotOnOrAfter();
         $result    = new Result();
@@ -90,7 +84,7 @@ final class NotOnOrAfterTest extends ControlledTimeTestCase
         $conditions = new Conditions(null, $this->currentTime - 59);
 
         // Create an assertion
-        $assertion = new Assertion($this->issuer, null, null, null, $conditions, [$this->authnStatement]);
+        $assertion = new Assertion(self::$issuer, null, null, null, $conditions, [self::$authnStatement]);
 
         $validator = new NotOnOrAfter();
         $result    = new Result();
@@ -111,7 +105,7 @@ final class NotOnOrAfterTest extends ControlledTimeTestCase
         $conditions = new Conditions(null, $this->currentTime);
 
         // Create an assertion
-        $assertion = new Assertion($this->issuer, null, null, null, $conditions, [$this->authnStatement]);
+        $assertion = new Assertion(self::$issuer, null, null, null, $conditions, [self::$authnStatement]);
 
         $validator = new NotOnOrAfter();
         $result    = new Result();

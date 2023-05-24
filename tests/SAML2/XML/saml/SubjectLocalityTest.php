@@ -31,13 +31,13 @@ final class SubjectLocalityTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = SubjectLocality::class;
+        self::$testedClass = SubjectLocality::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_SubjectLocality.xml',
         );
     }
@@ -56,7 +56,7 @@ final class SubjectLocalityTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($subjectLocality),
         );
     }
@@ -85,10 +85,10 @@ final class SubjectLocalityTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $subjectLocality = SubjectLocality::fromXML($this->xmlRepresentation->documentElement);
+        $subjectLocality = SubjectLocality::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($subjectLocality),
         );
     }

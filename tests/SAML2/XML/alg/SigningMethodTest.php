@@ -34,14 +34,14 @@ final class SigningMethodTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5)
+        self::$schemaFile = dirname(__FILE__, 5)
             . '/resources/schemas/sstc-saml-metadata-algsupport-v1.0.xsd';
 
-        $this->testedClass = SigningMethod::class;
+        self::$testedClass = SigningMethod::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/alg_SigningMethod.xml'
         );
     }
@@ -63,7 +63,7 @@ final class SigningMethodTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($signingMethod),
         );
     }
@@ -73,10 +73,10 @@ final class SigningMethodTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $signingMethod = SigningMethod::fromXML($this->xmlRepresentation->documentElement);
+        $signingMethod = SigningMethod::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($signingMethod),
         );
     }
@@ -86,7 +86,7 @@ final class SigningMethodTest extends TestCase
      */
     public function testMissingAlgorithmThrowsException(): void
     {
-        $document = $this->xmlRepresentation->documentElement;
+        $document = clone self::$xmlRepresentation->documentElement;
         $document->removeAttribute('Algorithm');
 
         $this->expectException(MissingAttributeException::class);

@@ -35,36 +35,36 @@ final class ArtifactResolutionServiceTest extends TestCase
     use SerializableElementTestTrait;
 
     /** @var \SimpleSAML\XML\Chunk */
-    protected Chunk $ext;
+    private static Chunk $ext;
 
     /** @var \SimpleSAML\XML\Attribute */
-    protected XMLAttribute $attr;
+    private static XMLAttribute $attr;
 
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->ext = new Chunk(DOMDocumentFactory::fromString(
+        self::$ext = new Chunk(DOMDocumentFactory::fromString(
             '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>'
         )->documentElement);
 
-        $this->attr = new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'attr1', 'testval1');
+        self::$attr = new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'attr1', 'testval1');
 
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = ArtifactResolutionService::class;
+        self::$testedClass = ArtifactResolutionService::class;
 
-        $this->arrayRepresentation = [
+        self::$arrayRepresentation = [
             'index' => 1,
             'Binding' => C::BINDING_HTTP_ARTIFACT,
             'Location' => 'https://whatever/',
             'isDefault' => true,
-            'Extensions' => [$this->ext],
-            'attributes' => [$this->attr->toArray()],
+            'Extensions' => [self::$ext],
+            'attributes' => [self::$attr->toArray()],
         ];
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_ArtifactResolutionService.xml',
         );
     }
@@ -84,12 +84,12 @@ final class ArtifactResolutionServiceTest extends TestCase
             'https://simplesamlphp.org/some/endpoint',
             false,
             null,
-            [$this->attr],
-            [$this->ext],
+            [self::$attr],
+            [self::$ext],
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($ars),
         );
     }
@@ -116,10 +116,10 @@ final class ArtifactResolutionServiceTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $ars = ArtifactResolutionService::fromXML($this->xmlRepresentation->documentElement);
+        $ars = ArtifactResolutionService::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($ars),
         );
     }
@@ -134,11 +134,13 @@ final class ArtifactResolutionServiceTest extends TestCase
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for md:ArtifactResolutionService.',
         );
-        $this->xmlRepresentation->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
 
-        ArtifactResolutionService::fromXML($this->xmlRepresentation->documentElement);
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
+
+        ArtifactResolutionService::fromXML($xmlRepresentation->documentElement);
         ArtifactResolutionService::fromArray(array_merge(
-            $this->arrayRepresentation,
+            self::$arrayRepresentation,
             ['ResponseLocation', 'https://response.location'],
         ));
     }

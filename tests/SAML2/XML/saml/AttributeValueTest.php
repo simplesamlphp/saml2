@@ -30,13 +30,13 @@ final class AttributeValueTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = AttributeValue::class;
+        self::$testedClass = AttributeValue::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_AttributeValue.xml',
         );
     }
@@ -69,7 +69,7 @@ final class AttributeValueTest extends TestCase
         $this->assertEquals(2, $av->getValue());
         $this->assertEquals('xs:integer', $av->getXsiType());
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($av),
         );
     }
@@ -100,7 +100,8 @@ XML;
     public function testEmptyStringAttribute(): void
     {
         $av = new AttributeValue('');
-        $this->xmlRepresentation->documentElement->textContent = '';
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->textContent = '';
 //        $this->assertEqualXMLStructure(
 //            $this->xmlRepresentation->documentElement,
 //            $av->toXML(),
@@ -119,11 +120,12 @@ XML;
      */
     public function testUnmarshalling(): void
     {
-        $av = AttributeValue::fromXML($this->xmlRepresentation->documentElement);
+        $av = AttributeValue::fromXML(self::$xmlRepresentation->documentElement);
+
         $this->assertIsInt($av->getValue());
         $this->assertEquals(2, $av->getValue());
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($av),
         );
     }

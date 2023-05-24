@@ -30,13 +30,13 @@ final class ProxyRestrictionTest extends TestCase
 
     /**
      */
-    public function setup(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = ProxyRestriction::class;
+        self::$testedClass = ProxyRestriction::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_ProxyRestriction.xml',
         );
     }
@@ -58,7 +58,7 @@ final class ProxyRestrictionTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($condition),
         );
     }
@@ -71,10 +71,10 @@ final class ProxyRestrictionTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $condition = ProxyRestriction::fromXML($this->xmlRepresentation->documentElement);
+        $condition = ProxyRestriction::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($condition),
         );
     }

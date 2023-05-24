@@ -28,13 +28,13 @@ final class AuthnContextClassRefTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = AuthnContextClassRef::class;
+        self::$testedClass = AuthnContextClassRef::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextClassRef.xml',
         );
     }
@@ -50,7 +50,7 @@ final class AuthnContextClassRefTest extends TestCase
         $authnContextClassRef = new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($authnContextClassRef),
         );
     }
@@ -63,10 +63,10 @@ final class AuthnContextClassRefTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $authnContextClassRef = AuthnContextClassRef::fromXML($this->xmlRepresentation->documentElement);
+        $authnContextClassRef = AuthnContextClassRef::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($authnContextClassRef),
         );
     }

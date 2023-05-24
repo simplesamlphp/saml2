@@ -30,13 +30,13 @@ final class AudienceRestrictionTest extends TestCase
 
     /**
      */
-    public function setup(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = AudienceRestriction::class;
+        self::$testedClass = AudienceRestriction::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_AudienceRestriction.xml',
         );
     }
@@ -57,7 +57,7 @@ final class AudienceRestrictionTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($condition),
         );
     }
@@ -70,10 +70,10 @@ final class AudienceRestrictionTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $condition = AudienceRestriction::fromXML($this->xmlRepresentation->documentElement);
+        $condition = AudienceRestriction::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($condition),
         );
     }

@@ -41,40 +41,42 @@ final class SubjectTest extends TestCase
     use SerializableElementTestTrait;
 
     /** @var \DOMDocument */
-    private DOMDocument $subject;
+    private static DOMDocument $subject;
 
     /** @var \DOMDocument */
-    private DOMDocument $baseId;
+    private static DOMDocument $baseId;
 
     /** @var \DOMDocument */
-    private DOMDocument $nameId;
+    private static DOMDocument $nameId;
 
     /** @var \DOMDocument */
-    private DOMDocument $subjectConfirmation;
+    private static DOMDocument $subjectConfirmation;
 
 
     public function setup(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = Subject::class;
+        self::$testedClass = Subject::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Subject.xml',
         );
 
-        $this->subject = DOMDocumentFactory::fromString(<<<XML
+        self::$subject = DOMDocumentFactory::fromString(<<<XML
 <saml:Subject xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"></saml:Subject>
 XML
         );
 
-        $this->baseId = DOMDocumentFactory::fromFile(
+        self::$baseId = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_BaseID.xml',
         );
-        $this->nameId = DOMDocumentFactory::fromFile(
+
+        self::$nameId = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_NameID.xml',
         );
-        $this->subjectConfirmation = DOMDocumentFactory::fromFile(
+
+        self::$subjectConfirmation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_SubjectConfirmation.xml',
         );
     }
@@ -125,7 +127,7 @@ XML
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($subject),
         );
     }
@@ -235,9 +237,9 @@ XML
         $subjectConfirmation = $subject->getSubjectConfirmation();
         $this->assertNotEmpty($subjectConfirmation);
 
-        $document = $this->subject;
-        AbstractBaseID::fromXML($this->baseId->documentElement)->toXML($document->documentElement);
-        SubjectConfirmation::fromXML($this->subjectConfirmation->documentElement)->toXML($document->documentElement);
+        $document = clone self::$subject;
+        AbstractBaseID::fromXML(self::$baseId->documentElement)->toXML($document->documentElement);
+        SubjectConfirmation::fromXML(self::$subjectConfirmation->documentElement)->toXML($document->documentElement);
 
         $this->assertXmlStringEqualsXmlString($document->saveXML(), strval($subject));
     }
@@ -250,9 +252,9 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $document = $this->subject;
+        $document = clone self::$subject;
 
-        $nameId = $this->nameId;
+        $nameId = clone self::$nameId;
         $document->documentElement->appendChild($document->importNode($nameId->documentElement, true));
 
         $subject = Subject::fromXML($document->documentElement);
@@ -284,9 +286,8 @@ XML
      */
     public function testManyNameIDThrowsException(): void
     {
-        $document = $this->subject;
-
-        $nameId = $this->nameId;
+        $document = clone self::$subject;
+        $nameId = clone self::$nameId;
         $document->documentElement->appendChild($document->importNode($nameId->documentElement, true));
 
         $nameId->documentElement->textContent = 'AnotherNameIDValue';

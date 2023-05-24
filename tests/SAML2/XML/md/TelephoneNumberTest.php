@@ -29,15 +29,15 @@ final class TelephoneNumberTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = TelephoneNumber::class;
+        self::$testedClass = TelephoneNumber::class;
 
-        $this->arrayRepresentation = ['+1234567890'];
+        self::$arrayRepresentation = ['+1234567890'];
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_TelephoneNumber.xml',
         );
     }
@@ -54,7 +54,7 @@ final class TelephoneNumberTest extends TestCase
         $name = new TelephoneNumber('+1234567890');
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
     }
@@ -68,10 +68,10 @@ final class TelephoneNumberTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $name = TelephoneNumber::fromXML($this->xmlRepresentation->documentElement);
+        $name = TelephoneNumber::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
     }

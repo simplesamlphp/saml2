@@ -34,13 +34,13 @@ final class ExtensionsTest extends TestCase
     /**
      * Prepare a basic DOMElement to test against
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = Extensions::class;
+        self::$testedClass = Extensions::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_Extensions.xml',
         );
     }
@@ -51,7 +51,7 @@ final class ExtensionsTest extends TestCase
      */
     public function testExtensionsGet(): void
     {
-        $extensions = Extensions::fromXML($this->xmlRepresentation->documentElement);
+        $extensions = Extensions::fromXML(self::$xmlRepresentation->documentElement);
         $list = $extensions->getList();
 
         $this->assertCount(2, $list);
@@ -67,7 +67,7 @@ final class ExtensionsTest extends TestCase
      */
     public function testExtensionsAddEmpty(): void
     {
-        $extensions = Extensions::fromXML($this->xmlRepresentation->documentElement);
+        $extensions = Extensions::fromXML(self::$xmlRepresentation->documentElement);
 
         $list = $extensions->getList();
 

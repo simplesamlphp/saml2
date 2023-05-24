@@ -44,28 +44,30 @@ final class AttributeAuthorityDescriptorTest extends TestCase
 
 
     /** @var \SimpleSAML\SAML2\XML\md\AttributeService */
-    protected AttributeService $as;
+    private static AttributeService $as;
 
     /** @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService */
-    protected AssertionIDRequestService $aidrs;
+    private static AssertionIDRequestService $aidrs;
 
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = AttributeAuthorityDescriptor::class;
+        self::$testedClass = AttributeAuthorityDescriptor::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_AttributeAuthorityDescriptor.xml',
         );
-        $this->as = new AttributeService(
+
+        self::$as = new AttributeService(
             C::BINDING_SOAP,
             "https://IdentityProvider.com/SAML/AA/SOAP",
         );
-        $this->aidrs = new AssertionIDRequestService(
+
+        self::$aidrs = new AssertionIDRequestService(
             C::BINDING_URI,
             "https://IdentityProvider.com/SAML/AA/URI",
         );
@@ -99,9 +101,9 @@ final class AttributeAuthorityDescriptorTest extends TestCase
             ],
         );
         $aad = new AttributeAuthorityDescriptor(
-            [$this->as],
+            [self::$as],
             [C::NS_SAMLP],
-            [$this->aidrs],
+            [self::$aidrs],
             [
                 new NameIDFormat(C::NAMEID_X509_SUBJECT_NAME),
                 new NameIDFormat(C::NAMEID_PERSISTENT),
@@ -115,10 +117,11 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($aad),
         );
     }
+
 
     /**
      * Test that creating an AttributeAuthorityDescriptor with no supported protocols fails.
@@ -129,7 +132,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         $this->expectExceptionMessage(
             'At least one protocol must be supported by this md:AttributeAuthorityDescriptor.',
         );
-        new AttributeAuthorityDescriptor([$this->as], []);
+        new AttributeAuthorityDescriptor([self::$as], []);
     }
 
 
@@ -139,7 +142,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     public function testMarshallingWithEmptySupportedProtocols(): void
     {
         $this->expectException(AssertionFailedException::class);
-        new AttributeAuthorityDescriptor([$this->as], []);
+        new AttributeAuthorityDescriptor([self::$as], []);
     }
 
 
@@ -172,7 +175,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithoutOptionalParameters(): void
     {
-        $aad = new AttributeAuthorityDescriptor([$this->as], [C::NS_SAMLP]);
+        $aad = new AttributeAuthorityDescriptor([self::$as], [C::NS_SAMLP]);
         $this->assertEmpty($aad->getAssertionIDRequestService());
         $this->assertEmpty($aad->getNameIDFormat());
         $this->assertEmpty($aad->getID());
@@ -191,7 +194,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithEmptyAssertionIDRequestService(): void
     {
-        $aad = new AttributeAuthorityDescriptor([$this->as], [C::NS_SAMLP], []);
+        $aad = new AttributeAuthorityDescriptor([self::$as], [C::NS_SAMLP], []);
         $this->assertEmpty($aad->getAssertionIDRequestService());
         $this->assertEmpty($aad->getNameIDFormat());
         $this->assertEmpty($aad->getID());
@@ -216,7 +219,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         );
 
         /** @psalm-suppress InvalidArgument */
-        new AttributeAuthorityDescriptor([$this->as], [C::NS_SAMLP], ['x']);
+        new AttributeAuthorityDescriptor([self::$as], [C::NS_SAMLP], ['x']);
     }
 
 
@@ -226,7 +229,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     public function testMarshallingWithEmptyNameIDFormat(): void
     {
         $this->expectException(SchemaViolationException::class);
-        new AttributeAuthorityDescriptor([$this->as], [C::NS_SAMLP], [$this->aidrs], [new NameIDFormat('')]);
+        new AttributeAuthorityDescriptor([self::$as], [C::NS_SAMLP], [self::$aidrs], [new NameIDFormat('')]);
     }
 
 
@@ -237,9 +240,9 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     {
         $this->expectException(SchemaViolationException::class);
         new AttributeAuthorityDescriptor(
-            [$this->as],
+            [self::$as],
             [C::NS_SAMLP],
-            [$this->aidrs],
+            [self::$aidrs],
             [new NameIDFormat(C::NAMEID_TRANSIENT)],
             [new AttributeProfile('')],
         );
@@ -258,9 +261,9 @@ final class AttributeAuthorityDescriptorTest extends TestCase
 
         /** @psalm-suppress InvalidArgument */
         new AttributeAuthorityDescriptor(
-            [$this->as],
+            [self::$as],
             [C::NS_SAMLP],
-            [$this->aidrs],
+            [self::$aidrs],
             [new NameIDFormat(C::NAMEID_PERSISTENT)],
             [new AttributeProfile(C::PROFILE_1)],
             ['x'],
@@ -276,10 +279,10 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $aad = AttributeAuthorityDescriptor::fromXML($this->xmlRepresentation->documentElement);
+        $aad = AttributeAuthorityDescriptor::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($aad),
         );
     }

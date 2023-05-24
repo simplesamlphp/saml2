@@ -34,17 +34,17 @@ final class KeywordsTest extends TestCase
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
 
-        $this->testedClass = Keywords::class;
+        self::$testedClass = Keywords::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/mdui_Keywords.xml',
         );
 
-        $this->arrayRepresentation = [
+        self::$arrayRepresentation = [
             'en' => ["KLM", "royal", "Dutch"],
         ];
     }
@@ -59,7 +59,7 @@ final class KeywordsTest extends TestCase
         $keywords->addKeyword("maatschappij");
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($keywords),
         );
     }
@@ -82,10 +82,10 @@ final class KeywordsTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $keywords = Keywords::fromXML($this->xmlRepresentation->documentElement);
+        $keywords = Keywords::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($keywords),
         );
     }
@@ -96,7 +96,7 @@ final class KeywordsTest extends TestCase
      */
     public function testUnmarshallingFailsMissingKeywords(): void
     {
-        $document = $this->xmlRepresentation;
+        $document = clone self::$xmlRepresentation;
         $document->documentElement->textContent = '';
 
         $this->expectException(AssertionFailedException::class);

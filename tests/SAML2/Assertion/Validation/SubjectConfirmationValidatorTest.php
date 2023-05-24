@@ -33,49 +33,49 @@ use SimpleSAML\XML\DOMDocumentFactory;
 final class SubjectConfirmationValidatorTest extends TestCase
 {
     /** @var \DOMDocument */
-    protected DOMDocument $document;
+    protected static DOMDocument $document;
 
     /** @var \SimpleSAML\SAML2\Assertion\Processor */
-    protected Processor $assertionProcessor;
+    protected static Processor $assertionProcessor;
 
     /** @var \SimpleSAML\SAML2\Configuration\IdentityProvider */
-    protected IdentityProvider $identityProviderConfiguration;
+    protected static IdentityProvider $identityProviderConfiguration;
 
     /** @var \SimpleSAML\SAML2\Configuration\ServiceProvider */
-    protected ServiceProvider $serviceProviderConfiguration;
+    protected static ServiceProvider $serviceProviderConfiguration;
 
     /** @var \Psr\Log\LoggerInterface */
-    protected LoggerInterface $logger;
+    protected static LoggerInterface $logger;
 
     /** @var \SimpleSAML\SAML2\Response\Validation\Validator */
-    protected Validator $validator;
+    protected static Validator $validator;
 
     /** @var \SimpleSAML\SAML2\Configuration\Destination */
-    protected Destination $destination;
+    protected static Destination $destination;
 
     /** @var \SimpleSAML\SAML2\xml\samlp\Response */
-    protected Response $response;
+    protected static Response $response;
 
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->logger = new NullLogger();
-        $this->validator = new Validator($this->logger);
-        $this->destination = new Destination(C::ENTITY_SP);
-        $this->response = new Response(new Status(new StatusCode()));
+        self::$logger = new NullLogger();
+        self::$validator = new Validator(self::$logger);
+        self::$destination = new Destination(C::ENTITY_SP);
+        self::$response = new Response(new Status(new StatusCode()));
 
-        $this->identityProviderConfiguration = new IdentityProvider(['entityId' => C::ENTITY_IDP]);
-        $this->serviceProviderConfiguration = new ServiceProvider(['entityId' => C::ENTITY_SP]);
+        self::$identityProviderConfiguration = new IdentityProvider(['entityId' => C::ENTITY_IDP]);
+        self::$serviceProviderConfiguration = new ServiceProvider(['entityId' => C::ENTITY_SP]);
 
-        $this->assertionProcessor = ProcessorBuilder::build(
-            $this->logger,
-            $this->validator,
-            $this->destination,
-            $this->identityProviderConfiguration,
-            $this->serviceProviderConfiguration,
-            $this->response,
+        self::$assertionProcessor = ProcessorBuilder::build(
+            self::$logger,
+            self::$validator,
+            self::$destination,
+            self::$identityProviderConfiguration,
+            self::$serviceProviderConfiguration,
+            self::$response,
         );
 
         $ns_xsi = C::NS_XSI;
@@ -87,7 +87,7 @@ final class SubjectConfirmationValidatorTest extends TestCase
         $entity_other = C::ENTITY_OTHER;
         $accr = C::AUTHNCONTEXT_CLASS_REF_LOA2;
 
-        $this->document = DOMDocumentFactory::fromString(<<<XML
+        self::$document = DOMDocumentFactory::fromString(<<<XML
     <saml:Assertion xmlns:xsi="{$ns_xsi}"
                     xmlns:xs="{$ns_xs}"
                     xmlns:saml="{$ns_saml}"
@@ -123,9 +123,9 @@ XML
      */
     public function testBasicValidation(): void
     {
-        $assertion = Assertion::fromXML($this->document->documentElement);
+        $assertion = Assertion::fromXML(self::$document->documentElement);
 
-        $result = $this->assertionProcessor->validateAssertion($assertion);
+        $result = self::$assertionProcessor->validateAssertion($assertion);
         $this->assertNull($result);
     }
 
@@ -134,7 +134,7 @@ XML
      */
     public function testSubjectConfirmationNonValidation(): void
     {
-        $xml = $this->document->saveXML();
+        $xml = self::$document->saveXML();
         $manipulated = str_replace(C::ENTITY_SP, C::ENTITY_OTHER, $xml);
         $document = DOMDocumentFactory::fromString($manipulated);
         $assertion = Assertion::fromXML($document->documentElement);
@@ -145,6 +145,6 @@ XML
             '("https://example.org/metadata") does not match the current destination ' .
             '("https://simplesamlphp.org/sp/metadata")',
         );
-        $this->assertionProcessor->validateAssertion($assertion);
+        self::$assertionProcessor->validateAssertion($assertion);
     }
 }

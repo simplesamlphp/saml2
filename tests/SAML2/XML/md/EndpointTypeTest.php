@@ -37,30 +37,30 @@ final class EndpointTypeTest extends TestCase
     use SerializableElementTestTrait;
 
     /** @var \DOMDocument */
-    protected DOMDocument $ext;
+    private static DOMDocument $ext;
 
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->ext = DOMDocumentFactory::fromString(
+        self::$ext = DOMDocumentFactory::fromString(
             '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
         );
 
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = AttributeService::class;
+        self::$testedClass = AttributeService::class;
 
-        $this->arrayRepresentation = [
+        self::$arrayRepresentation = [
             'Binding' => C::BINDING_HTTP_POST,
             'Location' => 'https://whatever/',
             'ResponseLocation' => 'https://foo.bar/',
-            'Extensions' => [new Chunk($this->ext->documentElement)],
+            'Extensions' => [new Chunk(self::$ext->documentElement)],
             'attributes' => [(new XMLAttribute('urn:x-simplesamlphp:namespace', 'test', 'attr', 'value'))->toArray()],
         ];
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_AttributeService.xml',
         );
     }
@@ -81,11 +81,11 @@ final class EndpointTypeTest extends TestCase
             'https://whatever/',
             'https://foo.bar/',
             [$attr],
-            [new Chunk($this->ext->documentElement)],
+            [new Chunk(self::$ext->documentElement)],
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($endpointType),
         );
     }
@@ -130,10 +130,10 @@ final class EndpointTypeTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $endpointType = AttributeService::fromXML($this->xmlRepresentation->documentElement);
+        $endpointType = AttributeService::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($endpointType),
         );
     }
@@ -148,7 +148,7 @@ final class EndpointTypeTest extends TestCase
         $this->expectExceptionMessage(
             'Unexpected name for endpoint: AttributeService. Expected: AssertionIDRequestService.',
         );
-        AssertionIDRequestService::fromXML($this->xmlRepresentation->documentElement);
+        AssertionIDRequestService::fromXML(self::$xmlRepresentation->documentElement);
     }
 
 
@@ -157,10 +157,13 @@ final class EndpointTypeTest extends TestCase
      */
     public function testUnmarshallingWithoutBinding(): void
     {
-        $this->xmlRepresentation->documentElement->removeAttribute('Binding');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->removeAttribute('Binding');
+
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing \'Binding\' attribute on md:AttributeService.');
-        AttributeService::fromXML($this->xmlRepresentation->documentElement);
+
+        AttributeService::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -169,9 +172,12 @@ final class EndpointTypeTest extends TestCase
      */
     public function testUnmarshallingWithEmptyBinding(): void
     {
-        $this->xmlRepresentation->documentElement->setAttribute('Binding', '');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+
+        $xmlRepresentation->documentElement->setAttribute('Binding', '');
         $this->expectException(SchemaViolationException::class);
-        AttributeService::fromXML($this->xmlRepresentation->documentElement);
+
+        AttributeService::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -180,10 +186,13 @@ final class EndpointTypeTest extends TestCase
      */
     public function testUnmarshallingWithoutLocation(): void
     {
-        $this->xmlRepresentation->documentElement->removeAttribute('Location');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->removeAttribute('Location');
+
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing \'Location\' attribute on md:AttributeService.');
-        AttributeService::fromXML($this->xmlRepresentation->documentElement);
+
+        AttributeService::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -192,9 +201,12 @@ final class EndpointTypeTest extends TestCase
      */
     public function testUnmarshallingWithEmptyLocation(): void
     {
-        $this->xmlRepresentation->documentElement->setAttribute('Location', '');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttribute('Location', '');
+
         $this->expectException(SchemaViolationException::class);
-        AttributeService::fromXML($this->xmlRepresentation->documentElement);
+
+        AttributeService::fromXML($xmlRepresentation->documentElement);
     }
 
 

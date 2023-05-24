@@ -39,13 +39,13 @@ final class AttributeTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = Attribute::class;
+        self::$testedClass = Attribute::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Attribute.xml',
         );
 
@@ -78,7 +78,7 @@ final class AttributeTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($attribute),
         );
     }
@@ -92,10 +92,10 @@ final class AttributeTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $attribute = Attribute::fromXML($this->xmlRepresentation->documentElement);
+        $attribute = Attribute::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($attribute),
         );
     }
@@ -106,7 +106,7 @@ final class AttributeTest extends TestCase
      */
     public function testUnmarshallingWithoutName(): void
     {
-        $document = $this->xmlRepresentation;
+        $document = clone self::$xmlRepresentation;
         $document->documentElement->removeAttribute('Name');
 
         $this->expectException(MissingAttributeException::class);
@@ -120,7 +120,7 @@ final class AttributeTest extends TestCase
      */
     public function testEncryption(): void
     {
-        $attribute = Attribute::fromXML($this->xmlRepresentation->documentElement);
+        $attribute = Attribute::fromXML(self::$xmlRepresentation->documentElement);
 
         $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             C::KEY_TRANSPORT_OAEP,

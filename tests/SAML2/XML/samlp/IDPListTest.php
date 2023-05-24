@@ -34,13 +34,13 @@ final class IDPListTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = IDPList::class;
+        self::$testedClass = IDPList::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_IDPList.xml',
         );
     }
@@ -56,7 +56,7 @@ final class IDPListTest extends TestCase
         $list = new IDPList([$entry1, $entry2], $getComplete);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($list),
         );
     }
@@ -119,10 +119,10 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $list = IDPList::fromXML($this->xmlRepresentation->documentElement);
+        $list = IDPList::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($list),
         );
     }
@@ -134,7 +134,7 @@ XML
     {
         $ns = IDPList::NS;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromString(<<<XML
+        $xmlRepresentation = DOMDocumentFactory::fromString(<<<XML
 <samlp:IDPList xmlns:samlp="{$ns}">
   <samlp:GetComplete>https://some/location</samlp:GetComplete>
 </samlp:IDPList>
@@ -144,6 +144,6 @@ XML
         $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage('At least one <samlp:IDPEntry> must be specified.');
 
-        IDPList::fromXML($this->xmlRepresentation->documentElement);
+        IDPList::fromXML($xmlRepresentation->documentElement);
     }
 }

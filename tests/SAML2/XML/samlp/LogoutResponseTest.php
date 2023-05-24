@@ -33,13 +33,13 @@ final class LogoutResponseTest extends TestCase
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = LogoutResponse::class;
+        self::$testedClass = LogoutResponse::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_LogoutResponse.xml',
         );
     }
@@ -89,7 +89,7 @@ XML
      */
     public function testLogoutSuccess(): void
     {
-        $response = LogoutResponse::fromXML($this->xmlRepresentation->documentElement);
+        $response = LogoutResponse::fromXML(self::$xmlRepresentation->documentElement);
         $this->assertTrue($response->isSuccess());
 
         $status = $response->getStatus();

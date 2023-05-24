@@ -29,13 +29,13 @@ final class AuthenticatingAuthorityTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = AuthenticatingAuthority::class;
+        self::$testedClass = AuthenticatingAuthority::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_AuthenticatingAuthority.xml',
         );
     }
@@ -48,7 +48,7 @@ final class AuthenticatingAuthorityTest extends TestCase
         $authenticatingAuthority = new AuthenticatingAuthority('https://idp.example.com/SAML2');
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($authenticatingAuthority),
         );
     }
@@ -58,10 +58,10 @@ final class AuthenticatingAuthorityTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $authenticatingAuthority = AuthenticatingAuthority::fromXML($this->xmlRepresentation->documentElement);
+        $authenticatingAuthority = AuthenticatingAuthority::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($authenticatingAuthority),
         );
     }

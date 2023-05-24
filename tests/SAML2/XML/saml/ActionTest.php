@@ -30,11 +30,11 @@ final class ActionTest extends TestCase
 
     /**
      */
-    public function setup(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->testedClass = Action::class;
+        self::$testedClass = Action::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Action.xml',
         );
     }
@@ -53,7 +53,7 @@ final class ActionTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($action),
         );
     }
@@ -66,10 +66,10 @@ final class ActionTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $action = Action::fromXML($this->xmlRepresentation->documentElement);
+        $action = Action::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($action),
         );
     }

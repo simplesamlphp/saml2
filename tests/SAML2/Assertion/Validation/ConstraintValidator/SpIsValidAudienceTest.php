@@ -29,20 +29,14 @@ use SimpleSAML\Test\SAML2\Constants as C;
  */
 final class SpIsValidAudienceTest extends MockeryTestCase
 {
-    /**
-     * @var \SAML2\XML\saml\AuthnStatement
-     */
-    private AuthnStatement $authnStatement;
+    /** @var \SimpleSAML\SAML2\XML\saml\AuthnStatement */
+    private static AuthnStatement $authnStatement;
 
-    /**
-     * @var \SAML2\XML\saml\Conditions
-     */
-    private Conditions $conditions;
+    /** @var \SimpleSAML\SAML2\XML\saml\Conditions */
+    private static Conditions $conditions;
 
-    /**
-     * @var \SAML2\XML\saml\Isssuer
-     */
-    private Issuer $issuer;
+    /** @var \SimpleSAML\SAML2\XML\saml\Isssuer */
+    private static Issuer $issuer;
 
     /** @var \Mockery\MockInterface */
     private MockInterface $serviceProvider;
@@ -50,15 +44,13 @@ final class SpIsValidAudienceTest extends MockeryTestCase
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        parent::setUp();
-
         // Create an Issuer
-        $this->issuer = new Issuer(C::ENTITY_IDP);
+        self::$issuer = new Issuer(C::ENTITY_IDP);
 
         // Create the conditions
-        $this->conditions = new Conditions(
+        self::$conditions = new Conditions(
             null,
             null,
             [],
@@ -66,7 +58,7 @@ final class SpIsValidAudienceTest extends MockeryTestCase
         );
 
         // Create the statements
-        $this->authnStatement = new AuthnStatement(
+        self::$authnStatement = new AuthnStatement(
             new AuthnContext(
                 new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                 null,
@@ -74,7 +66,13 @@ final class SpIsValidAudienceTest extends MockeryTestCase
             ),
             time()
         );
+    }
 
+
+    /**
+     */
+    public function setUp(): void
+    {
         $this->serviceProvider = Mockery::mock(ServiceProvider::class);
     }
 
@@ -86,7 +84,7 @@ final class SpIsValidAudienceTest extends MockeryTestCase
     public function whenNoValidAudiencesAreGivenTheAssertionIsValid(): void
     {
         // Create an assertion
-        $assertion = new Assertion($this->issuer, null, null, null, null, [$this->authnStatement]);
+        $assertion = new Assertion(self::$issuer, null, null, null, null, [self::$authnStatement]);
 
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('entityId');
 
@@ -107,7 +105,7 @@ final class SpIsValidAudienceTest extends MockeryTestCase
     public function ifTheSpEntityIdIsNotInTheValidAudiencesTheAssertionIsInvalid(): void
     {
         // Create an assertion
-        $assertion = new Assertion($this->issuer, null, null, null, $this->conditions, [$this->authnStatement]);
+        $assertion = new Assertion(self::$issuer, null, null, null, self::$conditions, [self::$authnStatement]);
 
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('anotherEntityId');
 
@@ -129,7 +127,7 @@ final class SpIsValidAudienceTest extends MockeryTestCase
     public function theAssertionIsValidWhenTheCurrentSpEntityIdIsAValidAudience(): void
     {
         // Create an assertion
-        $assertion = new Assertion($this->issuer, null, null, null, $this->conditions, [$this->authnStatement]);
+        $assertion = new Assertion(self::$issuer, null, null, null, self::$conditions, [self::$authnStatement]);
 
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn(C::ENTITY_SP);
 

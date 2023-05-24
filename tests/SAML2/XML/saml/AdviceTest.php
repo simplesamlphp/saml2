@@ -33,43 +33,43 @@ final class AdviceTest extends TestCase
     use SerializableElementTestTrait;
 
     /** @var \DOMDocument $assertionIDRef */
-    private DOMDocument $assertionIDRef;
+    private static DOMDocument $assertionIDRef;
 
     /** @var \DOMDocument $assertionURIRef */
-    private DOMDocument $assertionURIRef;
+    private static DOMDocument $assertionURIRef;
 
     /** @var \DOMDocument $assertion */
-    private DOMDocument $assertion;
+    private static DOMDocument $assertion;
 
     /** @var \DOMDocument $encryptedAssertion */
-    private DOMDocument $encryptedAssertion;
+    private static DOMDocument $encryptedAssertion;
 
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = Advice::class;
+        self::$testedClass = Advice::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Advice.xml',
         );
 
-        $this->assertionIDRef = DOMDocumentFactory::fromFile(
+        self::$assertionIDRef = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_AssertionIDRef.xml',
         );
 
-        $this->assertionURIRef = DOMDocumentFactory::fromFile(
+        self::$assertionURIRef = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_AssertionURIRef.xml',
         );
 
-        $this->assertion = DOMDocumentFactory::fromFile(
+        self::$assertion = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Assertion.xml',
         );
 
-        $this->encryptedAssertion = DOMDocumentFactory::fromFile(
+        self::$encryptedAssertion = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedAssertion.xml',
         );
     }
@@ -85,17 +85,17 @@ final class AdviceTest extends TestCase
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 
         $advice = new Advice(
-            [AssertionIDRef::fromXML($this->assertionIDRef->documentElement)],
-            [AssertionURIRef::fromXML($this->assertionURIRef->documentElement)],
-            [Assertion::fromXML($this->assertion->documentElement)],
-            [EncryptedAssertion::fromXML($this->encryptedAssertion->documentElement)],
+            [AssertionIDRef::fromXML(self::$assertionIDRef->documentElement)],
+            [AssertionURIRef::fromXML(self::$assertionURIRef->documentElement)],
+            [Assertion::fromXML(self::$assertion->documentElement)],
+            [EncryptedAssertion::fromXML(self::$encryptedAssertion->documentElement)],
             [$chunk],
         );
 
         $this->assertFalse($advice->isEmptyElement());
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($advice),
         );
     }
@@ -118,10 +118,10 @@ final class AdviceTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $advice = Advice::fromXML($this->xmlRepresentation->documentElement);
+        $advice = Advice::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($advice),
         );
     }

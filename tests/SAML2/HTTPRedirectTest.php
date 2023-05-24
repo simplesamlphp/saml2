@@ -30,7 +30,7 @@ final class HTTPRedirectTest extends TestCase
 {
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
         $container = new MockContainer();
         $container->setBlacklistedAlgorithms([]);

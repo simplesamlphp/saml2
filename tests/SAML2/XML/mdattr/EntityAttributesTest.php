@@ -49,13 +49,13 @@ final class EntityAttributesTest extends TestCase
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-metadata-attr.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-metadata-attr.xsd';
 
-        $this->testedClass = EntityAttributes::class;
+        self::$testedClass = EntityAttributes::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/mdattr_EntityAttributes.xml',
         );
     }
@@ -162,7 +162,7 @@ final class EntityAttributesTest extends TestCase
         $entityAttributes->addChild($attribute2);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($entityAttributes),
         );
     }
@@ -172,10 +172,10 @@ final class EntityAttributesTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $entityAttributes = EntityAttributes::fromXML($this->xmlRepresentation->documentElement);
+        $entityAttributes = EntityAttributes::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($entityAttributes),
         );
     }

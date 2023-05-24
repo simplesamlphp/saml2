@@ -34,13 +34,13 @@ final class RequestInitiatorTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-request-initiation.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-request-initiation.xsd';
 
-        $this->testedClass = RequestInitiator::class;
+        self::$testedClass = RequestInitiator::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/init_RequestInitiator.xml',
         );
     }
@@ -55,11 +55,10 @@ final class RequestInitiatorTest extends TestCase
     public function testMarshalling(): void
     {
         $attr = new XMLAttribute(C::NAMESPACE, 'test', 'attr', 'value');
-
         $requestInitiator = new RequestInitiator(C::LOCATION_A, C::LOCATION_B, [$attr]);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($requestInitiator),
         );
     }
@@ -73,10 +72,10 @@ final class RequestInitiatorTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $requestInitiator = RequestInitiator::fromXML($this->xmlRepresentation->documentElement);
+        $requestInitiator = RequestInitiator::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($requestInitiator),
         );
     }
@@ -87,13 +86,14 @@ final class RequestInitiatorTest extends TestCase
      */
     public function testUnmarshallingWithInvalidBinding(): void
     {
-        $this->xmlRepresentation->documentElement->setAttribute('Binding', C::BINDING_HTTP_POST);
+        $doc = clone self::$xmlRepresentation->documentElement;
+        $doc->setAttribute('Binding', C::BINDING_HTTP_POST);
 
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             "The Binding of a RequestInitiator must be 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'.",
         );
 
-        RequestInitiator::fromXML($this->xmlRepresentation->documentElement);
+        RequestInitiator::fromXML($doc);
     }
 }

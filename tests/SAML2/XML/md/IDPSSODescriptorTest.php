@@ -51,13 +51,13 @@ final class IDPSSODescriptorTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = IDPSSODescriptor::class;
+        self::$testedClass = IDPSSODescriptor::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_IDPSSODescriptor.xml',
         );
     }
@@ -168,7 +168,7 @@ final class IDPSSODescriptorTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($idpssod),
         );
     }
@@ -319,10 +319,10 @@ final class IDPSSODescriptorTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $idpssod = IDPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
+        $idpssod = IDPSSODescriptor::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($idpssod),
         );
     }
@@ -333,14 +333,17 @@ final class IDPSSODescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutSingleSignOnService(): void
     {
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $ssoServiceEps = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'SingleSignOnService');
+        /** @psalm-suppress PossiblyNullArgument */
+        $xmlRepresentation->documentElement->removeChild($ssoServiceEps->item(1));
+        /** @psalm-suppress PossiblyNullArgument */
+        $xmlRepresentation->documentElement->removeChild($ssoServiceEps->item(0));
+
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('At least one SingleSignOnService must be specified.');
-        $ssoServiceEps = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'SingleSignOnService');
-        /** @psalm-suppress PossiblyNullArgument */
-        $this->xmlRepresentation->documentElement->removeChild($ssoServiceEps->item(1));
-        /** @psalm-suppress PossiblyNullArgument */
-        $this->xmlRepresentation->documentElement->removeChild($ssoServiceEps->item(0));
-        IDPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
+
+        IDPSSODescriptor::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -349,12 +352,15 @@ final class IDPSSODescriptorTest extends TestCase
      */
     public function testUnmarshallingWithWrongWantAuthnRequestsSigned(): void
     {
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttribute('WantAuthnRequestsSigned', 'not a boolean');
+
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'The \'WantAuthnRequestsSigned\' attribute of md:IDPSSODescriptor must be a boolean.',
         );
-        $this->xmlRepresentation->documentElement->setAttribute('WantAuthnRequestsSigned', 'not a boolean');
-        IDPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
+
+        IDPSSODescriptor::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -363,11 +369,14 @@ final class IDPSSODescriptorTest extends TestCase
      */
     public function testUnmarshallingWithEmptyAttributeProfile(): void
     {
-        $attrProfiles = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AttributeProfile');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $attrProfiles = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AttributeProfile');
         /** @psalm-suppress PossiblyNullPropertyAssignment */
         $attrProfiles->item(0)->textContent = '';
+
         $this->expectException(SchemaViolationException::class);
-        IDPSSODescriptor::fromXML($this->xmlRepresentation->documentElement);
+
+        IDPSSODescriptor::fromXML($xmlRepresentation->documentElement);
     }
 
 

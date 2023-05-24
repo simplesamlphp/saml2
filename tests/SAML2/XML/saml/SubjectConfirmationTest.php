@@ -36,13 +36,13 @@ final class SubjectConfirmationTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
-    public function setup(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = SubjectConfirmation::class;
+        self::$testedClass = SubjectConfirmation::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_SubjectConfirmation.xml',
         );
     }
@@ -81,7 +81,7 @@ final class SubjectConfirmationTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($subjectConfirmation),
         );
     }
@@ -149,10 +149,10 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $subjectConfirmation = SubjectConfirmation::fromXML($this->xmlRepresentation->documentElement);
+        $subjectConfirmation = SubjectConfirmation::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($subjectConfirmation),
         );
     }
@@ -162,7 +162,7 @@ XML
      */
     public function testMethodMissingThrowsException(): void
     {
-        $document = $this->xmlRepresentation->documentElement;
+        $document = clone self::$xmlRepresentation->documentElement;
         $document->removeAttribute('Method');
 
         $this->expectException(MissingAttributeException::class);

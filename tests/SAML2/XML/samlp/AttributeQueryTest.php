@@ -44,13 +44,13 @@ final class AttributeQueryTest extends TestCase
 
     /**
      */
-    public function setup(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = AttributeQuery::class;
+        self::$testedClass = AttributeQuery::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_AttributeQuery.xml',
         );
     }
@@ -100,7 +100,7 @@ final class AttributeQueryTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($attributeQuery),
         );
     }
@@ -108,10 +108,10 @@ final class AttributeQueryTest extends TestCase
 
     public function testUnmarshalling(): void
     {
-        $aq = AttributeQuery::fromXML($this->xmlRepresentation->documentElement);
+        $aq = AttributeQuery::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($aq),
         );
     }

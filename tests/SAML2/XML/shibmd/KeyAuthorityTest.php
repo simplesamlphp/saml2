@@ -34,13 +34,13 @@ final class KeyAuthorityTest extends TestCase
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-shibmd-v1.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-shibmd-v1.0.xsd';
 
-        $this->testedClass = KeyAuthority::class;
+        self::$testedClass = KeyAuthority::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/shibmd_KeyAuthority.xml',
         );
     }
@@ -77,7 +77,7 @@ final class KeyAuthorityTest extends TestCase
         $keyAuthority = new KeyAuthority($keys, 2, [$attr1]);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($keyAuthority),
         );
     }
@@ -88,7 +88,7 @@ final class KeyAuthorityTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $keyAuthority = KeyAuthority::fromXML($this->xmlRepresentation->documentElement);
+        $keyAuthority = KeyAuthority::fromXML(self::$xmlRepresentation->documentElement);
         $this->assertEquals(2, $keyAuthority->getVerifyDepth());
 
         $keys = $keyAuthority->getKeys();

@@ -34,22 +34,22 @@ final class StatusTest extends TestCase
     use SerializableElementTestTrait;
 
     /** @var \DOMDocument $detail */
-    private DOMDocument $detail;
+    private static DOMDocument $detail;
 
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = Status::class;
+        self::$testedClass = Status::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_Status.xml',
         );
 
-        $this->detail = DOMDocumentFactory::fromFile(
+        self::$detail = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_StatusDetail.xml',
         );
     }
@@ -79,7 +79,7 @@ final class StatusTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($status),
         );
     }
@@ -100,7 +100,7 @@ final class StatusTest extends TestCase
             ),
             new StatusMessage('Something went wrong'),
             [
-                new StatusDetail([new Chunk($this->detail->documentElement)]),
+                new StatusDetail([new Chunk(self::$detail->documentElement)]),
             ],
         );
 
@@ -124,10 +124,10 @@ final class StatusTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $status = Status::fromXML($this->xmlRepresentation->documentElement);
+        $status = Status::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($status),
         );
     }

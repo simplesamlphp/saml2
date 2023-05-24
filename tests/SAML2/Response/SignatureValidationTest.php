@@ -52,17 +52,12 @@ final class SignatureValidationTest extends MockeryTestCase
      */
     private MockInterface $assertionProcessor;
 
-    /**
-     * @var string
-     */
-    private string $currentDestination = C::ENTITY_OTHER;
-
 
     /**
      * We mock the actual assertion processing as that is not what we want to test here. Since the assertion processor
      * is created via a static ::build() method we have to mock that, and have to run the tests in separate processes
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->assertionProcessorBuilder = Mockery::mock('alias:SimpleSAML\SAML2\Assertion\ProcessorBuilder');
         $this->assertionProcessor = Mockery::mock(AssertionProcessor::class);
@@ -71,10 +66,13 @@ final class SignatureValidationTest extends MockeryTestCase
             ->once()
             ->andReturn($this->assertionProcessor);
 
-        $this->identityProviderConfiguration = new IdentityProvider(
-            ['certificateData' => PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE)],
-        );
-        $this->serviceProviderConfiguration = new ServiceProvider(['entityId' => C::ENTITY_URN]);
+        $pattern = Certificate::CERTIFICATE_PATTERN;
+        preg_match($pattern, PEMCertificatesMock::loadPlainCertificateFile(PEMCertificatesMock::CERTIFICATE), $matches);
+
+        $this->identityProviderConfiguration
+            = new IdentityProvider(['certificateData' => $matches[1]]);
+        $this->serviceProviderConfiguration
+            = new ServiceProvider(['entityId' => 'urn:mace:feide.no:services:no.feide.moodle']);
     }
 
 
@@ -95,7 +93,7 @@ final class SignatureValidationTest extends MockeryTestCase
         $processor->process(
             $this->serviceProviderConfiguration,
             $this->identityProviderConfiguration,
-            new Destination($this->currentDestination),
+            new Destination(C::ENTITY_OTHER),
             $this->getUnsignedResponseWithSignedAssertion(),
         );
     }
@@ -118,7 +116,7 @@ final class SignatureValidationTest extends MockeryTestCase
         $processor->process(
             $this->serviceProviderConfiguration,
             $this->identityProviderConfiguration,
-            new Destination($this->currentDestination),
+            new Destination(C::ENTITY_OTHER),
             $this->getSignedResponseWithUnsignedAssertion(),
         );
     }
@@ -141,7 +139,7 @@ final class SignatureValidationTest extends MockeryTestCase
         $processor->process(
             $this->serviceProviderConfiguration,
             $this->identityProviderConfiguration,
-            new Destination($this->currentDestination),
+            new Destination(C::ENTITY_OTHER),
             $this->getSignedResponseWithSignedAssertion(),
         );
     }
@@ -173,7 +171,7 @@ final class SignatureValidationTest extends MockeryTestCase
         $processor->process(
             $this->serviceProviderConfiguration,
             $this->identityProviderConfiguration,
-            new Destination($this->currentDestination),
+            new Destination(C::ENTITY_OTHER),
             $this->getUnsignedResponseWithUnsignedAssertion(),
         );
     }

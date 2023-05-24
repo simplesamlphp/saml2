@@ -31,22 +31,22 @@ final class AuthzDecisionStatementTest extends TestCase
     use SerializableElementTestTrait;
 
     /** @var \DOMDocument $evidence */
-    private DOMDocument $evidence;
+    private static DOMDocument $evidence;
 
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = AuthzDecisionStatement::class;
+        self::$testedClass = AuthzDecisionStatement::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_AuthzDecisionStatement.xml',
         );
 
-        $this->evidence = DOMDocumentFactory::fromFile(
+        self::$evidence = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Evidence.xml',
         );
     }
@@ -63,11 +63,11 @@ final class AuthzDecisionStatementTest extends TestCase
                 new Action('urn:x-simplesamlphp:namespace', 'SomeAction'),
                 new Action('urn:x-simplesamlphp:namespace', 'OtherAction'),
             ],
-            Evidence::fromXML($this->evidence->documentElement),
+            Evidence::fromXML(self::$evidence->documentElement),
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($authzDecisionStatement),
         );
     }
@@ -77,10 +77,10 @@ final class AuthzDecisionStatementTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $authzDecisionStatement = AuthzDecisionStatement::fromXML($this->xmlRepresentation->documentElement);
+        $authzDecisionStatement = AuthzDecisionStatement::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($authzDecisionStatement),
         );
     }

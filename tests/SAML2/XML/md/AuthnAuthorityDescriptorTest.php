@@ -37,26 +37,26 @@ final class AuthnAuthorityDescriptorTest extends TestCase
 
 
     /** @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService */
-    protected AssertionIDRequestService $aidrs;
+    private static AssertionIDRequestService $aidrs;
 
     /** @var \SimpleSAML\SAML2\XML\md\AuthnQueryService */
-    protected AuthnQueryService $aqs;
+    private static AuthnQueryService $aqs;
 
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = AuthnAuthorityDescriptor::class;
+        self::$testedClass = AuthnAuthorityDescriptor::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_AuthnAuthorityDescriptor.xml',
         );
 
-        $this->aqs = new AuthnQueryService(C::BINDING_HTTP_POST, 'http://www.example.com/aqs');
-        $this->aidrs = new AssertionIDRequestService(C::BINDING_HTTP_POST, 'http://www.example.com/aidrs');
+        self::$aqs = new AuthnQueryService(C::BINDING_HTTP_POST, 'http://www.example.com/aqs');
+        self::$aidrs = new AssertionIDRequestService(C::BINDING_HTTP_POST, 'http://www.example.com/aidrs');
     }
 
 
@@ -69,14 +69,14 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     public function testMarshalling(): void
     {
         $aad = new AuthnAuthorityDescriptor(
-            [$this->aqs],
+            [self::$aqs],
             [C::NS_SAMLP, C::PROTOCOL],
-            [$this->aidrs],
+            [self::$aidrs],
             [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)],
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($aad),
         );
     }
@@ -92,7 +92,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         new AuthnAuthorityDescriptor(
             [],
             [C::NS_SAMLP, C::PROTOCOL],
-            [$this->aidrs],
+            [self::$aidrs],
             [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)],
         );
     }
@@ -104,7 +104,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     public function testMarshallingWithoutOptionalElements(): void
     {
         new AuthnAuthorityDescriptor(
-            [$this->aqs],
+            [self::$aqs],
             [C::NS_SAMLP, C::PROTOCOL],
         );
 
@@ -119,9 +119,9 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     {
         $this->expectException(SchemaViolationException::class);
         new AuthnAuthorityDescriptor(
-            [$this->aqs],
+            [self::$aqs],
             [C::NS_SAMLP, C::PROTOCOL],
-            [$this->aidrs],
+            [self::$aidrs],
             [new NameIDFormat(''), new NameIDFormat(C::NAMEID_TRANSIENT)],
         );
     }
@@ -135,9 +135,9 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AuthnQueryService must be an instance of EndpointType');
         new AuthnAuthorityDescriptor(
-            [$this->aqs, ''],
+            [self::$aqs, ''],
             [C::NS_SAMLP, C::PROTOCOL],
-            [$this->aidrs],
+            [self::$aidrs],
             [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)],
         );
     }
@@ -151,9 +151,9 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AssertionIDRequestServices must be an instance of EndpointType');
         new AuthnAuthorityDescriptor(
-            [$this->aqs],
+            [self::$aqs],
             [C::NS_SAMLP, C::PROTOCOL],
-            [$this->aidrs, ''],
+            [self::$aidrs, ''],
             [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)],
         );
     }
@@ -167,10 +167,10 @@ final class AuthnAuthorityDescriptorTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $aad = AuthnAuthorityDescriptor::fromXML($this->xmlRepresentation->documentElement);
+        $aad = AuthnAuthorityDescriptor::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($aad),
         );
     }
@@ -181,12 +181,15 @@ final class AuthnAuthorityDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutAuthnQueryService(): void
     {
-        $aqs = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AuthnQueryService');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $aqs = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AuthnQueryService');
         /** @psalm-suppress PossiblyNullArgument */
-        $this->xmlRepresentation->documentElement->removeChild($aqs->item(0));
+        $xmlRepresentation->documentElement->removeChild($aqs->item(0));
+
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing at least one AuthnQueryService in AuthnAuthorityDescriptor.');
-        AuthnAuthorityDescriptor::fromXML($this->xmlRepresentation->documentElement);
+
+        AuthnAuthorityDescriptor::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -195,11 +198,13 @@ final class AuthnAuthorityDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithEmptyNameIDFormat(): void
     {
-        $nidf = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'NameIDFormat');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $nidf = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'NameIDFormat');
         /** @psalm-suppress PossiblyNullPropertyAssignment */
         $nidf->item(0)->textContent = '';
         $this->expectException(SchemaViolationException::class);
-        AuthnAuthorityDescriptor::fromXML($this->xmlRepresentation->documentElement);
+
+        AuthnAuthorityDescriptor::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -208,10 +213,11 @@ final class AuthnAuthorityDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutAssertionIDRequestServices(): void
     {
-        $aidrs = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AssertionIDRequestService');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $aidrs = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AssertionIDRequestService');
         /** @psalm-suppress PossiblyNullArgument */
-        $this->xmlRepresentation->documentElement->removeChild($aidrs->item(0));
-        AuthnAuthorityDescriptor::fromXML($this->xmlRepresentation->documentElement);
+        $xmlRepresentation->documentElement->removeChild($aidrs->item(0));
+        AuthnAuthorityDescriptor::fromXML($xmlRepresentation->documentElement);
         $this->assertTrue(true);
     }
 
@@ -221,12 +227,13 @@ final class AuthnAuthorityDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutNameIDFormats(): void
     {
-        $nidf = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'NameIDFormat');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $nidf = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'NameIDFormat');
         /** @psalm-suppress PossiblyNullArgument */
-        $this->xmlRepresentation->documentElement->removeChild($nidf->item(1));
+        $xmlRepresentation->documentElement->removeChild($nidf->item(1));
         /** @psalm-suppress PossiblyNullArgument */
-        $this->xmlRepresentation->documentElement->removeChild($nidf->item(0));
-        AuthnAuthorityDescriptor::fromXML($this->xmlRepresentation->documentElement);
+        $xmlRepresentation->documentElement->removeChild($nidf->item(0));
+        AuthnAuthorityDescriptor::fromXML($xmlRepresentation->documentElement);
         $this->assertTrue(true);
     }
 }

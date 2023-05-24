@@ -33,13 +33,13 @@ final class SubjectConfirmationDataTest extends TestCase
 
     /**
      */
-    public function setup(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = SubjectConfirmationData::class;
+        self::$testedClass = SubjectConfirmationData::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_SubjectConfirmationData.xml',
         );
     }
@@ -71,7 +71,7 @@ final class SubjectConfirmationDataTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($subjectConfirmationData),
         );
     }
@@ -110,11 +110,11 @@ final class SubjectConfirmationDataTest extends TestCase
         $this->assertEquals('testval1', $attributes[0]->getAttrValue());
         $this->assertEquals('testval2', $attributes[1]->getAttrValue());
 
-        $document = $this->xmlRepresentation->documentElement;
+        $document = clone self::$xmlRepresentation->documentElement;
         $document->setAttribute('Address', 'non-IP');
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($document),
+            self::$xmlRepresentation->saveXML($document),
             strval($subjectConfirmationData),
         );
     }
@@ -127,10 +127,10 @@ final class SubjectConfirmationDataTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $subjectConfirmationData = SubjectConfirmationData::fromXML($this->xmlRepresentation->documentElement);
+        $subjectConfirmationData = SubjectConfirmationData::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($subjectConfirmationData),
         );
     }

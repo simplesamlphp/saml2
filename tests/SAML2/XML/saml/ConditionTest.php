@@ -36,13 +36,13 @@ final class ConditionTest extends TestCase
 
     /**
      */
-    public function setup(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
+        self::$schemaFile = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
 
-        $this->testedClass = CustomCondition::class;
+        self::$testedClass = CustomCondition::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Condition.xml',
         );
 
@@ -64,7 +64,7 @@ final class ConditionTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($condition),
         );
     }
@@ -77,17 +77,10 @@ final class ConditionTest extends TestCase
      */
     public function testUnmarshallingRegistered(): void
     {
-        $condition = CustomCondition::fromXML($this->xmlRepresentation->documentElement);
-
-        $this->assertInstanceOf(CustomCondition::class, $condition);
-        $this->assertEquals('ssp:CustomConditionType', $condition->getXsiType());
-
-        $audience = $condition->getAudience();
-        $this->assertCount(1, $audience);
-        $this->assertEquals('urn:some:audience', $audience[0]->getContent());
+        $condition = CustomCondition::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($condition),
         );
     }
@@ -97,7 +90,7 @@ final class ConditionTest extends TestCase
      */
     public function testUnmarshallingUnregistered(): void
     {
-        $element = $this->xmlRepresentation->documentElement;
+        $element = clone self::$xmlRepresentation->documentElement;
         $element->setAttributeNS(C::NS_XSI, 'xsi:type', 'ssp:UnknownConditionType');
 
         $condition = AbstractCondition::fromXML($element);

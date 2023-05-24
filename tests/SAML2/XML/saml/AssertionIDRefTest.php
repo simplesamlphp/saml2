@@ -29,13 +29,13 @@ final class AssertionIDRefTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = AssertionIDRef::class;
+        self::$testedClass = AssertionIDRef::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_AssertionIDRef.xml',
         );
     }
@@ -47,11 +47,8 @@ final class AssertionIDRefTest extends TestCase
     {
         $assertionIDRef = new AssertionIDRef('_Test');
 
-        $assertionIDRefElement = $assertionIDRef->toXML();
-        $this->assertEquals('_Test', $assertionIDRefElement->textContent);
-
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($assertionIDRef),
         );
     }
@@ -61,10 +58,10 @@ final class AssertionIDRefTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $assertionIDRef = AssertionIDRef::fromXML($this->xmlRepresentation->documentElement);
+        $assertionIDRef = AssertionIDRef::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($assertionIDRef),
         );
     }

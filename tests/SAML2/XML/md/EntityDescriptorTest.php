@@ -65,13 +65,13 @@ final class EntityDescriptorTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = EntityDescriptor::class;
+        self::$testedClass = EntityDescriptor::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_EntityDescriptor.xml',
         );
     }
@@ -177,7 +177,7 @@ final class EntityDescriptorTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($ed),
         );
     }
@@ -304,15 +304,16 @@ XML
      */
     public function testMarshallingWithAffiliationAndRoleDescriptors(): void
     {
-        $affiliateDescriptor = new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_SP)]);
-        $affiliateDescriptor->toXML($this->xmlRepresentation->documentElement);
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $affiliationDescriptor = new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_SP)]);
+        $affiliationDescriptor->toXML($xmlRepresentation->documentElement);
 
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'AffiliationDescriptor cannot be combined with other RoleDescriptor elements in EntityDescriptor.',
         );
 
-        EntityDescriptor::fromXML($this->xmlRepresentation->documentElement);
+        EntityDescriptor::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -354,8 +355,9 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $pdpd = $this->xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'PDPDescriptor')->item(0);
-        $customd = $this->xmlRepresentation->createElementNS(C::NS_MD, 'md:RoleDescriptor');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $pdpd = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'PDPDescriptor')->item(0);
+        $customd = $xmlRepresentation->createElementNS(C::NS_MD, 'md:RoleDescriptor');
         $customd->setAttribute('protocolSupportEnumeration', 'urn:oasis:names:tc:SAML:2.0:protocol');
         $customd->setAttributeNS(
             'http://www.w3.org/2000/xmlns/',
@@ -373,7 +375,7 @@ XML
          */
         $pdpd->parentNode->insertBefore($customd, $pdpd->nextSibling);
         $pdpd->parentNode->insertBefore($newline, $customd);
-        $entityDescriptor = EntityDescriptor::fromXML($this->xmlRepresentation->documentElement);
+        $entityDescriptor = EntityDescriptor::fromXML($xmlRepresentation->documentElement);
 
         $attributes = $entityDescriptor->getAttributesNS();
         $this->assertCount(1, $attributes);
@@ -422,7 +424,7 @@ XML
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            $xmlRepresentation->saveXML($xmlRepresentation->documentElement),
             strval($entityDescriptor),
         );
     }

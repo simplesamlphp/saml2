@@ -56,20 +56,16 @@ final class LogoutRequestTest extends TestCase
     use SignedElementTestTrait;
 
 
-    /** @var \DOMElement */
-    private DOMElement $logoutRequestElement;
-
-
     /**
      * Load a fixture.
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = LogoutRequest::class;
+        self::$testedClass = LogoutRequest::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_LogoutRequest.xml',
         );
     }
@@ -153,7 +149,7 @@ final class LogoutRequestTest extends TestCase
         $container = ContainerSingleton::getInstance();
         $container->setBlacklistedAlgorithms(null);
 
-        $logoutRequest = LogoutRequest::fromXML($this->xmlRepresentation->documentElement);
+        $logoutRequest = LogoutRequest::fromXML(self::$xmlRepresentation->documentElement);
         $issuer = $logoutRequest->getIssuer();
 
         $this->assertInstanceOf(Issuer::class, $issuer);
@@ -215,9 +211,9 @@ final class LogoutRequestTest extends TestCase
 </samlp:LogoutRequest>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->logoutRequestElement = $document->documentElement;
+        $logoutRequestElement = $document->documentElement;
 
-        $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
+        $logoutRequest = LogoutRequest::fromXML($logoutRequestElement);
         $identifier = $logoutRequest->getIdentifier();
 
         $this->assertInstanceOf(NameID::class, $identifier);
@@ -241,13 +237,13 @@ XML;
 </samlp:LogoutRequest>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->logoutRequestElement = $document->documentElement;
+        $logoutRequestElement = $document->documentElement;
 
         $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage(
             "Missing <saml:NameID>, <saml:BaseID> or <saml:EncryptedID> in <samlp:LogoutRequest>.",
         );
-        LogoutRequest::fromXML($this->logoutRequestElement);
+        LogoutRequest::fromXML($logoutRequestElement);
     }
 
 
@@ -268,11 +264,11 @@ XML;
 </samlp:LogoutRequest>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->logoutRequestElement = $document->documentElement;
+        $logoutRequestElement = $document->documentElement;
 
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage("More than one <saml:NameID> in <samlp:LogoutRequest>.");
-        LogoutRequest::fromXML($this->logoutRequestElement);
+        LogoutRequest::fromXML($logoutRequestElement);
     }
 
 
@@ -293,9 +289,9 @@ XML;
 </samlp:LogoutRequest>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->logoutRequestElement = $document->documentElement;
+        $logoutRequestElement = $document->documentElement;
 
-        $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
+        $logoutRequest = LogoutRequest::fromXML($logoutRequestElement);
         $this->assertEquals(1543433592, $logoutRequest->getNotOnOrAfter());
     }
 
@@ -333,9 +329,9 @@ XML;
 </samlp:LogoutRequest>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->logoutRequestElement = $document->documentElement;
+        $logoutRequestElement = $document->documentElement;
 
-        $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
+        $logoutRequest = LogoutRequest::fromXML($logoutRequestElement);
         $this->assertEquals($reason, $logoutRequest->getReason());
     }
 
@@ -372,9 +368,9 @@ XML;
 </samlp:LogoutRequest>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
-        $this->logoutRequestElement = $document->documentElement;
+        $logoutRequestElement = $document->documentElement;
 
-        $logoutRequest = LogoutRequest::fromXML($this->logoutRequestElement);
+        $logoutRequest = LogoutRequest::fromXML($logoutRequestElement);
         $this->assertCount(0, $logoutRequest->getSessionIndexes());
     }
 

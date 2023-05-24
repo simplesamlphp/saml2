@@ -33,13 +33,13 @@ final class RequestedAuthnContextTest extends TestCase
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = RequestedAuthnContext::class;
+        self::$testedClass = RequestedAuthnContext::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_RequestedAuthnContext.xml',
         );
     }
@@ -54,7 +54,7 @@ final class RequestedAuthnContextTest extends TestCase
         $requestedAuthnContext = new RequestedAuthnContext([$authnContextDeclRef], 'exact');
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($requestedAuthnContext),
         );
     }
@@ -101,10 +101,10 @@ final class RequestedAuthnContextTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $requestedAuthnContext = RequestedAuthnContext::fromXML($this->xmlRepresentation->documentElement);
+        $requestedAuthnContext = RequestedAuthnContext::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($requestedAuthnContext),
         );
     }
@@ -127,6 +127,7 @@ XML
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('You need either AuthnContextClassRef or AuthnContextDeclRef, not both.');
+
         RequestedAuthnContext::fromXML($document->documentElement);
     }
 }

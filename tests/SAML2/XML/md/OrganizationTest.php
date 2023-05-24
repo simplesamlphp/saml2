@@ -35,26 +35,26 @@ final class OrganizationTest extends TestCase
     use SerializableElementTestTrait;
 
     /** @var \DOMDocument */
-    protected DOMDocument $ext;
+    private static DOMDocument $ext;
 
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = Organization::class;
+        self::$testedClass = Organization::class;
 
-        $this->ext = DOMDocumentFactory::fromString(
+        self::$ext = DOMDocumentFactory::fromString(
             '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>'
         );
 
-        $this->arrayRepresentation = [
+        self::$arrayRepresentation = [
             'OrganizationName' => ['en' => 'SSP'],
             'OrganizationDisplayName' => ['en' => 'SimpleSAMLphp'],
             'OrganizationURL' => ['en' => 'https://simplesamlphp.org'],
-            'Extensions' => [new Chunk($this->ext->documentElement)],
+            'Extensions' => [new Chunk(self::$ext->documentElement)],
             'attributes' => [
                 [
                     'namespaceURI' => 'urn:test:something',
@@ -65,7 +65,7 @@ final class OrganizationTest extends TestCase
             ],
         ];
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_Organization.xml',
         );
     }
@@ -85,7 +85,7 @@ final class OrganizationTest extends TestCase
             [new OrganizationURL('en', 'https://IdentityProvider.com')],
             new Extensions(
                 [
-                    new Chunk($this->ext->documentElement),
+                    new Chunk(self::$ext->documentElement),
                 ],
             ),
         );
@@ -93,7 +93,7 @@ final class OrganizationTest extends TestCase
         $root->formatOutput = true;
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($org),
         );
     }
@@ -107,10 +107,10 @@ final class OrganizationTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $org = Organization::fromXML($this->xmlRepresentation->documentElement);
+        $org = Organization::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($org),
         );
     }

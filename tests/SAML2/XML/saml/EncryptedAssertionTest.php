@@ -50,13 +50,13 @@ final class EncryptedAssertionTest extends TestCase
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = EncryptedAssertion::class;
+        self::$testedClass = EncryptedAssertion::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedAssertion.xml',
         );
 
@@ -98,7 +98,7 @@ final class EncryptedAssertionTest extends TestCase
         $encryptedAssertion = new EncryptedAssertion($ed);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($encryptedAssertion),
         );
     }

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Signature;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Signature\ValidatorChain;
 use SimpleSAML\SAML2\XML\samlp\Response;
@@ -19,14 +20,14 @@ use SimpleSAML\SAML2\Signature\MissingConfigurationException;
 final class ValidatorChainTest extends TestCase
 {
     /** @var \SimpleSAML\SAML2\Signature\ValidatorChain */
-    private ValidatorChain $chain;
+    private static ValidatorChain $chain;
 
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->chain = new ValidatorChain(new \Psr\Log\NullLogger(), []);
+        self::$chain = new ValidatorChain(new NullLogger(), []);
     }
 
 
@@ -36,11 +37,11 @@ final class ValidatorChainTest extends TestCase
      */
     public function ifNoValidatorsCanValidateAnExceptionIsThrown(): void
     {
-        $this->chain->appendValidator(new MockChainedValidator(false, true));
-        $this->chain->appendValidator(new MockChainedValidator(false, true));
+        self::$chain->appendValidator(new MockChainedValidator(false, true));
+        self::$chain->appendValidator(new MockChainedValidator(false, true));
 
         $this->expectException(MissingConfigurationException::class);
-        $this->chain->hasValidSignature(new Response(new Status(new StatusCode())), new IdentityProvider([]));
+        self::$chain->hasValidSignature(new Response(new Status(new StatusCode())), new IdentityProvider([]));
     }
 
 
@@ -50,11 +51,11 @@ final class ValidatorChainTest extends TestCase
      */
     public function allRegisteredValidatorsShouldBeTried(): void
     {
-        $this->chain->appendValidator(new MockChainedValidator(false, true));
-        $this->chain->appendValidator(new MockChainedValidator(false, true));
-        $this->chain->appendValidator(new MockChainedValidator(true, false));
+        self::$chain->appendValidator(new MockChainedValidator(false, true));
+        self::$chain->appendValidator(new MockChainedValidator(false, true));
+        self::$chain->appendValidator(new MockChainedValidator(true, false));
 
-        $validationResult = $this->chain->hasValidSignature(
+        $validationResult = self::$chain->hasValidSignature(
             new Response(new Status(new StatusCode())),
             new IdentityProvider([]),
         );
@@ -68,11 +69,11 @@ final class ValidatorChainTest extends TestCase
      */
     public function itUsesTheResultOfTheFirstValidatorThatCanValidate(): void
     {
-        $this->chain->appendValidator(new MockChainedValidator(false, true));
-        $this->chain->appendValidator(new MockChainedValidator(true, false));
-        $this->chain->appendValidator(new MockChainedValidator(false, true));
+        self::$chain->appendValidator(new MockChainedValidator(false, true));
+        self::$chain->appendValidator(new MockChainedValidator(true, false));
+        self::$chain->appendValidator(new MockChainedValidator(false, true));
 
-        $validationResult = $this->chain->hasValidSignature(
+        $validationResult = self::$chain->hasValidSignature(
             new Response(new Status(new StatusCode())),
             new IdentityProvider([]),
         );

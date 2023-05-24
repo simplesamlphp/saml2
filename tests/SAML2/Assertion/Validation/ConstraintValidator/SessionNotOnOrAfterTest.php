@@ -25,20 +25,16 @@ use SimpleSAML\TestUtils\SAML2\ControlledTimeTestCase;
  */
 final class SessionNotOnOrAfterTest extends ControlledTimeTestCase
 {
-    /**
-     * @var \SAML2\XML\saml\Issuer
-     */
-    private Issuer $issuer;
+    /** @var \SimpleSAML\SAML2\XML\saml\Issuer */
+    private static Issuer $issuer;
 
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        parent::setUp();
-
         // Create an Issuer
-        $this->issuer = new Issuer('testIssuer');
+        self::$issuer = new Issuer('testIssuer');
     }
 
 
@@ -60,7 +56,7 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTestCase
         );
 
         // Create an assertion
-        $assertion = new Assertion($this->issuer, null, null, null, null, [$authnStatement]);
+        $assertion = new Assertion(self::$issuer, null, null, null, null, [$authnStatement]);
 
         $validator = new SessionNotOnOrAfter();
         $result    = new Result();
@@ -90,7 +86,7 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTestCase
         );
 
         // Create an assertion
-        $assertion = new Assertion($this->issuer, null, null, null, null, [$authnStatement]);
+        $assertion = new Assertion(self::$issuer, null, null, null, null, [$authnStatement]);
 
         $validator = new SessionNotOnOrAfter();
         $result    = new Result();
@@ -119,7 +115,7 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTestCase
         );
 
         // Create an assertion
-        $assertion = new Assertion($this->issuer, null, null, null, null, [$authnStatement]);
+        $assertion = new Assertion(self::$issuer, null, null, null, null, [$authnStatement]);
 
         $validator = new SessionNotOnOrAfter();
         $result    = new Result();

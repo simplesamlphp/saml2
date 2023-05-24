@@ -66,13 +66,13 @@ final class AssertionTest extends TestCase
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = Assertion::class;
+        self::$testedClass = Assertion::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Assertion.xml',
         );
 
@@ -161,7 +161,7 @@ final class AssertionTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($assertion),
         );
     }
@@ -510,6 +510,7 @@ XML
         $this->assertTrue($signedAssertion->wasSignedAtConstruction());
     }
 
+
     public function testEptiAttributeValuesAreParsedCorrectly(): void
     {
         $xml = <<<XML
@@ -819,7 +820,7 @@ XML;
      */
     public function testAssertionVersionOtherThan20ThrowsException(): void
     {
-        $document = $this->xmlRepresentation;
+        $document = clone self::$xmlRepresentation;
         $document->documentElement->setAttribute('Version', '1.3');
 
         $this->expectException(Exception::class);
@@ -834,7 +835,7 @@ XML;
      */
     public function testAssertionWithoutIDthrowsException(): void
     {
-        $document = $this->xmlRepresentation;
+        $document = clone self::$xmlRepresentation;
         $document->documentElement->removeAttribute('ID');
 
         $this->expectException(Exception::class);
@@ -849,7 +850,7 @@ XML;
      */
     public function testAssertionWithoutIssuerThrowsException(): void
     {
-        $document = $this->xmlRepresentation;
+        $document = clone self::$xmlRepresentation;
         $issuer = $document->documentElement->getElementsByTagNameNS(C::NS_SAML, 'Issuer')->item(0);
         $document->documentElement->removeChild($issuer);
 

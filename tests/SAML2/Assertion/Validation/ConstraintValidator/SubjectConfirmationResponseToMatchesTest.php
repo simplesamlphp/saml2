@@ -28,8 +28,6 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
      */
     public function setUp(): void
     {
-        parent::setUp();
-
         $this->response = Mockery::mock(Response::class);
     }
 
@@ -44,9 +42,7 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
         $subjectConfirmationData = new SubjectConfirmationData(null, null, null, 'someValue');
         $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
 
-        $validator = new SubjectConfirmationResponseToMatches(
-            $this->response
-        );
+        $validator = new SubjectConfirmationResponseToMatches($this->response);
         $result = new Result();
 
         $validator->validate($subjectConfirmation, $result);
@@ -65,9 +61,7 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
         $subjectConfirmationData = new SubjectConfirmationData();
         $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
 
-        $validator = new SubjectConfirmationResponseToMatches(
-            $this->response
-        );
+        $validator = new SubjectConfirmationResponseToMatches($this->response);
         $result = new Result();
 
         $validator->validate($subjectConfirmation, $result);
@@ -86,9 +80,7 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
         $subjectConfirmationData = new SubjectConfirmationData();
         $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
 
-        $validator = new SubjectConfirmationResponseToMatches(
-            $this->response
-        );
+        $validator = new SubjectConfirmationResponseToMatches($this->response);
         $result = new Result();
 
         $validator->validate($subjectConfirmation, $result);
@@ -107,9 +99,7 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
         $subjectConfirmationData = new SubjectConfirmationData(null, null, null, 'theSameValue');
         $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
 
-        $validator = new SubjectConfirmationResponseToMatches(
-            $this->response
-        );
+        $validator = new SubjectConfirmationResponseToMatches($this->response);
         $result = new Result();
 
         $validator->validate($subjectConfirmation, $result);
@@ -127,14 +117,10 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
         $this->response->shouldReceive('getInResponseTo')->andReturn('someValue');
         $subjectConfirmationData = new SubjectConfirmationData(null, null, null, 'anotherValue');
         $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
-
-        $validator = new SubjectConfirmationResponseToMatches(
-            $this->response
-        );
+        $validator = new SubjectConfirmationResponseToMatches($this->response);
         $result = new Result();
 
         $validator->validate($subjectConfirmation, $result);
-
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
     }

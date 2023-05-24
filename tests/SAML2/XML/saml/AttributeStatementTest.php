@@ -32,13 +32,13 @@ final class AttributeStatementTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = AttributeStatement::class;
+        self::$testedClass = AttributeStatement::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_AttributeStatement.xml',
         );
     }
@@ -69,7 +69,7 @@ final class AttributeStatementTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($attrStatement),
         );
     }
@@ -92,7 +92,7 @@ final class AttributeStatementTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $attrStatement = AttributeStatement::fromXML($this->xmlRepresentation->documentElement);
+        $attrStatement = AttributeStatement::fromXML(self::$xmlRepresentation->documentElement);
 
         $attributes = $attrStatement->getAttributes();
         $this->assertCount(3, $attributes);

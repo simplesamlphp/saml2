@@ -32,17 +32,17 @@ final class ProcessorTest extends MockeryTestCase
     /**
      * @var \SimpleSAML\SAML2\Assertion\Processor
      */
-    private Processor $processor;
+    private static Processor $processor;
 
     /**
      * @var m\MockInterface&Decrypter
      */
-    private MockInterface $decrypter;
+    private static MockInterface $decrypter;
 
 
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->decrypter = Mockery::mock(Decrypter::class);
+        self::$decrypter = Mockery::mock(Decrypter::class);
         $validator = Mockery::mock(Validator::class);
         $assertionValidator = Mockery::mock(AssertionValidator::class);
         $subjectConfirmationValidator = Mockery::mock(SubjectConfirmationValidator::class);
@@ -50,8 +50,8 @@ final class ProcessorTest extends MockeryTestCase
         $identityProvider = new IdentityProvider([]);
         $logger = Mockery::mock(LoggerInterface::class);
 
-        $this->processor = new Processor(
-            $this->decrypter,
+        self::$processor = new Processor(
+            self::$decrypter,
             $validator,
             $assertionValidator,
             $subjectConfirmationValidator,
@@ -86,12 +86,12 @@ final class ProcessorTest extends MockeryTestCase
         ];
 
         foreach ($testData as $assertions) {
-            $this->decrypter
+            self::$decrypter
                 ->shouldReceive('decrypt')
                 ->andReturn($assertion);
 
             $collection = new ArrayCollection($assertions);
-            $result = $this->processor->decryptAssertions($collection);
+            $result = self::$processor->decryptAssertions($collection);
             self::assertInstanceOf(ArrayCollection::class, $result);
             foreach ($result as $assertion) {
                 self::assertInstanceOf(Assertion::class, $assertion);
@@ -107,6 +107,6 @@ final class ProcessorTest extends MockeryTestCase
     {
         $this->expectException(InvalidAssertionException::class);
         $this->expectExceptionMessage('The assertion must be of type: EncryptedAssertion or Assertion');
-        $this->processor->decryptAssertions(new ArrayCollection([new stdClass()]));
+        self::$processor->decryptAssertions(new ArrayCollection([new stdClass()]));
     }
 }

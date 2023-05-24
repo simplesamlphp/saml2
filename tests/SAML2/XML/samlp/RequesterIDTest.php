@@ -29,13 +29,13 @@ final class RequesterIDTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = RequesterID::class;
+        self::$testedClass = RequesterID::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_RequesterID.xml',
         );
     }
@@ -47,11 +47,8 @@ final class RequesterIDTest extends TestCase
     {
         $requesterId = new RequesterID('urn:some:requester');
 
-        $requesterIdElement = $requesterId->toXML();
-        $this->assertEquals('urn:some:requester', $requesterIdElement->textContent);
-
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($requesterId),
         );
     }
@@ -61,10 +58,10 @@ final class RequesterIDTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $requesterId = RequesterID::fromXML($this->xmlRepresentation->documentElement);
+        $requesterId = RequesterID::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($requesterId),
         );
     }

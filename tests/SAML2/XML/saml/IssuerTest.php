@@ -32,13 +32,13 @@ final class IssuerTest extends TestCase
 
     /**
      */
-    public function setup(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = Issuer::class;
+        self::$testedClass = Issuer::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Issuer.xml',
         );
     }
@@ -60,7 +60,7 @@ final class IssuerTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($issuer),
         );
     }
@@ -109,10 +109,10 @@ final class IssuerTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $issuer = Issuer::fromXML($this->xmlRepresentation->documentElement);
+        $issuer = Issuer::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($issuer),
         );
     }
@@ -123,12 +123,13 @@ final class IssuerTest extends TestCase
      */
     public function testUnmarshallingEntityFormat(): void
     {
-        $this->xmlRepresentation->documentElement->setAttribute('Format', C::NAMEID_ENTITY);
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttribute('Format', C::NAMEID_ENTITY);
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
-        Issuer::fromXML($this->xmlRepresentation->documentElement);
+        Issuer::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -137,11 +138,12 @@ final class IssuerTest extends TestCase
      */
     public function testUnmarshallingNoFormat(): void
     {
-        $this->xmlRepresentation->documentElement->removeAttribute('Format');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->removeAttribute('Format');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
-        Issuer::fromXML($this->xmlRepresentation->documentElement);
+        Issuer::fromXML($xmlRepresentation->documentElement);
     }
 }

@@ -26,14 +26,14 @@ use function strval;
 final class AbstractLocalizedNameTest extends TestCase
 {
     /** @var \DOMDocument */
-    protected DOMDocument $xmlRepresentation;
+    private static DOMDocument $xmlRepresentation;
 
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_ServiceDescription.xml',
         );
     }
@@ -74,12 +74,13 @@ final class AbstractLocalizedNameTest extends TestCase
      */
     public function testUnmarshallingWithoutLang(): void
     {
-        $this->xmlRepresentation->documentElement->removeAttributeNS(C::NS_XML, 'lang');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->removeAttributeNS(C::NS_XML, 'lang');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing xml:lang from ServiceDescription');
 
-        ServiceDescription::fromXML($this->xmlRepresentation->documentElement);
+        ServiceDescription::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -88,12 +89,13 @@ final class AbstractLocalizedNameTest extends TestCase
      */
     public function testUnmarshallingWithEmptyLang(): void
     {
-        $this->xmlRepresentation->documentElement->setAttributeNS(C::NS_XML, 'lang', '');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttributeNS(C::NS_XML, 'lang', '');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('xml:lang cannot be empty.');
 
-        ServiceDescription::fromXML($this->xmlRepresentation->documentElement);
+        ServiceDescription::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -102,11 +104,12 @@ final class AbstractLocalizedNameTest extends TestCase
      */
     public function testUnmarshallingWithEmptyValue(): void
     {
-        $this->xmlRepresentation->documentElement->textContent = '';
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->textContent = '';
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Expected a non-empty value. Got: ""');
 
-        ServiceDescription::fromXML($this->xmlRepresentation->documentElement);
+        ServiceDescription::fromXML($xmlRepresentation->documentElement);
     }
 }

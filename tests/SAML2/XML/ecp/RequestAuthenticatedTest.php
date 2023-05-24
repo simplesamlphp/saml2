@@ -29,13 +29,13 @@ final class RequestAuthenticatedTest extends TestCase
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-ecp-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-ecp-2.0.xsd';
 
-        $this->testedClass = RequestAuthenticated::class;
+        self::$testedClass = RequestAuthenticated::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/ecp_RequestAuthenticated.xml'
         );
     }
@@ -48,7 +48,7 @@ final class RequestAuthenticatedTest extends TestCase
         $ra = new RequestAuthenticated(0);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($ra),
         );
     }
@@ -58,10 +58,10 @@ final class RequestAuthenticatedTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $ra = RequestAuthenticated::fromXML($this->xmlRepresentation->documentElement);
+        $ra = RequestAuthenticated::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($ra),
         );
     }
@@ -71,7 +71,7 @@ final class RequestAuthenticatedTest extends TestCase
      */
     public function testUnmarshallingWithMissingActorThrowsException(): void
     {
-        $document = $this->xmlRepresentation->documentElement;
+        $document = clone self::$xmlRepresentation->documentElement;
         $document->removeAttributeNS(C::NS_SOAP_ENV_11, 'actor');
 
         $this->expectException(MissingAttributeException::class);

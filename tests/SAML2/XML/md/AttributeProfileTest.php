@@ -32,13 +32,13 @@ final class AttributeProfileTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = AttributeProfile::class;
+        self::$testedClass = AttributeProfile::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_AttributeProfile.xml',
         );
     }
@@ -54,7 +54,7 @@ final class AttributeProfileTest extends TestCase
         $attributeProfile = new AttributeProfile(C::PROFILE_1);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($attributeProfile),
         );
     }
@@ -67,10 +67,10 @@ final class AttributeProfileTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $attributeProfile = AttributeProfile::fromXML($this->xmlRepresentation->documentElement);
+        $attributeProfile = AttributeProfile::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($attributeProfile),
         );
     }

@@ -31,13 +31,13 @@ final class SingleSignOnServiceTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = SingleSignOnService::class;
+        self::$testedClass = SingleSignOnService::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_SingleSignOnService.xml',
         );
     }
@@ -54,7 +54,7 @@ final class SingleSignOnServiceTest extends TestCase
         $ssoep = new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($ssoep),
         );
     }
@@ -82,10 +82,10 @@ final class SingleSignOnServiceTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $ssoep = SingleSignOnService::fromXML($this->xmlRepresentation->documentElement);
+        $ssoep = SingleSignOnService::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($ssoep),
         );
     }
@@ -96,13 +96,14 @@ final class SingleSignOnServiceTest extends TestCase
      */
     public function testUnmarshallingWithResponseLocation(): void
     {
-        $this->xmlRepresentation->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.',
         );
 
-        SingleSignOnService::fromXML($this->xmlRepresentation->documentElement);
+        SingleSignOnService::fromXML($xmlRepresentation->documentElement);
     }
 }

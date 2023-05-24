@@ -29,13 +29,13 @@ final class StatusMessageTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = StatusMessage::class;
+        self::$testedClass = StatusMessage::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_StatusMessage.xml',
         );
     }
@@ -47,11 +47,8 @@ final class StatusMessageTest extends TestCase
     {
         $statusMessage = new StatusMessage('Something went wrong');
 
-        $statusMessageElement = $statusMessage->toXML();
-        $this->assertEquals('Something went wrong', $statusMessageElement->textContent);
-
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($statusMessage),
         );
     }
@@ -61,11 +58,11 @@ final class StatusMessageTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $statusMessage = StatusMessage::fromXML($this->xmlRepresentation->documentElement);
+        $statusMessage = StatusMessage::fromXML(self::$xmlRepresentation->documentElement);
 
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($statusMessage),
         );
     }

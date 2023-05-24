@@ -29,13 +29,13 @@ final class GetCompleteTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = GetComplete::class;
+        self::$testedClass = GetComplete::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_GetComplete.xml',
         );
     }
@@ -51,7 +51,7 @@ final class GetCompleteTest extends TestCase
         $this->assertEquals('https://some/location', $getCompleteElement->textContent);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($getComplete),
         );
     }
@@ -61,10 +61,10 @@ final class GetCompleteTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $getComplete = GetComplete::fromXML($this->xmlRepresentation->documentElement);
+        $getComplete = GetComplete::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($getComplete),
         );
     }

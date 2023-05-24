@@ -31,60 +31,60 @@ use SimpleSAML\XML\DOMDocumentFactory;
 final class AssertionValidatorTest extends TestCase
 {
     /** @var \DOMDocument */
-    protected DOMDocument $document;
+    protected static DOMDocument $document;
 
     /** @var \SimpleSAML\SAML2\Assertion\Processor */
-    protected Processor $assertionProcessor;
+    protected static Processor $assertionProcessor;
 
     /** @var \SimpleSAML\SAML2\Configuration\IdentityProvider */
-    protected IdentityProvider $identityProviderConfiguration;
+    protected static IdentityProvider $identityProviderConfiguration;
 
     /** @var \SimpleSAML\SAML2\Configuration\ServiceProvider */
-    protected ServiceProvider $serviceProviderConfiguration;
+    protected static ServiceProvider $serviceProviderConfiguration;
 
     /** @var \Psr\Log\LoggerInterface */
-    protected $logger;
+    protected static LoggerInterface $logger;
 
     /** @var \SimpleSAML\SAML2\Response\Validation\Validator */
-    protected Validator $validator;
+    protected static Validator $validator;
 
     /** @var \SimpleSAML\SAML2\Configuration\Destination */
-    protected Destination $destination;
+    protected static Destination $destination;
 
     /** @var \SimpleSAML\SAML2\xml\samlp\Response */
-    protected Response $response;
+    protected static Response $response;
 
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
         $idpentity = C::ENTITY_IDP;
         $spentity = C::ENTITY_IDP;
         $audience = $spentity;
         $destination = 'https://example.org/authentication/sp/consume-assertion';
 
-        $this->logger = new NullLogger();
-        $this->validator = new Validator($this->logger);
-        $this->destination = new Destination($destination);
-        $this->response = new Response(new Status(new StatusCode()));
+        self::$logger = new NullLogger();
+        self::$validator = new Validator(self::$logger);
+        self::$destination = new Destination($destination);
+        self::$response = new Response(new Status(new StatusCode()));
 
-        $this->identityProviderConfiguration = new IdentityProvider(['entityId' => $idpentity]);
-        $this->serviceProviderConfiguration  = new ServiceProvider(['entityId' => $spentity]);
+        self::$identityProviderConfiguration = new IdentityProvider(['entityId' => $idpentity]);
+        self::$serviceProviderConfiguration  = new ServiceProvider(['entityId' => $spentity]);
 
-        $this->assertionProcessor = ProcessorBuilder::build(
-            $this->logger,
-            $this->validator,
-            $this->destination,
-            $this->identityProviderConfiguration,
-            $this->serviceProviderConfiguration,
-            $this->response,
+        self::$assertionProcessor = ProcessorBuilder::build(
+            self::$logger,
+            self::$validator,
+            self::$destination,
+            self::$identityProviderConfiguration,
+            self::$serviceProviderConfiguration,
+            self::$response,
         );
 
         $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
         $nid_transient = C::NAMEID_TRANSIENT;
 
-        $this->document = DOMDocumentFactory::fromString(<<<XML
+        self::$document = DOMDocumentFactory::fromString(<<<XML
     <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                     xmlns:xs="http://www.w3.org/2001/XMLSchema"
                     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -120,9 +120,9 @@ XML
      */
     public function testBasicValidation(): void
     {
-        $assertion = Assertion::fromXML($this->document->firstChild);
+        $assertion = Assertion::fromXML(self::$document->firstChild);
 
-        $result = $this->assertionProcessor->validateAssertion($assertion);
+        $result = self::$assertionProcessor->validateAssertion($assertion);
         $this->assertNull($result);
     }
 
@@ -172,6 +172,6 @@ XML
             'The configured Service Provider [https://simplesamlphp.org/idp/metadata] is not a valid audience '
             . 'for the assertion. Audiences: [https://example.edu/not-the-sp-entity-id]"',
         );
-        $result = $this->assertionProcessor->validateAssertion($assertion);
+        $result = self::$assertionProcessor->validateAssertion($assertion);
     }
 }

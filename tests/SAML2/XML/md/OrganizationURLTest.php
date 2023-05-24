@@ -37,17 +37,17 @@ final class OrganizationURLTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = OrganizationURL::class;
+        self::$testedClass = OrganizationURL::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_OrganizationURL.xml',
         );
 
-        $this->arrayRepresentation = ['en' => 'https://IdentityProvider.com'];
+        self::$arrayRepresentation = ['en' => 'https://IdentityProvider.com'];
     }
 
 
@@ -62,7 +62,7 @@ final class OrganizationURLTest extends TestCase
         $name = new OrganizationURL('en', 'https://IdentityProvider.com');
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
     }
@@ -76,10 +76,10 @@ final class OrganizationURLTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $name = OrganizationURL::fromXML($this->xmlRepresentation->documentElement);
+        $name = OrganizationURL::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
     }
@@ -90,7 +90,7 @@ final class OrganizationURLTest extends TestCase
      */
     public function testUnmarshallingFailsInvalidURL(): void
     {
-        $document = $this->xmlRepresentation;
+        $document = clone self::$xmlRepresentation;
         $document->documentElement->textContent = 'this is no url';
 
         $this->expectException(SchemaViolationException::class);

@@ -33,13 +33,13 @@ final class ResponseTest extends TestCase
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-ecp-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-ecp-2.0.xsd';
 
-        $this->testedClass = Response::class;
+        self::$testedClass = Response::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/ecp_Response.xml'
         );
     }
@@ -52,7 +52,7 @@ final class ResponseTest extends TestCase
         $response = new Response('https://example.com/ACS');
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($response),
         );
     }
@@ -89,10 +89,10 @@ final class ResponseTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $response = Response::fromXML($this->xmlRepresentation->documentElement);
+        $response = Response::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($response),
         );
     }
@@ -102,7 +102,7 @@ final class ResponseTest extends TestCase
      */
     public function testUnmarshallingWithMissingMustUnderstandThrowsException(): void
     {
-        $document = $this->xmlRepresentation->documentElement;
+        $document = clone self::$xmlRepresentation->documentElement;
         $document->removeAttributeNS(SOAP::NS_SOAP_ENV_11, 'mustUnderstand');
 
         $this->expectException(MissingAttributeException::class);
@@ -116,7 +116,7 @@ final class ResponseTest extends TestCase
      */
     public function testUnmarshallingWithMissingActorThrowsException(): void
     {
-        $document = $this->xmlRepresentation->documentElement;
+        $document = clone self::$xmlRepresentation->documentElement;
         $document->removeAttributeNS(SOAP::NS_SOAP_ENV_11, 'actor');
 
         $this->expectException(MissingAttributeException::class);
@@ -130,7 +130,7 @@ final class ResponseTest extends TestCase
      */
     public function testUnmarshallingWithMissingACSThrowsException(): void
     {
-        $document = $this->xmlRepresentation->documentElement;
+        $document = clone self::$xmlRepresentation->documentElement;
         $document->removeAttribute('AssertionConsumerServiceURL');
 
         $this->expectException(MissingAttributeException::class);

@@ -105,6 +105,7 @@ class AttributeValue extends AbstractSamlElement
     {
         Assert::same($xml->localName, 'AttributeValue', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AttributeValue::NS, InvalidDOMElementException::class);
+
         $value = $xml->textContent;
         if (
             $xml->hasAttributeNS(C::NS_XSI, "type") &&

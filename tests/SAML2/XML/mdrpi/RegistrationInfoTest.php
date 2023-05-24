@@ -36,17 +36,17 @@ final class RegistrationInfoTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
 
-        $this->testedClass = RegistrationInfo::class;
+        self::$testedClass = RegistrationInfo::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/mdrpi_RegistrationInfo.xml',
         );
 
-        $this->arrayRepresentation = [
+        self::$arrayRepresentation = [
             'registrationAuthority' => 'https://ExampleAuthority',
             'registrationInstant' => '2011-01-01T00:00:00Z',
             'registrationPolicy' => [
@@ -71,7 +71,7 @@ final class RegistrationInfoTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($registrationInfo),
         );
     }
@@ -81,10 +81,10 @@ final class RegistrationInfoTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $registrationInfo = RegistrationInfo::fromXML($this->xmlRepresentation->documentElement);
+        $registrationInfo = RegistrationInfo::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($registrationInfo),
         );
     }
@@ -111,7 +111,7 @@ XML
      */
     public function testRegistrationInstantTimezoneNotZuluThrowsException(): void
     {
-        $document = $this->xmlRepresentation->documentElement;
+        $document = clone self::$xmlRepresentation->documentElement;
         $document->setAttribute('registrationInstant', '2011-01-01T00:00:00WT');
 
         $this->expectException(ProtocolViolationException::class);
@@ -124,7 +124,7 @@ XML
      */
     public function testMultipleRegistrationPoliciesWithSameLanguageThrowsException(): void
     {
-        $document = $this->xmlRepresentation;
+        $document = clone self::$xmlRepresentation;
 
         // Append another 'en' RegistrationPolicy to the document
         $x = new RegistrationPolicy('en', 'https://example.org');

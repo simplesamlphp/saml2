@@ -37,13 +37,13 @@ final class EncryptedAttributeTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
-        $this->testedClass = EncryptedAttribute::class;
+        self::$testedClass = EncryptedAttribute::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedAttribute.xml',
         );
 
@@ -84,7 +84,7 @@ final class EncryptedAttributeTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $encryptedAttribute = EncryptedAttribute::fromXML($this->xmlRepresentation->documentElement);
+        $encryptedAttribute = EncryptedAttribute::fromXML(self::$xmlRepresentation->documentElement);
 
         $encryptedData = $encryptedAttribute->getEncryptedData();
         $this->assertEquals(C::XMLENC_ELEMENT, $encryptedData->getType());
@@ -95,7 +95,7 @@ final class EncryptedAttributeTest extends TestCase
      */
     public function testDecryptAttribute(): void
     {
-        $encryptedAttribute = EncryptedAttribute::fromXML($this->xmlRepresentation->documentElement);
+        $encryptedAttribute = EncryptedAttribute::fromXML(self::$xmlRepresentation->documentElement);
 
         /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(

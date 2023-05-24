@@ -37,13 +37,13 @@ final class AssertionIDRequestTest extends TestCase
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        $this->testedClass = AssertionIDRequest::class;
+        self::$testedClass = AssertionIDRequest::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_AssertionIDRequest.xml',
         );
     }
@@ -65,7 +65,7 @@ final class AssertionIDRequestTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($assertionIDRequest),
         );
     }
@@ -75,10 +75,10 @@ final class AssertionIDRequestTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $assertionIDRequest = AssertionIDRequest::fromXML($this->xmlRepresentation->documentElement);
+        $assertionIDRequest = AssertionIDRequest::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($assertionIDRequest),
         );
     }
