@@ -19,19 +19,16 @@ use SimpleSAML\Test\SAML2\AbstractControlledTimeTestCase;
  */
 class NotBeforeTest extends AbstractControlledTimeTestCase
 {
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private MockInterface $assertion;
+    /** @var \Mockery\MockInterface */
+    private static MockInterface $assertion;
 
 
     /**
      * @return void
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        parent::setUp();
-        $this->assertion = Mockery::mock(Assertion::class);
+        self::$assertion = Mockery::mock(Assertion::class);
     }
 
 
@@ -42,12 +39,12 @@ class NotBeforeTest extends AbstractControlledTimeTestCase
      */
     public function timestamp_in_the_future_beyond_graceperiod_is_not_valid(): void
     {
-        $this->assertion->shouldReceive('getNotBefore')->andReturn($this->currentTime + 61);
+        self::$assertion->shouldReceive('getNotBefore')->andReturn($this->currentTime + 61);
 
         $validator = new NotBefore();
         $result    = new Result();
 
-        $validator->validate($this->assertion, $result);
+        $validator->validate(self::$assertion, $result);
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
@@ -61,12 +58,12 @@ class NotBeforeTest extends AbstractControlledTimeTestCase
      */
     public function time_within_graceperiod_is_valid(): void
     {
-        $this->assertion->shouldReceive('getNotBefore')->andReturn($this->currentTime + 60);
+        self::$assertion->shouldReceive('getNotBefore')->andReturn($this->currentTime + 60);
 
         $validator = new NotBefore();
         $result    = new Result();
 
-        $validator->validate($this->assertion, $result);
+        $validator->validate(self::$assertion, $result);
 
         $this->assertTrue($result->isValid());
     }
@@ -79,12 +76,12 @@ class NotBeforeTest extends AbstractControlledTimeTestCase
      */
     public function current_time_is_valid(): void
     {
-        $this->assertion->shouldReceive('getNotBefore')->andReturn($this->currentTime);
+        self::$assertion->shouldReceive('getNotBefore')->andReturn($this->currentTime);
 
         $validator = new NotBefore();
         $result    = new Result();
 
-        $validator->validate($this->assertion, $result);
+        $validator->validate(self::$assertion, $result);
 
         $this->assertTrue($result->isValid());
     }

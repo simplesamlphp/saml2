@@ -36,37 +36,37 @@ final class DiscoveryResponseTest extends TestCase
     use SerializableElementTestTrait;
 
     /** @var \SimpleSAML\XML\Chunk */
-    protected Chunk $ext;
+    protected static Chunk $ext;
 
     /** @var \SimpleSAML\XML\Attribute */
-    protected XMLAttribute $attr;
+    protected static XMLAttribute $attr;
 
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-idp-discovery.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-idp-discovery.xsd';
 
-        $this->testedClass = DiscoveryResponse::class;
+        self::$testedClass = DiscoveryResponse::class;
 
-        $this->attr = new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'attr1', 'testval1');
+        self::$attr = new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'attr1', 'testval1');
 
-        $this->ext = new Chunk(DOMDocumentFactory::fromString(
+        self::$ext = new Chunk(DOMDocumentFactory::fromString(
             '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>'
         )->documentElement);
 
-        $this->arrayRepresentation = [
+        self::$arrayRepresentation = [
             'index' => 1,
             'Binding' => C::BINDING_HTTP_POST,
             'Location' => 'https://whatever/',
             'isDefault' => true,
             //'ResponseLocation' => null,
-            'Extensions' => [$this->ext],
-            'attributes' => [$this->attr->toArray()],
+            'Extensions' => [self::$ext],
+            'attributes' => [self::$attr->toArray()],
         ];
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/idpdisc_DiscoveryResponse.xml',
         );
     }
@@ -86,12 +86,12 @@ final class DiscoveryResponseTest extends TestCase
             'https://simplesamlphp.org/some/endpoint',
             false,
             null,
-            [$this->attr],
-            [$this->ext],
+            [self::$attr],
+            [self::$ext],
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($discoResponse),
         );
     }
@@ -124,10 +124,10 @@ final class DiscoveryResponseTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $discoResponse = DiscoveryResponse::fromXML($this->xmlRepresentation->documentElement);
+        $discoResponse = DiscoveryResponse::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($discoResponse),
         );
     }
@@ -138,15 +138,17 @@ final class DiscoveryResponseTest extends TestCase
      */
     public function testUnmarshallingWithResponseLocation(): void
     {
+        $doc = clone self::$xmlRepresentation->documentElement;
+        $doc->setAttribute('ResponseLocation', 'https://response.location/');
+
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for idpdisc:DiscoveryResponse.',
         );
-        $this->xmlRepresentation->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
 
-        DiscoveryResponse::fromXML($this->xmlRepresentation->documentElement);
+        DiscoveryResponse::fromXML($doc);
         DiscoveryResponse::fromArray(array_merge(
-            $this->arrayRepresentation,
+            self::$arrayRepresentation,
             ['ResponseLocation', 'https://response.location'],
         ));
     }

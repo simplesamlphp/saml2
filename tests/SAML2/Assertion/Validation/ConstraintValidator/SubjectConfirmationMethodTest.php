@@ -12,18 +12,16 @@ use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 
 class SubjectConfirmationMethodTest extends TestCase
 {
-    /**
-     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation
-     */
-    private SubjectConfirmation $subjectConfirmation;
+    /** @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation */
+    private static SubjectConfirmation $subjectConfirmation;
 
 
     /**
      * @return void
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->subjectConfirmation = new SubjectConfirmation();
+        self::$subjectConfirmation = new SubjectConfirmation();
     }
 
 
@@ -34,12 +32,12 @@ class SubjectConfirmationMethodTest extends TestCase
      */
     public function a_subject_confirmation_with_bearer_method_is_valid(): void
     {
-        $this->subjectConfirmation->setMethod(C::CM_BEARER);
+        self::$subjectConfirmation->setMethod(C::CM_BEARER);
 
         $validator = new SubjectConfirmationMethod();
         $result = new Result();
 
-        $validator->validate($this->subjectConfirmation, $result);
+        $validator->validate(self::$subjectConfirmation, $result);
 
         $this->assertTrue($result->isValid());
     }
@@ -52,12 +50,12 @@ class SubjectConfirmationMethodTest extends TestCase
      */
     public function a_subject_confirmation_with_holder_of_key_method_is_not_valid(): void
     {
-        $this->subjectConfirmation->setMethod(C::CM_HOK);
+        self::$subjectConfirmation->setMethod(C::CM_HOK);
 
         $validator = new SubjectConfirmationMethod();
         $result    = new Result();
 
-        $validator->validate($this->subjectConfirmation, $result);
+        $validator->validate(self::$subjectConfirmation, $result);
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());

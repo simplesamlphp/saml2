@@ -34,13 +34,13 @@ final class KeyDescriptorTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = KeyDescriptor::class;
+        self::$testedClass = KeyDescriptor::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_KeyDescriptor.xml',
         );
     }
@@ -61,7 +61,7 @@ final class KeyDescriptorTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($kd),
         );
     }
@@ -114,10 +114,10 @@ XML
      */
     public function testUnmarshalling(): void
     {
-        $kd = KeyDescriptor::fromXML($this->xmlRepresentation->documentElement);
+        $kd = KeyDescriptor::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($kd),
         );
     }
@@ -128,12 +128,13 @@ XML
      */
     public function testUnmarshallingWithWrongUse(): void
     {
-        $this->xmlRepresentation->documentElement->setAttribute('use', 'wrong');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttribute('use', 'wrong');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".');
 
-        KeyDescriptor::fromXML($this->xmlRepresentation->documentElement);
+        KeyDescriptor::fromXML($xmlRepresentation->documentElement);
     }
 
 

@@ -21,18 +21,15 @@ use SimpleSAML\Test\SAML2\AbstractControlledTimeTestCase;
  */
 final class SessionNotOnOrAfterTest extends AbstractControlledTimeTestCase
 {
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private $assertion;
+    /** @var \Mockery\MockInterface */
+    private static $assertion;
 
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        parent::setUp();
-        $this->assertion = Mockery::mock(Assertion::class);
+        self::$assertion = Mockery::mock(Assertion::class);
     }
 
 
@@ -42,12 +39,12 @@ final class SessionNotOnOrAfterTest extends AbstractControlledTimeTestCase
      */
     public function timestampInThePastBeforeGraceperiodIsNotValid(): void
     {
-        $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime - 60);
+        self::$assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime - 60);
 
         $validator = new SessionNotOnOrAfter();
         $result    = new Result();
 
-        $validator->validate($this->assertion, $result);
+        $validator->validate(self::$assertion, $result);
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
@@ -60,12 +57,12 @@ final class SessionNotOnOrAfterTest extends AbstractControlledTimeTestCase
      */
     public function timeWithinGraceperiodIsValid(): void
     {
-        $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime - 59);
+        self::$assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime - 59);
 
         $validator = new SessionNotOnOrAfter();
         $result    = new Result();
 
-        $validator->validate($this->assertion, $result);
+        $validator->validate(self::$assertion, $result);
 
         $this->assertTrue($result->isValid());
     }
@@ -77,12 +74,12 @@ final class SessionNotOnOrAfterTest extends AbstractControlledTimeTestCase
      */
     public function currentTimeIsValid(): void
     {
-        $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime);
+        self::$assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime);
 
         $validator = new SessionNotOnOrAfter();
         $result    = new Result();
 
-        $validator->validate($this->assertion, $result);
+        $validator->validate(self::$assertion, $result);
 
         $this->assertTrue($result->isValid());
     }

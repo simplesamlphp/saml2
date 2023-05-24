@@ -18,25 +18,20 @@ use SimpleSAML\SAML2\Configuration\ServiceProvider;
  */
 class SpIsValidAudienceTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private MockInterface $assertion;
+    /** @var \Mockery\MockInterface */
+    private static MockInterface $assertion;
 
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private MockInterface $serviceProvider;
+    /** @var \Mockery\MockInterface */
+    private static MockInterface $serviceProvider;
 
 
     /**
      * @return void
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        parent::setUp();
-        $this->assertion = Mockery::mock(Assertion::class);
-        $this->serviceProvider = Mockery::mock(ServiceProvider::class);
+        self::$assertion = Mockery::mock(Assertion::class);
+        self::$serviceProvider = Mockery::mock(ServiceProvider::class);
     }
 
 
@@ -47,14 +42,14 @@ class SpIsValidAudienceTest extends MockeryTestCase
      */
     public function when_no_valid_audiences_are_given_the_assertion_is_valid(): void
     {
-        $this->assertion->shouldReceive('getValidAudiences')->andReturn([]);
-        $this->serviceProvider->shouldReceive('getEntityId')->andReturn('entityId');
+        self::$assertion->shouldReceive('getValidAudiences')->andReturn([]);
+        self::$serviceProvider->shouldReceive('getEntityId')->andReturn('entityId');
 
         $validator = new SpIsValidAudience();
-        $validator->setServiceProvider($this->serviceProvider);
+        $validator->setServiceProvider(self::$serviceProvider);
         $result    = new Result();
 
-        $validator->validate($this->assertion, $result);
+        $validator->validate(self::$assertion, $result);
 
         $this->assertTrue($result->isValid());
     }
@@ -67,14 +62,14 @@ class SpIsValidAudienceTest extends MockeryTestCase
      */
     public function if_the_sp_entity_id_is_not_in_the_valid_audiences_the_assertion_is_invalid(): void
     {
-        $this->assertion->shouldReceive('getValidAudiences')->andReturn(['someEntityId']);
-        $this->serviceProvider->shouldReceive('getEntityId')->andReturn('anotherEntityId');
+        self::$assertion->shouldReceive('getValidAudiences')->andReturn(['someEntityId']);
+        self::$serviceProvider->shouldReceive('getEntityId')->andReturn('anotherEntityId');
 
         $validator = new SpIsValidAudience();
-        $validator->setServiceProvider($this->serviceProvider);
+        $validator->setServiceProvider(self::$serviceProvider);
         $result    = new Result();
 
-        $validator->validate($this->assertion, $result);
+        $validator->validate(self::$assertion, $result);
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
@@ -88,14 +83,14 @@ class SpIsValidAudienceTest extends MockeryTestCase
      */
     public function the_assertion_is_valid_when_the_current_sp_entity_id_is_a_valid_audience(): void
     {
-        $this->assertion->shouldReceive('getValidAudiences')->andReturn(['foo', 'bar', 'validEntityId', 'baz']);
-        $this->serviceProvider->shouldReceive('getEntityId')->andReturn('validEntityId');
+        self::$assertion->shouldReceive('getValidAudiences')->andReturn(['foo', 'bar', 'validEntityId', 'baz']);
+        self::$serviceProvider->shouldReceive('getEntityId')->andReturn('validEntityId');
 
         $validator = new SpIsValidAudience();
-        $validator->setServiceProvider($this->serviceProvider);
+        $validator->setServiceProvider(self::$serviceProvider);
         $result    = new Result();
 
-        $validator->validate($this->assertion, $result);
+        $validator->validate(self::$assertion, $result);
 
         $this->assertTrue($result->isValid());
     }

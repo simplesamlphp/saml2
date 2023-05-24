@@ -37,17 +37,17 @@ final class PublicationPathTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
 
-        $this->testedClass = PublicationPath::class;
+        self::$testedClass = PublicationPath::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/mdrpi_PublicationPath.xml',
         );
 
-        $this->arrayRepresentation = [
+        self::$arrayRepresentation = [
             [
                 'publisher' => 'SomePublisher',
                 'creationInstant' => '2011-01-01T00:00:00Z',
@@ -72,7 +72,7 @@ final class PublicationPathTest extends TestCase
         ]);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($publicationPath),
         );
     }
@@ -97,10 +97,10 @@ final class PublicationPathTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $publicationPath = PublicationPath::fromXML($this->xmlRepresentation->documentElement);
+        $publicationPath = PublicationPath::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($publicationPath),
         );
     }

@@ -35,27 +35,23 @@ final class AttributeConsumingServiceTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+    /** @var \SimpleSAML\SAML2\XML\md\RequestedAttribute */
+    private static RequestedAttribute $requestedAttribute;
+
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = AttributeConsumingService::class;
+        self::$testedClass = AttributeConsumingService::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_AttributeConsumingService.xml',
         );
-    }
 
-
-    /**
-     * @return RequestedAttribute
-     */
-    protected function getRequestedAttribute(): RequestedAttribute
-    {
-        return new RequestedAttribute(
+        self::$requestedAttribute = new RequestedAttribute(
             Name: 'urn:oid:1.3.6.1.4.1.5923.1.1.1.7',
             NameFormat: 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
             FriendlyName: 'eduPersonEntitlement',
@@ -75,13 +71,13 @@ final class AttributeConsumingServiceTest extends TestCase
         $acs = new AttributeConsumingService(
             2,
             [new ServiceName('en', 'Academic Journals R US')],
-            [$this->getRequestedAttribute()],
+            [self::$requestedAttribute],
             true,
             [new ServiceDescription('en', 'Academic Journals R US and only us')],
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($acs),
         );
     }
@@ -95,11 +91,12 @@ final class AttributeConsumingServiceTest extends TestCase
         $acs = new AttributeConsumingService(
             2,
             [new ServiceName('en', 'Academic Journals R US')],
-            [$this->getRequestedAttribute()],
+            [self::$requestedAttribute],
             false,
         );
 
-        $descr = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $descr = $xmlRepresentation->documentElement->getElementsByTagNameNS(
             C::NS_MD,
             'ServiceDescription',
         );
@@ -111,11 +108,11 @@ final class AttributeConsumingServiceTest extends TestCase
         $space = $descr->item(0)->previousSibling;
 
         /** @psalm-suppress PossiblyNullArgument */
-        $this->xmlRepresentation->documentElement->removeChild($descr->item(0));
-        $this->xmlRepresentation->documentElement->removeChild($space);
-        $this->xmlRepresentation->documentElement->setAttribute('isDefault', 'false');
+        $xmlRepresentation->documentElement->removeChild($descr->item(0));
+        $xmlRepresentation->documentElement->removeChild($space);
+        $xmlRepresentation->documentElement->setAttribute('isDefault', 'false');
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            $xmlRepresentation->saveXML($xmlRepresentation->documentElement),
             strval($acs),
         );
     }
@@ -129,12 +126,13 @@ final class AttributeConsumingServiceTest extends TestCase
         $acs = new AttributeConsumingService(
             index: 2,
             serviceName: [new ServiceName('en', 'Academic Journals R US')],
-            requestedAttribute: [$this->getRequestedAttribute()],
+            requestedAttribute: [self::$requestedAttribute],
             serviceDescription: [new ServiceDescription('en', 'Academic Journals R US and only us')],
         );
-        $this->xmlRepresentation->documentElement->removeAttribute('isDefault');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->removeAttribute('isDefault');
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            $xmlRepresentation->saveXML($xmlRepresentation->documentElement),
             strval($acs),
         );
     }
@@ -150,7 +148,7 @@ final class AttributeConsumingServiceTest extends TestCase
         new AttributeConsumingService(
             2,
             [],
-            [$this->getRequestedAttribute()],
+            [self::$requestedAttribute],
         );
     }
 
@@ -178,10 +176,10 @@ final class AttributeConsumingServiceTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $acs = AttributeConsumingService::fromXML($this->xmlRepresentation->documentElement);
+        $acs = AttributeConsumingService::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($acs),
         );
     }
@@ -192,10 +190,11 @@ final class AttributeConsumingServiceTest extends TestCase
      */
     public function testUnmarshallingWithoutIndex(): void
     {
-        $this->xmlRepresentation->documentElement->removeAttribute('index');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->removeAttribute('index');
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing \'index\' attribute on md:AttributeConsumingService.');
-        AttributeConsumingService::fromXML($this->xmlRepresentation->documentElement);
+        AttributeConsumingService::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -204,8 +203,9 @@ final class AttributeConsumingServiceTest extends TestCase
      */
     public function testUnmarshallingWithoutIsDefault(): void
     {
-        $this->xmlRepresentation->documentElement->removeAttribute('isDefault');
-        $acs = AttributeConsumingService::fromXML($this->xmlRepresentation->documentElement);
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->removeAttribute('isDefault');
+        $acs = AttributeConsumingService::fromXML($xmlRepresentation->documentElement);
         $this->assertNull($acs->getIsDefault());
     }
 
@@ -215,10 +215,11 @@ final class AttributeConsumingServiceTest extends TestCase
      */
     public function testUnmarshallingWithWrongIsDefault(): void
     {
-        $this->xmlRepresentation->documentElement->setAttribute('isDefault', 'xxx');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttribute('isDefault', 'xxx');
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage("The 'isDefault' attribute of md:AttributeConsumingService must be a boolean.");
-        AttributeConsumingService::fromXML($this->xmlRepresentation->documentElement);
+        AttributeConsumingService::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -227,10 +228,11 @@ final class AttributeConsumingServiceTest extends TestCase
      */
     public function testUnmarshallingWithNonNumericIndex(): void
     {
-        $this->xmlRepresentation->documentElement->setAttribute('index', 'x');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttribute('index', 'x');
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('The \'index\' attribute of md:AttributeConsumingService must be numerical.');
-        AttributeConsumingService::fromXML($this->xmlRepresentation->documentElement);
+        AttributeConsumingService::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -239,12 +241,13 @@ final class AttributeConsumingServiceTest extends TestCase
      */
     public function testUnmarshallingWithoutServiceName(): void
     {
-        $name = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(C::NS_MD, 'ServiceName');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $name = $xmlRepresentation->documentElement->getElementsByTagNameNS(C::NS_MD, 'ServiceName');
         /** @psalm-suppress PossiblyNullArgument */
-        $this->xmlRepresentation->documentElement->removeChild($name->item(0));
+        $xmlRepresentation->documentElement->removeChild($name->item(0));
         $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage('Missing at least one ServiceName in AttributeConsumingService.');
-        AttributeConsumingService::fromXML($this->xmlRepresentation->documentElement);
+        AttributeConsumingService::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -253,14 +256,15 @@ final class AttributeConsumingServiceTest extends TestCase
      */
     public function testUnmarshallingWithoutRequestedAttributes(): void
     {
-        $reqAttr = $this->xmlRepresentation->documentElement->getElementsByTagNameNS(
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $reqAttr = $xmlRepresentation->documentElement->getElementsByTagNameNS(
             C::NS_MD,
             'RequestedAttribute',
         );
         /** @psalm-suppress PossiblyNullArgument */
-        $this->xmlRepresentation->documentElement->removeChild($reqAttr->item(0));
+        $xmlRepresentation->documentElement->removeChild($reqAttr->item(0));
         $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage('Missing at least one RequestedAttribute in AttributeConsumingService.');
-        AttributeConsumingService::fromXML($this->xmlRepresentation->documentElement);
+        AttributeConsumingService::fromXML($xmlRepresentation->documentElement);
     }
 }

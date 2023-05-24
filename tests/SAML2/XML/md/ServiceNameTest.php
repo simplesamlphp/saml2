@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\ServiceName;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
@@ -27,27 +28,24 @@ use function strval;
  */
 final class ServiceNameTest extends TestCase
 {
+    use ArrayizableElementTestTrait;
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
 
-    /** @var array */
-    protected array $arrayDocument;
-
-
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = ServiceName::class;
+        self::$testedClass = ServiceName::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_ServiceName.xml',
         );
 
-        $this->arrayDocument = ['en' => 'Academic Journals R US'];
+        self::$arrayRepresentation = ['en' => 'Academic Journals R US'];
     }
 
 
@@ -62,7 +60,7 @@ final class ServiceNameTest extends TestCase
         $name = new ServiceName('en', 'Academic Journals R US');
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
     }
@@ -88,10 +86,10 @@ final class ServiceNameTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $name = ServiceName::fromXML($this->xmlRepresentation->documentElement);
+        $name = ServiceName::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
     }
@@ -102,12 +100,13 @@ final class ServiceNameTest extends TestCase
      */
     public function testUnmarshallingWithoutLang(): void
     {
-        $this->xmlRepresentation->documentElement->removeAttributeNS(C::NS_XML, 'lang');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->removeAttributeNS(C::NS_XML, 'lang');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Missing xml:lang from ServiceName');
 
-        ServiceName::fromXML($this->xmlRepresentation->documentElement);
+        ServiceName::fromXML($xmlRepresentation->documentElement);
     }
 
 
@@ -116,11 +115,12 @@ final class ServiceNameTest extends TestCase
      */
     public function testUnmarshallingWithEmptyLang(): void
     {
-        $this->xmlRepresentation->documentElement->setAttributeNS(C::NS_XML, 'lang', '');
+        $xmlRepresentation = clone self::$xmlRepresentation;
+        $xmlRepresentation->documentElement->setAttributeNS(C::NS_XML, 'lang', '');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('xml:lang cannot be empty.');
 
-        ServiceName::fromXML($this->xmlRepresentation->documentElement);
+        ServiceName::fromXML($xmlRepresentation->documentElement);
     }
 }

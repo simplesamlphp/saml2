@@ -104,4 +104,13 @@ class MockContainer extends AbstractContainer
         file_put_contents($filename, $data);
         chmod($filename, $mode);
     }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function setBlacklistedAlgorithms(?array $algos): void
+    {
+        $this->blacklistedEncryptionAlgorithms = [];
+    }
 }

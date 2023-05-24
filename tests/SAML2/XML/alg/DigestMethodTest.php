@@ -34,14 +34,14 @@ final class DigestMethodTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5)
+        self::$schemaFile = dirname(__FILE__, 5)
             . '/resources/schemas/sstc-saml-metadata-algsupport-v1.0.xsd';
 
-        $this->testedClass = DigestMethod::class;
+        self::$testedClass = DigestMethod::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/alg_DigestMethod.xml'
         );
     }
@@ -61,7 +61,7 @@ final class DigestMethodTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($digestMethod),
         );
     }
@@ -71,10 +71,10 @@ final class DigestMethodTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $digestMethod = DigestMethod::fromXML($this->xmlRepresentation->documentElement);
+        $digestMethod = DigestMethod::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($digestMethod),
         );
     }
@@ -84,7 +84,7 @@ final class DigestMethodTest extends TestCase
      */
     public function testUnmarshallingMissingAlgorithmThrowsException(): void
     {
-        $document = $this->xmlRepresentation->documentElement;
+        $document = clone self::$xmlRepresentation->documentElement;
         $document->removeAttribute('Algorithm');
 
         $this->expectException(MissingAttributeException::class);

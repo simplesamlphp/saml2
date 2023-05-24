@@ -15,26 +15,21 @@ use SimpleSAML\SAML2\XML\saml\SubjectConfirmationMatches;
 
 class SubjectConfirmationRecipientMathchesTest extends TestCase
 {
-    /**
-     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation
-     */
-    private SubjectConfirmation $subjectConfirmation;
+    /** @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation */
+    private static SubjectConfirmation $subjectConfirmation;
 
-    /**
-     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData
-     */
-    private SubjectConfirmationData $subjectConfirmationData;
+    /** @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData */
+    private static SubjectConfirmationData $subjectConfirmationData;
 
 
     /**
      * @return void
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        parent::setUp();
-        $this->subjectConfirmation = new SubjectConfirmation();
-        $this->subjectConfirmationData = new SubjectConfirmationData();
-        $this->subjectConfirmation->setSubjectConfirmationData($this->subjectConfirmationData);
+        self::$subjectConfirmation = new SubjectConfirmation();
+        self::$subjectConfirmationData = new SubjectConfirmationData();
+        self::$subjectConfirmation->setSubjectConfirmationData(self::$subjectConfirmationData);
     }
 
 
@@ -45,14 +40,14 @@ class SubjectConfirmationRecipientMathchesTest extends TestCase
      */
     public function when_the_subject_confirmation_recipient_differs_from_the_destination_the_sc_is_invalid(): void
     {
-        $this->subjectConfirmation->getSubjectConfirmationData()->setRecipient('someDestination');
+        self::$subjectConfirmation->getSubjectConfirmationData()->setRecipient('someDestination');
 
         $validator = new SubjectConfirmationRecipientMatches(
             new Destination('anotherDestination')
         );
         $result = new Result();
 
-        $validator->validate($this->subjectConfirmation, $result);
+        $validator->validate(self::$subjectConfirmation, $result);
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
@@ -66,14 +61,14 @@ class SubjectConfirmationRecipientMathchesTest extends TestCase
      */
     public function when_the_subject_confirmation_recipient_equals_the_destination_the_sc_is_invalid(): void
     {
-        $this->subjectConfirmation->getSubjectConfirmationData()->setRecipient('theSameDestination');
+        self::$subjectConfirmation->getSubjectConfirmationData()->setRecipient('theSameDestination');
 
         $validator = new SubjectConfirmationRecipientMatches(
             new Destination('theSameDestination')
         );
         $result = new Result();
 
-        $validator->validate($this->subjectConfirmation, $result);
+        $validator->validate(self::$subjectConfirmation, $result);
 
         $this->assertTrue($result->isValid());
     }

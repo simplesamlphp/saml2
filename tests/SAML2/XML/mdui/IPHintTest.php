@@ -29,13 +29,13 @@ final class IPHintTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
 
-        $this->testedClass = IPHint::class;
+        self::$testedClass = IPHint::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/mdui_IPHint.xml',
         );
     }
@@ -52,7 +52,7 @@ final class IPHintTest extends TestCase
         $hint = new IPHint('130.59.0.0/16');
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($hint),
         );
     }
@@ -66,10 +66,10 @@ final class IPHintTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $hint = IPHint::fromXML($this->xmlRepresentation->documentElement);
+        $hint = IPHint::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($hint),
         );
     }

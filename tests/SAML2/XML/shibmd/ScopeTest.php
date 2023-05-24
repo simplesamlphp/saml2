@@ -30,13 +30,13 @@ final class ScopeTest extends TestCase
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-shibmd-v1.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-shibmd-v1.0.xsd';
 
-        $this->testedClass = Scope::class;
+        self::$testedClass = Scope::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/shibmd_Scope.xml',
         );
     }
@@ -50,7 +50,7 @@ final class ScopeTest extends TestCase
         $scope = new Scope("example.org", false);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($scope),
         );
     }
@@ -106,7 +106,7 @@ final class ScopeTest extends TestCase
      */
     public function testUnmarshallingLiteral(): void
     {
-        $scope = Scope::fromXML($this->xmlRepresentation->documentElement);
+        $scope = Scope::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals('example.org', $scope->getContent());
         $this->assertFalse($scope->isRegexpScope());
@@ -119,7 +119,7 @@ final class ScopeTest extends TestCase
      */
     public function testUnmarshallingWithoutRegexpValue(): void
     {
-        $scope = Scope::fromXML($this->xmlRepresentation->documentElement);
+        $scope = Scope::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals('example.org', $scope->getContent());
         $this->assertFalse($scope->isRegexpScope());
@@ -131,7 +131,7 @@ final class ScopeTest extends TestCase
      */
     public function testUnmarshallingRegexp(): void
     {
-        $document = $this->xmlRepresentation;
+        $document = clone self::$xmlRepresentation;
         $document->documentElement->setAttribute('regexp', 'true');
         $document->documentElement->textContent = '^(.*|)example.edu$';
 

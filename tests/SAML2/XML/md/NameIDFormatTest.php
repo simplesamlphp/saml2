@@ -32,13 +32,13 @@ final class NameIDFormatTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = NameIDFormat::class;
+        self::$testedClass = NameIDFormat::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_NameIDFormat.xml',
         );
     }
@@ -54,7 +54,7 @@ final class NameIDFormatTest extends TestCase
         $nameIdFormat = new NameIDFormat(C::NAMEID_PERSISTENT);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($nameIdFormat),
         );
     }
@@ -67,10 +67,10 @@ final class NameIDFormatTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $nameIdFormat = NameIDFormat::fromXML($this->xmlRepresentation->documentElement);
+        $nameIdFormat = NameIDFormat::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($nameIdFormat),
         );
     }

@@ -7,8 +7,10 @@ namespace SimpleSAML\Test\SAML2;
 use Exception;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\HTTPRedirect;
 use SimpleSAML\SAML2\AuthnRequest;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
+use SimpleSAML\SAML2\HTTPRedirect;
 use SimpleSAML\SAML2\Request;
 use SimpleSAML\SAML2\Response;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -18,6 +20,16 @@ use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 class HTTPRedirectTest extends TestCase
 {
+    /**
+     */
+    public static function setUpBeforeClass(): void
+    {
+        $container = new MockContainer();
+        $container->setBlacklistedAlgorithms([]);
+        ContainerSingleton::setContainer($container);
+    }
+
+
     /**
      * test parsing of basic query string with authnrequest and
      * verify that the correct issuer is found.

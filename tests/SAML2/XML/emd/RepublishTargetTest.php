@@ -28,11 +28,11 @@ final class RepublishTargetTest extends TestCase
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->testedClass = RepublishTarget::class;
+        self::$testedClass = RepublishTarget::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/emd_RepublishTarget.xml',
         );
     }
@@ -46,7 +46,7 @@ final class RepublishTargetTest extends TestCase
         $republishTarget = new RepublishTarget('http://edugain.org/');
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($republishTarget),
         );
     }
@@ -70,7 +70,7 @@ final class RepublishTargetTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $republishTarget = RepublishTarget::fromXML($this->xmlRepresentation->documentElement);
+        $republishTarget = RepublishTarget::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals('http://edugain.org/', $republishTarget->getContent());
     }

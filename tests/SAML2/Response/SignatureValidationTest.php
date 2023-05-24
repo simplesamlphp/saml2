@@ -20,6 +20,7 @@ use SimpleSAML\SAML2\Response\Processor as ResponseProcessor;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\Utilities\Certificate;
 use SimpleSAML\Test\SAML2\CertificatesMock;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 use function preg_match;
 
@@ -49,7 +50,6 @@ class SignatureValidationTest extends MockeryTestCase
     private MockInterface $assertionProcessor;
 
     /**
-     * @var string
      */
     private string $currentDestination =
         'http://moodle.bridge.feide.no/simplesaml/saml2/sp/AssertionConsumerService.php';
@@ -60,7 +60,7 @@ class SignatureValidationTest extends MockeryTestCase
      * is created via a static ::build() method we have to mock that, and have to run the tests in separate processes
      * @return void
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->assertionProcessorBuilder = Mockery::mock('alias:SimpleSAML\SAML2\Assertion\ProcessorBuilder');
         $this->assertionProcessor = Mockery::mock(AssertionProcessor::class);
@@ -98,7 +98,7 @@ class SignatureValidationTest extends MockeryTestCase
             $this->serviceProviderConfiguration,
             $this->identityProviderConfiguration,
             new Destination($this->currentDestination),
-            $this->getUnsignedResponseWithSignedAssertion()
+            $this->getUnsignedResponseWithSignedAssertion(),
         );
     }
 
@@ -122,7 +122,7 @@ class SignatureValidationTest extends MockeryTestCase
             $this->serviceProviderConfiguration,
             $this->identityProviderConfiguration,
             new Destination($this->currentDestination),
-            $this->getSignedResponseWithUnsignedAssertion()
+            $this->getSignedResponseWithUnsignedAssertion(),
         );
     }
 
@@ -146,7 +146,7 @@ class SignatureValidationTest extends MockeryTestCase
             $this->serviceProviderConfiguration,
             $this->identityProviderConfiguration,
             new Destination($this->currentDestination),
-            $this->getSignedResponseWithSignedAssertion()
+            $this->getSignedResponseWithSignedAssertion(),
         );
     }
 
@@ -176,7 +176,7 @@ class SignatureValidationTest extends MockeryTestCase
             $this->serviceProviderConfiguration,
             $this->identityProviderConfiguration,
             new Destination($this->currentDestination),
-            $this->getUnsignedResponseWithUnsignedAssertion()
+            $this->getUnsignedResponseWithUnsignedAssertion(),
         );
     }
 

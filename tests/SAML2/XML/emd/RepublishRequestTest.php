@@ -32,17 +32,17 @@ final class RepublishRequestTest extends TestCase
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/eduidmd.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/eduidmd.xsd';
 
-        $this->testedClass = RepublishRequest::class;
+        self::$testedClass = RepublishRequest::class;
 
-        $this->arrayRepresentation = [
+        self::$arrayRepresentation = [
             'RepublishTarget' => 'http://edugain.org/',
         ];
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/emd_RepublishRequest.xml',
         );
     }
@@ -58,7 +58,7 @@ final class RepublishRequestTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($republishRequest),
         );
     }
@@ -69,10 +69,10 @@ final class RepublishRequestTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $republishRequest = RepublishRequest::fromXML($this->xmlRepresentation->documentElement);
+        $republishRequest = RepublishRequest::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($republishRequest),
         );
     }

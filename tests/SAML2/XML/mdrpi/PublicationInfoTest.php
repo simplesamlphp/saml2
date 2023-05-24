@@ -36,17 +36,17 @@ final class PublicationInfoTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
 
-        $this->testedClass = PublicationInfo::class;
+        self::$testedClass = PublicationInfo::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/mdrpi_PublicationInfo.xml'
         );
 
-        $this->arrayRepresentation = [
+        self::$arrayRepresentation = [
             'publisher' => 'SomePublisher',
             'creationInstant' => '2011-01-01T00:00:00Z',
             'publicationId' => 'SomePublicationId',
@@ -70,7 +70,7 @@ final class PublicationInfoTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($publicationInfo),
         );
     }
@@ -80,10 +80,10 @@ final class PublicationInfoTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $publicationInfo = PublicationInfo::fromXML($this->xmlRepresentation->documentElement);
+        $publicationInfo = PublicationInfo::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($publicationInfo),
         );
     }
@@ -93,7 +93,7 @@ final class PublicationInfoTest extends TestCase
      */
     public function testCreationInstantTimezoneNotZuluThrowsException(): void
     {
-        $document = $this->xmlRepresentation->documentElement;
+        $document = clone self::$xmlRepresentation->documentElement;
         $document->setAttribute('creationInstant', '2011-01-01T00:00:00WT');
 
         $this->expectException(ProtocolViolationException::class);
@@ -124,7 +124,7 @@ XML
      */
     public function testMultipleUsagePoliciesWithSameLanguageThrowsException(): void
     {
-        $document = $this->xmlRepresentation;
+        $document = clone self::$xmlRepresentation;
 
         // Append another 'en' UsagePolicy to the document
         $x = new UsagePolicy('en', 'https://example.org');

@@ -34,17 +34,17 @@ final class DisplayNameTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
 
-        $this->testedClass = DisplayName::class;
+        self::$testedClass = DisplayName::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/mdui_DisplayName.xml',
         );
 
-        $this->arrayRepresentation = ['en' => 'University of Examples'];
+        self::$arrayRepresentation = ['en' => 'University of Examples'];
     }
 
 
@@ -59,7 +59,7 @@ final class DisplayNameTest extends TestCase
         $name = new DisplayName('en', 'University of Examples');
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
     }
@@ -73,10 +73,10 @@ final class DisplayNameTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $name = DisplayName::fromXML($this->xmlRepresentation->documentElement);
+        $name = DisplayName::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
     }

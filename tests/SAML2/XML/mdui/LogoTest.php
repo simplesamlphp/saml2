@@ -34,28 +34,28 @@ final class LogoTest extends TestCase
 
 
     /** @var string */
-    private string $data = <<<IMG
+    private const DATA = <<<IMG
 data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=
 IMG;
 
     /** @var string */
-    private string $url = 'https://static.example.org/images/logos/logo300x200.png';
+    private const URL = 'https://static.example.org/images/logos/logo300x200.png';
 
 
     /**
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
 
-        $this->testedClass = Logo::class;
+        self::$testedClass = Logo::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/mdui_Logo.xml',
         );
 
-        $this->arrayRepresentation = [
-            'url' => 'https://static.example.org/images/logos/logo300x200.png',
+        self::$arrayRepresentation = [
+            'url' => self::URL,
             'width' => 300,
             'height' => 200,
             'lang' => 'en',
@@ -68,10 +68,10 @@ IMG;
      */
     public function testMarshalling(): void
     {
-        $logo = new Logo($this->url, 200, 300, "nl");
+        $logo = new Logo(self::URL, 200, 300, "nl");
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($logo),
         );
     }
@@ -82,10 +82,10 @@ IMG;
      */
     public function testUnmarshalling(): void
     {
-        $logo = Logo::fromXML($this->xmlRepresentation->documentElement);
+        $logo = Logo::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($logo),
         );
     }
@@ -96,14 +96,14 @@ IMG;
      */
     public function testUnmarshallingWithoutLanguage(): void
     {
-        $xmlRepresentation = $this->xmlRepresentation->documentElement;
+        $xmlRepresentation = clone self::$xmlRepresentation->documentElement;
         $xmlRepresentation->removeAttribute('xml:lang');
 
         $logo = Logo::fromXML($xmlRepresentation);
         $this->assertNull($logo->getLanguage());
         $this->assertEquals(200, $logo->getHeight());
         $this->assertEquals(300, $logo->getWidth());
-        $this->assertEquals($this->url, $logo->getContent());
+        $this->assertEquals(self::URL, $logo->getContent());
         $this->assertEquals(
             $logo->toArray(),
             ['url' => $logo->getContent(), 'width' => $logo->getWidth(), 'height' => $logo->getHeight()],
@@ -116,15 +116,15 @@ IMG;
      */
     public function testUnmarshallingDataURL(): void
     {
-        $document = $this->xmlRepresentation;
-        $document->documentElement->textContent = $this->data;
+        $document = clone self::$xmlRepresentation;
+        $document->documentElement->textContent = self::DATA;
         $document->documentElement->setAttribute('height', '1');
         $document->documentElement->setAttribute('width', '1');
 
         $logo = Logo::fromXML($document->documentElement);
         $this->assertEquals(1, $logo->getHeight());
         $this->assertEquals(1, $logo->getWidth());
-        $this->assertEquals($this->data, $logo->getContent());
+        $this->assertEquals(self::DATA, $logo->getContent());
     }
 
 
@@ -133,7 +133,7 @@ IMG;
      */
     public function testUnmarshallingFailsEmptyURL(): void
     {
-        $document = $this->xmlRepresentation;
+        $document = clone self::$xmlRepresentation;
         $document->documentElement->textContent = '';
 
         $this->expectException(AssertionFailedException::class);
@@ -147,7 +147,7 @@ IMG;
      */
     public function testUnmarshallingFailsInvalidURL(): void
     {
-        $document = $this->xmlRepresentation;
+        $document = clone self::$xmlRepresentation;
         $document->documentElement->textContent = 'this is no url';
 
         $this->expectException(InvalidArgumentException::class);
@@ -161,7 +161,7 @@ IMG;
      */
     public function testUnmarshallingFailsMissingWidth(): void
     {
-        $document = $this->xmlRepresentation;
+        $document = clone self::$xmlRepresentation;
         $document->documentElement->removeAttribute('width');
 
         $this->expectException(MissingAttributeException::class);
@@ -175,7 +175,7 @@ IMG;
      */
     public function testUnmarshallingFailsMissingHeight(): void
     {
-        $document = $this->xmlRepresentation;
+        $document = clone self::$xmlRepresentation;
         $document->documentElement->removeAttribute('height');
 
         $this->expectException(MissingAttributeException::class);

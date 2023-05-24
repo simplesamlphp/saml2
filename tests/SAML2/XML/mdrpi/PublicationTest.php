@@ -35,17 +35,17 @@ final class PublicationTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
 
-        $this->testedClass = Publication::class;
+        self::$testedClass = Publication::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/mdrpi_Publication.xml',
         );
 
-        $this->arrayRepresentation = [
+        self::$arrayRepresentation = [
             'publisher' => 'SomePublisher',
             'creationInstant' => '2011-01-01T00:00:00Z',
             'publicationId' => 'SomePublicationId',
@@ -64,7 +64,7 @@ final class PublicationTest extends TestCase
         );
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($publication),
         );
     }
@@ -74,10 +74,10 @@ final class PublicationTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $publication = Publication::fromXML($this->xmlRepresentation->documentElement);
+        $publication = Publication::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($publication),
         );
     }
@@ -87,7 +87,7 @@ final class PublicationTest extends TestCase
      */
     public function testCreationInstantTimezoneNotZuluThrowsException(): void
     {
-        $document = $this->xmlRepresentation->documentElement;
+        $document = clone self::$xmlRepresentation->documentElement;
         $document->setAttribute('creationInstant', '2011-01-01T00:00:00WT');
 
         $this->expectException(ProtocolViolationException::class);

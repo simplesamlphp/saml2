@@ -34,17 +34,17 @@ final class OrganizationNameTest extends TestCase
 
     /**
      */
-    protected function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->schema = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
-        $this->testedClass = OrganizationName::class;
+        self::$testedClass = OrganizationName::class;
 
-        $this->xmlRepresentation = DOMDocumentFactory::fromFile(
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_OrganizationName.xml',
         );
 
-        $this->arrayRepresentation = ['en' => 'Identity Providers R US'];
+        self::$arrayRepresentation = ['en' => 'Identity Providers R US'];
     }
 
 
@@ -59,7 +59,7 @@ final class OrganizationNameTest extends TestCase
         $name = new OrganizationName('en', 'Identity Providers R US');
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
     }
@@ -73,10 +73,10 @@ final class OrganizationNameTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $name = OrganizationName::fromXML($this->xmlRepresentation->documentElement);
+        $name = OrganizationName::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
-            $this->xmlRepresentation->saveXML($this->xmlRepresentation->documentElement),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
     }

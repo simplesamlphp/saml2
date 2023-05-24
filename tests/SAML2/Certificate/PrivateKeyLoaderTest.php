@@ -11,18 +11,16 @@ use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
 
 class PrivateKeyLoaderTest extends TestCase
 {
-    /**
-     * @var \SimpleSAML\SAML2\Certificate\PrivateKeyLoader
-     */
-    private PrivateKeyLoader $privateKeyLoader;
+    /** @var \SimpleSAML\SAML2\Certificate\PrivateKeyLoader */
+    private static PrivateKeyLoader $privateKeyLoader;
 
 
     /**
      * @return void
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $this->privateKeyLoader = new PrivateKeyLoader();
+        self::$privateKeyLoader = new PrivateKeyLoader();
     }
 
 
@@ -37,7 +35,7 @@ class PrivateKeyLoaderTest extends TestCase
     public function loading_a_configured_private_key_returns_a_certificate_private_key(
         ConfPrivateKey $configuredKey
     ): void {
-        $resultingKey = $this->privateKeyLoader->loadPrivateKey($configuredKey);
+        $resultingKey = self::$privateKeyLoader->loadPrivateKey($configuredKey);
 
         $this->assertInstanceOf(PrivateKey::class, $resultingKey);
         $this->assertEquals($resultingKey->getKeyAsString(), "This would normally contain the private key data.\n");

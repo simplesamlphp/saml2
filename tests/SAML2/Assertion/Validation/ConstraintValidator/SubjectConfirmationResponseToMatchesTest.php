@@ -15,32 +15,32 @@ use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 
 class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
 {
-    /**
-     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation
-     */
-    private SubjectConfirmation $subjectConfirmation;
+    /** @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmation */
+    private static SubjectConfirmation $subjectConfirmation;
 
-    /**
-     * @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData
-     */
-    private SubjectConfirmationData $subjectConfirmationData;
+    /** @var \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData */
+    private static SubjectConfirmationData $subjectConfirmationData;
 
-    /**
-     * @var \Mockery\MockInterface
-     */
+    /** @var \Mockery\MockInterface */
     private MockInterface $response;
 
 
     /**
      * @return void
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        parent::setUp();
+        self::$subjectConfirmation = new SubjectConfirmation();
+        self::$subjectConfirmationData = new SubjectConfirmationData();
+        self::$subjectConfirmation->setSubjectConfirmationData(self::$subjectConfirmationData);
+    }
 
-        $this->subjectConfirmation = new SubjectConfirmation();
-        $this->subjectConfirmationData = new SubjectConfirmationData();
-        $this->subjectConfirmation->setSubjectConfirmationData($this->subjectConfirmationData);
+
+    /**
+     * @return void
+     */
+    protected function setUp(): void
+    {
         $this->response = Mockery::mock(Response::class);
     }
 
@@ -53,14 +53,14 @@ class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
     public function when_the_response_responseto_is_null_the_subject_confirmation_is_valid(): void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturnNull();
-        $this->subjectConfirmationData->setInResponseTo('someValue');
+        self::$subjectConfirmationData->setInResponseTo('someValue');
 
         $validator = new SubjectConfirmationResponseToMatches(
             $this->response
         );
         $result = new Result();
 
-        $validator->validate($this->subjectConfirmation, $result);
+        $validator->validate(self::$subjectConfirmation, $result);
 
         $this->assertTrue($result->isValid());
     }
@@ -74,14 +74,14 @@ class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
     public function when_the_subjectconfirmation_responseto_is_null_the_subjectconfirmation_is_valid(): void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturn('someValue');
-        $this->subjectConfirmationData->setInResponseTo(null);
+        self::$subjectConfirmationData->setInResponseTo(null);
 
         $validator = new SubjectConfirmationResponseToMatches(
             $this->response
         );
         $result = new Result();
 
-        $validator->validate($this->subjectConfirmation, $result);
+        $validator->validate(self::$subjectConfirmation, $result);
 
         $this->assertTrue($result->isValid());
     }
@@ -95,14 +95,14 @@ class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
     public function when_the_subjectconfirmation_and_response_responseto_are_null_the_subjectconfirmation_is_valid(): void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturnNull();
-        $this->subjectConfirmationData->setInResponseTo(null);
+        self::$subjectConfirmationData->setInResponseTo(null);
 
         $validator = new SubjectConfirmationResponseToMatches(
             $this->response
         );
         $result = new Result();
 
-        $validator->validate($this->subjectConfirmation, $result);
+        $validator->validate(self::$subjectConfirmation, $result);
 
         $this->assertTrue($result->isValid());
     }
@@ -116,14 +116,14 @@ class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
     public function when_the_subjectconfirmation_and_response_responseto_are_equal_the_subjectconfirmation_is_valid(): void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturn('theSameValue');
-        $this->subjectConfirmationData->setInResponseTo('theSameValue');
+        self::$subjectConfirmationData->setInResponseTo('theSameValue');
 
         $validator = new SubjectConfirmationResponseToMatches(
             $this->response
         );
         $result = new Result();
 
-        $validator->validate($this->subjectConfirmation, $result);
+        $validator->validate(self::$subjectConfirmation, $result);
 
         $this->assertTrue($result->isValid());
     }
@@ -137,14 +137,14 @@ class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
     public function when_the_subjectconfirmation_and_response_responseto_differ_the_subjectconfirmation_is_invalid(): void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturn('someValue');
-        $this->subjectConfirmationData->setInResponseTo('anotherValue');
+        self::$subjectConfirmationData->setInResponseTo('anotherValue');
 
         $validator = new SubjectConfirmationResponseToMatches(
             $this->response
         );
         $result = new Result();
 
-        $validator->validate($this->subjectConfirmation, $result);
+        $validator->validate(self::$subjectConfirmation, $result);
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
