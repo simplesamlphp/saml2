@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -30,6 +31,7 @@ use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Key\PublicKey;
@@ -44,6 +46,10 @@ use function getcwd;
  */
 final class NameIdDecryptionTransformerTest extends TestCase
 {
+    use ControlledTimeTestTrait {
+        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
+    }
+
     /** @var \DOMDocument */
     protected static DOMDocument $document;
 
@@ -77,13 +83,15 @@ final class NameIdDecryptionTransformerTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        self::parentSetUpBeforeClass();
+
         $container = ContainerSingleton::getInstance();
         $container->setBlacklistedAlgorithms(null);
 
         self::$logger = new NullLogger();
         self::$validator = new Validator(self::$logger);
         self::$destination = new Destination(C::ENTITY_SP);
-        self::$response = new Response(new Status(new StatusCode()));
+        self::$response = new Response(new Status(new StatusCode()), self::$currentTime);
 
         self::$identityProviderConfiguration = new IdentityProvider(['assertionEncryptionEnabled' => true]);
         $base = getcwd() . DIRECTORY_SEPARATOR . self::FRAMEWORK;
@@ -122,7 +130,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
         $assertion = new Assertion(
             issuer: new Issuer(C::ENTITY_IDP),
             id: '_45e42090d8cbbfa52d5a394b01049fc2221e274182',
-            issueInstant: 1582718682,
+            issueInstant: new DateTimeImmutable('2023-05-27T16:20:52Z'),
             subject: new Subject($encryptedId),
             statements: [
                 new AuthnStatement(
@@ -131,7 +139,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
                         null,
                         null,
                     ),
-                    1583415268,
+                    new DateTimeImmutable('2023-05-27T16:20:52Z'),
                 ),
             ],
         );

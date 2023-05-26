@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
@@ -29,6 +30,7 @@ use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
 use SimpleSAML\SAML2\XML\samlp\RequesterID;
 use SimpleSAML\SAML2\XML\samlp\Scoping;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -56,6 +58,9 @@ use function strval;
  */
 final class AuthnRequestTest extends TestCase
 {
+    use ControlledTimeTestTrait {
+        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
+    }
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
     use SignedElementTestTrait;
@@ -65,6 +70,8 @@ final class AuthnRequestTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        self::parentSetUpBeforeClass();
+
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
         self::$testedClass = AuthnRequest::class;
@@ -91,7 +98,7 @@ final class AuthnRequestTest extends TestCase
             subject: $subject,
             issuer: new Issuer('https://gateway.stepup.org/saml20/sp/metadata'),
             id: '_2b0226190ca1c22de6f66e85f5c95158',
-            issueInstant: 1411393320,
+            issueInstant: new DateTimeImmutable('2014-09-22T13:42:00Z'),
             destination: 'https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO',
         );
 
@@ -127,8 +134,8 @@ final class AuthnRequestTest extends TestCase
 
         // Create Conditions
         $conditions = new Conditions(
-            1405558878,
-            1705558908,
+            new DateTimeImmutable('1970-01-01T01:33:31Z'),
+            new DateTimeImmutable('1970-01-02T01:33:31Z'),
             [],
             [
                 new AudienceRestriction(
@@ -155,6 +162,7 @@ final class AuthnRequestTest extends TestCase
 
         $authnRequest = new AuthnRequest(
             requestedAuthnContext: $rac,
+            issueInstant: self::$currentTime,
             subject: $subject,
             nameIdPolicy: $nameIdPolicy,
             conditions: $conditions,
@@ -205,8 +213,7 @@ AUTHNREQUEST;
 
         $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
         $issuer = $authnRequest->getIssuer();
-        $expectedIssueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
-        $this->assertEquals($expectedIssueInstant, $authnRequest->getIssueInstant());
+        $this->assertEquals('2004-12-05T09:21:59Z', $authnRequest->getIssueInstant()->format(C::DATETIME_FORMAT));
         $this->assertEquals('https://idp.example.org/SAML2/SSO/Artifact', $authnRequest->getDestination());
         $this->assertEquals(C::BINDING_HTTP_ARTIFACT, $authnRequest->getProtocolBinding());
         $this->assertEquals(
@@ -322,7 +329,7 @@ AUTHNREQUEST;
     {
         // the Issuer
         $issuer = new Issuer('https://sp.example.org/saml20/sp/metadata');
-        $issueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
+        $issueInstant = new DateTimeImmutable('2004-12-05T09:21:59Z');
         $destination = 'https://idp.example.org/idp/profile/saml2/Redirect/SSO';
         $protocolBinding = C::BINDING_HTTP_POST;
         $assertionConsumerServiceIndex = 1;
@@ -346,7 +353,7 @@ AUTHNREQUEST;
     {
         // the Issuer
         $issuer = new Issuer('https://sp.example.org/saml20/sp/metadata');
-        $issueInstant = XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z');
+        $issueInstant = new DateTimeImmutable('2004-12-05T09:21:59Z');
         $destination = 'https://idp.example.org/idp/profile/saml2/Redirect/SSO';
         $assertionConsumerServiceIndex = 1;
         $assertionConsumerServiceURL = "https://sp.example.org/authentication/sp/consume-assertion";

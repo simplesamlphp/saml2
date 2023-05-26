@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
@@ -18,7 +19,6 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function preg_match;
@@ -41,20 +41,20 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
      * @param string|null $id
      * @param string $version
-     * @param int $issueInstant
+     * @param \DateTimeImmutable $issueInstant
      * @param string|null $destination
      * @param string|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      */
     public function __construct(
         Subject $subject,
+        DateTimeImmutable $issueInstant,
         protected string $resource,
         protected array $action,
         protected ?Evidence $evidence = null,
         ?Issuer $issuer = null,
         ?string $id = null,
         string $version = '2.0',
-        ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
@@ -131,7 +131,7 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery
         $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
 
         Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
-        $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
+        $issueInstant = new DateTimeImmutable($issueInstant);
 
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::countBetween($issuer, 0, 1);
@@ -174,13 +174,13 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery
 
         $request = new static(
             array_pop($subject),
+            $issueInstant,
             self::getAttribute($xml, 'Resource'),
             $action,
             array_pop($evidence),
             array_pop($issuer),
             $id,
             $version,
-            $issueInstant,
             $destination,
             $consent,
             array_pop($extensions),

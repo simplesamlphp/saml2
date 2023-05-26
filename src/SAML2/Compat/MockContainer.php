@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Compat;
 
+use Beste\Clock;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
+use SimpleSAML\SAML2\Utils\ZuluClock;
 
 use function chmod;
 use function file_put_contents;
@@ -16,9 +18,10 @@ use function sys_get_temp_dir;
  */
 class MockContainer extends AbstractContainer
 {
-    /**
-     * @var array
-     */
+    /** @var \Beste\Clock */
+    private Clock $clock;
+
+    /** @var array */
     private array $debugMessages = [];
 
 
@@ -95,5 +98,16 @@ class MockContainer extends AbstractContainer
     public function setBlacklistedAlgorithms(?array $algos): void
     {
         $this->blacklistedEncryptionAlgorithms = [];
+    }
+
+
+    /**
+     * Get the system clock, using Zulu for a timezone
+     *
+     * @inheritDoc
+     */
+    public function getClock(): Clock
+    {
+        return isset($this->clock) ? $this->clock : ZuluClock::create();
     }
 }

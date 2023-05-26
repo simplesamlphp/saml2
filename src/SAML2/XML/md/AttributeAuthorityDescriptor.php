@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function preg_split;
@@ -32,7 +32,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType
      * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $sttributeProfile
      * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $sttribute
      * @param string|null $ID
-     * @param int|null $validUntil
+     * @param \DateTimeImmutable|null $validUntil
      * @param string|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @param string|null $errorURL
@@ -48,7 +48,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType
         protected array $attributeProfile = [],
         protected array $attribute = [],
         ?string $ID = null,
-        ?int $validUntil = null,
+        ?DateTimeImmutable $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         ?string $errorURL = null,
@@ -164,6 +164,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType
 
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
         $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
+        Assert::nullOrValidDateTimeZulu($validUntil);
 
         $attrServices = AttributeService::getChildrenOfClass($xml);
         Assert::notEmpty(
@@ -209,7 +210,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType
             $attrProfiles,
             $attributes,
             self::getOptionalAttribute($xml, 'ID', null),
-            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
+            $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
             self::getOptionalAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             self::getOptionalAttribute($xml, 'errorURL', null),

@@ -18,6 +18,7 @@ use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -37,6 +38,9 @@ use function dirname;
  */
 final class AbstractMessageTest extends TestCase
 {
+    use ControlledTimeTestTrait;
+
+
     /**
      * @group Message
      */
@@ -127,7 +131,7 @@ AUTHNREQUEST
         // first, try with common Issuer objects (Format=entity)
         $issuer = new Issuer('https://gateway.stepup.org/saml20/sp/metadata');
 
-        $response = new Response($status, $issuer);
+        $response = new Response($status, self::$currentTime, $issuer);
         $xml = $response->toXML();
         $xpCache = XPath::getXPath($xml);
         $xml_issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
@@ -144,7 +148,7 @@ AUTHNREQUEST
             C::NAMEID_UNSPECIFIED,
             'SomeSPProvidedID',
         );
-        $response = new Response($status, $issuer);
+        $response = new Response($status, self::$currentTime, $issuer);
         $xml = $response->toXML();
         $xpCache = XPath::getXPath($xml);
         $xml_issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
@@ -158,7 +162,7 @@ AUTHNREQUEST
         $this->assertEquals($issuer->getSPProvidedID(), $xml_issuer->getAttribute('SPProvidedID'));
 
         // finally, make sure we can skip the Issuer by setting it to null
-        $response = new Response($status);
+        $response = new Response($status, self::$currentTime);
         $xml = $response->toXML();
 
         $xpCache = XPath::getXPath($xml);

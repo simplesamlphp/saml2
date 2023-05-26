@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Compat;
 
+use Beste\Clock;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\AbstractElement;
@@ -170,4 +171,10 @@ abstract class AbstractContainer
      * @param int|null $mode The permissions to apply to the file. Defaults to 0600.
      */
     abstract public function writeFile(string $filename, string $data, int $mode = null): void;
+
+
+    /**
+     * Get the system clock, using Zulu for a timezone
+     */
+    abstract public function getClock(): Clock;
 }

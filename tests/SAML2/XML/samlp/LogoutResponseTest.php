@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
@@ -58,7 +59,7 @@ final class LogoutResponseTest extends TestCase
 
         $logoutResponse = new LogoutResponse(
             id: 's2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b',
-            issueInstant: 1197286788,
+            issueInstant: new DateTimeImmutable('2007-12-10T11:39:48Z'),
             destination: 'http://somewhere.example.org/simplesaml/saml2/sp/AssertionConsumerService.php',
             inResponseTo: '_bec424fa5103428909a30ff1e31168327f79474984',
             issuer: $issuer,

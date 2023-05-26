@@ -16,6 +16,7 @@ use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\SAML2\XML\samlp\StatusMessage;
+use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -34,6 +35,9 @@ use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
  */
 final class AbstractStatusResponseTest extends TestCase
 {
+    use ControlledTimeTestTrait;
+
+
     /**
      */
     public function testMarshalling(): void
@@ -50,7 +54,7 @@ final class AbstractStatusResponseTest extends TestCase
             new StatusMessage('OurMessageText')
         );
 
-        $response = new Response($status);
+        $response = new Response($status, self::$currentTime);
 
         $responseElement = $response->toXML();
 
@@ -102,6 +106,7 @@ final class AbstractStatusResponseTest extends TestCase
         );
 
         $response = new Response(
+            issueInstant: self::$currentTime,
             status: $status,
             issuer: $issuer,
             extensions: $extensions,

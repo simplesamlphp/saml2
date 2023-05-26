@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
@@ -16,7 +17,6 @@ use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
@@ -34,6 +34,7 @@ class AuthnRequest extends AbstractRequest
     /**
      * Constructor for SAML 2 AuthnRequest
      *
+     * @param \DateTimeImmutable $issueInstant
      * @param \SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext|null $requestedAuthnContext
      * @param \SimpleSAML\SAML2\XML\saml\Subject|null $subject
      * @param \SimpleSAML\SAML2\XML\samlp\NameIDPolicy|null $nameIdPolicy
@@ -48,7 +49,6 @@ class AuthnRequest extends AbstractRequest
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param string $version
-     * @param int|null $issueInstant
      * @param string|null $destination
      * @param string|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions|null $extensions
@@ -56,6 +56,7 @@ class AuthnRequest extends AbstractRequest
      * @throws \Exception
      */
     public function __construct(
+        DateTimeImmutable $issueInstant,
         protected ?RequestedAuthnContext $requestedAuthnContext = null,
         protected ?Subject $subject = null,
         protected ?NameIDPolicy $nameIdPolicy = null,
@@ -70,7 +71,6 @@ class AuthnRequest extends AbstractRequest
         ?Issuer $issuer = null,
         ?string $id = null,
         string $version = '2.0',
-        ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
@@ -257,7 +257,7 @@ class AuthnRequest extends AbstractRequest
         $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
 
         Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
-        $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
+        $issueInstant = new DateTimeImmutable($issueInstant);
 
         $attributeConsumingServiceIndex = self::getOptionalIntegerAttribute(
             $xml,
@@ -320,6 +320,7 @@ class AuthnRequest extends AbstractRequest
         Assert::maxCount($scoping, 1, 'Only one <samlp:Scoping> element is allowed.', TooManyElementsException::class);
 
         $request = new static(
+            $issueInstant,
             array_pop($requestedAuthnContext),
             array_pop($subject),
             array_pop($nameIdPolicy),
@@ -334,7 +335,6 @@ class AuthnRequest extends AbstractRequest
             array_pop($issuer),
             $id,
             $version,
-            $issueInstant,
             self::getOptionalAttribute($xml, 'Destination', null),
             self::getOptionalAttribute($xml, 'Consent', null),
             array_pop($extensions),

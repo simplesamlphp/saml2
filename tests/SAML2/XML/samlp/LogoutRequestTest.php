@@ -11,6 +11,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -51,6 +52,9 @@ use function strval;
  */
 final class LogoutRequestTest extends TestCase
 {
+    use ControlledTimeTestTrait {
+        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
+    }
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
     use SignedElementTestTrait;
@@ -61,6 +65,8 @@ final class LogoutRequestTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        self::parentSetUpBeforeClass();
+
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
         self::$testedClass = LogoutRequest::class;
@@ -79,6 +85,7 @@ final class LogoutRequestTest extends TestCase
 
         $logoutRequest = new LogoutRequest(
             identifier: $nameId,
+            issueInstant: self::$currentTime,
             sessionIndexes: [new SessionIndex('SessionIndexValue')],
         );
 
@@ -99,6 +106,7 @@ final class LogoutRequestTest extends TestCase
         $nameId = new NameID('NameIDValue');
         $logoutRequest = new LogoutRequest(
             identifier: $nameId,
+            issueInstant: self::$currentTime,
             sessionIndexes: [new SessionIndex('SessionIndexValue1'), new SessionIndex('SessionIndexValue2')],
         );
         $logoutRequestElement = $logoutRequest->toXML();
@@ -119,6 +127,7 @@ final class LogoutRequestTest extends TestCase
 
         $logoutRequest = new LogoutRequest(
             identifier: $nameId,
+            issueInstant: self::$currentTime,
             sessionIndexes: [new SessionIndex('SessionIndexValue')],
         );
 
@@ -182,7 +191,7 @@ final class LogoutRequestTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedID.xml',
         )->documentElement);
 
-        $logoutRequest = new LogoutRequest($eid);
+        $logoutRequest = new LogoutRequest($eid, self::$currentTime);
         $logoutRequestElement = $logoutRequest->toXML();
         $this->assertCount(
             1,
@@ -292,7 +301,7 @@ XML;
         $logoutRequestElement = $document->documentElement;
 
         $logoutRequest = LogoutRequest::fromXML($logoutRequestElement);
-        $this->assertEquals(1543433592, $logoutRequest->getNotOnOrAfter());
+        $this->assertEquals('2018-11-28T19:33:12Z', $logoutRequest->getNotOnOrAfter()->format(C::DATETIME_FORMAT));
     }
 
 
@@ -301,13 +310,15 @@ XML;
     public function testSetNotOnOrAfter(): void
     {
         $nameId = new NameID('NameIDValue');
-        $time = time();
 
-        $logoutRequest = new LogoutRequest($nameId, $time);
+        $logoutRequest = new LogoutRequest($nameId, self::$currentTime, self::$currentTime);
         $logoutRequestElement = $logoutRequest->toXML();
 
         $logoutRequest2 = LogoutRequest::fromXML($logoutRequestElement);
-        $this->assertEquals($time, $logoutRequest2->getNotOnOrAfter());
+        $this->assertEquals(
+            self::$currentTime->format(C::DATETIME_FORMAT),
+            $logoutRequest2->getNotOnOrAfter()->format(C::DATETIME_FORMAT),
+        );
     }
 
     /**
@@ -343,7 +354,7 @@ XML;
         $reason = "urn:simplesamlphp:reason-test";
         $nameId = new NameID('NameIDValue');
 
-        $logoutRequest = new LogoutRequest($nameId, null, $reason);
+        $logoutRequest = new LogoutRequest($nameId, self::$currentTime, null, $reason);
         $logoutRequestElement = $logoutRequest->toXML();
 
         $logoutRequest2 = LogoutRequest::fromXML($logoutRequestElement);
@@ -386,6 +397,7 @@ XML;
         ];
 
         $logoutRequest = new LogoutRequest(
+            issueInstant: self::$currentTime,
             identifier: $nameId,
             sessionIndexes: $sessionIndexes,
         );

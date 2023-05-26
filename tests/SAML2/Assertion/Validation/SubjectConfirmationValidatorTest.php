@@ -22,6 +22,7 @@ use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -32,6 +33,10 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class SubjectConfirmationValidatorTest extends TestCase
 {
+    use ControlledTimeTestTrait {
+        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
+    }
+
     /** @var \DOMDocument */
     protected static DOMDocument $document;
 
@@ -61,10 +66,12 @@ final class SubjectConfirmationValidatorTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        self::parentSetUpBeforeClass();
+
         self::$logger = new NullLogger();
         self::$validator = new Validator(self::$logger);
         self::$destination = new Destination(C::ENTITY_SP);
-        self::$response = new Response(new Status(new StatusCode()));
+        self::$response = new Response(new Status(new StatusCode()), self::$currentTime);
 
         self::$identityProviderConfiguration = new IdentityProvider(['entityId' => C::ENTITY_IDP]);
         self::$serviceProviderConfiguration = new ServiceProvider(['entityId' => C::ENTITY_SP]);

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Signature;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Signature\ValidatorChain;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
@@ -22,12 +24,16 @@ final class ValidatorChainTest extends TestCase
     /** @var \SimpleSAML\SAML2\Signature\ValidatorChain */
     private static ValidatorChain $chain;
 
+    /** @var \DateTimeImmutable */
+    private static DateTimeImmutable $currentTime;
+
 
     /**
      */
     public static function setUpBeforeClass(): void
     {
         self::$chain = new ValidatorChain(new NullLogger(), []);
+        self::$currentTime = Utils::getContainer()->getClock()->now();
     }
 
 
@@ -41,7 +47,10 @@ final class ValidatorChainTest extends TestCase
         self::$chain->appendValidator(new MockChainedValidator(false, true));
 
         $this->expectException(MissingConfigurationException::class);
-        self::$chain->hasValidSignature(new Response(new Status(new StatusCode())), new IdentityProvider([]));
+        self::$chain->hasValidSignature(
+            new Response(new Status(new StatusCode()), self::$currentTime),
+            new IdentityProvider([]),
+        );
     }
 
 
@@ -56,7 +65,7 @@ final class ValidatorChainTest extends TestCase
         self::$chain->appendValidator(new MockChainedValidator(true, false));
 
         $validationResult = self::$chain->hasValidSignature(
-            new Response(new Status(new StatusCode())),
+            new Response(new Status(new StatusCode()), self::$currentTime),
             new IdentityProvider([]),
         );
         $this->assertFalse($validationResult, 'The validation result is not what is expected');
@@ -74,7 +83,7 @@ final class ValidatorChainTest extends TestCase
         self::$chain->appendValidator(new MockChainedValidator(false, true));
 
         $validationResult = self::$chain->hasValidSignature(
-            new Response(new Status(new StatusCode())),
+            new Response(new Status(new StatusCode()), self::$currentTime),
             new IdentityProvider([]),
         );
         $this->assertFalse($validationResult, 'The validation result is not what is expected');

@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
-use SimpleSAML\SAML2\XML\ExtendableElementTrait;
-
-use function gmdate;
 
 /**
  * Class to represent a metadata document
@@ -26,17 +26,18 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      * Generic constructor for SAML metadata documents.
      *
      * @param string|null $id The ID for this document. Defaults to null.
-     * @param int|null    $validUntil Unix time of validity for this document. Defaults to null.
+     * @param \DateTimeImmutable|null    $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to null.
      */
     public function __construct(
         protected ?string $id = null,
-        protected ?int $validUntil = null,
+        protected ?DateTimeImmutable $validUntil = null,
         protected ?string $cacheDuration = null,
         ?Extensions $extensions = null,
     ) {
         Assert::nullOrValidNCName($id, SchemaViolationException::class);
+        Assert::nullOrSame($validUntil?->getTimeZone()->getName(), 'Z');
         Assert::nullOrValidDuration($cacheDuration, SchemaViolationException::class);
 
         $this->setExtensions($extensions);
@@ -57,9 +58,9 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     /**
      * Collect the value of the validUntil property.
      *
-     * @return int|null
+     * @return \DateTimeImmutable|null
      */
-    public function getValidUntil(): ?int
+    public function getValidUntil(): ?DateTimeImmutable
     {
         return $this->validUntil;
     }
@@ -99,7 +100,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
         }
 
         if ($this->getValidUntil() !== null) {
-            $e->setAttribute('validUntil', gmdate('Y-m-d\TH:i:s\Z', $this->getValidUntil()));
+            $e->setAttribute('validUntil', $this->getValidUntil()->format(C::DATETIME_FORMAT));
         }
 
         if ($this->getCacheDuration() !== null) {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use DateTimeImmutable;
 use DOMAttr;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
@@ -96,7 +97,7 @@ final class RoleDescriptorTest extends TestCase
             ],
             [C::NS_SAMLP, C::PROTOCOL],
             'TheID',
-            1234567890,
+            new DateTimeImmutable('2009-02-13T23:31:30Z'),
             'PT5000S',
             new Extensions([new Chunk(
                 DOMDocumentFactory::fromString(
@@ -171,7 +172,7 @@ final class RoleDescriptorTest extends TestCase
         $this->assertInstanceOf(ContactPerson::class, $descriptor->getContactPerson()[0]);
         $this->assertInstanceOf(ContactPerson::class, $descriptor->getContactPerson()[1]);
         $this->assertEquals('TheID', $descriptor->getID());
-        $this->assertEquals(1234567890, $descriptor->getValidUntil());
+        $this->assertEquals('2009-02-13T23:31:30Z', $descriptor->getValidUntil()->format(C::DATETIME_FORMAT));
         $this->assertEquals('PT5000S', $descriptor->getCacheDuration());
         $this->assertEquals('https://error.reporting/', $descriptor->getErrorURL());
 
@@ -219,7 +220,7 @@ final class RoleDescriptorTest extends TestCase
         $this->assertInstanceOf(ContactPerson::class, $descriptor->getContactPerson()[0]);
         $this->assertInstanceOf(ContactPerson::class, $descriptor->getContactPerson()[1]);
         $this->assertEquals('TheID', $descriptor->getID());
-        $this->assertEquals(1234567890, $descriptor->getValidUntil());
+        $this->assertEquals('2009-02-13T23:31:30Z', $descriptor->getValidUntil()->format(C::DATETIME_FORMAT));
         $this->assertEquals('PT5000S', $descriptor->getCacheDuration());
         $this->assertEquals('https://error.reporting/', $descriptor->getErrorURL());
 

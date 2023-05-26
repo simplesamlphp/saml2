@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class representing SAML 2 SSODescriptorType.
@@ -21,7 +21,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptorType
      *
      * @param string[] $protocolSupportEnumeration A set of URI specifying the protocols supported.
      * @param string|null $ID The ID for this document. Defaults to null.
-     * @param int|null $validUntil Unix time of validity for this document. Defaults to null.
+     * @param \DateTimeImmutable|null $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to an empty array.
      * @param string|null $errorURL An URI where to redirect users for support. Defaults to null.
@@ -43,7 +43,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptorType
     public function __construct(
         array $protocolSupportEnumeration,
         ?string $ID = null,
-        ?int $validUntil = null,
+        ?DateTimeImmutable $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         ?string $errorURL = null,

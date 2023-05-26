@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
@@ -67,7 +68,7 @@ final class ResponseTest extends TestCase
             destination: 'https://example.org/metadata',
             consent: C::CONSENT_EXPLICIT,
             inResponseTo: 'PHPUnit',
-            issueInstant: 1616691206,
+            issueInstant: new DateTimeImmutable('2021-03-25T16:53:26Z'),
             assertions: [Assertion::fromXML($assertion->documentElement)],
         );
 

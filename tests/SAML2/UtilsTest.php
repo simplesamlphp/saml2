@@ -13,6 +13,7 @@ use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
+use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
@@ -28,6 +29,9 @@ use function count;
  */
 final class UtilsTest extends TestCase
 {
+    use ControlledTimeTestTrait;
+
+
     /**
      * Test querying a SAML XML document.
      */
@@ -40,7 +44,7 @@ final class UtilsTest extends TestCase
             C::NAMEID_TRANSIENT,
         );
 
-        $aq = new AttributeQuery(new Subject($nameId_before));
+        $aq = new AttributeQuery(new Subject($nameId_before), self::$currentTime);
 
         $xml = $aq->toXML();
 

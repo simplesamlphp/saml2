@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DateTimeImmutable;
 use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
@@ -13,7 +14,6 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 /**
@@ -36,7 +36,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      * @param \SimpleSAML\SAML2\XML\md\AffiliateMember[] $affiliateMember
      *   A non-empty array of members of this affiliation.
      * @param string|null $ID The ID for this document. Defaults to null.
-     * @param int|null $validUntil Unix time of validity for this document. Defaults to null.
+     * @param \DateTimeImmutable|null $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to an empty array.
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $KeyDescriptor
@@ -47,7 +47,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         protected string $affiliationOwnerId,
         protected array $affiliateMember,
         ?string $ID = null,
-        ?int $validUntil = null,
+        ?DateTimeImmutable $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         protected array $keyDescriptor = [],
@@ -126,6 +126,8 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         $keyDescriptors = KeyDescriptor::getChildrenOfClass($xml);
 
         $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
+        Assert::nullOrValidDateTimeZulu($validUntil);
+
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
             $orgs,
@@ -154,7 +156,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             $owner,
             $members,
             self::getOptionalAttribute($xml, 'ID', null),
-            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
+            $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
             self::getOptionalAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             $keyDescriptors,

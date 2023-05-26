@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use DateTimeImmutable;
 use DOMDocument;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
@@ -20,7 +21,6 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
@@ -65,8 +65,8 @@ final class AuthnStatementTest extends TestCase
                 null,
                 [new AuthenticatingAuthority('https://idp.example.com/SAML2')],
             ),
-            XMLUtils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
-            XMLUtils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
+            new DateTimeImmutable('2020-03-23T23:37:24Z'),
+            new DateTimeImmutable('2020-03-23T23:37:24Z'),
             '123',
             new SubjectLocality('1.1.1.1', 'idp.example.org'),
         );
@@ -89,8 +89,8 @@ final class AuthnStatementTest extends TestCase
                 null,
                 [new AuthenticatingAuthority('https://idp.example.com/SAML2')],
             ),
-            XMLUtils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
-            XMLUtils::xsDateTimeToTimestamp('2020-03-23T23:37:24Z'),
+            new DateTimeImmutable('2020-03-23T23:37:24Z'),
+            new DateTimeImmutable('2020-03-23T23:37:24Z'),
             '123',
             new SubjectLocality('1.1.1.1', 'idp.example.org'),
         );

@@ -20,6 +20,7 @@ use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -30,6 +31,10 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class AssertionValidatorTest extends TestCase
 {
+    use ControlledTimeTestTrait {
+        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
+    }
+
     /** @var \DOMDocument */
     protected static DOMDocument $document;
 
@@ -59,6 +64,8 @@ final class AssertionValidatorTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        self::parentSetUpBeforeClass();
+
         $idpentity = C::ENTITY_IDP;
         $spentity = C::ENTITY_IDP;
         $audience = $spentity;
@@ -67,7 +74,7 @@ final class AssertionValidatorTest extends TestCase
         self::$logger = new NullLogger();
         self::$validator = new Validator(self::$logger);
         self::$destination = new Destination($destination);
-        self::$response = new Response(new Status(new StatusCode()));
+        self::$response = new Response(new Status(new StatusCode()), self::$currentTime);
 
         self::$identityProviderConfiguration = new IdentityProvider(['entityId' => $idpentity]);
         self::$serviceProviderConfiguration  = new ServiceProvider(['entityId' => $spentity]);

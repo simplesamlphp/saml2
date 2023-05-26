@@ -13,6 +13,7 @@ use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\Utils\HTTP;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\Constants as C;
@@ -25,6 +26,9 @@ use SimpleSAML\XMLSecurity\Key\PrivateKey;
  */
 final class HTTPPostTest extends TestCase
 {
+    use ControlledTimeTestTrait;
+
+
     /**
      * test parsing of basic query string with authnrequest and
      * verify that the correct issuer is found.
@@ -91,7 +95,9 @@ final class HTTPPostTest extends TestCase
      */
     public function testSendMissingDestination(): void
     {
-        $request = new AuthnRequest();
+        $request = new AuthnRequest(
+            issueInstant: self::$currentTime,
+        );
         $hp = new HTTPPost();
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Cannot send message, no destination set.');
@@ -105,7 +111,9 @@ final class HTTPPostTest extends TestCase
      */
     public function testSendAuthnRequestWithDestinationInBinding(): void
     {
-        $request = new AuthnRequest();
+        $request = new AuthnRequest(
+            issueInstant: self::$currentTime,
+        );
         $hp = new HTTPPost();
         $hp->setDestination('https://example.org');
         $hp->send($request);
@@ -119,6 +127,7 @@ final class HTTPPostTest extends TestCase
     public function testSendAuthnRequestWithDestination(): void
     {
         $request = new AuthnRequest(
+            issueInstant: self::$currentTime,
             destination: 'https://example.org',
         );
         $hp = new HTTPPost();
@@ -137,6 +146,7 @@ final class HTTPPostTest extends TestCase
         $issuer  = new Issuer('testIssuer');
 
         $response = new Response(
+            issueInstant: self::$currentTime,
             status: $status,
             issuer: $issuer,
             destination: 'http://example.org/login?success=yes',

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use DateTimeImmutable;
 use DOMText;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
@@ -153,7 +154,7 @@ final class EntityDescriptorTest extends TestCase
         $extensions = new Extensions([
             new PublicationInfo(
                 publisher: 'http://publisher.ra/',
-                creationInstant: XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
+                creationInstant: new DateTimeImmutable('2020-02-03T13:46:24Z'),
                 usagePolicy: [new UsagePolicy('en', 'http://publisher.ra/policy.txt')]
             )
         ]);
@@ -161,7 +162,7 @@ final class EntityDescriptorTest extends TestCase
         $ed = new EntityDescriptor(
             entityId: $entityid,
             id: $id,
-            validUntil: $now,
+            validUntil: new DateTimeImmutable('2020-02-05T09:39:25Z'),
             cacheDuration: $duration,
             extensions: $extensions,
             roleDescriptor: [
@@ -228,7 +229,6 @@ XML
 
         $entityid = C::ENTITY_IDP;
         $id = "_5A3CHB081";
-        $now = 1580895565;
         $duration = "P2Y6M5DT12H35M30S";
         $ad = new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_OTHER)]);
         $org = new Organization(
@@ -257,7 +257,7 @@ XML
         $extensions = new Extensions([
             new PublicationInfo(
                 publisher: 'http://publisher.ra/',
-                creationInstant: XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
+                creationInstant: new DateTimeImmutable('2020-02-03T13:46:24Z'),
                 usagePolicy: [new UsagePolicy('en', 'http://publisher.ra/policy.txt')],
             ),
         ]);
@@ -265,7 +265,7 @@ XML
         $ed = new EntityDescriptor(
             entityId: $entityid,
             id: $id,
-            validUntil: $now,
+            validUntil: new DateTimeImmutable('2020-02-05T09:39:25Z'),
             cacheDuration: $duration,
             extensions: $extensions,
             affiliationDescriptor: $ad,
@@ -275,7 +275,7 @@ XML
         );
         $this->assertEquals($entityid, $ed->getEntityID());
         $this->assertEquals($id, $ed->getID());
-        $this->assertEquals($now, $ed->getValidUntil());
+        $this->assertEquals('2020-02-05T09:39:25Z', $ed->getValidUntil()->format(C::DATETIME_FORMAT));
         $this->assertEquals($duration, $ed->getCacheDuration());
         $this->assertEmpty($ed->getRoleDescriptor());
         $this->assertInstanceOf(AffiliationDescriptor::class, $ed->getAffiliationDescriptor());
@@ -392,7 +392,7 @@ XML
         );
         $this->assertEquals(C::ENTITY_IDP, $entityDescriptor->getEntityID());
         $this->assertEquals('_5A3CHB081', $entityDescriptor->getID());
-        $this->assertEquals(1580895565, $entityDescriptor->getValidUntil());
+        $this->assertEquals('2020-02-05T09:39:25Z', $entityDescriptor->getValidUntil()->format(C::DATETIME_FORMAT));
         $this->assertEquals('P2Y6M5DT12H35M30S', $entityDescriptor->getCacheDuration());
 
         $roleDescriptors = $entityDescriptor->getRoleDescriptor();

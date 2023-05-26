@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use DateTimeImmutable;
 use DOMDocument;
 use DOMNodeList;
 use Exception;
@@ -32,6 +33,7 @@ use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\SAML2\XML\saml\SubjectLocality;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -61,6 +63,9 @@ use function time;
  */
 final class AssertionTest extends TestCase
 {
+    use ControlledTimeTestTrait {
+        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
+    }
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
@@ -68,6 +73,8 @@ final class AssertionTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        self::parentSetUpBeforeClass();
+
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
         self::$testedClass = Assertion::class;
@@ -92,10 +99,10 @@ final class AssertionTest extends TestCase
 
         // Create the conditions
         $conditions = new Conditions(
-            1314780665,
-            1314780665,
-            [],
-            [new AudienceRestriction([new Audience(C::ENTITY_SP)])],
+            notBefore: new DateTimeImmutable('2011-08-31T08:51:05Z'),
+            notOnOrAfter: new DateTimeImmutable('2011-08-31T10:51:05Z'),
+            condition: [],
+            audienceRestriction: [new AudienceRestriction([new Audience(C::ENTITY_SP)])],
         );
 
         // Create the AuthnStatement
@@ -105,7 +112,7 @@ final class AssertionTest extends TestCase
                 null,
                 null
             ),
-            authnInstant: 1314780665,
+            authnInstant: new DateTimeImmutable('2011-08-31T08:51:05Z'),
             sessionIndex: '_93af655219464fb403b34436cfb0c5cb1d9a5502',
             subjectLocality: new SubjectLocality('127.0.0.1')
         );
@@ -142,7 +149,7 @@ final class AssertionTest extends TestCase
                         Format: C::NAMEID_TRANSIENT,
                     ),
                     new SubjectConfirmationData(
-                        notOnOrAfter: 1314780665,
+                        notOnOrAfter: new DateTimeImmutable('2011-08-31T08:51:05Z'),
                         recipient: 'https://sp.example.org/authentication/sp/consume-assertion',
                         inResponseTo: '_13603a6565a69297e9809175b052d115965121c8',
                     ),
@@ -154,7 +161,7 @@ final class AssertionTest extends TestCase
         $assertion = new Assertion(
             $issuer,
             '_93af655219464fb403b34436cfb0c5cb1d9a5502',
-            5611,
+            new DateTimeImmutable('1970-01-01T01:33:31Z'),
             $subject,
             $conditions,
             [$authnStatement, $attrStatement],
@@ -239,8 +246,8 @@ XML;
 
         // Create Conditions
         $conditions = new Conditions(
-            notBefore: 1234567880,
-            notOnOrAfter: 1234567990,
+            notBefore: new DateTimeImmutable('2011-08-31T08:51:05Z'),
+            notOnOrAfter: new DateTimeImmutable('2011-08-31T10:51:05Z'),
             audienceRestriction: [
                 new AudienceRestriction(
                     [new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)],
@@ -259,8 +266,8 @@ XML;
                     new AuthenticatingAuthority(C::ENTITY_OTHER),
                 ],
             ),
-            1234567890 - 1,
-            1234568890 + 200,
+            new DateTimeImmutable('2011-08-31T08:51:04Z'),
+            new DateTimeImmutable('2011-08-31T08:54:25Z'),
             'idx1',
             new SubjectLocality('127.0.0.1', 'no.place.like.home'),
         );
@@ -291,7 +298,7 @@ XML;
         $assertion = new Assertion(
             issuer: $issuer,
             id: '_123abc',
-            issueInstant: 1234567890,
+            issueInstant: new DateTimeImmutable('2011-08-31T08:51:05Z'),
             conditions: $conditions,
             statements: $statements,
         );
@@ -311,9 +318,9 @@ XML;
             $authnStatement->getAuthnContext()->getAuthnContextDeclRef()?->getContent(),
         );
         $this->assertEquals('_123abc', $assertionToVerify->getId());
-        $this->assertEquals(1234567890, $assertionToVerify->getIssueInstant());
-        $this->assertEquals(1234569090, $authnStatement->getSessionNotOnOrAfter());
-        $this->assertEquals(1234567889, $authnStatement->getAuthnInstant());
+        $this->assertEquals('2011-08-31T08:51:05Z', $assertionToVerify->getIssueInstant()->format(C::DATETIME_FORMAT));
+        $this->assertEquals('2011-08-31T08:54:25Z', $authnStatement->getSessionNotOnOrAfter()->format(C::DATETIME_FORMAT));
+        $this->assertEquals('2011-08-31T08:51:04Z', $authnStatement->getAuthnInstant()->format(C::DATETIME_FORMAT));
         $this->assertEquals('idx1', $authnStatement->getSessionIndex());
 
         $subjectLocality = $authnStatement->getSubjectLocality();
@@ -680,7 +687,7 @@ XML;
         // Double-check that we can actually retrieve some basics.
         $this->assertEquals("_93af655219464fb403b34436cfb0c5cb1d9a5502", $verified->getId());
         $this->assertEquals("Provider", $verified->getIssuer()->getContent());
-        $this->assertEquals("5611", $verified->getIssueInstant());
+        $this->assertEquals("1970-01-01T01:33:31Z", $verified->getIssueInstant()->format(C::DATETIME_FORMAT));
     }
 
 
@@ -1085,7 +1092,7 @@ XML;
                 null,
                 null,
             ),
-            time(),
+            self::$currentTime,
         );
 
         // Create an assertion
@@ -1150,7 +1157,7 @@ XML;
                 null,
                 null,
             ),
-            time(),
+            self::$currentTime,
         );
 
         // Create Subject

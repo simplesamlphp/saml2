@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
@@ -53,8 +54,8 @@ final class ConditionsTest extends TestCase
     public function testMarshalling(): void
     {
         $conditions = new Conditions(
-            1405558878,
-            1705558908,
+            new DateTimeImmutable('2014-07-17T01:01:18Z'),
+            new DateTimeImmutable('2024-01-18T06:21:48Z'),
             [],
             [
                 new AudienceRestriction(

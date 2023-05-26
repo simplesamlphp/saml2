@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function array_pop;
 use function gmdate;
@@ -27,18 +28,20 @@ final class AuthnStatement extends AbstractStatementType
      * Initialize an AuthnStatement.
      *
      * @param \SimpleSAML\SAML2\XML\saml\AuthnContext $authnContext
-     * @param int $authnInstant
-     * @param int|null $sessionNotOnOrAfter
+     * @param \DateTimeImmutable $authnInstant
+     * @param \DateTimeImmutable|null $sessionNotOnOrAfter
      * @param string|null $sessionIndex
      * @param \SimpleSAML\SAML2\XML\saml\SubjectLocality|null $subjectLocality
      */
     public function __construct(
         protected AuthnContext $authnContext,
-        protected int $authnInstant,
-        protected ?int $sessionNotOnOrAfter = null,
+        protected DateTimeImmutable $authnInstant,
+        protected ?DateTimeImmutable $sessionNotOnOrAfter = null,
         protected ?string $sessionIndex = null,
         protected ?SubjectLocality $subjectLocality = null,
     ) {
+        Assert::same($authnInstant->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
+        Assert::nullOrSame($sessionNotOnOrAfter?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::nullOrNotWhitespaceOnly($sessionIndex);
     }
 
@@ -57,9 +60,9 @@ final class AuthnStatement extends AbstractStatementType
     /**
      * Collect the value of the AuthnInstant-property
      *
-     * @return int
+     * @return \DateTimeImmutable
      */
-    public function getAuthnInstant(): int
+    public function getAuthnInstant(): DateTimeImmutable
     {
         return $this->authnInstant;
     }
@@ -68,9 +71,9 @@ final class AuthnStatement extends AbstractStatementType
     /**
      * Collect the value of the sessionNotOnOrAfter-property
      *
-     * @return int|null
+     * @return \DateTimeImmutable|null
      */
-    public function getSessionNotOnOrAfter(): ?int
+    public function getSessionNotOnOrAfter(): ?DateTimeImmutable
     {
         return $this->sessionNotOnOrAfter;
     }
@@ -134,7 +137,7 @@ final class AuthnStatement extends AbstractStatementType
         $authnInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $authnInstant, 1);
 
         Assert::validDateTimeZulu($authnInstant, ProtocolViolationException::class);
-        $authnInstant = XMLUtils::xsDateTimeToTimestamp($authnInstant);
+        $authnInstant = new DateTimeImmutable($authnInstant);
 
         $sessionNotOnOrAfter = self::getOptionalAttribute($xml, 'SessionNotOnOrAfter', null);
         if ($sessionNotOnOrAfter !== null) {
@@ -142,7 +145,7 @@ final class AuthnStatement extends AbstractStatementType
             $sessionNotOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $sessionNotOnOrAfter, 1);
 
             Assert::validDateTimeZulu($sessionNotOnOrAfter, ProtocolViolationException::class);
-            $sessionNotOnOrAfter = XMLUtils::xsDateTimeToTimestamp($sessionNotOnOrAfter);
+            $sessionNotOnOrAfter = new DateTimeImmutable($sessionNotOnOrAfter);
         }
 
         $subjectLocality = SubjectLocality::getChildrenOfClass($xml);
@@ -173,14 +176,14 @@ final class AuthnStatement extends AbstractStatementType
 
         $this->getAuthnContext()->toXML($e);
 
-        $e->setAttribute('AuthnInstant', gmdate('Y-m-d\TH:i:s\Z', $this->getAuthnInstant()));
+        $e->setAttribute('AuthnInstant', $this->getAuthnInstant()->format(C::DATETIME_FORMAT));
 
         if ($this->getSessionIndex() !== null) {
             $e->setAttribute('SessionIndex', $this->getSessionIndex());
         }
 
         if ($this->getSessionNotOnOrAfter() !== null) {
-            $e->setAttribute('SessionNotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->getSessionNotOnOrAfter()));
+            $e->setAttribute('SessionNotOnOrAfter', $this->getSessionNotOnOrAfter()->format(C::DATETIME_FORMAT));
         }
 
         return $e;

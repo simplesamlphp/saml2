@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
@@ -14,6 +15,7 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
+use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -37,6 +39,9 @@ use function strval;
  */
 final class AttributeQueryTest extends TestCase
 {
+    use ControlledTimeTestTrait {
+        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
+    }
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
     use SignedElementTestTrait;
@@ -46,6 +51,8 @@ final class AttributeQueryTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        self::parentSetUpBeforeClass();
+
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
         self::$testedClass = AttributeQuery::class;
@@ -96,7 +103,7 @@ final class AttributeQueryTest extends TestCase
                 Format: C::NAMEID_ENTITY,
             ),
             id: 'aaf23196-1773-2113-474a-fe114412ab72',
-            issueInstant: 1504698567,
+            issueInstant: new DateTimeImmutable('2017-09-06T11:49:27Z'),
         );
 
         $this->assertEquals(
@@ -122,6 +129,7 @@ final class AttributeQueryTest extends TestCase
         $nameId = new NameID('NameIDValue');
         $attributeQuery = new AttributeQuery(
             subject: new Subject($nameId),
+            issueInstant: self::$currentTime,
             attributes: [
                 new Attribute(
                     name: 'test1',

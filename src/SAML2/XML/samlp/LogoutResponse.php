@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
@@ -28,10 +29,10 @@ final class LogoutResponse extends AbstractStatusResponse
      * Constructor for SAML 2 LogoutResponse.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\Status $status
+     * @param \DateTimeImmutable $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param string $version
-     * @param int|null $issueInstant
      * @param string|null $inResponseTo
      * @param string|null $destination
      * @param string|null $consent
@@ -42,10 +43,10 @@ final class LogoutResponse extends AbstractStatusResponse
      */
     public function __construct(
         Status $status,
+        DateTimeImmutable $issueInstant,
         ?Issuer $issuer = null,
         ?string $id = null,
         string $version = '2.0',
-        ?int $issueInstant = null,
         ?string $inResponseTo = null,
         ?string $destination = null,
         ?string $consent = null,
@@ -54,10 +55,10 @@ final class LogoutResponse extends AbstractStatusResponse
     ) {
         parent::__construct(
             $status,
+            $issueInstant,
             $issuer,
             $id,
             $version,
-            $issueInstant,
             $inResponseTo,
             $destination,
             $consent,
@@ -95,7 +96,7 @@ final class LogoutResponse extends AbstractStatusResponse
         $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
 
         Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
-        $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
+        $issueInstant = new DateTimeImmutable($issueInstant);
 
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::countBetween($issuer, 0, 1);
@@ -111,10 +112,10 @@ final class LogoutResponse extends AbstractStatusResponse
 
         $response = new static(
             array_pop($status),
+            $issueInstant,
             array_pop($issuer),
             $id,
             $version,
-            $issueInstant,
             self::getOptionalAttribute($xml, 'InResponseTo', null),
             self::getOptionalAttribute($xml, 'Destination', null),
             self::getOptionalAttribute($xml, 'Consent', null),

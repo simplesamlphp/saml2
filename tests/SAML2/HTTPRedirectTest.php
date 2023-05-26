@@ -16,6 +16,7 @@ use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
@@ -28,10 +29,17 @@ use function urldecode;
  */
 final class HTTPRedirectTest extends TestCase
 {
+    use ControlledTimeTestTrait {
+        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
+    }
+
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
+        self::parentSetUpBeforeClass();
+
         $container = new MockContainer();
         $container->setBlacklistedAlgorithms([]);
         ContainerSingleton::setContainer($container);
@@ -269,7 +277,7 @@ final class HTTPRedirectTest extends TestCase
      */
     public function testSendWithoutDestination(): void
     {
-        $request = new AuthnRequest();
+        $request = new AuthnRequest(self::$currentTime);
         $hr = new HTTPRedirect();
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Cannot build a redirect URL, no destination set.');
@@ -283,7 +291,7 @@ final class HTTPRedirectTest extends TestCase
      */
     public function testSendAuthnrequest(): void
     {
-        $request = new AuthnRequest();
+        $request = new AuthnRequest(self::$currentTime);
         $hr = new HTTPRedirect();
         $hr->setDestination('https://idp.example.org/');
         $hr->send($request);
@@ -302,6 +310,7 @@ final class HTTPRedirectTest extends TestCase
 
         $response = new Response(
             status: $status,
+            issueInstant: self::$currentTime,
             issuer: $issuer,
             destination: 'http://example.org/login?success=yes',
         );
@@ -320,7 +329,7 @@ final class HTTPRedirectTest extends TestCase
         $status = new Status(new StatusCode());
         $issuer = new Issuer('testIssuer');
 
-        $response = new Response($status, $issuer);
+        $response = new Response($status, self::$currentTime, $issuer);
         $hr = new HTTPRedirect();
         $hr->setDestination('gopher://myurl');
         $hr->send($response);

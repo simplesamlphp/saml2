@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -63,7 +64,7 @@ final class EntitiesDescriptorTest extends TestCase
         $extensions = new Extensions([
             new PublicationInfo(
                 publisher: 'http://publisher.ra/',
-                creationInstant: XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
+                creationInstant: new DateTimeImmutable('2020-02-03T13:46:24Z'),
                 usagePolicy: [new UsagePolicy('en', 'http://publisher.ra/policy.txt')],
             ),
         ]);

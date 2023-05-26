@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DateTimeImmutable;
 use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Utilities\Temporal;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Utils\ZuluClock;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -67,7 +68,7 @@ final class Assertion extends AbstractSamlElement implements
      *
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
      * @param string|null $id
-     * @param int|null $issueInstant
+     * @param \DateTimeImmutable|null $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Subject|null $subject
      * @param \SimpleSAML\SAML2\XML\saml\Conditions|null $conditions
      * @param \SimpleSAML\SAML2\XML\saml\AbstractStatementType[] $statements
@@ -75,13 +76,14 @@ final class Assertion extends AbstractSamlElement implements
     public function __construct(
         protected Issuer $issuer,
         protected ?string $id = null,
-        protected ?int $issueInstant = null,
+        protected ?DateTimeImmutable $issueInstant = null,
         protected ?Subject $subject = null,
         protected ?Conditions $conditions = null,
         protected array $statements = [],
     ) {
         $this->dataType = C::XMLENC_ELEMENT;
 
+        Assert::nullOrSame($issueInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::nullOrValidNCName($id); // Covers the empty string
         Assert::true(
             $subject || !empty($statements),
@@ -165,12 +167,12 @@ final class Assertion extends AbstractSamlElement implements
     /**
      * Retrieve the issue timestamp of this assertion.
      *
-     * @return int The issue timestamp of this assertion, as an UNIX timestamp.
+     * @return \DateTimeImmutable The issue timestamp of this assertion, as an UNIX timestamp.
      */
-    public function getIssueInstant(): int
+    public function getIssueInstant(): DateTimeImmutable
     {
         if ($this->issueInstant === null) {
-            return Temporal::getTime();
+            return ZuluClock::create()->now();
         }
 
         return $this->issueInstant;
@@ -272,7 +274,7 @@ final class Assertion extends AbstractSamlElement implements
         $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
 
         Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
-        $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
+        $issueInstant = new DateTimeImmutable($issueInstant);
 
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::minCount($issuer, 1, 'Missing <saml:Issuer> in assertion.', MissingElementException::class);
@@ -332,7 +334,7 @@ final class Assertion extends AbstractSamlElement implements
 
         $e->setAttribute('Version', '2.0');
         $e->setAttribute('ID', $this->getId());
-        $e->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->getIssueInstant()));
+        $e->setAttribute('IssueInstant', $this->getIssueInstant()->format(C::DATETIME_FORMAT));
 
         $this->getIssuer()->toXML($e);
         $this->getSubject()?->toXML($e);

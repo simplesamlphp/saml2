@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Utils\XPath;
@@ -11,6 +12,7 @@ use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -33,11 +35,16 @@ use function strval;
  */
 final class SubjectConfirmationTest extends TestCase
 {
+    use ControlledTimeTestTrait {
+        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
+    }
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
     public static function setUpBeforeClass(): void
     {
+        self::parentSetUpBeforeClass();
+
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
         self::$testedClass = SubjectConfirmation::class;
@@ -67,8 +74,8 @@ final class SubjectConfirmationTest extends TestCase
                 C::NAMEID_TRANSIENT,
             ),
             new SubjectConfirmationData(
-                987654321,
-                1234567890,
+                new DateTimeImmutable('2001-04-19T04:25:21Z'),
+                new DateTimeImmutable('2009-02-13T23:31:30Z'),
                 C::ENTITY_SP,
                 'SomeRequestID',
                 '127.0.0.1',
@@ -119,7 +126,7 @@ XML
         $subjectConfirmation = new SubjectConfirmation(
             C::CM_BEARER,
             new NameID('SomeNameIDValue'),
-            new SubjectConfirmationData(time()),
+            new SubjectConfirmationData(self::$currentTime),
         );
 
         // Marshall it to a \DOMElement

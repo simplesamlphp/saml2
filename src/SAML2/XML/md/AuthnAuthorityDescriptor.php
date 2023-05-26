@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function preg_split;
@@ -28,7 +28,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType
      * @param array $assertionIDRequestService
      * @param array $nameIDFormat
      * @param string|null $ID
-     * @param int|null $validUntil
+     * @param \DateTimeImmutable|null $validUntil
      * @param string|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @param string|null $errorURL
@@ -42,7 +42,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType
         protected array $assertionIDRequestService = [],
         protected array $nameIDFormat = [],
         string $ID = null,
-        ?int $validUntil = null,
+        ?DateTimeImmutable $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         ?string $errorURL = null,
@@ -135,6 +135,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType
         $nameIDFormats = NameIDFormat::getChildrenOfClass($xml);
 
         $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
+        Assert::nullOrValidDateTimeZulu($validUntil);
 
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
@@ -166,7 +167,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType
             $assertionIDRequestServices,
             $nameIDFormats,
             self::getOptionalAttribute($xml, 'ID', null),
-            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
+            $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
             self::getOptionalAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             self::getOptionalAttribute($xml, 'errorURL', null),
