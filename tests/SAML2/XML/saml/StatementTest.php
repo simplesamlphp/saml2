@@ -75,8 +75,9 @@ final class StatementTest extends TestCase
 
 
     /**
+     * Test unmarshalling a registered class
      */
-    public function testUnmarshallingRegistered(): void
+    public function testUnmarshalling(): void
     {
         $statement = CustomStatement::fromXML(self::$xmlRepresentation->documentElement);
         $this->assertInstanceOf(CustomStatement::class, $statement);

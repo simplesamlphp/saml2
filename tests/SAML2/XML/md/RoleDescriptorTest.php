@@ -154,7 +154,7 @@ final class RoleDescriptorTest extends TestCase
     /**
      * Test unmarshalling a known object as a RoleDescriptor.
      */
-    public function testUnmarshallingRegistered(): void
+    public function testUnmarshalling(): void
     {
         $descriptor = AbstractRoleDescriptor::fromXML(self::$xmlRepresentation->documentElement);
 

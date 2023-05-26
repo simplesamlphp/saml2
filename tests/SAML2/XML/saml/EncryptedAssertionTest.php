@@ -105,6 +105,19 @@ final class EncryptedAssertionTest extends TestCase
 
 
     /**
+     */
+    public function testUnmarshalling(): void
+    {
+        $encryptedAssertion = EncryptedAssertion::fromXML(self::$xmlRepresentation->documentElement);
+
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($encryptedAssertion),
+        );
+    }
+
+
+    /**
      * Test encryption / decryption
      */
     public function testEncryption(): void

@@ -77,8 +77,9 @@ final class BaseIDTest extends TestCase
 
 
     /**
+     * Test unmarshalling a registered class
      */
-    public function testUnmarshallingRegistered(): void
+    public function testUnmarshalling(): void
     {
         $baseId = AbstractBaseID::fromXML(self::$xmlRepresentation->documentElement);
 

@@ -49,7 +49,7 @@ final class AttributeStatementTest extends TestCase
 
     /**
      */
-    public function testMarshallingAttributes(): void
+    public function testMarshalling(): void
     {
         $attrStatement = new AttributeStatement(
             [

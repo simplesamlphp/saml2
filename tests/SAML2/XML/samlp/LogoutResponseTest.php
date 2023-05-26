@@ -6,7 +6,11 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\LogoutResponse;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -47,54 +51,36 @@ final class LogoutResponseTest extends TestCase
 
     /**
      */
-    public function testLogoutFailed(): void
+    public function testMarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<samlp:LogoutResponse xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    Version="2.0"
-    ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
-    IssueInstant="2007-12-10T11:39:48Z"
-    Destination="http://somewhere.example.org/simplesaml/saml2/sp/AssertionConsumerService.php"
-    InResponseTo="_bec424fa5103428909a30ff1e31168327f79474984">
-  <saml:Issuer>max.example.org</saml:Issuer>
-  <samlp:Status>
-    <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Responder" />
-    <samlp:StatusMessage>Something is wrong...</samlp:StatusMessage>
-  </samlp:Status>
-</samlp:LogoutResponse>
-XML
+        $issuer = new Issuer('max.example.org');
+        $status = new Status(new StatusCode(C::STATUS_SUCCESS));
+
+        $logoutResponse = new LogoutResponse(
+            id: 's2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b',
+            issueInstant: 1197286788,
+            destination: 'http://somewhere.example.org/simplesaml/saml2/sp/AssertionConsumerService.php',
+            inResponseTo: '_bec424fa5103428909a30ff1e31168327f79474984',
+            issuer: $issuer,
+            status: $status,
         );
 
-        $response = LogoutResponse::fromXML($document->documentElement);
-
-        $this->assertFalse($response->isSuccess());
-
-        $status = $response->getStatus();
-        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:Responder", $status->getStatusCode()->getValue());
-        $this->assertEmpty($status->getStatusCode()->getSubCodes());
-        $this->assertEquals("Something is wrong...", $status->getStatusMessage()?->getContent());
-
-        $this->assertEquals("_bec424fa5103428909a30ff1e31168327f79474984", $response->getInResponseTo());
-
         $this->assertEquals(
-            $document->saveXML($document->documentElement),
-            strval($response),
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($logoutResponse)
         );
     }
 
 
     /**
-     * A successful logout response
      */
-    public function testLogoutSuccess(): void
+    public function testUnmarshalling(): void
     {
-        $response = LogoutResponse::fromXML(self::$xmlRepresentation->documentElement);
-        $this->assertTrue($response->isSuccess());
+        $logoutResponse = LogoutResponse::fromXML(self::$xmlRepresentation->documentElement);
 
-        $status = $response->getStatus();
-        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:Success", $status->getStatusCode()->getValue());
-        $this->assertEmpty($status->getStatusCode()->getSubCodes());
-        $this->assertNull($status->getStatusMessage());
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($logoutResponse),
+        );
     }
 }

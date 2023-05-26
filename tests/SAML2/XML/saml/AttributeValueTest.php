@@ -46,8 +46,24 @@ final class AttributeValueTest extends TestCase
 
 
     /**
+     * Test creating an AttributeValue from scratch using an integer.
+     */
+    public function testMarshalling(): void
+    {
+        $av = new AttributeValue(2);
+        $this->assertIsInt($av->getValue());
+        $this->assertEquals(2, $av->getValue());
+        $this->assertEquals('xs:integer', $av->getXsiType());
+
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($av),
+        );
+    }
+
+
+    /**
      * Test creating an AttributeValue from scratch using a string.
-     *
      */
     public function testMarshallingString(): void
     {
@@ -59,22 +75,7 @@ final class AttributeValueTest extends TestCase
 
 
     /**
-     * Test creating an AttributeValue from scratch using an integer.
-     *
      */
-    public function testMarshallingInteger(): void
-    {
-        $av = new AttributeValue(2);
-        $this->assertIsInt($av->getValue());
-        $this->assertEquals(2, $av->getValue());
-        $this->assertEquals('xs:integer', $av->getXsiType());
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($av),
-        );
-    }
-
-
     public function testMarshallingNull(): void
     {
         $av = new AttributeValue(null);
@@ -124,6 +125,7 @@ XML;
 
         $this->assertIsInt($av->getValue());
         $this->assertEquals(2, $av->getValue());
+
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($av),

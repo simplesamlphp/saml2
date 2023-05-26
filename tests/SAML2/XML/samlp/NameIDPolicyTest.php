@@ -42,9 +42,10 @@ final class NameIDPolicyTest extends TestCase
         );
     }
 
+
     /**
      */
-    public function testMarshallingChristmas(): void
+    public function testMarshalling(): void
     {
         $nameIdPolicy = new NameIDPolicy(
             'urn:the:format',

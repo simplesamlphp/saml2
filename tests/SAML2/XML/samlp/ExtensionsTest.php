@@ -47,53 +47,41 @@ final class ExtensionsTest extends TestCase
 
 
     /**
-     * Test the getList() method.
      */
-    public function testExtensionsGet(): void
+    public function testMarshalling(): void
     {
-        $extensions = Extensions::fromXML(self::$xmlRepresentation->documentElement);
-        $list = $extensions->getList();
+        $ext1 = DOMDocumentFactory::fromString(<<<XML
+  <myns:AttributeList xmlns:myns="urn:test:mynamespace">
+    <myns:Attribute name="UserName" value=""/>
+  </myns:AttributeList>
+XML
+        );
 
-        $this->assertCount(2, $list);
-        $this->assertInstanceOf(Chunk::class, $list[0]);
-        $this->assertInstanceOf(Chunk::class, $list[1]);
-        $this->assertEquals("urn:test:mynamespace", $list[0]->getNamespaceURI());
-        $this->assertEquals("ExampleElement", $list[1]->getLocalName());
+        $ext2 = DOMDocumentFactory::fromString(
+            '<myns:ExampleElement xmlns:myns="urn:test:mynamespace" name="AnotherExtension" />',
+        );
+
+        $extensions = new Extensions(
+            [new Chunk($ext1->documentElement), new Chunk($ext2->documentElement)],
+        );
+
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($extensions)
+        );
     }
 
 
     /**
-     * Adding empty list should leave existing extensions unchanged.
      */
-    public function testExtensionsAddEmpty(): void
+    public function testUnmarshalling(): void
     {
         $extensions = Extensions::fromXML(self::$xmlRepresentation->documentElement);
 
-        $list = $extensions->getList();
-
-        $this->assertCount(2, $list);
-        $this->assertInstanceOf(Chunk::class, $list[0]);
-        $this->assertInstanceOf(Chunk::class, $list[1]);
-        $this->assertEquals("urn:test:mynamespace", $list[0]->getNamespaceURI());
-        $this->assertEquals("ExampleElement", $list[1]->getLocalName());
-    }
-
-
-    /**
-     * Test adding two random elements.
-     */
-    public function testExtensionsAddSome(): void
-    {
-        $scope = new Scope("scope");
-
-        $extensions = new Extensions([
-            new Chunk($scope->toXML()),
-        ]);
-        $list = $extensions->getList();
-
-        $this->assertCount(1, $list);
-        $this->assertInstanceOf(Chunk::class, $list[0]);
-        $this->assertEquals("urn:mace:shibboleth:metadata:1.0", $list[0]->getNamespaceURI());
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($extensions),
+        );
     }
 
 

@@ -87,7 +87,7 @@ XML
 
     /**
      */
-    public function testMarshallingNameID(): void
+    public function testMarshalling(): void
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 

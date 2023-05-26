@@ -257,36 +257,6 @@ AUTHNREQUEST;
     }
 
 
-    public function testThatTheSubjectIsCorrectlyRead(): void
-    {
-        $xml = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-    xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-    AssertionConsumerServiceIndex="1"
-    Destination="https://tiqr.example.org/idp/profile/saml2/Redirect/SSO"
-    Version="2.0"
-    ID="_2b0226190ca1c22de6f66e85f5c95158"
-    IssueInstant="2014-09-22T13:42:00Z">
-  <saml:Issuer>https://gateway.example.org/saml20/sp/metadata</saml:Issuer>
-  <saml:Subject>
-    <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
-  </saml:Subject>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
-
-        $subject = $authnRequest->getSubject();
-        $this->assertInstanceOf(Subject::class, $subject);
-
-        $nameId = $subject->getIdentifier();
-        $this->assertInstanceOf(NameID::class, $nameId);
-        $this->assertEquals("user@example.org", $nameId->getContent());
-        $this->assertEquals(C::NAMEID_UNSPECIFIED, $nameId->getFormat());
-    }
-
-
     public function testThatAnEncryptedNameIdCanBeDecrypted(): void
     {
         $container = ContainerSingleton::getInstance();
@@ -317,50 +287,6 @@ AUTHNREQUEST;
 
 
     /**
-     * Test for getting IDPlist values.
-     */
-    public function testgetIDPlistAttributes(): void
-    {
-        $xmlRequest = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  Version="2.0"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
-  IssueInstant="2004-12-05T09:21:59Z"
-  Destination="https://idp.example.org/SAML2/SSO/Artifact"
-  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
-  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
-  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
-    <samlp:Scoping><samlp:IDPList>
-        <samlp:IDPEntry ProviderID="urn:test:Legacy1"/>
-        <samlp:IDPEntry ProviderID="http://example.org/AAP" Name="N00T" Loc="https://mies"/>
-        <samlp:IDPEntry ProviderID="urn:example:1" Name="Voorbeeld"/>
-    </samlp:IDPList></samlp:Scoping>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $authnRequest = AuthnRequest::fromXML(DOMDocumentFactory::fromString($xmlRequest)->documentElement);
-
-        $expectedList = [
-            new IDPEntry('urn:test:Legacy1'),
-            new IDPEntry('http://example.org/AAP', 'N00T', 'https://mies'),
-            new IDPEntry('urn:example:1', 'Voorbeeld'),
-        ];
-
-        $scoping = $authnRequest->getScoping();
-        $this->assertInstanceOf(Scoping::class, $scoping);
-
-        $list = $scoping->getIDPList();
-        $this->assertInstanceOf(IDPList::class, $list);
-
-        $entries = $list->getIdpEntry();
-        $this->assertCount(3, $entries);
-        $this->assertEquals($expectedList, $entries);
-    }
-
-
-    /**
      * Test that parsing IDPList without ProviderID throws exception.
      */
     public function testScopeWithoutProviderIDThrowsException(): void
@@ -385,175 +311,6 @@ AUTHNREQUEST;
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing \'ProviderID\' attribute on samlp:IDPEntry.');
         AuthnRequest::fromXML(DOMDocumentFactory::fromString($xmlRequest)->documentElement);
-    }
-
-
-    /**
-     * Test getting NameIDPolicy
-     */
-    public function testGettingNameIDPolicy(): void
-    {
-        $xml = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  Version="2.0"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
-  IssueInstant="2004-12-05T09:21:59Z"
-  Destination="https://idp.example.org/SAML2/SSO/Artifact"
-  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
-  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
-  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
-  <samlp:NameIDPolicy
-    AllowCreate="true"
-    SPNameQualifier="https://sp.example.com/SAML2"
-    Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient"/>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $document     = DOMDocumentFactory::fromString($xml);
-        $authnRequest = AuthnRequest::fromXML($document->documentElement);
-
-        $nameIdPolicy = $authnRequest->getNameIdPolicy();
-
-        $this->assertInstanceOf(NameIDPolicy::class, $nameIdPolicy);
-        $this->assertEquals(true, $nameIdPolicy->getAllowCreate());
-        $this->assertEquals("https://sp.example.com/SAML2", $nameIdPolicy->getSPNameQualifier());
-        $this->assertEquals(C::NAMEID_TRANSIENT, $nameIdPolicy->getFormat());
-    }
-
-
-    /**
-     * Test getting ForceAuthn
-     */
-    public function testGettingForceAuthn(): void
-    {
-        $xml = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  Version="2.0"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
-  IssueInstant="2004-12-05T09:21:59Z"
-  Destination="https://idp.example.org/SAML2/SSO/Artifact"
-  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
-  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
-  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $document     = DOMDocumentFactory::fromString($xml);
-        $authnRequest = AuthnRequest::fromXML($document->documentElement);
-
-        $this->assertNull($authnRequest->getForceAuthn());
-
-        $xml = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  Version="2.0"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
-  ForceAuthn="true"
-  IssueInstant="2004-12-05T09:21:59Z"
-  Destination="https://idp.example.org/SAML2/SSO/Artifact"
-  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
-  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
-  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $document     = DOMDocumentFactory::fromString($xml);
-        $authnRequest = AuthnRequest::fromXML($document->documentElement);
-        $this->assertTrue($authnRequest->getForceAuthn());
-    }
-
-
-    /**
-     * Test getting IsPassive
-     */
-    public function testGettingIsPassive(): void
-    {
-        $xml = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  Version="2.0"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
-  IssueInstant="2004-12-05T09:21:59Z"
-  Destination="https://idp.example.org/SAML2/SSO/Artifact"
-  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
-  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
-  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $document     = DOMDocumentFactory::fromString($xml);
-        $authnRequest = AuthnRequest::fromXML($document->documentElement);
-
-        $this->assertNull($authnRequest->getIsPassive());
-
-        $xml = <<<AUTHNREQUEST
-<samlp:AuthnRequest IsPassive="false"
-  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  Version="2.0"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
-  IssueInstant="2004-12-05T09:21:59Z"
-  Destination="https://idp.example.org/SAML2/SSO/Artifact"
-  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
-  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
-  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $document     = DOMDocumentFactory::fromString($xml);
-        $authnRequest = AuthnRequest::fromXML($document->documentElement);
-        $this->assertFalse($authnRequest->getIsPassive());
-
-        $xml = <<<AUTHNREQUEST
-<samlp:AuthnRequest IsPassive="true"
-  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  Version="2.0"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
-  IssueInstant="2004-12-05T09:21:59Z"
-  Destination="https://idp.example.org/SAML2/SSO/Artifact"
-  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
-  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
-  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $document     = DOMDocumentFactory::fromString($xml);
-        $authnRequest = AuthnRequest::fromXML($document->documentElement);
-        $this->assertTrue($authnRequest->getIsPassive());
-    }
-
-
-    /**
-     * Test getting ProviderName
-     */
-    public function testGettingProviderName(): void
-    {
-        $xml = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  Version="2.0"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
-  IssueInstant="2004-12-05T09:21:59Z"
-  Destination="https://idp.example.org/SAML2/SSO/Artifact"
-  ProviderName="Example SP"
-  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
-  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
-  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $document     = DOMDocumentFactory::fromString($xml);
-        $authnRequest = AuthnRequest::fromXML($document->documentElement);
-
-        $this->assertEquals("Example SP", $authnRequest->getProviderName());
     }
 
 
@@ -689,5 +446,18 @@ AUTHNREQUEST;
             . 'exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
         );
         AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
+    }
+
+
+    /**
+     */
+    public function testUnmarshalling(): void
+    {
+        $authnRequest = AuthnRequest::fromXML(self::$xmlRepresentation->documentElement);
+
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($authnRequest),
+        );
     }
 }
