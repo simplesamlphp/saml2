@@ -87,6 +87,17 @@ class HTTPPost extends Binding
 
         $msg = Message::fromXML($document->firstChild);
 
+        /**
+         * 3.5.5.2 - SAML Bindings
+         *
+         * If the message is signed, the Destination XML attribute in the root SAML element of the protocol
+         * message MUST contain the URL to which the sender has instructed the user agent to deliver the
+         * message.
+         */
+        if ($msg->isMessageConstructedWithSignature()) {
+            Assert::notNull($msg->getDestination()); // Validation of the value must be done upstream
+        }
+
         if (array_key_exists('RelayState', $_POST)) {
             $msg->setRelayState($_POST['RelayState']);
         }
