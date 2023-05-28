@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\Subject;
@@ -29,7 +30,7 @@ abstract class AbstractSubjectQuery extends AbstractRequest
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
      * @param string|null $id
      * @param string $version
-     * @param int $issueInstant
+     * @param \DateTimeImmutable $issueInstant
      * @param string|null $destination
      * @param string|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
@@ -39,7 +40,7 @@ abstract class AbstractSubjectQuery extends AbstractRequest
         ?Issuer $issuer = null,
         ?string $id = null,
         string $version = '2.0',
-        ?int $issueInstant = null,
+        ?DateTimeImmutable $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,

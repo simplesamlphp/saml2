@@ -7,8 +7,8 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use DOMDocument;
 use DOMElement;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\XML\saml\AbstractStatement;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\UnknownStatement;
@@ -35,10 +35,17 @@ final class StatementTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
+    /** @var \SimpleSAML\SAML2\Compat\AbstractContainer */
+    private static AbstractContainer $containerBackup;
+
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
+        self::$containerBackup = ContainerSingleton::getInstance();
+
         self::$schemaFile = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
 
         self::$testedClass = CustomStatement::class;
@@ -47,9 +54,17 @@ final class StatementTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/saml_Statement.xml',
         );
 
-        $container = new MockContainer();
+        $container = clone self::$containerBackup;
         $container->registerExtensionHandler(CustomStatement::class);
         ContainerSingleton::setContainer($container);
+    }
+
+
+    /**
+     */
+    public static function tearDownAfterClass(): void
+    {
+        ContainerSingleton::setContainer(self::$containerBackup);
     }
 
 

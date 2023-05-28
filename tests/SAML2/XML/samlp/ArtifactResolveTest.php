@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utils;
@@ -52,7 +53,13 @@ final class ArtifactResolveTest extends TestCase
         $issuer = new Issuer('https://ServiceProvider.com/SAML');
         $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
 
-        $artifactResolve = new ArtifactResolve($artifact, $issuer, '_6c3a4f8b9c2d', '2.0', 1074711649);
+        $artifactResolve = new ArtifactResolve(
+            $artifact,
+            new DateTimeImmutable('2004-01-21T19:00:49Z'),
+            $issuer,
+            '_6c3a4f8b9c2d',
+            '2.0',
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

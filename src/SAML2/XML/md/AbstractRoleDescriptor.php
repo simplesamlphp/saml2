@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
@@ -15,7 +16,6 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function array_pop;
 use function count;
@@ -40,7 +40,7 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
      * @param string $type
      * @param string[] $protocolSupportEnumeration A set of URI specifying the protocols supported.
      * @param string|null $ID The ID for this document. Defaults to null.
-     * @param int|null $validUntil Unix time of validity for this document. Defaults to null.
+     * @param \DateTimeImmutable|null $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An Extensions object. Defaults to null.
      * @param string|null $errorURL An URI where to redirect users for support. Defaults to null.
@@ -56,7 +56,7 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
         protected string $type,
         array $protocolSupportEnumeration,
         ?string $ID = null,
-        ?int $validUntil = null,
+        ?DateTimeImmutable $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
         ?string $errorURL = null,
@@ -130,6 +130,8 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
             $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
 
             $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
+            Assert::nullOrValidDateTimeZulu($validUntil);
+
             $orgs = Organization::getChildrenOfClass($xml);
             Assert::maxCount(
                 $orgs,
@@ -151,7 +153,7 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
                 $type,
                 preg_split('/[\s]+/', trim($protocols)),
                 self::getOptionalAttribute($xml, 'ID', null),
-                $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
+                $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
                 self::getOptionalAttribute($xml, 'cacheDuration', null),
                 array_pop($extensions),
                 self::getOptionalAttribute($xml, 'errorURL', null),

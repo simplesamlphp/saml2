@@ -490,6 +490,11 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const SAML2INT_ENTITYID_MAX_LENGTH = 256;
 
     /**
+     * The format to express a timestamp in SAML2
+     */
+    public const DATETIME_FORMAT = 'Y-m-d\\TH:i:sp';
+
+    /**
      * Valid values for saml:DecisionType
      */
     public const AUTHZ_DECISION_PERMIT = 'Permit';

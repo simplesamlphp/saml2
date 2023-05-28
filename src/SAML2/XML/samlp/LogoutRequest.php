@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -40,13 +42,13 @@ final class LogoutRequest extends AbstractRequest
      * Constructor for SAML 2 AttributeQuery.
      *
      * @param \SimpleSAML\SAML2\XML\saml\IdentifierInterface $identifier
-     * @param int|null $notOnOrAfter
+     * @param \DateTimeImmutable $issueInstant
+     * @param \DateTimeImmutable|null $notOnOrAfter
      * @param string|null $reason
      * @param \SimpleSAML\SAML2\XML\samlp\SessionIndex[] $sessionIndexes
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param string $version
-     * @param int|null $issueInstant
      * @param string|null $destination
      * @param string|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
@@ -54,13 +56,13 @@ final class LogoutRequest extends AbstractRequest
      */
     public function __construct(
         IdentifierInterface $identifier,
-        protected ?int $notOnOrAfter = null,
+        DateTimeImmutable $issueInstant,
+        protected ?DateTimeImmutable $notOnOrAfter = null,
         protected ?string $reason = null,
         protected array $sessionIndexes = [],
         ?Issuer $issuer = null,
         ?string $id = null,
         string $version = '2.0',
-        ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
@@ -76,9 +78,9 @@ final class LogoutRequest extends AbstractRequest
     /**
      * Retrieve the expiration time of this request.
      *
-     * @return int|null The expiration time of this request.
+     * @return \DateTimeImmutable|null The expiration time of this request.
      */
-    public function getNotOnOrAfter(): ?int
+    public function getNotOnOrAfter(): ?DateTimeImmutable
     {
         return $this->notOnOrAfter;
     }
@@ -139,7 +141,7 @@ final class LogoutRequest extends AbstractRequest
         $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
 
         Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
-        $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
+        $issueInstant = new DateTimeImmutable($issueInstant);
 
         $notOnOrAfter = self::getOptionalAttribute($xml, 'NotOnOrAfter', null);
         if ($notOnOrAfter !== null) {
@@ -147,7 +149,7 @@ final class LogoutRequest extends AbstractRequest
             $notOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $notOnOrAfter, 1);
 
             Assert::validDateTimeZulu($notOnOrAfter, ProtocolViolationException::class);
-            $notOnOrAfter = XMLUtils::xsDateTimeToTimestamp($notOnOrAfter);
+            $notOnOrAfter = new DateTimeImmutable($notOnOrAfter);
         }
 
         $issuer = Issuer::getChildrenOfClass($xml);
@@ -176,13 +178,13 @@ final class LogoutRequest extends AbstractRequest
 
         $request = new static(
             $identifier,
+            $issueInstant,
             $notOnOrAfter,
             self::getOptionalAttribute($xml, 'Reason', null),
             $sessionIndex,
             array_pop($issuer),
             $id,
             $version,
-            $issueInstant,
             self::getOptionalAttribute($xml, 'Destination', null),
             self::getOptionalAttribute($xml, 'Consent', null),
             array_pop($extensions),
@@ -210,7 +212,7 @@ final class LogoutRequest extends AbstractRequest
         $e = parent::toUnsignedXML($parent);
 
         if ($this->getNotOnOrAfter() !== null) {
-            $e->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->getNotOnOrAfter()));
+            $e->setAttribute('NotOnOrAfter', $this->getNotOnOrAfter()->format(C::DATETIME_FORMAT));
         }
 
         if ($this->getReason() !== null) {

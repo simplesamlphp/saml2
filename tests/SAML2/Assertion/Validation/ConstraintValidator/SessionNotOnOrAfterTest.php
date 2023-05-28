@@ -4,27 +4,29 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
+use DateInterval;
+use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnStatement;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\TestUtils\SAML2\ControlledTimeTestCase;
 
 /**
- * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
- * tests.
- *
  * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter
- * @package simplesamlphp/saml2
  *
- * @runTestsInSeparateProcesses
+ * @package simplesamlphp/saml2
  */
-final class SessionNotOnOrAfterTest extends ControlledTimeTestCase
+final class SessionNotOnOrAfterTest extends TestCase
 {
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
+
     /** @var \SimpleSAML\SAML2\XML\saml\Issuer */
     private static Issuer $issuer;
 
@@ -33,6 +35,8 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTestCase
      */
     public static function setUpBeforeClass(): void
     {
+        self::$clock = Utils::getContainer()->getClock();
+
         // Create an Issuer
         self::$issuer = new Issuer('testIssuer');
     }
@@ -51,12 +55,12 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTestCase
                 null,
                 null
             ),
-            $this->currentTime,
-            $this->currentTime - 60
+            self::$clock->now(),
+            self::$clock->now()->sub(new DateInterval('PT60S')),
         );
 
         // Create an assertion
-        $assertion = new Assertion(self::$issuer, null, null, null, null, [$authnStatement]);
+        $assertion = new Assertion(self::$issuer, self::$clock->now(), null, null, null, [$authnStatement]);
 
         $validator = new SessionNotOnOrAfter();
         $result    = new Result();
@@ -81,12 +85,12 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTestCase
                 null,
                 null
             ),
-            $this->currentTime,
-            $this->currentTime - 59
+            self::$clock->now(),
+            self::$clock->now()->sub(new DateInterval('PT59S')),
         );
 
         // Create an assertion
-        $assertion = new Assertion(self::$issuer, null, null, null, null, [$authnStatement]);
+        $assertion = new Assertion(self::$issuer, self::$clock->now(), null, null, null, [$authnStatement]);
 
         $validator = new SessionNotOnOrAfter();
         $result    = new Result();
@@ -110,12 +114,12 @@ final class SessionNotOnOrAfterTest extends ControlledTimeTestCase
                 null,
                 null
             ),
-            $this->currentTime,
-            $this->currentTime
+            self::$clock->now(),
+            self::$clock->now(),
         );
 
         // Create an assertion
-        $assertion = new Assertion(self::$issuer, null, null, null, null, [$authnStatement]);
+        $assertion = new Assertion(self::$issuer, self::$clock->now(), null, null, null, [$authnStatement]);
 
         $validator = new SessionNotOnOrAfter();
         $result    = new Result();

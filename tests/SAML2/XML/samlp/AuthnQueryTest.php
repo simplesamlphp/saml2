@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
@@ -72,7 +73,7 @@ final class AuthnQueryTest extends TestCase
                 Format: C::NAMEID_ENTITY,
             ),
             id: 'aaf23196-1773-2113-474a-fe114412ab72',
-            issueInstant: 1504698567,
+            issueInstant: new DateTimeImmutable('2017-09-06T11:49:27Z'),
             sessionIndex: 'phpunit',
         );
 

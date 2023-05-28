@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use DateTimeImmutable;
 use DOMAttr;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
 use SimpleSAML\SAML2\XML\md\Company;
@@ -59,10 +60,16 @@ final class RoleDescriptorTest extends TestCase
     use SerializableElementTestTrait;
 
 
+    /** @var \SimpleSAML\SAML2\Compat\AbstractContainer */
+    private static AbstractContainer $containerBackup;
+
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
+        self::$containerBackup = ContainerSingleton::getInstance();
+
         self::$schemaFile = dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/schemas/simplesamlphp.xsd';
 
         self::$testedClass = AbstractRoleDescriptor::class;
@@ -71,9 +78,17 @@ final class RoleDescriptorTest extends TestCase
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_RoleDescriptor.xml',
         );
 
-        $container = new MockContainer();
+        $container = clone self::$containerBackup;
         $container->registerExtensionHandler(CustomRoleDescriptor::class);
         ContainerSingleton::setContainer($container);
+    }
+
+
+    /**
+     */
+    public static function tearDownAfterClass(): void
+    {
+        ContainerSingleton::setContainer(self::$containerBackup);
     }
 
 
@@ -96,7 +111,7 @@ final class RoleDescriptorTest extends TestCase
             ],
             [C::NS_SAMLP, C::PROTOCOL],
             'TheID',
-            1234567890,
+            new DateTimeImmutable('2009-02-13T23:31:30Z'),
             'PT5000S',
             new Extensions([new Chunk(
                 DOMDocumentFactory::fromString(
@@ -171,7 +186,7 @@ final class RoleDescriptorTest extends TestCase
         $this->assertInstanceOf(ContactPerson::class, $descriptor->getContactPerson()[0]);
         $this->assertInstanceOf(ContactPerson::class, $descriptor->getContactPerson()[1]);
         $this->assertEquals('TheID', $descriptor->getID());
-        $this->assertEquals(1234567890, $descriptor->getValidUntil());
+        $this->assertEquals('2009-02-13T23:31:30Z', $descriptor->getValidUntil()->format(C::DATETIME_FORMAT));
         $this->assertEquals('PT5000S', $descriptor->getCacheDuration());
         $this->assertEquals('https://error.reporting/', $descriptor->getErrorURL());
 
@@ -219,7 +234,7 @@ final class RoleDescriptorTest extends TestCase
         $this->assertInstanceOf(ContactPerson::class, $descriptor->getContactPerson()[0]);
         $this->assertInstanceOf(ContactPerson::class, $descriptor->getContactPerson()[1]);
         $this->assertEquals('TheID', $descriptor->getID());
-        $this->assertEquals(1234567890, $descriptor->getValidUntil());
+        $this->assertEquals('2009-02-13T23:31:30Z', $descriptor->getValidUntil()->format(C::DATETIME_FORMAT));
         $this->assertEquals('PT5000S', $descriptor->getCacheDuration());
         $this->assertEquals('https://error.reporting/', $descriptor->getErrorURL());
 

@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
@@ -42,10 +45,16 @@ final class AttributeQueryTest extends TestCase
     use SignedElementTestTrait;
 
 
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
+
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
+        self::$clock = Utils::getContainer()->getClock();
+
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
         self::$testedClass = AttributeQuery::class;
@@ -96,7 +105,7 @@ final class AttributeQueryTest extends TestCase
                 Format: C::NAMEID_ENTITY,
             ),
             id: 'aaf23196-1773-2113-474a-fe114412ab72',
-            issueInstant: 1504698567,
+            issueInstant: new DateTimeImmutable('2017-09-06T11:49:27Z'),
         );
 
         $this->assertEquals(
@@ -122,6 +131,7 @@ final class AttributeQueryTest extends TestCase
         $nameId = new NameID('NameIDValue');
         $attributeQuery = new AttributeQuery(
             subject: new Subject($nameId),
+            issueInstant: self::$clock->now(),
             attributes: [
                 new Attribute(
                     name: 'test1',

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use DateTimeImmutable;
 use Exception;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utils;
@@ -66,7 +67,7 @@ final class AffiliationDescriptorTest extends TestCase
             affiliationOwnerId: C::ENTITY_IDP,
             affiliateMember: [new AffiliateMember(C::ENTITY_SP), new AffiliateMember(C::ENTITY_OTHER)],
             ID: 'TheID',
-            validUntil: 1234567890,
+            validUntil: new DateTimeImmutable('2009-02-13T23:31:30Z'),
             cacheDuration: 'PT5000S',
             keyDescriptor: [
                 new KeyDescriptor(

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -24,21 +26,23 @@ final class Conditions extends AbstractSamlElement
     /**
      * Initialize a Conditions element.
      *
-     * @param int|null $notBefore
-     * @param int|null $notOnOrAfter
+     * @param \DateTimeImmutable|null $notBefore
+     * @param \DateTimeImmutable|null $notOnOrAfter
      * @param \SimpleSAML\SAML2\XML\saml\AbstractCondition[] $condition
      * @param \SimpleSAML\SAML2\XML\saml\AudienceRestriction[] $audienceRestriction
      * @param bool $oneTimeUse
      * @param \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null $proxyRestriction
      */
     public function __construct(
-        protected ?int $notBefore = null,
-        protected ?int $notOnOrAfter = null,
+        protected ?DateTimeImmutable $notBefore = null,
+        protected ?DateTimeImmutable $notOnOrAfter = null,
         protected array $condition = [],
         protected array $audienceRestriction = [],
         protected bool $oneTimeUse = false,
         protected ?ProxyRestriction $proxyRestriction = null,
     ) {
+        Assert::nullOrSame($notBefore?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
+        Assert::nullOrSame($notOnOrAfter?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::allIsInstanceOf($condition, AbstractCondition::class);
         Assert::allIsInstanceOf($audienceRestriction, AudienceRestriction::class);
     }
@@ -47,9 +51,9 @@ final class Conditions extends AbstractSamlElement
     /**
      * Collect the value of the notBefore-property
      *
-     * @return int|null
+     * @return \DateTimeImmutable|null
      */
-    public function getNotBefore(): ?int
+    public function getNotBefore(): ?DateTimeImmutable
     {
         return $this->notBefore;
     }
@@ -58,9 +62,9 @@ final class Conditions extends AbstractSamlElement
     /**
      * Collect the value of the notOnOrAfter-property
      *
-     * @return int|null
+     * @return \DateTimeImmutable|null
      */
-    public function getNotOnOrAfter(): ?int
+    public function getNotOnOrAfter(): ?DateTimeImmutable
     {
         return $this->notOnOrAfter;
     }
@@ -175,8 +179,8 @@ final class Conditions extends AbstractSamlElement
         );
 
         return new static(
-            $notBefore !== null ? XMLUtils::xsDateTimeToTimestamp($notBefore) : null,
-            $notOnOrAfter !== null ? XMLUtils::xsDateTimeToTimestamp($notOnOrAfter) : null,
+            $notBefore !== null ? new DateTimeImmutable($notBefore) : null,
+            $notOnOrAfter !== null ? new DateTimeImmutable($notOnOrAfter) : null,
             $condition,
             $audienceRestriction,
             !empty($oneTimeUse),
@@ -196,11 +200,11 @@ final class Conditions extends AbstractSamlElement
         $e = $this->instantiateParentElement($parent);
 
         if ($this->getNotBefore() !== null) {
-            $e->setAttribute('NotBefore', gmdate('Y-m-d\TH:i:s\Z', $this->getNotBefore()));
+            $e->setAttribute('NotBefore', $this->getNotBefore()->format(C::DATETIME_FORMAT));
         }
 
         if ($this->getNotOnOrAfter() !== null) {
-            $e->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->getNotOnOrAfter()));
+            $e->setAttribute('NotOnOrAfter', $this->getNotOnOrAfter()->format(C::DATETIME_FORMAT));
         }
 
         foreach ($this->getCondition() as $condition) {

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -34,6 +36,18 @@ use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
  */
 final class AbstractStatusResponseTest extends TestCase
 {
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
+
+
+    /**
+     */
+    public static function setUpBeforeClass(): void
+    {
+        self::$clock = Utils::getContainer()->getClock();
+    }
+
+
     /**
      */
     public function testMarshalling(): void
@@ -50,7 +64,7 @@ final class AbstractStatusResponseTest extends TestCase
             new StatusMessage('OurMessageText')
         );
 
-        $response = new Response($status);
+        $response = new Response($status, self::$clock->now());
 
         $responseElement = $response->toXML();
 
@@ -102,6 +116,7 @@ final class AbstractStatusResponseTest extends TestCase
         );
 
         $response = new Response(
+            issueInstant: self::$clock->now(),
             status: $status,
             issuer: $issuer,
             extensions: $extensions,

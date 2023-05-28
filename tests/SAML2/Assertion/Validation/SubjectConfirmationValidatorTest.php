@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidSubjectConfirmationException;
@@ -15,6 +16,7 @@ use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Signature\Validator;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
@@ -32,39 +34,43 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class SubjectConfirmationValidatorTest extends TestCase
 {
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
+
     /** @var \DOMDocument */
-    protected static DOMDocument $document;
+    private static DOMDocument $document;
 
     /** @var \SimpleSAML\SAML2\Assertion\Processor */
-    protected static Processor $assertionProcessor;
+    private static Processor $assertionProcessor;
 
     /** @var \SimpleSAML\SAML2\Configuration\IdentityProvider */
-    protected static IdentityProvider $identityProviderConfiguration;
+    private static IdentityProvider $identityProviderConfiguration;
 
     /** @var \SimpleSAML\SAML2\Configuration\ServiceProvider */
-    protected static ServiceProvider $serviceProviderConfiguration;
+    private static ServiceProvider $serviceProviderConfiguration;
 
     /** @var \Psr\Log\LoggerInterface */
-    protected static LoggerInterface $logger;
+    private static LoggerInterface $logger;
 
     /** @var \SimpleSAML\SAML2\Response\Validation\Validator */
-    protected static Validator $validator;
+    private static Validator $validator;
 
     /** @var \SimpleSAML\SAML2\Configuration\Destination */
-    protected static Destination $destination;
+    private static Destination $destination;
 
     /** @var \SimpleSAML\SAML2\xml\samlp\Response */
-    protected static Response $response;
+    private static Response $response;
 
 
     /**
      */
     public static function setUpBeforeClass(): void
     {
+        self::$clock = Utils::getContainer()->getClock();
         self::$logger = new NullLogger();
         self::$validator = new Validator(self::$logger);
         self::$destination = new Destination(C::ENTITY_SP);
-        self::$response = new Response(new Status(new StatusCode()));
+        self::$response = new Response(new Status(new StatusCode()), self::$clock->now());
 
         self::$identityProviderConfiguration = new IdentityProvider(['entityId' => C::ENTITY_IDP]);
         self::$serviceProviderConfiguration = new ServiceProvider(['entityId' => C::ENTITY_SP]);

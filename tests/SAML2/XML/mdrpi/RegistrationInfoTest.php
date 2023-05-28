@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
+use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -63,7 +64,7 @@ final class RegistrationInfoTest extends TestCase
     {
         $registrationInfo = new RegistrationInfo(
             'https://ExampleAuthority',
-            1234567890,
+            new DateTimeImmutable('2009-02-13T23:31:30Z'),
             [
                 new RegistrationPolicy('en', 'http://www.example.org/aai/metadata/en_registration.html'),
                 new RegistrationPolicy('de', 'http://www.example.org/aai/metadata/de_registration.html'),

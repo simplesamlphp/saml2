@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
+use DateTimeImmutable;
+use DateTimeZone;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
+use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
@@ -41,11 +45,16 @@ final class SpIsValidAudienceTest extends MockeryTestCase
     /** @var \Mockery\MockInterface */
     private MockInterface $serviceProvider;
 
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
+
 
     /**
      */
     public static function setUpBeforeClass(): void
     {
+        self::$clock = Utils::getContainer()->getClock();
+
         // Create an Issuer
         self::$issuer = new Issuer(C::ENTITY_IDP);
 
@@ -64,7 +73,7 @@ final class SpIsValidAudienceTest extends MockeryTestCase
                 null,
                 null
             ),
-            time()
+            self::$clock->now(),
         );
     }
 
@@ -84,7 +93,11 @@ final class SpIsValidAudienceTest extends MockeryTestCase
     public function whenNoValidAudiencesAreGivenTheAssertionIsValid(): void
     {
         // Create an assertion
-        $assertion = new Assertion(self::$issuer, null, null, null, null, [self::$authnStatement]);
+        $assertion = new Assertion(
+            issuer: self::$issuer,
+            issueInstant: self::$clock->now(),
+            statements: [self::$authnStatement],
+        );
 
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('entityId');
 
@@ -105,7 +118,12 @@ final class SpIsValidAudienceTest extends MockeryTestCase
     public function ifTheSpEntityIdIsNotInTheValidAudiencesTheAssertionIsInvalid(): void
     {
         // Create an assertion
-        $assertion = new Assertion(self::$issuer, null, null, null, self::$conditions, [self::$authnStatement]);
+        $assertion = new Assertion(
+            issuer: self::$issuer,
+            issueInstant: self::$clock->now(),
+            conditions: self::$conditions,
+            statements: [self::$authnStatement],
+        );
 
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn('anotherEntityId');
 
@@ -127,7 +145,12 @@ final class SpIsValidAudienceTest extends MockeryTestCase
     public function theAssertionIsValidWhenTheCurrentSpEntityIdIsAValidAudience(): void
     {
         // Create an assertion
-        $assertion = new Assertion(self::$issuer, null, null, null, self::$conditions, [self::$authnStatement]);
+        $assertion = new Assertion(
+            issuer: self::$issuer,
+            issueInstant: self::$clock->now(),
+            conditions: self::$conditions,
+            statements: [self::$authnStatement],
+        );
 
         $this->serviceProvider->shouldReceive('getEntityId')->andReturn(C::ENTITY_SP);
 

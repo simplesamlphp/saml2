@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
@@ -14,7 +15,6 @@ use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
@@ -33,10 +33,10 @@ class ArtifactResolve extends AbstractRequest
      * Initialize an ArtifactResolve.
      *
      * @param string $artifact
+     * @param \DateTimeImmutable $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param string $version
-     * @param int|null $issueInstant
      * @param string|null $destination
      * @param string|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
@@ -45,10 +45,10 @@ class ArtifactResolve extends AbstractRequest
      */
     public function __construct(
         protected string $artifact,
+        DateTimeImmutable $issueInstant,
         ?Issuer $issuer = null,
         ?string $id = null,
         string $version = '2.0',
-        ?int $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
@@ -102,7 +102,7 @@ class ArtifactResolve extends AbstractRequest
         $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
 
         Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
-        $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
+        $issueInstant = new DateTimeImmutable($issueInstant);
 
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::maxCount($issuer, 1);
@@ -123,10 +123,10 @@ class ArtifactResolve extends AbstractRequest
 
         $resolve = new static(
             $artifact,
+            $issueInstant,
             array_pop($issuer),
             $id,
             $version,
-            $issueInstant,
             self::getOptionalAttribute($xml, 'Destination', null),
             self::getOptionalAttribute($xml, 'Consent', null),
             array_pop($extensions),

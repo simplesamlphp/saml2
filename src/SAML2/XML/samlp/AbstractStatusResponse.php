@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
@@ -25,10 +26,10 @@ abstract class AbstractStatusResponse extends AbstractMessage
      * Constructor for SAML 2 response messages.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\Status $status
+     * @param \DateTimeImmutable $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param string $version
-     * @param int|null $issueInstant
      * @param string|null $inResponseTo
      * @param string|null $destination
      * @param string|null $consent
@@ -39,10 +40,10 @@ abstract class AbstractStatusResponse extends AbstractMessage
      */
     protected function __construct(
         protected Status $status,
+        DateTimeImmutable $issueInstant,
         ?Issuer $issuer = null,
         ?string $id = null,
         string $version = '2.0',
-        ?int $issueInstant = null,
         protected ?string $inResponseTo = null,
         ?string $destination = null,
         ?string $consent = null,

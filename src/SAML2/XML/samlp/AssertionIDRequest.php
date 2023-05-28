@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
@@ -13,7 +14,6 @@ use SimpleSAML\SAML2\XML\saml\AssertionIDRef;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
@@ -32,7 +32,7 @@ final class AssertionIDRequest extends AbstractRequest
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param string $version
-     * @param int|null $issueInstant
+     * @param \DateTimeImmutable|null $issueInstant
      * @param string|null $destination
      * @param string|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
@@ -44,7 +44,7 @@ final class AssertionIDRequest extends AbstractRequest
         ?Issuer $issuer = null,
         ?string $id = null,
         string $version = '2.0',
-        ?int $issueInstant = null,
+        ?DateTimeImmutable $issueInstant = null,
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
@@ -110,7 +110,7 @@ final class AssertionIDRequest extends AbstractRequest
         $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
 
         Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
-        $issueInstant = XMLUtils::xsDateTimeToTimestamp($issueInstant);
+        $issueInstant = new DateTimeImmutable($issueInstant);
 
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount(

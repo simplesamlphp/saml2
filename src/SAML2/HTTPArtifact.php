@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2;
 
+use DateInterval;
 use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
@@ -12,7 +13,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
-use SimpleSAML\SAML2\Utilities\Temporal;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
@@ -74,7 +75,8 @@ class HTTPArtifact extends Binding
         $artifactData = $message->toXML();
         $artifactDataString = $artifactData->ownerDocument?->saveXML($artifactData);
 
-        $store->set('artifact', $artifact, $artifactDataString, Temporal::getTime() + 15 * 60);
+        $clock = Utils::getContainer()->getClock();
+        $store->set('artifact', $artifact, $artifactDataString, $clock->now()->add(new DateDInterval('PT15M')));
 
         $destination = $message->getDestination();
         if ($destination === null) {

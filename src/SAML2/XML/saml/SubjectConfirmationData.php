@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
@@ -12,7 +13,6 @@ use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 
 use function filter_var;
@@ -35,8 +35,8 @@ final class SubjectConfirmationData extends AbstractSamlElement
     /**
      * Initialize (and parse) a SubjectConfirmationData element.
      *
-     * @param int|null $notBefore
-     * @param int|null $notOnOrAfter
+     * @param \DateTimeImmutable|null $notBefore
+     * @param \DateTimeImmutable|null $notOnOrAfter
      * @param string|null $recipient
      * @param string|null $inResponseTo
      * @param string|null $address
@@ -44,14 +44,16 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
-        protected ?int $notBefore = null,
-        protected ?int $notOnOrAfter = null,
+        protected ?DateTimeImmutable $notBefore = null,
+        protected ?DateTimeImmutable $notOnOrAfter = null,
         protected ?string $recipient = null,
         protected ?string $inResponseTo = null,
         protected ?string $address = null,
         protected array $info = [],
         array $namespacedAttributes = [],
     ) {
+        Assert::nullOrSame($notBefore?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
+        Assert::nullOrSame($notOnOrAfter?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::nullOrNotWhitespaceOnly($recipient);
         Assert::nullOrValidNCName($inResponseTo); // Covers the empty string
 
@@ -70,9 +72,9 @@ final class SubjectConfirmationData extends AbstractSamlElement
     /**
      * Collect the value of the NotBefore-property
      *
-     * @return int|null
+     * @return \DateTimeImmutable|null
      */
-    public function getNotBefore(): ?int
+    public function getNotBefore(): ?DateTimeImmutable
     {
         return $this->notBefore;
     }
@@ -81,9 +83,9 @@ final class SubjectConfirmationData extends AbstractSamlElement
     /**
      * Collect the value of the NotOnOrAfter-property
      *
-     * @return int|null
+     * @return \DateTimeImmutable|null
      */
-    public function getNotOnOrAfter(): ?int
+    public function getNotOnOrAfter(): ?DateTimeImmutable
     {
         return $this->notOnOrAfter;
     }
@@ -174,7 +176,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
             $NotBefore = preg_replace('/([.][0-9]+Z)$/', 'Z', $NotBefore, 1);
 
             Assert::validDateTimeZulu($NotBefore, ProtocolViolationException::class);
-            $NotBefore = XMLUtils::xsDateTimeToTimestamp($NotBefore);
+            $NotBefore = new DateTimeImmutable($NotBefore);
         }
 
         $NotOnOrAfter = self::getOptionalAttribute($xml, 'NotOnOrAfter', null);
@@ -183,7 +185,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
             $NotOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $NotOnOrAfter, 1);
 
             Assert::validDateTimeZulu($NotOnOrAfter, ProtocolViolationException::class);
-            $NotOnOrAfter = XMLUtils::xsDateTimeToTimestamp($NotOnOrAfter);
+            $NotOnOrAfter = new DateTimeImmutable($NotOnOrAfter);
         }
 
         $Recipient = self::getOptionalAttribute($xml, 'Recipient', null);
@@ -226,10 +228,10 @@ final class SubjectConfirmationData extends AbstractSamlElement
         $e = $this->instantiateParentElement($parent);
 
         if ($this->getNotBefore() !== null) {
-            $e->setAttribute('NotBefore', gmdate('Y-m-d\TH:i:s\Z', $this->getNotBefore()));
+            $e->setAttribute('NotBefore', $this->getNotBefore()->format(C::DATETIME_FORMAT));
         }
         if ($this->getNotOnOrAfter() !== null) {
-            $e->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->getNotOnOrAfter()));
+            $e->setAttribute('NotOnOrAfter', $this->getNotOnOrAfter()->format(C::DATETIME_FORMAT));
         }
         if ($this->getRecipient() !== null) {
             $e->setAttribute('Recipient', $this->getRecipient());

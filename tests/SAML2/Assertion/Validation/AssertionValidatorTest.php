@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
@@ -15,6 +16,7 @@ use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Signature\Validator;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
@@ -30,6 +32,9 @@ use SimpleSAML\XML\DOMDocumentFactory;
  */
 final class AssertionValidatorTest extends TestCase
 {
+    /** @var \Psr\Clock\ClockInterface */
+    protected static ClockInterface $clock;
+
     /** @var \DOMDocument */
     protected static DOMDocument $document;
 
@@ -64,10 +69,11 @@ final class AssertionValidatorTest extends TestCase
         $audience = $spentity;
         $destination = 'https://example.org/authentication/sp/consume-assertion';
 
+        self::$clock = Utils::getContainer()->getClock();
         self::$logger = new NullLogger();
         self::$validator = new Validator(self::$logger);
         self::$destination = new Destination($destination);
-        self::$response = new Response(new Status(new StatusCode()));
+        self::$response = new Response(new Status(new StatusCode()), self::$clock->now());
 
         self::$identityProviderConfiguration = new IdentityProvider(['entityId' => $idpentity]);
         self::$serviceProviderConfiguration  = new ServiceProvider(['entityId' => $spentity]);

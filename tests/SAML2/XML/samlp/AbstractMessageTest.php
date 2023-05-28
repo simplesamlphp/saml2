@@ -7,9 +7,11 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DOMElement;
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
@@ -37,6 +39,18 @@ use function dirname;
  */
 final class AbstractMessageTest extends TestCase
 {
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
+
+
+    /**
+     */
+    public static function setUpBeforeClass(): void
+    {
+        self::$clock = Utils::getContainer()->getClock();
+    }
+
+
     /**
      * @group Message
      */
@@ -127,7 +141,7 @@ AUTHNREQUEST
         // first, try with common Issuer objects (Format=entity)
         $issuer = new Issuer('https://gateway.stepup.org/saml20/sp/metadata');
 
-        $response = new Response($status, $issuer);
+        $response = new Response($status, self::$clock->now(), $issuer);
         $xml = $response->toXML();
         $xpCache = XPath::getXPath($xml);
         $xml_issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
@@ -144,7 +158,7 @@ AUTHNREQUEST
             C::NAMEID_UNSPECIFIED,
             'SomeSPProvidedID',
         );
-        $response = new Response($status, $issuer);
+        $response = new Response($status, self::$clock->now(), $issuer);
         $xml = $response->toXML();
         $xpCache = XPath::getXPath($xml);
         $xml_issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
@@ -158,7 +172,7 @@ AUTHNREQUEST
         $this->assertEquals($issuer->getSPProvidedID(), $xml_issuer->getAttribute('SPProvidedID'));
 
         // finally, make sure we can skip the Issuer by setting it to null
-        $response = new Response($status);
+        $response = new Response($status, self::$clock->now());
         $xml = $response->toXML();
 
         $xpCache = XPath::getXPath($xml);

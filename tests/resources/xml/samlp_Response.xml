@@ -12,7 +12,7 @@
         <saml:SubjectConfirmationData NotOnOrAfter="2011-08-31T08:51:05Z" Recipient="https://sp.example.org/authentication/sp/consume-assertion" InResponseTo="_13603a6565a69297e9809175b052d115965121c8" />
       </saml:SubjectConfirmation>
     </saml:Subject>
-    <saml:Conditions NotBefore="2011-08-31T08:51:05Z" NotOnOrAfter="2011-08-31T08:51:05Z">
+    <saml:Conditions NotBefore="2011-08-31T08:51:05Z" NotOnOrAfter="2011-08-31T10:51:05Z">
       <saml:AudienceRestriction>
         <saml:Audience>https://simplesamlphp.org/sp/metadata</saml:Audience>
       </saml:AudienceRestriction>

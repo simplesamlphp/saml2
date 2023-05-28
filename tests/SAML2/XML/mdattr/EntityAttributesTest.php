@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdattr;
 
+use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utils\XPath;
@@ -132,8 +133,8 @@ final class EntityAttributesTest extends TestCase
         // Create an assertion
         $unsignedAssertion = new Assertion(
             $issuer,
+            new DateTimeImmutable('2022-10-16T22:51:18Z'),
             '_93af655219464fb403b34436cfb0c5cb1d9a5502',
-            1665960678,
             $subject,
             $conditions,
             [$attrStatement]

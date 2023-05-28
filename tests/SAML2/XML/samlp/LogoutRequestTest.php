@@ -7,10 +7,12 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DOMDocument;
 use DOMElement;
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -55,12 +57,17 @@ final class LogoutRequestTest extends TestCase
     use SerializableElementTestTrait;
     use SignedElementTestTrait;
 
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
+
 
     /**
      * Load a fixture.
      */
     public static function setUpBeforeClass(): void
     {
+        self::$clock = Utils::getContainer()->getClock();
+
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
         self::$testedClass = LogoutRequest::class;
@@ -79,6 +86,7 @@ final class LogoutRequestTest extends TestCase
 
         $logoutRequest = new LogoutRequest(
             identifier: $nameId,
+            issueInstant: self::$clock->now(),
             sessionIndexes: [new SessionIndex('SessionIndexValue')],
         );
 
@@ -99,6 +107,7 @@ final class LogoutRequestTest extends TestCase
         $nameId = new NameID('NameIDValue');
         $logoutRequest = new LogoutRequest(
             identifier: $nameId,
+            issueInstant: self::$clock->now(),
             sessionIndexes: [new SessionIndex('SessionIndexValue1'), new SessionIndex('SessionIndexValue2')],
         );
         $logoutRequestElement = $logoutRequest->toXML();
@@ -119,6 +128,7 @@ final class LogoutRequestTest extends TestCase
 
         $logoutRequest = new LogoutRequest(
             identifier: $nameId,
+            issueInstant: self::$clock->now(),
             sessionIndexes: [new SessionIndex('SessionIndexValue')],
         );
 
@@ -182,7 +192,7 @@ final class LogoutRequestTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedID.xml',
         )->documentElement);
 
-        $logoutRequest = new LogoutRequest($eid);
+        $logoutRequest = new LogoutRequest($eid, self::$clock->now());
         $logoutRequestElement = $logoutRequest->toXML();
         $this->assertCount(
             1,
@@ -292,7 +302,7 @@ XML;
         $logoutRequestElement = $document->documentElement;
 
         $logoutRequest = LogoutRequest::fromXML($logoutRequestElement);
-        $this->assertEquals(1543433592, $logoutRequest->getNotOnOrAfter());
+        $this->assertEquals('2018-11-28T19:33:12Z', $logoutRequest->getNotOnOrAfter()->format(C::DATETIME_FORMAT));
     }
 
 
@@ -301,13 +311,15 @@ XML;
     public function testSetNotOnOrAfter(): void
     {
         $nameId = new NameID('NameIDValue');
-        $time = time();
 
-        $logoutRequest = new LogoutRequest($nameId, $time);
+        $logoutRequest = new LogoutRequest($nameId, self::$clock->now(), self::$clock->now());
         $logoutRequestElement = $logoutRequest->toXML();
 
         $logoutRequest2 = LogoutRequest::fromXML($logoutRequestElement);
-        $this->assertEquals($time, $logoutRequest2->getNotOnOrAfter());
+        $this->assertEquals(
+            self::$clock->now()->format(C::DATETIME_FORMAT),
+            $logoutRequest2->getNotOnOrAfter()->format(C::DATETIME_FORMAT),
+        );
     }
 
     /**
@@ -343,7 +355,7 @@ XML;
         $reason = "urn:simplesamlphp:reason-test";
         $nameId = new NameID('NameIDValue');
 
-        $logoutRequest = new LogoutRequest($nameId, null, $reason);
+        $logoutRequest = new LogoutRequest($nameId, self::$clock->now(), null, $reason);
         $logoutRequestElement = $logoutRequest->toXML();
 
         $logoutRequest2 = LogoutRequest::fromXML($logoutRequestElement);
@@ -386,6 +398,7 @@ XML;
         ];
 
         $logoutRequest = new LogoutRequest(
+            issueInstant: self::$clock->now(),
             identifier: $nameId,
             sessionIndexes: $sessionIndexes,
         );

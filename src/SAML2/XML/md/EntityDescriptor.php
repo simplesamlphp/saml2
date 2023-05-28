@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
@@ -12,7 +13,6 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function is_null;
@@ -35,7 +35,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
      *
      * @param string $entityId The entityID of the entity described by this descriptor.
      * @param string|null $id The ID for this document. Defaults to null.
-     * @param int|null $validUntil Unix time of validify for this document. Defaults to null.
+     * @param \DateTimeImmutable|null $validUntil Unix time of validify for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions.
      * @param \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType[] $roleDescriptor An array of role descriptors.
@@ -52,7 +52,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
     public function __construct(
         protected string $entityId,
         ?string $id = null,
-        ?int $validUntil = null,
+        ?DateTimeImmutable $validUntil = null,
         ?string $cacheDuration = null,
         Extensions $extensions = null,
         protected array $roleDescriptor = [],
@@ -115,6 +115,8 @@ final class EntityDescriptor extends AbstractMetadataDocument
         Assert::same($xml->namespaceURI, EntityDescriptor::NS, InvalidDOMElementException::class);
 
         $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
+        Assert::nullOrValidDateTimeZulu($validUntil);
+
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
 
@@ -190,7 +192,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
         $entity = new static(
             $entityID,
             self::getOptionalAttribute($xml, 'ID', null),
-            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
+            $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
             self::getOptionalAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
             $roleDescriptors,

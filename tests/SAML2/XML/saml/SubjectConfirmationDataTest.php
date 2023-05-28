@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
@@ -58,8 +59,8 @@ final class SubjectConfirmationDataTest extends TestCase
         $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
 
         $subjectConfirmationData = new SubjectConfirmationData(
-            987654321,
-            1234567890,
+            new DateTimeImmutable('2001-04-19T04:25:21Z'),
+            new DateTimeImmutable('2009-02-13T23:31:30Z'),
             C::ENTITY_SP,
             'SomeRequestID',
             '127.0.0.1',
@@ -87,8 +88,8 @@ final class SubjectConfirmationDataTest extends TestCase
         $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
 
         $subjectConfirmationData = new SubjectConfirmationData(
-            987654321,
-            1234567890,
+            new DateTimeImmutable('2001-04-19T04:25:21Z'),
+            new DateTimeImmutable('2009-02-13T23:31:30Z'),
             C::ENTITY_SP,
             'SomeRequestID',
             'non-IP',
@@ -99,8 +100,14 @@ final class SubjectConfirmationDataTest extends TestCase
             [$attr1, $attr2],
         );
 
-        $this->assertEquals(987654321, $subjectConfirmationData->getNotBefore());
-        $this->assertEquals(1234567890, $subjectConfirmationData->getNotOnOrAfter());
+        $this->assertEquals(
+            '2001-04-19T04:25:21Z',
+            $subjectConfirmationData->getNotBefore()->format(C::DATETIME_FORMAT),
+        );
+        $this->assertEquals(
+            '2009-02-13T23:31:30Z',
+            $subjectConfirmationData->getNotOnOrAfter()->format(C::DATETIME_FORMAT),
+        );
         $this->assertEquals(C::ENTITY_SP, $subjectConfirmationData->getRecipient());
         $this->assertEquals('SomeRequestID', $subjectConfirmationData->getInResponseTo());
         $this->assertEquals('non-IP', $subjectConfirmationData->getAddress());

@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use DOMDocument;
 use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Utilities\Temporal;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
@@ -24,7 +25,6 @@ use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignedElementTrait;
 
 use function array_pop;
-use function gmdate;
 
 /**
  * Base class for all SAML 2 messages.
@@ -76,7 +76,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
      * @param string $version
-     * @param int|null $issueInstant
+     * @param \DateTimeImmutable|null $issueInstant
      * @param string|null $destination
      * @param string|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
@@ -88,12 +88,13 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
         protected ?Issuer $issuer = null,
         protected ?string $id = null,
         protected string $version = '2.0',
-        protected ?int $issueInstant = null,
+        protected ?DateTimeImmutable $issueInstant = null,
         protected ?string $destination = null,
         protected ?string $consent = null,
         ?Extensions $extensions = null,
         ?string $relayState = null,
     ) {
+        Assert::nullOrSame($issueInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::nullOrValidNCName($id); // Covers the empty string
         Assert::nullOrValidURI($destination); // Covers the empty string
         Assert::nullOrValidURI($consent); // Covers the empty string
@@ -132,12 +133,12 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     /**
      * Retrieve the issue timestamp of this message.
      *
-     * @return int The issue timestamp of this message, as an UNIX timestamp
+     * @return \DateTimeImmutable The issue timestamp of this message, as an UNIX timestamp
      */
-    public function getIssueInstant(): int
+    public function getIssueInstant(): DateTimeImmutable
     {
         if ($this->issueInstant === null) {
-            return Temporal::getTime();
+            return Utils::getContainer()->getClock()->now();
         }
 
         return $this->issueInstant;
@@ -271,7 +272,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
         $root->setAttribute('Version', $this->getVersion());
         $root->setAttribute('ID', $this->getId());
-        $root->setAttribute('IssueInstant', gmdate('Y-m-d\TH:i:s\Z', $this->getIssueInstant()));
+        $root->setAttribute('IssueInstant', $this->getIssueInstant()->format(C::DATETIME_FORMAT));
 
         if ($this->getDestination() !== null) {
             $root->setAttribute('Destination', $this->getDestination());

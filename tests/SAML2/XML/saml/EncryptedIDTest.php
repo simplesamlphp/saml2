@@ -7,8 +7,8 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Configuration;
+use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
@@ -50,10 +50,16 @@ final class EncryptedIDTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+    /** @var \SimpleSAML\SAML2\Compat\AbstractContainer */
+    private static AbstractContainer $containerBackup;
+
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
+        self::$containerBackup = ContainerSingleton::getInstance();
+
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
         self::$testedClass = EncryptedID::class;
@@ -62,10 +68,18 @@ final class EncryptedIDTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedID.xml',
         );
 
-        $container = new MockContainer();
+        $container = clone self::$containerBackup;
         $container->setBlacklistedAlgorithms(null);
         $container->registerExtensionHandler(CustomBaseID::class);
         ContainerSingleton::setContainer($container);
+    }
+
+
+    /**
+     */
+    public static function tearDownAfterClass(): void
+    {
+        ContainerSingleton::setContainer(self::$containerBackup);
     }
 
 
@@ -228,7 +242,7 @@ final class EncryptedIDTest extends TestCase
         $this->assertEquals(strval($customId), strval($id));
 
         // Remove registration by using a clean container
-        $container = new MockContainer();
+        $container = clone self::$containerBackup;
         $container->setBlacklistedAlgorithms(null);
         ContainerSingleton::setContainer($container);
 

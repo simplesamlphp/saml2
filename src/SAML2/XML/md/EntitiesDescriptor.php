@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 /**
@@ -26,7 +26,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
      * @param \SimpleSAML\SAML2\XML\md\EntitiesDescriptor[] $entitiesDescriptors
      * @param string|null $Name
      * @param string|null $ID
-     * @param int|null $validUntil
+     * @param \DateTimeImmutable|null $validUntil
      * @param string|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      */
@@ -35,7 +35,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         protected array $entitiesDescriptors = [],
         protected ?string $Name = null,
         ?string $ID = null,
-        ?int $validUntil = null,
+        ?DateTimeImmutable $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,
     ) {
@@ -101,6 +101,8 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         Assert::same($xml->namespaceURI, EntitiesDescriptor::NS, InvalidDOMElementException::class);
 
         $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
+        Assert::nullOrValidDateTimeZulu($validUntil);
+
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
             $orgs,
@@ -130,7 +132,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             EntitiesDescriptor::getChildrenOfClass($xml),
             self::getOptionalAttribute($xml, 'Name', null),
             self::getOptionalAttribute($xml, 'ID', null),
-            $validUntil !== null ? XMLUtils::xsDateTimeToTimestamp($validUntil) : null,
+            $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
             self::getOptionalAttribute($xml, 'cacheDuration', null),
             !empty($extensions) ? $extensions[0] : null,
         );

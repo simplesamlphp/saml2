@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
+use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
@@ -60,7 +61,7 @@ final class AssertionIDRequestTest extends TestCase
             assertionIDRef: [new AssertionIDRef('_abc123'), new AssertionIDRef('_def456')],
             issuer: new Issuer('https://gateway.stepup.org/saml20/sp/metadata'),
             id: '_2b0226190ca1c22de6f66e85f5c95158',
-            issueInstant: 1411393320,
+            issueInstant: new DateTimeImmutable('2014-09-22T13:42:00Z'),
             destination: 'https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO',
         );
 

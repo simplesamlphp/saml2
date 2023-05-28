@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
@@ -119,7 +120,7 @@ final class SPSSODescriptorTest extends TestCase
         $extensions = new Extensions([
             new PublicationInfo(
                 publisher: 'http://publisher.ra/',
-                creationInstant: XMLUtils::xsDateTimeToTimestamp('2020-02-03T13:46:24Z'),
+                creationInstant: new DateTimeImmutable('2020-02-03T13:46:24Z'),
                 usagePolicy: [new UsagePolicy('en', 'http://publisher.ra/policy.txt')],
             ),
         ]);
@@ -143,7 +144,7 @@ final class SPSSODescriptorTest extends TestCase
             false,
             [$attrcs1, $attrcs2],
             'someID',
-            XMLUtils::xsDateTimeToTimestamp('2010-02-01T12:34:56Z'),
+            new DateTimeImmutable('2010-02-01T12:34:56Z'),
             'PT9000S',
             $extensions,
             'https://error.url/',
