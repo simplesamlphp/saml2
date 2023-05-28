@@ -1,9 +1,9 @@
-<saml:AuthnContextDecl xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
-  <samlacpass:AuthenticationContextDeclaration>
-    <samlacpass:Identification nym="verinymity">
-     <samlacpass:Extension>
-      <safeac:NoVerification/>
-      </samlacpass:Extension>
-    </samlacpass:Identification>
-  </samlacpass:AuthenticationContextDeclaration>
+<saml:AuthnContextDecl xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:ssp="urn:x-simplesamlphp:namespace" ssp:attr1="testval1">
+  <ssp:AuthenticationContextDeclaration>
+    <ssp:Identification nym="verinymity">
+      <ssp:Extension>
+        <ssp:NoVerification/>
+      </ssp:Extension>
+    </ssp:Identification>
+  </ssp:AuthenticationContextDeclaration>
 </saml:AuthnContextDecl>

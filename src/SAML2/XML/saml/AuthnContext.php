@@ -39,18 +39,17 @@ final class AuthnContext extends AbstractSamlElement
         protected ?AuthnContextDeclRef $authnContextDeclRef,
         protected array $authenticatingAuthorities = [],
     ) {
-        if (!is_null($authnContextClassRef)) {
-            Assert::oneOf(
-                null,
-                [$authnContextDecl, $authnContextDeclRef],
-                'Can only have one of AuthnContextDecl/AuthnContextDeclRef',
-            );
-        } else {
+        if (is_null($authnContextClassRef)) {
             Assert::false(
                 is_null($authnContextDecl) && is_null($authnContextDeclRef),
                 'You need either an AuthnContextDecl or an AuthnContextDeclRef',
             );
         }
+        Assert::oneOf(
+            null,
+            [$authnContextDecl, $authnContextDeclRef],
+            'Can only have one of AuthnContextDecl/AuthnContextDeclRef',
+        );
 
         Assert::allIsInstanceOf($authenticatingAuthorities, AuthenticatingAuthority::class);
     }

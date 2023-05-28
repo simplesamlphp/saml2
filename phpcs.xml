@@ -40,11 +40,12 @@
         <exclude-pattern>**/HTTPRedirectTest.php</exclude-pattern>
         <exclude-pattern>**/SOAPTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/Assertion/Validation/AssertionValidatorTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/XML/saml/EncryptedAssertionTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/saml/AssertionTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/saml/AuthnContextTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/saml/EncryptedAssertionTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/saml/EncryptedIDTest.php</exclude-pattern>
-        <exclude-pattern>tests/SAML2/XML/samlp/StatusDetailTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/samlp/RequestedAuthnContextTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/samlp/StatusDetailTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/shibmd/KeyAuthorityTest.php</exclude-pattern>
     </rule>
 </ruleset>

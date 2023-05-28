@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use DOMNodeList;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\XML\Attribute as XMLAttribute;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
 
 /**
  * Class representing SAML2 AuthnContextDecl
@@ -18,25 +20,39 @@ use SimpleSAML\SAML2\Utils;
  */
 final class AuthnContextDecl extends AbstractSamlElement
 {
+    use ExtendableAttributesTrait;
+    use ExtendableElementTrait;
+
+    /** The namespace-attribute for the xs:any element */
+    public const XS_ANY_ELT_NAMESPACE = C::XS_ANY_NS_ANY;
+
+    /** The namespace-attribute for the xs:anyAttribute element */
+    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_ANY;
+
+
     /**
      * Initialize an AuthnContextDecl.
      *
-     * @param \DOMNodeList $decl
+     * @param \SimpleSAML\XML\Chunk[] $elements
+     * @param \SimpleSAML\XML\Attribute[] $attributes
      */
-    public function __construct(
-        protected DOMNodeList $decl,
-    ) {
+    public function __construct(array $elements = [], array $attributes = [])
+    {
+        $this->setElements($elements);
+        $this->setAttributesNS($attributes);
     }
 
 
+
     /**
-     * Collect the value of the decl-property
+     * Test if an object, at the state it's in, would produce an empty XML-element
      *
-     * @return \DOMNodeList
+     * @return bool
      */
-    public function getDecl(): DOMNodeList
+    public function isEmptyElement(): bool
     {
-        return $this->decl;
+        return empty($this->getAttributesNS())
+            && empty($this->getElements());
     }
 
 
@@ -54,7 +70,18 @@ final class AuthnContextDecl extends AbstractSamlElement
         Assert::same($xml->localName, 'AuthnContextDecl', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AuthnContextDecl::NS, InvalidDOMElementException::class);
 
-        return new static($xml->childNodes);
+        $elements = [];
+        foreach ($xml->childNodes as $element) {
+            if ($element->namespaceURI === C::NS_SAML) {
+                continue;
+            } elseif (!($element instanceof DOMElement)) {
+                continue;
+            }
+
+            $elements[] = new Chunk($element);
+        }
+
+        return new static($elements, self::getAttributesNSFromXML($xml));
     }
 
 
@@ -66,11 +93,15 @@ final class AuthnContextDecl extends AbstractSamlElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
 
-        foreach ($this->getDecl() as $node) {
-            $e->appendChild($e->ownerDocument->importNode($node, true));
+        foreach ($this->getAttributesNS() as $attr) {
+            $attr->toXML($e);
+        }
+
+        foreach ($this->getElements() as $element) {
+            /** @psalm-var \SimpleSAML\XML\SerializableElementInterface $element */
+            $element->toXML($e);
         }
 
         return $e;
