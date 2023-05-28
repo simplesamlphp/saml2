@@ -34,7 +34,7 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
         protected ?DateTimeImmutable $registrationInstant = null,
         protected array $registrationPolicy = [],
     ) {
-        Assert::nullOrSame($registrationInstant?->getTimeZone()->getName(), 'Z');
+        Assert::nullOrSame($registrationInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::allIsInstanceOf($registrationPolicy, RegistrationPolicy::class);
 
         /**

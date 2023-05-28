@@ -9,8 +9,8 @@ use DOMAttr;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
 use SimpleSAML\SAML2\XML\md\Company;
@@ -60,10 +60,16 @@ final class RoleDescriptorTest extends TestCase
     use SerializableElementTestTrait;
 
 
+    /** @var \SimpleSAML\SAML2\Compat\AbstractContainer */
+    private static AbstractContainer $containerBackup;
+
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
+        self::$containerBackup = ContainerSingleton::getInstance();
+
         self::$schemaFile = dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/schemas/simplesamlphp.xsd';
 
         self::$testedClass = AbstractRoleDescriptor::class;
@@ -72,9 +78,17 @@ final class RoleDescriptorTest extends TestCase
             dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_RoleDescriptor.xml',
         );
 
-        $container = new MockContainer();
+        $container = clone self::$containerBackup;
         $container->registerExtensionHandler(CustomRoleDescriptor::class);
         ContainerSingleton::setContainer($container);
+    }
+
+
+    /**
+     */
+    public static function tearDownAfterClass(): void
+    {
+        ContainerSingleton::setContainer(self::$containerBackup);
     }
 
 

@@ -6,14 +6,15 @@ namespace SimpleSAML\Test\SAML2;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use Nyholm\Psr7\ServerRequest;
 use SimpleSAML\SAML2\HTTPPost;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
-use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\Utils\HTTP;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\Constants as C;
@@ -26,7 +27,16 @@ use SimpleSAML\XMLSecurity\Key\PrivateKey;
  */
 final class HTTPPostTest extends TestCase
 {
-    use ControlledTimeTestTrait;
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
+
+
+    /**
+     */
+    public static function setUpBeforeClass(): void
+    {
+        self::$clock = Utils::getContainer()->getClock();
+    }
 
 
     /**
@@ -96,7 +106,7 @@ final class HTTPPostTest extends TestCase
     public function testSendMissingDestination(): void
     {
         $request = new AuthnRequest(
-            issueInstant: self::$currentTime,
+            issueInstant: self::$clock->now(),
         );
         $hp = new HTTPPost();
         $this->expectException(Exception::class);
@@ -112,7 +122,7 @@ final class HTTPPostTest extends TestCase
     public function testSendAuthnRequestWithDestinationInBinding(): void
     {
         $request = new AuthnRequest(
-            issueInstant: self::$currentTime,
+            issueInstant: self::$clock->now(),
         );
         $hp = new HTTPPost();
         $hp->setDestination('https://example.org');
@@ -127,7 +137,7 @@ final class HTTPPostTest extends TestCase
     public function testSendAuthnRequestWithDestination(): void
     {
         $request = new AuthnRequest(
-            issueInstant: self::$currentTime,
+            issueInstant: self::$clock->now(),
             destination: 'https://example.org',
         );
         $hp = new HTTPPost();
@@ -146,7 +156,7 @@ final class HTTPPostTest extends TestCase
         $issuer  = new Issuer('testIssuer');
 
         $response = new Response(
-            issueInstant: self::$currentTime,
+            issueInstant: self::$clock->now(),
             status: $status,
             issuer: $issuer,
             destination: 'http://example.org/login?success=yes',

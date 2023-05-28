@@ -6,13 +6,14 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -35,15 +36,16 @@ use function strval;
  */
 final class SubjectConfirmationTest extends TestCase
 {
-    use ControlledTimeTestTrait {
-        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
-    }
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
+
+
     public static function setUpBeforeClass(): void
     {
-        self::parentSetUpBeforeClass();
+        self::$clock = Utils::getContainer()->getClock();
 
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
@@ -126,7 +128,7 @@ XML
         $subjectConfirmation = new SubjectConfirmation(
             C::CM_BEARER,
             new NameID('SomeNameIDValue'),
-            new SubjectConfirmationData(self::$currentTime),
+            new SubjectConfirmationData(self::$clock->now()),
         );
 
         // Marshall it to a \DOMElement

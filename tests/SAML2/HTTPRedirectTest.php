@@ -6,9 +6,10 @@ namespace SimpleSAML\Test\SAML2;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use Nyholm\Psr7\ServerRequest;
+use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\HTTPRedirect;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
@@ -16,7 +17,7 @@ use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
-use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
@@ -29,20 +30,32 @@ use function urldecode;
  */
 final class HTTPRedirectTest extends TestCase
 {
-    use ControlledTimeTestTrait {
-        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
-    }
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
+
+    /** @var \SimpleSAML\SAML2\Compat\AbstractContainer */
+    private static AbstractContainer $containerBackup;
 
 
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::parentSetUpBeforeClass();
+        self::$containerBackup = ContainerSingleton::getInstance();
 
-        $container = new MockContainer();
+        $container = clone self::$containerBackup;
         $container->setBlacklistedAlgorithms([]);
         ContainerSingleton::setContainer($container);
+
+        self::$clock = $container->getClock();
+    }
+
+
+    /**
+     */
+    public static function tearDownAfterClass(): void
+    {
+        ContainerSingleton::setContainer(self::$containerBackup);
     }
 
 
@@ -277,7 +290,7 @@ final class HTTPRedirectTest extends TestCase
      */
     public function testSendWithoutDestination(): void
     {
-        $request = new AuthnRequest(self::$currentTime);
+        $request = new AuthnRequest(self::$clock->now());
         $hr = new HTTPRedirect();
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Cannot build a redirect URL, no destination set.');
@@ -291,7 +304,7 @@ final class HTTPRedirectTest extends TestCase
      */
     public function testSendAuthnrequest(): void
     {
-        $request = new AuthnRequest(self::$currentTime);
+        $request = new AuthnRequest(self::$clock->now());
         $hr = new HTTPRedirect();
         $hr->setDestination('https://idp.example.org/');
         $hr->send($request);
@@ -310,7 +323,7 @@ final class HTTPRedirectTest extends TestCase
 
         $response = new Response(
             status: $status,
-            issueInstant: self::$currentTime,
+            issueInstant: self::$clock->now(),
             issuer: $issuer,
             destination: 'http://example.org/login?success=yes',
         );
@@ -329,7 +342,7 @@ final class HTTPRedirectTest extends TestCase
         $status = new Status(new StatusCode());
         $issuer = new Issuer('testIssuer');
 
-        $response = new Response($status, self::$currentTime, $issuer);
+        $response = new Response($status, self::$clock->now(), $issuer);
         $hr = new HTTPRedirect();
         $hr->setDestination('gopher://myurl');
         $hr->send($response);

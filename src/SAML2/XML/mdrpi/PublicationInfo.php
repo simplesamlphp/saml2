@@ -36,7 +36,7 @@ final class PublicationInfo extends AbstractMdrpiElement implements ArrayizableE
         protected ?string $publicationId = null,
         protected array $usagePolicy = [],
     ) {
-        Assert::nullOrSame($creationInstant?->getTimeZone()->getName(), 'Z');
+        Assert::nullOrSame($creationInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::allIsInstanceOf($usagePolicy, UsagePolicy::class);
 
         /**

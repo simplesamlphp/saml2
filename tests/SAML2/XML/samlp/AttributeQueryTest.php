@@ -7,7 +7,9 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
@@ -15,7 +17,6 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
-use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -39,19 +40,20 @@ use function strval;
  */
 final class AttributeQueryTest extends TestCase
 {
-    use ControlledTimeTestTrait {
-        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
-    }
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
     use SignedElementTestTrait;
+
+
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
 
 
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::parentSetUpBeforeClass();
+        self::$clock = Utils::getContainer()->getClock();
 
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
@@ -129,7 +131,7 @@ final class AttributeQueryTest extends TestCase
         $nameId = new NameID('NameIDValue');
         $attributeQuery = new AttributeQuery(
             subject: new Subject($nameId),
-            issueInstant: self::$currentTime,
+            issueInstant: self::$clock->now(),
             attributes: [
                 new Attribute(
                     name: 'test1',

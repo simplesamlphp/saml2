@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Compat;
 
-use Beste\Clock;
+use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use SimpleSAML\SAML2\Utils\ZuluClock;
 
 use function chmod;
 use function file_put_contents;
@@ -18,8 +17,8 @@ use function sys_get_temp_dir;
  */
 class MockContainer extends AbstractContainer
 {
-    /** @var \Beste\Clock */
-    private Clock $clock;
+    /** @var \Psr\Clock\ClockInterface */
+    private ClockInterface $clock;
 
     /** @var array */
     private array $debugMessages = [];
@@ -102,12 +101,24 @@ class MockContainer extends AbstractContainer
 
 
     /**
-     * Get the system clock, using Zulu for a timezone
+     * Set the system clock
      *
-     * @inheritDoc
+     * @param \Psr\Clock\ClockInterface
+     * @return void
      */
-    public function getClock(): Clock
+    public function setClock(ClockInterface $clock): void
     {
-        return isset($this->clock) ? $this->clock : ZuluClock::create();
+        $this->clock = $clock;
+    }
+
+
+    /**
+     * Get the system clock
+     *
+     * @return \Psr\Clock\ClockInterface
+     */
+    public function getClock(): ClockInterface
+    {
+        return $this->clock;
     }
 }

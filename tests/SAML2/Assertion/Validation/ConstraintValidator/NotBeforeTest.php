@@ -6,8 +6,10 @@ namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
 use DateInterval;
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\NotBefore;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
@@ -15,19 +17,16 @@ use SimpleSAML\SAML2\XML\saml\AuthnStatement;
 use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 
 /**
- * @covers \SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait
  * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\NotBefore
  *
  * @package simplesamlphp/saml2
  */
 final class NotBeforeTest extends TestCase
 {
-    use ControlledTimeTestTrait {
-        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
-    }
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
 
     /** @var \SimpleSAML\SAML2\XML\saml\Issuer */
     private static Issuer $issuer;
@@ -40,7 +39,7 @@ final class NotBeforeTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::parentSetUpBeforeClass();
+        self::$clock = Utils::getContainer()->getClock();
 
         // Create an Issuer
         self::$issuer = new Issuer('testIssuer');
@@ -52,7 +51,7 @@ final class NotBeforeTest extends TestCase
                 null,
                 null
             ),
-            self::$currentTime,
+            self::$clock->now(),
         );
     }
 
@@ -64,7 +63,7 @@ final class NotBeforeTest extends TestCase
     public function timestampInTheFutureBeyondGraceperiodIsNotValid(): void
     {
         // Create Conditions
-        $conditions = new Conditions(self::$currentTime->add(new DateInterval('PT61S')));
+        $conditions = new Conditions(self::$clock->now()->add(new DateInterval('PT61S')));
 
         // Create an assertion
         $assertion = new Assertion(self::$issuer, null, null, null, $conditions, [self::$authnStatement]);
@@ -86,7 +85,7 @@ final class NotBeforeTest extends TestCase
     public function timeWithinGraceperiodIsValid(): void
     {
         // Create Conditions
-        $conditions = new Conditions(self::$currentTime->add(new DateInterval('PT60S')));
+        $conditions = new Conditions(self::$clock->now()->add(new DateInterval('PT60S')));
 
         // Create an assertion
         $assertion = new Assertion(self::$issuer, null, null, null, $conditions, [self::$authnStatement]);
@@ -107,7 +106,7 @@ final class NotBeforeTest extends TestCase
     public function currentTimeIsValid(): void
     {
         // Create Conditions
-        $conditions = new Conditions(self::$currentTime);
+        $conditions = new Conditions(self::$clock->now());
 
         // Create an assertion
         $assertion = new Assertion(self::$issuer, null, null, null, $conditions, [self::$authnStatement]);

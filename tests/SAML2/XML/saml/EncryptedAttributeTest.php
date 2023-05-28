@@ -7,8 +7,8 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\EncryptedAttribute;
@@ -35,10 +35,16 @@ final class EncryptedAttributeTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+    /** @var \SimpleSAML\SAML2\Compat\AbstractContainer */
+    private static AbstractContainer $containerBackup;
+
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
+        self::$containerBackup = ContainerSingleton::getInstance();
+
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
         self::$testedClass = EncryptedAttribute::class;
@@ -47,9 +53,17 @@ final class EncryptedAttributeTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedAttribute.xml',
         );
 
-        $container = new MockContainer();
+        $container = clone self::$containerBackup;
         $container->setBlacklistedAlgorithms(null);
         ContainerSingleton::setContainer($container);
+    }
+
+
+    /**
+     */
+    public static function tearDownAfterClass(): void
+    {
+        ContainerSingleton::setContainer(self::$containerBackup);
     }
 
 

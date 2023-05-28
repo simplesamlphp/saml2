@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
@@ -19,6 +20,7 @@ use SimpleSAML\SAML2\Configuration\PrivateKey;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
@@ -31,7 +33,6 @@ use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Key\PublicKey;
@@ -46,9 +47,8 @@ use function getcwd;
  */
 final class NameIdDecryptionTransformerTest extends TestCase
 {
-    use ControlledTimeTestTrait {
-        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
-    }
+    /** @var \Psr\Clock\ClockInterface */
+    protected static ClockInterface $clock;
 
     /** @var \DOMDocument */
     protected static DOMDocument $document;
@@ -83,7 +83,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::parentSetUpBeforeClass();
+        self::$clock = Utils::getContainer()->getClock();
 
         $container = ContainerSingleton::getInstance();
         $container->setBlacklistedAlgorithms(null);
@@ -91,7 +91,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
         self::$logger = new NullLogger();
         self::$validator = new Validator(self::$logger);
         self::$destination = new Destination(C::ENTITY_SP);
-        self::$response = new Response(new Status(new StatusCode()), self::$currentTime);
+        self::$response = new Response(new Status(new StatusCode()), self::$clock->now());
 
         self::$identityProviderConfiguration = new IdentityProvider(['assertionEncryptionEnabled' => true]);
         $base = getcwd() . DIRECTORY_SEPARATOR . self::FRAMEWORK;

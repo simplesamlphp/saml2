@@ -11,8 +11,8 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\Utils\ZuluClock;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -172,7 +172,7 @@ final class Assertion extends AbstractSamlElement implements
     public function getIssueInstant(): DateTimeImmutable
     {
         if ($this->issueInstant === null) {
-            return ZuluClock::create()->now();
+            return Utils::getContainer()->getClock()->now();
         }
 
         return $this->issueInstant;

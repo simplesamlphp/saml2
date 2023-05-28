@@ -34,7 +34,7 @@ final class Publication extends AbstractMdrpiElement implements ArrayizableEleme
         protected ?DateTimeImmutable $creationInstant = null,
         protected ?string $publicationId = null,
     ) {
-        Assert::nullOrSame($creationInstant?->getTimeZone()->getName(), 'Z');
+        Assert::nullOrSame($creationInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
     }
 
 

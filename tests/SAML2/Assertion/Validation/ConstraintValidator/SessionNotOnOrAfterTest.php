@@ -6,27 +6,26 @@ namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
 use DateInterval;
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnStatement;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 
 /**
- * @covers \SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait
  * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter
  *
  * @package simplesamlphp/saml2
  */
 final class SessionNotOnOrAfterTest extends TestCase
 {
-    use ControlledTimeTestTrait {
-        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
-    }
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
 
     /** @var \SimpleSAML\SAML2\XML\saml\Issuer */
     private static Issuer $issuer;
@@ -36,7 +35,7 @@ final class SessionNotOnOrAfterTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::parentSetUpBeforeClass();
+        self::$clock = Utils::getContainer()->getClock();
 
         // Create an Issuer
         self::$issuer = new Issuer('testIssuer');
@@ -56,8 +55,8 @@ final class SessionNotOnOrAfterTest extends TestCase
                 null,
                 null
             ),
-            self::$currentTime,
-            self::$currentTime->sub(new DateInterval('PT60S')),
+            self::$clock->now(),
+            self::$clock->now()->sub(new DateInterval('PT60S')),
         );
 
         // Create an assertion
@@ -86,8 +85,8 @@ final class SessionNotOnOrAfterTest extends TestCase
                 null,
                 null
             ),
-            self::$currentTime,
-            self::$currentTime->sub(new DateInterval('PT59S')),
+            self::$clock->now(),
+            self::$clock->now()->sub(new DateInterval('PT59S')),
         );
 
         // Create an assertion
@@ -115,8 +114,8 @@ final class SessionNotOnOrAfterTest extends TestCase
                 null,
                 null
             ),
-            self::$currentTime,
-            self::$currentTime,
+            self::$clock->now(),
+            self::$clock->now(),
         );
 
         // Create an assertion

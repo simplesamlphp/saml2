@@ -9,8 +9,10 @@ use DOMDocument;
 use DOMNodeList;
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
+use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Compat\MockContainer;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Attribute;
@@ -33,7 +35,6 @@ use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\SAML2\XML\saml\SubjectLocality;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -63,17 +64,23 @@ use function time;
  */
 final class AssertionTest extends TestCase
 {
-    use ControlledTimeTestTrait {
-        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
-    }
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
+
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
+
+    /** @var \SimpleSAML\SAML2\Compat\AbstractContainer */
+    private static AbstractContainer $containerBackup;
+
 
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::parentSetUpBeforeClass();
+        self::$containerBackup = ContainerSingleton::getInstance();
+
+        self::$clock = Utils::getContainer()->getClock();
 
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
@@ -83,9 +90,17 @@ final class AssertionTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/saml_Assertion.xml',
         );
 
-        $container = new MockContainer();
+        $container = clone self::$containerBackup;
         $container->setBlacklistedAlgorithms(null);
         ContainerSingleton::setContainer($container);
+    }
+
+
+    /**
+     */
+    public static function tearDownAfterClass(): void
+    {
+        ContainerSingleton::setContainer(self::$containerBackup);
     }
 
 
@@ -1092,7 +1107,7 @@ XML;
                 null,
                 null,
             ),
-            self::$currentTime,
+            self::$clock->now(),
         );
 
         // Create an assertion
@@ -1157,7 +1172,7 @@ XML;
                 null,
                 null,
             ),
-            self::$currentTime,
+            self::$clock->now(),
         );
 
         // Create Subject

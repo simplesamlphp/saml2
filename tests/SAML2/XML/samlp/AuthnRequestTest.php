@@ -7,10 +7,12 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
@@ -30,7 +32,6 @@ use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
 use SimpleSAML\SAML2\XML\samlp\RequesterID;
 use SimpleSAML\SAML2\XML\samlp\Scoping;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -58,19 +59,19 @@ use function strval;
  */
 final class AuthnRequestTest extends TestCase
 {
-    use ControlledTimeTestTrait {
-        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
-    }
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
     use SignedElementTestTrait;
+
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
 
 
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::parentSetUpBeforeClass();
+        self::$clock = Utils::getContainer()->getClock();
 
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
@@ -162,7 +163,7 @@ final class AuthnRequestTest extends TestCase
 
         $authnRequest = new AuthnRequest(
             requestedAuthnContext: $rac,
-            issueInstant: self::$currentTime,
+            issueInstant: self::$clock->now(),
             subject: $subject,
             nameIdPolicy: $nameIdPolicy,
             conditions: $conditions,

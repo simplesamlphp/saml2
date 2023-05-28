@@ -11,6 +11,7 @@ use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
@@ -93,7 +94,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
         ?Extensions $extensions = null,
         ?string $relayState = null,
     ) {
-        Assert::nullOrSame($issueInstant?->getTimeZone()->getName(), 'Z');
+        Assert::nullOrSame($issueInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::nullOrValidNCName($id); // Covers the empty string
         Assert::nullOrValidURI($destination); // Covers the empty string
         Assert::nullOrValidURI($consent); // Covers the empty string

@@ -7,11 +7,12 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use DOMDocument;
 use DOMElement;
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -52,12 +53,12 @@ use function strval;
  */
 final class LogoutRequestTest extends TestCase
 {
-    use ControlledTimeTestTrait {
-        ControlledTimeTestTrait::setUpBeforeClass as parentSetUpBeforeClass;
-    }
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
     use SignedElementTestTrait;
+
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
 
 
     /**
@@ -65,7 +66,7 @@ final class LogoutRequestTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::parentSetUpBeforeClass();
+        self::$clock = Utils::getContainer()->getClock();
 
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
@@ -85,7 +86,7 @@ final class LogoutRequestTest extends TestCase
 
         $logoutRequest = new LogoutRequest(
             identifier: $nameId,
-            issueInstant: self::$currentTime,
+            issueInstant: self::$clock->now(),
             sessionIndexes: [new SessionIndex('SessionIndexValue')],
         );
 
@@ -106,7 +107,7 @@ final class LogoutRequestTest extends TestCase
         $nameId = new NameID('NameIDValue');
         $logoutRequest = new LogoutRequest(
             identifier: $nameId,
-            issueInstant: self::$currentTime,
+            issueInstant: self::$clock->now(),
             sessionIndexes: [new SessionIndex('SessionIndexValue1'), new SessionIndex('SessionIndexValue2')],
         );
         $logoutRequestElement = $logoutRequest->toXML();
@@ -127,7 +128,7 @@ final class LogoutRequestTest extends TestCase
 
         $logoutRequest = new LogoutRequest(
             identifier: $nameId,
-            issueInstant: self::$currentTime,
+            issueInstant: self::$clock->now(),
             sessionIndexes: [new SessionIndex('SessionIndexValue')],
         );
 
@@ -191,7 +192,7 @@ final class LogoutRequestTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedID.xml',
         )->documentElement);
 
-        $logoutRequest = new LogoutRequest($eid, self::$currentTime);
+        $logoutRequest = new LogoutRequest($eid, self::$clock->now());
         $logoutRequestElement = $logoutRequest->toXML();
         $this->assertCount(
             1,
@@ -311,12 +312,12 @@ XML;
     {
         $nameId = new NameID('NameIDValue');
 
-        $logoutRequest = new LogoutRequest($nameId, self::$currentTime, self::$currentTime);
+        $logoutRequest = new LogoutRequest($nameId, self::$clock->now(), self::$clock->now());
         $logoutRequestElement = $logoutRequest->toXML();
 
         $logoutRequest2 = LogoutRequest::fromXML($logoutRequestElement);
         $this->assertEquals(
-            self::$currentTime->format(C::DATETIME_FORMAT),
+            self::$clock->now()->format(C::DATETIME_FORMAT),
             $logoutRequest2->getNotOnOrAfter()->format(C::DATETIME_FORMAT),
         );
     }
@@ -354,7 +355,7 @@ XML;
         $reason = "urn:simplesamlphp:reason-test";
         $nameId = new NameID('NameIDValue');
 
-        $logoutRequest = new LogoutRequest($nameId, self::$currentTime, null, $reason);
+        $logoutRequest = new LogoutRequest($nameId, self::$clock->now(), null, $reason);
         $logoutRequestElement = $logoutRequest->toXML();
 
         $logoutRequest2 = LogoutRequest::fromXML($logoutRequestElement);
@@ -397,7 +398,7 @@ XML;
         ];
 
         $logoutRequest = new LogoutRequest(
-            issueInstant: self::$currentTime,
+            issueInstant: self::$clock->now(),
             identifier: $nameId,
             sessionIndexes: $sessionIndexes,
         );

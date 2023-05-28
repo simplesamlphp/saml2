@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2;
 
 use Exception;
 use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
@@ -13,7 +14,6 @@ use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
-use SimpleSAML\TestUtils\SAML2\ControlledTimeTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
@@ -29,7 +29,16 @@ use function count;
  */
 final class UtilsTest extends TestCase
 {
-    use ControlledTimeTestTrait;
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
+
+
+    /**
+     */
+    public static function setUpBeforeClass(): void
+    {
+        self::$clock = Utils::getContainer()->getClock();
+    }
 
 
     /**
@@ -44,7 +53,7 @@ final class UtilsTest extends TestCase
             C::NAMEID_TRANSIENT,
         );
 
-        $aq = new AttributeQuery(new Subject($nameId_before), self::$currentTime);
+        $aq = new AttributeQuery(new Subject($nameId_before), self::$clock->now());
 
         $xml = $aq->toXML();
 

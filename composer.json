@@ -26,7 +26,6 @@
         "ext-soap": "*",
         "ext-zlib": "*",
 
-        "beste/clock": "^3.0",
         "nyholm/psr7": "^1.5.1",
         "psr/clock": "^1.0",
         "psr/http-message": "^2.0",
@@ -37,6 +36,7 @@
         "simplesamlphp/assert": "^1.0.4"
     },
     "require-dev": {
+        "beste/clock": "^3.0",
         "mockery/mockery": "^1.5.1",
         "simplesamlphp/simplesamlphp-test-framework": "^1.5.5"
     },
