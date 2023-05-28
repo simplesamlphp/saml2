@@ -133,8 +133,8 @@ final class EntityAttributesTest extends TestCase
         // Create an assertion
         $unsignedAssertion = new Assertion(
             $issuer,
-            '_93af655219464fb403b34436cfb0c5cb1d9a5502',
             new DateTimeImmutable('2022-10-16T22:51:18Z'),
+            '_93af655219464fb403b34436cfb0c5cb1d9a5502',
             $subject,
             $conditions,
             [$attrStatement]

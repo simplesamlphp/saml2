@@ -66,7 +66,12 @@ final class NotOnOrAfterTest extends TestCase
         $conditions = new Conditions(null, self::$clock->now()->sub(new DateInterval('PT60S')));
 
         // Create an assertion
-        $assertion = new Assertion(self::$issuer, null, null, null, $conditions, [self::$authnStatement]);
+        $assertion = new Assertion(
+            issuer: self::$issuer,
+            issueInstant: self::$clock->now(),
+            conditions: $conditions,
+            statements: [self::$authnStatement],
+        );
 
         $validator = new NotOnOrAfter();
         $result    = new Result();
@@ -88,7 +93,12 @@ final class NotOnOrAfterTest extends TestCase
         $conditions = new Conditions(null, self::$clock->now()->sub(new DateInterval('PT59S')));
 
         // Create an assertion
-        $assertion = new Assertion(self::$issuer, null, null, null, $conditions, [self::$authnStatement]);
+        $assertion = new Assertion(
+            issuer: self::$issuer,
+            issueInstant: self::$clock->now(),
+            conditions: $conditions,
+            statements: [self::$authnStatement],
+        );
 
         $validator = new NotOnOrAfter();
         $result    = new Result();
@@ -109,7 +119,12 @@ final class NotOnOrAfterTest extends TestCase
         $conditions = new Conditions(null, self::$clock->now());
 
         // Create an assertion
-        $assertion = new Assertion(self::$issuer, null, null, null, $conditions, [self::$authnStatement]);
+        $assertion = new Assertion(
+            issuer: self::$issuer,
+            issueInstant: self::$clock->now(),
+            conditions: $conditions,
+            statements: [self::$authnStatement],
+        );
 
         $validator = new NotOnOrAfter();
         $result    = new Result();

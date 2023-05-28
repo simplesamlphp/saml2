@@ -60,7 +60,7 @@ final class SessionNotOnOrAfterTest extends TestCase
         );
 
         // Create an assertion
-        $assertion = new Assertion(self::$issuer, null, null, null, null, [$authnStatement]);
+        $assertion = new Assertion(self::$issuer, self::$clock->now(), null, null, null, [$authnStatement]);
 
         $validator = new SessionNotOnOrAfter();
         $result    = new Result();
@@ -90,7 +90,7 @@ final class SessionNotOnOrAfterTest extends TestCase
         );
 
         // Create an assertion
-        $assertion = new Assertion(self::$issuer, null, null, null, null, [$authnStatement]);
+        $assertion = new Assertion(self::$issuer, self::$clock->now(), null, null, null, [$authnStatement]);
 
         $validator = new SessionNotOnOrAfter();
         $result    = new Result();
@@ -119,7 +119,7 @@ final class SessionNotOnOrAfterTest extends TestCase
         );
 
         // Create an assertion
-        $assertion = new Assertion(self::$issuer, null, null, null, null, [$authnStatement]);
+        $assertion = new Assertion(self::$issuer, self::$clock->now(), null, null, null, [$authnStatement]);
 
         $validator = new SessionNotOnOrAfter();
         $result    = new Result();

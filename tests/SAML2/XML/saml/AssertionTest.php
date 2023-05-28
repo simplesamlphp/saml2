@@ -53,7 +53,6 @@ use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 use function dirname;
 use function strval;
-use function time;
 
 /**
  * Class \SimpleSAML\SAML2\AssertionTest
@@ -175,8 +174,8 @@ final class AssertionTest extends TestCase
         // Create an assertion
         $assertion = new Assertion(
             $issuer,
-            '_93af655219464fb403b34436cfb0c5cb1d9a5502',
             new DateTimeImmutable('1970-01-01T01:33:31Z'),
+            '_93af655219464fb403b34436cfb0c5cb1d9a5502',
             $subject,
             $conditions,
             [$authnStatement, $attrStatement],
@@ -388,7 +387,7 @@ XML;
                 authnContextClassRef: new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                 authenticatingAuthorities: [C::ENTITY_IDP, C::ENTITY_OTHER]
             ),
-            time(),
+            self::$clock->now(),
         );
 
         // Create AttributeStatement
@@ -1113,6 +1112,7 @@ XML;
         // Create an assertion
         $assertion = new Assertion(
             issuer: $issuer,
+            issueInstant: self::$clock->now(),
             subject: $subject,
             conditions: $conditions,
             statements: [$authnStatement],
@@ -1185,6 +1185,7 @@ XML;
         // Create a signed assertion
         $assertion = new Assertion(
             issuer: $issuer,
+            issueInstant: self::$clock->now(),
             subject: $subject,
             conditions: $conditions,
             statements: $statements,

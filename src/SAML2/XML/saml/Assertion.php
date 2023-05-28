@@ -68,22 +68,22 @@ final class Assertion extends AbstractSamlElement implements
      *
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
      * @param string|null $id
-     * @param \DateTimeImmutable|null $issueInstant
+     * @param \DateTimeImmutable $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Subject|null $subject
      * @param \SimpleSAML\SAML2\XML\saml\Conditions|null $conditions
      * @param \SimpleSAML\SAML2\XML\saml\AbstractStatementType[] $statements
      */
     public function __construct(
         protected Issuer $issuer,
+        protected DateTimeImmutable $issueInstant,
         protected ?string $id = null,
-        protected ?DateTimeImmutable $issueInstant = null,
         protected ?Subject $subject = null,
         protected ?Conditions $conditions = null,
         protected array $statements = [],
     ) {
         $this->dataType = C::XMLENC_ELEMENT;
 
-        Assert::nullOrSame($issueInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
+        Assert::same($issueInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::nullOrValidNCName($id); // Covers the empty string
         Assert::true(
             $subject || !empty($statements),
@@ -171,10 +171,6 @@ final class Assertion extends AbstractSamlElement implements
      */
     public function getIssueInstant(): DateTimeImmutable
     {
-        if ($this->issueInstant === null) {
-            return Utils::getContainer()->getClock()->now();
-        }
-
         return $this->issueInstant;
     }
 
@@ -305,8 +301,8 @@ final class Assertion extends AbstractSamlElement implements
 
         $assertion = new static(
             array_pop($issuer),
-            $id,
             $issueInstant,
+            $id,
             array_pop($subject),
             array_pop($conditions),
             array_merge($authnStatement, $attrStatement, $statements),

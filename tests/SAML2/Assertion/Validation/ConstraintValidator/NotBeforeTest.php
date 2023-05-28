@@ -66,7 +66,12 @@ final class NotBeforeTest extends TestCase
         $conditions = new Conditions(self::$clock->now()->add(new DateInterval('PT61S')));
 
         // Create an assertion
-        $assertion = new Assertion(self::$issuer, null, null, null, $conditions, [self::$authnStatement]);
+        $assertion = new Assertion(
+            issuer: self::$issuer,
+            issueInstant: self::$clock->now(),
+            conditions: $conditions,
+            statements: [self::$authnStatement],
+        );
 
         $validator = new NotBefore();
         $result    = new Result();
@@ -88,7 +93,12 @@ final class NotBeforeTest extends TestCase
         $conditions = new Conditions(self::$clock->now()->add(new DateInterval('PT60S')));
 
         // Create an assertion
-        $assertion = new Assertion(self::$issuer, null, null, null, $conditions, [self::$authnStatement]);
+        $assertion = new Assertion(
+            issuer: self::$issuer,
+            issueInstant: self::$clock->now(),
+            conditions: $conditions,
+            statements: [self::$authnStatement],
+        );
 
         $validator = new NotBefore();
         $result    = new Result();
@@ -109,7 +119,12 @@ final class NotBeforeTest extends TestCase
         $conditions = new Conditions(self::$clock->now());
 
         // Create an assertion
-        $assertion = new Assertion(self::$issuer, null, null, null, $conditions, [self::$authnStatement]);
+        $assertion = new Assertion(
+            issuer: self::$issuer,
+            issueInstant: self::$clock->now(),
+            conditions: $conditions,
+            statements: [self::$authnStatement],
+        );
 
         $validator = new NotBefore();
         $result    = new Result();
