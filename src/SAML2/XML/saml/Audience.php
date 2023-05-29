@@ -64,7 +64,7 @@ final class Audience extends AbstractSamlElement
      * Convert this Audience to XML.
      *
      * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this Condition.
+     * @return \DOMElement The XML element after adding the data corresponding to this Audience.
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
