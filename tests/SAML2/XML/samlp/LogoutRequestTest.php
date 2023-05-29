@@ -8,7 +8,6 @@ use DOMDocument;
 use DOMElement;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants as C;

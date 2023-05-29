@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\ArrayizableElementInterface;
@@ -14,6 +15,9 @@ use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableElementTrait;
 
+use function array_filter;
+use function array_key_exists;
+use function array_keys;
 use function array_map;
 use function array_merge;
 use function array_unique;
@@ -337,56 +341,95 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
      */
     public static function fromArray(array $data): static
     {
-        $DisplayName = [];
-        if (!empty($data['DisplayName'])) {
-            foreach ($data['DisplayName'] as $l => $k) {
-                $DisplayName[] = DisplayName::fromArray([$l => $k]);
-            }
-        }
-
-        $Description = [];
-        if (!empty($data['Description'])) {
-            foreach ($data['Description'] as $l => $k) {
-                $Description[] = Description::fromArray([$l => $k]);
-            }
-        }
-
-        $InformationURL = [];
-        if (!empty($data['InformationURL'])) {
-            foreach ($data['InformationURL'] as $l => $k) {
-                $InformationURL[] = InformationURL::fromArray([$l => $k]);
-            }
-        }
-
-        $PrivacyStatementURL = [];
-        if (!empty($data['PrivacyStatementURL'])) {
-            foreach ($data['PrivacyStatementURL'] as $l => $k) {
-                $PrivacyStatementURL[] = PrivacyStatementURL::fromArray([$l => $k]);
-            }
-        }
-
-        $Keywords = [];
-        if (!empty($data['Keywords'])) {
-            foreach ($data['Keywords'] as $l => $k) {
-                $Keywords[] = Keywords::fromArray([$l => $k]);
-            }
-        }
-
-        $Logo = [];
-        if (!empty($data['Logo'])) {
-            foreach ($data['Logo'] as $l) {
-                $Logo[] = Logo::fromArray($l);
-            }
-        }
+        $data = self::processArrayContents($data);
 
         return new static(
-            $DisplayName,
-            $Description,
-            $InformationURL,
-            $PrivacyStatementURL,
-            $Keywords,
-            $Logo,
+            $data['DisplayName'] ?? [],
+            $data['Description'] ?? [],
+            $data['InformationURL'] ?? [],
+            $data['PrivacyStatementURL'] ?? [],
+            $data['Keywords'] ?? [],
+            $data['Logo'] ?? [],
+            $data['children'] ?? [],
         );
+    }
+
+
+    /**
+     * Validates an array representation of this object and returns the same array with
+     * rationalized keys (casing) and parsed sub-elements.
+     *
+     * @param array $data
+     * @return array $data
+     */
+    private static function processArrayContents(array $data): array
+    {
+        $data = array_change_key_case($data, CASE_LOWER);
+
+        // Make sure the array keys are known for this kind of object
+        Assert::allOneOf(
+            array_keys($data),
+            [
+                'displayname',
+                'description',
+                'informationurl',
+                'privacystatementurl',
+                'keywords',
+                'logo',
+                'children',
+            ],
+            ArrayValidationException::class,
+        );
+
+        $retval = [];
+
+        if (array_key_exists('displayname', $data)) {
+            foreach ($data['displayname'] as $l => $displayName) {
+                $retval['DisplayName'][] = DisplayName::fromArray([$l => $displayName]);
+            }
+        }
+
+        if (array_key_exists('description', $data)) {
+            foreach ($data['description'] as $l => $description) {
+                $retval['Description'][] = Description::fromArray([$l => $description]);
+            }
+        }
+
+        if (array_key_exists('informationurl', $data)) {
+            foreach ($data['informationurl'] as $l => $iu) {
+                $retval['InformationURL'][] = InformationURL::fromArray([$l => $iu]);
+            }
+        }
+
+        if (array_key_exists('privacystatementurl', $data)) {
+            foreach ($data['privacystatementurl'] as $l => $psu) {
+                $retval['PrivacyStatementURL'][] = PrivacyStatementURL::fromArray([$l => $psu]);
+            }
+        }
+
+        if (array_key_exists('keywords', $data)) {
+            foreach ($data['keywords'] as $l => $keywords) {
+                $retval['Keywords'][] = Keywords::fromArray([$l => $keywords]);
+            }
+        }
+
+        if (array_key_exists('logo', $data)) {
+            foreach ($data['logo'] as $logo) {
+                $retval['Logo'][] = Logo::fromArray($logo);
+            }
+        }
+
+        if (array_key_exists('children', $data)) {
+            Assert::isArray($data['children'], ArrayValidationException::class);
+            Assert::allIsInstanceOf(
+                $data['children'],
+                SerializableElementInterface::class,
+                ArrayValidationException::class,
+            );
+            $retval['children'] = $data['children'];
+        }
+
+        return array_filter($retval);
     }
 
 
@@ -429,12 +472,15 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
             $logo[] = $child->toArray();
         }
 
+        $children = $this->getElements();
+
         return [] +
             (empty($displayName) ? [] : ['DisplayName' => $displayName]) +
             (empty($description) ? [] : ['Description' => $description]) +
             (empty($infoUrl) ? [] : ['InformationURL' => $infoUrl]) +
             (empty($privacyUrl) ? [] : ['PrivacyStatementURL' => $privacyUrl]) +
             (empty($keywords) ? [] : ['Keywords' => $keywords]) +
-            (empty($logo) ? [] : ['Logo' => $logo]);
+            (empty($logo) ? [] : ['Logo' => $logo]) +
+            (empty($children) ? [] : ['children' => $children]);
     }
 }

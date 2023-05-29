@@ -6,12 +6,14 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 use function array_key_first;
 use function explode;
 use function implode;
+use function rtrim;
 
 /**
  * Class for handling the Keywords metadata extensions for login and discovery user interface
@@ -121,8 +123,8 @@ final class Keywords extends AbstractMduiElement implements ArrayizableElementIn
      */
     public static function fromArray(array $data): static
     {
-        Assert::notEmpty($data);
-        Assert::count($data, 1);
+        Assert::notEmpty($data, ArrayValidationException::class);
+        Assert::count($data, 1, ArrayValidationException::class);
 
         $lang = array_key_first($data);
         $keywords = $data[$lang];

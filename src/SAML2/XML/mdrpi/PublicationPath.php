@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\mdrpi;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -101,6 +102,8 @@ final class PublicationPath extends AbstractMdrpiElement implements ArrayizableE
      */
     public static function fromArray(array $data): static
     {
+        Assert::allIsArray($data, ArrayValidationException::class);
+
         $publication = [];
         foreach ($data as $p) {
             $publication[] = Publication::fromArray($p);

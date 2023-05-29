@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -109,8 +110,13 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
      */
     public static function fromArray(array $data): static
     {
+        Assert::count($data, 1, ArrayValidationException::class);
+
         $lang = array_key_first($data);
+        Assert::stringNotEmpty($lang, ArrayValidationException::class);
+
         $value = $data[$lang];
+        Assert::stringNotEmpty($value, ArrayValidationException::class);
 
         return new static($lang, $value);
     }

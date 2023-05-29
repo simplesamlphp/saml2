@@ -8,10 +8,14 @@ use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
+use function array_change_key_case;
+use function array_keys;
 use function preg_replace;
 
 /**
@@ -172,27 +176,57 @@ final class PublicationInfo extends AbstractMdrpiElement implements ArrayizableE
      */
     public static function fromArray(array $data): static
     {
-        Assert::keyExists($data, 'publisher');
+        $data = self::processArrayContents($data);
 
-        $publisher = $data['publisher'];
-        Assert::string($publisher);
+        return new static(
+            $data['publisher'],
+            $data['creationInstant'] ?? null,
+            $data['publicationId'] ?? null,
+            $data['UsagePolicy'] ?? [],
+        );
+    }
 
-        $creationInstant = $data['creationInstant'] ?? null;
-        Assert::nullOrValidDateTimeZulu($creationInstant);
-        $creationInstant = is_null($creationInstant) ? null : new DateTimeImmutable($creationInstant);
 
-        $publicationId = $data['publicationId'] ?? null;
-        Assert::nullOrString($publicationId);
+    /**
+     * Validates an array representation of this object and returns the same array with
+     * rationalized keys (casing) and parsed sub-elements.
+     *
+     * @param array $data
+     * @return array $data
+     */
+    private static function processArrayContents(array $data): array
+    {
+        $data = array_change_key_case($data, CASE_LOWER);
 
-        $up = $data['usagePolicy'] ?? [];
-        Assert::isArray($up);
+        Assert::allOneOf(
+            array_keys($data),
+            ['publisher', 'creationinstant', 'publicationid', 'usagepolicy'],
+            ArrayValidationException::class,
+        );
+        Assert::keyExists($data, 'publisher', ArrayValidationException::class);
 
-        $usagePolicy = [];
-        foreach ($up as $k => $v) {
-            $usagePolicy[] = UsagePolicy::fromArray([$k => $v]);
+        Assert::string($data['publisher'], ArrayValidationException::class);
+        $retval = ['publisher' => $data['publisher']];
+
+        if (array_key_exists('creationinstant', $data)) {
+            Assert::string($data['creationinstant'], ArrayValidationException::class);
+            Assert::validDateTimeZulu($data['creationinstant'], ArrayValidationException::class);
+            $retval['creationInstant'] = new DateTimeImmutable($data['creationinstant']);
         }
 
-        return new static($publisher, $creationInstant, $publicationId, $usagePolicy);
+        if (array_key_exists('publicationid', $data)) {
+            Assert::string($data['publicationid'], ArrayValidationException::class);
+            $retval['publicationId'] = $data['publicationid'];
+        }
+
+        if (array_key_exists('usagepolicy', $data)) {
+            Assert::isArray($data['usagepolicy'], ArrayValidationException::class);
+            foreach ($data['usagepolicy'] as $lang => $up) {
+                $retval['UsagePolicy'][] = UsagePolicy::fromArray([$lang => $up]);
+            }
+        }
+
+        return $retval;
     }
 
 
@@ -215,9 +249,9 @@ final class PublicationInfo extends AbstractMdrpiElement implements ArrayizableE
         }
 
         if (!empty($this->getUsagePolicy())) {
-            $data['usagePolicy'] = [];
+            $data['UsagePolicy'] = [];
             foreach ($this->getUsagePolicy() as $up) {
-                $data['usagePolicy'] = array_merge($data['usagePolicy'], $up->toArray());
+                $data['UsagePolicy'] = array_merge($data['UsagePolicy'], $up->toArray());
             }
         }
         return $data;

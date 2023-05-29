@@ -8,7 +8,9 @@ use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
@@ -153,26 +155,51 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
      */
     public static function fromArray(array $data): static
     {
-        Assert::keyExists($data, 'registrationAuthority');
+        $data = self::processArrayContents($data);
 
-        $registrationAuthority = $data['registrationAuthority'];
-        Assert::string($registrationAuthority);
+        return new static(
+            $data['registrationAuthority'],
+            $data['registrationInstant'] ?? null,
+            $data['RegistrationPolicy'] ?? [],
+        );
+    }
 
-        $registrationInstant = $data['registrationInstant'] ?? null;
-        Assert::nullOrValidDateTimeZulu($registrationInstant);
-        $registrationInstant = is_null($registrationInstant)
-           ? null
-           : new DateTimeImmutable($registrationInstant);
 
-        $rp = $data['registrationPolicy'] ?? [];
-        Assert::isArray($rp);
+    /**
+     * Validates an array representation of this object and returns the same array with
+     * rationalized keys (casing) and parsed sub-elements.
+     *
+     * @param array $data
+     * @return array $data
+     */
+    private static function processArrayContents(array $data): array
+    {
+        $data = array_change_key_case($data, CASE_LOWER);
 
-        $registrationPolicy = [];
-        foreach ($rp as $k => $v) {
-            $registrationPolicy[] = RegistrationPolicy::fromArray([$k => $v]);
+        Assert::allOneOf(
+            array_keys($data),
+            ['registrationauthority', 'registrationinstant', 'registrationpolicy'],
+            ArrayValidationException::class,
+        );
+
+        Assert::keyExists($data, 'registrationauthority', ArrayValidationException::class);
+        Assert::string($data['registrationauthority'], ArrayValidationException::class);
+        $retval = ['registrationAuthority' => $data['registrationauthority']];
+
+        if (array_key_exists('registrationinstant', $data)) {
+            Assert::string($data['registrationinstant'], ArrayValidationException::class);
+            Assert::validDateTimeZulu($data['registrationinstant'], ArrayValidationException::class);
+            $retval['registrationInstant'] = new DateTimeImmutable($data['registrationinstant']);
         }
 
-        return new static($registrationAuthority, $registrationInstant, $registrationPolicy);
+        if (array_key_exists('registrationpolicy', $data)) {
+            Assert::isArray($data['registrationpolicy'], ArrayValidationException::class);
+            foreach ($data['registrationpolicy'] as $lang => $rp) {
+                $retval['RegistrationPolicy'][] = RegistrationPolicy::fromArray([$lang => $rp]);
+            }
+        }
+
+        return $retval;
     }
 
 
@@ -191,9 +218,9 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
         }
 
         if (!empty($this->getRegistrationPolicy())) {
-            $data['registrationPolicy'] = [];
+            $data['RegistrationPolicy'] = [];
             foreach ($this->getRegistrationPolicy() as $rp) {
-                $data['registrationPolicy'] = array_merge($data['registrationPolicy'], $rp->toArray());
+                $data['RegistrationPolicy'] = array_merge($data['RegistrationPolicy'], $rp->toArray());
             }
         }
 
