@@ -8,6 +8,7 @@ use DOMDocument;
 use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
@@ -17,10 +18,13 @@ use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\SerializableElementInterface;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function array_filter;
+use function array_change_key_case;
 use function array_key_exists;
+use function array_keys;
 use function array_map;
 use function array_pop;
 use function count;
@@ -241,55 +245,98 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
      */
     public static function fromArray(array $data): static
     {
-        Assert::keyExists($data, 'ContactType');
-
-        $ContactType = $data['ContactType'];
-        $Company = isset($data['Company']) ? new Company($data['Company']) : null;
-        $GivenName = isset($data['GivenName']) ? new GivenName($data['GivenName']) : null;
-        $SurName = isset($data['SurName']) ? new SurName($data['SurName']) : null;
-        $Extensions = array_key_exists('Extensions', $data) ? new Extensions($data['Extensions']) : null;
-
-        $EmailAddress = [];
-        if (array_key_exists('EmailAddress', $data)) {
-            foreach ($data['EmailAddress'] as $mail) {
-                $EmailAddress[] = new EmailAddress($mail);
-            }
-        }
-
-        $TelephoneNumber = [];
-        if (array_key_exists('TelephoneNumber', $data)) {
-            foreach ($data['TelephoneNumber'] as $telephone) {
-                $TelephoneNumber[] = new TelephoneNumber($telephone);
-            }
-        }
-
-        $attributes = [];
-        if (array_key_exists('attributes', $data)) {
-            foreach ($data['attributes'] as $attr) {
-                Assert::keyExists($attr, 'namespaceURI');
-                Assert::keyExists($attr, 'namespacePrefix');
-                Assert::keyExists($attr, 'attrName');
-                Assert::keyExists($attr, 'attrValue');
-
-                $attributes[] = new XMLAttribute(
-                    $attr['namespaceURI'],
-                    $attr['namespacePrefix'],
-                    $attr['attrName'],
-                    $attr['attrValue'],
-                );
-            }
-        }
+        $data = self::processArrayContents($data);
 
         return new static(
-            $ContactType,
-            $Company,
-            $GivenName,
-            $SurName,
-            $Extensions,
-            $EmailAddress,
-            $TelephoneNumber,
-            $attributes,
+            $data['contactType'],
+            $data['Company'] ?? null,
+            $data['GivenName'] ?? null,
+            $data['SurName'] ?? null,
+            $data['Extensions'] ?? null,
+            $data['EmailAddress'] ?? [],
+            $data['TelephoneNumber'] ?? [],
+            $data['attributes'] ?? null,
         );
+    }
+
+
+    /**
+     * Validates an array representation of this object and returns the same array with
+     * rationalized keys (casing) and parsed sub-elements.
+     *
+     * @param array $data
+     * @return array $data
+     */
+    private static function processArrayContents(array $data): array
+    {
+        $data = array_change_key_case($data, CASE_LOWER);
+
+        // Make sure the array keys are known for this kind of object
+        Assert::allOneOf(
+            array_keys($data),
+            [
+                'contacttype',
+                'company',
+                'givenname',
+                'surname',
+                'emailaddress',
+                'telephonenumber',
+                'extensions',
+                'attributes',
+            ],
+            ArrayValidationException::class,
+        );
+
+        Assert::keyExists($data, 'contacttype', ArrayValidationException::class);
+        Assert::string($data['contacttype'], ArrayValidationException::class);
+
+        $retval = ['contactType' => $data['contacttype']];
+
+        if (array_key_exists('company', $data)) {
+            Assert::string($data['company'], ArrayValidationException::class);
+            $retval['Company'] = new Company($data['company']);
+        }
+
+        if (array_key_exists('givenname', $data)) {
+            Assert::string($data['givenname'], ArrayValidationException::class);
+            $retval['GivenName'] = new GivenName($data['givenname']);
+        }
+
+        if (array_key_exists('surname', $data)) {
+            Assert::string($data['surname'], ArrayValidationException::class);
+            $retval['SurName'] = new SurName($data['surname']);
+        }
+
+        if (array_key_exists('emailaddress', $data)) {
+            Assert::isArray($data['emailaddress'], ArrayValidationException::class);
+            Assert::allString($data['emailaddress'], ArrayValidationException::class);
+            foreach ($data['emailaddress'] as $email) {
+                $retval['EmailAddress'][] = new EmailAddress($email);
+            }
+        }
+
+        if (array_key_exists('telephonenumber', $data)) {
+            Assert::isArray($data['telephonenumber'], ArrayValidationException::class);
+            Assert::allString($data['telephonenumber'], ArrayValidationException::class);
+            foreach ($data['telephonenumber'] as $telephone) {
+                $retval['TelephoneNumber'][] = new TelephoneNumber($telephone);
+            }
+        }
+
+        if (array_key_exists('extensions', $data)) {
+            Assert::isArray($data['extensions'], ArrayValidationException::class);
+            $retval['Extensions'] = new Extensions($data['extensions']);
+        }
+
+        if (array_key_exists('attributes', $data)) {
+            Assert::isArray($data['attributes'], ArrayValidationException::class);
+            Assert::allIsArray($data['attributes'], ArrayValidationException::class);
+            foreach ($data['attributes'] as $i => $attr) {
+                $retval['attributes'][] = XMLAttribute::fromArray($attr);
+            }
+        }
+
+        return $retval;
     }
 
 
@@ -307,7 +354,7 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
             'SurName' => $this->getSurName()?->getContent(),
             'EmailAddress' => [],
             'TelephoneNumber' => [],
-            'Extensions' => $this->Extensions->getList(),
+            'Extensions' => $this?->Extensions->getList(),
             'attributes' => [],
         ];
 

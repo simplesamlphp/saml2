@@ -62,7 +62,7 @@ final class DiscoveryResponseTest extends TestCase
             'Location' => 'https://whatever/',
             'isDefault' => true,
             //'ResponseLocation' => null,
-            'Extensions' => [self::$ext],
+            'children' => [self::$ext],
             'attributes' => [self::$attr->toArray()],
         ];
 
@@ -86,8 +86,8 @@ final class DiscoveryResponseTest extends TestCase
             C::LOCATION_A,
             false,
             null,
-            [self::$attr],
             [self::$ext],
+            [self::$attr],
         );
 
         $this->assertEquals(

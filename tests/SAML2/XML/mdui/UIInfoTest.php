@@ -59,6 +59,7 @@ final class UIInfoTest extends TestCase
             'PrivacyStatementURL' => ["nl" => "https://voorbeeld.nl/privacy", "en" => "https://example.org/privacy"],
             'Keywords' => ['en' => ['keyword']],
             'Logo' => [['url' => 'https://example.edu/logo.png', 'height' => 30, 'width' => 20, 'lang' => 'nl']],
+            //'children' => [],
         ];
     }
 

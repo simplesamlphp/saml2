@@ -60,6 +60,26 @@ final class IndexedEndpointTypeTest extends TestCase
 
 
     /**
+     * Test that creating an IndexedEndpointType from XML with a numeric string index succeeds.
+     *
+     * @param class-string $class
+     * @param string $xmlRepresentation
+     *
+     * @dataProvider classProvider
+     */
+    public function testUnmarshallingWithNumericString(string $class, string $xmlRepresentation): void
+    {
+        $xmlRepresentation = DOMDocumentFactory::fromFile(
+            self::$resourcePath . $xmlRepresentation,
+        );
+        $xmlRepresentation->documentElement->setAttribute('index', '+0000000000000000000005');
+
+        $endpoint = $class::fromXML($xmlRepresentation->documentElement);
+        $this->assertEquals(5, $endpoint->getIndex());
+    }
+
+
+    /**
      * Test that creating an IndexedEndpointType from XML checks the actual name of the endpoint.
      */
     public function testUnmarshallingUnexpectedEndpoint(): void

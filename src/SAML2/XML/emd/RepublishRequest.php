@@ -6,6 +6,8 @@ namespace SimpleSAML\SAML2\XML\emd;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 
 use function array_pop;
@@ -15,7 +17,7 @@ use function array_pop;
  *
  * @package simplesamlphp/saml2
  */
-final class RepublishRequest extends AbstractEmdElement
+final class RepublishRequest extends AbstractEmdElement implements ArrayizableElementInterface
 {
     /**
      * @param \SimpleSAML\SAML2\XML\emd\RepublishTarget $republishTarget
@@ -89,8 +91,8 @@ final class RepublishRequest extends AbstractEmdElement
      */
     public static function fromArray(array $data): static
     {
-        Assert::keyExists($data, 'RepublishTarget');
-        Assert::string($data['RepublishTarget']);
+        Assert::keyExists($data, 'RepublishTarget', ArrayValidationException::class);
+        Assert::string($data['RepublishTarget'], ArrayValidationException::class);
 
         return new static(new RepublishTarget($data['RepublishTarget']));
     }

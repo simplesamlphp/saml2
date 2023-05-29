@@ -6,12 +6,17 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableElementTrait;
+
+use function array_filter;
+use function array_key_exists;
+use function array_keys;
 
 /**
  * Class for handling the metadata extensions for login and discovery user interface
@@ -175,22 +180,77 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
      */
     public static function fromArray(array $data): static
     {
-        $IPHint = [];
-        foreach ($data['IPHint'] as $hint) {
-            $IPHint[] = new IPHint($hint);
+        $data = self::processArrayContents($data);
+
+        return new static(
+            $data['children'] ?? [],
+            $data['IPHint'] ?? [],
+            $data['DomainHint'] ?? [],
+            $data['GeolocationHint'] ?? [],
+        );
+    }
+
+
+    /**
+     * Validates an array representation of this object and returns the same array with
+     * rationalized keys (casing) and parsed sub-elements.
+     *
+     * @param array $data
+     * @return array $data
+     */
+    private static function processArrayContents(array $data): array
+    {
+        $data = array_change_key_case($data, CASE_LOWER);
+
+        // Make sure the array keys are known for this kind of object
+        Assert::allOneOf(
+            array_keys($data),
+            [
+                'iphint',
+                'domainhint',
+                'geolocationhint',
+                'children',
+            ],
+            ArrayValidationException::class,
+        );
+
+        $retval = [];
+
+        if (array_key_exists('iphint', $data)) {
+            Assert::isArray($data['iphint'], ArrayValidationException::class);
+            Assert::allString($data['iphint'], ArrayValidationException::class);
+            foreach ($data['iphint'] as $hint) {
+                $retval['IPHint'][] = new IPHint($hint);
+            }
         }
 
-        $DomainHint = [];
-        foreach ($data['DomainHint'] as $hint) {
-            $DomainHint[] = new DomainHint($hint);
+        if (array_key_exists('domainhint', $data)) {
+            Assert::isArray($data['domainhint'], ArrayValidationException::class);
+            Assert::allString($data['domainhint'], ArrayValidationException::class);
+            foreach ($data['domainhint'] as $hint) {
+                $retval['DomainHint'][] = new DomainHint($hint);
+            }
         }
 
-        $GeolocationHint = [];
-        foreach ($data['GeolocationHint'] as $hint) {
-            $GeolocationHint[] = new GeolocationHint($hint);
+        if (array_key_exists('geolocationhint', $data)) {
+            Assert::isArray($data['geolocationhint'], ArrayValidationException::class);
+            Assert::allString($data['geolocationhint'], ArrayValidationException::class);
+            foreach ($data['geolocationhint'] as $hint) {
+                $retval['GeolocationHint'][] = new GeolocationHint($hint);
+            }
         }
 
-        return new static([], $IPHint, $DomainHint, $GeolocationHint);
+        if (array_key_exists('children', $data)) {
+            Assert::isArray($data['children'], ArrayValidationException::class);
+            Assert::allIsInstanceOf(
+                $data['children'],
+                SerializableElementInterface::class,
+                ArrayValidationException::class,
+            );
+            $retval['children'] = $data['children'];
+        }
+
+        return $retval;
     }
 
 
@@ -205,6 +265,7 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
             'IPHint' => [],
             'DomainHint' => [],
             'GeolocationHint' => [],
+            'children' => $this->getElements(),
         ];
 
         foreach ($this->getIPHint() as $hint) {
@@ -219,6 +280,6 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
             $data['GeolocationHint'][] = $hint->getContent();
         }
 
-        return $data;
+        return array_filter($data);
     }
 }

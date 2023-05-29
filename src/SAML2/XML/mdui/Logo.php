@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\mdui;
 use DOMElement;
 use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -152,24 +153,54 @@ final class Logo extends AbstractMduiElement implements ArrayizableElementInterf
      */
     public static function fromArray(array $data): static
     {
-        Assert::keyExists($data, 'url');
+        $data = self::processArrayContents($data);
 
-        $Url = $data['url'];
-        $Width = $data['width'];
-        Assert::notNull(
-            $Width,
-            'Missing \'width\' attribute on mdui:Logo.',
-            MissingAttributeException::class,
-        );
-        $Height = $data['height'];
-        Assert::notNull(
-            $Height,
-            'Missing \'height\' attribute on mdui:Logo.',
-            MissingAttributeException::class,
-        );
-        $lang = $data['lang'] ?? null;
+        return new static($data['url'], $data['height'], $data['width'], $data['lang'] ?? null);
+    }
 
-        return new static($Url, $Height, $Width, $lang);
+
+    /**
+     * Validates an array representation of this object and returns the same array with
+     * rationalized keys (casing) and parsed sub-elements.
+     *
+     * @param array $data
+     * @return array $data
+     */
+    private static function processArrayContents(array $data): array
+    {
+        $data = array_change_key_case($data, CASE_LOWER);
+
+        // Make sure the array keys are known for this kind of object
+        Assert::allOneOf(
+            array_keys($data),
+            [
+                'url',
+                'height',
+                'width',
+                'lang',
+            ],
+            ArrayValidationException::class,
+        );
+
+        Assert::keyExists($data, 'url', ArrayValidationException::class);
+        Assert::keyExists($data, 'height', ArrayValidationException::class);
+        Assert::keyExists($data, 'width', ArrayValidationException::class);
+
+        Assert::integer($data['height'], ArrayValidationException::class);
+        Assert::integer($data['width'], ArrayValidationException::class);
+
+        $retval = [
+            'url' => $data['url'],
+            'height' => $data['height'],
+            'width' => $data['width'],
+        ];
+
+        if (array_key_exists('lang', $data)) {
+            Assert::string($data['lang'], ArrayValidationException::class);
+            $retval['lang'] = $data['lang'];
+        }
+
+        return $retval;
     }
 
 

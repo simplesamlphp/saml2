@@ -60,7 +60,7 @@ final class ArtifactResolutionServiceTest extends TestCase
             'Binding' => C::BINDING_HTTP_ARTIFACT,
             'Location' => 'https://whatever/',
             'isDefault' => true,
-            'Extensions' => [self::$ext],
+            'children' => [self::$ext],
             'attributes' => [self::$attr->toArray()],
         ];
 
@@ -84,8 +84,8 @@ final class ArtifactResolutionServiceTest extends TestCase
             'https://simplesamlphp.org/some/endpoint',
             false,
             null,
-            [self::$attr],
             [self::$ext],
+            [self::$attr],
         );
 
         $this->assertEquals(

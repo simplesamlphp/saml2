@@ -51,7 +51,7 @@ final class PublicationInfoTest extends TestCase
             'publisher' => 'SomePublisher',
             'creationInstant' => '2011-01-01T00:00:00Z',
             'publicationId' => 'SomePublicationId',
-            'usagePolicy' => ['en' => 'http://TheEnglishUsagePolicy', 'no' => 'http://TheNorwegianUsagePolicy'],
+            'UsagePolicy' => ['en' => 'http://TheEnglishUsagePolicy', 'no' => 'http://TheNorwegianUsagePolicy'],
         ];
     }
 

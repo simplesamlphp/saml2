@@ -6,8 +6,11 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\StringElementTrait;
+
+use function array_key_first;
 
 /**
  * Class implementing TelephoneNumber.
@@ -49,8 +52,7 @@ final class TelephoneNumber extends AbstractMdElement implements ArrayizableElem
      */
     public static function fromArray(array $data): static
     {
-        Assert::notEmpty($data);
-        Assert::count($data, 1);
+        Assert::allString($data, ArrayValidationException::class);
 
         $index = array_key_first($data);
         return new static($data[$index]);
