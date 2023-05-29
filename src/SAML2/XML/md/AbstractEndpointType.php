@@ -7,13 +7,19 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\ExtendableElementTrait;
+use SimpleSAML\XML\SerializableElementInterface;
+
+use function array_change_key_case;
+use function array_key_exists;
+use function array_keys;
 
 /**
  * Class representing SAML 2 EndpointType.
@@ -49,8 +55,8 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
      * @param string $binding
      * @param string $location
      * @param string|null $responseLocation
+     * @param \SimpleSAML\XML\ElementInterface[] $children
      * @param list<\SimpleSAML\XML\Attribute> $attributes
-     * @param array $children
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
@@ -58,15 +64,15 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
         protected string $binding,
         protected string $location,
         protected ?string $responseLocation = null,
-        array $attributes = [],
         array $children = [],
+        array $attributes = [],
     ) {
         Assert::validURI($binding, SchemaViolationException::class); // Covers the empty string
         Assert::validURI($location, SchemaViolationException::class); // Covers the empty string
         Assert::nullOrValidURI($responseLocation, SchemaViolationException::class); // Covers the empty string
 
-        $this->setAttributesNS($attributes);
         $this->setElements($children);
+        $this->setAttributesNS($attributes);
     }
 
 
@@ -147,8 +153,8 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
             $binding,
             $location,
             self::getOptionalAttribute($xml, 'ResponseLocation', null),
-            self::getAttributesNSFromXML($xml),
             $children,
+            self::getAttributesNSFromXML($xml),
         );
     }
 
@@ -193,31 +199,73 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
      */
     public static function fromArray(array $data): static
     {
-        Assert::keyExists($data, 'Binding');
-        Assert::keyExists($data, 'Location');
+        $data = self::processArrayContents($data);
 
-        $responseLocation = array_key_exists('ResponseLocation', $data) ? $data['ResponseLocation'] : null;
+        return new static(
+            $data['Binding'],
+            $data['Location'],
+            $data['ResponseLocation'] ?? null,
+            $data['children'] ?? [],
+            $data['attributes'] ?? [],
+        );
+    }
 
-        $Extensions = array_key_exists('Extensions', $data) ? $data['Extensions'] : null;
 
-        $attributes = [];
+    /**
+     * Validates an array representation of this object and returns the same array with
+     * rationalized keys (casing) and parsed sub-elements.
+     *
+     * @param array $data
+     * @return array $data
+     */
+    private static function processArrayContents(array $data): array
+    {
+        $data = array_change_key_case($data, CASE_LOWER);
+
+        // Make sure the array keys are known for this kind of object
+        Assert::allOneOf(
+            array_keys($data),
+            ['binding', 'location', 'responselocation', 'children', 'attributes'],
+            ArrayValidationException::class,
+        );
+
+        // Make sure all the mandatory items exist
+        Assert::keyExists($data, 'binding', ArrayValidationException::class);
+        Assert::keyExists($data, 'location', ArrayValidationException::class);
+
+        // Make sure the items have the correct data type
+        Assert::string($data['binding'], ArrayValidationException::class);
+        Assert::string($data['location'], ArrayValidationException::class);
+
+        $retval = [
+            'Binding' => $data['binding'],
+            'Location' => $data['location'],
+        ];
+
+        if (array_key_exists('responselocation', $data)) {
+            Assert::string($data['responselocation'], ArrayValidationException::class);
+            $retval['ResponseLocation'] = $data['responselocation'];
+        }
+
+        if (array_key_exists('children', $data)) {
+            Assert::isArray($data['children'], ArrayValidationException::class);
+            Assert::allIsInstanceOf(
+                $data['children'],
+                SerializableElementInterface::class,
+                ArrayValidationException::class,
+            );
+            $retval['children'] = $data['children'];
+        }
+
         if (array_key_exists('attributes', $data)) {
-            foreach ($data['attributes'] as $attr) {
-                Assert::keyExists($attr, 'namespaceURI');
-                Assert::keyExists($attr, 'namespacePrefix');
-                Assert::keyExists($attr, 'attrName');
-                Assert::keyExists($attr, 'attrValue');
-
-                $attributes[] = new XMLAttribute(
-                    $attr['namespaceURI'],
-                    $attr['namespacePrefix'],
-                    $attr['attrName'],
-                    $attr['attrValue'],
-                );
+            Assert::isArray($data['attributes'], ArrayValidationException::class);
+            Assert::allIsArray($data['attributes'], ArrayValidationException::class);
+            foreach ($data['attributes'] as $i => $attr) {
+                $retval['attributes'][] = XMLAttribute::fromArray($attr);
             }
         }
 
-        return new static($data['Binding'], $data['Location'], $responseLocation, $attributes, $Extensions);
+        return $retval;
     }
 
 
@@ -232,7 +280,7 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
             'Binding' => $this->getBinding(),
             'Location' => $this->getLocation(),
             'ResponseLocation' => $this->getResponseLocation(),
-            'Extensions' => $this->getElements(),
+            'children' => $this->getElements(),
         ];
 
         foreach ($this->getAttributesNS() as $a) {

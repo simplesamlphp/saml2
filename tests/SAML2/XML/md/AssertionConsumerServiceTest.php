@@ -61,7 +61,7 @@ final class AssertionConsumerServiceTest extends TestCase
             'Location' => 'https://whatever/',
             'isDefault' => true,
             'ResponseLocation' => 'https://foo.bar/',
-            'Extensions' => [self::$ext],
+            'children' => [self::$ext],
             'attributes' => [self::$attr->toArray()],
         ];
 
@@ -85,8 +85,8 @@ final class AssertionConsumerServiceTest extends TestCase
             'https://simplesamlphp.org/some/endpoint',
             false,
             'https://foo.bar/',
-            [self::$attr],
             [self::$ext],
+            [self::$attr],
         );
 
         $this->assertEquals(

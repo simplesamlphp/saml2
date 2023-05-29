@@ -6,6 +6,8 @@ namespace SimpleSAML\SAML2\XML\mdrpi;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -132,19 +134,49 @@ final class Publication extends AbstractMdrpiElement implements ArrayizableEleme
      */
     public static function fromArray(array $data): static
     {
-        Assert::keyExists($data, 'publisher');
+        $data = self::processArrayContents($data);
 
-        $publisher = $data['publisher'];
-        Assert::string($publisher);
+        return new static(
+            $data['publisher'],
+            $data['creationInstant'] ?? null,
+            $data['publicationId'] ?? null,
+        );
+    }
 
-        $creationInstant = $data['creationInstant'] ?? null;
-        Assert::nullOrString($creationInstant);
-        $creationInstant = is_null($creationInstant) ? null : XMLUtils::xsDateTimeToTimestamp($creationInstant);
 
-        $publicationId = $data['publicationId'] ?? null;
-        Assert::nullOrString($publicationId);
+    /**
+     * Validates an array representation of this object and returns the same array with
+     * rationalized keys (casing) and parsed sub-elements.
+     *
+     * @param array $data
+     * @return array $data
+     */
+    private static function processArrayContents(array $data): array
+    {
+        $data = array_change_key_case($data, CASE_LOWER);
 
-        return new static($publisher, $creationInstant, $publicationId);
+        Assert::allOneOf(
+            array_keys($data),
+            ['publisher', 'creationinstant', 'publicationid'],
+            ArrayValidationException::class,
+        );
+
+        Assert::keyExists($data, 'publisher', ArrayValidationException::class);
+        Assert::string($data['publisher'], ArrayValidationException::class);
+        $retval = ['publisher' => $data['publisher']];
+
+        if (array_key_exists('creationinstant', $data)) {
+            Assert::string($data['creationinstant'], ArrayValidationException::class);
+            Assert::validDateTimeZulu($data['creationinstant'], ArrayValidationException::class);
+            $retval['creationInstant'] = XMLUtils::xsDateTimeToTimestamp($data['creationinstant']);
+        }
+
+        if (array_key_exists('publicationid', $data)) {
+            Assert::string($data['publicationid'], ArrayValidationException::class);
+            $retval['publicationId'] = $data['publicationid'];
+        }
+
+        return $retval;
     }
 
 

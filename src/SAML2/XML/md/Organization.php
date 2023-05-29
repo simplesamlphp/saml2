@@ -8,6 +8,7 @@ use DOMDocument;
 use DOMElement;
 use Exception;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\ArrayizableElementInterface;
@@ -17,10 +18,13 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\SerializableElementInterface;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_change_key_case;
 use function array_filter;
 use function array_key_exists;
+use function array_keys;
 use function array_merge;
 
 /**
@@ -188,53 +192,83 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
      */
     public static function fromArray(array $data): static
     {
-        $orgNames = [];
-        if (array_key_exists('OrganizationName', $data)) {
-            foreach ($data['OrganizationName'] as $lang => $orgName) {
-                $orgNames[] = new OrganizationName($lang, $orgName);
-            }
-        }
-
-        $orgDisplayNames = [];
-        if (array_key_exists('OrganizationDisplayName', $data)) {
-            foreach ($data['OrganizationDisplayName'] as $lang => $orgDisplayName) {
-                $orgDisplayNames[] = new OrganizationDisplayName($lang, $orgDisplayName);
-            }
-        }
-
-        $orgURLs = [];
-        if (array_key_exists('OrganizationURL', $data)) {
-            foreach ($data['OrganizationURL'] as $lang => $orgURL) {
-                $orgURLs[] = new OrganizationURL($lang, $orgURL);
-            }
-        }
-
-        $Extensions = array_key_exists('Extensions', $data) ? new Extensions($data['Extensions']) : null;
-
-        $attributes = [];
-        if (array_key_exists('attributes', $data)) {
-            foreach ($data['attributes'] as $attr) {
-                Assert::keyExists($attr, 'namespaceURI');
-                Assert::keyExists($attr, 'namespacePrefix');
-                Assert::keyExists($attr, 'attrName');
-                Assert::keyExists($attr, 'attrValue');
-
-                $attributes[] = new XMLAttribute(
-                    $attr['namespaceURI'],
-                    $attr['namespacePrefix'],
-                    $attr['attrName'],
-                    $attr['attrValue'],
-                );
-            }
-        }
+        $data = self::processArrayContents($data);
 
         return new static(
-            $orgNames,
-            $orgDisplayNames,
-            $orgURLs,
-            $Extensions,
-            $attributes,
+            $data['OrganizationName'],
+            $data['OrganizationDisplayName'],
+            $data['OrganizationURL'],
+            $data['Extensions'] ?? null,
+            $data['attributes'] ?? [],
         );
+    }
+
+
+    /**
+     * Validates an array representation of this object and returns the same array with
+     * rationalized keys (casing) and parsed sub-elements.
+     *
+     * @param array $data
+     * @return array $data
+     */
+    private static function processArrayContents(array $data): array
+    {
+        $data = array_change_key_case($data, CASE_LOWER);
+
+        // Make sure the array keys are known for this kind of object
+        Assert::allOneOf(
+            array_keys($data),
+            [
+                'organizationname',
+                'organizationdisplayname',
+                'organizationurl',
+                'extensions',
+                'attributes',
+            ],
+            ArrayValidationException::class,
+        );
+
+        Assert::keyExists($data, 'organizationname', ArrayValidationException::class);
+        Assert::keyExists($data, 'organizationdisplayname', ArrayValidationException::class);
+        Assert::keyExists($data, 'organizationurl', ArrayValidationException::class);
+
+        // The minimum count is validated by the constructor
+        Assert::isArray($data['organizationname'], ArrayValidationException::class);
+        Assert::isArray($data['organizationdisplayname'], ArrayValidationException::class);
+        Assert::isArray($data['organizationurl'], ArrayValidationException::class);
+
+        foreach ($data['organizationname'] as $lang => $orgName) {
+            $data['organizationname'][$lang] = OrganizationName::fromArray([$lang => $orgName]);
+        }
+
+        foreach ($data['organizationdisplayname'] as $lang => $orgDisplayName) {
+            $data['organizationdisplayname'][$lang] = OrganizationDisplayName::fromArray([$lang => $orgDisplayName]);
+        }
+
+        foreach ($data['organizationurl'] as $lang => $orgUrl) {
+            $data['organizationurl'][$lang] = OrganizationURL::fromArray([$lang => $orgUrl]);
+        }
+
+        $retval = [
+            'OrganizationName' => $data['organizationname'],
+            'OrganizationDisplayName' => $data['organizationdisplayname'],
+            'OrganizationURL' => $data['organizationurl'],
+        ];
+
+        if (array_key_exists('extensions', $data)) {
+            Assert::isArray($data['extensions'], ArrayValidationException::class);
+            $retval['Extensions'] = new Extensions($data['extensions']);
+        }
+
+        if (array_key_exists('attributes', $data)) {
+            Assert::isArray($data['attributes'], ArrayValidationException::class);
+            Assert::allIsArray($data['attributes'], ArrayValidationException::class);
+            foreach ($data['attributes'] as $i => $attr) {
+                $retval['attributes'][] = XMLAttribute::fromArray($attr);
+            }
+        }
+
+        return $retval;
     }
 
 

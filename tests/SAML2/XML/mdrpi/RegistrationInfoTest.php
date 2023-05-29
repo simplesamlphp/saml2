@@ -49,7 +49,7 @@ final class RegistrationInfoTest extends TestCase
         self::$arrayRepresentation = [
             'registrationAuthority' => 'https://ExampleAuthority',
             'registrationInstant' => '2011-01-01T00:00:00Z',
-            'registrationPolicy' => [
+            'RegistrationPolicy' => [
                 'en' => 'http://www.example.org/aai/metadata/en_registration.html',
                 'de' => 'http://www.example.org/aai/metadata/de_registration.html',
             ],

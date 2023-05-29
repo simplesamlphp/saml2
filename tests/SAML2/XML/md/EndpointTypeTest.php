@@ -56,7 +56,7 @@ final class EndpointTypeTest extends TestCase
             'Binding' => C::BINDING_HTTP_POST,
             'Location' => 'https://whatever/',
             'ResponseLocation' => 'https://foo.bar/',
-            'Extensions' => [new Chunk(self::$ext->documentElement)],
+            'children' => [new Chunk(self::$ext->documentElement)],
             'attributes' => [(new XMLAttribute('urn:x-simplesamlphp:namespace', 'test', 'attr', 'value'))->toArray()],
         ];
 
@@ -80,8 +80,8 @@ final class EndpointTypeTest extends TestCase
             C::BINDING_HTTP_POST,
             'https://whatever/',
             'https://foo.bar/',
-            [$attr],
             [new Chunk(self::$ext->documentElement)],
+            [$attr],
         );
 
         $this->assertEquals(

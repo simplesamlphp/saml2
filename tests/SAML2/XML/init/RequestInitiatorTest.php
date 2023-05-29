@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\init\RequestInitiator;
 use SimpleSAML\XML\Attribute as XMLAttribute;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -31,11 +32,18 @@ final class RequestInitiatorTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+    /** @var \SimpleSAML\XML\Chunk */
+    private static Chunk $ext;
+
 
     /**
      */
     public static function setUpBeforeClass(): void
     {
+        self::$ext = new Chunk(DOMDocumentFactory::fromString(
+            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>'
+        )->documentElement);
+
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-request-initiation.xsd';
 
         self::$testedClass = RequestInitiator::class;
@@ -59,6 +67,7 @@ final class RequestInitiatorTest extends TestCase
         $requestInitiator = new RequestInitiator(
             'https://simplesamlphp.org/some/endpoint',
             'https://simplesamlphp.org/other/endpoint',
+            [self::$ext],
             [$attr],
         );
 

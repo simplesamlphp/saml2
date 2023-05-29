@@ -45,7 +45,7 @@ final class ScopeTest extends TestCase
     /**
      * Marshalling a scope in literal (non-regexp) form.
      */
-    public function testMarshallingLiteral(): void
+    public function testMarshalling(): void
     {
         $scope = new Scope("example.org", false);
 
@@ -104,7 +104,7 @@ final class ScopeTest extends TestCase
     /**
      * Unmarshalling a scope in literal (non-regexp) form.
      */
-    public function testUnmarshallingLiteral(): void
+    public function testUnmarshalling(): void
     {
         $scope = Scope::fromXML(self::$xmlRepresentation->documentElement);
 

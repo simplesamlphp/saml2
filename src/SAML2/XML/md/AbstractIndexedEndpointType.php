@@ -7,11 +7,17 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SerializableElementInterface;
 
+use function array_filter;
+use function array_key_exists;
+use function array_keys;
+use function is_bool;
 use function strval;
 
 /**
@@ -37,8 +43,8 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
      * @param string $location
      * @param bool|null $isDefault
      * @param string|null $responseLocation
-     * @param list<\SimpleSAML\XML\Attribute> $attributes
      * @param array $children
+     * @param list<\SimpleSAML\XML\Attribute> $attributes
      */
     public function __construct(
         int $index,
@@ -46,10 +52,10 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
         string $location,
         ?bool $isDefault = null,
         ?string $responseLocation = null,
-        array $attributes = [],
         array $children = [],
+        array $attributes = [],
     ) {
-        parent::__construct($binding, $location, $responseLocation, $attributes, $children);
+        parent::__construct($binding, $location, $responseLocation, $children, $attributes);
 
         $this->setIndex($index);
         $this->setIsDefault($isDefault);
@@ -98,8 +104,8 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
             $location,
             self::getOptionalBooleanAttribute($xml, 'isDefault', null),
             self::getOptionalAttribute($xml, 'ResponseLocation', null),
-            self::getAttributesNSFromXML($xml),
             $children,
+            self::getAttributesNSFromXML($xml),
         );
     }
 
@@ -149,40 +155,83 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
      */
     public static function fromArray(array $data): static
     {
-        Assert::keyExists($data, 'Binding');
-        Assert::keyExists($data, 'Location');
-        Assert::keyExists($data, 'index');
-
-        $responseLocation = array_key_exists('ResponseLocation', $data) ? $data['ResponseLocation'] : null;
-
-        $Extensions = array_key_exists('Extensions', $data) ? $data['Extensions'] : null;
-
-        $attributes = [];
-        if (array_key_exists('attributes', $data)) {
-            foreach ($data['attributes'] as $attr) {
-                Assert::keyExists($attr, 'namespaceURI');
-                Assert::keyExists($attr, 'namespacePrefix');
-                Assert::keyExists($attr, 'attrName');
-                Assert::keyExists($attr, 'attrValue');
-
-                $attributes[] = new XMLAttribute(
-                    $attr['namespaceURI'],
-                    $attr['namespacePrefix'],
-                    $attr['attrName'],
-                    $attr['attrValue'],
-                );
-            }
-        }
+        $data = self::processArrayContents($data);
 
         return new static(
             $data['index'],
             $data['Binding'],
             $data['Location'],
-            array_key_exists('isDefault', $data) ? $data['isDefault'] : null,
-            $responseLocation,
-            $attributes,
-            $Extensions,
+            $data['isDefault'] ?? null,
+            $data['ResponseLocation'] ?? null,
+            $data['children'] ?? null,
+            $data['attributes'] ?? [],
         );
+    }
+
+
+    /**
+     * Validates an array representation of this object and returns the same array with
+     * rationalized keys (casing) and parsed sub-elements.
+     *
+     * @param array $data
+     * @return array $data
+     */
+    private static function processArrayContents(array $data): array
+    {
+        $data = array_change_key_case($data, CASE_LOWER);
+
+        // Make sure the array keys are known for this kind of object
+        Assert::allOneOf(
+            array_keys($data),
+            ['index', 'binding', 'location', 'isdefault', 'responselocation', 'children', 'attributes'],
+            ArrayValidationException::class,
+        );
+
+        // Make sure all the mandatory items exist
+        Assert::keyExists($data, 'binding', ArrayValidationException::class);
+        Assert::keyExists($data, 'location', ArrayValidationException::class);
+        Assert::keyExists($data, 'index', ArrayValidationException::class);
+
+        // Make sure the items have the correct data type
+        Assert::integer($data['index'], ArrayValidationException::class);
+        Assert::string($data['binding'], ArrayValidationException::class);
+        Assert::string($data['location'], ArrayValidationException::class);
+
+        $retval = [
+            'Binding' => $data['binding'],
+            'Location' => $data['location'],
+            'index' => $data['index'],
+        ];
+
+        if (array_key_exists('isdefault', $data)) {
+            Assert::boolean($data['isdefault'], ArrayValidationException::class);
+            $retval['isDefault'] = $data['isdefault'];
+        }
+
+        if (array_key_exists('responselocation', $data)) {
+            Assert::string($data['responselocation'], ArrayValidationException::class);
+            $retval['ResponseLocation'] = $data['responselocation'];
+        }
+
+        if (array_key_exists('children', $data)) {
+            Assert::isArray($data['children'], ArrayValidationException::class);
+            Assert::allIsInstanceOf(
+                $data['children'],
+                SerializableElementInterface::class,
+                ArrayValidationException::class,
+            );
+            $retval['children'] = $data['children'];
+        }
+
+        if (array_key_exists('attributes', $data)) {
+            Assert::isArray($data['attributes'], ArrayValidationException::class);
+            Assert::allIsArray($data['attributes'], ArrayValidationException::class);
+            foreach ($data['attributes'] as $i => $attr) {
+                $retval['attributes'][] = XMLAttribute::fromArray($attr);
+            }
+        }
+
+        return $retval;
     }
 
 

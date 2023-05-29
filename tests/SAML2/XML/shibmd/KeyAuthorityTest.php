@@ -50,7 +50,7 @@ final class KeyAuthorityTest extends TestCase
     /**
      * Marshalling a KeyAuthority.
      */
-    public function testMarshallingLiteral(): void
+    public function testMarshalling(): void
     {
         $keys = [
             new KeyInfo(

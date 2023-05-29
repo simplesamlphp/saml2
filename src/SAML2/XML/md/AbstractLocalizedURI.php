@@ -75,4 +75,25 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
     {
         Assert::validURI($this->sanitizeContent($content), SchemaViolationException::class); // Covers the empty string
     }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array $data
+     * @return static
+     */
+    public static function fromArray(array $data): static
+    {
+        Assert::count($data, 1);
+
+        $lang = array_key_first($data);
+        Assert::stringNotEmpty($lang);
+
+        $value = $data[$lang];
+        Assert::stringNotEmpty($value);
+        Assert::validURI($value);
+
+        return new static($lang, $value);
+    }
 }
