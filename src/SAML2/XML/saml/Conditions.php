@@ -30,7 +30,7 @@ final class Conditions extends AbstractSamlElement
      * @param \DateTimeImmutable|null $notOnOrAfter
      * @param \SimpleSAML\SAML2\XML\saml\AbstractCondition[] $condition
      * @param \SimpleSAML\SAML2\XML\saml\AudienceRestriction[] $audienceRestriction
-     * @param bool $oneTimeUse
+     * @param \SimpleSAML\SAML2\XML\saml\OneTimeUse|null $oneTimeUse
      * @param \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null $proxyRestriction
      */
     public function __construct(
@@ -38,7 +38,7 @@ final class Conditions extends AbstractSamlElement
         protected ?DateTimeImmutable $notOnOrAfter = null,
         protected array $condition = [],
         protected array $audienceRestriction = [],
-        protected bool $oneTimeUse = false,
+        protected ?OneTimeUse $oneTimeUse = null,
         protected ?ProxyRestriction $proxyRestriction = null,
     ) {
         Assert::nullOrSame($notBefore?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
@@ -95,9 +95,9 @@ final class Conditions extends AbstractSamlElement
     /**
      * Collect the value of the oneTimeUse-property
      *
-     * @return bool
+     * @return \SimpleSAML\SAML2\XML\saml\OneTimeUse|null
      */
-    public function getOneTimeUse(): bool
+    public function getOneTimeUse(): ?OneTimeUse
     {
         return $this->oneTimeUse;
     }
@@ -125,7 +125,7 @@ final class Conditions extends AbstractSamlElement
             && empty($this->notOnOrAfter)
             && empty($this->condition)
             && empty($this->audienceRestriction)
-            && $this->oneTimeUse === false
+            && empty($this->oneTimeUse)
             && empty($this->proxyRestriction);
     }
 
@@ -162,7 +162,7 @@ final class Conditions extends AbstractSamlElement
 
         $condition = AbstractCondition::getChildrenOfClass($xml);
         $audienceRestriction = AudienceRestriction::getChildrenOfClass($xml);
-        $oneTimeUse = XMLUtils::extractStrings($xml, AbstractSamlElement::NS, 'OneTimeUse');
+        $oneTimeUse = OneTimeUse::getChildrenOfClass($xml);
         $proxyRestriction = ProxyRestriction::getChildrenOfClass($xml);
 
         Assert::maxCount(
@@ -183,7 +183,7 @@ final class Conditions extends AbstractSamlElement
             $notOnOrAfter !== null ? new DateTimeImmutable($notOnOrAfter) : null,
             $condition,
             $audienceRestriction,
-            !empty($oneTimeUse),
+            array_pop($oneTimeUse),
             array_pop($proxyRestriction),
         );
     }
@@ -215,13 +215,7 @@ final class Conditions extends AbstractSamlElement
             $audienceRestriction->toXML($e);
         }
 
-        if ($this->getOneTimeUse() !== false) {
-            /** @psalm-suppress PossiblyNullReference */
-            $e->appendChild(
-                $e->ownerDocument->createElementNS(AbstractSamlElement::NS, 'saml:OneTimeUse')
-            );
-        }
-
+        $this->getOneTimeUse()?->toXML($e);
         $this->getProxyRestriction()?->toXML($e);
 
         return $e;

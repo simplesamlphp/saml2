@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\SAML2\XML\saml\Conditions;
+use SimpleSAML\SAML2\XML\saml\OneTimeUse;
 use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -64,7 +65,7 @@ final class ConditionsTest extends TestCase
                     ],
                 ),
             ],
-            true,
+            new OneTimeUse(),
             new ProxyRestriction(
                 [
                     new Audience('http://sp.example.com/demo2/metadata.php'),

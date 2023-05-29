@@ -21,6 +21,7 @@ use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\OneTimeUse;
 use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
@@ -145,7 +146,7 @@ final class AuthnRequestTest extends TestCase
                     ],
                 ),
             ],
-            true,
+            new OneTimeUse(),
             new ProxyRestriction(
                 [
                     new Audience('http://sp.example.com/demo2/metadata.php'),
