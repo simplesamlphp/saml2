@@ -180,7 +180,7 @@ class IDPSSODescriptor extends SSODescriptorType
      */
     public function setNameIDMappingService(array $nameIDMappingService): void
     {
-        Assert::allIsInstanceOf($nameIdMappingService, NameIDMappingService::class);
+        Assert::allIsInstanceOf($nameIDMappingService, NameIDMappingService::class);
         $this->NameIDMappingService = $nameIDMappingService;
     }
 
