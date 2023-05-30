@@ -354,7 +354,7 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
             'SurName' => $this->getSurName()?->getContent(),
             'EmailAddress' => [],
             'TelephoneNumber' => [],
-            'Extensions' => $this?->Extensions->getList(),
+            'Extensions' => $this->Extensions?->getList(),
             'attributes' => [],
         ];
 
