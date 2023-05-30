@@ -163,7 +163,7 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
             $data['Location'],
             $data['isDefault'] ?? null,
             $data['ResponseLocation'] ?? null,
-            $data['children'] ?? null,
+            $data['children'] ?? [],
             $data['attributes'] ?? [],
         );
     }

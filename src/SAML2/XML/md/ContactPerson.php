@@ -255,7 +255,7 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
             $data['Extensions'] ?? null,
             $data['EmailAddress'] ?? [],
             $data['TelephoneNumber'] ?? [],
-            $data['attributes'] ?? null,
+            $data['attributes'] ?? [],
         );
     }
 
