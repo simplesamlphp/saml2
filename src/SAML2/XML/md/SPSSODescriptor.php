@@ -121,7 +121,7 @@ class SPSSODescriptor extends SSODescriptorType
     /**
      * Collect the value of the AssertionConsumerService-property
      *
-     * @return \SimpleSAML\SAML2\XML\md\AssertionConsumerService
+     * @return \SimpleSAML\SAML2\XML\md\AssertionConsumerService[]
      */
     public function getAssertionConsumerService(): array
     {
