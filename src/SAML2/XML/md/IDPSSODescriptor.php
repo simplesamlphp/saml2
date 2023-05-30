@@ -89,7 +89,7 @@ class IDPSSODescriptor extends SSODescriptorType
         $this->WantAuthnRequestsSigned = Utils::parseBoolean($xml, 'WantAuthnRequestsSigned', null);
 
         $this->setSingleSignOnService(SingleSignOnService::getChildrenOfClass($xml));
-        $this->setNameIDMappingService(NameIDMappingService::getChildrenOfClass());
+        $this->setNameIDMappingService(NameIDMappingService::getChildrenOfClass($xml));
         $this->setAssertionIDRequestService(AssertionIDRequestService::getChildrenOfClass($xml));
         $this->setAttributeProfile(AttributeProfile::getChildrenOfClass($xml));
 
