@@ -21,16 +21,6 @@ use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 class HTTPRedirectTest extends TestCase
 {
     /**
-     */
-    public static function setUpBeforeClass(): void
-    {
-        $container = new MockContainer();
-        $container->setBlacklistedAlgorithms([]);
-        ContainerSingleton::setContainer($container);
-    }
-
-
-    /**
      * test parsing of basic query string with authnrequest and
      * verify that the correct issuer is found.
      * @return void
