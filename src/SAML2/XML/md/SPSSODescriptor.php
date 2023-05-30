@@ -137,7 +137,7 @@ class SPSSODescriptor extends SSODescriptorType
      */
     public function setAssertionConsumerService(array $acs): void
     {
-        Assert::allIsInstanceOf($acs, AttributeConsumingService::class);
+        Assert::allIsInstanceOf($acs, AssertionConsumerService::class);
         $this->AssertionConsumerService = $acs;
     }
 
@@ -185,6 +185,7 @@ class SPSSODescriptor extends SSODescriptorType
      */
     public function setAttributeConsumingService(array $acs): void
     {
+        Assert::allIsInstanceOf($acs, AttributeConsumingService::class);
         $this->AttributeConsumingService = $acs;
     }
 

@@ -144,7 +144,7 @@ class IDPSSODescriptor extends SSODescriptorType
      */
     public function setSingleSignOnService(array $singleSignOnService): void
     {
-        Assert::isInstanceOf($singleSignOnService, SingleSignOnService::class);
+        Assert::allIsInstanceOf($singleSignOnService, SingleSignOnService::class);
         $this->SingleSignOnService = $singleSignOnService;
     }
 
