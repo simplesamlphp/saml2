@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Webmozart\Assert\Assert;
+
 /**
  * Class which implements the HTTP-POST binding.
  *
