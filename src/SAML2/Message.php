@@ -57,7 +57,7 @@ abstract class Message extends SignedElement
     private $destination = null;
 
     /**
-     * The destination URL of this message if it is known.
+     * Expression of the consent the principal (user) has given for this message.
      *
      * @var string
      */
