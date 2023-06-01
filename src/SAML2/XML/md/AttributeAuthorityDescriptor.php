@@ -172,7 +172,7 @@ class AttributeAuthorityDescriptor extends RoleDescriptor
     /**
      * Set the value of the AssertionIDRequestService-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequest[] $assertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
      * @return void
      */
     public function setAssertionIDRequestService(array $assertionIDRequestService): void

@@ -74,7 +74,7 @@ final class AttributeConsumingService extends AbstractMdElement
      * Initialize / parse an AttributeConsumingService.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return self
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong

@@ -126,7 +126,7 @@ class PDPDescriptor extends RoleDescriptor
      */
     public function setAssertionIDRequestService(array $assertionIDRequestService): void
     {
-        Assertion::allIsInstanceOf($assertionIDRequestService, AssertionIDRequestService::class);
+        Assert::allIsInstanceOf($assertionIDRequestService, AssertionIDRequestService::class);
         $this->AssertionIDRequestService = $assertionIDRequestService;
     }
 

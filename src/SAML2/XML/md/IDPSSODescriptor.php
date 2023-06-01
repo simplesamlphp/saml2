@@ -59,7 +59,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * Array with AttributeProfile objects.
      *
-     * @var \SimpleSAML\SAML2\XML\md\AttributeProfile
+     * @var \SimpleSAML\SAML2\XML\md\AttributeProfile[]
      */
     private array $AttributeProfile = [];
 
@@ -155,7 +155,7 @@ class IDPSSODescriptor extends SSODescriptorType
      * @param \SimpleSAML\SAML2\XML\md\SingleSignOnService $singleSignOnService
      * @return void
      */
-    public function addSingleSignOnService(EndpointType $singleSignOnService): void
+    public function addSingleSignOnService(SingleSignOnService $singleSignOnService): void
     {
         $this->SingleSignOnService[] = $singleSignOnService;
     }
@@ -235,6 +235,7 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Collect the value of the AttributeProfile-property
+     *
      * @return \SimpleSAML\SAML2\XML\md\AttributeProfile[]
      */
     public function getAttributeProfile(): array
@@ -246,7 +247,7 @@ class IDPSSODescriptor extends SSODescriptorType
     /**
      * Set the value of the AttributeProfile-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile $attributeProfile
+     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfile
      * @return void
      */
     public function setAttributeProfile(array $attributeProfile): void

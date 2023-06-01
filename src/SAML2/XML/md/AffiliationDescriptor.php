@@ -200,7 +200,7 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Set the value of the AffiliateMember-property
      *
-     * @param \SimpleSAML\SAML2\XML\md\AffiliateMember $affiliateMember
+     * @param \SimpleSAML\SAML2\XML\md\AffiliateMember[] $affiliateMember
      * @return void
      */
     public function setAffiliateMember(array $affiliateMember): void
