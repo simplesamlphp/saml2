@@ -13,6 +13,7 @@ use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 
 use function filter_var;
@@ -27,6 +28,10 @@ use function is_null;
 final class SubjectConfirmationData extends AbstractSamlElement
 {
     use ExtendableAttributesTrait;
+    use ExtendableElementTrait;
+
+    /** The namespace-attribute for the xs:any element */
+    public const XS_ANY_ELT_NAMESPACE = C::XS_ANY_NS_ANY;
 
     /** The namespace-attribute for the xs:anyAttribute element */
     public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
@@ -40,7 +45,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
      * @param string|null $recipient
      * @param string|null $inResponseTo
      * @param string|null $address
-     * @param (\SimpleSAML\XMLSecurity\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[] $info
+     * @param \SimpleSAML\XML\SerializableElementInterface[] $children
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
@@ -49,7 +54,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
         protected ?string $recipient = null,
         protected ?string $inResponseTo = null,
         protected ?string $address = null,
-        protected array $info = [],
+        array $children = [],
         array $namespacedAttributes = [],
     ) {
         Assert::nullOrSame($notBefore?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
@@ -63,8 +68,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
             );
         }
 
-        Assert::allIsInstanceOfAny($info, [Chunk::class, KeyInfo::class]);
-
+        $this->setElements($children);
         $this->setAttributesNS($namespacedAttributes);
     }
 
@@ -125,17 +129,6 @@ final class SubjectConfirmationData extends AbstractSamlElement
 
 
     /**
-     * Collect the value of the info-property
-     *
-     * @return (\SimpleSAML\XMLSecurity\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
-     */
-    public function getInfo(): array
-    {
-        return $this->info;
-    }
-
-
-    /**
      * Test if an object, at the state it's in, would produce an empty XML-element
      *
      * @return bool
@@ -147,7 +140,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
             && empty($this->recipient)
             && empty($this->inResponseTo)
             && empty($this->address)
-            && empty($this->info)
+            && empty($this->elements)
             && empty($this->namespacedAttributes);
     }
 
@@ -192,15 +185,15 @@ final class SubjectConfirmationData extends AbstractSamlElement
         $InResponseTo = self::getOptionalAttribute($xml, 'InResponseTo', null);
         $Address = self::getOptionalAttribute($xml, 'Address', null);
 
-        $info = [];
+        $children = [];
         foreach ($xml->childNodes as $n) {
             if (!($n instanceof DOMElement)) {
                 continue;
             } elseif ($n->namespaceURI === C::NS_XDSIG && $n->localName === 'KeyInfo') {
-                $info[] = KeyInfo::fromXML($n);
+                $children[] = KeyInfo::fromXML($n);
                 continue;
             } else {
-                $info[] = new Chunk($n);
+                $children[] = new Chunk($n);
                 continue;
             }
         }
@@ -211,7 +204,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
             $Recipient,
             $InResponseTo,
             $Address,
-            $info,
+            $children,
             self::getAttributesNSFromXML($xml),
         );
     }
@@ -247,7 +240,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
             $attr->toXML($e);
         }
 
-        foreach ($this->getInfo() as $n) {
+        foreach ($this->getElements() as $n) {
             $n->toXML($e);
         }
 
