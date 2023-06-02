@@ -51,8 +51,6 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
         ?string $SPNameQualifier = null,
     ) {
         parent::__construct($NameQualifier, $SPNameQualifier);
-
-        $this->dataType = C::XMLENC_ELEMENT;
     }
 
 

@@ -39,8 +39,6 @@ final class NameID extends NameIDType implements EncryptableElementInterface
         ?string $SPProvidedID = null,
     ) {
         parent::__construct($value, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
-
-        $this->dataType = C::XMLENC_ELEMENT;
     }
 
 
