@@ -98,6 +98,12 @@ final class EncryptedAssertionTest extends TestCase
         );
 
         $retrievalMethod = new RetrievalMethod($transforms, '#Encrypted_KEY_ID', C::XMLENC_ENCRYPTEDKEY);
+        $ek = new EncryptedKey(
+          cipherData: new CipherData(
+              new CipherValue('sNLWjwyj/R0oPwSgNnqowahiOwM0YU3YaH3jsH0t2YUDcHkcgouvW5x6YbNdgvGq0ImsNrkjI//0hrL4HvrOX33+DkhCo2FX5+a7UCdftfBfSjvt0houF8z3Zq/XOm6HxBUbWt5MULYpMKMZ9iAY6+raydxk2tFWgnAyHaBfzvU='),
+          ),
+          encryptionMethod: new EncryptionMethod(C::KEY_TRANSPORT_OAEP_MGF1P),
+        );
 
         $ed = new EncryptedData(
             cipherData: new CipherData(
@@ -106,16 +112,11 @@ final class EncryptedAssertionTest extends TestCase
             type: C::XMLENC_ELEMENT,
             encryptionMethod: new EncryptionMethod(C::BLOCK_ENC_AES256_GCM),
             keyInfo: new KeyInfo([
-                new EncryptedKey(
-                    cipherData: new CipherData(
-                        new CipherValue('sNLWjwyj/R0oPwSgNnqowahiOwM0YU3YaH3jsH0t2YUDcHkcgouvW5x6YbNdgvGq0ImsNrkjI//0hrL4HvrOX33+DkhCo2FX5+a7UCdftfBfSjvt0houF8z3Zq/XOm6HxBUbWt5MULYpMKMZ9iAY6+raydxk2tFWgnAyHaBfzvU='),
-                    ),
-                    encryptionMethod: new EncryptionMethod(C::KEY_TRANSPORT_OAEP_MGF1P),
-                ),
+                $ek,
                 $retrievalMethod,
             ]),
         );
-        $encryptedAssertion = new EncryptedAssertion($ed);
+        $encryptedAssertion = new EncryptedAssertion($ed, [$ek]);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
