@@ -11,6 +11,7 @@ use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
+use function boolval;
 use function is_null;
 use function is_numeric;
 use function strval;
@@ -25,14 +26,14 @@ final class RequestAuthenticated extends AbstractEcpElement
     /**
      * Create a ECP RequestAuthenticated element.
      *
-     * @param int|null $mustUnderstand
+     * @param bool|null $mustUnderstand
      */
     public function __construct(
-        protected ?int $mustUnderstand,
+        protected ?bool $mustUnderstand,
     ) {
         Assert::oneOf(
             $mustUnderstand,
-            [null, 0, 1],
+            [null, false, true],
             'Invalid value of env:mustUnderstand attribute in <ecp:Response>.',
             ProtocolViolationException::class,
         );
@@ -42,9 +43,9 @@ final class RequestAuthenticated extends AbstractEcpElement
     /**
      * Collect the value of the mustUnderstand-property
      *
-     * @return int|null
+     * @return bool|null
      */
-    public function getMustUnderstand(): ?int
+    public function getMustUnderstand(): ?bool
     {
         return $this->mustUnderstand;
     }
@@ -89,7 +90,7 @@ final class RequestAuthenticated extends AbstractEcpElement
             ProtocolViolationException::class,
         );
 
-        $mustUnderstand = ($mustUnderstand === '') ? null : intval($mustUnderstand);
+        $mustUnderstand = ($mustUnderstand === '') ? null : boolval($mustUnderstand);
 
         return new static($mustUnderstand);
     }
@@ -106,7 +107,7 @@ final class RequestAuthenticated extends AbstractEcpElement
         $response = $this->instantiateParentElement($parent);
 
         if ($this->getMustUnderstand() !== null) {
-            $response->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', strval($this->getMustUnderstand()));
+            $response->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', strval(intval($this->getMustUnderstand())));
         }
         $response->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
 

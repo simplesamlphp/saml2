@@ -45,7 +45,7 @@ final class RequestAuthenticatedTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $ra = new RequestAuthenticated(0);
+        $ra = new RequestAuthenticated(false);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
