@@ -93,7 +93,7 @@ SOAP
 
         /** @var \DOMElement $body */
         $body = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV_11, 'Body')->item(0);
-        $body->appendChild($doc->importNode($message->toXML(), true));
+        $message->toXML($body);
 
         $soap = new SOAP();
         $actual = $soap->getOutputToSend($message);
@@ -122,12 +122,12 @@ SOAP
 
         /** @var \DOMElement $header */
         $header = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV_11, 'Header')->item(0);
-        $header->appendChild($doc->importNode($requestAuthenticated->toXML(), true));
-        $header->appendChild($doc->importNode($ecpResponse->toXML(), true));
+        $requestAuthenticated->toXML($header);
+        $ecpResponse->toXML($header);
 
         /** @var \DOMElement $body */
         $body = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV_11, 'Body')->item(0);
-        $body->appendChild($doc->importNode($message->toXML(), true));
+        $message->toXML($body);
 
         $soap = new SOAP();
         $actual = $soap->getOutputToSend($message);
