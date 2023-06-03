@@ -81,7 +81,9 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
         array $namespacedAttribute = [],
     ) {
         Assert::oneOf($contactType, self::CONTACT_TYPES);
+        Assert::maxCount($emailAddress, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($emailAddress, EmailAddress::class);
+        Assert::maxCount($telephoneNumber, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($telephoneNumber, TelephoneNumber::class);
 
         $this->setExtensions($extensions);

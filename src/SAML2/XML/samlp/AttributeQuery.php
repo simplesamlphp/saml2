@@ -13,6 +13,7 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -62,6 +63,7 @@ class AttributeQuery extends AbstractSubjectQuery
         ?string $consent = null,
         ?Extensions $extensions = null,
     ) {
+        Assert::maxCount($attributes, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($attributes, Attribute::class);
 
         $cache = [];

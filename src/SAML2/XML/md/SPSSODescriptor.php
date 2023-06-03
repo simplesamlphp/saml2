@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
@@ -78,12 +79,14 @@ final class SPSSODescriptor extends AbstractSSODescriptor
             $nameIDFormat
         );
 
+        Assert::maxCount($assertionConsumerService, C::UNBOUNDED_LIMIT);
         Assert::minCount($assertionConsumerService, 1, 'At least one AssertionConsumerService must be specified.');
         Assert::allIsInstanceOf(
             $assertionConsumerService,
             AssertionConsumerService::class,
             'All md:AssertionConsumerService endpoints must be an instance of AssertionConsumerService.',
         );
+        Assert::maxCount($attributeConsumingService, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $attributeConsumingService,
             AttributeConsumingService::class,

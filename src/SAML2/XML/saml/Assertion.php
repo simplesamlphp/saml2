@@ -89,6 +89,7 @@ final class Assertion extends AbstractSamlElement implements
             $subject || !empty($statements),
             "Either a <saml:Subject> or some statement must be present in a <saml:Assertion>",
         );
+        Assert::maxCount($statements, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($statements, AbstractStatementType::class);
         Assert::nullOrNotWhitespaceOnly($id);
     }

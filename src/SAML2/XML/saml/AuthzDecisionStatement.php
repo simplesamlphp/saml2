@@ -40,6 +40,7 @@ final class AuthzDecisionStatement extends AbstractStatementType
     ) {
         Assert::validURI($resource);
         Assert::oneOf($decision, C::AUTHZ_DECISIONS, ProtocolViolationException::class);
+        Assert::maxCount($action, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($action, Action::class, SchemaViolationException::class);
     }
 

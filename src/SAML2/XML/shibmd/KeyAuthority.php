@@ -40,6 +40,7 @@ final class KeyAuthority extends AbstractShibmdElement
         protected ?int $VerifyDepth = null,
         array $namespacedAttributes = [],
     ) {
+        Assert::maxCount($keys, C::UNBOUNDED_LIMIT);
         Assert::nullOrRange($VerifyDepth, 0, 255);
 
         $this->setAttributesNS($namespacedAttributes);

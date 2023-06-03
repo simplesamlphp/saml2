@@ -7,10 +7,11 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\IdentifierTrait;
+use SimpleSAML\XML\Constants as C;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 
 /**
  * Class representing SAML 2 Subject element.
@@ -38,6 +39,7 @@ final class Subject extends AbstractSamlElement
                     . '<saml:BaseID>, <saml:NameID> or <saml:EncryptedID>',
             );
         }
+        Assert::maxCount($subjectConfirmation, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($subjectConfirmation, SubjectConfirmation::class);
 
         $this->setIdentifier($identifier);

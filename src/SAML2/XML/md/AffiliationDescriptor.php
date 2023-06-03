@@ -61,7 +61,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             ProtocolViolationException::class,
         );
         Assert::notEmpty($affiliateMember, 'List of affiliated members must not be empty.');
+        Assert::maxCount($affiliateMember, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($affiliateMember, AffiliateMember::class);
+        Assert::maxCount($keyDescriptor, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($keyDescriptor, KeyDescriptor::class);
 
         parent::__construct($ID, $validUntil, $cacheDuration, $extensions);

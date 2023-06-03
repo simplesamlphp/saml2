@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -31,6 +32,7 @@ final class IDPList extends AbstractSamlpElement
         protected array $IDPEntry,
         protected ?GetComplete $getComplete = null,
     ) {
+        Assert::maxCount($IDPEntry, C::UNBOUNDED_LIMIT);
         Assert::minCount($IDPEntry, 1, 'At least one samlp:IDPEntry must be specified.');
         Assert::allIsInstanceOf($IDPEntry, IDPEntry::class);
     }

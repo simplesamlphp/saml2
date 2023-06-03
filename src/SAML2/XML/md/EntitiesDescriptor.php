@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
@@ -44,6 +45,8 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
             'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.',
             ProtocolViolationException::class,
         );
+        Assert::maxCount($entitiesDescriptors, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($entityDescriptors, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($entitiesDescriptors, EntitiesDescriptor::class);
         Assert::allIsInstanceOf($entityDescriptors, EntityDescriptor::class);
 

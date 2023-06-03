@@ -46,6 +46,7 @@ final class Status extends AbstractSamlpElement
             'Invalid top-level status code:  %s',
             ProtocolViolationException::class,
         );
+        Assert::maxCount($statusDetails, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($statusDetails, StatusDetail::class);
     }
 

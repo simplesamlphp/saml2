@@ -55,6 +55,7 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
         protected array $logo = [],
         array $children = [],
     ) {
+        Assert::maxCount($displayName, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($displayName, DisplayName::class);
         /**
          * 2.1.2:  There MUST NOT be more than one <mdui:DisplayName>,
@@ -62,6 +63,7 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
          */
         $this->testLocalizedElements($displayName);
 
+        Assert::maxCount($description, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($description, Description::class);
         /**
          * 2.1.3:  There MUST NOT be more than one <mdui:Description>,
@@ -69,6 +71,7 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
          */
         $this->testLocalizedElements($description);
 
+        Assert::maxCount($keywords, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($keywords, Keywords::class);
         /**
          * 2.1.4:  There MUST NOT be more than one <mdui:Keywords>,
@@ -76,6 +79,7 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
          */
         $this->testLocalizedElements($keywords);
 
+        Assert::maxCount($informationURL, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($informationURL, InformationURL::class);
         /**
          * 2.1.6:  There MUST NOT be more than one <mdui:InformationURL>,
@@ -83,6 +87,7 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
          */
         $this->testLocalizedElements($informationURL);
 
+        Assert::maxCount($privacyStatementURL, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($privacyStatementURL, PrivacyStatementURL::class);
         /**
          * 2.1.7:  There MUST NOT be more than one <mdui:PrivacyStatementURL>,
@@ -90,6 +95,7 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
          */
         $this->testLocalizedElements($privacyStatementURL);
 
+        Assert::maxCount($logo, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($logo, Logo::class);
 
         $this->setElements($children);

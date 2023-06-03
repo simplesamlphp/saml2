@@ -6,9 +6,10 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\SAML2\Utils;
 
 use function strval;
 
@@ -37,6 +38,7 @@ final class AttributeConsumingService extends AbstractMdElement
         ?bool $isDefault = null,
         protected array $serviceDescription = [],
     ) {
+        Assert::maxCount($serviceName, C::UNBOUNDED_LIMIT);
         Assert::minCount(
             $serviceName,
             1,
@@ -48,11 +50,13 @@ final class AttributeConsumingService extends AbstractMdElement
             ServiceName::class,
             'Service names must be specified as ServiceName objects.',
         );
+        Assert::maxCount($serviceDescription, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $serviceDescription,
             ServiceDescription::class,
             'Service descriptions must be specified as ServiceDescription objects.',
         );
+        Assert::maxCount($requestedAttribute, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $requestedAttribute,
             RequestedAttribute::class,

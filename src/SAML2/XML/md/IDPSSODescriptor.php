@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
@@ -65,23 +66,28 @@ final class IDPSSODescriptor extends AbstractSSODescriptor
         array $manageNameIDService = [],
         array $nameIDFormat = [],
     ) {
+        Assert::maxCount($singleSignOnService, C::UNBOUNDED_LIMIT);
         Assert::minCount($singleSignOnService, 1, 'At least one SingleSignOnService must be specified.');
         Assert::allIsInstanceOf(
             $singleSignOnService,
             SingleSignOnService::class,
             'All md:SingleSignOnService endpoints must be an instance of SingleSignOnService.',
         );
+        Assert::maxCount($nameIDMappingService, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $nameIDMappingService,
             NameIDMappingService::class,
             'All md:NameIDMappingService endpoints must be an instance of NameIDMappingService.',
         );
+        Assert::maxCount($assertionIDRequestService, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $assertionIDRequestService,
             AssertionIDRequestService::class,
             'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.',
         );
+        Assert::maxCount($attributeProfile, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($attributeProfile, AttributeProfile::class);
+        Assert::maxCount($attribute, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $attribute,
             Attribute::class,

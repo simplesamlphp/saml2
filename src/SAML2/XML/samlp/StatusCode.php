@@ -28,6 +28,7 @@ final class StatusCode extends AbstractSamlpElement
         protected array $subCodes = [],
     ) {
         Assert::validURI($Value, SchemaViolationException::class); // Covers the empty string
+        Assert::maxCount($subCodes, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($subCodes, StatusCode::class);
     }
 

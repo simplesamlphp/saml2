@@ -67,6 +67,7 @@ final class LogoutRequest extends AbstractRequest
         ?string $consent = null,
         ?Extensions $extensions = null,
     ) {
+        Assert::maxCount($sessionIndexes, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($sessionIndexes, SessionIndex::class);
 
         parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);

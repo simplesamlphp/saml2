@@ -37,6 +37,7 @@ final class EntityAttributes extends AbstractMdattrElement
     public function __construct(
         protected array $children,
     ) {
+        Assert::maxCount($children, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOfAny($children, [Assertion::class, Attribute::class]);
 
         $assertions = array_filter($children, function ($child) {

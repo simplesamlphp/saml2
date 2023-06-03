@@ -57,14 +57,18 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
         ?Extensions $extensions = null,
         array $namespacedAttributes = [],
     ) {
-        Assert::allIsInstanceOf($organizationName, OrganizationName::class);
-        Assert::allIsInstanceOf($organizationDisplayName, OrganizationDisplayName::class);
-        Assert::allIsInstanceOf($organizationURL, OrganizationURL::class);
+        Assert::maxCount($organizationName, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($organizationDisplayName, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($organizationURL, C::UNBOUNDED_LIMIT);
 
         // [One or More]
         Assert::minCount($organizationName, 1, ProtocolViolationException::class);
         Assert::minCount($organizationDisplayName, 1, ProtocolViolationException::class);
         Assert::minCount($organizationURL, 1, ProtocolViolationException::class);
+
+        Assert::allIsInstanceOf($organizationName, OrganizationName::class);
+        Assert::allIsInstanceOf($organizationDisplayName, OrganizationDisplayName::class);
+        Assert::allIsInstanceOf($organizationURL, OrganizationURL::class);
 
         $this->setExtensions($extensions);
         $this->setAttributesNS($namespacedAttributes);

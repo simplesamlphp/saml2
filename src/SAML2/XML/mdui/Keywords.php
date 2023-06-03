@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\mdui;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
@@ -33,6 +34,7 @@ final class Keywords extends AbstractMduiElement implements ArrayizableElementIn
         protected string $lang,
         protected array $keywords = [],
     ) {
+        Assert::maxCount($keywords, C::UNBOUNDED_LIMIT);
         Assert::allNotContains($keywords, '+', 'Keywords may not contain a "+" character.');
     }
 

@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
@@ -50,17 +51,20 @@ final class PDPDescriptor extends AbstractRoleDescriptorType
         array $keyDescriptors = [],
         array $contacts = [],
     ) {
+        Assert::maxCount($authzService, C::UNBOUNDED_LIMIT);
         Assert::minCount($authzService, 1, 'At least one md:AuthzService endpoint must be present.');
         Assert::allIsInstanceOf(
             $authzService,
             AuthzService::class,
             'All md:AuthzService endpoints must be an instance of AuthzService.',
         );
+        Assert::maxCount($assertionIDRequestService, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $assertionIDRequestService,
             AssertionIDRequestService::class,
             'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.',
         );
+        Assert::maxCount($nameIDFormat, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($nameIDFormat, NameIDFormat::class);
 
         parent::__construct(

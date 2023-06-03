@@ -37,6 +37,7 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
         protected array $registrationPolicy = [],
     ) {
         Assert::nullOrSame($registrationInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
+        Assert::maxCount($registrationPolicy, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($registrationPolicy, RegistrationPolicy::class);
 
         /**

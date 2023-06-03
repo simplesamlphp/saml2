@@ -74,16 +74,19 @@ final class EntityDescriptor extends AbstractMetadataDocument
             sprintf('The entityID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
             ProtocolViolationException::class,
         );
+        Assert::maxCount($roleDescriptor, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $roleDescriptor,
             AbstractRoleDescriptorType::class,
             'All role descriptors must extend AbstractRoleDescriptor.',
         );
+        Assert::maxCount($contactPerson, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $contactPerson,
             ContactPerson::class,
             'All md:ContactPerson elements must be an instance of ContactPerson.',
         );
+        Assert::maxCount($additionalMetadataLocation, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $additionalMetadataLocation,
             AdditionalMetadataLocation::class,

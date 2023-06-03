@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 
@@ -28,6 +29,10 @@ final class Evidence extends AbstractSamlElement
         protected array $assertion = [],
         protected array $encryptedAssertion = [],
     ) {
+        Assert::maxCount($assertionIDRef, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($assertionURIRef, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($assertion, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($encryptedAssertion, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($assertionIDRef, AssertionIDRef::class, SchemaViolationException::class);
         Assert::allIsInstanceOf($assertionURIRef, AssertionURIRef::class, SchemaViolationException::class);
         Assert::allIsInstanceOf($assertion, Assertion::class, SchemaViolationException::class);

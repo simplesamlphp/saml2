@@ -46,6 +46,9 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
         protected array $domainHint = [],
         protected array $geolocationHint = [],
     ) {
+        Assert::maxCount($ipHint, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($domainHint, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($geolocationHint, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($ipHint, IPHint::class);
         Assert::allIsInstanceOf($domainHint, DomainHint::class);
         Assert::allIsInstanceOf($geolocationHint, GeolocationHint::class);
