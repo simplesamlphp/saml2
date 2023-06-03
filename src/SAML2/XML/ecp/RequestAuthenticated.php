@@ -107,7 +107,11 @@ final class RequestAuthenticated extends AbstractEcpElement
         $response = $this->instantiateParentElement($parent);
 
         if ($this->getMustUnderstand() !== null) {
-            $response->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', strval(intval($this->getMustUnderstand())));
+            $response->setAttributeNS(
+                C::NS_SOAP_ENV_11,
+                'env:mustUnderstand',
+                strval(intval($this->getMustUnderstand())),
+            );
         }
         $response->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
 
