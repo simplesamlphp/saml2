@@ -47,7 +47,7 @@ class SOAP extends Binding
         // containing another message (e.g. a Response), however in the ECP
         // profile, this is the Response itself.
         if ($message instanceof SAML2_Response) {
-            $requestAuthenticated = new RequestAuthenticated(1);
+            $requestAuthenticated = new RequestAuthenticated(true);
 
             $destination = $this->destination ?: $message->getDestination();
             if ($destination === null) {

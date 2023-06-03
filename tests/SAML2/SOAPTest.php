@@ -116,7 +116,7 @@ SOAP
 <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"><env:Header /><env:Body /></env:Envelope>
 SOAP
         );
-        $requestAuthenticated = new RequestAuthenticated(1);
+        $requestAuthenticated = new RequestAuthenticated(true);
         $ecpResponse = new Response('https://example.org/metadata');
 
 
