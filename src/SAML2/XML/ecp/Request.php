@@ -31,14 +31,12 @@ final class Request extends AbstractEcpElement
     /**
      * Create a ECP Request element.
      *
-     * @param bool $mustUnderstand
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
      * @param \SimpleSAML\SAML2\XML\samlp\IDPList|null $idpList
      * @param string|null $providerName
      * @param bool|null $isPassive
      */
     public function __construct(
-        protected bool $mustUnderstand,
         protected Issuer $issuer,
         protected ?IDPList $idpList = null,
         protected ?string $providerName = null,
@@ -48,22 +46,11 @@ final class Request extends AbstractEcpElement
 
 
     /**
-     * Collect the value of the mustUnderstand-property
-     *
-     * @return bool
-     */
-    public function getMustUnderstand(): bool
-    {
-        return $this->mustUnderstand;
-    }
-
-
-    /**
      * Collect the value of the isPassive-property
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getIsPassive(): bool
+    public function getIsPassive(): ?bool
     {
         return $this->isPassive;
     }
@@ -72,9 +59,9 @@ final class Request extends AbstractEcpElement
     /**
      * Collect the value of the providerName-property
      *
-     * @return string
+     * @return string|null
      */
-    public function getProviderName(): string
+    public function getProviderName(): ?string
     {
         return $this->providerName;
     }
@@ -129,9 +116,9 @@ final class Request extends AbstractEcpElement
         );
 
         $mustUnderstand = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand');
-        $mustUnderstand = ($mustUnderstand === '') ? null : boolval(intval($mustUnderstand));
-        Assert::nullOrBoolean(
+        Assert::same(
             $mustUnderstand,
+            '1',
             'Invalid value of env:mustUnderstand attribute in <ecp:Request>.',
             ProtocolViolationException::class,
         );
@@ -155,7 +142,6 @@ final class Request extends AbstractEcpElement
         $idpList = IDPList::getChildrenOfClass($xml);
 
         return new static(
-            $mustUnderstand,
             array_pop($issuer),
             array_pop($idpList),
             self::getOptionalAttribute($xml, 'ProviderName', null),
@@ -173,7 +159,7 @@ final class Request extends AbstractEcpElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', strval(intval($this->getMustUnderstand())));
+        $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', '1');
         $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', C::SOAP_ACTOR_NEXT);
 
         if ($this->getProviderName() !== null) {

@@ -66,7 +66,7 @@ final class RequestTest extends TestCase
         $getComplete = new GetComplete('https://some/location');
         $idpList = new IDPList([$entry1, $entry2], $getComplete);
 
-        $request = new Request(true, $issuer, $idpList, 'PHPUnit', true);
+        $request = new Request($issuer, $idpList, 'PHPUnit', true);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

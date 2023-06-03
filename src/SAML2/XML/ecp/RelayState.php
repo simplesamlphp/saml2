@@ -30,25 +30,12 @@ final class RelayState extends AbstractEcpElement
     /**
      * Create a ECP RelayState element.
      *
-     * @param bool $mustUnderstand
      * @param string $relayState
      */
     public function __construct(
-        protected bool $mustUnderstand,
         string $relayState,
     ) {
         $this->setContent($relayState);
-    }
-
-
-    /**
-     * Collect the value of the mustUnderstand-property
-     *
-     * @return bool
-     */
-    public function getMustUnderstand(): bool
-    {
-        return $this->mustUnderstand;
     }
 
 
@@ -81,9 +68,9 @@ final class RelayState extends AbstractEcpElement
         );
 
         $mustUnderstand = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand');
-        $mustUnderstand = ($mustUnderstand === '') ? null : boolval(intval($mustUnderstand));
-        Assert::nullOrBoolean(
+        Assert::same(
             $mustUnderstand,
+            '1',
             'Invalid value of env:mustUnderstand attribute in <ecp:RelayState>.',
             ProtocolViolationException::class,
         );
@@ -96,7 +83,7 @@ final class RelayState extends AbstractEcpElement
             ProtocolViolationException::class,
         );
 
-        return new static($mustUnderstand, $xml->textContent);
+        return new static($xml->textContent);
     }
 
 
@@ -109,7 +96,7 @@ final class RelayState extends AbstractEcpElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', strval(intval($this->getMustUnderstand())));
+        $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', '1');
         $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', C::SOAP_ACTOR_NEXT);
         $e->textContent = $this->getContent();
 

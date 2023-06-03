@@ -73,7 +73,7 @@ final class SubjectConfirmationTest extends TestCase
             [$attr1, $attr2]
         );
 
-        $subjectConfirmation = new SubjectConfirmation(true, C::CM_BEARER, $subjectConfirmationData);
+        $subjectConfirmation = new SubjectConfirmation(C::CM_BEARER, $subjectConfirmationData);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

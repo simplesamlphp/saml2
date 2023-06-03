@@ -30,27 +30,14 @@ final class SubjectConfirmation extends AbstractEcpElement
     /**
      * Create a ECP SubjectConfirmation element.
      *
-     * @param bool $mustUnderstand
      * @param string $method
      * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData|null $subjectConfirmationData
      */
     public function __construct(
-        protected bool $mustUnderstand,
         protected string $method,
         protected ?SubjectConfirmationData $subjectConfirmationData = null,
     ) {
         Assert::validURI($method, SchemaViolationException::class);
-    }
-
-
-    /**
-     * Collect the value of the mustUnderstand-property
-     *
-     * @return bool
-     */
-    public function getMustUnderstand(): bool
-    {
-        return $this->mustUnderstand;
     }
 
 
@@ -105,9 +92,9 @@ final class SubjectConfirmation extends AbstractEcpElement
         );
 
         $mustUnderstand = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand');
-        $mustUnderstand = ($mustUnderstand === '') ? null : boolval(intval($mustUnderstand));
-        Assert::nullOrBoolean(
+        Assert::same(
             $mustUnderstand,
+            '1',
             'Invalid value of env:mustUnderstand attribute in <ecp:SubjectConfirmation>.',
             ProtocolViolationException::class,
         );
@@ -129,7 +116,6 @@ final class SubjectConfirmation extends AbstractEcpElement
         );
 
         return new static(
-            $mustUnderstand,
             self::getAttribute($xml, 'Method'),
             array_pop($subjectConfirmationData),
         );
@@ -145,7 +131,7 @@ final class SubjectConfirmation extends AbstractEcpElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', strval(intval($this->getMustUnderstand())));
+        $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', '1');
         $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', C::SOAP_ACTOR_NEXT);
         $e->setAttribute('Method', $this->getMethod());
 

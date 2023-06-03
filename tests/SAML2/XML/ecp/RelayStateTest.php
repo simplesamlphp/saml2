@@ -50,7 +50,7 @@ final class RelayStateTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $relayState = new RelayState(true, 'AGDY854379dskssda');
+        $relayState = new RelayState('AGDY854379dskssda');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
