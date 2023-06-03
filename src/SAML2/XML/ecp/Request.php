@@ -7,7 +7,8 @@ namespace SimpleSAML\SAML2\XML\ecp;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\samlp\IDPList;
 use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -21,25 +22,28 @@ use function is_numeric;
 use function strval;
 
 /**
- * Class representing the ECP SubjectConfirmation element.
+ * Class representing the ECP Request element.
  *
  * @package simplesamlphp/saml2
  */
-final class SubjectConfirmation extends AbstractEcpElement
+final class Request extends AbstractEcpElement
 {
     /**
-     * Create a ECP SubjectConfirmation element.
+     * Create a ECP Request element.
      *
      * @param bool $mustUnderstand
-     * @param string $method
-     * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData|null $subjectConfirmationData
+     * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
+     * @param \SimpleSAML\SAML2\XML\samlp\IDPList|null $idpList
+     * @param string|null $providerName
+     * @param bool|null $isPassive
      */
     public function __construct(
         protected bool $mustUnderstand,
-        protected string $method,
-        protected ?SubjectConfirmationData $subjectConfirmationData = null,
+        protected Issuer $issuer,
+        protected ?IDPList $idpList = null,
+        protected ?string $providerName = null,
+        protected ?bool $isPassive = null,
     ) {
-        Assert::validURI($method, SchemaViolationException::class);
     }
 
 
@@ -55,29 +59,49 @@ final class SubjectConfirmation extends AbstractEcpElement
 
 
     /**
-     * Collect the value of the method-property
+     * Collect the value of the isPassive-property
+     *
+     * @return bool
+     */
+    public function getIsPassive(): bool
+    {
+        return $this->isPassive;
+    }
+
+
+    /**
+     * Collect the value of the providerName-property
      *
      * @return string
      */
-    public function getMethod(): string
+    public function getProviderName(): string
     {
-        return $this->method;
+        return $this->providerName;
     }
 
 
     /**
-     * Collect the value of the subjectConfirmationData-property
+     * Collect the value of the issuer-property
      *
-     * @return \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData|null
+     * @return \SimpleSAML\SAML2\XML\saml\Issuer
      */
-    public function getSubjectConfirmationData(): ?SubjectConfirmationData
+    public function getIssuer(): Issuer
     {
-        return $this->subjectConfirmationData;
+        return $this->issuer;
+    }
+    /**
+     * Collect the value of the idpList-property
+     *
+     * @return \SimpleSAML\SAML2\XML\samlp\IDPList|null
+     */
+    public function getIDPList(): ?IDPList
+    {
+        return $this->idpList;
     }
 
 
     /**
-     * Convert XML into a SubjectConfirmation
+     * Convert XML into a Request
      *
      * @param \DOMElement $xml The XML element we should load
      * @return static
@@ -89,18 +113,18 @@ final class SubjectConfirmation extends AbstractEcpElement
      */
     public static function fromXML(DOMElement $xml): static
     {
-        Assert::same($xml->localName, 'SubjectConfirmation', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, SubjectConfirmation::NS, InvalidDOMElementException::class);
+        Assert::same($xml->localName, 'Request', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, Request::NS, InvalidDOMElementException::class);
 
         // Assert required attributes
         Assert::true(
             $xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'actor'),
-            'Missing env:actor attribute in <ecp:SubjectConfirmation>.',
+            'Missing env:actor attribute in <ecp:Request>.',
             MissingAttributeException::class,
         );
         Assert::true(
             $xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand'),
-            'Missing env:mustUnderstand attribute in <ecp:SubjectConfirmation>.',
+            'Missing env:mustUnderstand attribute in <ecp:Request>.',
             MissingAttributeException::class,
         );
 
@@ -108,7 +132,7 @@ final class SubjectConfirmation extends AbstractEcpElement
         $mustUnderstand = ($mustUnderstand === '') ? null : boolval(intval($mustUnderstand));
         Assert::nullOrBoolean(
             $mustUnderstand,
-            'Invalid value of env:mustUnderstand attribute in <ecp:SubjectConfirmation>.',
+            'Invalid value of env:mustUnderstand attribute in <ecp:Request>.',
             ProtocolViolationException::class,
         );
 
@@ -116,22 +140,26 @@ final class SubjectConfirmation extends AbstractEcpElement
         Assert::same(
             $actor,
             C::SOAP_ACTOR_NEXT,
-            'Invalid value of env:actor attribute in <ecp:SubjectConfirmation>.',
+            'Invalid value of env:actor attribute in <ecp:Request>.',
             ProtocolViolationException::class,
         );
 
-        $subjectConfirmationData = SubjectConfirmationData::getChildrenOfClass($xml);
-        Assert::maxCount(
-            $subjectConfirmationData,
+        $issuer = Issuer::getChildrenOfClass($xml);
+        Assert::count(
+            $issuer,
             1,
-            'More than one <saml:SubjectConfirmationData> in <saml:SubjectConfirmation>.',
+            'More than one <saml:Issuer> in <ecp:Request>.',
             TooManyElementsException::class,
         );
 
+        $idpList = IDPList::getChildrenOfClass($xml);
+
         return new static(
             $mustUnderstand,
-            self::getAttribute($xml, 'Method'),
-            array_pop($subjectConfirmationData),
+            array_pop($issuer),
+            array_pop($idpList),
+            self::getOptionalAttribute($xml, 'ProviderName', null),
+            self::getOptionalBooleanAttribute($xml, 'IsPassive', null),
         );
     }
 
@@ -147,9 +175,17 @@ final class SubjectConfirmation extends AbstractEcpElement
         $e = $this->instantiateParentElement($parent);
         $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', strval(intval($this->getMustUnderstand())));
         $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', C::SOAP_ACTOR_NEXT);
-        $e->setAttribute('Method', $this->getMethod());
 
-        $this->getSubjectConfirmationData()?->toXML($e);
+        if ($this->getProviderName() !== null) {
+            $e->setAttribute('ProviderName', $this->getProviderName());
+        }
+
+        if ($this->getIsPassive() !== null) {
+            $e->setAttribute('IsPassive', strval(intval($this->getIsPassive())));
+        }
+
+        $this->getIssuer()->toXML($e);
+        $this->getIDPList()?->toXML($e);
 
         return $e;
     }

@@ -80,13 +80,13 @@ final class RequestAuthenticated extends AbstractEcpElement
         Assert::oneOf(
             $mustUnderstand,
             ['', '0', '1'],
-            'Invalid value of env:mustUnderstand attribute in <ecp:Response>.',
+            'Invalid value of env:mustUnderstand attribute in <ecp:RequestAuthenticated>.',
             ProtocolViolationException::class,
         );
         Assert::same(
             $actor,
             'http://schemas.xmlsoap.org/soap/actor/next',
-            'Invalid value of env:actor attribute in <ecp:Response>.',
+            'Invalid value of env:actor attribute in <ecp:RequestAuthenticated>.',
             ProtocolViolationException::class,
         );
 
