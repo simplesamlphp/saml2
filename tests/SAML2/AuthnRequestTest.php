@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\AuthnRequest;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -529,15 +530,11 @@ AUTHNREQUEST;
 
         $nameIdPolicy = $authnRequest->getNameIdPolicy();
 
-        $this->assertCount(3, $nameIdPolicy);
+        $this->assertNotNull($nameIdPolicy);
 
-        $this->assertArrayHasKey('AllowCreate', $nameIdPolicy);
-        $this->assertArrayHasKey('SPNameQualifier', $nameIdPolicy);
-        $this->assertArrayHasKey('Format', $nameIdPolicy);
-
-        $this->assertEquals(true, $nameIdPolicy['AllowCreate']);
-        $this->assertEquals("https://sp.example.com/SAML2", $nameIdPolicy['SPNameQualifier']);
-        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:nameid-format:transient", $nameIdPolicy['Format']);
+        $this->assertEquals(true, $nameIdPolicy->getAllowCreate());
+        $this->assertEquals("https://sp.example.com/SAML2", $nameIdPolicy->getSPNameQualifier());
+        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:nameid-format:transient", $nameIdPolicy->getFormat());
     }
 
 
@@ -556,11 +553,11 @@ AUTHNREQUEST;
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant(XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
-        $nameIdPolicy = [
-            "Format" => "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
-            "SPNameQualifier" => "https://sp.example.com/SAML2",
-            "AllowCreate" => true
-        ];
+        $nameIdPolicy = new NameIDPolicy(
+            "urn:oasis:names:tc:SAML:2.0:nameid-format:transient",
+            "https://sp.example.com/SAML2",
+            true,
+        );
         $request->setNameIDPolicy($nameIdPolicy);
 
         $requestStructure = $request->toUnsignedXML();
@@ -598,7 +595,7 @@ AUTHNREQUEST;
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant(XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
 
-        $nameIdPolicy = ["Format" => "urn:oasis:names:tc:SAML:2.0:nameid-format:transient"];
+        $nameIdPolicy = new NameIDPolicy("urn:oasis:names:tc:SAML:2.0:nameid-format:transient");
         $request->setNameIDPolicy($nameIdPolicy);
 
         $requestStructure = $request->toUnsignedXML();
@@ -618,70 +615,6 @@ AUTHNREQUEST;
         $this->assertEquals("urn:oasis:names:tc:SAML:2.0:nameid-format:transient", $requestElements[0]->getAttribute('Format'));
         $this->assertFalse($requestElements[0]->hasAttribute('SPNameQualifier'));
         $this->assertFalse($requestElements[0]->hasAttribute('AllowCreate'));
-    }
-
-
-    /**
-     * Test setting NameIDPolicy with invalid type for AllowCreate.
-     */
-    public function testSettingNameIDPolicyToIncorrectTypeAllowCreate(): void
-    {
-        // the Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
-
-        // basic AuthnRequest
-        $request = new AuthnRequest();
-        $request->setIssuer($issuer);
-        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
-
-        // AllowCreate must be a bool
-        $nameIdPolicy = ["AllowCreate" => "true"];
-        $this->expectException(InvalidArgumentException::class, 'Invalid Argument type: "bool" expected');
-        $request->setNameIDPolicy($nameIdPolicy);
-    }
-
-
-    /**
-     * Test setting NameIDPolicy with invalid type for SPNameQualifier.
-     */
-    public function testSettingNameIDPolicyToIncorrectTypeSPNameQualifier(): void
-    {
-        // the Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
-
-        // basic AuthnRequest
-        $request = new AuthnRequest();
-        $request->setIssuer($issuer);
-        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
-
-        // SPNameQualifier must be a string
-        $nameIdPolicy = ["SPNameQualifier" => true];
-        $this->expectException(InvalidArgumentException::class, 'Invalid Argument type: "string" expected');
-        $request->setNameIDPolicy($nameIdPolicy);
-    }
-
-
-    /**
-     * Test setting NameIDPolicy with one invalid type for Format.
-     * It would be nice to iterate over various types to check this more thoroughly.
-     */
-    public function testSettingNameIDPolicyToIncorrectTypeFormat(): void
-    {
-        // the Issuer
-        $issuer = new Issuer();
-        $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
-
-        // basic AuthnRequest
-        $request = new AuthnRequest();
-        $request->setIssuer($issuer);
-        $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
-
-        // Format must be a string
-        $nameIdPolicy = ["Format" => 2.0];
-        $this->expectException(InvalidArgumentException::class, 'Invalid Argument type: "string" expected');
-        $request->setNameIDPolicy($nameIdPolicy);
     }
 
 
