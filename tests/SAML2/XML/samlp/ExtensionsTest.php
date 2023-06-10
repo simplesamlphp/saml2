@@ -4,103 +4,107 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
-use DOMElement;
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\samlp\Extensions;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
+use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+
+use function dirname;
+use function strval;
 
 /**
- * Class \SimpleSAML\SAML2\XML\samlp\ExtensionsTest
+ * Class \SAML2\XML\samlp\ExtensionsTest
+ *
+ * @covers \SimpleSAML\SAML2\XML\samlp\Extensions
+ * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
+ * @package simplesamlphp/saml2
  */
-class ExtensionsTest extends TestCase
+final class ExtensionsTest extends TestCase
 {
-    /**
-     * @var \DOMElement
-     */
-    private DOMElement $testElement;
+    use SchemaValidationTestTrait;
+    use SerializableElementTestTrait;
 
 
     /**
-     * Prepare a basic DOMelement to test against
-     * @return void
+     * Prepare a basic DOMElement to test against
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-                xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-                ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
-                InResponseTo="_bec424fa5103428909a30ff1e31168327f79474984"
-                Version="2.0"
-                IssueInstant="2007-12-10T11:39:48Z"
-                Destination="http://moodle.bridge.feide.no/simplesaml/saml2/sp/AssertionConsumerService.php">
-    <saml:Issuer>max.feide.no</saml:Issuer>
-    <samlp:Extensions>
-        <myns:AttributeList xmlns:myns="urn:mynamespace">
-            <myns:Attribute name="UserName" value=""/>
-        </myns:AttributeList>
-        <ExampleElement name="AnotherExtension" />
-    </samlp:Extensions>
-    <samlp:Status>
-        <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
-    </samlp:Status>
-</samlp:Response>
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
+
+        self::$testedClass = Extensions::class;
+
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/samlp_Extensions.xml',
+        );
+    }
+
+
+    /**
+     */
+    public function testMarshalling(): void
+    {
+        $ext1 = DOMDocumentFactory::fromString(<<<XML
+  <myns:AttributeList xmlns:myns="urn:test:mynamespace">
+    <myns:Attribute name="UserName" value=""/>
+  </myns:AttributeList>
 XML
         );
-        $this->testElement = $document->documentElement;
+
+        $ext2 = DOMDocumentFactory::fromString(
+            '<myns:ExampleElement xmlns:myns="urn:test:mynamespace" name="AnotherExtension" />',
+        );
+
+        $extensions = new Extensions(
+            [new Chunk($ext1->documentElement), new Chunk($ext2->documentElement)],
+        );
+
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($extensions)
+        );
     }
 
 
     /**
-     * Test the getList() method.
-     * @return void
      */
-    public function testExtensionsGet(): void
+    public function testUnmarshalling(): void
     {
-        $list = Extensions::getList($this->testElement);
+        $extensions = Extensions::fromXML(self::$xmlRepresentation->documentElement);
 
-        $this->assertCount(2, $list);
-        $this->assertEquals("urn:mynamespace", $list[0]->getNamespaceURI());
-        $this->assertEquals("ExampleElement", $list[1]->getLocalName());
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($extensions),
+        );
     }
 
 
     /**
-     * Adding empty list should leave existing extensions unchanged.
-     * @return void
+     * Adding a non-namespaced element to an md:Extensions element should throw an exception
      */
-    public function testExtensionsAddEmpty(): void
+    public function testMarshallingWithNonNamespacedExtensions(): void
     {
-        Extensions::addList($this->testElement, []);
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage('Extensions MUST NOT include global (non-namespace-qualified) elements.');
 
-        $list = Extensions::getList($this->testElement);
-
-        $this->assertCount(2, $list);
-        $this->assertEquals("urn:mynamespace", $list[0]->getNamespaceURI());
-        $this->assertEquals("ExampleElement", $list[1]->getLocalName());
+        new Extensions([new Chunk(DOMDocumentFactory::fromString('<child/>')->documentElement)]);
     }
 
 
     /**
-     * Test adding two random elements.
-     * @return void
+     * Adding an element from SAML-defined namespaces element should throw an exception
      */
-    public function testExtensionsAddSome(): void
+    public function testMarshallingWithSamlDefinedNamespacedExtensions(): void
     {
-        $attribute = new Attribute();
-        $attribute->setName('TheName');
-        $scope = new Scope('scope');
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage('Extensions MUST NOT include any SAML-defined namespace elements.');
 
-        Extensions::addList($this->testElement, [$attribute, $scope]);
-
-        $list = Extensions::getList($this->testElement);
-
-        $this->assertCount(4, $list);
-        $this->assertEquals("urn:mynamespace", $list[0]->getNamespaceURI());
-        $this->assertEquals("ExampleElement", $list[1]->getLocalName());
-        $this->assertEquals("Attribute", $list[2]->getLocalName());
-        $this->assertEquals("urn:mace:shibboleth:metadata:1.0", $list[3]->getNamespaceURI());
+        new Extensions([new AttributeValue('something')]);
     }
 }

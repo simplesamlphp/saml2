@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Message;
 use SimpleSAML\SAML2\Response;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\samlp\Extensions;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\Chunk;
@@ -181,9 +182,9 @@ AUTHNREQUEST
     Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">
         https://gateway.stepup.org/saml20/sp/metadata
   </saml:Issuer>
-  <samlp:Extensions>
-    <myextElt att="value3">example1</myextElt>
-    <myextElt att="value5" />
+  <samlp:Extensions xmlns:ssp="urn:x-simplesamlphp:namespace">
+    <ssp:myextElt att="value3">example1</ssp:myextElt>
+    <ssp:myextElt att="value5" />
   </samlp:Extensions>
   <saml:Subject>
         <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
@@ -193,7 +194,7 @@ AUTHNREQUEST
         );
 
         $message = Message::fromXML($authnRequest->documentElement);
-        $exts = $message->getExtensions();
+        $exts = $message->getExtensions()->getList();
         $this->assertCount(2, $exts);
         $this->assertEquals("myextElt", $exts[0]->getLocalName());
         $this->assertEquals("example1", $exts[0]->getXML()->textContent);
@@ -233,15 +234,15 @@ AUTHNREQUEST
 
         $message = Message::fromXML($authnRequest->documentElement);
         $exts = $message->getExtensions();
-        $this->assertCount(0, $exts);
+        $this->assertNull($exts);
 
         $dom = DOMDocumentFactory::create();
         $ce = $dom->createElementNS('http://www.example.com/XFoo', 'xfoo:test', 'Test data!');
         $newexts[] = new Chunk($ce);
 
-        $message->setExtensions($newexts);
+        $message->setExtensions(new Extensions($newexts));
 
-        $exts = $message->getExtensions();
+        $exts = $message->getExtensions()->getList();
         $this->assertCount(1, $exts);
         $this->assertEquals("test", $exts[0]->getLocalName());
         $this->assertEquals("Test data!", $exts[0]->getXML()->textContent);

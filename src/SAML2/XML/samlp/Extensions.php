@@ -5,54 +5,54 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\ExtensionsTrait;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
  * Class for handling SAML2 extensions.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
-class Extensions
+final class Extensions extends AbstractSamlpElement
 {
+    use ExtensionsTrait;
+
     /**
-     * Get a list of Extensions in the given element.
+     * Create an Extensions object from its samlp:Extensions XML representation.
      *
-     * @param  \DOMElement $parent The element that may contain the samlp:Extensions element.
-     * @return array Array of extensions.
+     * For those supported extensions, an object of the corresponding class will be created. The rest will be added
+     * as a \SimpleSAML\XML\Chunk object.
+     *
+     * @param \DOMElement $xml
+     * @return static
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
      */
-    public static function getList(DOMElement $parent): array
+    public static function fromXML(DOMElement $xml): static
     {
-        $xpCache = XPath::getXPath($parent);
+        Assert::eq(
+            $xml->namespaceURI,
+            self::NS,
+            'Unknown namespace \'' . strval($xml->namespaceURI) . '\' for Extensions element.',
+            InvalidDOMElementException::class,
+        );
+        Assert::eq(
+            $xml->localName,
+            static::getClassName(static::class),
+            'Invalid Extensions element \'' . $xml->localName . '\'',
+            InvalidDOMElementException::class,
+        );
         $ret = [];
+
         /** @var \DOMElement $node */
-        foreach (XPath::xpQuery($parent, './saml_protocol:Extensions/*', $xpCache) as $node) {
+        foreach (XPath::xpQuery($xml, './*', XPath::getXPath($xml)) as $node) {
             $ret[] = new Chunk($node);
         }
 
-        return $ret;
-    }
-
-
-    /**
-     * Add a list of Extensions to the given element.
-     *
-     * @param \DOMElement $parent The element we should add the extensions to.
-     * @param \SimpleSAML\XML\Chunk[] $extensions List of extension objects.
-     * @return void
-     */
-    public static function addList(DOMElement $parent, array $extensions): void
-    {
-        if (empty($extensions)) {
-            return;
-        }
-
-        $extElement = $parent->ownerDocument->createElementNS(C::NS_SAMLP, 'samlp:Extensions');
-        $parent->appendChild($extElement);
-
-        foreach ($extensions as $ext) {
-            $ext->toXML($extElement);
-        }
+        return new static($ret);
     }
 }

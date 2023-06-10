@@ -15,11 +15,13 @@ use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Utilities\Temporal;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\Extensions;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
 use function call_user_func;
@@ -35,12 +37,13 @@ use function var_export;
  */
 abstract class Message extends SignedElement
 {
+    use ExtendableElementTrait;
+
+
     /**
-     * Request extensions.
-     *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\samlp\Extensions|null
      */
-    protected array $extensions = [];
+    private ?Extensions $extensions = null;
 
     /**
      * The name of the root element of the DOM tree for the message.
@@ -193,7 +196,10 @@ abstract class Message extends SignedElement
 
         $this->validateSignature($xml);
 
-        $this->extensions = Extensions::getList($xml);
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount($extensions, 1, SchemaViolationException::class);
+
+        $this->extensions = array_pop($extensions);
     }
 
 
@@ -480,7 +486,9 @@ abstract class Message extends SignedElement
             $this->issuer->toXML($root);
         }
 
-        Extensions::addList($root, $this->extensions);
+        if ($this->extensions !== null) {
+            $this->extensions->toXML($root);
+        }
 
         return $root;
     }
@@ -611,9 +619,9 @@ abstract class Message extends SignedElement
     /**
      * Retrieve the Extensions.
      *
-     * @return \SimpleSAML\SAML2\XML\samlp\Extensions[]
+     * @return \SimpleSAML\SAML2\XML\samlp\Extensions|null
      */
-    public function getExtensions(): array
+    public function getExtensions(): ?Extensions
     {
         return $this->extensions;
     }
@@ -622,24 +630,12 @@ abstract class Message extends SignedElement
     /**
      * Set the Extensions.
      *
-     * @param \SimpleSAML\SAML2\XML\samlp\Extensions[] $extensions The Extensions
+     * @param \SimpleSAML\SAML2\XML\samlp\Extensions|null $extensions The Extensions
      * @return void
      */
-    public function setExtensions(array $extensions): void
+    public function setExtensions(?Extensions $extensions): void
     {
         $this->extensions = $extensions;
-    }
-
-
-    /**
-     * Add an Extension.
-     *
-     * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions The Extensions
-     * @return void
-     */
-    public function addExtension(Extensions $extension): void
-    {
-        $this->extensions[] = $extension;
     }
 
 
