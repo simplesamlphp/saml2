@@ -12,7 +12,11 @@ use SimpleSAML\SAML2\AuthnRequest;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\samlp\IDPEntry;
+use SimpleSAML\SAML2\XML\samlp\IDPList;
 use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
+use SimpleSAML\SAML2\XML\samlp\RequesterID;
+use SimpleSAML\SAML2\XML\samlp\Scoping;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -273,11 +277,16 @@ AUTHNREQUEST;
         $request = new AuthnRequest();
         $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
-        $request->setIDPList([
-            'Legacy1',
-            ['ProviderID' => 'http://example.org/AAP', 'Name' => 'N00T', 'Loc' => 'https://mies'],
-            ['ProviderID' => 'urn:example:1', 'Name' => 'Voorbeeld', 'Something' => 'Else']
-        ]);
+        $request->setScoping(
+            new Scoping(
+                null,
+                new IDPList([
+                    new IDPEntry('Legacy1'),
+                    new IDPEntry('http://example.org/AAP', 'N00T', 'https://mies'),
+                    new IDPEntry('urn:example:1', 'Voorbeeld', 'Else'),
+                ]),
+            ),
+        );
 
         $requestStructure = $request->toUnsignedXML();
 
@@ -299,40 +308,6 @@ AUTHNREQUEST;
             $xpCache,
         );
         $this->assertCount(3, $idpEntryElements);
-    }
-
-
-    /**
-     * Test for getting IDPlist values.
-     */
-    public function testgetIDPlistAttributes(): void
-    {
-        $xmlRequest = <<<AUTHNREQUEST
-<samlp:AuthnRequest
-  xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-  xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  ID="_306f8ec5b618f361c70b6ffb1480eade"
-  Version="2.0"
-  IssueInstant="2004-12-05T09:21:59Z"
-  Destination="https://idp.example.org/SAML2/SSO/Artifact"
-  ProtocolBinding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
-  AssertionConsumerServiceURL="https://sp.example.com/SAML2/SSO/Artifact">
-  <saml:Issuer>https://sp.example.com/SAML2</saml:Issuer>
-    <samlp:Scoping><samlp:IDPList>
-        <samlp:IDPEntry ProviderID="Legacy1"/>
-        <samlp:IDPEntry ProviderID="http://example.org/AAP" Name="N00T" Loc="https://mies"/>
-        <samlp:IDPEntry ProviderID="urn:example:1" Name="Voorbeeld"/>
-    </samlp:IDPList></samlp:Scoping>
-</samlp:AuthnRequest>
-AUTHNREQUEST;
-
-        $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->firstChild);
-
-        $expectedList = ["Legacy1", "http://example.org/AAP", "urn:example:1"];
-
-        $list = $authnRequest->getIDPList();
-        $this->assertCount(3, $list);
-        $this->assertEquals($expectedList, $list);
     }
 
 
@@ -376,10 +351,16 @@ AUTHNREQUEST;
         $request = new AuthnRequest();
         $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
-        $request->setRequesterID([
-            'https://engine.demo.openconext.org/authentication/sp/metadata',
-            'https://shib.example.edu/SSO/Metadata',
-        ]);
+        $request->setScoping(
+            new Scoping(
+                null,
+                null,
+                [
+                    new RequesterID('https://engine.demo.openconext.org/authentication/sp/metadata'),
+                    new RequesterID('https://shib.example.edu/SSO/Metadata'),
+                ],
+            ),
+        );
 
         $requestStructure = $request->toUnsignedXML();
 
@@ -410,8 +391,8 @@ AUTHNREQUEST;
     public function testRequesterIdIsReadCorrectly(): void
     {
         $requesterId = [
-            'https://engine.demo.openconext.org/authentication/sp/metadata',
-            'https://shib.example.edu/SSO/Metadata',
+            new RequesterID('https://engine.demo.openconext.org/authentication/sp/metadata'),
+            new RequesterID('https://shib.example.edu/SSO/Metadata'),
         ];
 
         $xmlRequest = <<<AUTHNREQUEST
@@ -432,7 +413,7 @@ AUTHNREQUEST;
 
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->firstChild);
 
-        $this->assertEquals($requesterId, $authnRequest->getRequesterID());
+        $this->assertEquals($requesterId, $authnRequest->getScoping()?->getRequesterID());
     }
 
 
@@ -450,10 +431,9 @@ AUTHNREQUEST;
         $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
         $request->setIssueInstant(XMLUtils::xsDateTimeToTimestamp('2004-12-05T09:21:59Z'));
-        $request->setProxyCount(34);
-        $request->setRequesterID([
-            'https://engine.demo.openconext.org/authentication/sp/metadata',
-        ]);
+        $request->setScoping(
+            new Scoping(34, null, [new RequesterID('https://engine.demo.openconext.org/authentication/sp/metadata')]),
+        );
 
         $requestStructure = $request->toUnsignedXML();
 
@@ -498,7 +478,7 @@ AUTHNREQUEST;
 
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->firstChild);
 
-        $this->assertEquals($proxyCount, $authnRequest->getProxyCount());
+        $this->assertEquals($proxyCount, $authnRequest->getScoping()?->getProxyCount());
     }
 
 

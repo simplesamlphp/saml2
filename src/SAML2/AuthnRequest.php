@@ -14,11 +14,16 @@ use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\XML\samlp\IDPEntry;
+use SimpleSAML\SAML2\XML\samlp\IDPList;
 use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
+use SimpleSAML\SAML2\XML\samlp\RequesterID;
+use SimpleSAML\SAML2\XML\samlp\Scoping;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_pop;
 use function count;
 use function intval;
 use function in_array;
@@ -64,24 +69,9 @@ class AuthnRequest extends Request
     /**
      * The list of providerIDs in this request's scoping element
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\samlp\Scoping|null
      */
-    private array $IDPList = [];
-
-    /**
-     * The ProxyCount in this request's scoping element
-     *
-     * @var int|null
-     */
-    private ?int $ProxyCount = null;
-
-    /**
-     * The RequesterID list in this request's scoping element
-     *
-     * @var array
-     */
-
-    private array $RequesterID = [];
+    private ?Scoping $scoping = null;
 
     /**
      * The URL of the asertion consumer service where the response should be delivered.
@@ -183,10 +173,15 @@ class AuthnRequest extends Request
         }
 
         $this->parseSubject($xml);
-        $this->parseNameIdPolicy($xml);
+
+        $nameIdPolicy = NameIDPolicy::getChildrenOfClass($xml);
+        $this->nameIdPolicy = array_pop($nameIdPolicy);
+
         $this->parseRequestedAuthnContext($xml);
-        $this->parseScoping($xml);
         $this->parseConditions($xml);
+
+        $scoping = Scoping::getChildrenOfClass($xml);
+        $this->scoping = array_pop($scoping);
     }
 
 
@@ -239,18 +234,6 @@ class AuthnRequest extends Request
 
     /**
      * @param \DOMElement $xml
-     * @throws \Exception
-     * @return void
-     */
-    protected function parseNameIdPolicy(DOMElement $xml): void
-    {
-        $nameIdPolicy = NameIDPolicy::getChildrenOfClass($xml);
-        $this->nameIdPolicy = array_pop($nameIdPolicy);
-    }
-
-
-    /**
-     * @param \DOMElement $xml
      * @return void
      */
     protected function parseRequestedAuthnContext(DOMElement $xml): void
@@ -282,46 +265,6 @@ class AuthnRequest extends Request
         }
 
         $this->requestedAuthnContext = $rac;
-    }
-
-
-    /**
-     * @param \DOMElement $xml
-     * @throws \Exception
-     * @return void
-     */
-    protected function parseScoping(DOMElement $xml): void
-    {
-        $xpCache = XPath::getXPath($xml);
-
-        /** @var \DOMElement[] $scoping */
-        $scoping = XPath::xpQuery($xml, './saml_protocol:Scoping', $xpCache);
-        if (empty($scoping)) {
-            return;
-        }
-
-        $scoping = $scoping[0];
-
-        if ($scoping->hasAttribute('ProxyCount')) {
-            $this->ProxyCount = intval($scoping->getAttribute('ProxyCount'));
-        }
-
-        $xpCache = XPath::getXPath($scoping);
-        /** @var \DOMElement[] $idpEntries */
-        $idpEntries = XPath::xpQuery($scoping, './saml_protocol:IDPList/saml_protocol:IDPEntry', $xpCache);
-
-        foreach ($idpEntries as $idpEntry) {
-            if (!$idpEntry->hasAttribute('ProviderID')) {
-                throw new Exception("Could not get ProviderID from Scoping/IDPEntry element in AuthnRequest object");
-            }
-            $this->IDPList[] = $idpEntry->getAttribute('ProviderID');
-        }
-
-        /** @var \DOMElement[] $requesterIDs */
-        $requesterIDs = XPath::xpQuery($scoping, './saml_protocol:RequesterID', $xpCache);
-        foreach ($requesterIDs as $requesterID) {
-            $this->RequesterID[] = trim($requesterID->textContent);
-        }
     }
 
 
@@ -476,74 +419,21 @@ class AuthnRequest extends Request
 
 
     /**
-     * This function sets the scoping for the request.
-     * See Core 3.4.1.2 for the definition of scoping.
-     * Currently we support an IDPList of idpEntries.
-     *
-     * Each idpEntries consists of an array, containing
-     * keys (mapped to attributes) and corresponding values.
-     * Allowed attributes: Loc, Name, ProviderID.
-     *
-     * For backward compatibility, an idpEntries can also
-     * be a string instead of an array, where each string
-     * is mapped to the value of attribute ProviderID.
-     *
-     * @param array $IDPList List of idpEntries to scope the request to.
+     * @param \SimpleSAML\SAML2\XML\samlp\Scoping|null $scoping The scope.
      * @return void
      */
-    public function setIDPList(array $IDPList): void
+    public function setScoping(?Scoping $scoping): void
     {
-        $this->IDPList = $IDPList;
+        $this->scoping = $scoping;
     }
 
 
     /**
-     * This function retrieves the list of providerIDs from this authentication request.
-     * Currently we only support a list of ipd ientity id's.
-     *
-     * @return array List of idp EntityIDs from the request
+     * @return \SimpleSAML\SAML2\XML\samlp\Scoping|null
      */
-    public function getIDPList(): array
+    public function getScoping(): ?Scoping
     {
-        return $this->IDPList;
-    }
-
-
-    /**
-     * @param int $ProxyCount
-     * @return void
-     */
-    public function setProxyCount(int $ProxyCount): void
-    {
-        $this->ProxyCount = $ProxyCount;
-    }
-
-
-    /**
-     * @return int|null
-     */
-    public function getProxyCount(): ?int
-    {
-        return $this->ProxyCount;
-    }
-
-
-    /**
-     * @param array $RequesterID
-     * @return void
-     */
-    public function setRequesterID(array $RequesterID): void
-    {
-        $this->RequesterID = $RequesterID;
-    }
-
-
-    /**
-     * @return array
-     */
-    public function getRequesterID(): array
-    {
-        return $this->RequesterID;
+        return $this->scoping;
     }
 
 
@@ -831,42 +721,8 @@ class AuthnRequest extends Request
             }
         }
 
-        if ($this->ProxyCount !== null || count($this->IDPList) > 0 || count($this->RequesterID) > 0) {
-            $scoping = $this->document->createElementNS(Constants::NS_SAMLP, 'Scoping');
-            $root->appendChild($scoping);
-            if ($this->ProxyCount !== null) {
-                $scoping->setAttribute('ProxyCount', strval($this->ProxyCount));
-            }
-            if (count($this->IDPList) > 0) {
-                $idplist = $this->document->createElementNS(Constants::NS_SAMLP, 'IDPList');
-                foreach ($this->IDPList as $provider) {
-                    $idpEntry = $this->document->createElementNS(Constants::NS_SAMLP, 'IDPEntry');
-                    if (is_string($provider)) {
-                        $idpEntry->setAttribute('ProviderID', $provider);
-                    } elseif (is_array($provider)) {
-                        foreach ($provider as $attribute => $value) {
-                            if (
-                                in_array(
-                                    $attribute,
-                                    [
-                                        'ProviderID',
-                                        'Loc',
-                                        'Name'
-                                    ],
-                                    true
-                                )
-                            ) {
-                                $idpEntry->setAttribute($attribute, $value);
-                            }
-                        }
-                    }
-                    $idplist->appendChild($idpEntry);
-                }
-                $scoping->appendChild($idplist);
-            }
-            if (count($this->RequesterID) > 0) {
-                XMLUtils::addStrings($scoping, Constants::NS_SAMLP, 'RequesterID', false, $this->RequesterID);
-            }
+        if ($this->scoping !== null) {
+            $this->scoping->toXML($root);
         }
 
         return $root;
