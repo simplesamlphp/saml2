@@ -8,8 +8,10 @@ use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\samlp\SessionIndex;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -52,7 +54,7 @@ class LogoutRequest extends Request
     /**
      * The SessionIndexes of the sessions that should be terminated.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\samlp\SessionIndex[]
      */
     private array $sessionIndexes = [];
 
@@ -75,8 +77,6 @@ class LogoutRequest extends Request
     public function __construct(DOMElement $xml = null)
     {
         parent::__construct('LogoutRequest', $xml);
-
-        $this->sessionIndexes = [];
 
         if ($xml === null) {
             return;
@@ -111,11 +111,7 @@ class LogoutRequest extends Request
             $this->nameId = new NameID($nameId[0]);
         }
 
-        /** @var \DOMElement[] $sessionIndexes */
-        $sessionIndexes = XPath::xpQuery($xml, './saml_protocol:SessionIndex', $xpCache);
-        foreach ($sessionIndexes as $sessionIndex) {
-            $this->sessionIndexes[] = trim($sessionIndex->textContent);
-        }
+        $this->sessionIndexes = SessionIndex::getChildrenOfClass($xml);
     }
 
 
@@ -285,6 +281,7 @@ class LogoutRequest extends Request
      */
     public function setSessionIndexes(array $sessionIndexes): void
     {
+        Assert::allIsInstanceOf($sessionIndexes, SessionIndex::class);
         $this->sessionIndexes = $sessionIndexes;
     }
 
@@ -292,9 +289,9 @@ class LogoutRequest extends Request
     /**
      * Retrieve the sesion index of the session that should be terminated.
      *
-     * @return string|null The sesion index of the session that should be terminated.
+     * @return \SimpleSAML\SAML2\XML\samlp\SessionIndex|null The sesion index of the session that should be terminated.
      */
-    public function getSessionIndex(): ?string
+    public function getSessionIndex(): ?SessionIndex
     {
         if (empty($this->sessionIndexes)) {
             return null;
@@ -315,7 +312,7 @@ class LogoutRequest extends Request
         if (is_null($sessionIndex)) {
             $this->sessionIndexes = [];
         } else {
-            $this->sessionIndexes = [$sessionIndex];
+            $this->sessionIndexes = [new SessionIndex($sessionIndex)];
         }
     }
 
@@ -350,7 +347,7 @@ class LogoutRequest extends Request
         }
 
         foreach ($this->sessionIndexes as $sessionIndex) {
-            XMLUtils::addString($root, Constants::NS_SAMLP, 'SessionIndex', $sessionIndex);
+            $sessionIndex->toXML($root);
         }
 
         return $root;

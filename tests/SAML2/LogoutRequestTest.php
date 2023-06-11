@@ -11,6 +11,7 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\LogoutRequest;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\samlp\SessionIndex;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -88,7 +89,7 @@ XML;
         $nameId->setValue('NameIDValue');
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
-        $logoutRequest->setSessionIndexes(['SessionIndexValue1', 'SessionIndexValue2']);
+        $logoutRequest->setSessionIndexes([new SessionIndex('SessionIndexValue1'), new SessionIndex('SessionIndexValue2')]);
         $logoutRequestElement = $logoutRequest->toUnsignedXML();
 
         $xpCache = XPath::getXPath($logoutRequestElement);
@@ -110,9 +111,9 @@ XML;
 
         $sessionIndexElements = $logoutRequest->getSessionIndexes();
         $this->assertCount(2, $sessionIndexElements);
-        $this->assertEquals('SomeSessionIndex1', $sessionIndexElements[0]);
-        $this->assertEquals('SomeSessionIndex2', $sessionIndexElements[1]);
-        $this->assertEquals('SomeSessionIndex1', $logoutRequest->getSessionIndex());
+        $this->assertEquals('SomeSessionIndex1', $sessionIndexElements[0]->getContent());
+        $this->assertEquals('SomeSessionIndex2', $sessionIndexElements[1]->getContent());
+        $this->assertEquals('SomeSessionIndex1', $logoutRequest->getSessionIndex()->getContent());
 
         $logoutRequest->decryptNameId(CertificatesMock::getPrivateKey());
 
@@ -335,14 +336,18 @@ XML;
     public function testSetSessionIndicesVariants(): void
     {
         $logoutRequest = new LogoutRequest();
-        $logoutRequest->setSessionIndexes(['SessionIndexValue1', 'SessionIndexValue2']);
+        $logoutRequest->setSessionIndexes(
+            [new SessionIndex('SessionIndexValue1'), new SessionIndex('SessionIndexValue2')],
+        );
         $this->assertCount(2, $logoutRequest->getSessionIndexes());
         $logoutRequest->setSessionIndex(null);
         $this->assertCount(0, $logoutRequest->getSessionIndexes());
-        $logoutRequest->setSessionIndexes(['SessionIndexValue1', 'SessionIndexValue2']);
+        $logoutRequest->setSessionIndexes(
+            [new SessionIndex('SessionIndexValue1'), new SessionIndex('SessionIndexValue2')],
+        );
         $this->assertCount(2, $logoutRequest->getSessionIndexes());
         $logoutRequest->setSessionIndex('SessionIndexValue3');
         $this->assertCount(1, $logoutRequest->getSessionIndexes());
-        $this->assertEquals('SessionIndexValue3', $logoutRequest->getSessionIndex());
+        $this->assertEquals('SessionIndexValue3', $logoutRequest->getSessionIndex()->getContent());
     }
 }
