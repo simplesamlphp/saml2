@@ -6,8 +6,13 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
+use function array_change_key_case;
+use function array_filter;
+use function array_key_exists;
+use function array_keys;
 use function var_export;
 
 /**
@@ -15,7 +20,7 @@ use function var_export;
  *
  * @package simplesamlphp/saml2
  */
-final class NameIDPolicy extends AbstractSamlpElement
+final class NameIDPolicy extends AbstractSamlpElement implements ArrayizableElementInterface
 {
     /**
      * Initialize a NameIDPolicy.
@@ -123,5 +128,80 @@ final class NameIDPolicy extends AbstractSamlpElement
         }
 
         return $e;
+    }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array $data
+     * @return static
+     */
+    public static function fromArray(array $data): static
+    {
+        $data = self::processArrayContents($data);
+
+        return new static(
+            $data['Format'] ?? null,
+            $data['SPNameQualifier'] ?? null,
+            $data['AllowCreate'] ?? null,
+        );
+    }
+
+
+    /**
+     * Validates an array representation of this object and returns the same array with
+     * rationalized keys (casing) and parsed sub-elements.
+     *
+     * @param array $data
+     * @return array $data
+     */
+    private static function processArrayContents(array $data): array
+    {
+        $data = array_change_key_case($data, CASE_LOWER);
+
+        // Make sure the array keys are known for this kind of object
+        Assert::allOneOf(
+            array_keys($data),
+            [
+                'format',
+                'spnamequalifier',
+                'allowcreate',
+            ],
+            ArrayValidationException::class,
+        );
+
+        Assert::string($data['format'], ArrayValidationException::class);
+
+        $retval = ['Format' => $data['format']];
+
+        if (array_key_exists('spnamequalifier', $data)) {
+            Assert::string($data['spnamequalifier'], ArrayValidationException::class);
+            $retval['SPNameQualifier'] = $data['spnamequalifier'];
+        }
+
+        if (array_key_exists('allowcreate', $data)) {
+            Assert::boolean($data['allowcreate'], ArrayValidationException::class);
+            $retval['AllowCreate'] = $data['allowcreate'];
+        }
+
+        return $retval;
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $data = [
+            'Format' => $this->getFormat(),
+            'SPNameQualifier' => $this->getSPNameQualifier(),
+            'AllowCreate' => $this->getAllowCreate(),
+        ];
+
+        return array_filter($data);
     }
 }
