@@ -72,6 +72,7 @@
         <exclude-pattern>tests/SAML2/XML/saml/AttributeValueTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/saml/IssuerXMLShowAllTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/saml/NameIDTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/samlp/StatusDetailTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/shibmd/KeyAuthorityTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationResponseToMatchesTest.php</exclude-pattern>
     </rule>
