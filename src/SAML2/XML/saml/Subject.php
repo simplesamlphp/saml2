@@ -26,7 +26,7 @@ final class Subject extends AbstractSamlElement
      * Initialize a Subject element.
      *
      * @param \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null $identifier
-     * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[] $SubjectConfirmation
+     * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmation[] $subjectConfirmation
      */
     public function __construct(
         ?IdentifierInterface $identifier,

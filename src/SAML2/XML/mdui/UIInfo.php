@@ -14,6 +14,7 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableElementTrait;
+use SimpleSAML\XML\SerializableElementInterface;
 
 use function array_filter;
 use function array_key_exists;
@@ -228,7 +229,7 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
      *
      * @param (\SimpleSAML\SAML2\XML\md\AbstractLocalizedURL|
      *         \SimpleSAML\SAML2\XML\md\AbstractLocalizedName|
-     *         \SimpleSAML\XML\SAML2\mdui\Keywords)[] $items
+     *         \SimpleSAML\SAML2\XML\mdui\Keywords)[] $items
      * @return void
      */
     private function testLocalizedElements(array $elements)

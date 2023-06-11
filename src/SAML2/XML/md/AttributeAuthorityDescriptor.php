@@ -28,10 +28,10 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType
      *
      * @param \SimpleSAML\SAML2\XML\md\AttributeService[] $attributeService
      * @param string[] $protocolSupportEnumeration
-     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $sssertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $asssertionIDRequestService
      * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
-     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $sttributeProfile
-     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $sttribute
+     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfile
+     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attribute
      * @param string|null $ID
      * @param \DateTimeImmutable|null $validUntil
      * @param string|null $cacheDuration

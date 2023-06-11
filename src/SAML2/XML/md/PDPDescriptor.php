@@ -24,10 +24,10 @@ final class PDPDescriptor extends AbstractRoleDescriptorType
     /**
      * PDPDescriptor constructor.
      *
-     * @param \SimpleSAML\SAML2\XML\md\AuthzService[] $authzServiceEndpoints
+     * @param \SimpleSAML\SAML2\XML\md\AuthzService[] $authzService
      * @param string[] $protocolSupportEnumeration
      * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
-     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormats
+     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
      * @param string|null $ID
      * @param \DateTimeImmutable|null $validUntil
      * @param string|null $cacheDuration

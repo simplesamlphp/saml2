@@ -29,7 +29,7 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
      *
      * @param string $registrationAuthority
      * @param \DateTimeImmutable|null $registrationInstant
-     * @param \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy[] $RegistrationPolicy
+     * @param \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy[] $registrationPolicy
      */
     public function __construct(
         protected string $registrationAuthority,

@@ -39,7 +39,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      * @param \DateTimeImmutable|null $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to an empty array.
-     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $KeyDescriptor
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor
      *   An optional array of KeyDescriptors. Defaults to an empty array.
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttribute
      */

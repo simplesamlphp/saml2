@@ -76,7 +76,7 @@ class HTTPArtifact extends Binding
         $artifactDataString = $artifactData->ownerDocument?->saveXML($artifactData);
 
         $clock = Utils::getContainer()->getClock();
-        $store->set('artifact', $artifact, $artifactDataString, $clock->now()->add(new DateDInterval('PT15M')));
+        $store->set('artifact', $artifact, $artifactDataString, $clock->now()->add(new DateInterval('PT15M')));
 
         $destination = $message->getDestination();
         if ($destination === null) {
@@ -168,7 +168,7 @@ class HTTPArtifact extends Binding
         $issuer = new Issuer($this->spMetadata->getString('entityid'));
 
         // Construct the ArtifactResolve Request
-        $ar = new ArtifactResolve($query['SAMLart'], $issuer, null, null, null, $endpoint['Location']);
+        $ar = new ArtifactResolve($query['SAMLart'], null, $issuer, null, '2.0', $endpoint['Location']);
 
         // sign the request
         /** @psalm-suppress UndefinedClass */

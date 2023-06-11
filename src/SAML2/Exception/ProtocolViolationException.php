@@ -11,13 +11,19 @@ namespace SimpleSAML\SAML2\Exception;
  */
 class ProtocolViolationException extends RuntimeException
 {
-    public const DEFAULT_MESSAGE = 'A violation of the SAML2 protocol occurred.';
-
     /**
      * @param string $message
      */
     public function __construct(string $message = null)
     {
-        parent::__construct($message ?? static::DEFAULT_MESSAGE);
+        if ($message === null) {
+            if (defined('static::DEFAULT_MESSAGE')) {
+                $message = static::DEFAULT_MESSAGE;
+            } else {
+                $message = 'A violation of the SAML2 protocol occurred.';
+            }
+        }
+
+        parent::__construct($message);
     }
 }
