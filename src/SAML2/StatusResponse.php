@@ -7,6 +7,8 @@ namespace SimpleSAML\SAML2;
 use DOMElement;
 use Exception;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -18,16 +20,9 @@ use function is_null;
  * Base class for all SAML 2 response messages.
  *
  * Implements samlp:StatusResponseType. All of the elements in that type is
- * stored in the \SAML2\Message class, and this class is therefore more
+ * stored in the \SimpleSAML\SAML2\Message class, and this class is therefore more
  * or less empty. It is included mainly to make it easy to separate requests from
  * responses.
- *
- * The status code is represented as an array on the following form:
- * [
- *   'Code' => '<top-level status code>',
- *   'SubCode' => '<second-level status code>',
- *   'Message' => '<status message>',
- * ]
  *
  * Only the 'Code' field is required. The others will be set to null if they
  * aren't present.
@@ -47,9 +42,9 @@ abstract class StatusResponse extends Message
     /**
      * The status code of the response.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\samlp\Status
      */
-    private array $status;
+    private Status $status;
 
 
     /**
@@ -63,11 +58,9 @@ abstract class StatusResponse extends Message
     {
         parent::__construct($tagName, $xml);
 
-        $this->status = [
-            'Code' => Constants::STATUS_SUCCESS,
-            'SubCode' => null,
-            'Message' => null,
-        ];
+        $this->status = new Status(
+            new StatusCode(Constants::STATUS_SUCCESS),
+        );
 
         if ($xml === null) {
             return;
@@ -77,33 +70,11 @@ abstract class StatusResponse extends Message
             $this->inResponseTo = $xml->getAttribute('InResponseTo');
         }
 
-        $xpCache = XPath::getXPath($xml);
-        /** @var \DOMElement[] $status */
-        $status = XPath::xpQuery($xml, './saml_protocol:Status', $xpCache);
+        $status = Status::getChildrenOfClass($xml);
         if (empty($status)) {
             throw new MissingElementException('Missing status code on response.');
         }
-
-        $xpCache = XPath::getXPath($status[0]);
-        /** @var \DOMElement[] $statusCode */
-        $statusCode = XPath::xpQuery($status[0], './saml_protocol:StatusCode', $xpCache);
-        if (empty($statusCode)) {
-            throw new MissingElementException('Missing status code in status element.');
-        }
-        $this->status['Code'] = $statusCode[0]->getAttribute('Value');
-
-        /** @var \DOMElement[] $message */
-        $message = XPath::xpQuery($status[0], './saml_protocol:StatusMessage', $xpCache);
-        if (!empty($message)) {
-            $this->status['Message'] = trim($message[0]->textContent);
-        }
-
-        $xpCache = XPath::getXPath($statusCode[0]);
-        /** @var \DOMElement[] $subCode */
-        $subCode = XPath::xpQuery($statusCode[0], './saml_protocol:StatusCode', $xpCache);
-        if (!empty($subCode)) {
-            $this->status['SubCode'] = $subCode[0]->getAttribute('Value');
-        }
+        $this->status = array_pop($status);
     }
 
 
@@ -114,9 +85,7 @@ abstract class StatusResponse extends Message
      */
     public function isSuccess(): bool
     {
-        Assert::keyExists($this->status, "Code");
-
-        return $this->status['Code'] === Constants::STATUS_SUCCESS;
+        return $this->status->getStatusCode()->getValue() === Constants::STATUS_SUCCESS;
     }
 
 
@@ -146,9 +115,9 @@ abstract class StatusResponse extends Message
     /**
      * Retrieve the status code.
      *
-     * @return array The status code.
+     * @return \SimpleSAML\SAML2\XML\samlp\Status The status code.
      */
-    public function getStatus(): array
+    public function getStatus(): Status
     {
         return $this->status;
     }
@@ -157,20 +126,12 @@ abstract class StatusResponse extends Message
     /**
      * Set the status code.
      *
-     * @param array $status The status code.
+     * @param \SimpleSAML\SAML2\XML\samlp\Status $status The status code.
      * @return void
      */
-    public function setStatus(array $status): void
+    public function setStatus(Status $status): void
     {
-        Assert::keyExists($status, "Code", 'Cannot set status without a Code key in the array.');
-
         $this->status = $status;
-        if (!array_key_exists('SubCode', $status)) {
-            $this->status['SubCode'] = null;
-        }
-        if (!array_key_exists('Message', $status)) {
-            $this->status['Message'] = null;
-        }
     }
 
 
@@ -187,22 +148,7 @@ abstract class StatusResponse extends Message
             $root->setAttribute('InResponseTo', $this->inResponseTo);
         }
 
-        $status = $this->document->createElementNS(Constants::NS_SAMLP, 'Status');
-        $root->appendChild($status);
-
-        $statusCode = $this->document->createElementNS(Constants::NS_SAMLP, 'StatusCode');
-        $statusCode->setAttribute('Value', $this->status['Code']);
-        $status->appendChild($statusCode);
-
-        if (!is_null($this->status['SubCode'])) {
-            $subStatusCode = $this->document->createElementNS(Constants::NS_SAMLP, 'StatusCode');
-            $subStatusCode->setAttribute('Value', $this->status['SubCode']);
-            $statusCode->appendChild($subStatusCode);
-        }
-
-        if (!is_null($this->status['Message'])) {
-            XMLUtils::addString($status, Constants::NS_SAMLP, 'StatusMessage', $this->status['Message']);
-        }
+        $this->status->toXML($root);
 
         return $root;
     }

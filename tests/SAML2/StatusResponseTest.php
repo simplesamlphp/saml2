@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Response;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\XML\samlp\StatusMessage;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
@@ -19,32 +23,23 @@ class StatusResponseTest extends TestCase
      */
     public function testMarshalling(): void
     {
+        $status = new Status(
+            new StatusCode(
+                C::STATUS_REQUESTER,
+                [new StatusCode(C::STATUS_REQUEST_DENIED)],
+            ),
+            new StatusMessage('OurMessageText'),
+        );
         $response = new Response();
-        $response->setStatus([
-            'Code' => 'OurStatusCode',
-            'SubCode' => 'OurSubStatusCode',
-            'Message' => 'OurMessageText',
-        ]);
+        $response->setStatus($status);
 
         $responseElement = $response->toUnsignedXML();
 
-        $xpCache = XPath::getXPath($responseElement);
-        $statusElements = XPath::xpQuery($responseElement, './saml_protocol:Status', $xpCache);
-        $this->assertCount(1, $statusElements);
-
-        $xpCache = XPath::getXPath($statusElements[0]);
-        $statusCodeElements = XPath::xpQuery($statusElements[0], './saml_protocol:StatusCode', $xpCache);
-        $this->assertCount(1, $statusCodeElements);
-        $this->assertEquals('OurStatusCode', $statusCodeElements[0]->getAttribute("Value"));
-
-        $statusMessageElements = XPath::xpQuery($statusElements[0], './saml_protocol:StatusMessage', $xpCache);
-        $this->assertCount(1, $statusMessageElements);
-        $this->assertEquals('OurMessageText', $statusMessageElements[0]->textContent);
-
-        $xpCache = XPath::getXPath($statusCodeElements[0]);
-        $nestedStatusCodeElements = XPath::xpQuery($statusCodeElements[0], './saml_protocol:StatusCode', $xpCache);
-        $this->assertCount(1, $nestedStatusCodeElements);
-        $this->assertEquals('OurSubStatusCode', $nestedStatusCodeElements[0]->getAttribute("Value"));
+        $status = Status::getChildrenOfClass($responseElement);
+        $status = array_pop($status);
+        $this->assertEquals(C::STATUS_REQUESTER, $status->getStatusCode()->getValue());
+        $this->assertEquals(C::STATUS_REQUEST_DENIED, $status->getStatusCode()->getSubCodes()[0]->getValue());
+        $this->assertEquals('OurMessageText', $status->getStatusMessage()->getContent());
     }
 
 
@@ -75,9 +70,9 @@ XML;
         $this->assertFalse($response->isSuccess());
 
         $status = $response->getStatus();
-        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:Responder", $status['Code']);
-        $this->assertNull($status['SubCode']);
-        $this->assertEquals("Something is wrong...", $status['Message']);
+        $this->assertEquals(C::STATUS_RESPONDER, $status->getStatusCode()->getValue());
+        $this->assertEmpty($status->getStatusCode()->getSubCodes());
+        $this->assertEquals("Something is wrong...", $status->getStatusMessage()->getContent());
 
         $this->assertEquals("_bec424fa5103428909a30ff1e31168327f79474984", $response->getInResponseTo());
     }
@@ -110,9 +105,9 @@ XML;
         $this->assertTrue($response->isSuccess());
 
         $status = $response->getStatus();
-        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:Success", $status['Code']);
-        $this->assertNull($status['SubCode']);
-        $this->assertNull($status['Message']);
+        $this->assertEquals(C::STATUS_SUCCESS, $status->getStatusCode()->getValue());
+        $this->assertEmpty($status->getStatusCode()->getSubCodes());
+        $this->assertNull($status->getStatusMessage());
     }
 
 
@@ -146,9 +141,9 @@ XML;
         $this->assertFalse($response->isSuccess());
 
         $status = $response->getStatus();
-        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:Requester", $status['Code']);
-        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:RequestDenied", $status['SubCode']);
-        $this->assertEquals("The AuthnRequest could not be validated", $status['Message']);
+        $this->assertEquals(C::STATUS_REQUESTER, $status->getStatusCode()->getValue());
+        $this->assertEquals(C::STATUS_REQUEST_DENIED, $status->getStatusCode()->getSubCodes()[0]->getValue());
+        $this->assertEquals("The AuthnRequest could not be validated", $status->getStatusMessage()->getContent());
     }
 
 
@@ -160,9 +155,7 @@ XML;
     {
         $response = new Response();
         $response->setIssueInstant(1453323439);
-        $response->setStatus([
-            'Code' => 'OurStatusCode'
-        ]);
+        $response->setStatus(new Status(new StatusCode(C::STATUS_REQUESTER)));
         $response->setInResponseTo('aabb12234');
 
         $responseStructure = $response->toUnsignedXML();
@@ -175,7 +168,10 @@ XML;
             $xpCache,
         );
         $this->assertCount(1, $statusCodeElements);
-        $this->assertEquals('OurStatusCode', $statusCodeElements[0]->getAttribute('Value'));
+        $this->assertEquals(
+            'urn:oasis:names:tc:SAML:2.0:status:Requester',
+            $statusCodeElements[0]->getAttribute('Value'),
+        );
     }
 
 

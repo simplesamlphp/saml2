@@ -11,6 +11,9 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Response;
 use SimpleSAML\SAML2\Response\Validation\Result;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator\IsSuccessful;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\XML\samlp\StatusMessage;
 
 class IsSuccessfulTest extends MockeryTestCase
 {
@@ -54,11 +57,11 @@ class IsSuccessfulTest extends MockeryTestCase
      */
     public function anUnsuccessfulResponseIsNotValidAndGeneratesAProperErrorMessage(): void
     {
-        $responseStatus = [
-            'Code'    => 'foo',
-            'SubCode' => C::STATUS_PREFIX . 'bar',
-            'Message' => 'this is a test message'
-        ];
+        $responseStatus = new Status(
+            new StatusCode(C::STATUS_REQUESTER, [new StatusCode(C::STATUS_REQUEST_DENIED)]),
+            new StatusMessage('this is a test message'),
+        );
+
         $this->response->shouldReceive('isSuccess')->once()->andReturn(false);
         $this->response->shouldReceive('getStatus')->once()->andReturn($responseStatus);
 
@@ -70,6 +73,6 @@ class IsSuccessfulTest extends MockeryTestCase
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $errors);
-        $this->assertEquals('foo/bar this is a test message', $errors[0]);
+        $this->assertEquals('Requester/RequestDenied this is a test message', $errors[0]);
     }
 }

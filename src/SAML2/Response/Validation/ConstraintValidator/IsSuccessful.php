@@ -8,6 +8,7 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Response;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator;
 use SimpleSAML\SAML2\Response\Validation\Result;
+use SimpleSAML\SAML2\XML\samlp\Status;
 
 use function sprintf;
 use function strlen;
@@ -32,17 +33,20 @@ class IsSuccessful implements ConstraintValidator
 
 
     /**
-     * @param array $responseStatus
+     * @param \SimpleSAML\SAML2\XML\samlp\Status $responseStatus
      *
      * @return string
      */
-    private function buildMessage(array $responseStatus): string
+    private function buildMessage(Status $responseStatus): string
     {
+        $statusCode = $responseStatus->getStatusCode();
+        $subCodes = $responseStatus->getStatusCode()->getSubCodes();
+        $message = $responseStatus->getStatusMessage();
         return sprintf(
             '%s%s%s',
-            $this->truncateStatus($responseStatus['Code']),
-            $responseStatus['SubCode'] ? '/' . $this->truncateStatus($responseStatus['SubCode']) : '',
-            $responseStatus['Message'] ? ' ' . $responseStatus['Message'] : ''
+            $this->truncateStatus($statusCode->getValue()),
+            $subCodes ? '/' . $this->truncateStatus($subCodes[0]->getValue()) : '',
+            $message ? ' ' . $message->getContent() : ''
         );
     }
 

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\LogoutResponse;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -40,9 +41,9 @@ XML;
         $this->assertFalse($response->isSuccess());
 
         $status = $response->getStatus();
-        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:Responder", $status['Code']);
-        $this->assertNull($status['SubCode']);
-        $this->assertEquals("Something is wrong...", $status['Message']);
+        $this->assertEquals(C::STATUS_RESPONDER, $status->getStatusCode()->getValue());
+        $this->assertEmpty($status->getStatusCode()->getSubCodes());
+        $this->assertEquals("Something is wrong...", $status->getStatusMessage()->getContent());
 
         $this->assertEquals("_bec424fa5103428909a30ff1e31168327f79474984", $response->getInResponseTo());
     }
@@ -75,8 +76,8 @@ XML;
         $this->assertTrue($response->isSuccess());
 
         $status = $response->getStatus();
-        $this->assertEquals("urn:oasis:names:tc:SAML:2.0:status:Success", $status['Code']);
-        $this->assertNull($status['SubCode']);
-        $this->assertNull($status['Message']);
+        $this->assertEquals(C::STATUS_SUCCESS, $status->getStatusCode()->getValue());
+        $this->assertEmpty($status->getStatusCode()->getSubCodes());
+        $this->assertNull($status->getStatusMessage());
     }
 }
