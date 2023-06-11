@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
@@ -25,6 +26,7 @@ use function strval;
  */
 final class NameIDPolicyTest extends TestCase
 {
+    use ArrayizableElementTestTrait;
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
@@ -36,6 +38,12 @@ final class NameIDPolicyTest extends TestCase
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
         self::$testedClass = NameIDPolicy::class;
+
+        self::$arrayRepresentation = [
+            'Format' => C::NAMEID_TRANSIENT,
+            'SPNameQualifier' => 'https://some/qualifier',
+            'AllowCreate' => true,
+        ];
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_NameIDPolicy.xml',
