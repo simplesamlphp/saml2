@@ -6,8 +6,14 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
+
+use function array_change_key_case;
+use function array_filter;
+use function array_key_exists;
+use function array_keys;
 
 /**
  * Class for handling SAML2 IDPEntry.
@@ -105,5 +111,81 @@ final class IDPEntry extends AbstractSamlpElement
         }
 
         return $e;
+    }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array $data
+     * @return static
+     */
+    public static function fromArray(array $data): static
+    {
+        $data = self::processArrayContents($data);
+
+        return new static(
+            $data['ProviderID'],
+            $data['Name'] ?? null,
+            $data['Loc'] ?? null,
+        );
+    }
+
+
+    /**
+     * Validates an array representation of this object and returns the same array with
+     * rationalized keys (casing) and parsed sub-elements.
+     *
+     * @param array $data
+     * @return array $data
+     */
+    private static function processArrayContents(array $data): array
+    {
+        $data = array_change_key_case($data, CASE_LOWER);
+
+        // Make sure the array keys are known for this kind of object
+        Assert::allOneOf(
+            array_keys($data),
+            [
+                'providerid',
+                'name',
+                'loc',
+            ],
+            ArrayValidationException::class,
+        );
+
+        Assert::keyExists($data, 'providerid', ArrayValidationException::class);
+        Assert::string($data['providerid'], ArrayValidationException::class);
+
+        $retval = ['ProviderID' => $data['providerid']];
+
+        if (array_key_exists('name', $data)) {
+            Assert::string($data['name'], ArrayValidationException::class);
+            $retval['Name'] = $data['name'];
+        }
+
+        if (array_key_exists('loc', $data)) {
+            Assert::string($data['loc'], ArrayValidationException::class);
+            $retval['Loc'] = $data['loc'];
+        }
+
+        return $retval;
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $data = [
+            'ProviderID' => $this->getProviderID(),
+            'Name' => $this->getName(),
+            'Loc' => $this->getLoc(),
+        ];
+
+        return array_filter($data);
     }
 }
