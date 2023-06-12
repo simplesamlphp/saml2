@@ -96,12 +96,12 @@ final class NameIDPolicy extends AbstractSamlpElement implements ArrayizableElem
 
         $Format = self::getOptionalAttribute($xml, 'Format', null);
         $SPNameQualifier = self::getOptionalAttribute($xml, 'SPNameQualifier', null);
-        $AllowCreate = self::getOptionalAttribute($xml, 'AllowCreate', null);
+        $AllowCreate = self::getOptionalBooleanAttribute($xml, 'AllowCreate', null);
 
         return new static(
             $Format,
             $SPNameQualifier,
-            ($AllowCreate === 'true') ? true : false,
+            $AllowCreate,
         );
     }
 
