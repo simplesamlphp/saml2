@@ -6,12 +6,17 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
+use function array_change_key_case;
+use function array_filter;
+use function array_key_exists;
+use function array_keys;
 use function array_pop;
 use function is_null;
 
@@ -114,5 +119,80 @@ final class IDPList extends AbstractSamlpElement
         $this->getGetComplete()?->toXML($e);
 
         return $e;
+    }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array $data
+     * @return static
+     */
+    public static function fromArray(array $data): static
+    {
+        $data = self::processArrayContents($data);
+
+        return new static(
+            $data['IDPEntry'],
+            $data['GetComplete'] ?? null,
+        );
+    }
+
+
+    /**
+     * Validates an array representation of this object and returns the same array with
+     * rationalized keys (casing) and parsed sub-elements.
+     *
+     * @param array $data
+     * @return array $data
+     */
+    private static function processArrayContents(array $data): array
+    {
+        $data = array_change_key_case($data, CASE_LOWER);
+
+        // Make sure the array keys are known for this kind of object
+        Assert::allOneOf(
+            array_keys($data),
+            [
+                'idpentry',
+                'getcomplete',
+            ],
+            ArrayValidationException::class,
+        );
+
+        Assert::keyExists($data, 'idpentry', ArrayValidationException::class);
+        Assert::isArray($data['idpentry'], ArrayValidationException::class);
+
+        $retval = ['IDPEntry' => [], 'GetComplete' => null];
+
+        foreach ($data['idpentry'] as $entry) {
+            $retval['IDPEntry'][] = IDPEntry::fromArray($entry);
+        }
+
+        if (array_key_exists('getcomplete', $data)) {
+            $retval['GetComplete'] = GetComplete::fromArray($data['getcomplete']);
+        }
+
+        return $retval;
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * @return array
+     */
+    public function toArray(): array
+    {
+        $data = [
+            'IDPEntry' => [],
+            'GetComplete' => $this->getGetComplete()?->toArray(),
+        ];
+
+        foreach ($this->getIDPEntry() as $entry) {
+            $data['IDPEntry'][] = $entry->toArray();
+        }
+
+        return array_filter($data);
     }
 }

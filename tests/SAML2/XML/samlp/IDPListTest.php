@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
@@ -28,6 +29,7 @@ use function strval;
  */
 final class IDPListTest extends TestCase
 {
+    use ArrayizableElementTestTrait;
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
@@ -39,6 +41,14 @@ final class IDPListTest extends TestCase
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
         self::$testedClass = IDPList::class;
+
+        self::$arrayRepresentation = [
+            'IDPEntry' => [
+                ['ProviderID' => 'urn:some:requester1', 'Name' => 'testName1', 'Loc' => 'urn:test:testLoc1'],
+                ['ProviderID' => 'urn:some:requester2', 'Name' => 'testName2', 'Loc' => 'urn:test:testLoc2'],
+            ],
+            'GetComplete' => ['https://some/location'],
+        ];
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/samlp_IDPList.xml',
