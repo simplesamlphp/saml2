@@ -11,6 +11,8 @@ use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignedElementTrait;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
+use function method_exists;
+
 /**
  * Abstract class that represents a signed metadata element.
  *

@@ -113,6 +113,7 @@ final class DiscoHintsTest extends TestCase
         $keywords = new Keywords("nl", ["voorbeeld", "specimen"]);
         $discoHints = new DiscoHints();
         $discoHints->addChild(new Chunk($keywords->toXML()));
+        $this->assertCount(1, $discoHints->getElements());
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $discoHints->toXML($document->documentElement);

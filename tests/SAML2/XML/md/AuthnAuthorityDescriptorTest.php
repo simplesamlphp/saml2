@@ -24,9 +24,10 @@ use function strval;
 /**
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType
  * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor
  * @package simplesamlphp/saml2
  */
 final class AuthnAuthorityDescriptorTest extends TestCase
