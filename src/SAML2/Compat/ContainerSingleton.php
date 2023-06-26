@@ -17,6 +17,9 @@ class ContainerSingleton
      */
     public static function getInstance(): AbstractContainer
     {
+        if (!isset(self::$container)) {
+            self::$container = self::initSspContainer();
+        }
         Assert::notNull(self::$container, 'No container set.');
         return self::$container;
     }
@@ -30,5 +33,14 @@ class ContainerSingleton
     public static function setContainer(AbstractContainer $container): void
     {
         self::$container = $container;
+    }
+
+
+    /**
+     * @return \SAML2\Compat\SspContainer
+     */
+    public static function initSspContainer() : SspContainer
+    {
+        return new SspContainer();
     }
 }
