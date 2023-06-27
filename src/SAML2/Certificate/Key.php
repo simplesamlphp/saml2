@@ -64,10 +64,8 @@ class Key implements ArrayAccess
      * @param mixed $offset
      * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      * @return bool
-     *
-     * Type hint not possible due to upstream method signature
      */
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         if (!is_string($offset)) {
             throw InvalidArgumentException::invalidType('string', $offset);
@@ -80,11 +78,8 @@ class Key implements ArrayAccess
      * @param mixed $offset
      * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      * @return mixed
-     *
-     * Type hint not possible due to upstream method signature
      */
-    #[\ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         if (!is_string($offset)) {
             throw InvalidArgumentException::invalidType('string', $offset);
@@ -98,7 +93,7 @@ class Key implements ArrayAccess
      * @param mixed $value
      * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         if (!is_string($offset)) {
             throw InvalidArgumentException::invalidType('string', $offset);
@@ -110,10 +105,8 @@ class Key implements ArrayAccess
     /**
      * @param mixed $offset
      * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
-     *
-     * Type hint not possible due to upstream method signature
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset(mixed $offset): void
     {
         if (!is_string($offset)) {
             throw InvalidArgumentException::invalidType('string', $offset);

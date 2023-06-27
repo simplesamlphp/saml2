@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\XML\Constants as C;
 
 /**
  * Class representing SAML 2 SSODescriptorType.
@@ -55,21 +56,25 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptorType
         protected array $manageNameIDService = [],
         protected array $nameIDFormat = [],
     ) {
+        Assert::maxCount($artifactResolutionService, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $artifactResolutionService,
             ArtifactResolutionService::class,
             'All md:ArtifactResolutionService endpoints must be an instance of ArtifactResolutionService.',
         );
+        Assert::maxCount($singleLogoutService, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $singleLogoutService,
             SingleLogoutService::class,
             'All md:SingleLogoutService endpoints must be an instance of SingleLogoutService.',
         );
+        Assert::maxCount($manageNameIDService, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $manageNameIDService,
             ManageNameIDService::class,
             'All md:ManageNameIDService endpoints must be an instance of ManageNameIDService.',
         );
+        Assert::maxCount($nameIDFormat, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($nameIDFormat, NameIDFormat::class, ProtocolViolationException::class);
 
         parent::__construct(

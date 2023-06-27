@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -35,6 +36,7 @@ final class KeyDescriptor extends AbstractMdElement
             ['encryption', 'signing'],
             'The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".',
         );
+        Assert::maxCount($encryptionMethod, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($encryptionMethod, EncryptionMethod::class);
     }
 

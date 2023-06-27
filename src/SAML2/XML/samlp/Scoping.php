@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -32,6 +33,7 @@ final class Scoping extends AbstractSamlpElement
         protected ?IDPList $IDPList = null,
         protected array $requesterId = [],
     ) {
+        Assert::maxCount($requesterId, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($requesterId, RequesterID::class);
         Assert::nullOrNatural($proxyCount);
     }

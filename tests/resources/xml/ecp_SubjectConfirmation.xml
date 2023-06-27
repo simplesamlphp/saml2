@@ -1,0 +1,8 @@
+<ecp:SubjectConfirmation xmlns:ecp="urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp" xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" env:mustUnderstand="1" env:actor="http://schemas.xmlsoap.org/soap/actor/next" Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+  <saml:SubjectConfirmationData xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" NotBefore="2001-04-19T04:25:21Z" NotOnOrAfter="2009-02-13T23:31:30Z" Recipient="https://simplesamlphp.org/sp/metadata" InResponseTo="SomeRequestID" Address="127.0.0.1" test:attr1="testval1" test:attr2="testval2" xmlns:test="urn:test:something">
+    <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+      <ds:KeyName>SomeKey</ds:KeyName>
+    </ds:KeyInfo>
+    <some>Arbitrary Element</some>
+  </saml:SubjectConfirmationData>
+</ecp:SubjectConfirmation>

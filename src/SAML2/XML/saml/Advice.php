@@ -39,6 +39,10 @@ final class Advice extends AbstractSamlElement
         protected array $encryptedAssertion = [],
         array $elements = [],
     ) {
+        Assert::maxCount($assertionIDRef, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($assertionURIRef, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($assertion, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($encryptedAssertion, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($assertionIDRef, AssertionIDRef::class, SchemaViolationException::class);
         Assert::allIsInstanceOf($assertionURIRef, AssertionURIRef::class, SchemaViolationException::class);
         Assert::allIsInstanceOf($assertion, Assertion::class, SchemaViolationException::class);

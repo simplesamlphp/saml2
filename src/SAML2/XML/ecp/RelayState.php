@@ -10,43 +10,37 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\StringElementTrait;
 
 use function boolval;
-use function is_null;
-use function is_numeric;
+use function intval;
 use function strval;
 
 /**
- * Class representing the ECP RequestAuthenticated element.
+ * Class representing the ECP RelayState element.
  *
  * @package simplesamlphp/saml2
  */
-final class RequestAuthenticated extends AbstractEcpElement
+final class RelayState extends AbstractEcpElement
 {
+    use StringElementTrait;
+
     /**
-     * Create a ECP RequestAuthenticated element.
+     * Create a ECP RelayState element.
      *
-     * @param bool $mustUnderstand
+     * @param string $relayState
      */
     public function __construct(
-        protected bool $mustUnderstand
+        string $relayState,
     ) {
+        $this->setContent($relayState);
     }
 
 
     /**
-     * Collect the value of the mustUnderstand-property
-     *
-     * @return bool
-     */
-    public function getMustUnderstand(): bool
-    {
-        return $this->mustUnderstand;
-    }
-
-
-    /**
-     * Convert XML into a RequestAuthenticated
+     * Convert XML into a RelayState
      *
      * @param \DOMElement $xml The XML element we should load
      * @return static
@@ -58,38 +52,43 @@ final class RequestAuthenticated extends AbstractEcpElement
      */
     public static function fromXML(DOMElement $xml): static
     {
-        Assert::same($xml->localName, 'RequestAuthenticated', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, RequestAuthenticated::NS, InvalidDOMElementException::class);
+        Assert::same($xml->localName, 'RelayState', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, RelayState::NS, InvalidDOMElementException::class);
 
         // Assert required attributes
         Assert::true(
             $xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'actor'),
-            'Missing env:actor attribute in <ecp:RequestAuthenticated>.',
+            'Missing env:actor attribute in <ecp:RelayState>.',
+            MissingAttributeException::class,
+        );
+        Assert::true(
+            $xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand'),
+            'Missing env:mustUnderstand attribute in <ecp:RelayState>.',
             MissingAttributeException::class,
         );
 
         $mustUnderstand = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand');
-        $actor = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'actor');
-
-        Assert::oneOf(
+        Assert::same(
             $mustUnderstand,
-            ['0', '1'],
-            'Invalid value of env:mustUnderstand attribute in <ecp:RequestAuthenticated>.',
+            '1',
+            'Invalid value of env:mustUnderstand attribute in <ecp:RelayState>.',
             ProtocolViolationException::class,
         );
+
+        $actor = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'actor');
         Assert::same(
             $actor,
-            'http://schemas.xmlsoap.org/soap/actor/next',
-            'Invalid value of env:actor attribute in <ecp:RequestAuthenticated>.',
+            C::SOAP_ACTOR_NEXT,
+            'Invalid value of env:actor attribute in <ecp:RelayState>.',
             ProtocolViolationException::class,
         );
 
-        return new static(boolval($mustUnderstand));
+        return new static($xml->textContent);
     }
 
 
     /**
-     * Convert this ECP RequestAuthentication to XML.
+     * Convert this ECP RelayState to XML.
      *
      * @param \DOMElement|null $parent The element we should append this element to.
      * @return \DOMElement
@@ -97,8 +96,9 @@ final class RequestAuthenticated extends AbstractEcpElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', strval(intval($this->getMustUnderstand())));
+        $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', '1');
         $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', C::SOAP_ACTOR_NEXT);
+        $e->textContent = $this->getContent();
 
         return $e;
     }

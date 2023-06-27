@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
@@ -25,6 +26,7 @@ final class AudienceRestriction extends AbstractConditionType
     public function __construct(
         protected array $audience,
     ) {
+        Assert::maxCount($audience, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($audience, Audience::class);
     }
 

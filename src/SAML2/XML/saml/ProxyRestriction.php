@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Utils as XMLUtils;
 
@@ -27,6 +28,7 @@ final class ProxyRestriction extends AbstractConditionType
         protected ?int $count = null,
     ) {
         Assert::nullOrNatural($count, 'Count must be a non-negative integer.');
+        Assert::maxCount($audience, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($audience, Audience::class);
     }
 

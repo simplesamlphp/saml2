@@ -9,6 +9,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDecl;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -51,6 +52,7 @@ final class AuthnContext extends AbstractSamlElement
             'Can only have one of AuthnContextDecl/AuthnContextDeclRef',
         );
 
+        Assert::maxCount($authenticatingAuthorities, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($authenticatingAuthorities, AuthenticatingAuthority::class);
     }
 

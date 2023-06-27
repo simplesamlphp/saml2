@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\saml\AssertionIDRef;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
@@ -49,6 +50,7 @@ final class AssertionIDRequest extends AbstractRequest
         ?string $consent = null,
         ?Extensions $extensions = null,
     ) {
+        Assert::maxCount($assertionIDRef, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($assertionIDRef, AssertionIDRef::class, InvalidDOMElementException::class);
 
         parent::__construct(

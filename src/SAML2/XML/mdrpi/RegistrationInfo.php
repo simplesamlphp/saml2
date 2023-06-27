@@ -29,7 +29,7 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
      *
      * @param string $registrationAuthority
      * @param \DateTimeImmutable|null $registrationInstant
-     * @param \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy[] $RegistrationPolicy
+     * @param \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy[] $registrationPolicy
      */
     public function __construct(
         protected string $registrationAuthority,
@@ -37,6 +37,7 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
         protected array $registrationPolicy = [],
     ) {
         Assert::nullOrSame($registrationInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
+        Assert::maxCount($registrationPolicy, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($registrationPolicy, RegistrationPolicy::class);
 
         /**

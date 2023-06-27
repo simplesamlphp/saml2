@@ -82,7 +82,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      */
     protected function getOriginalXML(): DOMElement
     {
-        return $this->xml ?? $this->toUnsignedXML();
+        return $this->isSigned() ? $this->getXML() : $this->toUnsignedXML();
     }
 
 

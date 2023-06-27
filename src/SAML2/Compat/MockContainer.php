@@ -10,6 +10,7 @@ use Psr\Log\NullLogger;
 
 use function chmod;
 use function file_put_contents;
+use function strval;
 use function sys_get_temp_dir;
 
 /**
@@ -63,7 +64,7 @@ class MockContainer extends AbstractContainer
         /** @scrutinizer ignore-unused */string $url = null,
         /** @scrutinizer ignore-unused */array $data = []
     ): string {
-        return $url;
+        return strval($url);
     }
 
 
@@ -103,7 +104,7 @@ class MockContainer extends AbstractContainer
     /**
      * Set the system clock
      *
-     * @param \Psr\Clock\ClockInterface
+     * @param \Psr\Clock\ClockInterface $clock
      * @return void
      */
     public function setClock(ClockInterface $clock): void

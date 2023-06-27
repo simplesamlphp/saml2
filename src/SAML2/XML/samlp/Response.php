@@ -57,6 +57,7 @@ class Response extends AbstractStatusResponse
         ?Extensions $extensions = null,
         protected array $assertions = [],
     ) {
+        Assert::maxCount($assertions, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOfAny($assertions, [Assertion::class, EncryptedAssertion::class]);
 
         parent::__construct(

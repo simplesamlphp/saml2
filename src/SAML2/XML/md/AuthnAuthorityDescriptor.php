@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
@@ -50,17 +51,20 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType
         array $keyDescriptor = [],
         array $contact = [],
     ) {
+        Assert::maxCount($authnQueryService, C::UNBOUNDED_LIMIT);
         Assert::minCount($authnQueryService, 1, 'Missing at least one AuthnQueryService in AuthnAuthorityDescriptor.');
         Assert::allIsInstanceOf(
             $authnQueryService,
             AbstractEndpointType::class,
             'AuthnQueryService must be an instance of EndpointType',
         );
+        Assert::maxCount($assertionIDRequestService, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $assertionIDRequestService,
             AbstractEndpointType::class,
             'AssertionIDRequestServices must be an instance of EndpointType',
         );
+        Assert::maxCount($nameIDFormat, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($nameIDFormat, NameIDFormat::class);
 
         parent::__construct(

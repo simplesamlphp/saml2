@@ -30,6 +30,7 @@ trait ExtensionsTrait
      */
     public function __construct(array $extensions)
     {
+        Assert::maxCount($extensions, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($extensions, ElementInterface::class);
 
         foreach ($extensions as $extension) {

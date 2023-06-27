@@ -47,6 +47,7 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
         Assert::notWhitespaceOnly($name, 'Cannot specify an empty name for an Attribute.');
         Assert::nullOrValidURI($nameFormat); // Covers the empty string
         Assert::nullOrNotWhitespaceOnly($friendlyName, 'FriendlyName cannot be an empty string.');
+        Assert::maxCount($attributeValue, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($attributeValue, AttributeValue::class, 'Invalid AttributeValue.');
 
         $this->setAttributesNS($namespacedAttribute);

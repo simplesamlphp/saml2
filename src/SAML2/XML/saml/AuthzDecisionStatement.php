@@ -30,7 +30,7 @@ final class AuthzDecisionStatement extends AbstractStatementType
      * @param string $resource
      * @param string $decision
      * @param \SimpleSAML\SAML2\XML\saml\Action[] $action
-     * @param \SimpleSAML\SAML2\XML\saml\Evidence|null
+     * @param \SimpleSAML\SAML2\XML\saml\Evidence|null $evidence
      */
     public function __construct(
         protected string $resource,
@@ -40,6 +40,7 @@ final class AuthzDecisionStatement extends AbstractStatementType
     ) {
         Assert::validURI($resource);
         Assert::oneOf($decision, C::AUTHZ_DECISIONS, ProtocolViolationException::class);
+        Assert::maxCount($action, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($action, Action::class, SchemaViolationException::class);
     }
 

@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -27,10 +28,10 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType
      *
      * @param \SimpleSAML\SAML2\XML\md\AttributeService[] $attributeService
      * @param string[] $protocolSupportEnumeration
-     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $sssertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $asssertionIDRequestService
      * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
-     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $sttributeProfile
-     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $sttribute
+     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfile
+     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attribute
      * @param string|null $ID
      * @param \DateTimeImmutable|null $validUntil
      * @param string|null $cacheDuration
@@ -56,6 +57,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType
         array $keyDescriptor = [],
         array $contact = [],
     ) {
+        Assert::maxCount($attributeService, C::UNBOUNDED_LIMIT);
         Assert::minCount(
             $attributeService,
             1,
@@ -68,9 +70,13 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType
             'AttributeService is not an instance of EndpointType.',
             InvalidDOMElementException::class,
         );
+        Assert::maxCount($nameIDFormat, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($nameIDFormat, NameIDFormat::class);
+        Assert::maxCount($assertionIDRequestService, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($assertionIDRequestService, AssertionIDRequestService::class);
+        Assert::maxCount($attributeProfile, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($attributeProfile, AttributeProfile::class);
+        Assert::maxCount($attribute, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($attribute, Attribute::class);
 
         parent::__construct(

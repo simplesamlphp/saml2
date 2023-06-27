@@ -89,13 +89,11 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
 
         $children = [];
         foreach ($xml->childNodes as $child) {
-            if ($child->namespaceURI === C::NS_MD) {
+            if (!($child instanceof DOMElement)) {
                 continue;
-            } elseif (!($child instanceof DOMElement)) {
-                continue;
-            }
-
-            $children[] = new Chunk($child);
+            } elseif ($child->namespaceURI !== C::NS_MD) {
+                $children[] = new Chunk($child);
+            } // else continue
         }
 
         return new static(

@@ -60,6 +60,7 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery
         ?Extensions $extensions = null,
     ) {
         Assert::validURI($resource);
+        Assert::maxCount($action, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($action, Action::class, SchemaViolationException::class);
 
         parent::__construct($subject, $issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);

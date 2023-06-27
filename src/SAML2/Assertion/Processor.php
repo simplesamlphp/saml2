@@ -132,15 +132,18 @@ class Processor
             ));
         }
 
-        foreach ($assertion->getSubject()->getSubjectConfirmation() as $subjectConfirmation) {
-            $subjectConfirmationValidationResult = $this->subjectConfirmationValidator->validate(
-                $subjectConfirmation,
-            );
-            if (!$subjectConfirmationValidationResult->isValid()) {
-                throw new InvalidSubjectConfirmationException(sprintf(
-                    'Invalid SubjectConfirmation in Assertion, errors: "%s"',
-                    implode('", "', $subjectConfirmationValidationResult->getErrors()),
-                ));
+        $subject = $assertion->getSubject();
+        if ($subject !== null) {
+            foreach ($subject->getSubjectConfirmation() as $subjectConfirmation) {
+                $subjectConfirmationValidationResult = $this->subjectConfirmationValidator->validate(
+                    $subjectConfirmation,
+                );
+                if (!$subjectConfirmationValidationResult->isValid()) {
+                    throw new InvalidSubjectConfirmationException(sprintf(
+                        'Invalid SubjectConfirmation in Assertion, errors: "%s"',
+                        implode('", "', $subjectConfirmationValidationResult->getErrors()),
+                    ));
+                }
             }
         }
     }

@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
 
@@ -27,6 +28,8 @@ class AttributeStatement extends AbstractStatementType
         protected array $encryptedAttributes = [],
     ) {
         Assert::true(!empty($attributes) || !empty($encryptedAttributes));
+        Assert::maxCount($attributes, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($encryptedAttributes, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($attributes, Attribute::class);
         Assert::allIsInstanceOf($encryptedAttributes, EncryptedAttribute::class);
     }

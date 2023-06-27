@@ -41,6 +41,7 @@ final class PublicationInfo extends AbstractMdrpiElement implements ArrayizableE
         protected array $usagePolicy = [],
     ) {
         Assert::nullOrSame($creationInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
+        Assert::maxCount($usagePolicy, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($usagePolicy, UsagePolicy::class);
 
         /**

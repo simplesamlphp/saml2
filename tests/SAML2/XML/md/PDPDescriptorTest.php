@@ -24,7 +24,7 @@ use function strval;
  * Tests for md:PDPDescriptor
  *
  * @covers \SimpleSAML\SAML2\XML\md\PDPDescriptor
- * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
  * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement

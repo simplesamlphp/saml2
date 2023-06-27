@@ -11,6 +11,8 @@ use SimpleSAML\SAML2\XML\md\Organization;
 use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
 use SimpleSAML\SAML2\XML\md\OrganizationName;
 use SimpleSAML\SAML2\XML\md\OrganizationURL;
+use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -88,6 +90,7 @@ final class OrganizationTest extends TestCase
                     new Chunk(self::$ext->documentElement),
                 ],
             ),
+            [new XMLAttribute(C::NAMESPACE, 'ssp', 'attr1', 'value1')],
         );
         $root = DOMDocumentFactory::fromString('<root/>');
         $root->formatOutput = true;

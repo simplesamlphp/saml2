@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -79,6 +80,7 @@ final class AffiliationDescriptorTest extends TestCase
                     'signing',
                 ),
             ],
+            namespacedAttribute: [new XMLAttribute(C::NAMESPACE, 'ssp', 'attr1', 'value1')],
         );
 
         $this->assertEquals(

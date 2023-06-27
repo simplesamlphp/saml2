@@ -81,12 +81,15 @@ final class Assertion extends AbstractSamlElement implements
         protected ?Conditions $conditions = null,
         protected array $statements = [],
     ) {
-        Assert::same($issueInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
+        $this->dataType = C::XMLENC_ELEMENT;
+
+        Assert::same($issueInstant->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::nullOrValidNCName($id); // Covers the empty string
         Assert::true(
             $subject || !empty($statements),
             "Either a <saml:Subject> or some statement must be present in a <saml:Assertion>",
         );
+        Assert::maxCount($statements, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($statements, AbstractStatementType::class);
         Assert::nullOrNotWhitespaceOnly($id);
     }

@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\Assertion\Transformer;
 
 use Exception;
 use Psr\Log\LoggerInterface;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assertion\Exception\NotDecryptedException;
 use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
@@ -15,6 +16,7 @@ use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProviderAware;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
+use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
 use SimpleSAML\SAML2\XML\saml\Subject;
 
 use function get_class;
@@ -92,11 +94,12 @@ final class NameIdDecryptionTransformer implements
                 'Could not decrypt the assertion NameId with the configured keys, see the debug log for information',
             );
         }
+        Assert::implementsInterface($decrypted, IdentifierInterface::class);
 
         return new Assertion(
             $assertion->getIssuer(),
-            $assertion->getId(),
             $assertion->getIssueInstant(),
+            $assertion->getId(),
             new Subject($decrypted, $subject->getSubjectConfirmation()),
             $assertion->getConditions(),
             $assertion->getStatements(),

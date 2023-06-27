@@ -39,7 +39,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
      * @param \DateTimeImmutable|null $validUntil Unix time of validity for this document. Defaults to null.
      * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to an empty array.
-     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $KeyDescriptor
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor
      *   An optional array of KeyDescriptors. Defaults to an empty array.
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttribute
      */
@@ -61,7 +61,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
             ProtocolViolationException::class,
         );
         Assert::notEmpty($affiliateMember, 'List of affiliated members must not be empty.');
+        Assert::maxCount($affiliateMember, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($affiliateMember, AffiliateMember::class);
+        Assert::maxCount($keyDescriptor, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($keyDescriptor, KeyDescriptor::class);
 
         parent::__construct($ID, $validUntil, $cacheDuration, $extensions);

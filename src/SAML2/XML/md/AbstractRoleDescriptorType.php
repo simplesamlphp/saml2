@@ -55,6 +55,7 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
         protected array $contact = [],
         array $namespacedAttributes = []
     ) {
+        Assert::maxCount($protocolSupportEnumeration, C::UNBOUNDED_LIMIT);
         Assert::minCount(
             $protocolSupportEnumeration,
             1,
@@ -62,11 +63,13 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
         );
         Assert::allValidURI($protocolSupportEnumeration, SchemaViolationException::class);
         Assert::nullOrValidURI($errorURL, SchemaViolationException::class); // Covers the empty string
+        Assert::maxCount($contact, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $contact,
             ContactPerson::class,
             'All contacts must be an instance of md:ContactPerson',
         );
+        Assert::maxCount($keyDescriptor, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $keyDescriptor,
             KeyDescriptor::class,

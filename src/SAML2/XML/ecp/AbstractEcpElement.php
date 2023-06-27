@@ -11,6 +11,8 @@ use SimpleSAML\XML\AbstractElement;
  * Abstract class to be implemented by all the classes in this namespace
  *
  * @package simplesamlphp/saml2
+ *
+ * @see http://docs.oasis-open.org/security/saml/Post2.0/saml-ecp/v2.0/saml-ecp-v2.0.html
  */
 abstract class AbstractEcpElement extends AbstractElement
 {

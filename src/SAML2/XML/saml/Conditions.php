@@ -43,7 +43,9 @@ final class Conditions extends AbstractSamlElement
     ) {
         Assert::nullOrSame($notBefore?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::nullOrSame($notOnOrAfter?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
+        Assert::maxCount($condition, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($condition, AbstractCondition::class);
+        Assert::maxCount($audienceRestriction, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($audienceRestriction, AudienceRestriction::class);
     }
 

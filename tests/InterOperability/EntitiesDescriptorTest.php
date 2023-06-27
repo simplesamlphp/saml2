@@ -30,6 +30,8 @@ final class EntitiesDescriptorTest extends TestCase
             EntitiesDescriptor::fromXML($metadata);
             $this->assertTrue($shouldPass);
         } catch (AssertionFailedException $e) {
+            fwrite(STDERR, $e->getFile() . '(' . strval($e->getLine()) . '):' . $e->getMessage());
+            fwrite(STDERR, $e->getTraceAsString());
             $this->assertFalse($shouldPass);
         }
     }

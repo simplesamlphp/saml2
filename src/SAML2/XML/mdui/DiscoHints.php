@@ -13,6 +13,7 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableElementTrait;
+use SimpleSAML\XML\SerializableElementInterface;
 
 use function array_filter;
 use function array_key_exists;
@@ -46,6 +47,9 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
         protected array $domainHint = [],
         protected array $geolocationHint = [],
     ) {
+        Assert::maxCount($ipHint, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($domainHint, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($geolocationHint, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($ipHint, IPHint::class);
         Assert::allIsInstanceOf($domainHint, DomainHint::class);
         Assert::allIsInstanceOf($geolocationHint, GeolocationHint::class);
