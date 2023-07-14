@@ -47,6 +47,10 @@ final class EntitiesDescriptorTest extends TestCase
                 true,
                 DOMDocumentFactory::fromFile('/tmp/metadata/edugain.xml')->documentElement,
             ],
+            'GRNET' => [
+                true,
+                DOMDocumentFactory::fromFile('/tmp/metadata/grnet.xml')->documentElement,
+            ],
         ];
     }
 }

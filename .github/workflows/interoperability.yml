@@ -66,7 +66,7 @@ jobs:
         run: |
           echo "{date}={$(date +'%Y-%m-%d')}" >> "$GITHUB_STATE"
 
-      - name: Cache eduGAIN metadata
+      - name: Cache metadata
         id: cache-metadata
         uses: actions/cache@v3
         with:
@@ -80,6 +80,13 @@ jobs:
             mkdir -p /tmp/metadata
             wget https://mds.edugain.org/edugain-v2.xml -O /tmp/metadata/edugain.xml
             wget https://technical.edugain.org/mds-v2.cer -O /tmp/metadataedugain-pub.crt
+
+
+      - name: Download GRNET metadata
+        if: steps.cache-metadata.outputs.cache-hit != 'true'
+        run: |
+            mkdir -p /tmp/metadata
+            wget https://md.aai.grnet.gr/aggregates/grnet-metadata.xml -O /tmp/metadata/grnet.xml
 
       - name: Run unit tests
         run: |
