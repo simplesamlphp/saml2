@@ -39,6 +39,7 @@ use function strval;
  *
  * @covers \SimpleSAML\SAML2\XML\mdattr\EntityAttributes
  * @covers \SimpleSAML\SAML2\XML\mdattr\AbstractMdattrElement
+ * @requires PHP >= 8.1
  * @package simplesamlphp/saml2
  */
 
