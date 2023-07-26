@@ -81,8 +81,6 @@ final class Assertion extends AbstractSamlElement implements
         protected ?Conditions $conditions = null,
         protected array $statements = [],
     ) {
-        $this->dataType = C::XMLENC_ELEMENT;
-
         Assert::same($issueInstant->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::nullOrValidNCName($id); // Covers the empty string
         Assert::true(
