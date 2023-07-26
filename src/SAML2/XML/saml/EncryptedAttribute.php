@@ -4,12 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\XML\EncryptedElementTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
-use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementInterface;
-use SimpleSAML\XMLSecurity\XML\EncryptedElementTrait;
 use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
 
 /**
@@ -20,21 +17,6 @@ use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
 class EncryptedAttribute extends AbstractSamlElement implements EncryptedElementInterface
 {
     use EncryptedElementTrait;
-
-
-    public function getBlacklistedAlgorithms(): ?array
-    {
-        $container = ContainerSingleton::getInstance();
-        return $container->getBlacklistedEncryptionAlgorithms();
-    }
-
-
-    public function getEncryptionBackend(): ?EncryptionBackend
-    {
-        // return the encryption backend you want to use,
-        // or null if you are fine with the default
-        return null;
-    }
 
 
     /**

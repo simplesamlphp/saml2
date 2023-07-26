@@ -44,8 +44,6 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
         protected array $attributeValue = [],
         array $namespacedAttribute = [],
     ) {
-        $this->dataType = C::XMLENC_ELEMENT;
-
         Assert::notWhitespaceOnly($name, 'Cannot specify an empty name for an Attribute.');
         Assert::nullOrValidURI($nameFormat); // Covers the empty string
         Assert::nullOrNotWhitespaceOnly($friendlyName, 'FriendlyName cannot be an empty string.');

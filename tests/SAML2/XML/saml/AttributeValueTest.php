@@ -150,9 +150,6 @@ XML
         $av = AttributeValue::fromXML($document->documentElement);
         $value = $av->getValue();
 
-        $this->assertCount(1, $value);
-        $value = $value[0];
-
         $this->assertInstanceOf(NameID::class, $value);
 
         $this->assertEquals('abcd-some-value-xyz', $value->getContent());
@@ -162,15 +159,15 @@ XML
 
 
     /**
-     * @TODO: Fix AttributeValue to deal with XML structures like NameID, BaseID, EncryptedID
-     *
      * Serialize an EncryptedID and unserialize that again.
      * @return void
-    public function testSerializeEncryptedID() : void
+     */
+    public function testSerializeEncryptedID(): void
     {
         $document = DOMDocumentFactory::fromString(
-            '<saml:AttributeValue xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"><saml:EncryptedID xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Id="_4ea05f00adb06c642e0cb52f063e2570-1" Type="http://www.w3.org/2001/04/xmlenc#Element"><xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes256-cbc"/><ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:RetrievalMethod Type="http://www.w3.org/2001/04/xmlenc#EncryptedKey" URI="#_dc9043a7cbec55c6fcc61f1cf64cf868-1"/></ds:KeyInfo><xenc:CipherData><xenc:CipherValue>vErnRkA0oSmtQGamjZGa9RFN25SUx1UVLsLAOtopt7pyywTD7wu9pyocfD4HqduXCsvaiZpJykz11utZdvtJ0sOdm9oE+lAtNTUnKzGSNoSopGCzwNu5pqwhIEvWEWeilmJayAC2elpRYOnUs/rePxibz0Wbqa7BItLt6ZkKTtMkv0U0PpgGenF1pWzsahRtw6Y5tFq7xFQkG/z0Lz5rJ+IxExYXgB3LN6FBmVcB1ioahk2ovOwbLQ+lNAdqUMhpZx6fgdL2v7g4OYPK0rDgSALU3gU3dvU4hC/Kk9N5Rkw=</xenc:CipherValue></xenc:CipherData></xenc:EncryptedData><xenc:EncryptedKey xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Id="_dc9043a7cbec55c6fcc61f1cf64cf868-1" Recipient="urn:nl-eid-gdi:1.0:DV:00000009900006840000:entities:9780"><xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"><ds:DigestMethod xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/></xenc:EncryptionMethod><ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:KeyName>_b420654655d491b49555c698f80efb7bda3ac6ef</ds:KeyName></ds:KeyInfo><xenc:CipherData><xenc:CipherValue>d5X+psMTEy9DWDoVotB5sPHdNpofv5BdPUleflhGfjbjGIfWbV9fK+jMkQ4cqwSWwmTGSQ8OO+lYA9IwZasnWygAu3dSSlYd+sd/m2waz83MrTBsTtZUzwy8N18tNMu4xB/tb45XPvis9agg6b2RdpDSS1m5BKK+MMKgX2ZYIqOW6cbXxl73YJHHHpcTi1TsI+tx6DLNWB2ku5wpS3cFB3c0Tws9qG+YBwTzfp1gFhzvBQDNxLWVjPKEWEw5Do1dp8f7jOPWq0sscz6DaTJH3RStwOSLF2vsayGZUgqNXyPHX12dFNGHiTXEWVYcuXsqG8sXJQyUmE5kYqN/D8NT1BIq50L6xIKkQGxNSlyAAkvkV87b1z6X2Fvk6Hvmx+eqauJX/BKknqgNZL/I5xfysDcNG5i0vA/kOVai4LvmdEoUSq1dIWcGsiW5pbM13R+DddkUegGcZctmFLcafBM2A3WztGclLWSJea+hh24YurcRGQVoOaZcYRmGVA0cYRQjfcSb3mvGxl01I9f27Hzv6/pXMWmEetpNhO4Pxy4GIwatJ7clW+s679f6N4+qepzbnxqjMLOmRPilJ0t9+wHYQ9wc2+NN4lssLNNz852rb5Rs9HDTvOyvtV7ew4HdMqGjXeJt545pQzSonuzCVVs67Nuhi/rmOktsav8tP0N8izE=</xenc:CipherValue></xenc:CipherData><xenc:ReferenceList><xenc:DataReference URI="#_4ea05f00adb06c642e0cb52f063e2570-1"/></xenc:ReferenceList></xenc:EncryptedKey></saml:EncryptedID></saml:AttributeValue>'
+            '<saml:AttributeValue xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"><saml:EncryptedID><xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Id="_4ea05f00adb06c642e0cb52f063e2570-1" Type="http://www.w3.org/2001/04/xmlenc#Element"><xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes256-cbc"/><ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:RetrievalMethod URI="#_dc9043a7cbec55c6fcc61f1cf64cf868-1" Type="http://www.w3.org/2001/04/xmlenc#EncryptedKey"/></ds:KeyInfo><xenc:CipherData><xenc:CipherValue>vErnRkA0oSmtQGamjZGa9RFN25SUx1UVLsLAOtopt7pyywTD7wu9pyocfD4HqduXCsvaiZpJykz11utZdvtJ0sOdm9oE+lAtNTUnKzGSNoSopGCzwNu5pqwhIEvWEWeilmJayAC2elpRYOnUs/rePxibz0Wbqa7BItLt6ZkKTtMkv0U0PpgGenF1pWzsahRtw6Y5tFq7xFQkG/z0Lz5rJ+IxExYXgB3LN6FBmVcB1ioahk2ovOwbLQ+lNAdqUMhpZx6fgdL2v7g4OYPK0rDgSALU3gU3dvU4hC/Kk9N5Rkw=</xenc:CipherValue></xenc:CipherData></xenc:EncryptedData><xenc:EncryptedKey xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Id="_dc9043a7cbec55c6fcc61f1cf64cf868-1" Recipient="urn:nl-eid-gdi:1.0:DV:00000009900006840000:entities:9780"><xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"><ds:DigestMethod xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/></xenc:EncryptionMethod><ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:KeyName>_b420654655d491b49555c698f80efb7bda3ac6ef</ds:KeyName></ds:KeyInfo><xenc:CipherData><xenc:CipherValue>d5X+psMTEy9DWDoVotB5sPHdNpofv5BdPUleflhGfjbjGIfWbV9fK+jMkQ4cqwSWwmTGSQ8OO+lYA9IwZasnWygAu3dSSlYd+sd/m2waz83MrTBsTtZUzwy8N18tNMu4xB/tb45XPvis9agg6b2RdpDSS1m5BKK+MMKgX2ZYIqOW6cbXxl73YJHHHpcTi1TsI+tx6DLNWB2ku5wpS3cFB3c0Tws9qG+YBwTzfp1gFhzvBQDNxLWVjPKEWEw5Do1dp8f7jOPWq0sscz6DaTJH3RStwOSLF2vsayGZUgqNXyPHX12dFNGHiTXEWVYcuXsqG8sXJQyUmE5kYqN/D8NT1BIq50L6xIKkQGxNSlyAAkvkV87b1z6X2Fvk6Hvmx+eqauJX/BKknqgNZL/I5xfysDcNG5i0vA/kOVai4LvmdEoUSq1dIWcGsiW5pbM13R+DddkUegGcZctmFLcafBM2A3WztGclLWSJea+hh24YurcRGQVoOaZcYRmGVA0cYRQjfcSb3mvGxl01I9f27Hzv6/pXMWmEetpNhO4Pxy4GIwatJ7clW+s679f6N4+qepzbnxqjMLOmRPilJ0t9+wHYQ9wc2+NN4lssLNNz852rb5Rs9HDTvOyvtV7ew4HdMqGjXeJt545pQzSonuzCVVs67Nuhi/rmOktsav8tP0N8izE=</xenc:CipherValue></xenc:CipherData><xenc:ReferenceList><xenc:DataReference URI="#_4ea05f00adb06c642e0cb52f063e2570-1"/></xenc:ReferenceList></xenc:EncryptedKey></saml:EncryptedID></saml:AttributeValue>'
         );
+        $document->formatOutput = true;
 
         $attributeValue = AttributeValue::fromXML($document->documentElement);
 
@@ -179,5 +176,4 @@ XML
             strval($attributeValue),
         );
     }
-     */
 }

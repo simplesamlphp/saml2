@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
@@ -18,6 +17,7 @@ use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\UnknownID;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -110,14 +110,14 @@ final class EncryptedIDTest extends TestCase
                 new CipherValue('he5ZBjtfp/1/Y3PgE/CWspDPADig9vuZ7yZyYXDQ1wA/HBTPCldtL/p6UT5RCAFYUwN6kp3jnHkhK1yMjrI1SMw0n5NEc2wO9N5inQIeQOZ8XD9yD9M5fHvWz2ByNMGlB35RWMnBRHzDi1PRV7Irwcs9WoiODh3i6j2vYXP7cAo='),
             ),
             id: 'Encrypted_KEY_ID',
-            recipient: 'some_ENTITY_ID',
+            recipient: C::ENTITY_SP,
             carriedKeyName: new CarriedKeyName('Name of the key'),
             encryptionMethod: new EncryptionMethod('http://www.w3.org/2009/xmlenc11#rsa-oaep'),
             referenceList: new ReferenceList(
                 [new DataReference('#Encrypted_DATA_ID')],
             ),
         );
-        $eid = new EncryptedID($ed);
+        $eid = new EncryptedID($ed, [$ek]);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -149,14 +149,14 @@ final class EncryptedIDTest extends TestCase
                 new CipherValue('GMhpk09X+quNC/SsnxcDglZU/DCLAu9bMJ5bPcgaBK4s3F1eXciU8hlOYNaskSwP86HmA704NbzSDOHAgN6ckR+iCssxA7XCBjz0hltsgfn5p9Rh8qKtKltiXvxo/xXTcSXXZXNcE0R2KTya0P4DjZvYYgbIls/AH8ZyDV07ntI='),
             ),
             id: 'Encrypted_KEY_ID',
-            recipient: 'some_ENTITY_ID',
+            recipient: C::ENTITY_SP,
             carriedKeyName: new CarriedKeyName('Name of the key'),
             encryptionMethod: new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5'),
             referenceList: new ReferenceList(
                 [new DataReference('#Encrypted_DATA_ID')],
             ),
         );
-        $eid = new EncryptedID($ed);
+        $eid = new EncryptedID($ed, [$ek]);
         $eidElement = $eid->toXML();
 
         // Test for an EncryptedID
@@ -164,14 +164,11 @@ final class EncryptedIDTest extends TestCase
         $eidElements = XPath::xpQuery($eidElement, './xenc:EncryptedData', $xpCache);
         $this->assertCount(1, $eidElements);
 
-        // Note: this cannot be tested as long as we don't include EncryptedKey in the structure
-        // (see simplesamlphp/xml-security issue #30)
-        //
         // Test ordering of EncryptedID contents
         /** @psalm-var \DOMElement[] $eidElements */
-        //$eidElements = XPath::xpQuery($eidElement, './xenc:EncryptedData/following-sibling::*', $xpCache);
-        //$this->assertCount(1, $eidElements);
-        //$this->assertEquals('xenc:EncryptedKey', $eidElements[0]->tagName);
+        $eidElements = XPath::xpQuery($eidElement, './xenc:EncryptedData/following-sibling::*', $xpCache);
+        $this->assertCount(1, $eidElements);
+        $this->assertEquals('xenc:EncryptedKey', $eidElements[0]->tagName);
     }
 
 

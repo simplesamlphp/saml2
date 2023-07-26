@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DOMElement;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\XML\AbstractElement;
+use SimpleSAML\SAML2\XML\EncryptedElementTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
-use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
-use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementInterface;
-use SimpleSAML\XMLSecurity\XML\EncryptedElementTrait;
 
 /**
  * Class handling encrypted assertions.
@@ -25,21 +22,6 @@ final class EncryptedAssertion extends AbstractSamlElement implements EncryptedE
 
     /** @var bool */
     protected bool $wasSignedAtConstruction = false;
-
-
-    public function getBlacklistedAlgorithms(): ?array
-    {
-        $container = ContainerSingleton::getInstance();
-        return $container->getBlacklistedEncryptionAlgorithms();
-    }
-
-
-    public function getEncryptionBackend(): ?EncryptionBackend
-    {
-        // return the encryption backend you want to use,
-        // or null if you are fine with the default
-        return null;
-    }
 
 
     /**

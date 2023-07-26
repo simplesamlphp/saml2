@@ -28,13 +28,13 @@
       </saml:AuthnStatement>
       <saml:AttributeStatement>
         <saml:Attribute Name="urn:test:ServiceID">
-          <saml:AttributeValue>1</saml:AttributeValue>
+          <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:integer">1</saml:AttributeValue>
         </saml:Attribute>
         <saml:Attribute Name="urn:test:EntityConcernedID">
-          <saml:AttributeValue>1</saml:AttributeValue>
+          <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:integer">1</saml:AttributeValue>
         </saml:Attribute>
         <saml:Attribute Name="urn:test:EntityConcernedSubID">
-          <saml:AttributeValue>1</saml:AttributeValue>
+          <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:integer">1</saml:AttributeValue>
         </saml:Attribute>
       </saml:AttributeStatement>
     </saml:Assertion>

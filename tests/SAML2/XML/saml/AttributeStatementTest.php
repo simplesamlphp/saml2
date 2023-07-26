@@ -55,15 +55,15 @@ final class AttributeStatementTest extends TestCase
             [
                 new Attribute(
                     name: 'urn:ServiceID',
-                    attributeValue: [new AttributeValue('1')],
+                    attributeValue: [new AttributeValue(1)],
                 ),
                 new Attribute(
                     name: 'urn:EntityConcernedID',
-                    attributeValue: [new AttributeValue('1')],
+                    attributeValue: [new AttributeValue(1)],
                 ),
                 new Attribute(
                     name: 'urn:EntityConcernedSubID',
-                    attributeValue: [new AttributeValue('1')],
+                    attributeValue: [new AttributeValue(1)],
                 ),
             ]
         );
