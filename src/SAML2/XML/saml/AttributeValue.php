@@ -163,12 +163,6 @@ class AttributeValue extends AbstractSamlElement
                 $e->textContent = '';
                 break;
             case "object":
-                $value = $this->getValue();
-                if ($value instanceof Chunk) {
-                    // The object is unknown to this library - add an xsi:type for it
-                    $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C::NS_XSI);
-                    $e->setAttributeNS(C::NS_XSI, 'xsi:type', $value->getQualifiedName());
-                }
                 $this->getValue()->toXML($e);
                 break;
             default: // string
