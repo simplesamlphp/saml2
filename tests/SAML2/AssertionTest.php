@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Assertion;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
@@ -35,7 +36,9 @@ class AssertionTest extends TestCase
         // Create an assertion
         $assertion = new Assertion();
         $assertion->setIssuer($issuer);
-        $assertion->setValidAudiences(['audience1', 'audience2']);
+        $assertion->setValidAudiences(
+            [new Audience('audience1'), new Audience('audience2')]
+        );
         $assertion->setAuthnContextClassRef('someAuthnContext');
 
         // Marshall it to a \DOMElement
@@ -105,8 +108,8 @@ XML;
         // Test for valid audiences
         $assertionValidAudiences = $assertion->getValidAudiences();
         $this->assertCount(2, $assertionValidAudiences);
-        $this->assertEquals('audience1', $assertionValidAudiences[0]);
-        $this->assertEquals('audience2', $assertionValidAudiences[1]);
+        $this->assertEquals('audience1', $assertionValidAudiences[0]->getContent());
+        $this->assertEquals('audience2', $assertionValidAudiences[1]->getContent());
 
         // Test for Authenticating Authorities
         $assertionAuthenticatingAuthorities = $assertion->getAuthenticatingAuthority();
@@ -129,7 +132,9 @@ XML;
         $assertion = new Assertion();
 
         $assertion->setIssuer($issuer);
-        $assertion->setValidAudiences(['audience1', 'audience2']);
+        $assertion->setValidAudiences(
+            [new Audience('audience1'), new Audience('audience2')]
+        );
 
         $this->assertNull($assertion->getAuthnContextClassRef());
 
@@ -199,7 +204,9 @@ XML;
         $assertion = new Assertion();
 
         $assertion->setIssuer($issuer);
-        $assertion->setValidAudiences(['audience1', 'audience2']);
+        $assertion->setValidAudiences(
+            [new Audience('audience1'), new Audience('audience2')]
+        );
 
         $assertion->setAuthnContextClassRef('someAuthnContext');
 
@@ -269,7 +276,9 @@ XML;
         $assertion = new Assertion();
 
         $assertion->setIssuer($issuer);
-        $assertion->setValidAudiences(['audience1', 'audience2']);
+        $assertion->setValidAudiences(
+            [new Audience('audience1'), new Audience('audience2')]
+        );
 
         $assertion->setAuthnContextClassRef('someAuthnContext');
 
@@ -1550,7 +1559,7 @@ XML;
 
         $audienceRestrictions = $assertion->getValidAudiences();
         $this->assertCount(1, $audienceRestrictions);
-        $this->assertEquals('audience1', $audienceRestrictions[0]);
+        $this->assertEquals('audience1', $audienceRestrictions[0]->getContent());
     }
 
 
@@ -1912,7 +1921,9 @@ XML;
         // Create an assertion
         $assertion = new Assertion();
         $assertion->setIssuer($issuer);
-        $assertion->setValidAudiences(['audience1', 'audience2']);
+        $assertion->setValidAudiences(
+            [new Audience('audience1'), new Audience('audience2')]
+        );
         $assertion->setAuthnContextClassRef('someAuthnContext');
 
         $nameId = new NameID();

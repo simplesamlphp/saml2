@@ -12,6 +12,7 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
@@ -115,7 +116,7 @@ class AuthnRequest extends Request
     /**
      * Audiences to send in the request.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\saml\Audience[]
      */
     private array $audiences = [];
 
@@ -294,9 +295,8 @@ class AuthnRequest extends Request
         $xpCache = XPath::getXPath($ar);
         /** @var \DOMElement[] $audiences */
         $audiences = XPath::xpQuery($ar, './saml_assertion:Audience', $xpCache);
-        $this->audiences = [];
         foreach ($audiences as $a) {
-            $this->audiences[] = trim($a->textContent);
+            $this->audiences[] = Audience::fromXML($a);
         }
     }
 
@@ -397,7 +397,7 @@ class AuthnRequest extends Request
      * Retrieve the audiences from the request.
      * This may be an empty string, in which case no audience is included.
      *
-     * @return array The audiences.
+     * @return \SimpleSAML\SAML2\XML\saml\Audience[] The audiences.
      */
     public function getAudiences(): array
     {
@@ -409,7 +409,7 @@ class AuthnRequest extends Request
      * Set the audiences to send in the request.
      * This may be an empty string, in which case no audience will be sent.
      *
-     * @param array $audiences The audiences.
+     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audiences The audiences.
      * @return void
      */
     public function setAudiences(array $audiences): void
@@ -776,7 +776,9 @@ class AuthnRequest extends Request
             $ar = $document->createElementNS(Constants::NS_SAML, 'saml:AudienceRestriction');
             $conditions->appendChild($ar);
 
-            XMLUtils::addStrings($ar, Constants::NS_SAML, 'saml:Audience', false, $this->getAudiences());
+            foreach ($this->audiences as $audience) {
+                $audience->toXML($ar);
+            }
         }
     }
 }

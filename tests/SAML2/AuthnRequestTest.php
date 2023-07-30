@@ -10,6 +10,7 @@ use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\AuthnRequest;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
@@ -925,7 +926,9 @@ AUTHNREQUEST;
         $request = new AuthnRequest();
         $request->setIssuer($issuer);
         $request->setDestination('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO');
-        $request->setAudiences(array('https://sp1.example.org', 'https://sp2.example.org'));
+        $request->setAudiences(
+            [new Audience('https://sp1.example.org'), new Audience('https://sp2.example.org')]
+        );
 
         $requestStructure = $request->toUnsignedXML();
 
@@ -979,6 +982,8 @@ AUTHNREQUEST;
 
         $authnRequest = new AuthnRequest(DOMDocumentFactory::fromString($xmlRequest)->firstChild);
 
-        $this->assertEquals($expectedAudiences, $authnRequest->getAudiences());
+        $audiences = $authnRequest->getAudiences();
+        $this->assertEquals($expectedAudiences[0], $audiences[0]->getContent());
+        $this->assertEquals($expectedAudiences[1], $audiences[1]->getContent());
     }
 }

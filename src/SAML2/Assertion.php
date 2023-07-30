@@ -16,6 +16,7 @@ use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\RuntimeException;
 use SimpleSAML\SAML2\Utilities\Temporal;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
@@ -124,7 +125,7 @@ class Assertion extends SignedElement
      *
      * If no restrictions on the audience are present, this variable contains null.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\saml\Audience[]
      */
     private array $validAudiences = [];
 
@@ -407,15 +408,16 @@ class Assertion extends SignedElement
             switch ($node->localName) {
                 case 'AudienceRestriction':
                     $audiences = XMLUtils::extractStrings($node, Constants::NS_SAML, 'Audience');
-                    if (empty($this->validAudiences)) {
-                        /* The first (and probably last) AudienceRestriction element. */
-                        $this->validAudiences = $audiences;
-                    } else {
+                    if (!empty($this->validAudiences)) {
                         /*
                          * The set of AudienceRestriction are ANDed together, so we need
                          * the subset that are present in all of them.
                          */
-                        $this->validAudiences = array_intersect($this->validAudiences, $audiences);
+                        $audiences = array_intersect($this->validAudiences, $audiences);
+                    }
+
+                    foreach ($audiences as $audience) {
+                        $this->validAudiences[] = new Audience($audience);
                     }
                     break;
                 case 'OneTimeUse':
@@ -1032,7 +1034,7 @@ class Assertion extends SignedElement
      *
      * This may be an empty array, in which case all audiences are allowed.
      *
-     * @return array The allowed audiences.
+     * @return \SimpleSAML\SAML2\XML\saml\Audience[] The allowed audiences.
      */
     public function getValidAudiences(): array
     {
@@ -1045,7 +1047,7 @@ class Assertion extends SignedElement
      *
      * This may be an empty array, in which case all audiences are allowed.
      *
-     * @param array $validAudiences The allowed audiences.
+     * @param \SimpleSAML\SAML2\XML\saml\Audience[] $validAudiences The allowed audiences.
      * @return void
      */
     public function setValidAudiences(array $validAudiences = []): void
@@ -1595,7 +1597,9 @@ class Assertion extends SignedElement
             $ar = $document->createElementNS(Constants::NS_SAML, 'saml:AudienceRestriction');
             $conditions->appendChild($ar);
 
-            XMLUtils::addStrings($ar, Constants::NS_SAML, 'saml:Audience', false, $this->validAudiences);
+            foreach ($this->validAudiences as $audience) {
+                $audience->toXML($ar);
+            }
         }
     }
 
