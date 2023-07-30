@@ -8,10 +8,15 @@ use DOMDocument;
 use DOMNodeList;
 use Exception;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Assertion;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Audience;
+use SimpleSAML\SAML2\XML\saml\AuthnContext;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\XML\saml\AuthnContextDecl;
+use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
@@ -39,7 +44,9 @@ class AssertionTest extends TestCase
         $assertion->setValidAudiences(
             [new Audience('audience1'), new Audience('audience2')]
         );
-        $assertion->setAuthnContextClassRef('someAuthnContext');
+        $assertion->setAuthnContext(
+            new AuthnContext(new AuthnContextClassRef('someAuthnContext'), null, null, []),
+        );
 
         // Marshall it to a \DOMElement
         $assertionElement = $assertion->toXML();
@@ -112,7 +119,7 @@ XML;
         $this->assertEquals('audience2', $assertionValidAudiences[1]->getContent());
 
         // Test for Authenticating Authorities
-        $assertionAuthenticatingAuthorities = $assertion->getAuthenticatingAuthority();
+        $assertionAuthenticatingAuthorities = $assertion->getAuthnContext()?->getAuthenticatingAuthorities();
         $this->assertCount(2, $assertionAuthenticatingAuthorities);
         $this->assertEquals('someIdP1', $assertionAuthenticatingAuthorities[0]->getContent());
         $this->assertEquals('someIdP2', $assertionAuthenticatingAuthorities[1]->getContent());
@@ -136,10 +143,7 @@ XML;
             [new Audience('audience1'), new Audience('audience2')]
         );
 
-        $this->assertNull($assertion->getAuthnContextClassRef());
-
-        $assertion->setAuthnContextClassRef('someAuthnContext');
-        $assertion->setAuthnContextDeclRef('/relative/path/to/document.xml');
+        $this->assertNull($assertion->getAuthnContext()?->getAuthnContextClassRef());
 
         $assertion->setID("_123abc");
 
@@ -151,8 +155,13 @@ XML;
 
         $assertion->setSessionIndex("idx1");
 
-        $assertion->setAuthenticatingAuthority(
-            [new AuthenticatingAuthority("idp1"), new AuthenticatingAuthority("idp2")]
+        $assertion->setAuthnContext(
+            new AuthnContext(
+                new AuthnContextClassRef('someAuthnContext'),
+                null,
+                new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml'),
+                [new AuthenticatingAuthority("idp1"), new AuthenticatingAuthority("idp2")],
+            ),
         );
 
         $assertion->setAttributes([
@@ -166,7 +175,10 @@ XML;
 
         $assertionToVerify = new Assertion(DOMDocumentFactory::fromString($assertionElement)->firstChild);
 
-        $this->assertEquals('/relative/path/to/document.xml', $assertionToVerify->getAuthnContextDeclRef());
+        $this->assertEquals(
+            'https://example.org/relative/path/to/document.xml',
+            $assertionToVerify->getAuthnContext()?->getAuthnContextDeclRef()->getContent(),
+        );
         $this->assertEquals('_123abc', $assertionToVerify->getId());
         $this->assertEquals(1234567890, $assertionToVerify->getIssueInstant());
         $this->assertEquals(1234567889, $assertionToVerify->getAuthnInstant());
@@ -176,7 +188,7 @@ XML;
 
         $this->assertEquals('idx1', $assertionToVerify->getSessionIndex());
 
-        $authauth = $assertionToVerify->getAuthenticatingAuthority();
+        $authauth = $assertionToVerify->getAuthnContext()?->getAuthenticatingAuthorities();
         $this->assertCount(2, $authauth);
         $this->assertEquals("idp2", $authauth[1]->getContent());
 
@@ -208,10 +220,13 @@ XML;
             [new Audience('audience1'), new Audience('audience2')]
         );
 
-        $assertion->setAuthnContextClassRef('someAuthnContext');
-
-        $assertion->setAuthenticatingAuthority(
-            [new AuthenticatingAuthority("idp1"), new AuthenticatingAuthority("idp2")]
+        $assertion->setAuthnContext(
+            new AuthnContext(
+                new AuthnContextClassRef('someAuthnContext'),
+                null,
+                null,
+                [new AuthenticatingAuthority("idp1"), new AuthenticatingAuthority("idp2")],
+            ),
         );
 
         $assertion->setAttributes([
@@ -232,7 +247,7 @@ XML;
 
         $assertionToVerify = new Assertion(DOMDocumentFactory::fromString($assertionElement)->firstChild);
 
-        $authauth = $assertionToVerify->getAuthenticatingAuthority();
+        $authauth = $assertionToVerify->getAuthnContext()?->getAuthenticatingAuthorities();
         $this->assertCount(2, $authauth);
         $this->assertEquals("idp2", $authauth[1]->getContent());
 
@@ -280,10 +295,13 @@ XML;
             [new Audience('audience1'), new Audience('audience2')]
         );
 
-        $assertion->setAuthnContextClassRef('someAuthnContext');
-
-        $assertion->setAuthenticatingAuthority(
-            [new AuthenticatingAuthority("idp1"), new AuthenticatingAuthority("idp2")]
+        $assertion->setAuthnContext(
+            new AuthnContext(
+                new AuthnContextClassRef('someAuthnContext'),
+                null,
+                null,
+                [new AuthenticatingAuthority("idp1"), new AuthenticatingAuthority("idp2")],
+            ),
         );
 
         $assertion->setAttributes([
@@ -333,13 +351,12 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
 
         $assertion = new Assertion($document->documentElement);
-        $authnContextDecl = $assertion->getAuthnContextDecl();
+        $authnContextDecl = $assertion->getAuthnContext()->getAuthnContextDecl();
         $this->assertNotEmpty($authnContextDecl);
-        $this->assertEquals('AuthnContextDecl', $authnContextDecl->getLocalName());
-        $childLocalName = $authnContextDecl->getXML()->childNodes->item(1)->localName;
+        $childLocalName = $authnContextDecl->getElements()[0]->getLocalName();
         $this->assertEquals('AuthenticationContextDeclaration', $childLocalName);
 
-        $this->assertEquals('someAuthnContext', $assertion->getAuthnContextClassRef());
+        $this->assertEquals('someAuthnContext', $assertion->getAuthnContext()?->getAuthnContextClassRef()->getContent());
     }
 
 
@@ -360,7 +377,7 @@ XML;
   <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
     <saml:AuthnContext>
       <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
-      <saml:AuthnContextDeclRef>/relative/path/to/document.xml</saml:AuthnContextDeclRef>
+      <saml:AuthnContextDeclRef>https://example.org/relative/path/to/document.xml</saml:AuthnContextDeclRef>
     </saml:AuthnContext>
   </saml:AuthnStatement>
 </saml:Assertion>
@@ -369,8 +386,14 @@ XML;
         $document = DOMDocumentFactory::fromString($xml);
 
         $assertion = new Assertion($document->documentElement);
-        $this->assertEquals('/relative/path/to/document.xml', $assertion->getAuthnContextDeclRef());
-        $this->assertEquals('someAuthnContext', $assertion->getAuthnContextClassRef());
+        $this->assertEquals(
+            'https://example.org/relative/path/to/document.xml',
+            $assertion->getAuthnContext()?->getAuthnContextDeclRef()->getContent(),
+        );
+        $this->assertEquals(
+            'someAuthnContext',
+            $assertion->getAuthnContext()?->getAuthnContextClassRef()->getContent(),
+        );
     }
 
 
@@ -380,14 +403,23 @@ XML;
     public function testSetAuthnContextDecl(): void
     {
         $xml = <<<XML
-<samlac:AuthenticationContextDeclaration xmlns:samlac="urn:oasis:names:tc:SAML:2.0:ac">
-</samlac:AuthenticationContextDeclaration>
+<saml:AuthnContextDecl xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+  <samlac:AuthenticationContextDeclaration xmlns:samlac="urn:oasis:names:tc:SAML:2.0:ac">
+  </samlac:AuthenticationContextDeclaration>
+</saml:AuthnContextDecl>
 XML;
 
         $document  = DOMDocumentFactory::fromString($xml);
         $assertion = new Assertion();
 
-        $assertion->setAuthnContextDecl(new Chunk($document->documentElement));
+        $assertion->setAuthnContext(
+            new AuthnContext(
+                null,
+                AuthnContextDecl::fromXML($document->documentElement),
+                null,
+                []
+            ),
+        );
         $issuer = new Issuer();
         $issuer->setValue('example:issuer');
         $assertion->setIssuer($issuer);
@@ -397,7 +429,7 @@ XML;
         $xpCache = XPath::getXPath($assertionElement);
         $acElements = XPath::xpQuery(
             $assertionElement,
-            './saml_assertion:AuthnStatement/saml_assertion:AuthnContext',
+            './saml_assertion:AuthnStatement/saml_assertion:AuthnContext/saml_assertion:AuthnContextDecl',
             $xpCache,
         );
         $this->assertCount(1, $acElements);
@@ -450,8 +482,10 @@ XML;
     public function testAuthnContextDeclAndRefConstraint(): void
     {
         $xml = <<<XML
-<samlac:AuthenticationContextDeclaration xmlns:samlac="urn:oasis:names:tc:SAML:2.0:ac">
-</samlac:AuthenticationContextDeclaration>
+<saml:AuthnContextDecl xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+  <samlac:AuthenticationContextDeclaration xmlns:samlac="urn:oasis:names:tc:SAML:2.0:ac">
+  </samlac:AuthenticationContextDeclaration>
+</saml:AuthnContextDecl>
 XML;
 
         $document  = DOMDocumentFactory::fromString($xml);
@@ -459,20 +493,15 @@ XML;
 
         $e = null;
         try {
-            $assertion->setAuthnContextDecl(new Chunk($document->documentElement));
-            $assertion->setAuthnContextDeclRef('/relative/path/to/document.xml');
-        } catch (Exception $e) {
-        }
-        $this->assertNotEmpty($e);
-
-        // Try again in reverse order for good measure.
-        $assertion = new Assertion();
-
-        $e = null;
-        try {
-            $assertion->setAuthnContextDeclRef('/relative/path/to/document.xml');
-            $assertion->setAuthnContextDecl(new Chunk($document->documentElement));
-        } catch (Exception $e) {
+            $assertion->setAuthnContext(
+                new AuthnContext(
+                    null,
+                    AuthnContextDecl::fromXML($document->documentElement),
+                    new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml'),
+                    [],
+                ),
+            );
+        } catch (AssertionFailedException $e) {
         }
         $this->assertNotEmpty($e);
 
@@ -501,12 +530,10 @@ XML;
 
         $e = null;
         try {
-            new Assertion($document->documentElement);
-        } catch (Exception $e) {
+            $assertion = new Assertion($document->documentElement);
+        } catch (AssertionFailedException $e) {
         }
         $this->assertNotEmpty($e);
-
-        $this->assertEquals('/relative/path/to/document.xml', $assertion->getAuthnContextDeclRef());
     }
 
 
@@ -578,7 +605,7 @@ XML
      */
     public function testNoAuthnContextDeclRefFallback(): void
     {
-        $authnContextDeclRef = 'relative/url/to/authcontext.xml';
+        $authnContextDeclRef = 'https://example.org/relative/path/to/document.xml';
 
         // Unmarshall an assertion
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -598,8 +625,11 @@ XML
 XML
         );
         $assertion = new Assertion($document->firstChild);
-        $this->assertEmpty($assertion->getAuthnContextClassRef());
-        $this->assertEquals($authnContextDeclRef, $assertion->getAuthnContextDeclRef());
+        $this->assertNull($assertion->getAuthnContext()->getAuthnContextClassRef());
+        $this->assertEquals(
+            $authnContextDeclRef,
+            $assertion->getAuthnContext()?->getAuthnContextDeclRef()->getContent(),
+        );
     }
 
 
@@ -1685,7 +1715,10 @@ XML;
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
 
-        $this->expectException(Exception::class, "More than one <saml:AuthnContext> in <saml:AuthnStatement>");
+        $this->expectException(
+            AssertionFailedException::class,
+            "More than one <saml:AuthnContext> in <saml:AuthnStatement>",
+        );
         $assertion = new Assertion($document->firstChild);
     }
 
@@ -1885,7 +1918,7 @@ XML;
   <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
     <saml:AuthnContext>
       <saml:AuthnContextClassRef>someAuthnContext</saml:AuthnContextClassRef>
-      <saml:AuthnContextDeclRef>/relative/path/to/document.xml</saml:AuthnContextDeclRef>
+      <saml:AuthnContextDeclRef>https://example.org/relative/path/to/document.xml</saml:AuthnContextDeclRef>
     </saml:AuthnContext>
   </saml:AuthnStatement>
 </saml:Assertion>
@@ -1924,7 +1957,9 @@ XML;
         $assertion->setValidAudiences(
             [new Audience('audience1'), new Audience('audience2')]
         );
-        $assertion->setAuthnContextClassRef('someAuthnContext');
+        $assertion->setAuthnContext(
+            new AuthnContext(new AuthnContextClassRef('someAuthnContext'), null, null, [])
+        );
 
         $nameId = new NameID();
         $nameId->setValue("just_a_basic_identifier");
@@ -2010,7 +2045,9 @@ XML;
         $nameId->setValue("just_a_basic_identifier");
         $nameId->setFormat("urn:oasis:names:tc:SAML:2.0:nameid-format:transient");
         $assertion->setNameId($nameId);
-        $assertion->setAuthnContextClassRef('someAuthnContext');
+        $assertion->setAuthnContext(
+            new AuthnContext(new AuthnContextClassRef('someAuthnContext'), null, null, [])
+        );
 
         // Marshall it to a \DOMElement
         $assertionElement = $assertion->toXML();

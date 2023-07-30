@@ -70,6 +70,7 @@
         <exclude-pattern>tests/SAML2/XML/mdattr/EntityAttributesTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/mdui/LogoTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/saml/AttributeValueTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/saml/AuthnContextTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/saml/IssuerXMLShowAllTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/saml/NameIDTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/samlp/StatusDetailTest.php</exclude-pattern>

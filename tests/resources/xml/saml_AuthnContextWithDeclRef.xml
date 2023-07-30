@@ -1,0 +1,4 @@
+<saml:AuthnContext xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+  <saml:AuthnContextDeclRef>https://example.org/relative/path/to/document.xml</saml:AuthnContextDeclRef>
+  <saml:AuthenticatingAuthority>https://idp.example.com/SAML2</saml:AuthenticatingAuthority>
+</saml:AuthnContext>
