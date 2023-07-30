@@ -16,6 +16,7 @@ use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\RuntimeException;
 use SimpleSAML\SAML2\Utilities\Temporal;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
@@ -179,7 +180,7 @@ class Assertion extends SignedElement
     /**
      * The list of AuthenticatingAuthorities for this assertion.
      *
-     * @var array
+     * @var \SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority[]
      */
     private array $AuthenticatingAuthority = [];
 
@@ -532,11 +533,7 @@ class Assertion extends SignedElement
             );
         }
 
-        $this->AuthenticatingAuthority = XMLUtils::extractStrings(
-            $authnContextEl,
-            Constants::NS_SAML,
-            'AuthenticatingAuthority'
-        );
+        $this->AuthenticatingAuthority = AuthenticatingAuthority::getChildrenOfClass($authnContextEl);
     }
 
 
@@ -1255,7 +1252,7 @@ class Assertion extends SignedElement
     /**
      * Retrieve the AuthenticatingAuthority.
      *
-     * @return array
+     * @return \SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority[]
      */
     public function getAuthenticatingAuthority(): array
     {
@@ -1266,7 +1263,7 @@ class Assertion extends SignedElement
     /**
      * Set the AuthenticatingAuthority
      *
-     * @param array $authenticatingAuthority
+     * @param \SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority[] $authenticatingAuthority
      * @return void
      */
     public function setAuthenticatingAuthority(array $authenticatingAuthority): void
@@ -1664,13 +1661,9 @@ class Assertion extends SignedElement
             );
         }
 
-        XMLUtils::addStrings(
-            $authnContextEl,
-            Constants::NS_SAML,
-            'saml:AuthenticatingAuthority',
-            false,
-            $this->AuthenticatingAuthority
-        );
+        foreach ($this->AuthenticatingAuthority as $authority) {
+            $authority->toXML($authnContextEl);
+        }
     }
 
 

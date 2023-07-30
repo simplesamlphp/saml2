@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Assertion;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
@@ -110,8 +111,8 @@ XML;
         // Test for Authenticating Authorities
         $assertionAuthenticatingAuthorities = $assertion->getAuthenticatingAuthority();
         $this->assertCount(2, $assertionAuthenticatingAuthorities);
-        $this->assertEquals('someIdP1', $assertionAuthenticatingAuthorities[0]);
-        $this->assertEquals('someIdP2', $assertionAuthenticatingAuthorities[1]);
+        $this->assertEquals('someIdP1', $assertionAuthenticatingAuthorities[0]->getContent());
+        $this->assertEquals('someIdP2', $assertionAuthenticatingAuthorities[1]->getContent());
     }
 
 
@@ -145,7 +146,9 @@ XML;
 
         $assertion->setSessionIndex("idx1");
 
-        $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
+        $assertion->setAuthenticatingAuthority(
+            [new AuthenticatingAuthority("idp1"), new AuthenticatingAuthority("idp2")]
+        );
 
         $assertion->setAttributes([
             "name1" => ["value1", "value2"],
@@ -170,7 +173,7 @@ XML;
 
         $authauth = $assertionToVerify->getAuthenticatingAuthority();
         $this->assertCount(2, $authauth);
-        $this->assertEquals("idp2", $authauth[1]);
+        $this->assertEquals("idp2", $authauth[1]->getContent());
 
         $attributes = $assertionToVerify->getAttributes();
         $this->assertCount(3, $attributes);
@@ -200,7 +203,9 @@ XML;
 
         $assertion->setAuthnContextClassRef('someAuthnContext');
 
-        $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
+        $assertion->setAuthenticatingAuthority(
+            [new AuthenticatingAuthority("idp1"), new AuthenticatingAuthority("idp2")]
+        );
 
         $assertion->setAttributes([
             "name1" => ["value1",123,"2017-31-12"],
@@ -222,7 +227,7 @@ XML;
 
         $authauth = $assertionToVerify->getAuthenticatingAuthority();
         $this->assertCount(2, $authauth);
-        $this->assertEquals("idp2", $authauth[1]);
+        $this->assertEquals("idp2", $authauth[1]->getContent());
 
         $attributes = $assertionToVerify->getAttributes();
         $this->assertCount(3, $attributes);
@@ -268,7 +273,9 @@ XML;
 
         $assertion->setAuthnContextClassRef('someAuthnContext');
 
-        $assertion->setAuthenticatingAuthority(["idp1", "idp2"]);
+        $assertion->setAuthenticatingAuthority(
+            [new AuthenticatingAuthority("idp1"), new AuthenticatingAuthority("idp2")]
+        );
 
         $assertion->setAttributes([
             "name1" => ["value1", "2017-31-12"],
