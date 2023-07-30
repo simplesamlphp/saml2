@@ -11,11 +11,13 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\AuthnRequest;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Audience;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
 use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
+use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
 use SimpleSAML\SAML2\XML\samlp\RequesterID;
 use SimpleSAML\SAML2\XML\samlp\Scoping;
 use SimpleSAML\SAML2\Utils\XPath;
@@ -32,13 +34,15 @@ class AuthnRequestTest extends TestCase
     public function testUnmarshalling(): void
     {
         $authnRequest = new AuthnRequest();
-        $authnRequest->setRequestedAuthnContext([
-            'AuthnContextClassRef' => [
-                'accr1',
-                'accr2',
-            ],
-            'Comparison' => 'better',
-        ]);
+        $authnRequest->setRequestedAuthnContext(
+            new RequestedAuthnContext(
+                [
+                    new AuthnContextClassRef('accr1'),
+                    new AuthnContextClassRef('accr2'),
+                ],
+                'better',
+            ),
+        );
 
         $authnRequestElement = $authnRequest->toUnsignedXML();
 
