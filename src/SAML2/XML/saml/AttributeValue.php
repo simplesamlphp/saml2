@@ -5,188 +5,172 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use Serializable;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\XML\SerializableElementInterface;
+use SimpleSAML\XML\Attribute as XMLAttribute;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 use function array_pop;
+use function class_exists;
+use function explode;
+use function gettype;
+use function intval;
+use function is_array;
+use function is_int;
+use function is_null;
 use function is_string;
-use function serialize;
-use function unserialize;
+use function str_contains;
 
 /**
  * Serializable class representing an AttributeValue.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
-class AttributeValue implements Serializable
+class AttributeValue extends AbstractSamlElement
 {
-    /**
-     * The raw \DOMElement representing this value.
-     *
-     * @var \DOMElement
-     */
-    private DOMElement $element;
-
-
     /**
      * Create an AttributeValue.
      *
      * @param mixed $value The value of this element. Can be one of:
-     *  - string                       Create an attribute value with a simple string.
-     *  - \DOMElement(AttributeValue)  Create an attribute value of the given DOMElement.
-     *  - \DOMElement                  Create an attribute value with the given DOMElement as a child.
+     *  - string
+     *  - int
+     *  - null
+     *  - \SimpleSAML\XML\SerializableElementInterface
+     *
+     * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied value is neither a string or a DOMElement
      */
-    public function __construct($value)
-    {
-        Assert::true(is_string($value) || $value instanceof DOMElement);
-
-        if (is_string($value)) {
-            $doc = DOMDocumentFactory::create();
-            $this->element = $doc->createElementNS(C::NS_SAML, 'saml:AttributeValue');
-            $this->element->setAttributeNS(C::NS_XSI, 'xsi:type', 'xs:string');
-            $this->element->appendChild($doc->createTextNode($value));
-
-            /* Make sure that the xs-namespace is available in the AttributeValue (for xs:string). */
-            $this->element->setAttributeNS(C::NS_XS, 'xs:tmp', 'tmp');
-            $this->element->removeAttributeNS(C::NS_XS, 'tmp');
-            return;
-        }
-
-        $doc = DOMDocumentFactory::create();
-        if ($value->namespaceURI === C::NS_SAML && $value->localName === 'AttributeValue') {
-            $doc->appendChild($doc->importNode($value, true));
-            $this->element = $doc->documentElement;
-            return;
-        }
-
-        $this->element = $doc->createElementNS(C::NS_SAML, 'saml:AttributeValue');
-        Utils::copyElement($value, $this->element);
+    public function __construct(
+        protected string|int|null|SerializableElementInterface $value,
+    ) {
     }
 
 
     /**
-     * Collect the value of the element-property
+     * Get the XSI type of this attribute value.
      *
-     * @return \DOMElement
+     * @return string
      */
-    public function getElement(): DOMElement
+    public function getXsiType(): string
     {
-        return $this->element;
+        $type = gettype($this->value);
+
+        switch ($type) {
+            case "integer":
+                return "xs:integer";
+            case "NULL":
+                return "xs:nil";
+            case "object":
+                /** @var \SimpleSAML\XML\SerializableElementInterface $this->value */
+                return sprintf(
+                    '%s:%s',
+                    $this->value::getNamespacePrefix(),
+                    ":",
+                    AbstractElement::getClassName(get_class($this->value)),
+                );
+            default:
+                return "xs:string";
+        }
     }
 
 
     /**
-     * Set the value of the element-property
+     * Get this attribute value.
      *
-     * @param \DOMElement $element
-     * @return void
+     * @return string|int|\SimpleSAML\XML\SerializableElementInterface[]|null
      */
-    public function setElement(DOMElement $element): void
+    public function getValue()
     {
-        $this->element = $element;
+        return $this->value;
+    }
+
+
+    /**
+     * Convert XML into a AttributeValue
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return static
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     */
+    public static function fromXML(DOMElement $xml): static
+    {
+        Assert::same($xml->localName, 'AttributeValue', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, AttributeValue::NS, InvalidDOMElementException::class);
+
+        if ($xml->childElementCount > 0) {
+            $node = $xml->firstElementChild;
+
+            if (str_contains($node->tagName, ':')) {
+                list($prefix, $eltName) = explode(':', $node->tagName);
+                $className = sprintf('\SimpleSAML\SAML2\XML\%s\%s', $prefix, $eltName);
+
+                if ($node->namespaceURI === C::NS_SAML && $node->localName === 'NameID') {
+                    $value = $className::fromXML($node);
+                } else {
+                    $value = Chunk::fromXML($node);
+                }
+            } else {
+                $value = Chunk::fromXML($node);
+            }
+        } elseif (
+            $xml->hasAttributeNS(C::NS_XSI, "type") &&
+            $xml->getAttributeNS(C::NS_XSI, "type") === "xs:integer"
+        ) {
+            // we have an integer as value
+            $value = intval($xml->textContent);
+        } elseif (
+            // null value
+            $xml->hasAttributeNS(C::NS_XSI, "nil") &&
+            ($xml->getAttributeNS(C::NS_XSI, "nil") === "1" ||
+                $xml->getAttributeNS(C::NS_XSI, "nil") === "true")
+        ) {
+            $value = null;
+        } else {
+            $value = $xml->textContent;
+        }
+
+        return new static($value);
     }
 
 
     /**
      * Append this attribute value to an element.
      *
-     * @param  \DOMElement $parent The element we should append this attribute value to.
+     * @param \DOMElement|null $parent The element we should append this attribute value to.
+     *
      * @return \DOMElement The generated AttributeValue element.
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        Assert::same($this->getElement()->namespaceURI, C::NS_SAML);
-        Assert::same($this->getElement()->localName, "AttributeValue");
+        $e = parent::instantiateParentElement($parent);
 
-        return $parent->appendChild($parent->ownerDocument->importNode($this->element, true));
-    }
+        $type = gettype($this->value);
 
-
-    /**
-     * Returns a plain text content of the attribute value.
-     *
-     * @return string
-     */
-    public function getString(): string
-    {
-        return $this->element->textContent;
-    }
-
-
-    /**
-     * Convert this attribute value to a string.
-     *
-     * If this element contains XML data, that data will be encoded as a string and returned.
-     *
-     * @return string This attribute value.
-     */
-    public function __toString(): string
-    {
-        $doc = $this->element->ownerDocument;
-
-        $ret = '';
-        foreach ($this->element->childNodes as $c) {
-            $ret .= $doc->saveXML($c);
+        switch ($type) {
+            case "integer":
+                // make sure that the xs namespace is available in the AttributeValue
+                $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C::NS_XSI);
+                $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xs', C::NS_XS);
+                $e->setAttributeNS(C::NS_XSI, 'xsi:type', 'xs:integer');
+                $e->textContent = strval($this->getValue());
+                break;
+            case "NULL":
+                $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C::NS_XSI);
+                $e->setAttributeNS(C::NS_XSI, 'xsi:nil', '1');
+                $e->textContent = '';
+                break;
+            case "object":
+                $this->getValue()->toXML($e);
+                break;
+            default: // string
+                $e->textContent = $this->getValue();
+                break;
         }
 
-        return $ret;
-    }
-
-
-    /**
-     * Serialize this AttributeValue.
-     *
-     * @return string The AttributeValue serialized.
-     */
-    public function serialize(): string
-    {
-        return serialize($this->element->ownerDocument->saveXML($this->element));
-    }
-
-
-    /**
-     * Un-serialize this AttributeValue.
-     *
-     * @param string $serialized The serialized AttributeValue.
-     * @return void
-     *
-     * Type hint not possible due to upstream method signature
-     */
-    public function unserialize($serialized): void
-    {
-        $element = DOMDocumentFactory::fromString(unserialize($serialized));
-        $this->setElement($element->documentElement);
-    }
-
-
-
-    /**
-     * Serialize this XML chunk.
-     *
-     * This method will be invoked by any calls to serialize().
-     *
-     * @return array The serialized representation of this XML object.
-     */
-    public function __serialize(): array
-    {
-        return [serialize($this->element->ownerDocument->saveXML($this->element))];
-    }
-
-
-    /**
-     * Unserialize an XML object and load it..
-     *
-     * This method will be invoked by any calls to unserialize(), allowing us to restore any data that might not
-     * be serializable in its original form (e.g.: DOM objects).
-     *
-     * @param array $vars The XML object that we want to restore.
-     */
-    public function __unserialize(array $serialized): void
-    {
-        $element = DOMDocumentFactory::fromString(unserialize(array_pop($serialized)));
-        $this->setElement($element->documentElement);
+        return $e;
     }
 }

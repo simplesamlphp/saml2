@@ -38,7 +38,7 @@ class HTTPRedirectTest extends TestCase
         $this->assertInstanceOf(Request::class, $samlrequest);
         $this->assertEquals(
             'https://profile.surfconext.nl/simplesaml/module.php/saml/sp/metadata.php/default-sp',
-            $samlrequest->getIssuer()->getValue()
+            $samlrequest->getIssuer()->getContent()
         );
     }
 
@@ -60,7 +60,7 @@ class HTTPRedirectTest extends TestCase
         $samlrequest = $hr->receive($request);
         $this->assertInstanceOf(Response::class, $samlrequest);
         $issuer = $samlrequest->getIssuer();
-        $this->assertEquals('https://engine.test.surfconext.nl/authentication/idp/metadata', $issuer->getValue());
+        $this->assertEquals('https://engine.test.surfconext.nl/authentication/idp/metadata', $issuer->getContent());
     }
 
 
@@ -283,8 +283,7 @@ class HTTPRedirectTest extends TestCase
      */
     public function testSendAuthnResponse(): void
     {
-        $issuer = new Issuer();
-        $issuer->setValue('testIssuer');
+        $issuer = new Issuer('testIssuer');
 
         $response = new Response();
         $response->setIssuer($issuer);
@@ -303,8 +302,7 @@ class HTTPRedirectTest extends TestCase
      */
     public function testSendAuthnResponseBespokeDestination(): void
     {
-        $issuer = new Issuer();
-        $issuer->setValue('testIssuer');
+        $issuer = new Issuer('testIssuer');
 
         $response = new Response();
         $response->setIssuer($issuer);

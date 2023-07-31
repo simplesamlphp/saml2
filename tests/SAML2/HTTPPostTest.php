@@ -32,7 +32,7 @@ class HTTPPostTest extends TestCase
         $samlrequest = $hp->receive($request);
         $this->assertInstanceOf(AuthnRequest::class, $samlrequest);
         $issuer = $samlrequest->getIssuer();
-        $this->assertEquals('https://engine.test.surfconext.nl/authentication/sp/metadata', $issuer->getValue());
+        $this->assertEquals('https://engine.test.surfconext.nl/authentication/sp/metadata', $issuer->getContent());
     }
 
 
@@ -55,7 +55,7 @@ class HTTPPostTest extends TestCase
         $response = $hp->receive($request);
         $this->assertInstanceOf(Response::class, $response);
         $issuer = $response->getIssuer();
-        $this->assertEquals('https://engine.test.surfconext.nl/authentication/idp/metadata', $issuer->getValue());
+        $this->assertEquals('https://engine.test.surfconext.nl/authentication/idp/metadata', $issuer->getContent());
         $relay = $response->getRelayState();
         $this->assertEquals('relaystate001', $relay);
     }
@@ -127,8 +127,7 @@ class HTTPPostTest extends TestCase
      */
     public function testSendAuthnResponse(): void
     {
-        $issuer  = new Issuer();
-        $issuer->setValue('testIssuer');
+        $issuer  = new Issuer('testIssuer');
 
         $response = new Response();
         $response->setIssuer($issuer);

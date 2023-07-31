@@ -4,37 +4,47 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
+use DateInterval;
+use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotOnOrAfter;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
-use SimpleSAML\Test\SAML2\AbstractControlledTimeTestCase;
 
 /**
- * Because we're mocking a static call, we have to run it in separate processes so as to not contaminate the other
- * tests.
- *
  * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotOnOrAfter
+ *
  * @package simplesamlphp/saml2
  */
-final class SubjectConfirmationNotOnOrAfterTest extends AbstractControlledTimeTestCase
+final class SubjectConfirmationNotOnOrAfterTest extends TestCase
 {
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
+
+
+    /**
+     */
+    public static function setUpBeforeClass(): void
+    {
+        self::$clock = Utils::getContainer()->getClock();
+    }
+
+
     /**
      * @group assertion-validation
      * @test
-     *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
     public function timestampInThePastBeforeGraceperiodIsNotValid(): void
     {
-        $subjectConfirmationData = new SubjectConfirmationData();
-        $subjectConfirmationData->setNotOnOrAfter($this->currentTime - 60);
-        $subjectConfirmation = new SubjectConfirmation();
-        $subjectConfirmation->setMethod(C::CM_HOK);
-        $subjectConfirmation->setSubjectConfirmationData($subjectConfirmationData);
+        $subjectConfirmationData = new SubjectConfirmationData(
+            null,
+            self::$clock->now()->sub(new DateInterval('PT60S')),
+        );
+        $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationNotOnOrAfter();
         $result = new Result();
@@ -49,17 +59,14 @@ final class SubjectConfirmationNotOnOrAfterTest extends AbstractControlledTimeTe
     /**
      * @group assertion-validation
      * @test
-     *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
     public function timeWithinGraceperiodIsValid(): void
     {
-        $subjectConfirmationData = new SubjectConfirmationData();
-        $subjectConfirmationData->setNotOnOrAfter($this->currentTime - 59);
-        $subjectConfirmation = new SubjectConfirmation();
-        $subjectConfirmation->setMethod(C::CM_HOK);
-        $subjectConfirmation->setSubjectConfirmationData($subjectConfirmationData);
+        $subjectConfirmationData = new SubjectConfirmationData(
+            null,
+            self::$clock->now()->sub(new DateInterval('PT59S')),
+        );
+        $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationNotOnOrAfter();
         $result = new Result();
@@ -73,17 +80,11 @@ final class SubjectConfirmationNotOnOrAfterTest extends AbstractControlledTimeTe
     /**
      * @group assertion-validation
      * @test
-     *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
     public function currentTimeIsValid(): void
     {
-        $subjectConfirmationData = new SubjectConfirmationData();
-        $subjectConfirmationData->setNotOnOrAfter($this->currentTime);
-        $subjectConfirmation = new SubjectConfirmation();
-        $subjectConfirmation->setMethod(C::CM_HOK);
-        $subjectConfirmation->setSubjectConfirmationData($subjectConfirmationData);
+        $subjectConfirmationData = new SubjectConfirmationData(null, self::$clock->now());
+        $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationNotBefore();
         $result = new Result();

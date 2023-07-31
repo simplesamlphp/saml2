@@ -4,9 +4,9 @@
     <saml:AttributeValue>really</saml:AttributeValue>
     <saml:AttributeValue>cool</saml:AttributeValue>
   </saml:Attribute>
-  <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" ID="_93af655219464fb403b34436cfb0c5cb1d9a5502" IssueInstant="2022-10-16T22:51:18Z" Version="2.0">
+  <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="_93af655219464fb403b34436cfb0c5cb1d9a5502" IssueInstant="2022-10-16T22:51:18Z" Version="2.0">
     <saml:Issuer>testIssuer</saml:Issuer>
-    <ds:Signature>
+    <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
       <ds:SignedInfo>
         <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
         <ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>

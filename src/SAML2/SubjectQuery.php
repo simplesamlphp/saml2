@@ -79,7 +79,7 @@ abstract class SubjectQuery extends Request
         } elseif (count($nameId) > 1) {
             throw new TooManyElementsException('More than one <saml:NameID> in <saml:Subject>.');
         }
-        $this->nameId = new NameID($nameId[0]);
+        $this->nameId = NameID::fromXML($nameId[0]);
     }
 
 

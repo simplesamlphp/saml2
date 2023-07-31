@@ -4,127 +4,181 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdattr;
 
+use DateTimeImmutable;
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\saml\Attribute;
-use SimpleSAML\SAML2\XML\saml\AttributeValue;
-use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeStatement;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\XML\saml\AuthnContext;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
+use SimpleSAML\SAML2\XML\saml\Audience;
+use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
+use SimpleSAML\SAML2\XML\saml\Conditions;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+
+use function dirname;
+use function strval;
 
 /**
- * Class \SimpleSAML\SAML2\XML\mdattr\EntityAttributesTest
+ * Class \SAML2\XML\mdattr\EntityAttributesTest
+ *
+ * @covers \SimpleSAML\SAML2\XML\mdattr\EntityAttributes
+ * @covers \SimpleSAML\SAML2\XML\mdattr\AbstractMdattrElement
+ * @requires PHP >= 8.1
+ * @package simplesamlphp/saml2
  */
-class EntityAttributesTest extends TestCase
+
+final class EntityAttributesTest extends TestCase
 {
+    use SchemaValidationTestTrait;
+    use SerializableElementTestTrait;
+
+
     /**
-     * @return void
+     */
+    public static function setUpBeforeClass(): void
+    {
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-metadata-attr.xsd';
+
+        self::$testedClass = EntityAttributes::class;
+
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/mdattr_EntityAttributes.xml',
+        );
+    }
+
+
+    /**
      */
     public function testMarshalling(): void
     {
-        $attribute1 = new Attribute();
-        $attribute1->setName('urn:simplesamlphp:v1:simplesamlphp');
-        $attribute1->setNameFormat('urn:oasis:names:tc:SAML:2.0:attrname-format:uri');
-        $attribute1->setAttributeValue([
-             new AttributeValue('FirstValue'),
-             new AttributeValue('SecondValue'),
-        ]);
-        $attribute2 = new Attribute();
-        $attribute2->setName('foo');
-        $attribute2->setNameFormat('urn:simplesamlphp:v1');
-        $attribute2->setAttributeValue([
-             new AttributeValue('bar'),
-        ]);
-
-        $entityAttributes = new EntityAttributes();
-        $entityAttributes->setChildren([$attribute1, $attribute2]);
-
-        $document = DOMDocumentFactory::fromString('<root />');
-        $xml = $entityAttributes->toXML($document->firstChild);
-
-        $xpCache = XPath::getXPath($xml);
-        $entityAttributesElements = XPath::xpQuery(
-            $xml,
-            '/root/*[local-name()=\'EntityAttributes\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:attribute\']',
-            $xpCache,
+        $attribute1 = new Attribute(
+            name: 'attrib1',
+            nameFormat: C::NAMEFORMAT_URI,
+            attributeValue: [
+                new AttributeValue('is'),
+                new AttributeValue('really'),
+                new AttributeValue('cool'),
+            ],
         );
-        $this->assertCount(1, $entityAttributesElements);
-        $entityAttributesElement = $entityAttributesElements[0];
 
-        $xpCache = XPath::getXPath($entityAttributesElement);
-        $attributeElements = XPath::xpQuery(
-            $entityAttributesElement,
-            './*[local-name()=\'Attribute\' and namespace-uri()=\'urn:oasis:names:tc:SAML:2.0:assertion\']',
-            $xpCache,
+        // Create an Issuer
+        $issuer = new Issuer('testIssuer');
+
+        // Create the conditions
+        $conditions = new Conditions(
+            condition: [],
+            audienceRestriction: [
+                new AudienceRestriction([
+                    new Audience(C::ENTITY_IDP),
+                    new Audience(C::ENTITY_URN),
+                ]),
+            ],
         );
-        $this->assertCount(2, $attributeElements);
+
+        // Create the statements
+        $attrStatement = new AttributeStatement([
+            new Attribute(
+                name: 'urn:mace:dir:attribute-def:uid',
+                nameFormat: C::NAMEFORMAT_URI,
+                attributeValue: [
+                    new AttributeValue('student2'),
+                ],
+            ),
+            new Attribute(
+                name: 'urn:mace:terena.org:attribute-def:schacHomeOrganization',
+                nameFormat: C::NAMEFORMAT_URI,
+                attributeValue: [
+                    new AttributeValue('university.example.org'),
+                    new AttributeValue('bbb.cc'),
+                ],
+            ),
+            new Attribute(
+                name: 'urn:schac:attribute-def:schacPersonalUniqueCode',
+                nameFormat: C::NAMEFORMAT_URI,
+                attributeValue: [
+                    new AttributeValue('urn:schac:personalUniqueCode:nl:local:uvt.nl:memberid:524020'),
+                    new AttributeValue('urn:schac:personalUniqueCode:nl:local:surfnet.nl:studentid:12345'),
+                ],
+            ),
+            new Attribute(
+                name: 'urn:mace:dir:attribute-def:eduPersonAffiliation',
+                nameFormat: C::NAMEFORMAT_URI,
+                attributeValue: [
+                    new AttributeValue('member'),
+                    new AttributeValue('student'),
+                ],
+            ),
+        ]);
+
+        $subject = new Subject(new NameID(
+            value: 'some:entity',
+            Format: C::NAMEID_ENTITY,
+        ));
+
+        // Create an assertion
+        $unsignedAssertion = new Assertion(
+            $issuer,
+            new DateTimeImmutable('2022-10-16T22:51:18Z'),
+            '_93af655219464fb403b34436cfb0c5cb1d9a5502',
+            $subject,
+            $conditions,
+            [$attrStatement]
+        );
+
+        // Sign the assertion
+        $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
+            C::SIG_RSA_SHA256,
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY)
+        );
+        $unsignedAssertion->sign($signer);
+        $signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
+
+        $attribute2 = new Attribute(
+            name: 'foo',
+            nameFormat: 'urn:simplesamlphp:v1:simplesamlphp',
+            attributeValue: [
+                new AttributeValue('is'),
+                new AttributeValue('really'),
+                new AttributeValue('cool'),
+            ],
+        );
+
+        $entityAttributes = new EntityAttributes([$attribute1]);
+        $entityAttributes->addChild($signedAssertion);
+        $entityAttributes->addChild($attribute2);
+
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($entityAttributes),
+        );
     }
 
 
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute">
-    <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" IssueInstant="1984-08-26T10:01:30.000Z" Version="2.0"/>
-    <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="attrib1"/>
-    <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" IssueInstant="1984-08-26T10:01:30.000Z" Version="2.0"/>
-    <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="attrib2"/>
-    <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="attrib3"/>
-</mdattr:EntityAttributes>
-XML
-        );
+        $entityAttributes = EntityAttributes::fromXML(self::$xmlRepresentation->documentElement);
 
-        $entityAttributes = new EntityAttributes($document->firstChild);
-        $this->assertCount(5, $entityAttributes->getChildren());
-
-        $this->assertInstanceOf(Chunk::class, $entityAttributes->getChildren()[0]);
-        $this->assertInstanceOf(Attribute::class, $entityAttributes->getChildren()[1]);
-        $this->assertInstanceOf(Chunk::class, $entityAttributes->getChildren()[2]);
-        $this->assertInstanceOf(Attribute::class, $entityAttributes->getChildren()[3]);
-        $this->assertInstanceOf(Attribute::class, $entityAttributes->getChildren()[4]);
-
-        $this->assertEquals('Assertion', $entityAttributes->getChildren()[0]->getLocalName());
         $this->assertEquals(
-            '1984-08-26T10:01:30.000Z',
-            $entityAttributes->getChildren()[0]->getXML()->getAttribute('IssueInstant')
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($entityAttributes),
         );
-        $this->assertEquals('attrib2', $entityAttributes->getChildren()[3]->getName());
-    }
-
-
-    /**
-     * @return void
-     */
-    public function testUnmarshallingAttributes(): void
-    {
-        $document = DOMDocumentFactory::fromString(<<<XML
-<mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute">
-  <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:simplesamlphp:v1:simplesamlphp" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
-    <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">is</saml:AttributeValue>
-    <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">really</saml:AttributeValue>
-    <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">cool</saml:AttributeValue>
-  </saml:Attribute>
-  <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="foo" NameFormat="urn:simplesamlphp:v1">
-    <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">bar</saml:AttributeValue>
-  </saml:Attribute>
-</mdattr:EntityAttributes>
-XML
-        );
-
-        $entityAttributes = new EntityAttributes($document->firstChild);
-        $this->assertCount(2, $entityAttributes->getChildren());
-
-        $this->assertEquals('urn:simplesamlphp:v1:simplesamlphp', $entityAttributes->getChildren()[0]->getName());
-        $this->assertEquals(
-            'urn:oasis:names:tc:SAML:2.0:attrname-format:uri',
-            $entityAttributes->getChildren()[0]->getNameFormat()
-        );
-        $this->assertCount(3, $entityAttributes->getChildren()[0]->getAttributeValue());
-        $this->assertEquals('foo', $entityAttributes->getChildren()[1]->getName());
-        $this->assertEquals('urn:simplesamlphp:v1', $entityAttributes->getChildren()[1]->getNameFormat());
-        $this->assertCount(1, $entityAttributes->getChildren()[1]->getAttributeValue());
     }
 }

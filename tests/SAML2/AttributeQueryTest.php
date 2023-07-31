@@ -20,8 +20,7 @@ class AttributeQueryTest extends TestCase
     public function testMarshalling(): void
     {
         $attributeQuery = new AttributeQuery();
-        $nameId = new NameID();
-        $nameId->setValue('NameIDValue');
+        $nameId = new NameID('NameIDValue');
         $attributeQuery->setNameID($nameId);
         $attributeQuery->setAttributes(
             [
@@ -111,11 +110,11 @@ XML;
         $aq = new AttributeQuery($document->firstChild);
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
+        $this->assertEquals('https://example.org/', $aq->getIssuer()->getContent());
 
         $nameid = $aq->getNameId();
         $this->assertInstanceOf(NameID::class, $nameid);
-        $this->assertEquals('urn:example:subject', $nameid->getValue());
+        $this->assertEquals('urn:example:subject', $nameid->getContent());
 
         $attributes = array_keys($aq->getAttributes());
         $this->assertCount(3, $attributes);
@@ -132,8 +131,7 @@ XML;
         $fmt_uri = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
 
         $attributeQuery = new AttributeQuery();
-        $nameId = new NameID();
-        $nameId->setValue('NameIDValue');
+        $nameId = new NameID('NameIDValue');
         $attributeQuery->setNameID($nameId);
         $attributeQuery->setAttributes(
             [
@@ -190,7 +188,7 @@ XML;
         $aq = new AttributeQuery($document->firstChild);
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
+        $this->assertEquals('https://example.org/', $aq->getIssuer()->getContent());
 
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', $aq->getAttributeNameFormat());
     }
@@ -225,7 +223,7 @@ XML;
         $aq = new AttributeQuery($document->firstChild);
 
         // Sanity check
-        $this->assertEquals('https://example.org/', $aq->getIssuer()->getValue());
+        $this->assertEquals('https://example.org/', $aq->getIssuer()->getContent());
 
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified', $aq->getAttributeNameFormat());
     }

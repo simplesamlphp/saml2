@@ -108,7 +108,7 @@ class LogoutRequest extends Request
             /* The NameID element is encrypted. */
             $this->encryptedNameId = $nameId[0];
         } else {
-            $this->nameId = new NameID($nameId[0]);
+            $this->nameId = NameID::fromXML($nameId[0]);
         }
 
         $this->sessionIndexes = SessionIndex::getChildrenOfClass($xml);
@@ -229,7 +229,7 @@ class LogoutRequest extends Request
 
         $nameId = Utils::decryptElement($this->encryptedNameId, $key, $blacklist);
         Utils::getContainer()->debugMessage($nameId, 'decrypt');
-        $this->nameId = new NameID($nameId);
+        $this->nameId = NameID::fromXML($nameId);
         $this->encryptedNameId = null;
     }
 

@@ -11,10 +11,9 @@ interface SubjectConfirmationConstraintValidator
     /**
      * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmation $subjectConfirmation
      * @param \SimpleSAML\SAML2\Assertion\Validation\Result $result
-     * @return void
      */
     public function validate(
         SubjectConfirmation $subjectConfirmation,
-        Result $result
+        Result $result,
     ): void;
 }

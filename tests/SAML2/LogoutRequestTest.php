@@ -64,8 +64,7 @@ XML;
      */
     public function testMarshalling(): void
     {
-        $nameId = new NameID();
-        $nameId->setValue('NameIDValue');
+        $nameId = new NameID('NameIDValue');
 
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
@@ -85,8 +84,7 @@ XML;
         $this->assertCount(1, $sessionIndexElements);
         $this->assertEquals('SessionIndexValue', $sessionIndexElements[0]->textContent);
 
-        $nameId = new NameID();
-        $nameId->setValue('NameIDValue');
+        $nameId = new NameID('NameIDValue');
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
         $logoutRequest->setSessionIndexes([new SessionIndex('SessionIndexValue1'), new SessionIndex('SessionIndexValue2')]);
@@ -106,7 +104,7 @@ XML;
     public function testUnmarshalling(): void
     {
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
-        $this->assertEquals('TheIssuer', $logoutRequest->getIssuer()->getValue());
+        $this->assertEquals('TheIssuer', $logoutRequest->getIssuer()->getContent());
         $this->assertTrue($logoutRequest->isNameIdEncrypted());
 
         $sessionIndexElements = $logoutRequest->getSessionIndexes();
@@ -118,7 +116,7 @@ XML;
         $logoutRequest->decryptNameId(CertificatesMock::getPrivateKey());
 
         $nameId = $logoutRequest->getNameId();
-        $this->assertEquals('TheNameIDValue', $nameId->getValue());
+        $this->assertEquals('TheNameIDValue', $nameId->getContent());
     }
 
 
@@ -127,8 +125,7 @@ XML;
      */
     public function testEncryptedNameId(): void
     {
-        $nameId = new NameID();
-        $nameId->setValue('NameIdValue');
+        $nameId = new NameID('NameIdValue');
 
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
@@ -153,7 +150,7 @@ XML;
 
         $logoutRequest->decryptNameId(CertificatesMock::getPrivateKey());
         $nameId = $logoutRequest->getNameId();
-        $this->assertEquals('TheNameIDValue', $nameId->getValue());
+        $this->assertEquals('TheNameIDValue', $nameId->getContent());
     }
 
 
@@ -185,7 +182,7 @@ XML;
         $this->logoutRequestElement = $document->firstChild;
 
         $logoutRequest = new LogoutRequest($this->logoutRequestElement);
-        $this->assertEquals("frits", $logoutRequest->getNameId()->getValue());
+        $this->assertEquals("frits", $logoutRequest->getNameId()->getContent());
         $this->assertEquals("urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified", $logoutRequest->getNameId()->getFormat());
 
         $this->assertFalse($logoutRequest->isNameIdEncrypted());
@@ -255,11 +252,8 @@ XML;
      */
     public function testSetNotOnOrAfter(): void
     {
-        $nameId = new NameID();
-        $nameId->setValue('NameIDValue');
+        $nameId = new NameID('NameIDValue');
         $time = time();
-        $nameId = new NameID();
-        $nameId->setValue('NameIDValue');
 
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);
@@ -296,8 +290,7 @@ XML;
     public function testSetReason(): void
     {
         $reason = "urn:simplesamlphp:reason-test";
-        $nameId = new NameID();
-        $nameId->setValue('NameIDValue');
+        $nameId = new NameID('NameIDValue');
 
         $logoutRequest = new LogoutRequest();
         $logoutRequest->setNameID($nameId);

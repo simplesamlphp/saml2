@@ -103,11 +103,7 @@ final class Extensions extends AbstractMdElement
                 array_key_exists($node->namespaceURI, $supported)
                 && array_key_exists($node->localName, $supported[$node->namespaceURI])
             ) {
-                if ($node->namespaceURI === C::NS_MDATTR) {
-                    $ret[] = new $supported[$node->namespaceURI][$node->localName]($node);
-                } else {
-                    $ret[] = $supported[$node->namespaceURI][$node->localName]::fromXML($node);
-                }
+                $ret[] = $supported[$node->namespaceURI][$node->localName]::fromXML($node);
             } else {
                 $ret[] = new Chunk($node);
             }

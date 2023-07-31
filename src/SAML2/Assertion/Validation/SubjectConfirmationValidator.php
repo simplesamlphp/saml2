@@ -12,9 +12,7 @@ use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 
 class SubjectConfirmationValidator
 {
-    /**
-     * @var \SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator[]
-     */
+    /** @var \SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator[] */
     protected array $constraints;
 
 
@@ -26,14 +24,13 @@ class SubjectConfirmationValidator
      */
     public function __construct(
         private IdentityProvider $identityProvider,
-        private ServiceProvider $serviceProvider
+        private ServiceProvider $serviceProvider,
     ) {
     }
 
 
     /**
      * @param \SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator $constraint
-     * @return void
      */
     public function addConstraintValidator(
         SubjectConfirmationConstraintValidator $constraint

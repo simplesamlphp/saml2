@@ -18,8 +18,15 @@ use function is_bool;
  *
  * @package simplesamlphp/saml2
  */
-final class RequestedAttribute extends AbstractMdElement
+final class RequestedAttribute extends Attribute
 {
+    /** @var string */
+    public const NS = C::NS_MD;
+
+    /** @var string */
+    public const NS_PREFIX = 'md';
+
+
     /**
      * RequestedAttribute constructor.
      *
@@ -30,60 +37,13 @@ final class RequestedAttribute extends AbstractMdElement
      * @param \SimpleSAML\SAML2\XML\saml\AttributeValue[] $AttributeValues
      */
     public function __construct(
-        protected string $Name,
+        string $Name,
         protected ?bool $isRequired = null,
-        protected ?string $NameFormat = null,
-        protected ?string $FriendlyName = null,
-        protected array $AttributeValues = [],
+        ?string $NameFormat = null,
+        ?string $FriendlyName = null,
+        array $AttributeValues = [],
     ) {
-        Assert::notWhitespaceOnly($Name, 'Cannot specify an empty name for an Attribute.');
-        Assert::nullOrValidURI($NameFormat); // Covers the empty string
-        Assert::nullOrNotWhitespaceOnly($FriendlyName, 'FriendlyName cannot be an empty string.');
-        Assert::allIsInstanceOf($AttributeValues, AttributeValue::class, 'Invalid AttributeValue.');
-    }
-
-
-    /**
-     * Collect the value of the Name-property
-     *
-     * @return string
-     */
-    public function getName(): string
-    {
-        return $this->Name;
-    }
-
-
-    /**
-     * Collect the value of the NameFormat-property
-     *
-     * @return string|null
-     */
-    public function getNameFormat(): ?string
-    {
-        return $this->NameFormat;
-    }
-
-
-    /**
-     * Collect the value of the FriendlyName-property
-     *
-     * @return string|null
-     */
-    public function getFriendlyName(): ?string
-    {
-        return $this->FriendlyName;
-    }
-
-
-    /**
-     * Collect the value of the attributeValues-property
-     *
-     * @return \SimpleSAML\SAML2\XML\saml\AttributeValue[]
-     */
-    public function getAttributeValues(): array
-    {
-        return $this->AttributeValues;
+        parent::__construct($Name, $NameFormat, $FriendlyName, $AttributeValues);
     }
 
 
@@ -114,14 +74,12 @@ final class RequestedAttribute extends AbstractMdElement
         Assert::same($xml->localName, 'RequestedAttribute', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, RequestedAttribute::NS, InvalidDOMElementException::class);
 
-        $attribute = new Attribute($xml);
-
         return new static(
             self::getAttribute($xml, 'Name'),
             self::getOptionalBooleanAttribute($xml, 'isRequired', null),
             self::getOptionalAttribute($xml, 'NameFormat', null),
             self::getOptionalAttribute($xml, 'FriendlyName', null),
-            $attribute->getAttributeValue(),
+            AttributeValue::getChildrenOfClass($xml),
         );
     }
 
@@ -134,23 +92,10 @@ final class RequestedAttribute extends AbstractMdElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('Name', $this->getName());
+        $e = parent::toXML($parent);
 
-        if ($this->getNameFormat() !== null) {
-            $e->setAttribute('NameFormat', $this->getNameFormat());
-        }
-
-        if ($this->getFriendlyName() !== null) {
-            $e->setAttribute('FriendlyName', $this->getFriendlyName());
-        }
-
-        if ($this->getIsRequired() !== null) {
+        if (is_bool($this->getIsRequired())) {
             $e->setAttribute('isRequired', $this->getIsRequired() ? 'true' : 'false');
-        }
-
-        foreach ($this->getAttributeValues() as $av) {
-            $av->toXML($e);
         }
 
         return $e;

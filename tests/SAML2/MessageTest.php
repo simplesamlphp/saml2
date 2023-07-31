@@ -73,9 +73,7 @@ AUTHNREQUEST
   <saml:Issuer NameQualifier="https://gateway.stepup.org/saml20/sp/metadata"
     SPNameQualifier="https://spnamequalifier.com"
     SPProvidedID="ProviderID"
-    Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">
-        https://gateway.stepup.org/saml20/sp/metadata
-  </saml:Issuer>
+    Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">https://gateway.stepup.org/saml20/sp/metadata</saml:Issuer>
   <saml:Subject>
         <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">user@example.org</saml:NameID>
   </saml:Subject>
@@ -90,7 +88,7 @@ AUTHNREQUEST
         $this->assertEquals('https://spnamequalifier.com', $issuer->getSPNameQualifier());
         $this->assertEquals('ProviderID', $issuer->getSPProvidedID());
         $this->assertEquals('urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified', $issuer->getFormat());
-        $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer->getValue());
+        $this->assertEquals('https://gateway.stepup.org/saml20/sp/metadata', $issuer->getContent());
     }
 
 
@@ -102,8 +100,7 @@ AUTHNREQUEST
     {
         // first, try with common Issuer objects (Format=entity)
         $response = new Response();
-        $issuer = new Issuer();
-        $issuer->setValue('https://gateway.stepup.org/saml20/sp/metadata');
+        $issuer = new Issuer('https://gateway.stepup.org/saml20/sp/metadata');
         $response->setIssuer($issuer);
         $xml = $response->toUnsignedXML();
         $xpCache = XPath::getXPath($xml);
@@ -111,13 +108,16 @@ AUTHNREQUEST
         $xml_issuer = $xml_issuer[0];
 
         $this->assertFalse($xml_issuer->hasAttributes());
-        $this->assertEquals($issuer->getValue(), $xml_issuer->textContent);
+        $this->assertEquals($issuer->getContent(), $xml_issuer->textContent);
 
         // now, try an Issuer with another format and attributes
-        $issuer->setFormat(C::NAMEID_UNSPECIFIED);
-        $issuer->setNameQualifier('SomeNameQualifier');
-        $issuer->setSPNameQualifier('SomeSPNameQualifier');
-        $issuer->setSPProvidedID('SomeSPProvidedID');
+        $issuer = new Issuer(
+            'https://gateway.stepup.org/saml20/sp/metadata',
+            'SomeNameQualifier',
+            'SomeSPNameQualifier',
+            C::NAMEID_UNSPECIFIED,
+            'SomeSPProvidedID',
+        );
         $response->setIssuer($issuer);
         $xml = $response->toUnsignedXML();
         $xpCache = XPath::getXPath($xml);
@@ -125,7 +125,7 @@ AUTHNREQUEST
         $xml_issuer = $xml_issuer[0];
 
         $this->assertTrue($xml_issuer->hasAttributes());
-        $this->assertEquals($issuer->getValue(), $xml_issuer->textContent);
+        $this->assertEquals($issuer->getContent(), $xml_issuer->textContent);
         $this->assertEquals($issuer->getNameQualifier(), $xml_issuer->getAttribute('NameQualifier'));
         $this->assertEquals($issuer->getSPNameQualifier(), $xml_issuer->getAttribute('SPNameQualifier'));
         $this->assertEquals($issuer->getSPProvidedID(), $xml_issuer->getAttribute('SPProvidedID'));
@@ -356,12 +356,12 @@ XML;
         $document  = DOMDocumentFactory::fromString($xml);
         $message = Message::fromXML($document->documentElement);
 
-        $this->assertEquals('https://example.org/', $message->getIssuer()->getValue());
+        $this->assertEquals('https://example.org/', $message->getIssuer()->getContent());
         $this->assertEquals('aaf23196-1773-2113-474a-fe114412ab72', $message->getId());
 
         $message->setId('somethingNEW');
 
-        $this->assertEquals('https://example.org/', $message->getIssuer()->getValue());
+        $this->assertEquals('https://example.org/', $message->getIssuer()->getContent());
         $this->assertEquals('somethingNEW', $message->getId());
         $this->assertEquals(C::CONSENT_PRIOR, $message->getConsent());
 

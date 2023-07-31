@@ -7,21 +7,21 @@ namespace SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
-use SimpleSAML\SAML2\Response;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\XML\samlp\Response;
 
 use function sprintf;
 use function strval;
 
-class SubjectConfirmationResponseToMatches implements
-    SubjectConfirmationConstraintValidator
+class SubjectConfirmationResponseToMatches implements SubjectConfirmationConstraintValidator
 {
     /**
      * Constructor for SubjectConfirmationResponseToMatches
-     * @param \SimpleSAML\SAML2\Response $response
+     *
+     * @param \SimpleSAML\SAML2\XML\samlp\Response $response
      */
     public function __construct(
-        private Response $response
+        private Response $response,
     ) {
     }
 
@@ -29,7 +29,8 @@ class SubjectConfirmationResponseToMatches implements
     /**
      * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmation $subjectConfirmation
      * @param \SimpleSAML\SAML2\Assertion\Validation\Result $result
-     * @return void
+     *
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function validate(SubjectConfirmation $subjectConfirmation, Result $result): void
     {
@@ -42,7 +43,7 @@ class SubjectConfirmationResponseToMatches implements
             $result->addError(sprintf(
                 'InResponseTo in SubjectConfirmationData ("%s") does not match the Response InResponseTo ("%s")',
                 $inResponseTo,
-                strval($this->getInResponseTo())
+                strval($this->getInResponseTo()),
             ));
         }
     }

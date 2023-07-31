@@ -221,7 +221,7 @@ class AuthnRequest extends Request
         if ($nameId->localName === 'EncryptedData') { // the NameID element is encrypted
             $this->encryptedNameId = $nameId;
         } else {
-            $this->nameId = new NameID($nameId);
+            $this->nameId = NameID::fromXML($nameId);
         }
 
         /** @var \DOMElement[] $subjectConfirmation */
@@ -599,7 +599,7 @@ class AuthnRequest extends Request
 
         $nameId = Utils::decryptElement($this->encryptedNameId, $key, $blacklist);
         Utils::getContainer()->debugMessage($nameId, 'decrypt');
-        $this->nameId = new NameID($nameId);
+        $this->nameId = NameID::fromXML($nameId);
 
         $this->encryptedNameId = null;
     }

@@ -488,4 +488,22 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
      * The maximum size for any entityid as per SAML2INT-specification
      */
     public const SAML2INT_ENTITYID_MAX_LENGTH = 256;
+
+    /**
+     * The format to express a timestamp in SAML2
+     */
+    public const DATETIME_FORMAT = 'Y-m-d\\TH:i:sp';
+
+    /**
+     * Valid values for saml:DecisionType
+     */
+    public const AUTHZ_DECISION_PERMIT = 'Permit';
+    public const AUTHZ_DECISION_DENY = 'Deny';
+    public const AUTHZ_DECISION_INDETERMINATE = 'Indeterminate';
+
+    public const AUTHZ_DECISIONS = [
+        self::AUTHZ_DECISION_PERMIT,
+        self::AUTHZ_DECISION_DENY,
+        self::AUTHZ_DECISION_INDETERMINATE,
+    ];
 }

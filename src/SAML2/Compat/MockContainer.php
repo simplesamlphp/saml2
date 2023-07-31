@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Compat;
 
+use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -16,6 +17,9 @@ use function sys_get_temp_dir;
  */
 class MockContainer extends AbstractContainer
 {
+    /** @var \Psr\Clock\ClockInterface */
+    private ClockInterface $clock;
+
     /**
      * @var string
      */
@@ -103,5 +107,37 @@ class MockContainer extends AbstractContainer
         }
         file_put_contents($filename, $data);
         chmod($filename, $mode);
+    }
+
+
+    /**
+     * @inheritDoc
+     */
+    public function setBlacklistedAlgorithms(?array $algos): void
+    {
+        $this->blacklistedEncryptionAlgorithms = [];
+    }
+
+
+    /**
+     * Set the system clock
+     *
+     * @param \Psr\Clock\ClockInterface $clock
+     * @return void
+     */
+    public function setClock(ClockInterface $clock): void
+    {
+        $this->clock = $clock;
+    }
+
+
+    /**
+     * Get the system clock
+     *
+     * @return \Psr\Clock\ClockInterface
+     */
+    public function getClock(): ClockInterface
+    {
+        return $this->clock;
     }
 }

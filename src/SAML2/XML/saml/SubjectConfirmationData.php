@@ -4,115 +4,94 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function filter_var;
 use function gmdate;
 use function is_null;
-use function sprintf;
 
 /**
  * Class representing SAML 2 SubjectConfirmationData element.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
-class SubjectConfirmationData
+final class SubjectConfirmationData extends AbstractSamlElement
 {
-    /**
-     * The time before this element is valid, as an unix timestamp.
-     *
-     * @var int|null
-     */
-    private ?int $NotBefore = null;
+    use ExtendableAttributesTrait;
+    use ExtendableElementTrait;
+
+    /** The namespace-attribute for the xs:any element */
+    public const XS_ANY_ELT_NAMESPACE = C::XS_ANY_NS_ANY;
+
+    /** The namespace-attribute for the xs:anyAttribute element */
+    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
+
 
     /**
-     * The time after which this element is invalid, as an unix timestamp.
+     * Initialize (and parse) a SubjectConfirmationData element.
      *
-     * @var int|null
+     * @param \DateTimeImmutable|null $notBefore
+     * @param \DateTimeImmutable|null $notOnOrAfter
+     * @param string|null $recipient
+     * @param string|null $inResponseTo
+     * @param string|null $address
+     * @param \SimpleSAML\XML\SerializableElementInterface[] $children
+     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
-    private ?int $NotOnOrAfter = null;
+    public function __construct(
+        protected ?DateTimeImmutable $notBefore = null,
+        protected ?DateTimeImmutable $notOnOrAfter = null,
+        protected ?string $recipient = null,
+        protected ?string $inResponseTo = null,
+        protected ?string $address = null,
+        array $children = [],
+        array $namespacedAttributes = [],
+    ) {
+        Assert::nullOrSame($notBefore?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
+        Assert::nullOrSame($notOnOrAfter?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
+        Assert::nullOrNotWhitespaceOnly($recipient);
+        Assert::nullOrValidNCName($inResponseTo); // Covers the empty string
 
-    /**
-     * The Recipient this Subject is valid for. Either an entity or a location.
-     *
-     * @var string|null
-     */
-    private ?string $Recipient = null;
+        if (!is_null($address) && !filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)) {
+            Utils::getContainer()->getLogger()->warning(
+                sprintf('Provided argument (%s) is not a valid IP address.', $address),
+            );
+        }
 
-    /**
-     * The ID of the AuthnRequest this is a response to.
-     *
-     * @var string|null
-     */
-    private ?string $InResponseTo = null;
-
-    /**
-     * The IP(v6) address of the user.
-     *
-     * @var string|null
-     */
-    private ?string $Address = null;
-
-    /**
-     * The various key information elements.
-     *
-     * Array with various elements describing this key.
-     * Unknown elements will be represented by \SimpleSAML\XML\Chunk.
-     *
-     * @var (\SimpleSAML\XMLSecurity\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
-     */
-    private array $info = [];
+        $this->setElements($children);
+        $this->setAttributesNS($namespacedAttributes);
+    }
 
 
     /**
      * Collect the value of the NotBefore-property
      *
-     * @return int|null
+     * @return \DateTimeImmutable|null
      */
-    public function getNotBefore(): ?int
+    public function getNotBefore(): ?DateTimeImmutable
     {
-        return $this->NotBefore;
-    }
-
-
-    /**
-     * Set the value of the NotBefore-property
-     *
-     * @param int|null $notBefore
-     * @return void
-     */
-    public function setNotBefore(int $notBefore = null): void
-    {
-        $this->NotBefore = $notBefore;
+        return $this->notBefore;
     }
 
 
     /**
      * Collect the value of the NotOnOrAfter-property
      *
-     * @return int|null
+     * @return \DateTimeImmutable|null
      */
-    public function getNotOnOrAfter(): ?int
+    public function getNotOnOrAfter(): ?DateTimeImmutable
     {
-        return $this->NotOnOrAfter;
-    }
-
-
-    /**
-     * Set the value of the NotOnOrAfter-property
-     *
-     * @param int|null $notOnOrAfter
-     * @return void
-     */
-    public function setNotOnOrAfter(int $notOnOrAfter = null): void
-    {
-        $this->NotOnOrAfter = $notOnOrAfter;
+        return $this->notOnOrAfter;
     }
 
 
@@ -123,19 +102,7 @@ class SubjectConfirmationData
      */
     public function getRecipient(): ?string
     {
-        return $this->Recipient;
-    }
-
-
-    /**
-     * Set the value of the Recipient-property
-     *
-     * @param string|null $recipient
-     * @return void
-     */
-    public function setRecipient(string $recipient = null): void
-    {
-        $this->Recipient = $recipient;
+        return $this->recipient;
     }
 
 
@@ -146,19 +113,7 @@ class SubjectConfirmationData
      */
     public function getInResponseTo(): ?string
     {
-        return $this->InResponseTo;
-    }
-
-
-    /**
-     * Set the value of the InResponseTo-property
-     *
-     * @param string|null $inResponseTo
-     * @return void
-     */
-    public function setInResponseTo(string $inResponseTo = null): void
-    {
-        $this->InResponseTo = $inResponseTo;
+        return $this->inResponseTo;
     }
 
 
@@ -169,136 +124,123 @@ class SubjectConfirmationData
      */
     public function getAddress(): ?string
     {
-        return $this->Address;
+        return $this->address;
     }
 
 
     /**
-     * Set the value of the Address-property
+     * Test if an object, at the state it's in, would produce an empty XML-element
      *
-     * @param string|null $address
-     * @return void
+     * @return bool
      */
-    public function setAddress(string $address = null): void
+    public function isEmptyElement(): bool
     {
-        if (!is_null($address) && !filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)) {
-            Utils::getContainer()->getLogger()->warning(
-                sprintf('Provided argument (%s) is not a valid IP address.', $address)
-            );
-        }
-        $this->Address = $address;
+        return empty($this->notBefore)
+            && empty($this->notOnOrAfter)
+            && empty($this->recipient)
+            && empty($this->inResponseTo)
+            && empty($this->address)
+            && empty($this->elements)
+            && empty($this->namespacedAttributes);
     }
 
 
     /**
-     * Collect the value of the info-property
+     * Convert XML into a SubjectConfirmationData
      *
-     * @return (\SimpleSAML\XMLSecurity\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
-     */
-    public function getInfo(): array
-    {
-        return $this->info;
-    }
-
-
-    /**
-     * Set the value of the info-property
+     * @param \DOMElement $xml The XML element we should load
+     * @return static
      *
-     * @param (\SimpleSAML\XMLSecurity\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[] $info
-     * @return void
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     *   if the supplied element is missing any of the mandatory attributes
+     * @throws \SimpleSAML\Assert\AssertionFailedException
+     *   if NotBefore or NotOnOrAfter contain an invalid date.
      */
-    public function setInfo(array $info): void
+    public static function fromXML(DOMElement $xml): static
     {
-        $this->info = $info;
-    }
+        Assert::same($xml->localName, 'SubjectConfirmationData', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, SubjectConfirmationData::NS, InvalidDOMElementException::class);
 
+        $NotBefore = self::getOptionalAttribute($xml, 'NotBefore', null);
+        if ($NotBefore !== null) {
+            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
+            $NotBefore = preg_replace('/([.][0-9]+Z)$/', 'Z', $NotBefore, 1);
 
-    /**
-     * Add the value to the info-property
-     *
-     * @param \SimpleSAML\XML\Chunk|\SimpleSAML\XMLSecurity\XML\ds\KeyInfo $info
-     * @return void
-     */
-    public function addInfo($info): void
-    {
-        Assert::isInstanceOfAny($info, [Chunk::class, KeyInfo::class]);
-        $this->info[] = $info;
-    }
-
-
-    /**
-     * Initialize (and parse) a SubjectConfirmationData element.
-     *
-     * @param \DOMElement|null $xml The XML element we should load.
-     */
-    public function __construct(DOMElement $xml = null)
-    {
-        if ($xml === null) {
-            return;
+            Assert::validDateTimeZulu($NotBefore, ProtocolViolationException::class);
+            $NotBefore = new DateTimeImmutable($NotBefore);
         }
 
-        if ($xml->hasAttribute('NotBefore')) {
-            $this->setNotBefore(XMLUtils::xsDateTimeToTimestamp($xml->getAttribute('NotBefore')));
+        $NotOnOrAfter = self::getOptionalAttribute($xml, 'NotOnOrAfter', null);
+        if ($NotOnOrAfter !== null) {
+            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
+            $NotOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $NotOnOrAfter, 1);
+
+            Assert::validDateTimeZulu($NotOnOrAfter, ProtocolViolationException::class);
+            $NotOnOrAfter = new DateTimeImmutable($NotOnOrAfter);
         }
-        if ($xml->hasAttribute('NotOnOrAfter')) {
-            $this->setNotOnOrAfter(XMLUtils::xsDateTimeToTimestamp($xml->getAttribute('NotOnOrAfter')));
-        }
-        if ($xml->hasAttribute('Recipient')) {
-            $this->setRecipient($xml->getAttribute('Recipient'));
-        }
-        if ($xml->hasAttribute('InResponseTo')) {
-            $this->setInResponseTo($xml->getAttribute('InResponseTo'));
-        }
-        if ($xml->hasAttribute('Address')) {
-            $this->setAddress($xml->getAttribute('Address'));
-        }
+
+        $Recipient = self::getOptionalAttribute($xml, 'Recipient', null);
+        $InResponseTo = self::getOptionalAttribute($xml, 'InResponseTo', null);
+        $Address = self::getOptionalAttribute($xml, 'Address', null);
+
+        $children = [];
         foreach ($xml->childNodes as $n) {
             if (!($n instanceof DOMElement)) {
                 continue;
-            }
-            if ($n->namespaceURI !== C::NS_XDSIG) {
-                $this->addInfo(new Chunk($n));
+            } elseif ($n->namespaceURI === C::NS_XDSIG && $n->localName === 'KeyInfo') {
+                $children[] = KeyInfo::fromXML($n);
+                continue;
+            } else {
+                $children[] = new Chunk($n);
                 continue;
             }
-            switch ($n->localName) {
-                case 'KeyInfo':
-                    $this->addInfo(KeyInfo::fromXML($n));
-                    break;
-                default:
-                    $this->addInfo(new Chunk($n));
-                    break;
-            }
         }
+
+        return new static(
+            $NotBefore,
+            $NotOnOrAfter,
+            $Recipient,
+            $InResponseTo,
+            $Address,
+            $children,
+            self::getAttributesNSFromXML($xml),
+        );
     }
 
 
     /**
      * Convert this element to XML.
      *
-     * @param  \DOMElement $parent The parent element we should append this element to.
+     * @param  \DOMElement|null $parent The parent element we should append this element to.
      * @return \DOMElement This element, as XML.
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toXML(DOMElement $parent = null): DOMElement
     {
-        $e = $parent->ownerDocument->createElementNS(C::NS_SAML, 'saml:SubjectConfirmationData');
-        $parent->appendChild($e);
+        $e = $this->instantiateParentElement($parent);
 
-        if ($this->NotBefore !== null) {
-            $e->setAttribute('NotBefore', gmdate('Y-m-d\TH:i:s\Z', $this->NotBefore));
+        if ($this->getNotBefore() !== null) {
+            $e->setAttribute('NotBefore', $this->getNotBefore()->format(C::DATETIME_FORMAT));
         }
-        if ($this->NotOnOrAfter !== null) {
-            $e->setAttribute('NotOnOrAfter', gmdate('Y-m-d\TH:i:s\Z', $this->NotOnOrAfter));
+        if ($this->getNotOnOrAfter() !== null) {
+            $e->setAttribute('NotOnOrAfter', $this->getNotOnOrAfter()->format(C::DATETIME_FORMAT));
         }
-        if ($this->Recipient !== null) {
-            $e->setAttribute('Recipient', $this->Recipient);
+        if ($this->getRecipient() !== null) {
+            $e->setAttribute('Recipient', $this->getRecipient());
         }
-        if ($this->InResponseTo !== null) {
-            $e->setAttribute('InResponseTo', $this->InResponseTo);
+        if ($this->getInResponseTo() !== null) {
+            $e->setAttribute('InResponseTo', $this->getInResponseTo());
         }
-        if ($this->Address !== null) {
-            $e->setAttribute('Address', $this->Address);
+        if ($this->getAddress() !== null) {
+            $e->setAttribute('Address', $this->getAddress());
         }
-        foreach ($this->getInfo() as $n) {
+
+        foreach ($this->getAttributesNS() as $attr) {
+            $attr->toXML($e);
+        }
+
+        foreach ($this->getElements() as $n) {
             $n->toXML($e);
         }
 

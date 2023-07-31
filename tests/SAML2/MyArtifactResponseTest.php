@@ -18,10 +18,8 @@ class MyArtifactResponseTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $issuer1 = new Issuer();
-        $issuer2 = new Issuer();
-        $issuer1->setValue('urn:example:issuer');
-        $issuer2->setValue('urn:example:other');
+        $issuer1 = new Issuer('urn:example:issuer');
+        $issuer2 = new Issuer('urn:example:other');
 
         $artifactResponse = new ArtifactResponse();
         $artifactResponse->setIssuer($issuer1);
@@ -36,11 +34,11 @@ class MyArtifactResponseTest extends TestCase
         $xpCache = XPath::getXPath($artifactResponseElement);
         $artifactIssuer = XPath::xpQuery($artifactResponseElement, './saml:Issuer', $xpCache);
         $this->assertCount(1, $artifactIssuer);
-        $this->assertEquals($issuer1->getValue(), $artifactIssuer[0]->textContent);
+        $this->assertEquals($issuer1->getContent(), $artifactIssuer[0]->textContent);
 
         $authnelement = XPath::xpQuery($artifactResponseElement, './saml_protocol:AuthnRequest/saml:Issuer', $xpCache);
         $this->assertCount(1, $authnelement);
-        $this->assertEquals($issuer2->getValue(), $authnelement[0]->textContent);
+        $this->assertEquals($issuer2->getContent(), $authnelement[0]->textContent);
     }
 
 

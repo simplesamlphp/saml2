@@ -191,7 +191,7 @@ abstract class Message extends SignedElement
         /** @var \DOMElement[] $issuer */
         $issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
         if (!empty($issuer)) {
-            $this->issuer = new Issuer($issuer[0]);
+            $this->issuer = Issuer::fromXML($issuer[0]);
         }
 
         $this->validateSignature($xml);

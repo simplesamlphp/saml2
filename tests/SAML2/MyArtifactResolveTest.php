@@ -17,8 +17,7 @@ class MyArtifactResolveTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $issuer = new Issuer();
-        $issuer->setValue('urn:example:issuer');
+        $issuer = new Issuer('urn:example:issuer');
         $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
 
         $artifactResolve = new ArtifactResolve();
@@ -42,8 +41,7 @@ class MyArtifactResolveTest extends TestCase
         $id = '_6c3a4f8b9c2d';
         $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
 
-        $issuer = new Issuer();
-        $issuer->setValue('https://ServiceProvider.com/SAML');
+        $issuer = new Issuer('https://ServiceProvider.com/SAML');
 
         $xml = <<<XML
 <samlp:ArtifactResolve
@@ -61,6 +59,6 @@ XML;
         $this->assertInstanceOf(ArtifactResolve::class, $ar);
         $this->assertEquals($artifact, $ar->getArtifact());
         $this->assertEquals($id, $ar->getId());
-        $this->assertEquals($issuer->getValue(), $ar->getIssuer()->getValue());
+        $this->assertEquals($issuer->getContent(), $ar->getIssuer()->getContent());
     }
 }

@@ -2,89 +2,156 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\SAML2\XML\md;
+namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use Exception;
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Compat\AbstractContainer;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\XML\saml\EncryptedAttribute;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
+use SimpleSAML\XMLSecurity\Key\PublicKey;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+
+use function dirname;
+use function strval;
 
 /**
- * Class \SimpleSAML\SAML2\XML\md\AttributeTest
+ * Class \SAML2\XML\saml\AttributeTest
+ *
+ * @covers \SimpleSAML\SAML2\XML\saml\Attribute
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
+ * @package simplesamlphp/saml2
  */
-class AttributeTest extends TestCase
+final class AttributeTest extends TestCase
 {
+    use SchemaValidationTestTrait;
+    use SerializableElementTestTrait;
+
+    /** @var \SimpleSAML\SAML2\Compat\AbstractContainer */
+    private static AbstractContainer $containerBackup;
+
+
     /**
-     * @return void
+     */
+    public static function setUpBeforeClass(): void
+    {
+        self::$containerBackup = ContainerSingleton::getInstance();
+
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+
+        self::$testedClass = Attribute::class;
+
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/saml_Attribute.xml',
+        );
+
+        $container = clone self::$containerBackup;
+        $container->setBlacklistedAlgorithms(null);
+        ContainerSingleton::setContainer($container);
+    }
+
+
+    /**
+     */
+    public static function tearDownAfterClass(): void
+    {
+        ContainerSingleton::setContainer(self::$containerBackup);
+    }
+
+
+    // marshalling
+
+
+    /**
+     * Test creating an Attribute from scratch.
      */
     public function testMarshalling(): void
     {
-        $attribute = new Attribute();
-        $attribute->setName('TheName');
-        $attribute->setNameFormat('TheNameFormat');
-        $attribute->setFriendlyName('TheFriendlyName');
-        $attribute->setAttributeValue([
-            new AttributeValue('FirstValue'),
-            new AttributeValue('SecondValue'),
-        ]);
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
 
-        $document = DOMDocumentFactory::fromString('<root />');
-        $attributeElement = $attribute->toXML($document->firstChild);
+        $attribute = new Attribute(
+            'TheName',
+            C::NAMEFORMAT_URI,
+            'TheFriendlyName',
+            [
+                new AttributeValue('FirstValue'),
+                new AttributeValue('SecondValue'),
+            ],
+            [$attr1, $attr2],
+        );
 
-        $xpCache = XPath::getXPath($attributeElement);
-        $attributeElements = XPath::xpQuery($attributeElement, '/root/saml_assertion:Attribute', $xpCache);
-        $this->assertCount(1, $attributeElements);
-        /** @var \DOMElement $attributeElement */
-        $attributeElement = $attributeElements[0];
-
-        $this->assertEquals('TheName', $attributeElement->getAttribute('Name'));
-        $this->assertEquals('TheNameFormat', $attributeElement->getAttribute('NameFormat'));
-        $this->assertEquals('TheFriendlyName', $attributeElement->getAttribute('FriendlyName'));
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($attribute),
+        );
     }
 
 
+    // unmarshalling
+
+
     /**
-     * @return void
+     * Test creating of an Attribute from XML.
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = C::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:Attribute xmlns:saml="{$samlNamespace}" Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
-    <saml:AttributeValue>FirstValue</saml:AttributeValue>
-    <saml:AttributeValue>SecondValue</saml:AttributeValue>
-</saml:Attribute>
-XML
-        );
+        $attribute = Attribute::fromXML(self::$xmlRepresentation->documentElement);
 
-        $attribute = new Attribute($document->firstChild);
-        $this->assertEquals('TheName', $attribute->getName());
-        $this->assertEquals('TheNameFormat', $attribute->getNameFormat());
-        $this->assertEquals('TheFriendlyName', $attribute->getFriendlyName());
-        $this->assertCount(2, $attribute->getAttributeValue());
-        $this->assertEquals('FirstValue', strval($attribute->getAttributeValue()[0]));
-        $this->assertEquals('SecondValue', strval($attribute->getAttributeValue()[1]));
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($attribute),
+        );
     }
 
 
     /**
-     * @return void
+     * Test that creating an Attribute from XML fails if no Name is provided.
      */
-    public function testUnmarshallingFailure(): void
+    public function testUnmarshallingWithoutName(): void
     {
-        $samlNamespace = C::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:Attribute xmlns:saml="{$samlNamespace}" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
-    <saml:AttributeValue>FirstValue</saml:AttributeValue>
-    <saml:AttributeValue>SecondValue</saml:AttributeValue>
-</saml:Attribute>
-XML
+        $document = clone self::$xmlRepresentation;
+        $document->documentElement->removeAttribute('Name');
+
+        $this->expectException(MissingAttributeException::class);
+
+        Attribute::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test encryption / decryption
+     */
+    public function testEncryption(): void
+    {
+        $attribute = Attribute::fromXML(self::$xmlRepresentation->documentElement);
+
+        $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
+            C::KEY_TRANSPORT_OAEP,
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY),
         );
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing Name on Attribute.');
-        new Attribute($document->firstChild);
+
+        $encattr = new EncryptedAttribute($attribute->encrypt($encryptor));
+        $str = strval($encattr);
+        $doc = DOMDocumentFactory::fromString($str);
+        $encattr = EncryptedAttribute::fromXML($doc->documentElement);
+
+        $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
+            $encattr->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
+        );
+
+        $attr = $encattr->decrypt($decryptor);
+        $this->assertEquals(strval($attribute), strval($attr));
     }
 }

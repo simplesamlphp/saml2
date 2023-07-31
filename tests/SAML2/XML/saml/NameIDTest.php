@@ -2,82 +2,81 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\SAML2\XML\md;
+namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+
+use function dirname;
+use function strval;
 
 /**
- * Class \SimpleSAML\SAML2\XML\md\NameIDTest
+ * Class \SAML2\XML\saml\NameIDTest
+ *
+ * @covers \SimpleSAML\SAML2\XML\saml\NameID
+ * @covers \SimpleSAML\SAML2\XML\saml\NameIDType
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
+ *
+ * @package simplesamlphp/saml2
  */
-class NameIDTest extends TestCase
+final class NameIDTest extends TestCase
 {
+    use SchemaValidationTestTrait;
+    use SerializableElementTestTrait;
+
+
     /**
-     * @return void
+     */
+    public static function setUpBeforeClass(): void
+    {
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
+
+        self::$testedClass = NameID::class;
+
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/saml_NameID.xml',
+        );
+    }
+
+
+    // marshalling
+
+
+    /**
      */
     public function testMarshalling(): void
     {
-        $nameId = new NameID();
-        $nameId->setNameQualifier('TheNameQualifier');
-        $nameId->setSPNameQualifier('TheSPNameQualifier');
-        $nameId->setFormat('TheFormat');
-        $nameId->setSPProvidedID('TheSPProvidedID');
-        $nameId->setValue('TheNameIDValue');
-        $nameIdElement = $nameId->toXML();
+        $nameId = new NameID(
+            'TheNameIDValue',
+            'TheNameQualifier',
+            'TheSPNameQualifier',
+            'urn:the:format',
+            'TheSPProvidedID',
+        );
 
-        $xpCache = XPath::getXPath($nameIdElement);
-        $nameIdElements = XPath::xpQuery($nameIdElement, '/saml_assertion:NameID', $xpCache);
-        $this->assertCount(1, $nameIdElements);
-        /** @var \DOMElement $nameIdElement */
-        $nameIdElement = $nameIdElements[0];
-
-        $this->assertEquals('TheNameQualifier', $nameIdElement->getAttribute("NameQualifier"));
-        $this->assertEquals('TheSPNameQualifier', $nameIdElement->getAttribute("SPNameQualifier"));
-        $this->assertEquals('TheFormat', $nameIdElement->getAttribute("Format"));
-        $this->assertEquals('TheSPProvidedID', $nameIdElement->getAttribute("SPProvidedID"));
-        $this->assertEquals('TheNameIDValue', $nameIdElement->textContent);
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($nameId),
+        );
     }
 
 
+    // unmarshalling
+
+
     /**
-     * @return void
      */
     public function testUnmarshalling(): void
     {
-        $samlNamespace = C::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<saml:NameID xmlns:saml="{$samlNamespace}" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">TheNameIDValue</saml:NameID>
-XML
+        $nameId = NameID::fromXML(self::$xmlRepresentation->documentElement);
+
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($nameId),
         );
-
-        $nameId = new NameID($document->firstChild);
-        $this->assertEquals('TheNameQualifier', $nameId->getNameQualifier());
-        $this->assertEquals('TheSPNameQualifier', $nameId->getSPNameQualifier());
-        $this->assertEquals('TheFormat', $nameId->getFormat());
-        $this->assertEquals('TheSPProvidedID', $nameId->getSPProvidedID());
-        $this->assertEquals('TheNameIDValue', $nameId->getValue());
-    }
-
-
-    /**
-     * @return void
-     */
-    public function testToString(): void
-    {
-        $nameId = new NameID();
-        $nameId->setNameQualifier('TheNameQualifier');
-        $nameId->setSPNameQualifier('TheSPNameQualifier');
-        $nameId->setFormat('TheFormat');
-        $nameId->setSPProvidedID('TheSPProvidedID');
-        $nameId->setValue('TheNameIDValue');
-
-        $output = '<saml:NameID xmlns:saml="' . C::NS_SAML . '" NameQualifier="TheNameQualifier" ' .
-                  'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">' .
-                  'TheNameIDValue</saml:NameID>';
-
-        $this->assertXmlStringEqualsXmlString($output, $nameId->__toString());
     }
 }

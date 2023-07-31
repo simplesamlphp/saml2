@@ -13,15 +13,14 @@ use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use function sprintf;
 use function strval;
 
-class SubjectConfirmationRecipientMatches implements
-    SubjectConfirmationConstraintValidator
+class SubjectConfirmationRecipientMatches implements SubjectConfirmationConstraintValidator
 {
     /**
      * Constructor for SubjectConfirmationRecipientMatches
      * @param \SimpleSAML\SAML2\Configuration\Destination $destination
      */
     public function __construct(
-        private Destination $destination
+        private Destination $destination,
     ) {
     }
 
@@ -29,7 +28,8 @@ class SubjectConfirmationRecipientMatches implements
     /**
      * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmation $subjectConfirmation
      * @param \SimpleSAML\SAML2\Assertion\Validation\Result $result
-     * @return void
+     *
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function validate(SubjectConfirmation $subjectConfirmation, Result $result): void
     {
@@ -42,7 +42,7 @@ class SubjectConfirmationRecipientMatches implements
             $result->addError(sprintf(
                 'Recipient in SubjectConfirmationData ("%s") does not match the current destination ("%s")',
                 $recipient,
-                strval($this->destination)
+                strval($this->destination),
             ));
         }
     }
