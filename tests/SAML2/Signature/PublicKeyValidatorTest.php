@@ -5,42 +5,50 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Signature;
 
 use Mockery;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Certificate\Key;
 use SimpleSAML\SAML2\Certificate\KeyCollection;
 use SimpleSAML\SAML2\Certificate\KeyLoader;
-use SimpleSAML\SAML2\Configuration\CertificateProvider;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
-use SimpleSAML\SAML2\Response;
+use SimpleSAML\SAML2\Configuration\CertificateProvider;
+use SimpleSAML\SAML2\Constants;
 use SimpleSAML\SAML2\Signature\PublicKeyValidator;
-use SimpleSAML\SAML2\SignedElement;
-use SimpleSAML\SAML2\Utilities\Certificate;
-use SimpleSAML\Test\SAML2\CertificatesMock;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\TestUtils\SimpleTestLogger;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\Utils\Certificate;
 
-class PublicKeyValidatorTest extends MockeryTestCase
+/**
+ * @covers \SimpleSAML\SAML2\Signature\PublicKeyValidator
+ * @package simplesamlphp/saml2
+ */
+final class PublicKeyValidatorTest extends MockeryTestCase
 {
+    /** @var \Mockery\MockInterface */
     private MockInterface $mockSignedElement;
+
+    /** @var \Mockery\MockInterface */
     private MockInterface $mockConfiguration;
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
         $this->mockConfiguration = Mockery::mock(CertificateProvider::class);
-        $this->mockSignedElement = Mockery::mock(SignedElement::class);
+        $this->mockSignedElement = Mockery::mock(AbstractMessage::class);
     }
 
 
     /**
      * @test
      * @group signature
-     * @return void
      */
     public function itCannotValidateIfNoKeysCanBeLoaded(): void
     {
@@ -54,7 +62,6 @@ class PublicKeyValidatorTest extends MockeryTestCase
     /**
      * @test
      * @group signature
-     * @return void
      */
     public function itWillValidateWhenKeysCanBeLoaded(): void
     {
@@ -68,13 +75,12 @@ class PublicKeyValidatorTest extends MockeryTestCase
     /**
      * @test
      * @group signature
-     * @return void
      */
     public function nonX509KeysAreNotUsedForValidation(): void
     {
         $controlledCollection = new KeyCollection([
             new Key(['type' => 'not_X509']),
-            new Key(['type' => 'again_not_X509'])
+            new Key(['type' => 'again_not_X509']),
         ]);
 
         $keyloaderMock = $this->prepareKeyLoader($controlledCollection);
@@ -92,23 +98,20 @@ class PublicKeyValidatorTest extends MockeryTestCase
     /**
      * @test
      * @group signature
-     * @return void
      */
     public function signedMessageWithValidSignatureIsValidatedCorrectly(): void
     {
-        $pattern = Certificate::CERTIFICATE_PATTERN;
-        preg_match($pattern, CertificatesMock::PUBLIC_KEY_PEM, $matches);
-
-        $config = new IdentityProvider(['certificateData' => $matches[1]]);
+        $config = new IdentityProvider(
+            ['certificateData' => PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE)],
+        );
         $validator = new PublicKeyValidator(new SimpleTestLogger(), new KeyLoader());
 
-        $doc = DOMDocumentFactory::fromFile(__DIR__ . '/response.xml');
-        $response = new Response($doc->firstChild);
-        $response->setSignatureKey(CertificatesMock::getPrivateKey());
-        $response->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
+        $doc = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 3) . '/resources/xml/response/signedresponse_with_unsignedassertion.xml',
+        );
 
         // convert to signed response
-        $response = new Response($response->toSignedXML());
+        $response = Response::fromXML($doc->documentElement);
 
         $this->assertTrue($validator->canValidate($response, $config), 'Cannot validate the element');
         $this->assertTrue($validator->hasValidSignature($response, $config), 'The signature is not valid');

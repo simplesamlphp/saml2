@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2;
 
-use PHPUnit\Framework\TestCase;
+use Exception;
 use Nyholm\Psr7\ServerRequest;
+use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Binding;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
@@ -14,7 +15,11 @@ use SimpleSAML\SAML2\HTTPPost;
 use SimpleSAML\SAML2\HTTPRedirect;
 use SimpleSAML\SAML2\SOAP;
 
-class BindingTest extends TestCase
+/**
+ * @covers \SimpleSAML\SAML2\Binding
+ * @package simplesamlphp\saml2
+ */
+final class BindingTest extends TestCase
 {
     /**
      * Test getting binding objects from string.
@@ -32,7 +37,8 @@ class BindingTest extends TestCase
         $bind = Binding::getBinding(C::BINDING_PAOS);
         $this->assertInstanceOf(SOAP::class, $bind);
 
-        $this->expectException(UnsupportedBindingException::class, 'Unsupported binding:');
+        $this->expectException(UnsupportedBindingException::class);
+        $this->expectExceptionMessage('Unsupported binding:');
         $bind = Binding::getBinding('nonsense');
     }
 
@@ -64,7 +70,8 @@ class BindingTest extends TestCase
         $q = ['aap' => 'noot'];
         $request = new ServerRequest('GET', 'http://tnyholm.se');
         $request = $request->withQueryParams($q);
-        $this->expectException(UnsupportedBindingException::class, 'Unable to find the current binding.');
+        $this->expectException(UnsupportedBindingException::class);
+        $this->expectExceptionMessage('Unable to find the SAML 2 binding used for this request.');
         $bind = Binding::getCurrentBinding($request);
     }
 
@@ -125,7 +132,8 @@ class BindingTest extends TestCase
     {
         $request = new ServerRequest('PUT', 'http://tnyholm.se');
         $request = $request->withAddedHeader('CONTENT_TYPE', 'text/xml');
-        $this->expectException(UnsupportedBindingException::class, 'Unable to find the current binding.');
+        $this->expectException(UnsupportedBindingException::class);
+        $this->expectExceptionMessage('Unable to find the SAML 2 binding used for this request.');
         $bind = Binding::getCurrentBinding($request);
     }
 

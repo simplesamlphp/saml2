@@ -10,38 +10,44 @@ use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
-use SimpleSAML\SAML2\Response as SAML2_Response;
-use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
-use SimpleSAML\SAML2\XML\ecp\Response as ECPResponse;
-use SimpleSAML\SOAP\Constants as SOAPC;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SOAP11\Utils\XPath;
+use SimpleSAML\SAML2\XML\ecp\Response as ECPResponse;
+use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\MessageFactory;
+use SimpleSAML\SAML2\XML\samlp\Response as SAML2_Response;
+use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\SOAP11\XML\env\Body;
 use SimpleSAML\SOAP11\XML\env\Envelope;
 use SimpleSAML\SOAP11\XML\env\Header;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function file_get_contents;
+use function header;
+use function sprintf;
 
 /**
  * Class which implements the SOAP binding.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class SOAP extends Binding
 {
     /**
-     * @param \SimpleSAML\SAML2\Message $message
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message
      * @throws \Exception
      * @return string|false The XML or false on error
      */
-    public function getOutputToSend(Message $message): string|false
+    public function getOutputToSend(AbstractMessage $message)
     {
+        $header = new Header();
+
         // In the Artifact Resolution profile, this will be an ArtifactResolve
         // containing another message (e.g. a Response), however in the ECP
         // profile, this is the Response itself.
         if ($message instanceof SAML2_Response) {
-            $requestAuthenticated = new RequestAuthenticated(1);
+            $requestAuthenticated = new RequestAuthenticated(true);
 
             $destination = $this->destination ?: $message->getDestination();
             if ($destination === null) {
@@ -49,28 +55,23 @@ class SOAP extends Binding
             }
             $response = new ECPResponse($destination);
             $header = new Header([$requestAuthenticated, $response]);
-        } else {
-            $header = new Header();
         }
 
         $env = new Envelope(
-            new Body([new Chunk($message->toUnsignedXML())]),
+            new Body([$message]),
             $header,
         );
-
-        $elt = $env->toXML();
-        /** @psalm-var \DOMDocument $elt->ownerDocument */
-        return $elt->ownerDocument->saveXML();
+        return $env->toXML()->ownerDocument?->saveXML();
     }
 
 
     /**
      * Send a SAML 2 message using the SOAP binding.
      *
-     * @param \SimpleSAML\SAML2\Message $message The message we should send.
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message we should send.
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function send(Message $message): ResponseInterface
+    public function send(AbstractMessage $message): ResponseInterface
     {
         $xml = $this->getOutputToSend($message);
         Utils::getContainer()->debugMessage($xml, 'out');
@@ -83,11 +84,11 @@ class SOAP extends Binding
      * Receive a SAML 2 message sent using the HTTP-POST binding.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @return \SimpleSAML\SAML2\Message The received message.
+     * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
      *
      * @throws \Exception If unable to receive the message
      */
-    public function receive(ServerRequestInterface $request): Message
+    public function receive(/** @scrutinizer ignore-unused */ServerRequestInterface $request): AbstractMessage
     {
         $postText = $this->getInputStream();
 
@@ -100,12 +101,13 @@ class SOAP extends Binding
         $xml = $document->firstChild;
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
 
-        $xpCache = XPath::getXPath($xml);
+        $xpCache = XPath::getXPath($document->documentElement);
         /** @var \DOMElement[] $results */
         $results = XPath::xpQuery($xml, '/env:Envelope/env:Body/*[1]', $xpCache);
 
-        return Message::fromXML($results[0]);
+        return MessageFactory::fromXML($results[0]);
     }
+
 
     /**
      * @return string|false

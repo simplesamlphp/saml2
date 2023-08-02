@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Assertion\Validation;
 
-use SimpleSAML\SAML2\Assertion;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\IdentityProviderAware;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProviderAware;
+use SimpleSAML\SAML2\XML\saml\Assertion;
 
 class AssertionValidator
 {
@@ -20,18 +20,17 @@ class AssertionValidator
 
     /**
      * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProvider
-     * @param \SimpleSAML\SAML2\Configuration\ServiceProvider $serviceProvider
+     * @param \SimpleSAML\SAML2\Configuration\ServiceProvider  $serviceProvider
      */
     public function __construct(
         private IdentityProvider $identityProvider,
-        private ServiceProvider $serviceProvider
+        private ServiceProvider $serviceProvider,
     ) {
     }
 
 
     /**
      * @param \SimpleSAML\SAML2\Assertion\Validation\AssertionConstraintValidator $constraint
-     * @return void
      */
     public function addConstraintValidator(AssertionConstraintValidator $constraint): void
     {
@@ -48,12 +47,13 @@ class AssertionValidator
 
 
     /**
-     * @param \SimpleSAML\SAML2\Assertion $assertion
+     * @param \SimpleSAML\SAML2\XML\saml\Assertion $assertion
      * @return \SimpleSAML\SAML2\Assertion\Validation\Result
      */
     public function validate(Assertion $assertion): Result
     {
         $result = new Result();
+
         foreach ($this->constraints as $validator) {
             $validator->validate($assertion, $result);
         }

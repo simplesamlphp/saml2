@@ -30,7 +30,7 @@ final class IDPList extends AbstractSamlpElement
     /**
      * Initialize an IDPList element.
      *
-     * @param \SimpleSAML\SAML2\XML\samlp\IDPEntry[] $idpEntry
+     * @param \SimpleSAML\SAML2\XML\samlp\IDPEntry[] $IDPEntry
      * @param \SimpleSAML\SAML2\XML\samlp\GetComplete|null $getComplete
      */
     public function __construct(

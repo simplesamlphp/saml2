@@ -5,23 +5,24 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Response\Validation\ConstraintValidator;
 
 use Mockery;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Configuration\Destination;
-use SimpleSAML\SAML2\Response;
 use SimpleSAML\SAML2\Response\Validation\Result;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator\DestinationMatches;
+use SimpleSAML\SAML2\XML\samlp\Response;
 
-class DestinationMatchesTest extends MockeryTestCase
+/**
+ * @covers \SimpleSAML\SAML2\Response\Validation\ConstraintValidator\DestinationMatches
+ * @package simplesamlphp/saml2
+ */
+final class DestinationMatchesTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\MockInterface
-     */
+    /** @var \Mockery\MockInterface */
     private MockInterface $response;
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -32,7 +33,6 @@ class DestinationMatchesTest extends MockeryTestCase
     /**
      * @group response-validation
      * @test
-     * @return void
      */
     public function aResponseIsValidWhenTheDestinationsMatch(): void
     {
@@ -50,7 +50,6 @@ class DestinationMatchesTest extends MockeryTestCase
     /**
      * @group response-validation
      * @test
-     * @return void
      */
     public function aResponseIsNotValidWhenTheDestinationsAreNotEqual(): void
     {

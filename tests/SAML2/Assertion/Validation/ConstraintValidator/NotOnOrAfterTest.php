@@ -4,47 +4,79 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
-use Mockery;
-use Mockery\MockInterface;
-use SimpleSAML\SAML2\Assertion;
+use DateInterval;
+use PHPUnit\Framework\TestCase;
+use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\NotOnOrAfter;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
-use SimpleSAML\Test\SAML2\AbstractControlledTimeTestCase;
+use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\AuthnContext;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\XML\saml\AuthnStatement;
+use SimpleSAML\SAML2\XML\saml\Conditions;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\Test\SAML2\Constants as C;
 
 /**
- * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
- * tests.
+ * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\NotOnOrAfter
  *
- * @runTestsInSeparateProcesses
+ * @package simplesamlphp/saml2
  */
-class NotOnOrAfterTest extends AbstractControlledTimeTestCase
+final class NotOnOrAfterTest extends TestCase
 {
-    /** @var \Mockery\MockInterface */
-    private static MockInterface $assertion;
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
+
+    /** @var \SimpleSAML\SAML2\XML\saml\Issuer */
+    private static Issuer $issuer;
+
+    /** @var \SimpleSAML\SAML2\XML\saml\AuthnStatement */
+    private static AuthnStatement $authnStatement;
 
 
     /**
-     * @return void
      */
     public static function setUpBeforeClass(): void
     {
-        self::$assertion = Mockery::mock(Assertion::class);
+        self::$clock = Utils::getContainer()->getClock();
+
+        // Create an Issuer
+        self::$issuer = new Issuer('testIssuer');
+
+        // Create the statements
+        self::$authnStatement = new AuthnStatement(
+            new AuthnContext(
+                new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_URN),
+                null,
+                null
+            ),
+            self::$clock->now(),
+        );
     }
 
 
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
-    public function timestamp_in_the_past_before_graceperiod_is_not_valid(): void
+    public function timestampInThePastBeforeGraceperiodIsNotValid(): void
     {
-        self::$assertion->shouldReceive('getNotOnOrAfter')->andReturn($this->currentTime - 60);
+        // Create Conditions
+        $conditions = new Conditions(null, self::$clock->now()->sub(new DateInterval('PT60S')));
+
+        // Create an assertion
+        $assertion = new Assertion(
+            issuer: self::$issuer,
+            issueInstant: self::$clock->now(),
+            conditions: $conditions,
+            statements: [self::$authnStatement],
+        );
 
         $validator = new NotOnOrAfter();
         $result    = new Result();
 
-        $validator->validate(self::$assertion, $result);
+        $validator->validate($assertion, $result);
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $result->getErrors());
@@ -55,14 +87,23 @@ class NotOnOrAfterTest extends AbstractControlledTimeTestCase
      * @group assertion-validation
      * @test
      */
-    public function time_within_graceperiod_is_valid()
+    public function timeWithinGraceperiodIsValid(): void
     {
-        self::$assertion->shouldReceive('getNotOnOrAfter')->andReturn($this->currentTime - 59);
+        // Create Conditions
+        $conditions = new Conditions(null, self::$clock->now()->sub(new DateInterval('PT59S')));
+
+        // Create an assertion
+        $assertion = new Assertion(
+            issuer: self::$issuer,
+            issueInstant: self::$clock->now(),
+            conditions: $conditions,
+            statements: [self::$authnStatement],
+        );
 
         $validator = new NotOnOrAfter();
         $result    = new Result();
 
-        $validator->validate(self::$assertion, $result);
+        $validator->validate($assertion, $result);
 
         $this->assertTrue($result->isValid());
     }
@@ -71,16 +112,24 @@ class NotOnOrAfterTest extends AbstractControlledTimeTestCase
     /**
      * @group assertion-validation
      * @test
-     * @return void
      */
-    public function current_time_is_valid(): void
+    public function currentTimeIsValid(): void
     {
-        self::$assertion->shouldReceive('getNotOnOrAfter')->andReturn($this->currentTime);
+        // Create Conditions
+        $conditions = new Conditions(null, self::$clock->now());
+
+        // Create an assertion
+        $assertion = new Assertion(
+            issuer: self::$issuer,
+            issueInstant: self::$clock->now(),
+            conditions: $conditions,
+            statements: [self::$authnStatement],
+        );
 
         $validator = new NotOnOrAfter();
         $result    = new Result();
 
-        $validator->validate(self::$assertion, $result);
+        $validator->validate($assertion, $result);
 
         $this->assertTrue($result->isValid());
     }

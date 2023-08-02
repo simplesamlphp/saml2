@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\Signature;
 
 use Psr\Log\LoggerInterface;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
-use SimpleSAML\SAML2\SignedElement;
+use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
 use function get_class;
 use function sprintf;
@@ -19,9 +19,7 @@ use function sprintf;
  */
 class ValidatorChain implements ValidatorInterface
 {
-    /**
-     * @var \SimpleSAML\SAML2\Signature\ChainedValidator[]
-     */
+    /** @var \SimpleSAML\SAML2\Signature\ChainedValidator[] */
     private array $validators = [];
 
 
@@ -42,7 +40,6 @@ class ValidatorChain implements ValidatorInterface
 
     /**
      * @param \SimpleSAML\SAML2\Signature\ChainedValidator $validator
-     * @return void
      */
     public function appendValidator(ChainedValidator $validator): void
     {
@@ -51,20 +48,20 @@ class ValidatorChain implements ValidatorInterface
 
 
     /**
-     * @param \SimpleSAML\SAML2\SignedElement $signedElement
+     * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface $signedElement
      * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
      */
     public function hasValidSignature(
-        SignedElement $signedElement,
-        CertificateProvider $configuration
+        SignedElementInterface $signedElement,
+        CertificateProvider $configuration,
     ): bool {
         foreach ($this->validators as $validator) {
             if ($validator->canValidate($signedElement, $configuration)) {
                 $this->logger->debug(sprintf(
                     'Validating the signed element with validator of type "%s"',
-                    get_class($validator)
+                    get_class($validator),
                 ));
 
                 return $validator->hasValidSignature($signedElement, $configuration);
@@ -72,13 +69,13 @@ class ValidatorChain implements ValidatorInterface
 
             $this->logger->debug(sprintf(
                 'Could not validate the signed element with validator of type "%s"',
-                get_class($validator)
+                get_class($validator),
             ));
         }
 
         throw new MissingConfigurationException(sprintf(
             'No certificates have been configured%s',
-            $configuration->has('entityid') ? ' for "' . $configuration->get('entityid') . '"' : ''
+            $configuration->has('entityid') ? ' for "' . $configuration->get('entityid') . '"' : '',
         ));
     }
 }

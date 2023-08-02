@@ -6,12 +6,13 @@ namespace SimpleSAML\SAML2\Assertion;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\SAML2\Assertion;
 use SimpleSAML\SAML2\Assertion\Exception\NotDecryptedException;
 use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
-use SimpleSAML\SAML2\EncryptedAssertion;
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 
 use function count;
 use function get_class;
@@ -32,7 +33,7 @@ class Decrypter
         private LoggerInterface $logger,
         private IdentityProvider $identityProvider,
         private ServiceProvider $serviceProvider,
-        private PrivateKeyLoader $privateKeyLoader
+        private PrivateKeyLoader $privateKeyLoader,
     ) {
     }
 
@@ -50,23 +51,19 @@ class Decrypter
 
 
     /**
-     * @param \SimpleSAML\SAML2\EncryptedAssertion $assertion
+     * @param \SimpleSAML\SAML2\XML\saml\EncryptedAssertion $assertion
      *
-     * @return \SimpleSAML\SAML2\Assertion
+     * @return \SimpleSAML\SAML2\XML\saml\Assertion
      */
     public function decrypt(EncryptedAssertion $assertion): Assertion
     {
         $decryptionKeys = $this->privateKeyLoader->loadDecryptionKeys($this->identityProvider, $this->serviceProvider);
-        $blacklistedKeys = $this->identityProvider->getBlacklistedAlgorithms();
-        if (is_null($blacklistedKeys)) {
-            $blacklistedKeys = $this->serviceProvider->getBlacklistedAlgorithms();
-        }
 
         // reflects the simplesamlphp behaviour for BC, see
         // https://github.com/simplesamlphp/simplesamlphp/blob/3d735912342767d391297cc5e13272a76730aca0/modules/saml/lib/Message.php#L369
         foreach ($decryptionKeys as $index => $key) {
             try {
-                $decryptedAssertion = $assertion->getAssertion($key, $blacklistedKeys);
+                $decryptedAssertion = $assertion->decrypt($key);
                 $this->logger->debug(sprintf('Decrypted Assertion with key "#%d"', $index));
 
                 return $decryptedAssertion;
@@ -75,14 +72,14 @@ class Decrypter
                     'Could not decrypt assertion with key "#%d", "%s" thrown: "%s"',
                     $index,
                     get_class($e),
-                    $e->getMessage()
+                    $e->getMessage(),
                 ));
             }
         }
 
         throw new NotDecryptedException(sprintf(
             'Could not decrypt the assertion, tried with "%d" keys. See the debug log for more information',
-            count($decryptionKeys)
+            count($decryptionKeys),
         ));
     }
 }

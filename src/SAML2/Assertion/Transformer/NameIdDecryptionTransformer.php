@@ -6,19 +6,25 @@ namespace SimpleSAML\SAML2\Assertion\Transformer;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\SAML2\Assertion;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assertion\Exception\NotDecryptedException;
 use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\IdentityProviderAware;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProviderAware;
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\EncryptedID;
+use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
+use SimpleSAML\SAML2\XML\saml\Subject;
 
 use function get_class;
+use function is_null;
 use function sprintf;
 
 final class NameIdDecryptionTransformer implements
-    Transformer,
+    TransformerInterface,
     IdentityProviderAware,
     ServiceProviderAware
 {
@@ -41,55 +47,68 @@ final class NameIdDecryptionTransformer implements
      */
     public function __construct(
         private LoggerInterface $logger,
-        private PrivateKeyLoader $privateKeyLoader
+        private PrivateKeyLoader $privateKeyLoader,
     ) {
+        $this->logger = $logger;
+        $this->privateKeyLoader = $privateKeyLoader;
     }
 
 
     /**
-     * @param \SimpleSAML\SAML2\Assertion $assertion
+     * @param \SimpleSAML\SAML2\XML\saml\Assertion $assertion
      * @throws \Exception
-     * @return \SimpleSAML\SAML2\Assertion
+     * @return \SimpleSAML\SAML2\XML\saml\Assertion
      */
     public function transform(Assertion $assertion): Assertion
     {
-        if (!$assertion->isNameIdEncrypted()) {
+        $subject = $assertion->getSubject();
+        if ($subject === null) {
+            return $assertion;
+        }
+
+        $identifier = $subject->getIdentifier();
+        if (!($identifier instanceof EncryptedID)) {
             return $assertion;
         }
 
         $decryptionKeys  = $this->privateKeyLoader->loadDecryptionKeys($this->identityProvider, $this->serviceProvider);
-        $blacklistedKeys = $this->identityProvider->getBlacklistedAlgorithms();
-        if (is_null($blacklistedKeys)) {
-            $blacklistedKeys = $this->serviceProvider->getBlacklistedAlgorithms();
-        }
 
+        $decrypted = null;
         foreach ($decryptionKeys as $index => $key) {
             try {
-                $assertion->decryptNameId($key, $blacklistedKeys);
+                $decrypted = $identifier->decrypt($key);
                 $this->logger->debug(sprintf('Decrypted assertion NameId with key "#%d"', $index));
+                break;
             } catch (Exception $e) {
                 $this->logger->debug(sprintf(
                     'Decrypting assertion NameId with key "#%d" failed, "%s" thrown: "%s"',
                     $index,
                     get_class($e),
-                    $e->getMessage()
+                    $e->getMessage(),
                 ));
             }
         }
 
-        if ($assertion->isNameIdEncrypted()) {
+        if ($decrypted === null) {
             throw new NotDecryptedException(
-                'Could not decrypt the assertion NameId with the configured keys, see the debug log for information'
+                'Could not decrypt the assertion NameId with the configured keys, see the debug log for information',
             );
         }
+        Assert::implementsInterface($decrypted, IdentifierInterface::class);
 
-        return $assertion;
+        return new Assertion(
+            $assertion->getIssuer(),
+            $assertion->getIssueInstant(),
+            $assertion->getId(),
+            new Subject($decrypted, $subject->getSubjectConfirmation()),
+            $assertion->getConditions(),
+            $assertion->getStatements(),
+        );
     }
 
 
     /**
      * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProvider
-     * @return void
      */
     public function setIdentityProvider(IdentityProvider $identityProvider): void
     {
@@ -99,7 +118,6 @@ final class NameIdDecryptionTransformer implements
 
     /**
      * @param \SimpleSAML\SAML2\Configuration\ServiceProvider $serviceProvider
-     * @return void
      */
     public function setServiceProvider(ServiceProvider $serviceProvider): void
     {

@@ -57,6 +57,11 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const BINDING_HTTP_ARTIFACT = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact';
 
     /**
+     * The URN for the DEFLATE url encoding
+     */
+    public const BINDING_HTTP_REDIRECT_DEFLATE = 'urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:DEFLATE';
+
+    /**
      * The URN for the SOAP binding.
      */
     public const BINDING_SOAP = 'urn:oasis:names:tc:SAML:2.0:bindings:SOAP';

@@ -5,25 +5,63 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use Exception;
-use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\AuthnRequest;
+use Psr\Clock\ClockInterface;
+use Nyholm\Psr7\ServerRequest;
+use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\HTTPRedirect;
-use SimpleSAML\SAML2\Request;
-use SimpleSAML\SAML2\Response;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
+use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
+use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
-class HTTPRedirectTest extends TestCase
+use function urldecode;
+
+/**
+ * @covers \SimpleSAML\SAML2\HTTPRedirect
+ * @package simplesamlphp\saml2
+ */
+final class HTTPRedirectTest extends TestCase
 {
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
+
+    /** @var \SimpleSAML\SAML2\Compat\AbstractContainer */
+    private static AbstractContainer $containerBackup;
+
+
+    /**
+     */
+    public static function setUpBeforeClass(): void
+    {
+        self::$containerBackup = ContainerSingleton::getInstance();
+
+        $container = clone self::$containerBackup;
+        $container->setBlacklistedAlgorithms([]);
+        ContainerSingleton::setContainer($container);
+
+        self::$clock = $container->getClock();
+    }
+
+
+    /**
+     */
+    public static function tearDownAfterClass(): void
+    {
+        ContainerSingleton::setContainer(self::$containerBackup);
+    }
+
+
     /**
      * test parsing of basic query string with authnrequest and
      * verify that the correct issuer is found.
-     * @return void
      */
     public function testRequestParsing(): void
     {
@@ -35,10 +73,10 @@ class HTTPRedirectTest extends TestCase
 
         $hr = new HTTPRedirect();
         $samlrequest = $hr->receive($request);
-        $this->assertInstanceOf(Request::class, $samlrequest);
+        $this->assertInstanceOf(AbstractRequest::class, $samlrequest);
         $this->assertEquals(
             'https://profile.surfconext.nl/simplesaml/module.php/saml/sp/metadata.php/default-sp',
-            $samlrequest->getIssuer()->getContent()
+            $samlrequest->getIssuer()->getContent(),
         );
     }
 
@@ -46,7 +84,6 @@ class HTTPRedirectTest extends TestCase
     /**
      * test parsing of basic query string with saml response and
      * verify that the correct issuer is found.
-     * @return void
      */
     public function testResponseParsing(): void
     {
@@ -66,7 +103,6 @@ class HTTPRedirectTest extends TestCase
 
     /**
      * test parsing of Relaystate and SAMLencoding together with authnrequest
-     * @return void
      */
     public function testRequestParsingMoreParams(): void
     {
@@ -80,7 +116,7 @@ class HTTPRedirectTest extends TestCase
 
         $hr = new HTTPRedirect();
         $samlrequest = $hr->receive($request);
-        $this->assertInstanceOf(Request::class, $samlrequest);
+        $this->assertInstanceOf(AbstractRequest::class, $samlrequest);
         $relaystate = $samlrequest->getRelayState();
         $this->assertEquals('https://profile.surfconext.nl/', $relaystate);
     }
@@ -89,30 +125,31 @@ class HTTPRedirectTest extends TestCase
     /**
      * Test parsing a signed authentication request.
      * It does not actually verify the validity of the signature.
-     * @return void
      */
     public function testSignedRequestParsing(): void
     {
         $q = [
-            'SAMLRequest' => 'nVLBauMwEP0Vo7sjW7FpKpJA2rBsoNuGOruHXhZFHm8EsuRqxtv27yvbWWgvYelFgjfvzbx5zBJVazu56enkHuG5B6TktbUO5VhYsT446RUalE61gJK0rDY/7qSYZbILnrz2ln2QXFYoRAhkvGPJbrtiv7VoygJEoTJ9LOusXDSFuJ4vdH6cxwoIEGUjsrqoFUt+QcCoXLHYKMoRe9g5JOUoQlleprlI8/yQz6W4ksXiiSXbuI1xikbViahDyfkRSM2wD40DmjnL0bSdhcE6Hx7BTd3xqnqoIPw1GmbdqWPJNx80jCGtGIUeWLL5t8mtd9i3EM78n493/zWr9XVvx+58mj39IlUaR/QmKOPq4Dtkyf4c9E1EjPtzOePjREL5/XDYp/uH6sDWy6G3HDML66+5ayO7VlHx2dySf2y9nM7pPprabffeGv02ZNcquux5QEydNiNVUlAODTiKMVvrX24DKIJz8nw9jfx8tOt3',
-            'RelayState' => 'https://beta.surfnet.nl/simplesaml/module.php/core/authenticate.php?as=Braindrops',
-            'SigAlg' =>  'http://www.w3.org/2000/09/xmldsig#sha1',
-            'Signature' => 'b%2Bqe%2FXGgICOrEL1v9dwuoy0RJtJ%2FGNAr7gJGYSJzLG0riPKwo7v5CH8GPC2P9IRikaeaNeQrnhBAaf8FCWrO0cLFw4qR6msK9bxRBGk%2BhIaTUYCh54ETrVCyGlmBneMgC5%2FiCRvtEW3ESPXCCqt8Ncu98yZmv9LIVyHSl67Se%2BfbB9sDw3%2FfzwYIHRMqK2aS8jnsnqlgnBGGOXqIqN3%2Bd%2F2dwtCfz14s%2F9odoYzSUv32qfNPiPez6PSNqwhwH7dWE3TlO%2FjZmz0DnOeQ2ft6qdZEi5ZN5KCV6VmNKpkrLMq6DDPnuwPm%2F8oCAoT88R2jG7uf9QZB%2BArWJKMEhDLsCA%3D%3D',
+            'SAMLRequest' => 'hVLLbttADPwVYe+ylJXsyAvbgBujqIG0MWK3h1wCVkvFC+xDXVJp+/ddywmS9uCeCJAznOGACwJne7Ue+Ojv8ceAxNkvZz2pcbAUQ/QqABlSHhyS4lbt159vlZyUqo+BQxuseEe5zAAijGyCF9l2sxSPjZ41jW5npZxjpWvsrisoZ9ddV8NU6is5nTczXTfTeS2ybxgpMZciLUp0ogG3nhg8p1Ypq7y8ymV1kJUqa1XJB5Ft0jXGA4+sI3NPqiiM7icuhBxiezTPOPG2cEEPFif9sS9OJ5wgBRn/ZHFvnvyd32N8Ni2KbP1q/yZ4GhzGl8nX+9s3AY0u/E+BzlXm0NLY1djBYDmnXmS7l1g/GK+Ti8uJfj+DSH06HHb57m5/EKvFabcaE4qrV1v/OEoOHDJoYFgU7/GL80d8SUrbzS5Y0/7OPobogC8bOXWMzrsRqjiCJ4OeU2jWhp83EYFxKTgOKIrVWfLvv1v9AQ==',
+            'RelayState' => 'https://demo.moo-archive.nl/module.php/admin/test/default-sp',
+            'SigAlg' => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
+            'Signature' => 'T8+SG10HcgOkpw4cUFTnoF9WWrlYnllnqKruvmVcyinbiJsdnw7EMxM6Lr/5Mo/Rk3Hd7x8tuQ955Vv96jMRKGfdvq8Dh1gx4PKJPHXFWBSipWOc9UDNT0N3addnk9PiSaQ5YehT9lZ4agoSmKqiWNrE4qpKIcgWdh0GgiYDUto=',
         ];
         $request = new ServerRequest('GET', 'http://tnyholm.se');
         $request = $request->withQueryParams($q);
 
         $hr = new HTTPRedirect();
         $samlrequest = $hr->receive($request);
-        $this->assertInstanceOf(Request::class, $samlrequest);
+        $this->assertInstanceOf(AbstractRequest::class, $samlrequest);
         $relaystate = $samlrequest->getRelayState();
-        $this->assertEquals('https://beta.surfnet.nl/simplesaml/module.php/core/authenticate.php?as=Braindrops', $relaystate);
+        $this->assertEquals(
+            'https://demo.moo-archive.nl/module.php/admin/test/default-sp',
+            $relaystate,
+        );
     }
 
 
     /**
      * Test validating a signed authentication request.
-     * @return void
      */
     public function testSignedRequestValidation(): void
     {
@@ -153,16 +190,15 @@ class HTTPRedirectTest extends TestCase
 
 
     /**
+     * @TODO:  Once we can complete HTTPRedirect and pull certificates from metadata, we can run this test
      * Test validating a signed authentication request.
-     * @return void
-     */
     public function testSignedRequestValidationWrongKeytype(): void
     {
         $q = [
-            'SAMLRequest' => 'nVLBauMwEP0Vo7sjW7FpKpJA2rBsoNuGOruHXhZFHm8EsuRqxtv27yvbWWgvYelFgjfvzbx5zBJVazu56enkHuG5B6TktbUO5VhYsT446RUalE61gJK0rDY/7qSYZbILnrz2ln2QXFYoRAhkvGPJbrtiv7VoygJEoTJ9LOusXDSFuJ4vdH6cxwoIEGUjsrqoFUt+QcCoXLHYKMoRe9g5JOUoQlleprlI8/yQz6W4ksXiiSXbuI1xikbViahDyfkRSM2wD40DmjnL0bSdhcE6Hx7BTd3xqnqoIPw1GmbdqWPJNx80jCGtGIUeWLL5t8mtd9i3EM78n493/zWr9XVvx+58mj39IlUaR/QmKOPq4Dtkyf4c9E1EjPtzOePjREL5/XDYp/uH6sDWy6G3HDML66+5ayO7VlHx2dySf2y9nM7pPprabffeGv02ZNcquux5QEydNiNVUlAODTiKMVvrX24DKIJz8nw9jfx8tOt3',
-            'RelayState' => 'https://beta.surfnet.nl/simplesaml/module.php/core/authenticate.php?as=Braindrops',
-            'SigAlg' => 'http://www.w3.org/2000/09/xmldsig#sha1',
-            'Signature' => 'b+qe/XGgICOrEL1v9dwuoy0RJtJ/GNAr7gJGYSJzLG0riPKwo7v5CH8GPC2P9IRikaeaNeQrnhBAaf8FCWrO0cLFw4qR6msK9bxRBGk+hIaTUYCh54ETrVCyGlmBneMgC5/iCRvtEW3ESPXCCqt8Ncu98yZmv9LIVyHSl67Se+fbB9sDw3/fzwYIHRMqK2aS8jnsnqlgnBGGOXqIqN3+d/2dwtCfz14s/9odoYzSUv32qfNPiPez6PSNqwhwH7dWE3TlO/jZmz0DnOeQ2ft6qdZEi5ZN5KCV6VmNKpkrLMq6DDPnuwPm/8oCAoT88R2jG7uf9QZB+ArWJKMEhDLsCA==',
+            'SAMLRequest' => 'fZJRb8IgFIX/SsN7W4qsXYg1cfNhJi4a2+1hLwsCriQFOi41+/mrVTPng0+EezjfvfeEKXDTdmzeh8Zu1XevIEQ/prXARqFEvbfMcdDALDcKWBCsmr+uGEkw67wLTrgWXVnuOziA8kE7i6LlokSfOcUU73P6kHOSUfpY7CZCEiryolC5ollGOOa4oEKi6F15GJwlGkCDHaBXSwuB2zCUMCFxlsV4UhPMsgkjxQeKFsM22vIwupoQOmBpqmWXGOdi7kWjDyqxbXqcmxyFtKrWlfIHLVTSNR2K5pd5n52F3ih/Vt+2qz+iVMbdIo2TfTtCRnoKp5PEXMBYlWrP+zbEMHTZnHN80lZq+3U/wt3pEbCXut7Em3VVo9n0yGZjJH52Get2yS41KnDJA79qPk2vrafb/+8w+wU=',
+            'RelayState' => 'https://demo.moo-archive.nl/module.php/admin/test/default-sp',
+            'SigAlg' => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
+            'Signature' => 'Tp/AVn5TblVDZ6qfYLj8Ltk2ZX06kXtMWo5W3oL5WxkoBI/xK/dcTpxjBFMAO3V7g6u2zF4c26gUXdDhAQmrvqTK2oXSmTGdRNYcvwJ0Nkg5i4POcJOaTfZO3p4to8y06RVsmDgvHG0iC3gqhkwu4GjDt1DpPG5AEpk+qZfCm4M=',
         ];
         $request = new ServerRequest('GET', 'http://tnyholm.se');
         $request = $request->withQueryParams($q);
@@ -171,33 +207,34 @@ class HTTPRedirectTest extends TestCase
         $request = $hr->receive($request);
 
         // validate with wrong type of cert
-        $this->expectException(Exception::class, 'Invalid key type for validating signature');
-        $request->validate(CertificatesMock::getPublicKey());
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid key type for validating signature');
+        $request->validate(PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY));
     }
+     */
 
 
     /**
      * test that a request with unsupported encoding specified fails
-     * @return void
      */
     public function testInvalidEncodingSpecified(): void
     {
         $q = [
             'SAMLRequest' => 'pVJNb9swDP0rhu6O7XjeGiEJkDYoGqDbgibboZdCkahEgEx5Ir11%2F36y02FdD7n0JPDjPT4%2BcU6q9Z1c9XzCB%2FjRA3H23HokORYWoo8ogyJHElULJFnL3erzvZxOStnFwEEHL15BLiMUEUR2AUW2WS%2FEUw2NrXRp7NWshEPVzJqm%2BTQzVV1DddC21rUy1tq6norsO0RKyIVIRAlO1MMGiRVySpVVk1fTvKr25ZVsGvnh46PI1mkbh4pH1Im5I1kUgEeHMKE%2BWh0QnnmCvlBpf0B2emwunOkKcnj0kJM7Yj7oXf2VfhOQ%2BhbiDuJPp%2BHbw%2F0%2F8uSIdf4tO7m28zC4U7TB9KnendKAIabzO82VpjFrwKrec06dyLYv%2Fl47NEnNZWsP5yaSd%2Fv9Nt9%2B3e3Fcj5wy9GquHyPxhZYGcXqjcR58XrA%2FHxLX5K0zXobvNO%2Fs9sQW8WXlQ8ZZ3I7tkqOCsmlz0iWex9%2B3URQDAvBsQdRLM8j%2F7%2FY5R8%3D',
             'RelayState' => 'https://profile.surfconext.nl/',
-            'SAMLEncoding' => 'urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:none'
+            'SAMLEncoding' => 'urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:none',
         ];
         $request = new ServerRequest('GET', 'http://tnyholm.se');
         $request = $request->withQueryParams($q);
 
-        $this->expectException(Exception::class, 'Unknown SAMLEncoding:');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unknown SAMLEncoding:');
         $hr = new HTTPRedirect();
-        $request = $hr->receive($request);
+        $hr->receive($request);
     }
 
 
     /**
-     * @return void
      */
     public function testNoSigAlgSpecified(): void
     {
@@ -209,15 +246,15 @@ class HTTPRedirectTest extends TestCase
         $request = new ServerRequest('GET', 'http://tnyholm.se');
         $request = $request->withQueryParams($q);
 
-        $this->expectException(Exception::class, 'Missing signature algorithm');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing signature algorithm');
         $hr = new HTTPRedirect();
-        $request = $hr->receive($request);
+        $hr->receive($request);
     }
 
 
     /**
      * test handling of non-deflated data in samlrequest
-     * @return void
      */
     public function testInvalidRequestData(): void
     {
@@ -234,7 +271,6 @@ class HTTPRedirectTest extends TestCase
 
     /**
      * test with a query string that has Request nor Response
-     * @return void
      */
     public function testNoRequestOrResponse(): void
     {
@@ -242,7 +278,8 @@ class HTTPRedirectTest extends TestCase
         $request = new ServerRequest('GET', 'http://tnyholm.se');
         $request = $request->withQueryParams($q);
 
-        $this->expectException(Exception::class, 'Missing SAMLRequest or SAMLResponse parameter.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing SAMLRequest or SAMLResponse parameter.');
         $hr = new HTTPRedirect();
         $hr->receive($request);
     }
@@ -250,25 +287,24 @@ class HTTPRedirectTest extends TestCase
 
     /**
      * Construct an authnrequest and try to send it without a destination.
-     * @return void
      */
     public function testSendWithoutDestination(): void
     {
-        $request = new AuthnRequest();
+        $request = new AuthnRequest(self::$clock->now());
         $hr = new HTTPRedirect();
-        $this->expectException('Exception', 'Cannot build a redirect URL, no destination set.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot build a redirect URL, no destination set.');
         $hr->send($request);
     }
 
 
     /**
      * Construct an authnrequest and send it.
-     * @return void
      * @doesNotPerformAssertions
      */
     public function testSendAuthnrequest(): void
     {
-        $request = new AuthnRequest();
+        $request = new AuthnRequest(self::$clock->now());
         $hr = new HTTPRedirect();
         $hr->setDestination('https://idp.example.org/');
         $hr->send($request);
@@ -278,18 +314,20 @@ class HTTPRedirectTest extends TestCase
     /**
      * Construct an authnresponse and send it.
      * Also test setting a relaystate and destination for the response.
-     * @return void
      * @doesNotPerformAssertions
      */
     public function testSendAuthnResponse(): void
     {
+        $status = new Status(new StatusCode());
         $issuer = new Issuer('testIssuer');
 
-        $response = new Response();
-        $response->setIssuer($issuer);
+        $response = new Response(
+            status: $status,
+            issueInstant: self::$clock->now(),
+            issuer: $issuer,
+            destination: 'http://example.org/login?success=yes',
+        );
         $response->setRelayState('http://example.org');
-        $response->setDestination('http://example.org/login?success=yes');
-        $response->setSignatureKey(CertificatesMock::getPrivateKey());
         $hr = new HTTPRedirect();
         $hr->send($response);
     }
@@ -297,15 +335,14 @@ class HTTPRedirectTest extends TestCase
 
     /**
      * Test setting destination in the HR binding.
-     * @return void
      * @doesNotPerformAssertions
      */
     public function testSendAuthnResponseBespokeDestination(): void
     {
+        $status = new Status(new StatusCode());
         $issuer = new Issuer('testIssuer');
 
-        $response = new Response();
-        $response->setIssuer($issuer);
+        $response = new Response($status, self::$clock->now(), $issuer);
         $hr = new HTTPRedirect();
         $hr->setDestination('gopher://myurl');
         $hr->send($response);

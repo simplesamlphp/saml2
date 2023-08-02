@@ -5,12 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Response;
 
 use Psr\Log\LoggerInterface;
-use SimpleSAML\SAML2\Assertion\Processor as AssertionProcessor;
 use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
-use SimpleSAML\SAML2\Response;
 use SimpleSAML\SAML2\Response\Exception\InvalidResponseException;
 use SimpleSAML\SAML2\Response\Exception\NoAssertionsFoundException;
 use SimpleSAML\SAML2\Response\Exception\PreconditionNotMetException;
@@ -18,6 +16,7 @@ use SimpleSAML\SAML2\Response\Exception\UnsignedResponseException;
 use SimpleSAML\SAML2\Response\Validation\PreconditionValidator;
 use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\XML\samlp\Response;
 
 use function sprintf;
 
@@ -36,7 +35,7 @@ class Processor
     /**
      * @var \SimpleSAML\SAML2\Assertion\Processor
      */
-    private AssertionProcessor $assertionProcessor;
+    private $assertionProcessor;
 
     /**
      * Indicates whether or not the response was signed. This is required in order to be able to check whether either
@@ -49,10 +48,9 @@ class Processor
 
     /**
      * @param \Psr\Log\LoggerInterface $logger
-     *
      */
     public function __construct(
-        private LoggerInterface $logger
+        private LoggerInterface $logger,
     ) {
         $this->signatureValidator = new Validator($logger);
     }
@@ -62,15 +60,15 @@ class Processor
      * @param \SimpleSAML\SAML2\Configuration\ServiceProvider  $serviceProviderConfiguration
      * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProviderConfiguration
      * @param \SimpleSAML\SAML2\Configuration\Destination $currentDestination
-     * @param \SimpleSAML\SAML2\Response $response
+     * @param \SimpleSAML\SAML2\XML\samlp\Response $response
      *
-     * @return \SimpleSAML\SAML2\Utilities\ArrayCollection Collection of \SimpleSAML\SAML2\Assertion objects
+     * @return \SimpleSAML\SAML2\Utilities\ArrayCollection Collection of \SimpleSAML\SAML2\XML\saml\Assertion objects
      */
     public function process(
         ServiceProvider $serviceProviderConfiguration,
         IdentityProvider $identityProviderConfiguration,
         Destination $currentDestination,
-        Response $response
+        Response $response,
     ): ArrayCollection {
         $this->preconditionValidator = new PreconditionValidator($currentDestination);
         $this->assertionProcessor = ProcessorBuilder::build(
@@ -79,7 +77,7 @@ class Processor
             $currentDestination,
             $identityProviderConfiguration,
             $serviceProviderConfiguration,
-            $response
+            $response,
         );
 
         $this->enforcePreconditions($response);
@@ -91,9 +89,8 @@ class Processor
     /**
      * Checks the preconditions that must be valid in order for the response to be processed.
      *
-     * @param \SimpleSAML\SAML2\Response $response
+     * @param \SimpleSAML\SAML2\XML\samlp\Response $response
      * @throws \SimpleSAML\SAML2\Response\Exception\PreconditionNotMetException
-     * @return void
      */
     private function enforcePreconditions(Response $response): void
     {
@@ -106,10 +103,9 @@ class Processor
 
 
     /**
-     * @param \SimpleSAML\SAML2\Response $response
+     * @param \SimpleSAML\SAML2\XML\samlp\Response $response
      * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProviderConfiguration
      * @throws \SimpleSAML\SAML2\Response\Exception\InvalidResponseException
-     * @return void
      */
     private function verifySignature(Response $response, IdentityProvider $identityProviderConfiguration): void
     {
@@ -117,7 +113,7 @@ class Processor
             $this->logger->info(sprintf(
                 'SAMLResponse with id "%s" was not signed at root level, not attempting to verify the signature of the'
                 . ' reponse itself',
-                $response->getId()
+                $response->getId(),
             ));
 
             return;
@@ -125,21 +121,21 @@ class Processor
 
         $this->logger->info(sprintf(
             'Attempting to verify the signature of SAMLResponse with id "%s"',
-            $response->getId()
+            $response->getId(),
         ));
 
         $this->responseIsSigned = true;
 
         if (!$this->signatureValidator->hasValidSignature($response, $identityProviderConfiguration)) {
             throw new InvalidResponseException(
-                sprintf('The SAMLResponse with id "%s", does not have a valid signature', $response->getId())
+                sprintf('The SAMLResponse with id "%s", does not have a valid signature', $response->getId()),
             );
         }
     }
 
 
     /**
-     * @param \SimpleSAML\SAML2\Response $response
+     * @param \SimpleSAML\SAML2\XML\samlp\Response $response
      * @throws \SimpleSAML\SAML2\Response\Exception\UnsignedResponseException
      * @throws \SimpleSAML\SAML2\Response\Exception\NoAssertionsFoundException
      * @return \SimpleSAML\SAML2\Utilities\ArrayCollection
@@ -152,14 +148,14 @@ class Processor
         }
 
         $decryptedAssertions = $this->assertionProcessor->decryptAssertions(
-            new ArrayCollection($assertions)
+            new ArrayCollection($assertions),
         );
 
         if (!$this->responseIsSigned) {
             foreach ($assertions as $assertion) {
                 if (!$assertion->wasSignedAtConstruction()) {
                     throw new UnsignedResponseException(
-                        'Both the response and the assertion it contains are not signed.'
+                        'Both the response and the assertion it contains are not signed.',
                     );
                 }
             }

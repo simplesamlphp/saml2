@@ -15,14 +15,14 @@ use function sprintf;
 class PreconditionNotMetException extends InvalidResponseException
 {
     /**
-     * @param Result $result
-     * @return PreconditionNotMetException
+     * @param \SimpleSAML\SAML2\Response\Validation\Result $result
+     * @return \SimpleSAML\SAML2\Response\Exception\PreconditionNotMetException
      */
     public static function createFromValidationResult(Result $result): PreconditionNotMetException
     {
         $message = sprintf(
             'Cannot process response, preconditions not met: "%s"',
-            implode('", "', $result->getErrors())
+            implode('", "', $result->getErrors()),
         );
 
         return new self($message);

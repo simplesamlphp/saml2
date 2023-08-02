@@ -5,26 +5,26 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Response\Validation\ConstraintValidator;
 
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Response;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator;
 use SimpleSAML\SAML2\Response\Validation\Result;
+use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 
+use function implode;
 use function sprintf;
 use function strlen;
-use function strpos;
+use function str_contains;
 use function substr;
 
 class IsSuccessful implements ConstraintValidator
 {
     /**
-     * @param \SimpleSAML\SAML2\Response $response
+     * @param \SimpleSAML\SAML2\XML\samlp\Response $response
      * @param \SimpleSAML\SAML2\Response\Validation\Result $result
-     * @return void
      */
     public function validate(
         Response $response,
-        Result $result
+        Result $result,
     ): void {
         if (!$response->isSuccess()) {
             $result->addError($this->buildMessage($response->getStatus()));
@@ -39,14 +39,22 @@ class IsSuccessful implements ConstraintValidator
      */
     private function buildMessage(Status $responseStatus): string
     {
+        $subCodes = [];
         $statusCode = $responseStatus->getStatusCode();
-        $subCodes = $responseStatus->getStatusCode()->getSubCodes();
-        $message = $responseStatus->getStatusMessage();
+
+        $codes = $statusCode->getSubCodes();
+        if (!empty($codes)) {
+            foreach ($codes as $code) {
+                $subCodes[] = $this->truncateStatus($code->getValue());
+            }
+        }
+        $statusMessage = $responseStatus->getStatusMessage();
+
         return sprintf(
             '%s%s%s',
             $this->truncateStatus($statusCode->getValue()),
-            $subCodes ? '/' . $this->truncateStatus($subCodes[0]->getValue()) : '',
-            $message ? ' ' . $message->getContent() : ''
+            $subCodes ? '/' . implode('/', $subCodes) : '',
+            $statusMessage ? ' ' . $statusMessage->getContent() : '',
         );
     }
 
@@ -59,11 +67,11 @@ class IsSuccessful implements ConstraintValidator
      */
     private function truncateStatus(string $status): string
     {
-        $prefixLength = strlen(C::STATUS_PREFIX);
-        if (strpos($status, C::STATUS_PREFIX) !== 0) {
+        if (!str_starts_with($status, C::STATUS_PREFIX)) {
             return $status;
         }
 
+        $prefixLength = strlen(C::STATUS_PREFIX);
         return substr($status, $prefixLength);
     }
 }

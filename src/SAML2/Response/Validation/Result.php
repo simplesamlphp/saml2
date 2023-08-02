@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Response\Validation;
 
-use SimpleSAML\SAML2\Exception\InvalidArgumentException;
-
 /**
  * Simple Result object
  */
@@ -17,8 +15,6 @@ class Result
 
     /**
      * @param string $message
-     * @throws InvalidArgumentException
-     * @return void
      */
     public function addError(string $message): void
     {

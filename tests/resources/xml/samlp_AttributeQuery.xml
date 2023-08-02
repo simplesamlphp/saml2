@@ -14,7 +14,7 @@
   </saml:Attribute>
   <saml:Attribute Name="test3"/>
   <saml:Attribute Name="test4">
-    <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:integer">4</saml:AttributeValue>
-    <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:integer">23</saml:AttributeValue>
+    <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:integer">4</saml:AttributeValue>
+    <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:integer">23</saml:AttributeValue>
   </saml:Attribute>
 </samlp:AttributeQuery>

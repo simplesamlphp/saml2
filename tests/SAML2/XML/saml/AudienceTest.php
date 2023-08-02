@@ -18,6 +18,7 @@ use function strval;
  * Class \SimpleSAML\SAML2\XML\saml\AudienceTest
  *
  * @covers \SimpleSAML\SAML2\XML\saml\Audience
+ * @covers \SimpleSAML\SAML2\XML\saml\AbstractConditionType
  * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  *
  * @package simplesamlphp/saml2

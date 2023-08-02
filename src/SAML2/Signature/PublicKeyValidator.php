@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Signature;
 
-use Mockery\MockInterface;
 use Psr\Log\LoggerInterface;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Certificate\Key;
 use SimpleSAML\SAML2\Certificate\KeyCollection;
 use SimpleSAML\SAML2\Certificate\KeyLoader;
 use SimpleSAML\SAML2\Certificate\X509;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
-use SimpleSAML\SAML2\SignedElement;
+use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
 use function count;
 use function sprintf;
@@ -32,21 +32,21 @@ class PublicKeyValidator extends AbstractChainedValidator
      */
     public function __construct(
         LoggerInterface $logger,
-        private KeyLoader|MockInterface $keyLoader,
+        private KeyLoader $keyLoader,
     ) {
         parent::__construct($logger);
     }
 
 
     /**
-     * @param \SimpleSAML\SAML2\SignedElement $signedElement
+     * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface $signedElement
      * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
      */
     public function canValidate(
-        SignedElement $signedElement,
-        CertificateProvider $configuration
+        SignedElementInterface $signedElement,
+        CertificateProvider $configuration,
     ): bool {
         $this->configuredKeys = $this->keyLoader->extractPublicKeys($configuration);
 
@@ -55,15 +55,19 @@ class PublicKeyValidator extends AbstractChainedValidator
 
 
     /**
-     * @param \SimpleSAML\SAML2\SignedElement $signedElement
+     * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface $signedElement
      * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      *
      * @return bool
+     *
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function hasValidSignature(
-        SignedElement $signedElement,
-        CertificateProvider $configuration
+        SignedElementInterface $signedElement,
+        CertificateProvider $configuration,
     ): bool {
+        Assert::notEmpty($this->configuredKeys);
+
         $logger = $this->logger;
         $pemCandidates = $this->configuredKeys->filter(function (Key $key) use ($logger) {
             if (!$key instanceof X509) {

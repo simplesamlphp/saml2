@@ -7,8 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\XML\saml\NameID;
-use SimpleSAML\XML\SerializableElementInterface;
+use SimpleSAML\XML\AbstractElement;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -38,12 +37,12 @@ class AttributeValue extends AbstractSamlElement
      *  - string
      *  - int
      *  - null
-     *  - \SimpleSAML\XML\SerializableElementInterface
+     *  - \SimpleSAML\XML\AbstractElement
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied value is neither a string or a DOMElement
      */
     public function __construct(
-        protected string|int|null|SerializableElementInterface $value,
+        protected string|int|null|AbstractElement $value,
     ) {
     }
 
@@ -63,7 +62,7 @@ class AttributeValue extends AbstractSamlElement
             case "NULL":
                 return "xs:nil";
             case "object":
-                /** @var \SimpleSAML\XML\SerializableElementInterface $this->value */
+                /** @var \SimpleSAML\XML\AbstractElement $this->value */
                 return sprintf(
                     '%s:%s',
                     $this->value::getNamespacePrefix(),
@@ -79,7 +78,7 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Get this attribute value.
      *
-     * @return string|int|\SimpleSAML\XML\SerializableElementInterface[]|null
+     * @return string|int|\SimpleSAML\XML\AbstractElement[]|null
      */
     public function getValue()
     {
@@ -108,7 +107,7 @@ class AttributeValue extends AbstractSamlElement
                 list($prefix, $eltName) = explode(':', $node->tagName);
                 $className = sprintf('\SimpleSAML\SAML2\XML\%s\%s', $prefix, $eltName);
 
-                if ($node->namespaceURI === C::NS_SAML && $node->localName === 'NameID') {
+                if (class_exists($className)) {
                     $value = $className::fromXML($node);
                 } else {
                     $value = Chunk::fromXML($node);

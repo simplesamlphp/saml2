@@ -11,15 +11,12 @@ use SimpleSAML\SAML2\Exception\InvalidArgumentException;
  */
 class Result
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private array $errors = [];
 
 
     /**
-     * @param $message
-     * @return void
+     * @param string $message
      */
     public function addError(string $message): void
     {

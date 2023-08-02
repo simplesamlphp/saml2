@@ -4,19 +4,22 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Response;
 
-use Exception;
-use Psr\Log\NullLogger;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Assertion;
+use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Signature\Validator;
-use SimpleSAML\SAML2\Utilities\Certificate;
-use SimpleSAML\Test\SAML2\CertificatesMock;
+use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\Exception\ReferenceValidationFailedException;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\Utils\Certificate;
 
 use function preg_match;
 
-class XmlSignatureWrappingTest extends TestCase
+/**
+ * @package simplesamlphp/saml2
+ */
+final class XmlSignatureWrappingTest extends TestCase
 {
     /** @var \SimpleSAML\SAML2\Signature\Validator */
     private static Validator $signatureValidator;
@@ -26,27 +29,23 @@ class XmlSignatureWrappingTest extends TestCase
 
 
     /**
-     * @return void
      */
     public static function setUpBeforeClass(): void
     {
         self::$signatureValidator = new Validator(new NullLogger());
 
-        $pattern = Certificate::CERTIFICATE_PATTERN;
-        preg_match($pattern, CertificatesMock::PUBLIC_KEY_PEM, $matches);
-
         self::$identityProviderConfiguration = new IdentityProvider(
-            ['certificateData' => $matches[1]]
+            ['certificateData' => PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE)],
         );
     }
 
 
     /**
-     * @return void
      */
     public function testThatASignatureReferencingAnEmbeddedAssertionIsNotValid(): void
     {
-        $this->expectException(Exception::class, 'Reference validation failed');
+        $this->expectException(ReferenceValidationFailedException::class);
+        $this->expectExceptionMessage('Reference does not point to given element.');
 
         $assertion = $this->getSignedAssertionWithEmbeddedAssertionReferencedInSignature();
         self::$signatureValidator->hasValidSignature($assertion, self::$identityProviderConfiguration);
@@ -54,11 +53,11 @@ class XmlSignatureWrappingTest extends TestCase
 
 
     /**
-     * @return void
      */
     public function testThatASignatureReferencingAnotherAssertionIsNotValid(): void
     {
-        $this->expectException(Exception::class, 'Reference validation failed');
+        $this->expectException(ReferenceValidationFailedException::class);
+        $this->expectExceptionMessage('Reference does not point to given element.');
 
         $assertion = $this->getSignedAssertionWithSignatureThatReferencesAnotherAssertion();
         self::$signatureValidator->hasValidSignature($assertion, self::$identityProviderConfiguration);
@@ -66,21 +65,21 @@ class XmlSignatureWrappingTest extends TestCase
 
 
     /**
-     * @return \SimpleSAML\SAML2\Assertion
+     * @return \SimpleSAML\SAML2\XML\saml\Assertion
      */
     private function getSignedAssertionWithSignatureThatReferencesAnotherAssertion(): Assertion
     {
         $doc = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionWithInvalidReferencedId.xml');
-        return new Assertion($doc->firstChild);
+        return Assertion::fromXML($doc->firstChild);
     }
 
 
     /**
-     * @return \SimpleSAML\SAML2\Assertion
+     * @return \SimpleSAML\SAML2\XML\saml\Assertion
      */
     private function getSignedAssertionWithEmbeddedAssertionReferencedInSignature(): Assertion
     {
         $document = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionReferencedEmbeddedAssertion.xml');
-        return new Assertion($document->firstChild);
+        return Assertion::fromXML($document->firstChild);
     }
 }

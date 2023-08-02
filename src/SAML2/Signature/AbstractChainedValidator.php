@@ -6,9 +6,12 @@ namespace SimpleSAML\SAML2\Signature;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
-use SimpleSAML\SAML2\SignedElement;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\CryptoEncoding\PEM;
+use SimpleSAML\XMLSecurity\Key\X509Certificate as X509;
+use SimpleSAML\XMLSecurity\Utils\Security;
+use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
 use function sprintf;
 
@@ -20,7 +23,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
-        protected LoggerInterface $logger
+        protected LoggerInterface $logger,
     ) {
     }
 
@@ -28,7 +31,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
     /**
      * BC compatible version of the signature check
      *
-     * @param \SimpleSAML\SAML2\SignedElement      $element
+     * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface $element
      * @param \SimpleSAML\SAML2\Utilities\ArrayCollection $pemCandidates
      *
      * @throws \Exception
@@ -36,19 +39,22 @@ abstract class AbstractChainedValidator implements ChainedValidator
      * @return bool
      */
     protected function validateElementWithKeys(
-        SignedElement $element,
-        ArrayCollection $pemCandidates
+        SignedElementInterface $element,
+        ArrayCollection $pemCandidates,
     ): bool {
         $lastException = null;
         foreach ($pemCandidates as $index => $candidateKey) {
-            $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
-            $key->loadKey($candidateKey->getCertificate());
+            $cert = new X509(PEM::fromString($candidateKey->getCertificate()));
+            $verifier = (new SignatureAlgorithmFactory([]))->getAlgorithm(
+                $element->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+                $cert->getPublicKey(),
+            );
 
             try {
                 /*
                  * Make sure that we have a valid signature on either the response or the assertion.
                  */
-                $result = $element->validate($key);
+                $result = $element->verify($verifier);
                 if ($result) {
                     $this->logger->debug(sprintf('Validation with key "#%d" succeeded', $index));
                     return true;
@@ -58,7 +64,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
                 $this->logger->debug(sprintf(
                     'Validation with key "#%d" failed with exception: %s',
                     $index,
-                    $e->getMessage()
+                    $e->getMessage(),
                 ));
 
                 $lastException = $e;

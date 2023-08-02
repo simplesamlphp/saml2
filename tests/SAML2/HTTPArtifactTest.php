@@ -9,13 +9,16 @@ use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\HTTPArtifact;
 
-class HTTPArtifactTest extends TestCase
+/**
+ * @covers \SimpleSAML\SAML2\HTTPArtifact
+ * @package simplesamlphp\saml2
+ */
+final class HTTPArtifactTest extends TestCase
 {
     /**
      * The Artifact binding depends on simpleSAMLphp, so currently
      * the only thing we can really unit test is whether the SAMLart
      * parameter is missing.
-     * @return void
      */
     public function testArtifactMissingUrlParamThrowsException(): void
     {
@@ -24,7 +27,8 @@ class HTTPArtifactTest extends TestCase
         $request = $request->withQueryParams($q);
 
         $ha = new HTTPArtifact();
-        $this->expectException(Exception::class, 'Missing SAMLart parameter.');
-        $request = $ha->receive($request);
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing SAMLart parameter.');
+        $ha->receive($request);
     }
 }

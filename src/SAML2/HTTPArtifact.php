@@ -4,40 +4,45 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2;
 
+use DateInterval;
 use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
-use SimpleSAML\SAML2\Utilities\Temporal;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
+use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
 use SimpleSAML\Store\StoreFactory;
 use SimpleSAML\Utils\HTTP;
-use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function array_key_exists;
 use function base64_decode;
 use function base64_encode;
 use function bin2hex;
 use function hexdec;
-use function pack;
 use function openssl_random_pseudo_bytes;
+use function pack;
+use function sha1;
 use function substr;
 use function var_export;
 
 /**
  * Class which implements the HTTP-Artifact binding.
  *
- * @author  Danny Bollaert, UGent AS. <danny.bollaert@ugent.be>
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class HTTPArtifact extends Binding
 {
     /**
+     * @psalm-suppress UndefinedDocblockClass
+     * @psalm-suppress UndefinedClass
      * @var \SimpleSAML\Configuration
      */
     private Configuration $spMetadata;
@@ -46,11 +51,11 @@ class HTTPArtifact extends Binding
     /**
      * Create the redirect URL for a message.
      *
-     * @param  \SimpleSAML\SAML2\Message $message The message.
+     * @param  \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message.
      * @throws \Exception
      * @return string        The URL the user should be redirected to in order to send a message.
      */
-    public function getRedirectURL(Message $message): string
+    public function getRedirectURL(AbstractMessage $message): string
     {
         /** @psalm-suppress UndefinedClass */
         $config = Configuration::getInstance();
@@ -64,26 +69,28 @@ class HTTPArtifact extends Binding
         $generatedId = pack('H*', bin2hex(openssl_random_pseudo_bytes(20)));
         $issuer = $message->getIssuer();
         if ($issuer === null) {
-            throw new MissingElementException('Cannot get redirect URL, no Issuer set in the message.');
+            throw new Exception('Cannot get redirect URL, no Issuer set in the message.');
         }
-        $artifact = base64_encode("\x00\x04\x00\x00" . sha1($issuer->getValue(), true) . $generatedId);
-        $artifactData = $message->toUnsignedXML();
-        $artifactDataString = $artifactData->ownerDocument->saveXML($artifactData);
+        $artifact = base64_encode("\x00\x04\x00\x00" . sha1($issuer->getContent(), true) . $generatedId);
+        $artifactData = $message->toXML();
+        $artifactDataString = $artifactData->ownerDocument?->saveXML($artifactData);
 
-        $store->set('artifact', $artifact, $artifactDataString, Temporal::getTime() + (15 * 60));
+        $clock = Utils::getContainer()->getClock();
+        $store->set('artifact', $artifact, $artifactDataString, $clock->now()->add(new DateInterval('PT15M')));
 
-        $params = [
-            'SAMLart' => $artifact,
-        ];
+        $destination = $message->getDestination();
+        if ($destination === null) {
+            throw new Exception('Cannot get redirect URL, no destination set in the message.');
+        }
+
+        $params = ['SAMLart' => $artifact];
+
         $relayState = $message->getRelayState();
         if ($relayState !== null) {
             $params['RelayState'] = $relayState;
         }
 
-        $destination = $message->getDestination();
-        if ($destination === null) {
-            throw new MissingAttributeException('Cannot get redirect URL, no destination set in the message.');
-        }
+        /** @psalm-suppress UndefinedClass */
         $httpUtils = new HTTP();
         return $httpUtils->addURLparameters($destination, $params);
     }
@@ -92,10 +99,10 @@ class HTTPArtifact extends Binding
     /**
      * Send a SAML 2 message using the HTTP-Redirect binding.
      *
-     * @param \SimpleSAML\SAML2\Message $message The message we should send.
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message we should send.
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public function send(Message $message): ResponseInterface
+    public function send(AbstractMessage $message): ResponseInterface
     {
         $destination = $this->getRedirectURL($message);
         return new Response(303, ['Location' => $destination]);
@@ -108,10 +115,12 @@ class HTTPArtifact extends Binding
      * Throws an exception if it is unable receive the message.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @return \SimpleSAML\SAML2\Message The received message.
+     * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
+     *
      * @throws \Exception
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
-    public function receive(ServerRequestInterface $request): Message
+    public function receive(ServerRequestInterface $request): AbstractMessage
     {
         $query = $request->getQueryParams();
         if (array_key_exists('SAMLart', $query)) {
@@ -147,16 +156,19 @@ class HTTPArtifact extends Binding
             "ArtifactResolutionService endpoint being used is := " . $endpoint['Location']
         );
 
+        /**
+         * @psalm-suppress UndefinedClass
+         * @psalm-suppress DocblockTypeContradiction
+         */
+        Assert::notEmpty($this->spMetadata, 'Cannot process received message without SP metadata.');
+
+        /**
+         * Set the request attributes
+         */
+        $issuer = new Issuer($this->spMetadata->getString('entityid'));
+
         // Construct the ArtifactResolve Request
-        $ar = new ArtifactResolve();
-
-        /* Set the request attributes */
-        $issuer = new Issuer();
-        $issuer->setValue($this->spMetadata->getString('entityid'));
-
-        $ar->setIssuer($issuer);
-        $ar->setArtifact($query['SAMLart']);
-        $ar->setDestination($endpoint['Location']);
+        $ar = new ArtifactResolve($query['SAMLart'], null, $issuer, null, '2.0', $endpoint['Location']);
 
         // sign the request
         /** @psalm-suppress UndefinedClass */
@@ -165,25 +177,24 @@ class HTTPArtifact extends Binding
         $soap = new SOAPClient();
 
         // Send message through SoapClient
-        /** @var \SimpleSAML\SAML2\ArtifactResponse $artifactResponse */
+        /** @var \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $artifactResponse */
         $artifactResponse = $soap->send($ar, $this->spMetadata, $idpMetadata);
 
         if (!$artifactResponse->isSuccess()) {
             throw new Exception('Received error from ArtifactResolutionService.');
         }
 
-        $xml = $artifactResponse->getAny();
-        if ($xml === null) {
+        $samlResponse = $artifactResponse->getMessage();
+        if ($samlResponse === null) {
             /* Empty ArtifactResponse - possibly because of Artifact replay? */
 
             throw new Exception('Empty ArtifactResponse received, maybe a replay?');
         }
 
-        $samlResponse = Message::fromXML($xml);
         $samlResponse->addValidator([get_class($this), 'validateSignature'], $artifactResponse);
 
         if (isset($query['RelayState'])) {
-            $samlResponse->setRelayState($_REQUEST['RelayState']);
+            $samlResponse->setRelayState($query['RelayState']);
         }
 
         return $samlResponse;
@@ -192,8 +203,6 @@ class HTTPArtifact extends Binding
 
     /**
      * @param \SimpleSAML\Configuration $sp
-     *
-     * @return void
      *
      * @psalm-suppress UndefinedClass
      */
@@ -206,12 +215,13 @@ class HTTPArtifact extends Binding
     /**
      * A validator which returns true if the ArtifactResponse was signed with the given key
      *
-     * @param \SimpleSAML\SAML2\ArtifactResponse $message
-     * @param XMLSecurityKey $key
+     * @param \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $message
+     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key
      * @return bool
      */
     public static function validateSignature(ArtifactResponse $message, XMLSecurityKey $key): bool
     {
+        // @todo verify if this works and/or needs to do anything more. Ref. HTTPRedirect binding
         return $message->validate($key);
     }
 }

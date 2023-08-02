@@ -5,26 +5,27 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Response\Validation\ConstraintValidator;
 
 use Mockery;
-use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
+use Mockery\Adapter\Phpunit\MockeryTestCase;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Response;
 use SimpleSAML\SAML2\Response\Validation\Result;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator\IsSuccessful;
+use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\SAML2\XML\samlp\StatusMessage;
 
-class IsSuccessfulTest extends MockeryTestCase
+/**
+ * @covers \SimpleSAML\SAML2\Response\Validation\ConstraintValidator\IsSuccessful
+ * @package simplesamlphp/saml2
+ */
+final class IsSuccessfulTest extends MockeryTestCase
 {
-    /**
-     * @var \Mockery\MockInterface
-     */
+    /** @var \Mockery\MockInterface */
     private MockInterface $response;
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
@@ -35,7 +36,6 @@ class IsSuccessfulTest extends MockeryTestCase
     /**
      * @group response-validation
      * @test
-     * @return void
      */
     public function validatingASuccessfulResponseGivesAValidValidationResult(): void
     {
@@ -53,13 +53,19 @@ class IsSuccessfulTest extends MockeryTestCase
     /**
      * @group response-validation
      * @test
-     * @return void
      */
     public function anUnsuccessfulResponseIsNotValidAndGeneratesAProperErrorMessage(): void
     {
         $responseStatus = new Status(
-            new StatusCode(C::STATUS_REQUESTER, [new StatusCode(C::STATUS_REQUEST_DENIED)]),
-            new StatusMessage('this is a test message'),
+            new StatusCode(
+                C::STATUS_SUCCESS,
+                [
+                    new StatusCode(
+                        C::STATUS_PREFIX . 'bar'
+                    )
+                ]
+            ),
+            new StatusMessage('this is a test message')
         );
 
         $this->response->shouldReceive('isSuccess')->once()->andReturn(false);
@@ -73,6 +79,6 @@ class IsSuccessfulTest extends MockeryTestCase
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $errors);
-        $this->assertEquals('Requester/RequestDenied this is a test message', $errors[0]);
+        $this->assertEquals('Success/bar this is a test message', $errors[0]);
     }
 }

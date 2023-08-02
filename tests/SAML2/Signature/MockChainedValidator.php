@@ -7,22 +7,20 @@ namespace SimpleSAML\Test\SAML2\Signature;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Signature\AbstractChainedValidator;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
-use SimpleSAML\SAML2\SignedElement;
+use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
 /**
  * MockChainedValidator, to be able to test the validatorchain without having to use
  * actual validators
+ *
+ * @package simplesamlphp/saml2
  */
-class MockChainedValidator extends AbstractChainedValidator
+final class MockChainedValidator extends AbstractChainedValidator
 {
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private bool $canValidate;
 
-    /**
-     * @var bool
-     */
+    /** @var bool */
     private bool $isValid;
 
 
@@ -42,22 +40,26 @@ class MockChainedValidator extends AbstractChainedValidator
 
 
     /**
+     * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface $signedElement
+     * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      * @return bool
      */
     public function canValidate(
-        SignedElement $signedElement,
-        CertificateProvider $configuration
+        SignedElementInterface $signedElement,
+        CertificateProvider $configuration,
     ): bool {
         return $this->canValidate;
     }
 
 
     /**
+     * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface $signedElement
+     * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
      * @return bool
      */
     public function hasValidSignature(
-        SignedElement $signedElement,
-        CertificateProvider $configuration
+        SignedElementInterface $signedElement,
+        CertificateProvider $configuration,
     ): bool {
         return $this->isValid;
     }

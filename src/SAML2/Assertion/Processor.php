@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Assertion;
 
-use Mockery\MockInterface;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\SAML2\Assertion;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidSubjectConfirmationException;
-use SimpleSAML\SAML2\Assertion\Transformer\Transformer;
+use SimpleSAML\SAML2\Assertion\Transformer\TransformerInterface;
 use SimpleSAML\SAML2\Assertion\Validation\AssertionValidator;
 use SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationValidator;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
-use SimpleSAML\SAML2\EncryptedAssertion;
 use SimpleSAML\SAML2\Response\Exception\InvalidSignatureException;
 use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 
 use function implode;
 use function sprintf;
@@ -24,22 +23,22 @@ use function sprintf;
 class Processor
 {
     /**
-     * @param \SimpleSAML\SAML2\Assertion\Decrypter|\Mockery\MockInterface $decrypter
+     * @param \SimpleSAML\SAML2\Assertion\Decrypter $decrypter
      * @param \SimpleSAML\SAML2\Signature\Validator $signatureValidator
      * @param \SimpleSAML\SAML2\Assertion\Validation\AssertionValidator $assertionValidator
      * @param \SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationValidator $subjectConfirmationValidator
-     * @param \SimpleSAML\SAML2\Assertion\Transformer\Transformer $transformer
+     * @param \SimpleSAML\SAML2\Assertion\Transformer\TransformerInterface $transformer
      * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProviderConfiguration
      * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
-        private Decrypter|MockInterface $decrypter,
+        private Decrypter $decrypter,
         private Validator $signatureValidator,
         private AssertionValidator $assertionValidator,
         private SubjectConfirmationValidator $subjectConfirmationValidator,
-        private Transformer|MockInterface $transformer,
+        private TransformerInterface $transformer,
         private IdentityProvider $identityProviderConfiguration,
-        private LoggerInterface $logger
+        private LoggerInterface $logger,
     ) {
     }
 
@@ -50,7 +49,7 @@ class Processor
      * @param \SimpleSAML\SAML2\Utilities\ArrayCollection $assertions
      * @return \SimpleSAML\SAML2\Utilities\ArrayCollection Collection of processed assertions
      */
-    public function decryptAssertions(ArrayCollection $assertions)
+    public function decryptAssertions(ArrayCollection $assertions): ArrayCollection
     {
         $decrypted = new ArrayCollection();
         foreach ($assertions->getIterator() as $assertion) {
@@ -82,22 +81,22 @@ class Processor
 
 
     /**
-     * @param \SimpleSAML\SAML2\Assertion $assertion
-     * @return \SimpleSAML\SAML2\Assertion
+     * @param \SimpleSAML\SAML2\XML\saml\Assertion $assertion
+     * @return \SimpleSAML\SAML2\XML\saml\Assertion
      */
     public function process(Assertion $assertion): Assertion
     {
         if (!$assertion->wasSignedAtConstruction()) {
             $this->logger->info(sprintf(
                 'Assertion with id "%s" was not signed at construction, not verifying the signature',
-                $assertion->getId()
+                $assertion->getId(),
             ));
         } else {
             $this->logger->info(sprintf('Verifying signature of Assertion with id "%s"', $assertion->getId()));
 
             if (!$this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration)) {
                 throw new InvalidSignatureException(
-                    sprintf('The assertion with id "%s" does not have a valid signature', $assertion->getId())
+                    sprintf('The assertion with id "%s" does not have a valid signature', $assertion->getId()),
                 );
             }
         }
@@ -111,8 +110,8 @@ class Processor
 
 
     /**
-     * @param \SimpleSAML\SAML2\EncryptedAssertion $assertion
-     * @return \SimpleSAML\SAML2\Assertion
+     * @param \SimpleSAML\SAML2\XML\saml\EncryptedAssertion $assertion
+     * @return \SimpleSAML\SAML2\XML\saml\Assertion
      */
     private function decryptAssertion(EncryptedAssertion $assertion): Assertion
     {
@@ -121,8 +120,7 @@ class Processor
 
 
     /**
-     * @param \SimpleSAML\SAML2\Assertion $assertion
-     * @return void
+     * @param \SimpleSAML\SAML2\XML\saml\Assertion $assertion
      */
     public function validateAssertion(Assertion $assertion): void
     {
@@ -130,27 +128,30 @@ class Processor
         if (!$assertionValidationResult->isValid()) {
             throw new InvalidAssertionException(sprintf(
                 'Invalid Assertion in SAML Response, errors: "%s"',
-                implode('", "', $assertionValidationResult->getErrors())
+                implode('", "', $assertionValidationResult->getErrors()),
             ));
         }
 
-        foreach ($assertion->getSubjectConfirmation() as $subjectConfirmation) {
-            $subjectConfirmationValidationResult = $this->subjectConfirmationValidator->validate(
-                $subjectConfirmation
-            );
-            if (!$subjectConfirmationValidationResult->isValid()) {
-                throw new InvalidSubjectConfirmationException(sprintf(
-                    'Invalid SubjectConfirmation in Assertion, errors: "%s"',
-                    implode('", "', $subjectConfirmationValidationResult->getErrors())
-                ));
+        $subject = $assertion->getSubject();
+        if ($subject !== null) {
+            foreach ($subject->getSubjectConfirmation() as $subjectConfirmation) {
+                $subjectConfirmationValidationResult = $this->subjectConfirmationValidator->validate(
+                    $subjectConfirmation,
+                );
+                if (!$subjectConfirmationValidationResult->isValid()) {
+                    throw new InvalidSubjectConfirmationException(sprintf(
+                        'Invalid SubjectConfirmation in Assertion, errors: "%s"',
+                        implode('", "', $subjectConfirmationValidationResult->getErrors()),
+                    ));
+                }
             }
         }
     }
 
 
     /**
-     * @param \SimpleSAML\SAML2\Assertion $assertion
-     * @return \SimpleSAML\SAML2\Assertion
+     * @param \SimpleSAML\SAML2\XML\saml\Assertion $assertion
+     * @return \SimpleSAML\SAML2\XML\saml\Assertion
      */
     private function transformAssertion(Assertion $assertion): Assertion
     {

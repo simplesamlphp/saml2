@@ -4,20 +4,24 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2;
 
+use Exception;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 
-use function array_key_exist;
+use function array_key_exists;
 use function array_keys;
 use function array_map;
+use function explode;
 use function implode;
 use function var_export;
 
 /**
  * Base class for SAML 2 bindings.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 abstract class Binding
 {
@@ -42,17 +46,17 @@ abstract class Binding
     public static function getBinding(string $urn): Binding
     {
         switch ($urn) {
-            case Constants::BINDING_HTTP_POST:
-            case Constants::BINDING_HOK_SSO:
+            case C::BINDING_HTTP_POST:
+            case C::BINDING_HOK_SSO:
                 return new HTTPPost();
-            case Constants::BINDING_HTTP_REDIRECT:
+            case C::BINDING_HTTP_REDIRECT:
                 return new HTTPRedirect();
-            case Constants::BINDING_HTTP_ARTIFACT:
+            case C::BINDING_HTTP_ARTIFACT:
                 return new HTTPArtifact();
             // ECP ACS is defined with the PAOS binding, but as the IdP, we
             // talk to the ECP using SOAP -- if support for ECP as an SP is
             // implemented, this logic may need to change
-            case Constants::BINDING_PAOS:
+            case C::BINDING_PAOS:
                 return new SOAP();
             default:
                 throw new UnsupportedBindingException('Unsupported binding: ' . var_export($urn, true));
@@ -151,7 +155,6 @@ abstract class Binding
      * Set to null to use the destination set in the message.
      *
      * @param string|null $destination The destination the message should be delivered to.
-     * @return void
      */
     public function setDestination(string $destination = null): void
     {
@@ -165,10 +168,10 @@ abstract class Binding
      * This function will send a message using the specified binding.
      * The message will be delivered to the destination set in the message.
      *
-     * @param \SimpleSAML\SAML2\Message $message The message which should be sent.
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message which should be sent.
      * @return \Psr\Http\Message\ResponseInterface
      */
-    abstract public function send(Message $message): ResponseInterface;
+    abstract public function send(AbstractMessage $message): ResponseInterface;
 
 
     /**
@@ -178,7 +181,7 @@ abstract class Binding
      * An exception will be thrown if we are unable to process the message.
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
-     * @return \SimpleSAML\SAML2\Message The received message.
+     * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
      */
-    abstract public function receive(ServerRequestInterface $request): Message;
+    abstract public function receive(ServerRequestInterface $request): AbstractMessage;
 }

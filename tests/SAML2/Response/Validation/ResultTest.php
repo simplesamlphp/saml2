@@ -7,12 +7,15 @@ namespace SimpleSAML\Test\SAML2\Response\Validation;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Response\Validation\Result;
 
-class ResultTest extends TestCase
+/**
+ * @covers \SimpleSAML\SAML2\Response\Validation\Result
+ * @package simplesamlphp/saml2
+ */
+final class ResultTest extends TestCase
 {
     /**
      * @group response-validation
      * @test
-     * @return void
      */
     public function addedErrorsCanBeRetrieved(): void
     {
@@ -30,7 +33,6 @@ class ResultTest extends TestCase
     /**
      * @group response-validation
      * @test
-     * @return void
      */
     public function theResultCorrectlyReportsWhetherOrNotItIsValid(): void
     {
