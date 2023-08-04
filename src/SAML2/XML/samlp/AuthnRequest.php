@@ -67,7 +67,7 @@ class AuthnRequest extends AbstractRequest
         protected ?int $assertionConsumerServiceIndex = null,
         protected ?string $protocolBinding = null,
         protected ?int $attributeConsumingServiceIndex = null,
-        protected ?string $ProviderName = null,
+        protected ?string $providerName = null,
         ?Issuer $issuer = null,
         ?string $id = null,
         string $version = '2.0',
@@ -76,7 +76,7 @@ class AuthnRequest extends AbstractRequest
         ?Extensions $extensions = null,
         protected ?Scoping $scoping = null,
     ) {
-        Assert::nullOrNotWhitespaceOnly($ProviderName);
+        Assert::nullOrNotWhitespaceOnly($providerName);
         Assert::oneOf(
             null,
             [$assertionConsumerServiceURL, $assertionConsumerServiceIndex],
@@ -157,7 +157,7 @@ class AuthnRequest extends AbstractRequest
      */
     public function getProviderName(): ?string
     {
-        return $this->ProviderName;
+        return $this->providerName;
     }
 
 
