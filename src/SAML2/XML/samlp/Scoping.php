@@ -98,7 +98,7 @@ final class Scoping extends AbstractSamlpElement
         $requesterId = RequesterID::getChildrenOfClass($xml);
 
         return new static(
-            is_null($proxyCount) ? null : $proxyCount,
+            $proxyCount,
             array_pop($idpList),
             $requesterId,
         );
