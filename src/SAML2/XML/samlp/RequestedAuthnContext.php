@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\XML\Constants as C;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 use function array_merge;
@@ -35,8 +36,12 @@ final class RequestedAuthnContext extends AbstractSamlpElement
         protected ?string $Comparison = null,
     ) {
         Assert::maxCount($requestedAuthnContexts, C::UNBOUNDED_LIMIT);
-        Assert::minCount($requestedAuthnContexts, 1);
-        Assert::allIsInstanceOfAny($requestedAuthnContexts, [AuthnContextClassRef::class, AuthnContextDeclRef::class]);
+        Assert::minCount($requestedAuthnContexts, 1, SchemaViolationException::class);
+        Assert::allIsInstanceOfAny(
+            $requestedAuthnContexts,
+            [AuthnContextClassRef::class, AuthnContextDeclRef::class],
+            SchemaViolationException::class,
+        );
 
         if ($requestedAuthnContexts[0] instanceof AuthnContextClassRef) {
             Assert::allIsInstanceOf(
