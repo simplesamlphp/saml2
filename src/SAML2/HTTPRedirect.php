@@ -127,10 +127,8 @@ class HTTPRedirect extends Binding
 
         if (array_key_exists('SAMLRequest', $query)) {
             $message = $query['SAMLRequest'];
-            $signedQuery = 'SAMLRequest=' . urlencode($query['SAMLRequest']);
         } elseif (array_key_exists('SAMLResponse', $query)) {
             $message = $query['SAMLResponse'];
-            $signedQuery = 'SAMLResponse=' . urlencode($query['SAMLResponse']);
         } else {
             throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
@@ -151,44 +149,11 @@ class HTTPRedirect extends Binding
 
         $document = DOMDocumentFactory::fromString($message);
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
-        $message = MessageFactory::fromXML($document->documentElement);
 
+        $msg = MessageFactory::fromXML($document->documentElement);
         if (array_key_exists('RelayState', $query)) {
-            $message->setRelayState($query['RelayState']);
-            $signedQuery .= '&RelayState=' . urlencode($query['RelayState']);
+            $msg->setRelayState($query['RelayState']);
         }
-
-        if (!array_key_exists('Signature', $query)) {
-            return $message;
-        }
-
-        /**
-         * 3.4.5.2 - SAML Bindings
-         *
-         * If the message is signed, the Destination XML attribute in the root SAML element of the protocol
-         * message MUST contain the URL to which the sender has instructed the user agent to deliver the
-         * message.
-         */
-        Assert::notNull($message->getDestination()); // Validation of the value must be done upstream
-
-        if (!array_key_exists('SigAlg', $query)) {
-            throw new Exception('Missing signature algorithm.');
-        } else {
-            $signedQuery .= '&SigAlg=' . urlencode($query['SigAlg']);
-        }
-
-        $container = ContainerSingleton::getInstance();
-        $blacklist = $container->getBlacklistedEncryptionAlgorithms();
-        $verifier = (new SignatureAlgorithmFactory($blacklist))->getAlgorithm(
-            $query['SigAlg'],
-            // TODO:  Need to use the key from the metadata
-            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
-        );
-
-        if ($verifier->verify($signedQuery, base64_decode($query['Signature'])) === false) {
-            throw new SignatureVerificationFailedException('Failed to verify signature.');
-        }
-
-        return $message;
+        return $msg;
     }
 }
