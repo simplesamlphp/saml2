@@ -11,7 +11,7 @@ on:  # yamllint disable-line rule:truthy
     branches: [master, release-*]
     paths-ignore:
       - '**.md'
-  workflow_dispatch
+  workflow_dispatch:
 
 jobs:
   linter:
@@ -24,7 +24,7 @@ jobs:
           fetch-depth: 0
 
       - name: Lint Code Base
-        uses: github/super-linter/slim@v5
+        uses: super-linter/super-linter/slim@v5
         env:
           LOG_LEVEL: NOTICE
           VALIDATE_ALL_CODEBASE: true
@@ -285,8 +285,8 @@ jobs:
     runs-on: [ubuntu-latest]
     if: |
       always() &&
-      needs.coverage.result == 'success' &&
-      (needs.unit-tests-linux == 'success' || needs.coverage == 'skipped')
+      needs.coverage.result == 'success' ||
+      (needs.unit-tests-linux == 'success' && needs.coverage == 'skipped')
 
     steps:
       - uses: geekyeggo/delete-artifact@v2
