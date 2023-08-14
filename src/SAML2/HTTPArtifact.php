@@ -85,7 +85,7 @@ class HTTPArtifact extends Binding
 
         $params = ['SAMLart' => $artifact];
 
-        $relayState = $message->getRelayState();
+        $relayState = $this->getRelayState();
         if ($relayState !== null) {
             $params['RelayState'] = $relayState;
         }
@@ -194,7 +194,7 @@ class HTTPArtifact extends Binding
         $samlResponse->addValidator([get_class($this), 'validateSignature'], $artifactResponse);
 
         if (isset($query['RelayState'])) {
-            $samlResponse->setRelayState($query['RelayState']);
+            $this->setRelayState($query['RelayState']);
         }
 
         return $samlResponse;

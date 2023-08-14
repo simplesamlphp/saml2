@@ -56,7 +56,7 @@ class HTTPRedirect extends Binding
             $destination = $this->destination;
         }
 
-        $relayState = $message->getRelayState();
+        $relayState = $this->getRelayState();
         $msgStr = $message->toXML();
 
         Utils::getContainer()->debugMessage($msgStr, 'out');
@@ -152,7 +152,7 @@ class HTTPRedirect extends Binding
 
         $msg = MessageFactory::fromXML($document->documentElement);
         if (array_key_exists('RelayState', $query)) {
-            $msg->setRelayState($query['RelayState']);
+            $this->setRelayState($query['RelayState']);
         }
         return $msg;
     }

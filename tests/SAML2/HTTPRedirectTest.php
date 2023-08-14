@@ -117,7 +117,7 @@ final class HTTPRedirectTest extends TestCase
         $hr = new HTTPRedirect();
         $samlrequest = $hr->receive($request);
         $this->assertInstanceOf(AbstractRequest::class, $samlrequest);
-        $relaystate = $samlrequest->getRelayState();
+        $relaystate = $hr->getRelayState();
         $this->assertEquals('https://profile.surfconext.nl/', $relaystate);
     }
 
@@ -140,7 +140,7 @@ final class HTTPRedirectTest extends TestCase
         $hr = new HTTPRedirect();
         $samlrequest = $hr->receive($request);
         $this->assertInstanceOf(AbstractRequest::class, $samlrequest);
-        $relaystate = $samlrequest->getRelayState();
+        $relaystate = $hr->getRelayState();
         $this->assertEquals(
             'https://demo.moo-archive.nl/module.php/admin/test/default-sp',
             $relaystate,
@@ -163,6 +163,7 @@ final class HTTPRedirectTest extends TestCase
         $request = $request->withQueryParams($q);
 
         $hr = new HTTPRedirect();
+        $hr->setRelayState(urlencode($q['RelayState']));
         $samlrequest = $hr->receive($request);
 
         // validate with the correct certificate, should verify
@@ -308,8 +309,9 @@ final class HTTPRedirectTest extends TestCase
             issuer: $issuer,
             destination: 'http://example.org/login?success=yes',
         );
-        $response->setRelayState('http://example.org');
+
         $hr = new HTTPRedirect();
+        $hr->setRelayState('http://example.org');
         $hr->send($response);
     }
 

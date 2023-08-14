@@ -26,6 +26,13 @@ use function var_export;
 abstract class Binding
 {
     /**
+     * The RelayState associated with the message.
+     *
+     * @var string|null
+     */
+    protected ?string $relayState = null;
+
+    /**
      * The destination of messages.
      *
      * This can be null, in which case the destination in the message is used.
@@ -146,6 +153,28 @@ abstract class Binding
     public function getDestination(): ?string
     {
         return $this->destination;
+    }
+
+
+    /**
+     * Set the RelayState associated with he message.
+     *
+     * @param string|null $relayState The RelayState.
+     */
+    public function setRelayState(string $relayState = null): void
+    {
+        $this->relayState = $relayState;
+    }
+
+
+    /**
+     * Get the RelayState associated with the message.
+     *
+     * @return string|null The RelayState.
+     */
+    public function getRelayState(): ?string
+    {
+        return $this->relayState;
     }
 
 
