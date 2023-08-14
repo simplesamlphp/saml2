@@ -53,7 +53,7 @@ class HTTPRedirect extends Binding
             $destination = $this->destination;
         }
 
-        $relayState = $message->getRelayState();
+        $relayState = $this->getRelayState();
         $msgStr = $message->toXML();
 
         Utils::getContainer()->debugMessage($msgStr, 'out');
@@ -151,8 +151,8 @@ class HTTPRedirect extends Binding
         $message = MessageFactory::fromXML($document->documentElement);
 
         if (array_key_exists('RelayState', $query)) {
-            $message->setRelayState($query['RelayState']);
             $signedQuery .= '&RelayState=' . urlencode($query['RelayState']);
+            $this->setRelayState($query['RelayState']);
         }
 
         if (!array_key_exists('Signature', $query)) {
