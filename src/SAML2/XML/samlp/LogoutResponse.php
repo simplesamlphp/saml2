@@ -36,7 +36,6 @@ final class LogoutResponse extends AbstractStatusResponse
      * @param string|null $destination
      * @param string|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions|null $extensions
-     * @param string|null $relayState
      *
      * @throws \Exception
      */
@@ -50,7 +49,6 @@ final class LogoutResponse extends AbstractStatusResponse
         ?string $destination = null,
         ?string $consent = null,
         ?Extensions $extensions = null,
-        ?string $relayState = null,
     ) {
         parent::__construct(
             $status,
@@ -62,7 +60,6 @@ final class LogoutResponse extends AbstractStatusResponse
             $destination,
             $consent,
             $extensions,
-            $relayState,
         );
     }
 
