@@ -48,18 +48,21 @@ require 'vendor/autoload.php';
 
 // Implement the Container interface (out of scope for example)
 require 'container.php';
-SAML2\Compat\ContainerSingleton::setContainer($container);
+SimpleSAML\SAML2\Compat\ContainerSingleton::setContainer($container);
 
 // Set up an AuthnRequest
-$request = new SAML2\AuthnRequest();
-$request->setId($container->generateId());
-$issuer = new SAML2\XML\saml\Issuer();
-$issuer->setValue('https://sp.example.edu');
-$request->setIssuer($issuer);
-$request->setDestination('https://idp.example.edu');
+$id = $container->generateId();
+$issuer = new SimpleSAML\SAML2\XML\saml\Issuer('https://sp.example.edu');
+$destination = 'https://idp.example.edu';
+$request = new SimpleSAML\SAML2\XML\samlp\AuthnRequest(
+    id: $id,
+    issuer: $issuer,
+    destination: $destination,
+);
+
 
 // Send it off using the HTTP-Redirect binding
-$binding = new SAML2\HTTPRedirect();
+$binding = new SimpleSAML\SAML2\HTTPRedirect();
 $binding->send($request);
 ```
 
