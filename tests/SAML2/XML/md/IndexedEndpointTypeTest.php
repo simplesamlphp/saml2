@@ -53,7 +53,8 @@ final class IndexedEndpointTypeTest extends TestCase
      */
     public function testMarshallingWithoutIsDefault(string $class): void
     {
-        $idxep = new $class(42, C::BINDING_HTTP_POST, 'https://simplesamlphp.org/some/endpoint');
+        $binding = ($class === DiscoveryResponse::class) ? C::BINDING_IDPDISC : C::BINDING_HTTP_POST;
+        $idxep = new $class(42, $binding, 'https://simplesamlphp.org/some/endpoint');
         $this->assertNull($idxep->getIsDefault());
     }
 

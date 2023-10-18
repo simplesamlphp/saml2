@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\idpdisc;
 
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType;
 
 /**
@@ -48,10 +49,11 @@ final class DiscoveryResponse extends AbstractIndexedEndpointType
         array $attributes = [],
         array $children = [],
     ) {
+        Assert::same($binding, C::BINDING_IDPDISC, ProtocolViolationException::class);
         Assert::null(
             $unused,
             'The \'ResponseLocation\' attribute must be omitted for idpdisc:DiscoveryResponse.',
         );
-        parent::__construct($index, $binding, $location, $isDefault, null, $attributes, $children);
+        parent::__construct($index, C::BINDING_IDPDISC, $location, $isDefault, null, $attributes, $children);
     }
 }

@@ -58,7 +58,7 @@ final class DiscoveryResponseTest extends TestCase
 
         self::$arrayRepresentation = [
             'index' => 1,
-            'Binding' => C::BINDING_HTTP_POST,
+            'Binding' => C::BINDING_IDPDISC,
             'Location' => 'https://whatever/',
             'isDefault' => true,
             //'ResponseLocation' => null,
@@ -82,7 +82,7 @@ final class DiscoveryResponseTest extends TestCase
     {
         $discoResponse = new DiscoveryResponse(
             43,
-            C::BINDING_HTTP_POST,
+            C::BINDING_IDPDISC,
             'https://simplesamlphp.org/some/endpoint',
             false,
             null,
@@ -108,7 +108,7 @@ final class DiscoveryResponseTest extends TestCase
         );
         new DiscoveryResponse(
             42,
-            C::BINDING_HTTP_ARTIFACT,
+            C::BINDING_IDPDISC,
             'https://simplesamlphp.org/some/endpoint',
             false,
             'https://response.location/',
