@@ -51,6 +51,7 @@
         </properties>
         <exclude-pattern>tests/SAML2/AssertionTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/Assertion/ProcessorTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/Assertion/Validation/AssertionValidatorTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/AttributeQueryTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/AuthnRequestTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/BindingTest.php</exclude-pattern>
@@ -69,8 +70,11 @@
         <exclude-pattern>tests/SAML2/XML/md/EntityDescriptorTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/mdattr/EntityAttributesTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/mdui/LogoTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/saml/AssertionTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/saml/AttributeValueTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/saml/AuthnContextTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/saml/EncryptedAssertionTest.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/saml/EncryptedIDTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/saml/IssuerXMLShowAllTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/saml/NameIDTest.php</exclude-pattern>
         <exclude-pattern>tests/SAML2/XML/samlp/RequestedAuthnContextTest.php</exclude-pattern>
