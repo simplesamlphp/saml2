@@ -51,7 +51,8 @@ final class IndexedEndpointTypeTest extends TestCase
      */
     public function testMarshallingWithoutIsDefault(string $class): void
     {
-        $idxep = new $class(42, C::BINDING_HTTP_POST, C::LOCATION_A);
+        $binding = ($class === DiscoveryResponse::class) ? C::BINDING_IDPDISC : C::BINDING_HTTP_POST;
+        $idxep = new $class(42, $binding, C::LOCATION_A);
         $this->assertNull($idxep->getIsDefault());
     }
 

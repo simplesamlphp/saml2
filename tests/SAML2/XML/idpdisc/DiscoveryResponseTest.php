@@ -58,7 +58,7 @@ final class DiscoveryResponseTest extends TestCase
 
         self::$arrayRepresentation = [
             'index' => 1,
-            'Binding' => C::BINDING_HTTP_POST,
+            'Binding' => C::BINDING_IDPDISC,
             'Location' => 'https://whatever/',
             'isDefault' => true,
             //'ResponseLocation' => null,
@@ -82,7 +82,7 @@ final class DiscoveryResponseTest extends TestCase
     {
         $discoResponse = new DiscoveryResponse(
             43,
-            C::BINDING_HTTP_POST,
+            C::BINDING_IDPDISC,
             C::LOCATION_A,
             false,
             null,
@@ -106,7 +106,13 @@ final class DiscoveryResponseTest extends TestCase
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for idpdisc:DiscoveryResponse.',
         );
-        new DiscoveryResponse(42, C::BINDING_HTTP_ARTIFACT, C::LOCATION_A, false, 'https://response.location/');
+        new DiscoveryResponse(
+            42,
+            C::BINDING_IDPDISC,
+            C::LOCATION_A,
+            false,
+            'https://response.location/',
+        );
     }
 
 

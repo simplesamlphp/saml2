@@ -61,6 +61,11 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
      */
     public const BINDING_HTTP_REDIRECT_DEFLATE = 'urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:DEFLATE';
 
+    /*
+     * The URN for the IdP Discovery Protocol binding
+     */
+    public const BINDING_IDPDISC = 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol';
+
     /**
      * The URN for the PAOS binding.
      */
