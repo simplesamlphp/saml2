@@ -4,101 +4,111 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\XML\Constants as C;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
-use function is_bool;
+use function preg_split;
 
 /**
  * Class representing SAML 2 IDPSSODescriptor.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
-class IDPSSODescriptor extends SSODescriptorType
+final class IDPSSODescriptor extends AbstractSSODescriptor
 {
     /**
-     * Whether AuthnRequests sent to this IdP should be signed.
+     * IDPSSODescriptor constructor.
      *
-     * @var bool|null
+     * @param \SimpleSAML\SAML2\XML\md\SingleSignOnService[] $singleSignOnService
+     * @param string[] $protocolSupportEnumeration
+     * @param bool|null $wantAuthnRequestsSigned
+     * @param \SimpleSAML\SAML2\XML\md\NameIDMappingService[] $nameIDMappingService
+     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfile
+     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attribute
+     * @param string|null $ID
+     * @param \DateTimeImmutable|null $validUntil
+     * @param string|null $cacheDuration
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
+     * @param string|null $errorURL
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor
+     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contact
+     * @param \SimpleSAML\SAML2\XML\md\ArtifactResolutionService[] $artifactResolutionService
+     * @param \SimpleSAML\SAML2\XML\md\SingleLogoutService[] $singleLogoutService
+     * @param \SimpleSAML\SAML2\XML\md\ManageNameIDService[] $manageNameIDService
+     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
      */
-    private ?bool $WantAuthnRequestsSigned = null;
+    public function __construct(
+        protected array $singleSignOnService,
+        array $protocolSupportEnumeration,
+        protected ?bool $wantAuthnRequestsSigned = null,
+        protected array $nameIDMappingService = [],
+        protected array $assertionIDRequestService = [],
+        protected array $attributeProfile = [],
+        protected array $attribute = [],
+        ?string $ID = null,
+        ?DateTimeImmutable $validUntil = null,
+        ?string $cacheDuration = null,
+        ?Extensions $extensions = null,
+        ?string $errorURL = null,
+        array $keyDescriptor = [],
+        ?Organization $organization = null,
+        array $contact = [],
+        array $artifactResolutionService = [],
+        array $singleLogoutService = [],
+        array $manageNameIDService = [],
+        array $nameIDFormat = [],
+    ) {
+        Assert::maxCount($singleSignOnService, C::UNBOUNDED_LIMIT);
+        Assert::minCount($singleSignOnService, 1, 'At least one SingleSignOnService must be specified.');
+        Assert::allIsInstanceOf(
+            $singleSignOnService,
+            SingleSignOnService::class,
+            'All md:SingleSignOnService endpoints must be an instance of SingleSignOnService.',
+        );
+        Assert::maxCount($nameIDMappingService, C::UNBOUNDED_LIMIT);
+        Assert::allIsInstanceOf(
+            $nameIDMappingService,
+            NameIDMappingService::class,
+            'All md:NameIDMappingService endpoints must be an instance of NameIDMappingService.',
+        );
+        Assert::maxCount($assertionIDRequestService, C::UNBOUNDED_LIMIT);
+        Assert::allIsInstanceOf(
+            $assertionIDRequestService,
+            AssertionIDRequestService::class,
+            'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.',
+        );
+        Assert::maxCount($attributeProfile, C::UNBOUNDED_LIMIT);
+        Assert::allIsInstanceOf($attributeProfile, AttributeProfile::class);
+        Assert::maxCount($attribute, C::UNBOUNDED_LIMIT);
+        Assert::allIsInstanceOf(
+            $attribute,
+            Attribute::class,
+            'All md:Attribute elements must be an instance of Attribute.',
+        );
 
-    /**
-     * List of SingleSignOnService endpoints.
-     *
-     * Array with SingleSignOnService objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\SingleSignOnService[]
-     */
-    private array $SingleSignOnService = [];
-
-    /**
-     * List of NameIDMappingService endpoints.
-     *
-     * Array with NameIDMappingService objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\NameIDMappingService[]
-     */
-    private array $NameIDMappingService = [];
-
-    /**
-     * List of AssertionIDRequestService endpoints.
-     *
-     * Array with AssertionIDRequestService objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
-     */
-    private array $AssertionIDRequestService = [];
-
-    /**
-     * List of supported attribute profiles.
-     *
-     * Array with AttributeProfile objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AttributeProfile[]
-     */
-    private array $AttributeProfile = [];
-
-    /**
-     * List of supported attributes.
-     *
-     * Array with \SAML2\XML\saml\Attribute objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\saml\Attribute[]
-     */
-    private array $Attribute = [];
-
-
-    /**
-     * Initialize an IDPSSODescriptor.
-     *
-     * @param \DOMElement|null $xml The XML element we should load.
-     */
-    public function __construct(DOMElement $xml = null)
-    {
-        parent::__construct('md:IDPSSODescriptor', $xml);
-
-        if ($xml === null) {
-            return;
-        }
-
-        $this->WantAuthnRequestsSigned = Utils::parseBoolean($xml, 'WantAuthnRequestsSigned', null);
-
-        $this->setSingleSignOnService(SingleSignOnService::getChildrenOfClass($xml));
-        $this->setNameIDMappingService(NameIDMappingService::getChildrenOfClass($xml));
-        $this->setAssertionIDRequestService(AssertionIDRequestService::getChildrenOfClass($xml));
-        $this->setAttributeProfile(AttributeProfile::getChildrenOfClass($xml));
-
-        $xpCache = XPath::getXPath($xml);
-
-        /** @var \DOMElement $a */
-        foreach (XPath::xpQuery($xml, './saml_assertion:Attribute', $xpCache) as $a) {
-            $this->Attribute[] = new Attribute($a);
-        }
+        parent::__construct(
+            $protocolSupportEnumeration,
+            $ID,
+            $validUntil,
+            $cacheDuration,
+            $extensions,
+            $errorURL,
+            $keyDescriptor,
+            $organization,
+            $contact,
+            $artifactResolutionService,
+            $singleLogoutService,
+            $manageNameIDService,
+            $nameIDFormat,
+        );
     }
 
 
@@ -109,220 +119,172 @@ class IDPSSODescriptor extends SSODescriptorType
      */
     public function wantAuthnRequestsSigned(): ?bool
     {
-        return $this->WantAuthnRequestsSigned;
+        return $this->wantAuthnRequestsSigned;
     }
 
 
     /**
-     * Set the value of the WantAuthnRequestsSigned-property
-     *
-     * @param bool|null $flag
-     * @return void
-     */
-    public function setWantAuthnRequestsSigned(bool $flag = null): void
-    {
-        $this->WantAuthnRequestsSigned = $flag;
-    }
-
-
-    /**
-     * Collect the value of the SingleSignOnService-property
+     * Get the SingleSignOnService endpoints
      *
      * @return \SimpleSAML\SAML2\XML\md\SingleSignOnService[]
      */
     public function getSingleSignOnService(): array
     {
-        return $this->SingleSignOnService;
+        return $this->singleSignOnService;
     }
 
 
     /**
-     * Set the value of the SingleSignOnService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\SingleSignOnService[] $singleSignOnService
-     * @return void
-     */
-    public function setSingleSignOnService(array $singleSignOnService): void
-    {
-        Assert::allIsInstanceOf($singleSignOnService, SingleSignOnService::class);
-        $this->SingleSignOnService = $singleSignOnService;
-    }
-
-
-    /**
-     * Add the value to the SingleSignOnService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\SingleSignOnService $singleSignOnService
-     * @return void
-     */
-    public function addSingleSignOnService(SingleSignOnService $singleSignOnService): void
-    {
-        $this->SingleSignOnService[] = $singleSignOnService;
-    }
-
-
-    /**
-     * Collect the value of the NameIDMappingService-property
+     * Get the NameIDMappingService endpoints
      *
      * @return \SimpleSAML\SAML2\XML\md\NameIDMappingService[]
      */
     public function getNameIDMappingService(): array
     {
-        return $this->NameIDMappingService;
+        return $this->nameIDMappingService;
     }
 
 
     /**
-     * Set the value of the NameIDMappingService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\NameIDMappingService[] $nameIDMappingService
-     * @return void
-     */
-    public function setNameIDMappingService(array $nameIDMappingService): void
-    {
-        Assert::allIsInstanceOf($nameIDMappingService, NameIDMappingService::class);
-        $this->NameIDMappingService = $nameIDMappingService;
-    }
-
-
-    /**
-     * Add the value to the NameIDMappingService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\NameIDMappingService $nameIDMappingService
-     * @return void
-     */
-    public function addNameIDMappingService(NameIDMappingService $nameIDMappingService): void
-    {
-        $this->NameIDMappingService[] = $nameIDMappingService;
-    }
-
-
-    /**
-     * Collect the value of the AssertionIDRequestService-property
+     * Collect the AssertionIDRequestService endpoints
      *
      * @return \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
     public function getAssertionIDRequestService(): array
     {
-        return $this->AssertionIDRequestService;
+        return $this->assertionIDRequestService;
     }
 
 
     /**
-     * Set the value of the AssertionIDRequestService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
-     * @return void
-     */
-    public function setAssertionIDRequestService(array $assertionIDRequestService): void
-    {
-        Assert::allIsInstanceOf($assertionIDRequestService, AssertionIDRequestService::class);
-        $this->AssertionIDRequestService = $assertionIDRequestService;
-    }
-
-
-    /**
-     * Add the value to the AssertionIDRequestService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService $assertionIDRequestService
-     * @return void
-     */
-    public function addAssertionIDRequestService(AssertionIDRequestService $assertionIDRequestService): void
-    {
-        $this->AssertionIDRequestService[] = $assertionIDRequestService;
-    }
-
-
-    /**
-     * Collect the value of the AttributeProfile-property
+     * Get the attribute profiles supported
      *
      * @return \SimpleSAML\SAML2\XML\md\AttributeProfile[]
      */
     public function getAttributeProfile(): array
     {
-        return $this->AttributeProfile;
+        return $this->attributeProfile;
     }
 
 
     /**
-     * Set the value of the AttributeProfile-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfile
-     * @return void
-     */
-    public function setAttributeProfile(array $attributeProfile): void
-    {
-        Assert::allIsInstanceOf($attributeProfile, AttributeProfile::class);
-        $this->AttributeProfile = $attributeProfile;
-    }
-
-
-    /**
-     * Collect the value of the Attribute-property
+     * Get the attributes supported by this IdP
      *
      * @return \SimpleSAML\SAML2\XML\saml\Attribute[]
      */
-    public function getAttribute(): array
+    public function getSupportedAttribute(): array
     {
-        return $this->Attribute;
+        return $this->attribute;
     }
 
 
     /**
-     * Set the value of the Attribute-property
+     * Initialize an IDPSSODescriptor.
      *
-     * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attribute
-     * @return void
+     * @param \DOMElement $xml The XML element we should load.
+     * @return static
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     *   if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     *   if too many child-elements of a type are specified
      */
-    public function setAttribute(array $attribute): void
+    public static function fromXML(DOMElement $xml): static
     {
-        $this->Attribute = $attribute;
+        Assert::same($xml->localName, 'IDPSSODescriptor', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, IDPSSODescriptor::NS, InvalidDOMElementException::class);
+
+        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
+        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
+        Assert::nullOrValidDateTimeZulu($validUntil);
+
+        $orgs = Organization::getChildrenOfClass($xml);
+        Assert::maxCount(
+            $orgs,
+            1,
+            'More than one Organization found in this descriptor',
+            TooManyElementsException::class,
+        );
+
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount(
+            $extensions,
+            1,
+            'Only one md:Extensions element is allowed.',
+            TooManyElementsException::class,
+        );
+
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount(
+            $signature,
+            1,
+            'Only one ds:Signature element is allowed.',
+            TooManyElementsException::class,
+        );
+
+        $idpssod = new static(
+            SingleSignOnService::getChildrenOfClass($xml),
+            preg_split('/[\s]+/', trim($protocols)),
+            self::getOptionalBooleanAttribute($xml, 'WantAuthnRequestsSigned', null),
+            NameIDMappingService::getChildrenOfClass($xml),
+            AssertionIDRequestService::getChildrenOfClass($xml),
+            AttributeProfile::getChildrenOfClass($xml),
+            Attribute::getChildrenOfClass($xml),
+            self::getOptionalAttribute($xml, 'ID', null),
+            $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
+            self::getOptionalAttribute($xml, 'cacheDuration', null),
+            !empty($extensions) ? $extensions[0] : null,
+            self::getOptionalAttribute($xml, 'errorURL', null),
+            KeyDescriptor::getChildrenOfClass($xml),
+            !empty($orgs) ? $orgs[0] : null,
+            ContactPerson::getChildrenOfClass($xml),
+            ArtifactResolutionService::getChildrenOfClass($xml),
+            SingleLogoutService::getChildrenOfClass($xml),
+            ManageNameIDService::getChildrenOfClass($xml),
+            NameIDFormat::getChildrenOfClass($xml),
+        );
+
+        if (!empty($signature)) {
+            $idpssod->setSignature($signature[0]);
+            $idpssod->setXML($xml);
+        }
+        return $idpssod;
     }
 
 
     /**
-     * Addthe value to the Attribute-property
+     * Convert this assertion to an unsigned XML document.
+     * This method does not sign the resulting XML document.
      *
-     * @param \SimpleSAML\SAML2\XML\saml\Attribute $attribute
-     * @return void
+     * @return \DOMElement The root element of the DOM tree
      */
-    public function addAttribute(Attribute $attribute): void
+    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
-        $this->Attribute[] = $attribute;
-    }
+        $e = parent::toUnsignedXML($parent);
 
-
-    /**
-     * Add this IDPSSODescriptor to an EntityDescriptor.
-     *
-     * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
-     * @return \DOMElement
-     */
-    public function toXML(DOMElement $parent): DOMElement
-    {
-        $e = parent::toXML($parent);
-
-        if (is_bool($this->WantAuthnRequestsSigned)) {
-            $e->setAttribute('WantAuthnRequestsSigned', $this->WantAuthnRequestsSigned ? 'true' : 'false');
+        if (is_bool($this->wantAuthnRequestsSigned)) {
+            $e->setAttribute('WantAuthnRequestsSigned', $this->wantAuthnRequestsSigned ? 'true' : 'false');
         }
 
-        foreach ($this->SingleSignOnService as $ssos) {
-            $ssos->toXML($e);
+        foreach ($this->getSingleSignOnService() as $ep) {
+            $ep->toXML($e);
         }
 
-        foreach ($this->NameIDMappingService as $nidms) {
-            $nidms->toXML($e);
+        foreach ($this->getNameIDMappingService() as $ep) {
+            $ep->toXML($e);
         }
 
-        foreach ($this->AssertionIDRequestService as $aidrs) {
-            $aidrs->toXML($e);
+        foreach ($this->getAssertionIDRequestService() as $ep) {
+            $ep->toXML($e);
         }
 
-        foreach ($this->AttributeProfile as $ap) {
+        foreach ($this->getAttributeProfile() as $ap) {
             $ap->toXML($e);
         }
 
-        foreach ($this->Attribute as $a) {
+        foreach ($this->getSupportedAttribute() as $a) {
             $a->toXML($e);
         }
 
