@@ -4,100 +4,75 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\SignedElementHelper;
-use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\XML\md\Extensions;
-use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Utils as XMLUtils;
-
-use function array_pop;
-use function gmdate;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\XML\Constants as C;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 /**
  * Class representing SAML 2 EntitiesDescriptor element.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
-class EntitiesDescriptor extends SignedElementHelper
+final class EntitiesDescriptor extends AbstractMetadataDocument
 {
     /**
-     * The ID of this element.
+     * EntitiesDescriptor constructor.
      *
-     * @var string|null
+     * @param \SimpleSAML\SAML2\XML\md\EntityDescriptor[] $entityDescriptors
+     * @param \SimpleSAML\SAML2\XML\md\EntitiesDescriptor[] $entitiesDescriptors
+     * @param string|null $Name
+     * @param string|null $ID
+     * @param \DateTimeImmutable|null $validUntil
+     * @param string|null $cacheDuration
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      */
-    private ?string $ID = null;
+    public function __construct(
+        protected array $entityDescriptors = [],
+        protected array $entitiesDescriptors = [],
+        protected ?string $Name = null,
+        ?string $ID = null,
+        ?DateTimeImmutable $validUntil = null,
+        ?string $cacheDuration = null,
+        ?Extensions $extensions = null,
+    ) {
+        Assert::true(
+            !empty($entitiesDescriptors) || !empty($entityDescriptors),
+            'At least one md:EntityDescriptor or md:EntitiesDescriptor element is required.',
+            ProtocolViolationException::class,
+        );
+        Assert::maxCount($entitiesDescriptors, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($entityDescriptors, C::UNBOUNDED_LIMIT);
+        Assert::allIsInstanceOf($entitiesDescriptors, EntitiesDescriptor::class);
+        Assert::allIsInstanceOf($entityDescriptors, EntityDescriptor::class);
+
+        parent::__construct($ID, $validUntil, $cacheDuration, $extensions);
+    }
+
 
     /**
-     * The name of this entity collection.
+     * Get the EntitiesDescriptor children objects
      *
-     * @var string|null
+     * @return \SimpleSAML\SAML2\XML\md\EntitiesDescriptor[]
      */
-    private ?string $Name = null;
-
-    /**
-     * Extensions on this element.
-     *
-     * Array of extension elements.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\Extensions|null
-     */
-    private ?Extensions $Extensions = null;
-
-    /**
-     * Child EntityDescriptor and EntitiesDescriptor elements.
-     *
-     * @var (\SimpleSAML\SAML2\XML\md\EntityDescriptor|\SimpleSAML\SAML2\XML\md\EntitiesDescriptor)[]
-     */
-    private array $children = [];
-
-
-    /**
-     * Initialize an EntitiesDescriptor.
-     *
-     * @param \DOMElement|null $xml The XML element we should load.
-     */
-    public function __construct(DOMElement $xml = null)
+    public function getEntitiesDescriptors(): array
     {
-        parent::__construct($xml);
+        return $this->entitiesDescriptors;
+    }
 
-        if ($xml === null) {
-            return;
-        }
 
-        if ($xml->hasAttribute('ID')) {
-            $this->ID = $xml->getAttribute('ID');
-        }
-        if ($xml->hasAttribute('validUntil')) {
-            $this->validUntil = XMLUtils::xsDateTimeToTimestamp($xml->getAttribute('validUntil'));
-        }
-        if ($xml->hasAttribute('cacheDuration')) {
-            $this->cacheDuration = $xml->getAttribute('cacheDuration');
-        }
-        if ($xml->hasAttribute('Name')) {
-            $this->Name = $xml->getAttribute('Name');
-        }
-
-        $extensions = Extensions::getChildrenOfClass($xml);
-        $this->Extensions = array_pop($extensions);
-
-        /** @var \DOMElement $node */
-        foreach (
-            XPath::xpQuery(
-                $xml,
-                './saml_metadata:EntityDescriptor|./saml_metadata:EntitiesDescriptor',
-                XPath::getXPath($xml)
-            ) as $node
-        ) {
-            if ($node->localName === 'EntityDescriptor') {
-                $this->children[] = new EntityDescriptor($node);
-            } else {
-                $this->children[] = new EntitiesDescriptor($node);
-            }
-        }
+    /**
+     * Get the EntityDescriptor children objects
+     *
+     * @return \SimpleSAML\SAML2\XML\md\EntityDescriptor[]
+     */
+    public function getEntityDescriptors(): array
+    {
+        return $this->entityDescriptors;
     }
 
 
@@ -113,181 +88,88 @@ class EntitiesDescriptor extends SignedElementHelper
 
 
     /**
-     * Set the value of the Name property.
+     * Initialize an EntitiesDescriptor from an existing XML document.
      *
-     * @param string|null $name
-     * @return void
-     */
-    public function setName(string $name = null): void
-    {
-        $this->Name = $name;
-    }
-
-
-    /**
-     * Collect the value of the ID property.
+     * @param \DOMElement $xml The XML element we should load.
+     * @return static
      *
-     * @return string|null
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     *   if too many child-elements of a type are specified
      */
-    public function getID(): ?string
+    public static function fromXML(DOMElement $xml): static
     {
-        return $this->ID;
-    }
+        Assert::same($xml->localName, 'EntitiesDescriptor', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, EntitiesDescriptor::NS, InvalidDOMElementException::class);
 
+        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
+        Assert::nullOrValidDateTimeZulu($validUntil);
 
-    /**
-     * Set the value of the ID property.
-     *
-     * @param string|null $Id
-     * @return void
-     */
-    public function setID(string $Id = null): void
-    {
-        $this->ID = $Id;
-    }
+        $orgs = Organization::getChildrenOfClass($xml);
+        Assert::maxCount(
+            $orgs,
+            1,
+            'More than one Organization found in this descriptor',
+            TooManyElementsException::class,
+        );
 
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount(
+            $extensions,
+            1,
+            'Only one md:Extensions element is allowed.',
+            TooManyElementsException::class,
+        );
 
-    /**
-     * Collect the value of the validUntil-property
-     * @return int|null
-     */
-    public function getValidUntil(): ?int
-    {
-        return $this->validUntil;
-    }
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount(
+            $signature,
+            1,
+            'Only one ds:Signature element is allowed.',
+            TooManyElementsException::class,
+        );
 
+        $entities = new static(
+            EntityDescriptor::getChildrenOfClass($xml),
+            EntitiesDescriptor::getChildrenOfClass($xml),
+            self::getOptionalAttribute($xml, 'Name', null),
+            self::getOptionalAttribute($xml, 'ID', null),
+            $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
+            self::getOptionalAttribute($xml, 'cacheDuration', null),
+            !empty($extensions) ? $extensions[0] : null,
+        );
 
-    /**
-     * Set the value of the validUntil-property
-     * @param int|null $validUntil
-     * @return void
-     */
-    public function setValidUntil(int $validUntil = null): void
-    {
-        $this->validUntil = $validUntil;
-    }
-
-
-    /**
-     * Collect the value of the cacheDuration-property
-     * @return string|null
-     */
-    public function getCacheDuration(): ?string
-    {
-        return $this->cacheDuration;
-    }
-
-
-    /**
-     * Set the value of the cacheDuration-property
-     * @param string|null $cacheDuration
-     * @return void
-     */
-    public function setCacheDuration(string $cacheDuration = null): void
-    {
-        $this->cacheDuration = $cacheDuration;
-    }
-
-
-    /**
-     * Collect the value of the Extensions property.
-     *
-     * @return \SimpleSAML\SAML2\XML\md\Extensions|null
-     */
-    public function getExtensions(): ?Extensions
-    {
-        return $this->Extensions;
-    }
-
-
-    /**
-     * Set the value of the Extensions property.
-     *
-     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
-     * @return void
-     */
-    public function setExtensions(?Extensions $extensions): void
-    {
-        $this->Extensions = $extensions;
-    }
-
-
-    /**
-     * Collect the value of the children property.
-     *
-     * @return (\SimpleSAML\SAML2\XML\md\EntityDescriptor|\SimpleSAML\SAML2\XML\md\EntitiesDescriptor)[]
-     */
-    public function getChildren(): array
-    {
-        return $this->children;
-    }
-
-
-    /**
-     * Set the value of the childen property.
-     *
-     * @param array $children
-     * @return void
-     */
-    public function setChildren(array $children): void
-    {
-        $this->children = $children;
-    }
-
-
-    /**
-     * Add the value to the children property.
-     *
-     * @param \SimpleSAML\SAML2\XML\md\EntityDescriptor|\SimpleSAML\SAML2\XML\md\EntitiesDescriptor $child
-     * @return void
-     */
-    public function addChildren($child): void
-    {
-        Assert::isInstanceOfAny($child, [EntityDescriptor::class, EntitiesDescriptor::class]);
-        $this->children[] = $child;
-    }
-
-
-    /**
-     * Convert this EntitiesDescriptor to XML.
-     *
-     * @param \DOMElement|null $parent The EntitiesDescriptor we should append this EntitiesDescriptor to.
-     * @return \DOMElement
-     */
-    public function toXML(DOMElement $parent = null): DOMElement
-    {
-        if ($parent === null) {
-            $doc = DOMDocumentFactory::create();
-            $e = $doc->createElementNS(C::NS_MD, 'md:EntitiesDescriptor');
-            $doc->appendChild($e);
-        } else {
-            $e = $parent->ownerDocument->createElementNS(C::NS_MD, 'md:EntitiesDescriptor');
-            $parent->appendChild($e);
+        if (!empty($signature)) {
+            $entities->setSignature($signature[0]);
+            $entities->setXML($xml);
         }
 
-        if ($this->ID !== null) {
-            $e->setAttribute('ID', $this->ID);
-        }
+        return $entities;
+    }
 
-        if ($this->validUntil !== null) {
-            $e->setAttribute('validUntil', gmdate('Y-m-d\TH:i:s\Z', $this->validUntil));
-        }
 
-        if ($this->cacheDuration !== null) {
-            $e->setAttribute('cacheDuration', $this->cacheDuration);
-        }
+    /**
+     * Convert this assertion to an unsigned XML document.
+     * This method does not sign the resulting XML document.
+     *
+     * @return \DOMElement The root element of the DOM tree
+     */
+    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
+    {
+        $e = parent::toUnsignedXML($parent);
 
         if ($this->Name !== null) {
             $e->setAttribute('Name', $this->Name);
         }
 
-        $this->Extensions?->toXML($e);
-
-        foreach ($this->children as $node) {
-            $node->toXML($e);
+        foreach ($this->getEntitiesDescriptors() as $entitiesDescriptor) {
+            $entitiesDescriptor->toXML($e);
         }
 
-        $this->signElement($e, $e->firstChild);
+        foreach ($this->getEntityDescriptors() as $entityDescriptor) {
+            $entityDescriptor->toXML($e);
+        }
 
         return $e;
     }
