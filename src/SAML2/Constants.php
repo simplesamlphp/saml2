@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2;
 /**
  * Various SAML 2 constants.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
 class Constants extends \SimpleSAML\XMLSecurity\Constants
 {
@@ -27,19 +27,24 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const AC_UNSPECIFIED = 'urn:oasis:names:tc:SAML:2.0:ac:classes:unspecified';
 
     /**
+     * Pairwise identifier attribute
+     */
+    public const ATTR_PAIRWISE_ID = 'urn:oasis:names:tc:SAML:attribute:pairwise-id';
+
+    /**
      * Subject identifier attribute
      */
     public const ATTR_SUBJECT_ID = 'urn:oasis:names:tc:SAML:attribute:subject-id';
 
     /**
-     * Pairwise identifier attribute
+     * The URN for the Holder-of-Key Web Browser SSO Profile binding
      */
-    public const ATTR_PAIRWISE_ID = 'urn:oasis:names:tc:SAML:attribute:pairwise-id';
+    public const BINDING_HOK_SSO = 'urn:oasis:names:tc:SAML:2.0:profiles:holder-of-key:SSO:browser';
 
-    /*
-     * The URN for the IdP Discovery Protocol binding
+    /**
+     * The URN for the HTTP-ARTIFACT binding.
      */
-    public const BINDING_IDPDISC = 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol';
+    public const BINDING_HTTP_ARTIFACT = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact';
 
     /**
      * The URN for the HTTP-POST binding.
@@ -52,19 +57,14 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const BINDING_HTTP_REDIRECT = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect';
 
     /**
-     * The URN for the HTTP-ARTIFACT binding.
-     */
-    public const BINDING_HTTP_ARTIFACT = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact';
-
-    /**
      * The URN for the DEFLATE url encoding
      */
     public const BINDING_HTTP_REDIRECT_DEFLATE = 'urn:oasis:names:tc:SAML:2.0:bindings:URL-Encoding:DEFLATE';
 
-    /**
-     * The URN for the SOAP binding.
+    /*
+     * The URN for the IdP Discovery Protocol binding
      */
-    public const BINDING_SOAP = 'urn:oasis:names:tc:SAML:2.0:bindings:SOAP';
+    public const BINDING_IDPDISC = 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol';
 
     /**
      * The URN for the PAOS binding.
@@ -72,9 +72,14 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const BINDING_PAOS = 'urn:oasis:names:tc:SAML:2.0:bindings:PAOS';
 
     /**
-     * The URN for the Holder-of-Key Web Browser SSO Profile binding
+     * The URN for the SOAP binding.
      */
-    public const BINDING_HOK_SSO = 'urn:oasis:names:tc:SAML:2.0:profiles:holder-of-key:SSO:browser';
+    public const BINDING_SOAP = 'urn:oasis:names:tc:SAML:2.0:bindings:SOAP';
+
+    /**
+     * The URN for the URI binding.
+     */
+    public const BINDING_URI = 'urn:oasis:names:tc:SAML:2.0:bindings:URI';
 
     /**
      * Bearer subject confirmation method.
@@ -119,9 +124,23 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const COMPARISON_MINIMUM = 'minimum';
 
     /**
-     * No claim as to principal consent is being made.
+     * Indicates that a principal’s consent has been explicitly obtained by the issuer of the message during the
+     * action that initiated the message.
      */
-    public const CONSENT_UNSPECIFIED = 'urn:oasis:names:tc:SAML:2.0:consent:unspecified';
+    public const CONSENT_EXPLICIT = 'urn:oasis:names:tc:SAML:2.0:consent:current-explicit';
+
+    /**
+     * Indicates that a principal’s consent has been implicitly obtained by the issuer of the message during the
+     * action that initiated the message, as part of a broader indication of consent.
+     * Implicit consent is typically more proximal to the action in time and presentation than prior consent,
+     * such as part of a session of activities.
+     */
+    public const CONSENT_IMPLICIT = 'urn:oasis:names:tc:SAML:2.0:consent:current-implicit';
+
+    /**
+     * Indicates that the issuer of the message does not believe that they need to obtain or report consent.
+     */
+    public const CONSENT_INAPPLICABLE = 'urn:oasis:names:tc:SAML:2.0:consent:inapplicable';
 
     /**
      * Indicates that a principal’s consent has been obtained by the issuer of the message.
@@ -135,32 +154,23 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const CONSENT_PRIOR = 'urn:oasis:names:tc:SAML:2.0:consent:prior';
 
     /**
-     * Indicates that a principal’s consent has been implicitly obtained by the issuer of the message during the
-     * action that initiated the message, as part of a broader indication of consent.
-     * Implicit consent is typically more proximal to the action in time and presentation than prior consent,
-     * such as part of a session of activities.
-     */
-    public const CONSENT_IMPLICIT = 'urn:oasis:names:tc:SAML:2.0:consent:current-implicit';
-
-    /**
-     * Indicates that a principal’s consent has been explicitly obtained by the issuer of the message during the
-     * action that initiated the message.
-     */
-    public const CONSENT_EXPLICIT = 'urn:oasis:names:tc:SAML:2.0:consent:current-explicit';
-
-    /**
      * Indicates that the issuer of the message did not obtain consent.
      */
     public const CONSENT_UNAVAILABLE = 'urn:oasis:names:tc:SAML:2.0:consent:unavailable';
 
     /**
-     * Indicates that the issuer of the message does not believe that they need to obtain or report consent.
+     * No claim as to principal consent is being made.
      */
-    public const CONSENT_INAPPLICABLE = 'urn:oasis:names:tc:SAML:2.0:consent:inapplicable';
+    public const CONSENT_UNSPECIFIED = 'urn:oasis:names:tc:SAML:2.0:consent:unspecified';
 
     public const EPTI_URN_MACE = 'urn:mace:dir:attribute-def:eduPersonTargetedID';
 
     public const EPTI_URN_OID = 'urn:oid:1.3.6.1.4.1.5923.1.1.1.10';
+
+    /**
+     * LogoutRequest Reason - admin wishes to terminate the session
+     */
+    public const LOGOUT_REASON_ADMIN = 'urn:oasis:names:tc:SAML:2.0:logout:admin';
 
     /**
      * LogoutRequest Reason - user wishes to terminate the session
@@ -168,9 +178,11 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const LOGOUT_REASON_USER = 'urn:oasis:names:tc:SAML:2.0:logout:user';
 
     /**
-     * LogoutRequest Reason - admin wishes to terminate the session
+     * The class of strings acceptable as the attribute name MUST be drawn from the set of values belonging to
+     * the primitive type xs:Name as defined in [Schema2] Section 3.3.6. See [SAMLProf] for attribute profiles
+     * that make use of this identifier.
      */
-    public const LOGOUT_REASON_ADMIN = 'urn:oasis:names:tc:SAML:2.0:logout:admin';
+    public const NAMEFORMAT_BASIC = 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic';
 
     /**
      * The interpretation of the attribute name is left to individual implementations.
@@ -185,42 +197,24 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const NAMEFORMAT_URI = 'urn:oasis:names:tc:SAML:2.0:attrname-format:uri';
 
     /**
-     * The class of strings acceptable as the attribute name MUST be drawn from the set of values belonging to
-     * the primitive type xs:Name as defined in [Schema2] Section 3.3.6. See [SAMLProf] for attribute profiles
-     * that make use of this identifier.
-     */
-    public const NAMEFORMAT_BASIC = 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic';
-
-    /**
-     * Unspecified NameID format.
-     */
-    public const NAMEID_UNSPECIFIED = 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified';
-
-    /**
      * Email address NameID format.
      */
     public const NAMEID_EMAIL_ADDRESS = 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress';
 
     /**
-     * X509 Subject Name NameID format.
+     * Encrypted NameID format.
      */
-    public const NAMEID_X509_SUBJECT_NAME = 'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName';
-
-    /**
-     * Windows Domain Qualifier Name NameID format.
-     */
-    public const NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME =
-        'urn:oasis:names:tc:SAML:1.1:nameid-format:WindowsDomainQualifiedName';
-
-    /**
-     * Kerberos Principal Name NameID format.
-     */
-    public const NAMEID_KERBEROS = 'urn:oasis:names:tc:SAML:2.0:nameid-format:kerberos';
+    public const NAMEID_ENCRYPTED = 'urn:oasis:names:tc:SAML:2.0:nameid-format:encrypted';
 
     /**
      * Entity NameID format.
      */
     public const NAMEID_ENTITY = 'urn:oasis:names:tc:SAML:2.0:nameid-format:entity';
+
+    /**
+     * Kerberos Principal Name NameID format.
+     */
+    public const NAMEID_KERBEROS = 'urn:oasis:names:tc:SAML:2.0:nameid-format:kerberos';
 
     /**
      * Persistent NameID format.
@@ -233,9 +227,20 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const NAMEID_TRANSIENT = 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient';
 
     /**
-     * Encrypted NameID format.
+     * Unspecified NameID format.
      */
-    public const NAMEID_ENCRYPTED = 'urn:oasis:names:tc:SAML:2.0:nameid-format:encrypted';
+    public const NAMEID_UNSPECIFIED = 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified';
+
+    /**
+     * Windows Domain Qualifier Name NameID format.
+     */
+    public const NAMEID_WINDOWS_DOMAIN_QUALIFIED_NAME =
+        'urn:oasis:names:tc:SAML:1.1:nameid-format:WindowsDomainQualifiedName';
+
+    /**
+     * X509 Subject Name NameID format.
+     */
+    public const NAMEID_X509_SUBJECT_NAME = 'urn:oasis:names:tc:SAML:1.1:nameid-format:X509SubjectName';
 
     /**
      * The namespace for the SAML 2 metadata Algorithm Support profile
@@ -252,20 +257,10 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
      */
     public const NS_EMD = 'http://eduid.cz/schema/metadata/1.0';
 
-    /*
-     * The namespace for the IdP Discovery Protocol binding
-     */
-    public const NS_IDPDISC = 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol';
-
     /**
-     * The namespace for the SAML 2 protocol.
+     * The namespace for the SAML 2 HoK Web Browser SSO Profile.
      */
-    public const NS_SAMLP = 'urn:oasis:names:tc:SAML:2.0:protocol';
-
-    /**
-     * The namespace for the SAML 2 assertions.
-     */
-    public const NS_SAML = 'urn:oasis:names:tc:SAML:2.0:assertion';
+    public const NS_HOK = 'urn:oasis:names:tc:SAML:2.0:profiles:holder-of-key:SSO:browser';
 
     /**
      * The namespace for the SAML 2 metadata.
@@ -293,54 +288,24 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const NS_SHIBMD = 'urn:mace:shibboleth:metadata:1.0';
 
     /**
-     * The namespace for XML schema.
+     * The namespace for the SAML 2 assertions.
      */
-    public const NS_XS = 'http://www.w3.org/2001/XMLSchema';
+    public const NS_SAML = 'urn:oasis:names:tc:SAML:2.0:assertion';
 
     /**
-     * The namespace for XML schema instance.
+     * The namespace for the SAML 2 protocol.
      */
-    public const NS_XSI = 'http://www.w3.org/2001/XMLSchema-instance';
+    public const NS_SAMLP = 'urn:oasis:names:tc:SAML:2.0:protocol';
 
     /**
-     * The namespace for the SAML 2 HoK Web Browser SSO Profile.
+     * The namespace for the SOAP protocol.
      */
-    public const NS_HOK = 'urn:oasis:names:tc:SAML:2.0:profiles:holder-of-key:SSO:browser';
+    public const NS_SOAP = 'http://schemas.xmlsoap.org/soap/envelope/';
 
     /**
-     * The status namespace
+     * The namespace for the IDP Discovery protocol
      */
-    public const STATUS_PREFIX = 'urn:oasis:names:tc:SAML:2.0:status:';
-
-    /**
-     * Top-level status code indicating successful processing of the request.
-     * The request succeeded. Additional information MAY be returned in the <StatusMessage>
-     * and/or <StatusDetail> elements.
-     *
-     * Top-level status code.
-     */
-    public const STATUS_SUCCESS = 'urn:oasis:names:tc:SAML:2.0:status:Success';
-
-    /**
-     * The request could not be performed due to an error on the part of the requester.
-     *
-     * Top-level status code.
-     */
-    public const STATUS_REQUESTER = 'urn:oasis:names:tc:SAML:2.0:status:Requester';
-
-    /**
-     * The request could not be performed due to an error on the part of the SAML responder or SAML authority.
-     *
-     * Top-level status code.
-     */
-    public const STATUS_RESPONDER = 'urn:oasis:names:tc:SAML:2.0:status:Responder';
-
-    /**
-     * The SAML responder could not process the request because the version of the request message was incorrect.
-     *
-     * Top-level status code.
-     */
-    public const STATUS_VERSION_MISMATCH = 'urn:oasis:names:tc:SAML:2.0:status:VersionMismatch';
+    public const NS_IDPDISC = 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol';
 
     /**
      * The responding provider was unable to successfully authenticate the principal.
@@ -402,6 +367,11 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const STATUS_PARTIAL_LOGOUT = 'urn:oasis:names:tc:SAML:2.0:status:PartialLogout';
 
     /**
+     * The status namespace
+     */
+    public const STATUS_PREFIX = 'urn:oasis:names:tc:SAML:2.0:status:';
+
+    /**
      * Indicates that a responding provider cannot authenticate the principal directly and is not permitted
      * to proxy the request further.
      *
@@ -449,11 +419,34 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const STATUS_REQUEST_VERSION_TOO_LOW = 'urn:oasis:names:tc:SAML:2.0:status:RequestVersionTooLow';
 
     /**
+     * The request could not be performed due to an error on the part of the requester.
+     *
+     * Top-level status code.
+     */
+    public const STATUS_REQUESTER = 'urn:oasis:names:tc:SAML:2.0:status:Requester';
+
+    /**
      * The resource value provided in the request message is invalid or unrecognized.
      *
      * Second-level status code.
      */
     public const STATUS_RESOURCE_NOT_RECOGNIZED = 'urn:oasis:names:tc:SAML:2.0:status:ResourceNotRecognized';
+
+    /**
+     * The request could not be performed due to an error on the part of the SAML responder or SAML authority.
+     *
+     * Top-level status code.
+     */
+    public const STATUS_RESPONDER = 'urn:oasis:names:tc:SAML:2.0:status:Responder';
+
+    /**
+     * Top-level status code indicating successful processing of the request.
+     * The request succeeded. Additional information MAY be returned in the <StatusMessage>
+     * and/or <StatusDetail> elements.
+     *
+     * Top-level status code.
+     */
+    public const STATUS_SUCCESS = 'urn:oasis:names:tc:SAML:2.0:status:Success';
 
     /**
      * The response message would contain more elements than the SAML responder is able to return.
@@ -483,6 +476,13 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
      * Second-level status code.
      */
     public const STATUS_UNSUPPORTED_BINDING = 'urn:oasis:names:tc:SAML:2.0:status:UnsupportedBinding';
+
+    /**
+     * The SAML responder could not process the request because the version of the request message was incorrect.
+     *
+     * Top-level status code.
+     */
+    public const STATUS_VERSION_MISMATCH = 'urn:oasis:names:tc:SAML:2.0:status:VersionMismatch';
 
     /**
      * The maximum size for any entityid as per specification
