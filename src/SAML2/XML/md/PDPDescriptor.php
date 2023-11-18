@@ -4,166 +4,178 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Constants as C;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XMLSecurity\XML\ds\Signature;
+
+use function preg_split;
 
 /**
  * Class representing SAML 2 metadata PDPDescriptor.
  *
- * @package SimpleSAMLphp
+ * @package simplesamlphp/saml2
  */
-class PDPDescriptor extends RoleDescriptor
+final class PDPDescriptor extends AbstractRoleDescriptorType
 {
     /**
-     * List of AuthzService endpoints.
+     * PDPDescriptor constructor.
      *
-     * Array with EndpointType objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AuthzService[]
+     * @param \SimpleSAML\SAML2\XML\md\AuthzService[] $authzService
+     * @param string[] $protocolSupportEnumeration
+     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
+     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
+     * @param string|null $ID
+     * @param \DateTimeImmutable|null $validUntil
+     * @param string|null $cacheDuration
+     * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
+     * @param string|null $errorURL
+     * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts
      */
-    private array $AuthzService = [];
+    public function __construct(
+        protected array $authzService,
+        array $protocolSupportEnumeration,
+        protected array $assertionIDRequestService = [],
+        protected array $nameIDFormat = [],
+        ?string $ID = null,
+        ?DateTimeImmutable $validUntil = null,
+        ?string $cacheDuration = null,
+        ?Extensions $extensions = null,
+        ?string $errorURL = null,
+        ?Organization $organization = null,
+        array $keyDescriptors = [],
+        array $contacts = [],
+    ) {
+        Assert::maxCount($authzService, C::UNBOUNDED_LIMIT);
+        Assert::minCount($authzService, 1, 'At least one md:AuthzService endpoint must be present.');
+        Assert::allIsInstanceOf(
+            $authzService,
+            AuthzService::class,
+            'All md:AuthzService endpoints must be an instance of AuthzService.',
+        );
+        Assert::maxCount($assertionIDRequestService, C::UNBOUNDED_LIMIT);
+        Assert::allIsInstanceOf(
+            $assertionIDRequestService,
+            AssertionIDRequestService::class,
+            'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.',
+        );
+        Assert::maxCount($nameIDFormat, C::UNBOUNDED_LIMIT);
+        Assert::allIsInstanceOf($nameIDFormat, NameIDFormat::class);
 
-    /**
-     * List of AssertionIDRequestService endpoints.
-     *
-     * Array with EndpointType objects.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
-     */
-    private array $AssertionIDRequestService = [];
-
-    /**
-     * List of supported NameID formats.
-     *
-     * Array of strings.
-     *
-     * @var \SimpleSAML\SAML2\XML\md\NameIDFormat[]
-     */
-    private array $NameIDFormat = [];
-
-
-    /**
-     * Initialize an IDPSSODescriptor.
-     *
-     * @param \DOMElement|null $xml The XML element we should load.
-     * @throws \Exception
-     */
-    public function __construct(DOMElement $xml = null)
-    {
-        parent::__construct('md:PDPDescriptor', $xml);
-
-        if ($xml === null) {
-            return;
-        }
-
-        $xpCache = XPath::getXPath($xml);
-
-        $this->setAuthzService(AuthzService::getChildrenOfClass($xml));
-        if ($this->getAuthzService() !== []) {
-            throw new MissingElementException('Must have at least one AuthzService in PDPDescriptor.');
-        }
-
-        $this->setAssertionIDRequestService(AssertionIDRequestService::getChildrenOfClass($xml));
-        $this->setNameIDFormat(NameIDFormat::getChildrenOfClass($xml));
+        parent::__construct(
+            $protocolSupportEnumeration,
+            $ID,
+            $validUntil,
+            $cacheDuration,
+            $extensions,
+            $errorURL,
+            $keyDescriptors,
+            $organization,
+            $contacts,
+        );
     }
 
 
     /**
-     * Collect the value of the AuthzService-property
+     * Get the AuthzService endpoints of this PDPDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\AuthzService[]
      */
     public function getAuthzService(): array
     {
-        return $this->AuthzService;
+        return $this->authzService;
     }
 
 
     /**
-     * Set the value of the AuthzService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AuthzService[] $authzService
-     * @return void
-     */
-    public function setAuthzService(array $authzService = []): void
-    {
-        Assert::allIsInstanceOf($authzService, AuthzService::class);
-        $this->AuthzService = $authzService;
-    }
-
-
-    /**
-     * Add the value to the AuthzService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AuthzService $authzService
-     * @return void
-     */
-    public function addAuthzService(AuthzService $authzService): void
-    {
-        $this->AuthzService[] = $authzService;
-    }
-
-
-    /**
-     * Collect the value of the AssertionIDRequestService-property
+     * Get the AssertionIDRequestService endpoints of this PDPDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[]
      */
     public function getAssertionIDRequestService(): array
     {
-        return $this->AssertionIDRequestService;
+        return $this->assertionIDRequestService;
     }
 
 
     /**
-     * Set the value of the AssertionIDRequestService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
-     * @return void
-     */
-    public function setAssertionIDRequestService(array $assertionIDRequestService): void
-    {
-        Assert::allIsInstanceOf($assertionIDRequestService, AssertionIDRequestService::class);
-        $this->AssertionIDRequestService = $assertionIDRequestService;
-    }
-
-
-    /**
-     * Add the value to the AssertionIDRequestService-property
-     *
-     * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService $assertionIDRequestService
-     * @return void
-     */
-    public function addAssertionIDRequestService(AssertionIDRequestService $assertionIDRequestService): void
-    {
-        $this->AssertionIDRequestService[] = $assertionIDRequestService;
-    }
-
-
-    /**
-     * Collect the value of the NameIDFormat-property
+     * Get the NameIDFormats supported by this PDPDescriptor
      *
      * @return \SimpleSAML\SAML2\XML\md\NameIDFormat[]
      */
     public function getNameIDFormat(): array
     {
-        return $this->NameIDFormat;
+        return $this->nameIDFormat;
     }
 
 
     /**
-     * Set the value of the NameIDFormat-property
+     * Initialize an IDPSSODescriptor from a given XML document.
      *
-     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
-     * @return void
+     * @param \DOMElement $xml The XML element we should load.
+     * @return static
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     *   if the supplied element is missing one of the mandatory attributes
+     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     *   if too many child-elements of a type are specified
      */
-    public function setNameIDFormat(array $nameIDFormat): void
+    public static function fromXML(DOMElement $xml): static
     {
-        Assert::allIsInstanceOf($nameIDFormat, NameIDFormat::class);
-        $this->NameIDFormat = $nameIDFormat;
+        Assert::same($xml->localName, 'PDPDescriptor', InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, PDPDescriptor::NS, InvalidDOMElementException::class);
+
+        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
+        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
+        Assert::nullOrValidDateTimeZulu($validUntil);
+
+        $orgs = Organization::getChildrenOfClass($xml);
+        Assert::maxCount(
+            $orgs,
+            1,
+            'More than one Organization found in this descriptor',
+            TooManyElementsException::class,
+        );
+
+        $signature = Signature::getChildrenOfClass($xml);
+        Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
+
+        $extensions = Extensions::getChildrenOfClass($xml);
+        Assert::maxCount(
+            $extensions,
+            1,
+            'Only one md:Extensions element is allowed.',
+            TooManyElementsException::class,
+        );
+
+        $pdp = new static(
+            AuthzService::getChildrenOfClass($xml),
+            preg_split('/[\s]+/', trim($protocols)),
+            AssertionIDRequestService::getChildrenOfClass($xml),
+            NameIDFormat::getChildrenOfClass($xml),
+            self::getOptionalAttribute($xml, 'ID', null),
+            $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
+            self::getOptionalAttribute($xml, 'cacheDuration', null),
+            !empty($extensions) ? $extensions[0] : null,
+            self::getOptionalAttribute($xml, 'errorURL', null),
+            !empty($orgs) ? $orgs[0] : null,
+            KeyDescriptor::getChildrenOfClass($xml),
+            ContactPerson::getChildrenOfClass($xml),
+        );
+
+        if (!empty($signature)) {
+            $pdp->setSignature($signature[0]);
+            $pdp->setXML($xml);
+        }
+
+        return $pdp;
     }
 
 
@@ -172,23 +184,22 @@ class PDPDescriptor extends RoleDescriptor
      *
      * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
      * @return \DOMElement
+     * @throws \Exception
      */
-    public function toXML(DOMElement $parent): DOMElement
+    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
-        Assert::notEmpty($this->AuthzService);
+        $e = parent::toUnsignedXML($parent);
 
-        $e = parent::toXML($parent);
-
-        foreach ($this->AuthzService as $as) {
-            $as->toXML($e);
+        foreach ($this->getAuthzService() as $ep) {
+            $ep->toXML($e);
         }
 
-        foreach ($this->AssertionIDRequestService as $aidrs) {
-            $aidrs->toXML($e);
+        foreach ($this->getAssertionIDRequestService() as $ep) {
+            $ep->toXML($e);
         }
 
-        foreach ($this->NameIDFormat as $nid) {
-            $nid->toXML($e);
+        foreach ($this->getNameIDFormat() as $nidFormat) {
+            $nidFormat->toXML($e);
         }
 
         return $e;
