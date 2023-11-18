@@ -1,5 +1,4 @@
-<md:AffiliationDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="TheID" validUntil="2009-02-13T23:31:30Z"
-    cacheDuration="PT5000S" affiliationOwnerID="https://simplesamlphp.org/idp/metadata">
+<md:AffiliationDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ssp="urn:x-simplesamlphp:namespace" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S" affiliationOwnerID="https://simplesamlphp.org/idp/metadata" ssp:attr1="value1">
   <md:AffiliateMember>https://simplesamlphp.org/sp/metadata</md:AffiliateMember>
   <md:AffiliateMember>https://example.org/metadata</md:AffiliateMember>
   <md:KeyDescriptor use="signing">

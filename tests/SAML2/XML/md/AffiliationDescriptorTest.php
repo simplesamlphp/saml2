@@ -4,129 +4,176 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use DateTimeImmutable;
 use Exception;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
-use SimpleSAML\SAML2\XML\md\AffiliateMember;
-use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\md\AffiliateMember;
+use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
+use SimpleSAML\SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
-use SimpleSAML\XMLSecurity\XML\ds\X509Certificate;
-use SimpleSAML\XMLSecurity\XML\ds\X509Data;
+use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
-class AffiliationDescriptorTest extends TestCase
+use function dirname;
+use function strval;
+
+/**
+ * Tests for the AffiliationDescriptor class.
+ *
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
+ * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
+ * @covers \SimpleSAML\SAML2\XML\md\AffiliationDescriptor
+ * @package simplesamlphp/saml2
+ */
+final class AffiliationDescriptorTest extends TestCase
 {
+    use SchemaValidationTestTrait;
+    use SerializableElementTestTrait;
+    use SignedElementTestTrait;
+
+
     /**
-     * @return void
+     */
+    public static function setUpBeforeClass(): void
+    {
+        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
+
+        self::$testedClass = AffiliationDescriptor::class;
+
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/md_AffiliationDescriptor.xml',
+        );
+    }
+
+
+    // test marshalling
+
+
+    /**
+     * Test creating an AffiliationDescriptor object from scratch.
      */
     public function testMarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString('<root />');
-
-        $affiliationDescriptorElement = new AffiliationDescriptor();
-        $affiliationDescriptorElement->setAffiliationOwnerID('TheOwner');
-        $affiliationDescriptorElement->setID('TheID');
-        $affiliationDescriptorElement->setValidUntil(1234567890);
-        $affiliationDescriptorElement->setCacheDuration('PT5000S');
-        $affiliationDescriptorElement->setAffiliateMember([
-            new AffiliateMember('Member1'),
-            new AffiliateMember('Member2'),
-        ]);
-        $kd = new KeyDescriptor(new KeyInfo([new X509Data([new X509Certificate(
-            '/CTj03d1DB5e2t7CTo9BEzCf5S9NRzwnBgZRlm32REI='
-        )])]));
-        $affiliationDescriptorElement->setKeyDescriptor([$kd]);
-
-        $affiliationDescriptorElement = $affiliationDescriptorElement->toXML($document->firstChild);
-
-        $xpCache = XPath::getXPath($affiliationDescriptorElement);
-        $affiliationDescriptorElements = XPath::xpQuery(
-            $affiliationDescriptorElement,
-            '/root/saml_metadata:AffiliationDescriptor',
-            $xpCache,
+        $affiliationDescriptor = new AffiliationDescriptor(
+            affiliationOwnerId: C::ENTITY_IDP,
+            affiliateMember: [new AffiliateMember(C::ENTITY_SP), new AffiliateMember(C::ENTITY_OTHER)],
+            ID: 'TheID',
+            validUntil: new DateTimeImmutable('2009-02-13T23:31:30Z'),
+            cacheDuration: 'PT5000S',
+            keyDescriptor: [
+                new KeyDescriptor(
+                    new KeyInfo(
+                        [
+                            new KeyName('IdentityProvider.com SSO Key'),
+                        ],
+                    ),
+                    'signing',
+                ),
+            ],
+            namespacedAttribute: [new XMLAttribute(C::NAMESPACE, 'ssp', 'attr1', 'value1')],
         );
-        $this->assertCount(1, $affiliationDescriptorElements);
-        /** @var \DOMElement $affiliationDescriptorElement */
-        $affiliationDescriptorElement = $affiliationDescriptorElements[0];
 
-        $this->assertEquals('TheOwner', $affiliationDescriptorElement->getAttribute("affiliationOwnerID"));
-        $this->assertEquals('TheID', $affiliationDescriptorElement->getAttribute("ID"));
-        $this->assertEquals('2009-02-13T23:31:30Z', $affiliationDescriptorElement->getAttribute("validUntil"));
-        $this->assertEquals('PT5000S', $affiliationDescriptorElement->getAttribute("cacheDuration"));
-
-        $affiliateMembers = XPath::xpQuery(
-            $affiliationDescriptorElement,
-            './saml_metadata:AffiliateMember',
-            $xpCache,
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($affiliationDescriptor),
         );
-        $this->assertCount(2, $affiliateMembers);
-        $this->assertEquals('Member1', $affiliateMembers[0]->textContent);
-        $this->assertEquals('Member2', $affiliateMembers[1]->textContent);
     }
 
 
     /**
-     * @return void
+     * Test that creating an AffiliationDescriptor with an empty owner ID fails.
+     */
+    public function testMarhsallingWithEmptyOwnerID(): void
+    {
+        $this->expectException(SchemaViolationException::class);
+        new AffiliationDescriptor(
+            affiliationOwnerId: '',
+            affiliateMember: [new AffiliateMember(C::ENTITY_SP), new AffiliateMember(C::ENTITY_OTHER)],
+        );
+    }
+
+
+    /**
+     * Test that creating an AffiliationDescriptor with an empty list of members fails.
+     */
+    public function testMarshallingWithEmptyMemberList(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('List of affiliated members must not be empty.');
+        new AffiliationDescriptor(
+            affiliationOwnerId: C::ENTITY_IDP,
+            affiliateMember: [],
+        );
+    }
+
+
+    // test unmarshalling
+
+
+    /**
+     * Test creating an AffiliationDescriptor from XML.
      */
     public function testUnmarshalling(): void
     {
-        $mdNamespace = C::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
-<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="TheOwner" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
-    <md:AffiliateMember>Member</md:AffiliateMember>
-    <md:AffiliateMember>OtherMember</md:AffiliateMember>
-</md:AffiliationDescriptor>
-XML
-        );
+        $affiliationDescriptor = AffiliationDescriptor::fromXML(self::$xmlRepresentation->documentElement);
 
-        $affiliateDescriptor = new AffiliationDescriptor($document->firstChild);
-        $this->assertEquals('TheOwner', $affiliateDescriptor->getAffiliationOwnerID());
-        $this->assertEquals('TheID', $affiliateDescriptor->getID());
-        $this->assertEquals(1234567890, $affiliateDescriptor->getValidUntil());
-        $this->assertEquals('PT5000S', $affiliateDescriptor->getCacheDuration());
-        $affiliateMember = $affiliateDescriptor->getAffiliateMember();
-        $this->assertCount(2, $affiliateMember);
-        $this->assertEquals('Member', $affiliateMember[0]->getContent());
-        $this->assertEquals('OtherMember', $affiliateMember[1]->getContent());
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($affiliationDescriptor),
+        );
     }
 
 
     /**
-     * @return void
+     * Test failure to create an AffiliationDescriptor from XML when there's no affiliation members.
      */
     public function testUnmarshallingWithoutMembers(): void
     {
-        $mdNamespace = C::NS_MD;
+        $mdNamespace = AffiliationDescriptor::NS;
+        $entity_idp = C::ENTITY_IDP;
+
         $document = DOMDocumentFactory::fromString(<<<XML
-<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="TheOwner" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
+<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="{$entity_idp}" ID="TheID"
+    validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
 </md:AffiliationDescriptor>
 XML
         );
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing AffiliateMember in AffiliationDescriptor.');
-        new AffiliationDescriptor($document->firstChild);
+        $this->expectExceptionMessage('List of affiliated members must not be empty.');
+        AffiliationDescriptor::fromXML($document->documentElement);
     }
 
 
     /**
-     * @return void
+     * Test failure to create an AffiliationDescriptor from XML when there's no owner specified.
      */
     public function testUnmarshallingWithoutOwner(): void
     {
-        $mdNamespace = C::NS_MD;
+        $mdNamespace = AffiliationDescriptor::NS;
+        $entity_other = C::ENTITY_OTHER;
+        $entity_sp = C::ENTITY_SP;
+
         $document = DOMDocumentFactory::fromString(<<<XML
-    <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
-    <md:AffiliateMember>Member</md:AffiliateMember>
-    <md:AffiliateMember>OtherMember</md:AffiliateMember>
+<md:AffiliationDescriptor xmlns:md="{$mdNamespace}" ID="TheID"
+    validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
+  <md:AffiliateMember>{$entity_sp}</md:AffiliateMember>
+  <md:AffiliateMember>{$entity_other}</md:AffiliateMember>
 </md:AffiliationDescriptor>
 XML
         );
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Missing affiliationOwnerID on AffiliationDescriptor.');
-        new AffiliationDescriptor($document->firstChild);
+        $this->expectException(MissingAttributeException::class);
+        $this->expectExceptionMessage("Missing 'affiliationOwnerID' attribute on md:AffiliationDescriptor.");
+        AffiliationDescriptor::fromXML($document->documentElement);
     }
 }
