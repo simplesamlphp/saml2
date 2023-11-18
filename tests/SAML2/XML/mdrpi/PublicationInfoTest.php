@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
+use DateTimeImmutable;
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -61,7 +62,7 @@ final class PublicationInfoTest extends TestCase
     {
         $publicationInfo = new PublicationInfo(
             'SomePublisher',
-            1293840000,
+            new DateTimeImmutable('2011-01-01T00:00:00Z'),
             'SomePublicationId',
             [
                 new UsagePolicy('en', 'http://TheEnglishUsagePolicy'),

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdrpi;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
@@ -12,7 +13,8 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Utils as XMLUtils;
+
+use function preg_replace;
 
 /**
  * Class for handling the mdrpi:RegistrationInfo element.
@@ -26,14 +28,16 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
      * Create/parse a mdrpi:RegistrationInfo element.
      *
      * @param string $registrationAuthority
-     * @param int|null $registrationInstant
-     * @param \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy[] $RegistrationPolicy
+     * @param \DateTimeImmutable|null $registrationInstant
+     * @param \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy[] $registrationPolicy
      */
     public function __construct(
         protected string $registrationAuthority,
-        protected ?int $registrationInstant = null,
+        protected ?DateTimeImmutable $registrationInstant = null,
         protected array $registrationPolicy = [],
     ) {
+        Assert::nullOrSame($registrationInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
+        Assert::maxCount($registrationPolicy, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($registrationPolicy, RegistrationPolicy::class);
 
         /**
@@ -69,9 +73,9 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
     /**
      * Collect the value of the registrationInstant property
      *
-     * @return int|null
+     * @return \DateTimeImmutable|null
      */
-    public function getRegistrationInstant(): ?int
+    public function getRegistrationInstant(): ?DateTimeImmutable
     {
         return $this->registrationInstant;
     }
@@ -113,7 +117,7 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
             $registrationInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $registrationInstant, 1);
 
             Assert::validDateTimeZulu($registrationInstant, ProtocolViolationException::class);
-            $registrationInstant = XMLUtils::xsDateTimeToTimestamp($registrationInstant);
+            $registrationInstant = new DateTimeImmutable($registrationInstant);
         }
         $RegistrationPolicy = RegistrationPolicy::getChildrenOfClass($xml);
 
@@ -133,7 +137,7 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
         $e->setAttribute('registrationAuthority', $this->getRegistrationAuthority());
 
         if ($this->getRegistrationInstant() !== null) {
-            $e->setAttribute('registrationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->getRegistrationInstant()));
+            $e->setAttribute('registrationInstant', $this->getRegistrationInstant()->format(C::DATETIME_FORMAT));
         }
 
         foreach ($this->getRegistrationPolicy() as $rp) {
@@ -186,7 +190,7 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
         if (array_key_exists('registrationinstant', $data)) {
             Assert::string($data['registrationinstant'], ArrayValidationException::class);
             Assert::validDateTimeZulu($data['registrationinstant'], ArrayValidationException::class);
-            $retval['registrationInstant'] = XMLUtils::xsDateTimeToTimestamp($data['registrationinstant']);
+            $retval['registrationInstant'] = new DateTimeImmutable($data['registrationinstant']);
         }
 
         if (array_key_exists('registrationpolicy', $data)) {
@@ -211,7 +215,7 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
         $data['registrationAuthority'] = $this->getRegistrationAuthority();
 
         if ($this->getRegistrationInstant() !== null) {
-            $data['registrationInstant'] = gmdate('Y-m-d\TH:i:s\Z', $this->getRegistrationInstant());
+            $data['registrationInstant'] = $this->getRegistrationInstant()->format(C::DATETIME_FORMAT);
         }
 
         if (!empty($this->getRegistrationPolicy())) {

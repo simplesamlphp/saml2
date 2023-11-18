@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdrpi;
 
+use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
@@ -12,7 +13,6 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function array_change_key_case;
 use function array_keys;
@@ -30,16 +30,18 @@ final class PublicationInfo extends AbstractMdrpiElement implements ArrayizableE
      * Create/parse a mdrpi:PublicationInfo element.
      *
      * @param string $publisher
-     * @param int|null $creationInstant
+     * @param \DateTimeImmutable|null $creationInstant
      * @param string|null $publicationId
      * @param \SimpleSAML\SAML2\XML\mdrpi\UsagePolicy[] $usagePolicy
      */
     public function __construct(
         protected string $publisher,
-        protected ?int $creationInstant = null,
+        protected ?DateTimeImmutable $creationInstant = null,
         protected ?string $publicationId = null,
         protected array $usagePolicy = [],
     ) {
+        Assert::nullOrSame($creationInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
+        Assert::maxCount($usagePolicy, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($usagePolicy, UsagePolicy::class);
 
         /**
@@ -75,9 +77,9 @@ final class PublicationInfo extends AbstractMdrpiElement implements ArrayizableE
     /**
      * Collect the value of the creationInstant-property
      *
-     * @return int|null
+     * @return \DateTimeImmutable|null
      */
-    public function getCreationInstant(): ?int
+    public function getCreationInstant(): ?DateTimeImmutable
     {
         return $this->creationInstant;
     }
@@ -130,7 +132,7 @@ final class PublicationInfo extends AbstractMdrpiElement implements ArrayizableE
             $creationInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $creationInstant, 1);
 
             Assert::validDateTimeZulu($creationInstant, ProtocolViolationException::class);
-            $creationInstant = XMLUtils::xsDateTimeToTimestamp($creationInstant);
+            $creationInstant = new DateTimeImmutable($creationInstant);
         }
 
         $publicationId = self::getOptionalAttribute($xml, 'publicationId', null);
@@ -152,7 +154,7 @@ final class PublicationInfo extends AbstractMdrpiElement implements ArrayizableE
         $e->setAttribute('publisher', $this->getPublisher());
 
         if ($this->getCreationInstant() !== null) {
-            $e->setAttribute('creationInstant', gmdate('Y-m-d\TH:i:s\Z', $this->getCreationInstant()));
+            $e->setAttribute('creationInstant', $this->getCreationInstant()->format(C::DATETIME_FORMAT));
         }
 
         if ($this->getPublicationId() !== null) {
@@ -210,7 +212,7 @@ final class PublicationInfo extends AbstractMdrpiElement implements ArrayizableE
         if (array_key_exists('creationinstant', $data)) {
             Assert::string($data['creationinstant'], ArrayValidationException::class);
             Assert::validDateTimeZulu($data['creationinstant'], ArrayValidationException::class);
-            $retval['creationInstant'] = XMLUtils::xsDateTimeToTimestamp($data['creationinstant']);
+            $retval['creationInstant'] = new DateTimeImmutable($data['creationinstant']);
         }
 
         if (array_key_exists('publicationid', $data)) {
@@ -240,7 +242,7 @@ final class PublicationInfo extends AbstractMdrpiElement implements ArrayizableE
         $data['publisher'] = $this->getPublisher();
 
         if ($this->getCreationInstant() !== null) {
-            $data['creationInstant'] = gmdate('Y-m-d\TH:i:s\Z', $this->getCreationInstant());
+            $data['creationInstant'] = $this->getCreationInstant()->format(C::DATETIME_FORMAT);
         }
 
         if ($this->getPublicationId() !== null) {
