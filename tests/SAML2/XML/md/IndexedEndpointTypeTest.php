@@ -20,7 +20,7 @@ use function sprintf;
 use function strval;
 
 /**
- * Class \SAML2\XML\md\IndexedEndpointTypeTest
+ * Class \SimpleSAML\SAML2\XML\md\IndexedEndpointTypeTest
  *
  * @covers \SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType
  * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
