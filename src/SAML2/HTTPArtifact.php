@@ -8,9 +8,8 @@ use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
-use SimpleSAML\Store;
+use SimpleSAML\Store\StoreFactory;
 use SimpleSAML\Utils\HTTP;
-
 use SAML2\Utilities\Temporal;
 use SAML2\XML\saml\Issuer;
 
@@ -38,7 +37,10 @@ class HTTPArtifact extends Binding
     public function getRedirectURL(Message $message) : string
     {
         /** @psalm-suppress UndefinedClass */
-        $store = Store::getInstance();
+        $config = Configuration::getInstance();
+
+        /** @psalm-suppress UndefinedClass */
+        $store = StoreFactory::getInstance($config->getString('store.type'));
         if ($store === false) {
             throw new \Exception('Unable to send artifact without a datastore configured.');
         }
