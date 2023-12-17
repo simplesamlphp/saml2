@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\Comparison;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
@@ -119,7 +120,7 @@ final class AuthnRequestTest extends TestCase
                 new AuthnContextClassRef('urn:test:accr1'),
                 new AuthnContextClassRef('urn:test:accr2'),
             ],
-            'better',
+            Comparison::BETTER,
         );
 
         // Create Subject

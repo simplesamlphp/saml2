@@ -6,12 +6,12 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\XsNamespace as NS;
 
 /**
  * Class representing SAML2 AuthnContextDecl
@@ -24,10 +24,10 @@ final class AuthnContextDecl extends AbstractSamlElement
     use ExtendableElementTrait;
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = C::XS_ANY_NS_ANY;
+    public const XS_ANY_ELT_NAMESPACE = NS::ANY;
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_ANY;
+    public const XS_ANY_ATTR_NAMESPACE = NS::ANY;
 
 
     /**
@@ -72,7 +72,7 @@ final class AuthnContextDecl extends AbstractSamlElement
 
         $elements = [];
         foreach ($xml->childNodes as $element) {
-            if ($element->namespaceURI === C::NS_SAML) {
+            if ($element->namespaceURI === static::NS) {
                 continue;
             } elseif (!($element instanceof DOMElement)) {
                 continue;

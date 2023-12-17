@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\XsNamespace as NS;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
@@ -25,7 +26,7 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
     use ExtendableAttributesTrait;
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
+    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**

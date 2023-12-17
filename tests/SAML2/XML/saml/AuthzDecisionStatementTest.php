@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\Decision;
 use SimpleSAML\SAML2\XML\saml\Action;
 use SimpleSAML\SAML2\XML\saml\AuthzDecisionStatement;
 use SimpleSAML\SAML2\XML\saml\Evidence;
@@ -58,7 +59,7 @@ final class AuthzDecisionStatementTest extends TestCase
     {
         $authzDecisionStatement = new AuthzDecisionStatement(
             'urn:x-simplesamlphp:resource',
-            'Permit',
+            Decision::PERMIT,
             [
                 new Action('urn:x-simplesamlphp:namespace', 'SomeAction'),
                 new Action('urn:x-simplesamlphp:namespace', 'OtherAction'),

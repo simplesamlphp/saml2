@@ -9,6 +9,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\Comparison;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
@@ -63,7 +64,7 @@ final class AuthnQueryTest extends TestCase
     {
         $nameId = new NameID('urn:example:subject', null, null, C::NAMEID_UNSPECIFIED);
         $authnContextDeclRef = new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml');
-        $requestedAuthnContext = new RequestedAuthnContext([$authnContextDeclRef], 'exact');
+        $requestedAuthnContext = new RequestedAuthnContext([$authnContextDeclRef], Comparison::EXACT);
 
         $authnQuery = new AuthnQuery(
             subject: new Subject($nameId),

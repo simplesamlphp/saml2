@@ -8,8 +8,8 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\ExtendableElementTrait;
+use SimpleSAML\XML\XsNamespace as NS;
 
 /**
  * SAML StatusDetail data type.
@@ -21,7 +21,7 @@ final class StatusDetail extends AbstractSamlpElement
     use ExtendableElementTrait;
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = C::XS_ANY_NS_ANY;
+    public const XS_ANY_ELT_NAMESPACE = NS::ANY;
 
 
     /**

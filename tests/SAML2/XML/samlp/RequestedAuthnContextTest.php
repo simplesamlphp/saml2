@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\Comparison;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
@@ -51,7 +52,7 @@ final class RequestedAuthnContextTest extends TestCase
     {
         $authnContextDeclRef = new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml');
 
-        $requestedAuthnContext = new RequestedAuthnContext([$authnContextDeclRef], 'exact');
+        $requestedAuthnContext = new RequestedAuthnContext([$authnContextDeclRef], Comparison::EXACT);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -70,7 +71,7 @@ final class RequestedAuthnContextTest extends TestCase
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('You need either AuthnContextClassRef or AuthnContextDeclRef, not both.');
 
-        new RequestedAuthnContext([$authnContextClassRef, $authnContextDeclRef], 'exact');
+        new RequestedAuthnContext([$authnContextClassRef, $authnContextDeclRef], Comparison::EXACT);
     }
 
 
@@ -92,7 +93,7 @@ final class RequestedAuthnContextTest extends TestCase
                  DOMDocumentFactory::fromString('<root />'),
                  $authnContextDeclRef,
              ],
-             'exact',
+             Comparison::EXACT,
          );
     }
 

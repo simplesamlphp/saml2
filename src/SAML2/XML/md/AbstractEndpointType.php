@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use CASE_LOWER;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Attribute as XMLAttribute;
@@ -16,6 +16,7 @@ use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\SerializableElementInterface;
+use SimpleSAML\XML\XsNamespace as NS;
 
 use function array_change_key_case;
 use function array_key_exists;
@@ -43,10 +44,10 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
     use ExtendableElementTrait;
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = C::XS_ANY_NS_OTHER;
+    public const XS_ANY_ELT_NAMESPACE = NS::OTHER;
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
+    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**
@@ -140,13 +141,11 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
 
         $children = [];
         foreach ($xml->childNodes as $child) {
-            if ($child->namespaceURI === C::NS_MD) {
+            if (!($child instanceof DOMElement)) {
                 continue;
-            } elseif (!($child instanceof DOMElement)) {
-                continue;
-            }
-
-            $children[] = new Chunk($child);
+            } elseif ($child->namespaceURI !== static::NS) {
+                $children[] = new Chunk($child);
+            } // else continue
         }
 
         return new static(

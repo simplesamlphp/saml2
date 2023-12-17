@@ -13,6 +13,7 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\XsNamespace as NS;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function is_null;
@@ -27,7 +28,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
     use ExtendableAttributesTrait;
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
+    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**
