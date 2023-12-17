@@ -97,33 +97,6 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const CM_VOUCHES = 'urn:oasis:names:tc:SAML:2.0:cm:sender-vouches';
 
     /**
-     * Request Authentication Context Comparison indicating that  the resulting authentication context in the
-     * authentication statement MUST be stronger (as deemed by the responder) than any one of the authentication
-     * contexts specified
-     */
-    public const COMPARISON_BETTER = 'better';
-
-    /**
-     * Request Authentication Context Comparison indicating that the resulting authentication context in the
-     * authentication statement MUST be the exact match of at least one of the authentication contexts specified
-     */
-    public const COMPARISON_EXACT = 'exact';
-
-    /**
-     * Request Authentication Context Comparison indicating that the resulting authentication context in the
-     * authentication statement MUST be as strong as possible (as deemed by the responder) without exceeding the
-     * strength of at least one of the authentication contexts specified.
-     */
-    public const COMPARISON_MAXIMUM = 'maximum';
-
-    /**
-     * Request Authentication Context Comparison indicating that he resulting authentication context in the
-     * authentication statement MUST be at least as strong (as deemed by the responder) as one of the authentication
-     * contexts specified.
-     */
-    public const COMPARISON_MINIMUM = 'minimum';
-
-    /**
      * Indicates that a principal’s consent has been explicitly obtained by the issuer of the message during the
      * action that initiated the message.
      */
@@ -498,17 +471,4 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
      * The format to express a timestamp in SAML2
      */
     public const DATETIME_FORMAT = 'Y-m-d\\TH:i:sp';
-
-    /**
-     * Valid values for saml:DecisionType
-     */
-    public const AUTHZ_DECISION_PERMIT = 'Permit';
-    public const AUTHZ_DECISION_DENY = 'Deny';
-    public const AUTHZ_DECISION_INDETERMINATE = 'Indeterminate';
-
-    public const AUTHZ_DECISIONS = [
-        self::AUTHZ_DECISION_PERMIT,
-        self::AUTHZ_DECISION_DENY,
-        self::AUTHZ_DECISION_INDETERMINATE,
-    ];
 }

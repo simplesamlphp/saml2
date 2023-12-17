@@ -10,6 +10,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\XsNamespace as NS;
 
 use function implode;
 
@@ -23,7 +24,7 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
     use ExtendableAttributesTrait;
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
+    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**

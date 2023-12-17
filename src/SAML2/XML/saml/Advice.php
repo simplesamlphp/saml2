@@ -11,6 +11,7 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\ExtendableElementTrait;
+use SimpleSAML\XML\XsNamespace as NS;
 
 /**
  * Class representing a saml:Advice element.
@@ -22,7 +23,7 @@ final class Advice extends AbstractSamlElement
     use ExtendableElementTrait;
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = C::XS_ANY_NS_OTHER;
+    public const XS_ANY_ELT_NAMESPACE = NS::OTHER;
 
 
     /**

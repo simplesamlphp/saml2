@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
+use CASE_LOWER;
 use DOMDocument;
 use DOMElement;
 use Exception;
@@ -20,6 +21,7 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\SerializableElementInterface;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XML\XsNamespace as NS;
 
 use function array_change_key_case;
 use function array_filter;
@@ -38,7 +40,7 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
     use ExtendableElementTrait;
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
+    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**

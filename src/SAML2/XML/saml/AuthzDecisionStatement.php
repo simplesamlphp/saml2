@@ -8,14 +8,17 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\Decision;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\Utils as XMLUtils;
+use ValueError;
 
 use function array_pop;
 use function gmdate;
+use function sprintf;
 
 /**
  * Class representing a SAML2 AuthzDecisionStatement
@@ -28,18 +31,17 @@ final class AuthzDecisionStatement extends AbstractStatementType
      * Initialize an AuthzDecisionStatement.
      *
      * @param string $resource
-     * @param string $decision
+     * @param \SimpleSAML\SAML2\XML\Decision $decision
      * @param \SimpleSAML\SAML2\XML\saml\Action[] $action
      * @param \SimpleSAML\SAML2\XML\saml\Evidence|null $evidence
      */
     public function __construct(
         protected string $resource,
-        protected string $decision,
+        protected Decision $decision,
         protected array $action,
         protected ?Evidence $evidence = null,
     ) {
         Assert::validURI($resource);
-        Assert::oneOf($decision, C::AUTHZ_DECISIONS, ProtocolViolationException::class);
         Assert::maxCount($action, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($action, Action::class, SchemaViolationException::class);
     }
@@ -59,9 +61,9 @@ final class AuthzDecisionStatement extends AbstractStatementType
     /**
      * Collect the value of the decision-property
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\XML\Decision
      */
-    public function getDecision(): string
+    public function getDecision(): Decision
     {
         return $this->decision;
     }
@@ -122,9 +124,15 @@ final class AuthzDecisionStatement extends AbstractStatementType
             TooManyElementsException::class,
         );
 
+        try {
+            $decision = Decision::from(self::getAttribute($xml, 'Decision'));
+        } catch (ValueError) {
+            throw ProtocolViolationException(sprintf('Unknown value \'%s\' for Decision attribute.', $decision));
+        }
+
         return new static(
             self::getAttribute($xml, 'Resource'),
-            self::getAttribute($xml, 'Decision'),
+            $decision,
             $action,
             array_pop($evidence),
         );
@@ -142,7 +150,7 @@ final class AuthzDecisionStatement extends AbstractStatementType
         $e = $this->instantiateParentElement($parent);
 
         $e->setAttribute('Resource', $this->getResource());
-        $e->setAttribute('Decision', $this->getDecision());
+        $e->setAttribute('Decision', $this->getDecision()->value);
 
         foreach ($this->getAction() as $action) {
             $action->toXML($e);

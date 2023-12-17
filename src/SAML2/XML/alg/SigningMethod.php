@@ -12,7 +12,7 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\ExtendableElementTrait;
-use SimpleSAML\XMLSecurity\Constants as C;
+use SimpleSAML\XML\XsNamespace as NS;
 use SimpleSAML\XMLSecurity\Exception\InvalidArgumentException;
 
 use function strval;
@@ -28,7 +28,7 @@ final class SigningMethod extends AbstractAlgElement
     use ExtendableElementTrait;
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = C::XS_ANY_NS_ANY;
+    public const XS_ANY_ELT_NAMESPACE = NS::ANY;
 
 
     /**

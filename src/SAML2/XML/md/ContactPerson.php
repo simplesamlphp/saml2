@@ -20,6 +20,7 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\SerializableElementInterface;
 use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XML\XsNamespace as NS;
 
 use function array_filter;
 use function array_change_key_case;
@@ -43,7 +44,7 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
     use ExtendableElementTrait;
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = C::XS_ANY_NS_OTHER;
+    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**
