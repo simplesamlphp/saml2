@@ -125,17 +125,17 @@ XML
      */
     public function testMultipleRegistrationPoliciesWithSameLanguageThrowsException(): void
     {
-        $document = clone self::$xmlRepresentation;
+        $document = clone self::$xmlRepresentation->documentElement;
 
         // Append another 'en' RegistrationPolicy to the document
         $x = new RegistrationPolicy('en', 'https://example.org');
-        $x->toXML($document->documentElement);
+        $x->toXML($document);
 
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'There MUST NOT be more than one <mdrpi:RegistrationPolicy>,'
             . ' within a given <mdrpi:RegistrationInfo>, for a given language'
         );
-        RegistrationInfo::fromXML($document->documentElement);
+        RegistrationInfo::fromXML($document);
     }
 }

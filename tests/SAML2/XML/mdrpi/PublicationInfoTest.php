@@ -125,17 +125,17 @@ XML
      */
     public function testMultipleUsagePoliciesWithSameLanguageThrowsException(): void
     {
-        $document = clone self::$xmlRepresentation;
+        $document = clone self::$xmlRepresentation->documentElement;
 
         // Append another 'en' UsagePolicy to the document
         $x = new UsagePolicy('en', 'https://example.org');
-        $x->toXML($document->documentElement);
+        $x->toXML($document);
 
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'There MUST NOT be more than one <mdrpi:UsagePolicy>,'
             . ' within a given <mdrpi:PublicationInfo>, for a given language'
         );
-        PublicationInfo::fromXML($document->documentElement);
+        PublicationInfo::fromXML($document);
     }
 }
