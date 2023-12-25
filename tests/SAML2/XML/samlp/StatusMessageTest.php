@@ -52,18 +52,4 @@ final class StatusMessageTest extends TestCase
             strval($statusMessage),
         );
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $statusMessage = StatusMessage::fromXML(self::$xmlRepresentation->documentElement);
-
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($statusMessage),
-        );
-    }
 }

@@ -52,17 +52,4 @@ final class AuthenticatingAuthorityTest extends TestCase
             strval($authenticatingAuthority),
         );
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $authenticatingAuthority = AuthenticatingAuthority::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authenticatingAuthority),
-        );
-    }
 }

@@ -63,21 +63,4 @@ final class OrganizationDisplayNameTest extends TestCase
             strval($name),
         );
     }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test creating a OrganizationDisplayName from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = OrganizationDisplayName::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
 }

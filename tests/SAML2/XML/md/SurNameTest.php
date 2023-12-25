@@ -57,21 +57,4 @@ final class SurNameTest extends TestCase
             strval($name),
         );
     }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test creating a SurName from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = SurName::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
 }

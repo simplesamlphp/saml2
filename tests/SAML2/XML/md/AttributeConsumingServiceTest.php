@@ -172,20 +172,6 @@ final class AttributeConsumingServiceTest extends TestCase
 
 
     /**
-     * Test creating an AssertionConsumerService from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $acs = AttributeConsumingService::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($acs),
-        );
-    }
-
-
-    /**
      * Test that creating an AssertionConsumerService from XML fails if index is missing.
      */
     public function testUnmarshallingWithoutIndex(): void

@@ -168,17 +168,4 @@ final class EntityAttributesTest extends TestCase
             strval($entityAttributes),
         );
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $entityAttributes = EntityAttributes::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($entityAttributes),
-        );
-    }
 }

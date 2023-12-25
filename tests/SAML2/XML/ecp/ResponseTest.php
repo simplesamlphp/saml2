@@ -87,19 +87,6 @@ final class ResponseTest extends TestCase
 
     /**
      */
-    public function testUnmarshalling(): void
-    {
-        $response = Response::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($response),
-        );
-    }
-
-
-    /**
-     */
     public function testUnmarshallingWithMissingMustUnderstandThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;

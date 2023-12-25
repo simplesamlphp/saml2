@@ -56,21 +56,4 @@ final class GeolocationHintTest extends TestCase
             strval($hint),
         );
     }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test creating a GeolocationHint from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $hint = GeolocationHint::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($hint),
-        );
-    }
 }

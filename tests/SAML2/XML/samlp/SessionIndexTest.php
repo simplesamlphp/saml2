@@ -52,17 +52,4 @@ final class SessionIndexTest extends TestCase
             strval($sessionIndex),
         );
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $sessionIndex = SessionIndex::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($sessionIndex),
-        );
-    }
 }

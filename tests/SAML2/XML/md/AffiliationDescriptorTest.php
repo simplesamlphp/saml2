@@ -121,20 +121,6 @@ final class AffiliationDescriptorTest extends TestCase
 
 
     /**
-     * Test creating an AffiliationDescriptor from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $affiliationDescriptor = AffiliationDescriptor::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($affiliationDescriptor),
-        );
-    }
-
-
-    /**
      * Test failure to create an AffiliationDescriptor from XML when there's no affiliation members.
      */
     public function testUnmarshallingWithoutMembers(): void

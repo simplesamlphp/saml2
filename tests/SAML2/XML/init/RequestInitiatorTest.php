@@ -76,20 +76,6 @@ final class RequestInitiatorTest extends TestCase
 
 
     /**
-     * Test creating a RequestInitiator from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $requestInitiator = RequestInitiator::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($requestInitiator),
-        );
-    }
-
-
-    /**
      * Test that creating a RequestInitiator from XML with an invalid Binding fails.
      */
     public function testUnmarshallingWithInvalidBinding(): void

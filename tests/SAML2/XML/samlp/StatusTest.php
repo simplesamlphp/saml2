@@ -118,17 +118,4 @@ final class StatusTest extends TestCase
         $this->assertEquals('samlp:StatusMessage', $statusElements[0]->tagName);
         $this->assertEquals('samlp:StatusDetail', $statusElements[1]->tagName);
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $status = Status::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($status),
-        );
-    }
 }

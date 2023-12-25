@@ -97,16 +97,4 @@ final class PublicationPathTest extends TestCase
         );
         $this->assertTrue($publicationPath->isEmptyElement());
     }
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $publicationPath = PublicationPath::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($publicationPath),
-        );
-    }
 }

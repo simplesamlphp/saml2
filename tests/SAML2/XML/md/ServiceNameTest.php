@@ -82,20 +82,6 @@ final class ServiceNameTest extends TestCase
 
 
     /**
-     * Test creating a ServiceName from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = ServiceName::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
-
-
-    /**
      * Test that creating a ServiceName from XML fails when xml:lang is missing.
      */
     public function testUnmarshallingWithoutLang(): void

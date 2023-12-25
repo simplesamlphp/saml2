@@ -102,18 +102,6 @@ final class ScopeTest extends TestCase
 
 
     /**
-     * Unmarshalling a scope in literal (non-regexp) form.
-     */
-    public function testUnmarshalling(): void
-    {
-        $scope = Scope::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals('example.org', $scope->getContent());
-        $this->assertFalse($scope->isRegexpScope());
-    }
-
-
-    /**
      * Unmarshalling a scope that does not specify an explicit
      * regexp value (assumed to be false).
      */

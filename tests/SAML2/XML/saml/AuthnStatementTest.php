@@ -120,19 +120,6 @@ final class AuthnStatementTest extends TestCase
 
     /**
      */
-    public function testUnmarshalling(): void
-    {
-        $authnStatement = AuthnStatement::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authnStatement),
-        );
-    }
-
-
-    /**
-     */
     public function testUnmarshallingWithoutAuthnContextThrowsException(): void
     {
         $samlNamespace = C::NS_SAML;

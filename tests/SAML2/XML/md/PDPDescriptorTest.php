@@ -147,20 +147,6 @@ final class PDPDescriptorTest extends TestCase
 
 
     /**
-     * Test creating a PDPDescriptor object from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $pdpd = PDPDescriptor::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($pdpd),
-        );
-    }
-
-
-    /**
      * Test that creating a PDPDescriptor from XML fails when there's no AuthzService endpoint.
      */
     public function testUnmarshallingWithoutAuthzServiceDescriptors(): void

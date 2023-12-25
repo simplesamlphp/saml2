@@ -77,18 +77,4 @@ final class ResponseTest extends TestCase
             strval($response),
         );
     }
-
-
-    /**
-     * Unmarshalling of a response tag
-     */
-    public function testUnmarshalling(): void
-    {
-        $response = Response::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($response),
-        );
-    }
 }

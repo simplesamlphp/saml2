@@ -100,21 +100,4 @@ final class OrganizationTest extends TestCase
             strval($org),
         );
     }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test creating an Organization object from XML
-     */
-    public function testUnmarshalling(): void
-    {
-        $org = Organization::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($org),
-        );
-    }
 }

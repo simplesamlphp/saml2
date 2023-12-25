@@ -58,21 +58,4 @@ final class TelephoneNumberTest extends TestCase
             strval($name),
         );
     }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test creating a TelephoneNumber from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = TelephoneNumber::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
 }

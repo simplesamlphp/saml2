@@ -100,17 +100,4 @@ final class NameIDPolicyTest extends TestCase
         );
         $this->assertTrue($nameIdPolicy->isEmptyElement());
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $nameIdPolicy = NameIDPolicy::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($nameIdPolicy),
-        );
-    }
 }

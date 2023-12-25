@@ -94,21 +94,4 @@ final class AssertionConsumerServiceTest extends TestCase
             strval($idxep),
         );
     }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test creating an IndexedEndpointType from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $idxep = AssertionConsumerService::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($idxep),
-        );
-    }
 }

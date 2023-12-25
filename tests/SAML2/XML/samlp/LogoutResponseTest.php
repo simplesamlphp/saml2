@@ -71,17 +71,4 @@ final class LogoutResponseTest extends TestCase
             strval($logoutResponse)
         );
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $logoutResponse = LogoutResponse::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($logoutResponse),
-        );
-    }
 }

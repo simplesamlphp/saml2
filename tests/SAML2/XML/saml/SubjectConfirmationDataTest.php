@@ -132,19 +132,6 @@ final class SubjectConfirmationDataTest extends TestCase
 
     /**
      */
-    public function testUnmarshalling(): void
-    {
-        $subjectConfirmationData = SubjectConfirmationData::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($subjectConfirmationData),
-        );
-    }
-
-
-    /**
-     */
     public function testUnmarshallingEmpty(): void
     {
         $samlNamespace = C::NS_SAML;

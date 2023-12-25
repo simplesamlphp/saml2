@@ -53,17 +53,4 @@ final class OneTimeUseTest extends TestCase
             strval($oneTimeUse),
         );
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $oneTimeUse = OneTimeUse::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($oneTimeUse),
-        );
-    }
 }

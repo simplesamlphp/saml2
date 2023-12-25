@@ -74,17 +74,4 @@ final class StatusDetailTest extends TestCase
         );
         $this->assertTrue($statusDetail->isEmptyElement());
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $statusDetail = StatusDetail::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($statusDetail),
-        );
-    }
 }

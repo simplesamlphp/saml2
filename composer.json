@@ -31,7 +31,7 @@
         "psr/http-message": "^2.0",
         "psr/log": "^2.0 || ^3.0",
         "simplesamlphp/assert": "^1.0",
-        "simplesamlphp/xml-common": "^1.12",
+        "simplesamlphp/xml-common": "^1.14",
         "simplesamlphp/xml-security": "^1.6",
         "simplesamlphp/xml-soap": "^1.3"
     },

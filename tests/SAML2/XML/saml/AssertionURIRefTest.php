@@ -52,17 +52,4 @@ final class AssertionURIRefTest extends TestCase
             strval($assertionURIRef),
         );
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $assertionURIRef = AssertionURIRef::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($assertionURIRef),
-        );
-    }
 }

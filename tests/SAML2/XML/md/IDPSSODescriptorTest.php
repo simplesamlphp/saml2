@@ -315,20 +315,6 @@ final class IDPSSODescriptorTest extends TestCase
 
 
     /**
-     * Test creating an IDPSSODescriptor from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $idpssod = IDPSSODescriptor::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($idpssod),
-        );
-    }
-
-
-    /**
      * Test that creating an IDPSSODescriptor from XML fails if no SingleSignOnService endpoint is provided.
      */
     public function testUnmarshallingWithoutSingleSignOnService(): void

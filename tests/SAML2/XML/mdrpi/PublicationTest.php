@@ -73,19 +73,6 @@ final class PublicationTest extends TestCase
 
     /**
      */
-    public function testUnmarshalling(): void
-    {
-        $publication = Publication::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($publication),
-        );
-    }
-
-
-    /**
-     */
     public function testCreationInstantTimezoneNotZuluThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;

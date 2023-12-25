@@ -74,20 +74,6 @@ final class EmailAddressTest extends TestCase
 
 
     /**
-     * Test creating a EmailAddress from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = EmailAddress::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
-
-
-    /**
      * Test that creating an EmailAddress from XML fails when an invalid email address is found.
      */
     public function testUnmarshallingWithInvalidEmail(): void

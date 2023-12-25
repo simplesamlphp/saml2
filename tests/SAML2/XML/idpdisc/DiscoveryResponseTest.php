@@ -120,20 +120,6 @@ final class DiscoveryResponseTest extends TestCase
 
 
     /**
-     * Test creating a DiscoveryResponse from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $discoResponse = DiscoveryResponse::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($discoResponse),
-        );
-    }
-
-
-    /**
      * Test that creating a DiscoveryResponse from XML fails when ResponseLocation is present.
      */
     public function testUnmarshallingWithResponseLocation(): void

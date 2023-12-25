@@ -126,20 +126,6 @@ final class EndpointTypeTest extends TestCase
 
 
     /**
-     * Test creating an EndpointType from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $endpointType = AttributeService::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($endpointType),
-        );
-    }
-
-
-    /**
      * Test that creating an EndpointType from XML checks the actual name of the endpoint.
      */
     public function testUnmarshallingUnexpectedEndpoint(): void

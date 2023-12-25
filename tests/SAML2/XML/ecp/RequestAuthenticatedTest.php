@@ -56,19 +56,6 @@ final class RequestAuthenticatedTest extends TestCase
 
     /**
      */
-    public function testUnmarshalling(): void
-    {
-        $ra = RequestAuthenticated::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($ra),
-        );
-    }
-
-
-    /**
-     */
     public function testUnmarshallingWithMissingActorThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;

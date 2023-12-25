@@ -82,17 +82,4 @@ final class IDPEntryTest extends TestCase
             strval($entry),
         );
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $entry = IDPEntry::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($entry),
-        );
-    }
 }

@@ -71,20 +71,6 @@ final class PrivacyStatementURLTest extends TestCase
 
 
     /**
-     * Test creating a PrivacyStatementURL from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = PrivacyStatementURL::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
-
-
-    /**
      * Test that creating a PrivacyStatementURL with an invalid url throws an exception
      */
     public function testUnmarshallingFailsInvalidURL(): void

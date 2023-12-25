@@ -76,20 +76,6 @@ final class AdditionalMetadataLocationTest extends TestCase
 
 
     /**
-     * Test creating an AdditionalMetadataLocation object from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $additionalMetadataLocation = AdditionalMetadataLocation::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($additionalMetadataLocation),
-        );
-    }
-
-
-    /**
      * Test that creating an AdditionalMetadataLocation from XML fails if "namespace" is missing.
      */
     public function testUnmarshallingWithoutNamespace(): void

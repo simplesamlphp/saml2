@@ -92,17 +92,4 @@ final class ArtifactResponseTest extends TestCase
             strval($artifactResponse),
         );
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $ar = ArtifactResponse::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($ar),
-        );
-    }
 }

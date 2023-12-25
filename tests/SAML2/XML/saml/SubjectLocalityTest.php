@@ -79,17 +79,4 @@ final class SubjectLocalityTest extends TestCase
         );
         $this->assertTrue($subjectLocality->isEmptyElement());
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $subjectLocality = SubjectLocality::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($subjectLocality),
-        );
-    }
 }

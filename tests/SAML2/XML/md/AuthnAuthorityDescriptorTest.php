@@ -164,20 +164,6 @@ final class AuthnAuthorityDescriptorTest extends TestCase
 
 
     /**
-     * Test creating an AuthnAuthorityDescriptor from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $aad = AuthnAuthorityDescriptor::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($aad),
-        );
-    }
-
-
-    /**
      * Test that creating an AuthnAuthorityDescriptor from XML fails if no AuthnQueryService was provided.
      */
     public function testUnmarshallingWithoutAuthnQueryService(): void

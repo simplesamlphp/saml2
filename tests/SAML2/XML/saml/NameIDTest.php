@@ -73,20 +73,4 @@ final class NameIDTest extends TestCase
             strval($nameId),
         );
     }
-
-
-    // unmarshalling
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $nameId = NameID::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($nameId),
-        );
-    }
 }

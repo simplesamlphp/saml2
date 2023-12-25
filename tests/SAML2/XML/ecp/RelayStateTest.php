@@ -61,19 +61,6 @@ final class RelayStateTest extends TestCase
 
     /**
      */
-    public function testUnmarshalling(): void
-    {
-        $relayState = RelayState::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($relayState),
-        );
-    }
-
-
-    /**
-     */
     public function testUnmarshallingWithMissingMustUnderstandThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;

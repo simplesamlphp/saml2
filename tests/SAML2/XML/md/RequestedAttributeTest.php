@@ -85,20 +85,6 @@ final class RequestedAttributeTest extends TestCase
 
 
     /**
-     * Test creating a RequestedAttribute object from XML
-     */
-    public function testUnmarshalling(): void
-    {
-        $ra = RequestedAttribute::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($ra),
-        );
-    }
-
-
-    /**
      * Test that creating a RequestedAttribute object from XML works when isRequired is missing.
      */
     public function testUnmarshallingWithoutIsRequired(): void

@@ -96,17 +96,6 @@ final class EncryptedAttributeTest extends TestCase
 
     /**
      */
-    public function testUnmarshalling(): void
-    {
-        $encryptedAttribute = EncryptedAttribute::fromXML(self::$xmlRepresentation->documentElement);
-
-        $encryptedData = $encryptedAttribute->getEncryptedData();
-        $this->assertEquals(C::XMLENC_ELEMENT, $encryptedData->getType());
-    }
-
-
-    /**
-     */
     public function testDecryptAttribute(): void
     {
         $encryptedAttribute = EncryptedAttribute::fromXML(self::$xmlRepresentation->documentElement);

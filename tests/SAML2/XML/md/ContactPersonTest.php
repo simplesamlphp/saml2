@@ -131,20 +131,6 @@ final class ContactPersonTest extends TestCase
 
 
     /**
-     * Test creating a ContactPerson from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $contactPerson = ContactPerson::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($contactPerson),
-        );
-    }
-
-
-    /**
      * Test that creating a ContactPerson from XML without a contactType attribute fails.
      */
     public function testUnmarshallingWithoutType(): void

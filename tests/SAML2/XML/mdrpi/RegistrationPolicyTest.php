@@ -72,20 +72,6 @@ final class RegistrationPolicyTest extends TestCase
 
 
     /**
-     * Test creating a RegistrationPolicy from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = RegistrationPolicy::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
-
-
-    /**
      * Test that creating a RegistrationPolicy with an invalid url throws an exception
      */
     public function testUnmarshallingFailsInvalidURL(): void

@@ -195,20 +195,6 @@ final class UIInfoTest extends TestCase
 
 
     /**
-     * Test unmarshalling a basic UIInfo element
-     */
-    public function testUnmarshalling(): void
-    {
-        $uiinfo = UIInfo::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($uiinfo),
-        );
-    }
-
-
-    /**
      */
     public function testMultipleDescriptionWithSameLanguageThrowsException(): void
     {

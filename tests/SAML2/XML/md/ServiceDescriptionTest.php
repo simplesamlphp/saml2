@@ -63,21 +63,4 @@ final class ServiceDescriptionTest extends TestCase
             strval($name),
         );
     }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test creating a ServiceDescription from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = ServiceDescription::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
 }

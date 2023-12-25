@@ -89,20 +89,6 @@ final class ConditionTest extends TestCase
 
 
     /**
-     * Test unmarshalling a registered class
-     */
-    public function testUnmarshalling(): void
-    {
-        $condition = CustomCondition::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($condition),
-        );
-    }
-
-
-    /**
      */
     public function testUnmarshallingUnregistered(): void
     {

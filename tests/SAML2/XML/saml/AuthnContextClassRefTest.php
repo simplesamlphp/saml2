@@ -54,20 +54,4 @@ final class AuthnContextClassRefTest extends TestCase
             strval($authnContextClassRef),
         );
     }
-
-
-    // unmarshalling
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $authnContextClassRef = AuthnContextClassRef::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authnContextClassRef),
-        );
-    }
 }

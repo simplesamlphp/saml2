@@ -112,20 +112,6 @@ final class ArtifactResolutionServiceTest extends TestCase
 
 
     /**
-     * Test creating a ArtifactResolutionService from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $ars = ArtifactResolutionService::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($ars),
-        );
-    }
-
-
-    /**
      * Test that creating a ArtifactResolutionService from XML fails when ResponseLocation is present.
      */
     public function testUnmarshallingWithResponseLocation(): void

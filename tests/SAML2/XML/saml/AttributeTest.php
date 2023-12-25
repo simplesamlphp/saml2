@@ -102,20 +102,6 @@ final class AttributeTest extends TestCase
 
 
     /**
-     * Test creating of an Attribute from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $attribute = Attribute::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($attribute),
-        );
-    }
-
-
-    /**
      * Test that creating an Attribute from XML fails if no Name is provided.
      */
     public function testUnmarshallingWithoutName(): void

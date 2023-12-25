@@ -90,23 +90,6 @@ final class AttributeStatementTest extends TestCase
 
     /**
      */
-    public function testUnmarshalling(): void
-    {
-        $attrStatement = AttributeStatement::fromXML(self::$xmlRepresentation->documentElement);
-
-        $attributes = $attrStatement->getAttributes();
-        $this->assertCount(3, $attributes);
-        $this->assertEquals('urn:ServiceID', $attributes[0]->getName());
-        $this->assertEquals('urn:EntityConcernedID', $attributes[1]->getName());
-        $this->assertEquals('urn:EntityConcernedSubID', $attributes[2]->getName());
-
-        $this->assertEmpty($attrStatement->getEncryptedAttributes());
-        $this->assertFalse($attrStatement->hasEncryptedAttributes());
-    }
-
-
-    /**
-     */
     public function testUnmarshallingMissingAttributesThrowsException(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML

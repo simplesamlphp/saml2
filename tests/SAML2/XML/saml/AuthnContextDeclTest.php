@@ -71,20 +71,4 @@ XML
             strval($authnContextDecl),
         );
     }
-
-
-    // unmarshalling
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $authnContextDecl = AuthnContextDecl::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authnContextDecl),
-        );
-    }
 }

@@ -107,17 +107,4 @@ final class ScopingTest extends TestCase
         );
         $this->assertTrue($scoping->isEmptyElement());
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $scoping = Scoping::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($scoping),
-        );
-    }
 }

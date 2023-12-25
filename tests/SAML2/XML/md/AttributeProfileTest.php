@@ -58,20 +58,4 @@ final class AttributeProfileTest extends TestCase
             strval($attributeProfile),
         );
     }
-
-
-    // unmarshalling
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $attributeProfile = AttributeProfile::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($attributeProfile),
-        );
-    }
 }

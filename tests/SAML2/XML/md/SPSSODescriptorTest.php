@@ -236,20 +236,6 @@ final class SPSSODescriptorTest extends TestCase
 
 
     /**
-     * Test creating an SPSSODescriptor from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $spssod = SPSSODescriptor::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($spssod),
-        );
-    }
-
-
-    /**
      * Test that creating an SPSSODescriptor from XML fails if no AssertionConsumerService is specified.
      */
     public function testUnmarshallingWithoutAssertionConsumerService(): void

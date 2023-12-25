@@ -73,19 +73,6 @@ XML
 
 
     /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $extensions = Extensions::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($extensions),
-        );
-    }
-
-
-    /**
      * Adding a non-namespaced element to an md:Extensions element should throw an exception
      */
     public function testMarshallingWithNonNamespacedExtensions(): void

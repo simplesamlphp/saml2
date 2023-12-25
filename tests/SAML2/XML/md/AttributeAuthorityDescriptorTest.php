@@ -276,20 +276,6 @@ final class AttributeAuthorityDescriptorTest extends TestCase
 
 
     /**
-     * Test creating an AttributeAuthorityDescriptor from XML
-     */
-    public function testUnmarshalling(): void
-    {
-        $aad = AttributeAuthorityDescriptor::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($aad),
-        );
-    }
-
-
-    /**
      * Test that creating an AttributeAuthorityDescriptor without any optional element works.
      */
     public function testUnmarshallingWithoutOptionalElements(): void

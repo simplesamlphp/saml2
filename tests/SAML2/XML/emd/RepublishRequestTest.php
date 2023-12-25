@@ -62,18 +62,4 @@ final class RepublishRequestTest extends TestCase
             strval($republishRequest),
         );
     }
-
-
-    /**
-     * Unmarshalling
-     */
-    public function testUnmarshalling(): void
-    {
-        $republishRequest = RepublishRequest::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($republishRequest),
-        );
-    }
 }

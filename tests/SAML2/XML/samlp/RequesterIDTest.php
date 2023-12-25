@@ -52,17 +52,4 @@ final class RequesterIDTest extends TestCase
             strval($requesterId),
         );
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $requesterId = RequesterID::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($requesterId),
-        );
-    }
 }

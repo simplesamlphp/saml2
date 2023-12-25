@@ -127,19 +127,6 @@ XML
 
     /**
      */
-    public function testUnmarshalling(): void
-    {
-        $list = IDPList::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($list),
-        );
-    }
-
-
-    /**
-     */
     public function testZeroIDPEntriesThrowsException(): void
     {
         $ns = IDPList::NS;

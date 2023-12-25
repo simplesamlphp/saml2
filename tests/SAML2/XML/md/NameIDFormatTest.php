@@ -58,20 +58,4 @@ final class NameIDFormatTest extends TestCase
             strval($nameIdFormat),
         );
     }
-
-
-    // unmarshalling
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $nameIdFormat = NameIDFormat::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($nameIdFormat),
-        );
-    }
 }

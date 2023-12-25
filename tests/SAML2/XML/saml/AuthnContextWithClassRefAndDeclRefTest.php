@@ -62,20 +62,4 @@ final class AuthnContextWithClassRefAndDeclRefTest extends TestCase
             strval($authnContext),
         );
     }
-
-
-    // unmarshalling
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $authnContext = AuthnContext::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authnContext),
-        );
-    }
 }

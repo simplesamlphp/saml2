@@ -110,20 +110,6 @@ XML
 
 
     /**
-     * Test creating a KeyDescriptor from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $kd = KeyDescriptor::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($kd),
-        );
-    }
-
-
-    /**
      * Test that creating a KeyDescriptor from XML with a wrong use fails.
      */
     public function testUnmarshallingWithWrongUse(): void

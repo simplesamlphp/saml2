@@ -77,20 +77,6 @@ final class NameIDMappingServiceTest extends TestCase
 
 
     /**
-     * Test creating a NameIDMappingService from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $nidmsep = NameIDMappingService::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($nidmsep),
-        );
-    }
-
-
-    /**
      * Test that creating a NameIDMappingService from XML fails when ResponseLocation is present.
      */
     public function testUnmarshallingWithResponseLocation(): void

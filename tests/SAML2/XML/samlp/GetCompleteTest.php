@@ -59,17 +59,4 @@ final class GetCompleteTest extends TestCase
             strval($getComplete),
         );
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $getComplete = GetComplete::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($getComplete),
-        );
-    }
 }

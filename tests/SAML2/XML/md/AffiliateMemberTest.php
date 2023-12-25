@@ -84,21 +84,4 @@ final class AffiliateMemberTest extends TestCase
 
         new AffiliateMember(str_pad('https://some.entity.org/id', C::ENTITYID_MAX_LENGTH + 1, 'a'));
     }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test creating a AffiliateMember from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $affiliateMember = AffiliateMember::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($affiliateMember),
-        );
-    }
 }

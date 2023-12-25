@@ -80,19 +80,6 @@ final class RegistrationInfoTest extends TestCase
 
     /**
      */
-    public function testUnmarshalling(): void
-    {
-        $registrationInfo = RegistrationInfo::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($registrationInfo),
-        );
-    }
-
-
-    /**
-     */
     public function testMissingPublisherThrowsException(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML

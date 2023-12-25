@@ -69,19 +69,6 @@ final class DigestMethodTest extends TestCase
 
     /**
      */
-    public function testUnmarshalling(): void
-    {
-        $digestMethod = DigestMethod::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($digestMethod),
-        );
-    }
-
-
-    /**
-     */
     public function testUnmarshallingMissingAlgorithmThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;

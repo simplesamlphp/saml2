@@ -52,17 +52,4 @@ final class AssertionIDRefTest extends TestCase
             strval($assertionIDRef),
         );
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $assertionIDRef = AssertionIDRef::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($assertionIDRef),
-        );
-    }
 }

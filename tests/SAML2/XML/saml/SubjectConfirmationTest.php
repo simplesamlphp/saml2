@@ -156,19 +156,6 @@ XML
 
     /**
      */
-    public function testUnmarshalling(): void
-    {
-        $subjectConfirmation = SubjectConfirmation::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($subjectConfirmation),
-        );
-    }
-
-
-    /**
-     */
     public function testMethodMissingThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;

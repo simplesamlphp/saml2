@@ -457,17 +457,4 @@ AUTHNREQUEST;
         );
         AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $authnRequest = AuthnRequest::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authnRequest),
-        );
-    }
 }

@@ -56,21 +56,4 @@ final class IPHintTest extends TestCase
             strval($hint),
         );
     }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test creating a IPHint from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $hint = IPHint::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($hint),
-        );
-    }
 }

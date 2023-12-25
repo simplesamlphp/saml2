@@ -115,17 +115,6 @@ final class AttributeQueryTest extends TestCase
     }
 
 
-    public function testUnmarshalling(): void
-    {
-        $aq = AttributeQuery::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($aq),
-        );
-    }
-
-
     public function testAttributeNameFormat(): void
     {
         $nameId = new NameID('NameIDValue');

@@ -78,20 +78,6 @@ final class KeywordsTest extends TestCase
 
 
     /**
-     * Unmarshalling of a keywords tag
-     */
-    public function testUnmarshalling(): void
-    {
-        $keywords = Keywords::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($keywords),
-        );
-    }
-
-
-    /**
      * Unmarshalling fails if attribute is empty
      */
     public function testUnmarshallingFailsMissingKeywords(): void

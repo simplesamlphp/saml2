@@ -61,17 +61,4 @@ final class StatusCodeTest extends TestCase
             strval($statusCode),
         );
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $statusCode = StatusCode::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($statusCode),
-        );
-    }
 }

@@ -83,15 +83,4 @@ final class AuthnQueryTest extends TestCase
             strval($authnQuery),
         );
     }
-
-
-    public function testUnmarshalling(): void
-    {
-        $authnQuery = AuthnQuery::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authnQuery),
-        );
-    }
 }

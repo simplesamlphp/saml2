@@ -150,20 +150,6 @@ final class EntitiesDescriptorTest extends TestCase
 
 
     /**
-     * Test creating an EntitiesDescriptor from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $entitiesd = EntitiesDescriptor::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($entitiesd),
-        );
-    }
-
-
-    /**
      * Test that creating an EntitiesDescriptor without Name from XML works.
      */
     public function testUnmarshallingWithoutName(): void

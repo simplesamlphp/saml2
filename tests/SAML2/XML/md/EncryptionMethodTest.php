@@ -123,20 +123,6 @@ final class EncryptionMethodTest extends TestCase
 
 
     /**
-     * Test creating an EncryptionMethod object from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $encryptionMethod = EncryptionMethod::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($encryptionMethod),
-        );
-    }
-
-
-    /**
      * Test that creating an EncryptionMethod object from XML without an Algorithm attribute fails.
      */
     public function testUnmarshallingWithoutAlgorithm(): void

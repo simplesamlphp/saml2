@@ -72,20 +72,6 @@ final class OrganizationURLTest extends TestCase
 
 
     /**
-     * Test creating a OrganizationURL from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = OrganizationURL::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
-
-
-    /**
      * Test that creating a OrganizationURL with an invalid url throws an exception
      */
     public function testUnmarshallingFailsInvalidURL(): void

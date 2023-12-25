@@ -92,20 +92,6 @@ final class DiscoHintsTest extends TestCase
 
 
     /**
-     * Test unmarshalling a basic DiscoHints element
-     */
-    public function testUnmarshalling(): void
-    {
-        $discoHints = DiscoHints::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($discoHints),
-        );
-    }
-
-
-    /**
      * Add a Keywords element to the children attribute
      */
     public function testMarshallingChildren(): void

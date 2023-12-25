@@ -72,17 +72,4 @@ final class AuthzDecisionStatementTest extends TestCase
             strval($authzDecisionStatement),
         );
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $authzDecisionStatement = AuthzDecisionStatement::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authzDecisionStatement),
-        );
-    }
 }

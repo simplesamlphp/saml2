@@ -78,20 +78,6 @@ final class SingleSignOnServiceTest extends TestCase
 
 
     /**
-     * Test creating a SingleSignOnService from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $ssoep = SingleSignOnService::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($ssoep),
-        );
-    }
-
-
-    /**
      * Test that creating a SingleSignOnService from XML fails when ResponseLocation is present.
      */
     public function testUnmarshallingWithResponseLocation(): void

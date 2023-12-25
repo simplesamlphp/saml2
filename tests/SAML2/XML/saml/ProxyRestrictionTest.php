@@ -62,20 +62,4 @@ final class ProxyRestrictionTest extends TestCase
             strval($condition),
         );
     }
-
-
-    // unmarshalling
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $condition = ProxyRestriction::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($condition),
-        );
-    }
 }

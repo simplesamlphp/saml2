@@ -105,17 +105,4 @@ final class EvidenceTest extends TestCase
         );
         $this->assertTrue($evidence->isEmptyElement());
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $evidence = Evidence::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($evidence),
-        );
-    }
 }

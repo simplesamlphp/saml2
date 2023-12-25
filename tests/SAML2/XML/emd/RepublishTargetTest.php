@@ -63,15 +63,4 @@ final class RepublishTargetTest extends TestCase
 
         new RepublishTarget('http://example.org/');
     }
-
-
-    /**
-     * Unmarshalling
-     */
-    public function testUnmarshalling(): void
-    {
-        $republishTarget = RepublishTarget::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals('http://edugain.org/', $republishTarget->getContent());
-    }
 }

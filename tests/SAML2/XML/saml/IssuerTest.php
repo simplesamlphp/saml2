@@ -106,19 +106,6 @@ final class IssuerTest extends TestCase
 
 
     /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $issuer = Issuer::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($issuer),
-        );
-    }
-
-
-    /**
      * Test that creating an Issuer from XML contains no attributes when format is "entity".
      */
     public function testUnmarshallingEntityFormat(): void

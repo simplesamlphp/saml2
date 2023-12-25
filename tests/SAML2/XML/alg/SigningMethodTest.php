@@ -71,19 +71,6 @@ final class SigningMethodTest extends TestCase
 
     /**
      */
-    public function testUnmarshalling(): void
-    {
-        $signingMethod = SigningMethod::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($signingMethod),
-        );
-    }
-
-
-    /**
-     */
     public function testMissingAlgorithmThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;

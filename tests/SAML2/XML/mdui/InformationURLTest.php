@@ -72,20 +72,6 @@ final class InformationURLTest extends TestCase
 
 
     /**
-     * Test creating a InformationURL from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = InformationURL::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
-
-
-    /**
      * Test that creating a InformationURL with an invalid url throws an exception
      */
     public function testUnmarshallingFailsInvalidURL(): void

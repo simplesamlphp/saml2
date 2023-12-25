@@ -57,21 +57,4 @@ final class GivenNameTest extends TestCase
             strval($name),
         );
     }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test creating a GivenName from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = GivenName::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
 }

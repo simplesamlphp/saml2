@@ -116,24 +116,6 @@ XML;
 
 
     /**
-     * Verifies that we can create an AttributeValue from a DOMElement.
-     *
-     */
-    public function testUnmarshalling(): void
-    {
-        $av = AttributeValue::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertIsInt($av->getValue());
-        $this->assertEquals(2, $av->getValue());
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($av),
-        );
-    }
-
-
-    /**
      * Verifies that we can create an AttributeValue containing a NameID from a DOMElement.
      *
      * @return void

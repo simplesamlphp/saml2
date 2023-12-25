@@ -100,19 +100,6 @@ final class RequestedAuthnContextTest extends TestCase
 
     /**
      */
-    public function testUnmarshalling(): void
-    {
-        $requestedAuthnContext = RequestedAuthnContext::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($requestedAuthnContext),
-        );
-    }
-
-
-    /**
-     */
     public function testUnmarshallingWithMixedContextsFails(): void
     {
         $samlNamespace = C::NS_SAML;

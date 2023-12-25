@@ -95,20 +95,4 @@ final class ConditionsTest extends TestCase
         );
         $this->assertTrue($conditions->isEmptyElement());
     }
-
-
-    // unmarshalling
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $conditions = Conditions::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($conditions),
-        );
-    }
 }

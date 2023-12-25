@@ -53,17 +53,4 @@ final class AudienceTest extends TestCase
             strval($audience),
         );
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $audience = Audience::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($audience),
-        );
-    }
 }

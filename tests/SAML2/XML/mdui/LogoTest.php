@@ -78,20 +78,6 @@ IMG;
 
 
     /**
-     * Unmarshalling of a logo tag
-     */
-    public function testUnmarshalling(): void
-    {
-        $logo = Logo::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($logo),
-        );
-    }
-
-
-    /**
      * Unmarshalling of a logo tag without a language
      */
     public function testUnmarshallingWithoutLanguage(): void

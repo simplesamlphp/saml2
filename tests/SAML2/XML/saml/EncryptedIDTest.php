@@ -173,19 +173,6 @@ final class EncryptedIDTest extends TestCase
 
 
     /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $eid = EncryptedID::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($eid),
-        );
-    }
-
-
-    /**
      * Test encryption / decryption
      */
     public function testEncryption(): void

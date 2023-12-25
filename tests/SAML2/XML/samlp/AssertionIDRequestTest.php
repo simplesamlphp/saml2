@@ -70,17 +70,4 @@ final class AssertionIDRequestTest extends TestCase
             strval($assertionIDRequest),
         );
     }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $assertionIDRequest = AssertionIDRequest::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($assertionIDRequest),
-        );
-    }
 }
