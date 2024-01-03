@@ -75,7 +75,7 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
             $keyDescriptor,
             $organization,
             $contactPerson,
-            $namespacedAttributes
+            $namespacedAttributes,
         );
     }
 
@@ -160,6 +160,7 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
                 KeyDescriptor::getChildrenOfClass($xml),
                 array_pop($orgs),
                 ContactPerson::getChildrenOfClass($xml),
+                self::getAttributesNSFromXML($xml),
             );
         }
 

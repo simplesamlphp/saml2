@@ -40,6 +40,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor
      * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contact
+     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
         protected array $attributeService,
@@ -56,6 +57,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType
         ?Organization $organization = null,
         array $keyDescriptor = [],
         array $contact = [],
+        array $namespacedAttributes = []
     ) {
         Assert::maxCount($attributeService, C::UNBOUNDED_LIMIT);
         Assert::minCount(
@@ -89,6 +91,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType
             $keyDescriptor,
             $organization,
             $contact,
+            $namespacedAttributes
         );
     }
 
@@ -223,6 +226,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType
             !empty($orgs) ? $orgs[0] : null,
             KeyDescriptor::getChildrenOfClass($xml),
             ContactPerson::getChildrenOfClass($xml),
+            self::getAttributesNSFromXML($xml),
         );
 
         if (!empty($signature)) {

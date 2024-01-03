@@ -161,7 +161,8 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
             self::getOptionalAttribute($xml, 'errorURL', null),
             KeyDescriptor::getChildrenOfClass($xml),
             !empty($orgs) ? $orgs[0] : null,
-            ContactPerson::getChildrenOfClass($xml)
+            ContactPerson::getChildrenOfClass($xml),
+            self::getAttributesNSFromXML($xml),
         );
     }
 
