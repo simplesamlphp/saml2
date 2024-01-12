@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Test\SAML2\XML\samlp;
 
-use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\samlp\RequesterID;
 use SimpleSAML\XML\DOMDocumentFactory;

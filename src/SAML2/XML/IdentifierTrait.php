@@ -6,11 +6,11 @@ namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
-use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\XML\Exception\TooManyElementsException;
 
 use function array_pop;
 

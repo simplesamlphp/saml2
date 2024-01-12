@@ -7,7 +7,6 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
-use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\NameID;

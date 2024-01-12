@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
@@ -15,7 +14,6 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -28,11 +26,9 @@ use SimpleSAML\XMLSecurity\XML\ds\Transforms;
 use SimpleSAML\XMLSecurity\XML\ds\XPath;
 use SimpleSAML\XMLSecurity\XML\xenc\CipherData;
 use SimpleSAML\XMLSecurity\XML\xenc\CipherValue;
-use SimpleSAML\XMLSecurity\XML\xenc\DataReference;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptedData;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptionMethod;
-use SimpleSAML\XMLSecurity\XML\xenc\ReferenceList;
 
 use function dirname;
 use function strval;

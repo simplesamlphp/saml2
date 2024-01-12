@@ -12,21 +12,17 @@ use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\IdentifierTrait;
-use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
 use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
-use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
-use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
-use function gmdate;
 
 /**
  * Class for SAML 2 logout request messages.

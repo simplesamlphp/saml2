@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2;
 
-use DOMElement;
 use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
@@ -12,15 +11,13 @@ use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
-use SimpleSAML\XMLSecurity\Key\PublicKey;
+use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\Utils\Security;
 
 use function array_key_exists;
 use function base64_decode;
@@ -28,8 +25,8 @@ use function base64_encode;
 use function gzdeflate;
 use function gzinflate;
 use function sprintf;
-use function strlen;
 use function str_contains;
+use function strlen;
 use function urlencode;
 
 /**

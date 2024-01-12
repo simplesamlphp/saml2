@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2;
 
-use DOMDocument;
 use DOMElement;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\Assert;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\EntitiesDescriptor;
 use SimpleSAML\XML\DOMDocumentFactory;

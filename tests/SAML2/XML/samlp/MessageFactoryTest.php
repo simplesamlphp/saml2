@@ -6,20 +6,18 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\saml\Attribute;
-use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
+use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
 use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
 use SimpleSAML\SAML2\XML\samlp\LogoutRequest;
 use SimpleSAML\SAML2\XML\samlp\LogoutResponse;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SAML2\XML\samlp\Response;
-use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 use function dirname;
-use function strval;
 
 /**
  * @covers \SimpleSAML\SAML2\XML\samlp\MessageFactory

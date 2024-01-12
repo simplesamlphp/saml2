@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\shibmd;
 
-use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\shibmd\Scope;

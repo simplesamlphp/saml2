@@ -10,7 +10,6 @@ use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\XML\Exception\ArrayValidationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
-use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
 

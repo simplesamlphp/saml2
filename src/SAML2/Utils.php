@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2;
 
-use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;

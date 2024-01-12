@@ -7,10 +7,10 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\StringElementTrait;
 
 use function array_key_first;

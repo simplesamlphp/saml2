@@ -12,8 +12,6 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 
 use function boolval;
-use function is_null;
-use function is_numeric;
 use function strval;
 
 /**

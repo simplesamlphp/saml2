@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Certificate;
 
-use SimpleSAML\SAML2\Exception\InvalidArgumentException;
-
 class PrivateKey extends Key
 {
     /**

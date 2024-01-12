@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\ecp;
 
-use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
+use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;

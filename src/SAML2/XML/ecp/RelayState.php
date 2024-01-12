@@ -10,13 +10,7 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\StringElementTrait;
-
-use function boolval;
-use function intval;
-use function strval;
 
 /**
  * Class representing the ECP RelayState element.

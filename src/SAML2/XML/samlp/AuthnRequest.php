@@ -7,21 +7,17 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\Subject;
-use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
-use function filter_var;
-use function is_null;
 use function strval;
 
 /**

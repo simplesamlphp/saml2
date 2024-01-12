@@ -6,13 +6,11 @@ namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches;
-use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
-use SimpleSAML\SAML2\XML\saml\SubjectConfirmationMatches;
 
 /**
  * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches

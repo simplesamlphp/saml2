@@ -10,7 +10,6 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\StringElementTrait;
 
 use function filter_var;

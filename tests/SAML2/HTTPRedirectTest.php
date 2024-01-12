@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use Exception;
+use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
-use Nyholm\Psr7\ServerRequest;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\HTTPRedirect;
@@ -17,12 +17,8 @@ use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
-use SimpleSAML\SAML2\Utils;
-use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-
-use function urldecode;
 
 /**
  * @covers \SimpleSAML\SAML2\HTTPRedirect

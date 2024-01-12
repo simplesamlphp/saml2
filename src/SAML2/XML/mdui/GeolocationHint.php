@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdui;
 
-use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\StringElementTrait;

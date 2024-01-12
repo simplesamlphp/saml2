@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Utilities;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Utilities\File;
 use SimpleSAML\SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\Utilities\File;
 
 /**
  * @covers \SimpleSAML\SAML2\Utilities\File

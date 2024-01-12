@@ -6,16 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\XML\AbstractElement;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XMLSecurity\XML\ds\Signature;
-
-use function array_pop;
-use function preg_split;
 
 /**
  * Class representing unknown RoleDescriptors.

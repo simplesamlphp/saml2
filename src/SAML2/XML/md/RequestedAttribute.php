@@ -7,9 +7,9 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 use function is_bool;
 

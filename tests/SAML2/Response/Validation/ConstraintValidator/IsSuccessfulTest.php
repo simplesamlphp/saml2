@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Response\Validation\ConstraintValidator;
 
 use Mockery;
-use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Mockery\MockInterface;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Response\Validation\Result;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator\IsSuccessful;
+use SimpleSAML\SAML2\Response\Validation\Result;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;

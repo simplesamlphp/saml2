@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
 
 use DateInterval;
-use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\Assertion\Validation\AssertionConstraintValidator;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\saml\Assertion;
 
 class SessionNotOnOrAfter implements AssertionConstraintValidator
 {

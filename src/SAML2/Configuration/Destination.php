@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Configuration;
 
-use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use Stringable;
 
 /**

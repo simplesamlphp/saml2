@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Certificate;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Certificate\Key;
 use SimpleSAML\SAML2\Certificate\Exception\InvalidKeyUsageException;
+use SimpleSAML\SAML2\Certificate\Key;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 
 use function call_user_func_array;

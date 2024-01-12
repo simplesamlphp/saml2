@@ -10,7 +10,6 @@ use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\CryptoEncoding\PEM;
 use SimpleSAML\XMLSecurity\Key\X509Certificate as X509;
-use SimpleSAML\XMLSecurity\Utils\Security;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
 use function sprintf;

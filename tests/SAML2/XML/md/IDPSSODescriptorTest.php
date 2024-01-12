@@ -6,15 +6,14 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AttributeProfile;
-use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
 use SimpleSAML\SAML2\XML\md\IDPSSODescriptor;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\SAML2\XML\md\ManageNameIDService;
-use SimpleSAML\SAML2\XML\md\NameIDMappingService;
 use SimpleSAML\SAML2\XML\md\NameIDFormat;
+use SimpleSAML\SAML2\XML\md\NameIDMappingService;
 use SimpleSAML\SAML2\XML\md\SingleLogoutService;
 use SimpleSAML\SAML2\XML\md\SingleSignOnService;
 use SimpleSAML\SAML2\XML\saml\Attribute;

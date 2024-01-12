@@ -8,7 +8,6 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
 
 /**
  * Class representing a SAML2 AttributeStatement

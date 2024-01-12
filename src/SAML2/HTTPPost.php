@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2;
 
-use DOMDocument;
-use DOMElement;
 use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;

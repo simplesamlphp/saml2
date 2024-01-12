@@ -5,10 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\ecp;
 
 use DOMDocument;
-use DOMElement;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\ecp\Response;
 use SimpleSAML\SOAP\Constants as SOAP;
 use SimpleSAML\XML\DOMDocumentFactory;

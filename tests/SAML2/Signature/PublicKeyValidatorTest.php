@@ -5,24 +5,20 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Signature;
 
 use Mockery;
-use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Mockery\MockInterface;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Certificate\Key;
 use SimpleSAML\SAML2\Certificate\KeyCollection;
 use SimpleSAML\SAML2\Certificate\KeyLoader;
-use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
-use SimpleSAML\SAML2\Constants;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Signature\PublicKeyValidator;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\TestUtils\SimpleTestLogger;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
-use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\Utils\Certificate;
 
 /**
  * @covers \SimpleSAML\SAML2\Signature\PublicKeyValidator

@@ -6,8 +6,8 @@ namespace SimpleSAML\Test\SAML2\Utilities;
 
 use ArrayIterator;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\Utilities\ArrayCollection;
 
 use function ucfirst;
 

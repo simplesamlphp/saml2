@@ -18,8 +18,6 @@ use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Assertion;
-use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
-use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;

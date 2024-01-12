@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Signature;
 
 use Psr\Log\NullLogger;
-use SimpleSAML\SAML2\Signature\AbstractChainedValidator;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
+use SimpleSAML\SAML2\Signature\AbstractChainedValidator;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
 /**

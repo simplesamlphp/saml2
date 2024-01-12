@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\alg;
 
-use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;

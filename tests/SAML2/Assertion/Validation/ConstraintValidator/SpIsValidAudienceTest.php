@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
-use DateTimeImmutable;
-use DateTimeZone;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;

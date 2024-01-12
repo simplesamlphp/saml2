@@ -6,9 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\XML\StringElementTrait;
-use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 
 /**
  * SAML NameIDType abstract data type.

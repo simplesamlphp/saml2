@@ -5,13 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Certificate;
 
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Configuration\PrivateKey as ConfPrivateKey;
 use SimpleSAML\SAML2\Certificate\PrivateKey;
 use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
+use SimpleSAML\SAML2\Configuration\PrivateKey as ConfPrivateKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-
-use function dirname;
-use function file_get_content;
 
 /**
  * @covers \SimpleSAML\SAML2\Certificate\PrivateKeyLoader

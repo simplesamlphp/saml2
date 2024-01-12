@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Response;
 
 use Mockery;
-use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Mockery\MockInterface;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Assertion\Processor as AssertionProcessor;
 use SimpleSAML\SAML2\Configuration\Destination;

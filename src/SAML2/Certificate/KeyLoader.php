@@ -8,7 +8,6 @@ use SimpleSAML\SAML2\Certificate\Exception\InvalidCertificateStructureException;
 use SimpleSAML\SAML2\Certificate\Exception\NoKeysFoundException;
 use SimpleSAML\SAML2\Certificate\KeyCollection;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
-use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\SAML2\Utilities\File;
 use SimpleSAML\XMLSecurity\Utils\Certificate;
 

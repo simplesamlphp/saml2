@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2;
 
-use Exception;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Binding;

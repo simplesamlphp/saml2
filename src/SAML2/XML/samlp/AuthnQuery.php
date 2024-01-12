@@ -19,7 +19,6 @@ use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
-use function in_array;
 use function preg_replace;
 use function version_compare;
 

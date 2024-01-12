@@ -18,7 +18,6 @@ use SimpleSAML\XML\XsNamespace as NS;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 
 use function filter_var;
-use function gmdate;
 use function is_null;
 
 /**

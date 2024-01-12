@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdui;
 
-use InvalidArgumentException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
 
 /**

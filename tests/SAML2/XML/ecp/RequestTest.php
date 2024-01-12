@@ -4,21 +4,15 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\ecp;
 
-use DOMDocument;
-use DOMElement;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\ecp\Request;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\GetComplete;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
 use SimpleSAML\SOAP\Constants as SOAP;
-use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 

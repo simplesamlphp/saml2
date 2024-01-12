@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Signature;
 
-use DateTimeImmutable;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Signature\MissingConfigurationException;
 use SimpleSAML\SAML2\Signature\ValidatorChain;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
-use SimpleSAML\SAML2\Signature\MissingConfigurationException;
 
 /**
  * @covers \SimpleSAML\SAML2\Signature\ValidatorChain

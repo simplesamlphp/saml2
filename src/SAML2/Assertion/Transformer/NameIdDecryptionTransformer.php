@@ -9,7 +9,6 @@ use Psr\Log\LoggerInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assertion\Exception\NotDecryptedException;
 use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\IdentityProviderAware;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
@@ -20,7 +19,6 @@ use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
 use SimpleSAML\SAML2\XML\saml\Subject;
 
 use function get_class;
-use function is_null;
 use function sprintf;
 
 final class NameIdDecryptionTransformer implements

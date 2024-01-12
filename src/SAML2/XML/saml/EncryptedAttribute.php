@@ -6,8 +6,8 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use SimpleSAML\SAML2\XML\EncryptedElementTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XMLSecurity\XML\EncryptedElementInterface;
 use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
+use SimpleSAML\XMLSecurity\XML\EncryptedElementInterface;
 
 /**
  * Class handling encrypted attributes.

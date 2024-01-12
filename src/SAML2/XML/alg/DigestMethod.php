@@ -7,12 +7,10 @@ namespace SimpleSAML\SAML2\XML\alg;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\XsNamespace as NS;
-use SimpleSAML\XMLSecurity\Exception\InvalidArgumentException;
 
 /**
  * Class for handling the alg:DigestMethod element.

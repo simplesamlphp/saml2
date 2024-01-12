@@ -7,13 +7,13 @@ namespace SimpleSAML\SAML2\Compat;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 use SimpleSAML\XML\AbstractElement;
 use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 
 use function array_key_exists;
-use function is_subclass_of;
 use function implode;
+use function is_subclass_of;
 
 abstract class AbstractContainer
 {

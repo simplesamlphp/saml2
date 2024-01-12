@@ -10,7 +10,6 @@ use SimpleSAML\SAML2\Certificate\Exception\InvalidKeyUsageException;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 
 use function array_key_exists;
-use function in_array;
 use function is_string;
 
 /**

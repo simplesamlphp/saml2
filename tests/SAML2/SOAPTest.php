@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2;
 
-use DOMDocument;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Nyholm\Psr7\ServerRequest;
-use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use SimpleSAML\SAML2\SOAP;
 use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
@@ -19,7 +16,6 @@ use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function dirname;
-use function sprintf;
 
 /**
  * @covers \SimpleSAML\SAML2\SOAP

@@ -8,12 +8,10 @@ use DOMDocument;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\ServiceDescription;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function dirname;
-use function strval;
 
 /**
  * Tests for localized names.

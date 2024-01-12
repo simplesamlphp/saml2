@@ -10,8 +10,8 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation;
-use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
 use SimpleSAML\SAML2\XML\md\AffiliateMember;
+use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
 use SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor;
 use SimpleSAML\SAML2\XML\md\AttributeService;
 use SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor;
@@ -39,7 +39,6 @@ use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;

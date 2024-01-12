@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Assertion;
 
 use Mockery;
-use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Mockery\MockInterface;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\SAML2\Assertion\Decrypter;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;

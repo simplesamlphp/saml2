@@ -6,21 +6,17 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\Assert;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDecl;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
-use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use XMLReader;
 
 use function dirname;
-use function strval;
 
 /**
  * Class \SAML2\XML\saml\AuthnContextTest

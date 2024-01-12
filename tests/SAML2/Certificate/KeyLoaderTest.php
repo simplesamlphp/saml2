@@ -5,20 +5,16 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Certificate;
 
 use Mockery;
-use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Mockery\MockInterface;
 use SimpleSAML\SAML2\Certificate\Exception\InvalidCertificateStructureException;
 use SimpleSAML\SAML2\Certificate\Exception\NoKeysFoundException;
 use SimpleSAML\SAML2\Certificate\Key;
 use SimpleSAML\SAML2\Certificate\KeyLoader;
 use SimpleSAML\SAML2\Certificate\X509;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
-use SimpleSAML\XMLSecurity\Utils\Certificate;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
-use function dirname;
-use function file_get_contents;
-use function preg_match;
 use function preg_replace;
 
 /**

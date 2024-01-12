@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DOMDocument;
 use DOMElement;
-use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Attribute as XMLAttribute;
@@ -18,20 +14,14 @@ use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
-use SimpleSAML\XML\SerializableElementInterface;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XML\XsNamespace as NS;
 
-use function array_filter;
 use function array_change_key_case;
+use function array_filter;
 use function array_key_exists;
 use function array_keys;
-use function array_map;
 use function array_pop;
 use function count;
-use function filter_var;
-use function preg_replace;
-use function var_export;
 
 /**
  * Class representing SAML 2 ContactPerson.
