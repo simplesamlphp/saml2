@@ -1,7 +1,8 @@
 /.phpunit.cache/
+/.phpunit.result.cache
 /build/
 /cache.properties
 /composer.lock
 /composer.phar
-/.phpunit.result.cache
+phpunit.xml.bak
 /vendor/
