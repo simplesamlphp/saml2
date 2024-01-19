@@ -34,7 +34,7 @@ final class RequestInitiator extends AbstractEndpointType
      * @param string $location
      * @param string|null $responseLocation
      * @param array $children
-     * @param list<\SimpleSAML\XML\Attribute> $attributes
+     * @param array<\SimpleSAML\XML\Attribute> $attributes
      *
      * @throws \InvalidArgumentException
      */

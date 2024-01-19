@@ -56,7 +56,7 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
      * @param string $location
      * @param string|null $responseLocation
      * @param \SimpleSAML\XML\ElementInterface[] $children
-     * @param list<\SimpleSAML\XML\Attribute> $attributes
+     * @param array<\SimpleSAML\XML\Attribute> $attributes
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
