@@ -46,7 +46,7 @@ final class MessageFactoryTest extends TestCase
 
     /**
      * @param string $file
-     * @param class-string class
+     * @param class-string $class
      * @dataProvider provideMessages
      */
     public function testMessageFactory(string $file, string $class): void

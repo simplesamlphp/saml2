@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\Decision;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
@@ -121,10 +122,11 @@ final class AuthzDecisionStatement extends AbstractStatementType
             TooManyElementsException::class,
         );
 
+        $decision = self::getAttribute($xml, 'Decision');
         try {
-            $decision = Decision::from(self::getAttribute($xml, 'Decision'));
+            $decision = Decision::from($decision);
         } catch (ValueError) {
-            throw ProtocolViolationException(sprintf('Unknown value \'%s\' for Decision attribute.', $decision));
+            throw new ProtocolViolationException(sprintf('Unknown value \'%s\' for Decision attribute.', $decision));
         }
 
         return new static(

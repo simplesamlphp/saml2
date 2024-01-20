@@ -3,6 +3,8 @@
 
 require_once(dirname(__FILE__, 3) . '/vendor/autoload.php');
 
+use DateTimeImmutable;
+use DateTimeZone;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
@@ -11,6 +13,7 @@ use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\samlp\LogoutRequest;
 use SimpleSAML\SAML2\XML\samlp\SessionIndex;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 $container = new MockContainer();
@@ -26,6 +29,7 @@ $eid = new EncryptedID($nid->encrypt($encryptor));
 
 $logoutRequest = new LogoutRequest(
     identifier: $eid,
+    issueInstant: new DateTimeImmutable('now', new DateTimeZone('Z')),
     sessionIndexes: [new SessionIndex('SomeSessionIndex1'), new SessionIndex('SomeSessionIndex2')],
     issuer: new Issuer('urn:test:TheIssuer')
 );

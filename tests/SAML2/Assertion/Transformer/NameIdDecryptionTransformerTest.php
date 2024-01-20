@@ -68,7 +68,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
     /** @var \SimpleSAML\SAML2\Configuration\Destination */
     protected static Destination $destination;
 
-    /** @var \SimpleSAML\SAML2\xml\samlp\Response */
+    /** @var \SimpleSAML\SAML2\XML\samlp\Response */
     protected static Response $response;
 
     /** @var string */

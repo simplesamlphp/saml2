@@ -3,6 +3,8 @@
 
 namespace SimpleSAML;
 
+use DateTimeImmutable;
+use DateTimeZone;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
 use SimpleSAML\SAML2\XML\saml\Assertion;
@@ -27,6 +29,7 @@ $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
 
 $unsignedAssertion = new Assertion(
     issuer: new Issuer('testIssuer'),
+    issueInstant: new DateTimeImmutable('now', new DateTimeZone('Z')),
     id: '_93af655219464fb403b34436cfb0c5cb1d9a5502',
     subject: new Subject(new NameID(
         value: 'some:entity',
@@ -43,27 +46,27 @@ $unsignedAssertion = new Assertion(
     ),
     statements: [new AttributeStatement([
         new Attribute(
-            Name: 'urn:mace:dir:attribute-def:uid',
-            NameFormat: C::NAMEFORMAT_URI,
-            AttibuteValues: [new AttributeValue('student2')],
+            name: 'urn:mace:dir:attribute-def:uid',
+            nameFormat: C::NAMEFORMAT_URI,
+            attributeValue: [new AttributeValue('student2')],
         ),
         new Attribute(
-            Name: 'urn:mace:terena.org:attribute-def:schacHomeOrganization',
-            NameFormat: C::NAMEFORMAT_URI,
-            AttributesValues: [new AttributeValue('university.example.org'), new AttributeValue('bbb.cc')],
+            name: 'urn:mace:terena.org:attribute-def:schacHomeOrganization',
+            nameFormat: C::NAMEFORMAT_URI,
+            attributeValue: [new AttributeValue('university.example.org'), new AttributeValue('bbb.cc')],
         ),
         new Attribute(
-            Name: 'urn:schac:attribute-def:schacPersonalUniqueCode',
-            NameFormat: C::NAMEFORMAT_URI,
-            AttributeValues: [
+            name: 'urn:schac:attribute-def:schacPersonalUniqueCode',
+            nameFormat: C::NAMEFORMAT_URI,
+            attributeValue: [
                 new AttributeValue('urn:schac:personalUniqueCode:nl:local:uvt.nl:memberid:524020'),
                 new AttributeValue('urn:schac:personalUniqueCode:nl:local:surfnet.nl:studentid:12345'),
             ],
         ),
         new Attribute(
-            Name: 'urn:mace:dir:attribute-def:eduPersonAffiliation',
-            NameFormat: C::NAMEFORMAT_URI,
-            AttributeValues: [new AttributeValue('member'), new AttributeValue('student')],
+            name: 'urn:mace:dir:attribute-def:eduPersonAffiliation',
+            nameFormat: C::NAMEFORMAT_URI,
+            attributeValue: [new AttributeValue('member'), new AttributeValue('student')],
         ),
     ])],
 );
@@ -71,15 +74,15 @@ $unsignedAssertion->sign($signer);
 $signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
 $entityAttributes = new EntityAttributes([
     new Attribute(
-        Name: 'attrib1',
-        NameFormat: C::NAMEFORMAT_URI,
-        AttributeValues: [new AttributeValue('is'), new AttributeValue('really'), new AttributeValue('cool')],
+        name: 'attrib1',
+        nameFormat: C::NAMEFORMAT_URI,
+        attributeValue: [new AttributeValue('is'), new AttributeValue('really'), new AttributeValue('cool')],
     ),
     $signedAssertion,
     new Attribute(
-        Name: 'foo',
-        NameFormat: 'urn:simplesamlphp:v1:simplesamlphp',
-        AttributeValues: [new AttributeValue('is'), new AttributeValue('really'), new AttributeValue('cool')],
+        name: 'foo',
+        nameFormat: 'urn:simplesamlphp:v1:simplesamlphp',
+        attributeValue: [new AttributeValue('is'), new AttributeValue('really'), new AttributeValue('cool')],
     ),
 ]);
 

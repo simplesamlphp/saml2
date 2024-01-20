@@ -32,7 +32,7 @@ final class KeyAuthority extends AbstractShibmdElement
      * Create a KeyAuthority.
      *
      * @param \SimpleSAML\XMLSecurity\XML\ds\KeyInfo[] $keys
-     * @param int|null $verifyDepth
+     * @param int|null $VerifyDepth
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
@@ -101,7 +101,6 @@ final class KeyAuthority extends AbstractShibmdElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
 
         foreach ($this->getAttributesNS() as $attr) {

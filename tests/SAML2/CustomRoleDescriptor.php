@@ -49,7 +49,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
      *   Defaults to an empty array.
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
      *   The organization running this entity. Defaults to null.
-     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contact
      *   An array of contacts for this entity. Defaults to an empty array.
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */

@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 
 /**
  * Example class to demonstrate how BaseID can be extended.

@@ -3,11 +3,14 @@
 
 require_once(dirname(__FILE__, 3) . '/vendor/autoload.php');
 
+use DateTimeImmutable;
+use DateTimeZone;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
@@ -18,6 +21,7 @@ $unsignedAssertion = Assertion::fromXML($document->documentElement);
 $unsignedResponse = new Response(
     status: new Status(new StatusCode(C::STATUS_SUCCESS)),
     issuer: new Issuer('https://IdentityProvider.com'),
+    issueInstant: new DateTimeImmutable('now', new DateTimeZone('Z')),
     id: 'abc123',
     inResponseTo: 'PHPUnit',
     destination: C::ENTITY_OTHER,

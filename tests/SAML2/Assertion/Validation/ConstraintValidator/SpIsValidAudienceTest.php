@@ -37,7 +37,7 @@ final class SpIsValidAudienceTest extends MockeryTestCase
     /** @var \SimpleSAML\SAML2\XML\saml\Conditions */
     private static Conditions $conditions;
 
-    /** @var \SimpleSAML\SAML2\XML\saml\Isssuer */
+    /** @var \SimpleSAML\SAML2\XML\saml\Issuer */
     private static Issuer $issuer;
 
     /** @var \Mockery\MockInterface */

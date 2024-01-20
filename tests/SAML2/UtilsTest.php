@@ -54,6 +54,8 @@ final class UtilsTest extends TestCase
         $xpCache = XPath::getXPath($xml);
         $nameId_after = XPath::xpQuery($xml, './saml_assertion:Subject/saml_assertion:NameID', $xpCache);
         $this->assertTrue(count($nameId_after) === 1);
+
+        /** @var \DOMNode $nameId_after[0] */
         $this->assertEquals('NameIDValue', $nameId_after[0]->textContent);
         $this->assertEquals(C::NAMEID_TRANSIENT, $nameId_after[0]->getAttribute("Format"));
         $this->assertEquals('OurNameQualifier', $nameId_after[0]->getAttribute("NameQualifier"));

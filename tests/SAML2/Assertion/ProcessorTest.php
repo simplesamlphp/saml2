@@ -35,7 +35,7 @@ final class ProcessorTest extends MockeryTestCase
     private static Processor $processor;
 
     /**
-     * @var m\MockInterface&Decrypter
+     * @var MockInterface&Decrypter
      */
     private static MockInterface $decrypter;
 

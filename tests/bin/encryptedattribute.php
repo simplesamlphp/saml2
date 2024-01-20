@@ -9,6 +9,7 @@ use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\EncryptedAttribute;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 $container = new MockContainer();
@@ -20,8 +21,8 @@ $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
     PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY)
 );
 $attribute = new Attribute(
-    Name: 'urn:encrypted:attribute',
-    AttributeValues: [new AttributeValue('very secret data')],
+    name: 'urn:encrypted:attribute',
+    attributeValue: [new AttributeValue('very secret data')],
 );
 $encAttribute = new EncryptedAttribute($attribute->encrypt($encryptor));
 

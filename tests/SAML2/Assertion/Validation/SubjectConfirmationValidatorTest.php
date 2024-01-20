@@ -56,7 +56,7 @@ final class SubjectConfirmationValidatorTest extends TestCase
     /** @var \SimpleSAML\SAML2\Configuration\Destination */
     private static Destination $destination;
 
-    /** @var \SimpleSAML\SAML2\xml\samlp\Response */
+    /** @var \SimpleSAML\SAML2\XML\samlp\Response */
     private static Response $response;
 
 

@@ -56,11 +56,9 @@ class AttributeValue extends AbstractSamlElement
             case "NULL":
                 return "xs:nil";
             case "object":
-                /** @var \SimpleSAML\XML\AbstractElement $this->value */
                 return sprintf(
                     '%s:%s',
                     $this->value::getNamespacePrefix(),
-                    ":",
                     AbstractElement::getClassName(get_class($this->value)),
                 );
             default:

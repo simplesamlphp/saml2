@@ -119,7 +119,8 @@ final class BindingTest extends TestCase
         $q = ['AAP' => 'Noot'];
         $request = new ServerRequest('POST', 'http://tnyholm.se');
         $request = $request->withParsedBody($q);
-        $this->expectException(UnsupportedBindingException::class, 'Unable to find the current binding.');
+        $this->expectException(UnsupportedBindingException::class);
+        $this->expectExceptionMessage('Unable to find the SAML 2 binding used for this request.');
         Binding::getCurrentBinding($request);
     }
 
