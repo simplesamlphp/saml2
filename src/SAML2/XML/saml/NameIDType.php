@@ -14,8 +14,9 @@ use SimpleSAML\XML\StringElementTrait;
  * @package simplesamlphp/saml2
  */
 
-abstract class NameIDType extends AbstractBaseIDType
+abstract class NameIDType extends AbstractSamlElement implements IdentifierInterface
 {
+    use IDNameQualifiersTrait;
     use StringElementTrait;
 
 
@@ -30,15 +31,15 @@ abstract class NameIDType extends AbstractBaseIDType
      */
     protected function __construct(
         string $value,
-        ?string $nameQualifier = null,
-        ?string $spNameQualifier = null,
+        protected ?string $nameQualifier = null,
+        protected ?string $spNameQualifier = null,
         protected ?string $format = null,
         protected ?string $spProvidedID = null,
     ) {
+        Assert::nullOrNotWhitespaceOnly($nameQualifier);
+        Assert::nullOrNotWhitespaceOnly($spNameQualifier);
         Assert::nullOrValidURI($format); // Covers the empty string
         Assert::nullOrNotWhitespaceOnly($spProvidedID);
-
-        parent::__construct($nameQualifier, $spNameQualifier);
 
         $this->setContent($value);
     }
@@ -87,7 +88,15 @@ abstract class NameIDType extends AbstractBaseIDType
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $e = parent::toXML($parent);
+        $e = $this->instantiateParentElement($parent);
+
+        if ($this->getNameQualifier() !== null) {
+            $e->setAttribute('NameQualifier', $this->getNameQualifier());
+        }
+
+        if ($this->getSPNameQualifier() !== null) {
+            $e->setAttribute('SPNameQualifier', $this->getSPNameQualifier());
+        }
 
         if ($this->getFormat() !== null) {
             $e->setAttribute('Format', $this->getFormat());
