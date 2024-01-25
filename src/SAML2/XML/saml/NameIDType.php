@@ -13,8 +13,9 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
+use Serializable;
 
-abstract class NameIDType
+abstract class NameIDType implements Serializable
 {
     use IDNameQualifiersTrait;
 
@@ -194,6 +195,62 @@ abstract class NameIDType
         $element->appendChild($value);
 
         return $element;
+    }
+
+
+    /**
+     * Serialize this NameID.
+     *
+     * @return string The NameID serialized.
+     */
+    public function serialize() : string
+    {
+        return serialize([
+            'NameQualifier' => $this->NameQualifier,
+            'SPNameQualifier' => $this->SPNameQualifier,
+            'nodeName' => $this->nodeName,
+            'Format' => $this->Format,
+            'SPProvidedID' => $this->SPProvidedID,
+            'value' => $this->value
+        ]);
+    }
+
+
+    /**
+     * Un-serialize this NameID.
+     *
+     * @param string $serialized The serialized NameID.
+     * @return void
+     *
+     * Type hint not possible due to upstream method signature
+     */
+    public function unserialize($serialized) : void
+    {
+        $unserialized = unserialize($serialized);
+        foreach ($unserialized as $k => $v) {
+            $this->$k = $v;
+        }
+    }
+
+
+    public function __serialize(): array
+    {
+        return [
+            'NameQualifier' => $this->getNameQualifier(),
+            'SPNameQualifier' => $this->getSPNameQualifier(),
+            'nodeName' => $this->nodeName,
+            'Format' => $this->Format,
+            'SPProvidedID' => $this->SPProvidedID,
+            'value' => $this->value
+        ];
+    }
+
+
+    public function __unserialize($serialized): void
+    {
+        foreach ($serialized as $k => $v) {
+            $this->$k = $v;
+        }
     }
 
 

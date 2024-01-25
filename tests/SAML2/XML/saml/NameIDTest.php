@@ -77,4 +77,23 @@ XML
 
         $this->assertXmlStringEqualsXmlString($output, $nameId->__toString());
     }
+
+
+
+    /**
+     * Serialize a NameID and unserialize that again.
+     * @return void
+     */
+    public function testSerialize() : void
+    {
+        $nid1 = new NameID();
+        $nid1->setValue('aap:noot:mies');
+        $ser = $nid1->serialize();
+
+        $nid2 = new NameID();
+        $nid2->setValue('Wim');
+        $nid2->unserialize($ser);
+
+        $this->assertEquals($nid1, $nid2);
+    }
 }
