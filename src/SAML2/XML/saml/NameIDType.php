@@ -11,9 +11,14 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
+use SAML2\Constants;
+use SAML2\DOMDocumentFactory;
 
-abstract class NameIDType extends BaseIDType
+abstract class NameIDType
 {
+    use IDNameQualifiersTrait;
+
+
     /**
      * A URI reference representing the classification of string-based identifier information. See Section 8.3 for the
      * SAML-defined URI references that MAY be used as the value of the Format attribute and their associated
@@ -59,10 +64,16 @@ abstract class NameIDType extends BaseIDType
      */
     public function __construct(DOMElement $xml = null)
     {
-        parent::__construct($xml);
-
         if ($xml === null) {
             return;
+        }
+
+        if ($xml->hasAttribute('NameQualifier')) {
+            $this->NameQualifier = $xml->getAttribute('NameQualifier');
+        }
+
+        if ($xml->hasAttribute('SPNameQualifier')) {
+            $this->SPNameQualifier = $xml->getAttribute('SPNameQualifier');
         }
 
         if ($xml->hasAttribute('Format')) {
@@ -154,7 +165,22 @@ abstract class NameIDType extends BaseIDType
      */
     public function toXML(DOMElement $parent = null) : DOMElement
     {
-        $element = parent::toXML($parent);
+        if ($parent === null) {
+            $parent = DOMDocumentFactory::create();
+            $doc = $parent;
+        } else {
+            $doc = $parent->ownerDocument;
+        }
+        $element = $doc->createElementNS(Constants::NS_SAML, $this->nodeName);
+        $parent->appendChild($element);
+
+        if ($this->NameQualifier !== null) {
+            $element->setAttribute('NameQualifier', $this->getNameQualifier());
+        }
+
+        if ($this->SPNameQualifier !== null) {
+            $element->setAttribute('SPNameQualifier', $this->getSPNameQualifier());
+        }
 
         if ($this->Format !== null) {
             $element->setAttribute('Format', $this->Format);
@@ -168,5 +194,20 @@ abstract class NameIDType extends BaseIDType
         $element->appendChild($value);
 
         return $element;
+    }
+
+
+    /**
+     * Get a string representation of this BaseIDType object.
+     *
+     * @return string The resulting XML, as a string.
+     */
+    public function __toString()
+    {
+        $doc = DOMDocumentFactory::create();
+        $root = $doc->createElementNS(Constants::NS_SAML, 'root');
+        $ele = $this->toXML($root);
+
+        return $doc->saveXML($ele);
     }
 }
