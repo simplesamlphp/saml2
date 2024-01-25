@@ -4,10 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
  * Class representing the saml:Issuer element.
