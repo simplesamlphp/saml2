@@ -81,6 +81,29 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
 
 
     /**
+     * Convert XML into an NameID
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return static
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     */
+    public static function fromXML(DOMElement $xml): static
+    {
+        Assert::same($xml->localName, static::getLocalName(), InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, static::NS, InvalidDOMElementException::class);
+
+        $NameQualifier = self::getOptionalAttribute($xml, 'NameQualifier', null);
+        $SPNameQualifier = self::getOptionalAttribute($xml, 'SPNameQualifier', null);
+        $Format = self::getOptionalAttribute($xml, 'Format', null);
+        $SPProvidedID = self::getOptionalAttribute($xml, 'SPProvidedID', null);
+
+        return new static($xml->textContent, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
+    }
+
+
+    /**
      * Convert this NameIDType to XML.
      *
      * @param \DOMElement $parent The element we are converting to XML.

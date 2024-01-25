@@ -47,29 +47,6 @@ final class NameID extends NameIDType implements EncryptableElementInterface
     }
 
 
-    /**
-     * Convert XML into an NameID
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
-     *   if the qualified name of the supplied element is wrong
-     */
-    public static function fromXML(DOMElement $xml): static
-    {
-        Assert::same($xml->localName, 'NameID', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, NameID::NS, InvalidDOMElementException::class);
-
-        $NameQualifier = self::getOptionalAttribute($xml, 'NameQualifier', null);
-        $SPNameQualifier = self::getOptionalAttribute($xml, 'SPNameQualifier', null);
-        $Format = self::getOptionalAttribute($xml, 'Format', null);
-        $SPProvidedID = self::getOptionalAttribute($xml, 'SPProvidedID', null);
-
-        return new static($xml->textContent, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
-    }
-
-
     public function getBlacklistedAlgorithms(): ?array
     {
         $container = ContainerSingleton::getInstance();
