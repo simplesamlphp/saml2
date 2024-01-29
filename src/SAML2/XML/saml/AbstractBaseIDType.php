@@ -14,6 +14,9 @@ use SimpleSAML\Assert\Assert;
  */
 abstract class AbstractBaseIDType extends AbstractSamlElement implements BaseIdentifierInterface
 {
+    use IDNameQualifiersTrait;
+
+
     /**
      * Initialize a saml:BaseIDAbstractType from scratch
      *
@@ -30,28 +33,6 @@ abstract class AbstractBaseIDType extends AbstractSamlElement implements BaseIde
     ) {
         Assert::nullOrNotWhitespaceOnly($nameQualifier);
         Assert::nullOrNotWhitespaceOnly($spNameQualifier);
-    }
-
-
-    /**
-     * Collect the value of the NameQualifier-property
-     *
-     * @return string|null
-     */
-    public function getNameQualifier(): ?string
-    {
-        return $this->nameQualifier;
-    }
-
-
-    /**
-     * Collect the value of the SPNameQualifier-property
-     *
-     * @return string|null
-     */
-    public function getSPNameQualifier(): ?string
-    {
-        return $this->spNameQualifier;
     }
 
 
