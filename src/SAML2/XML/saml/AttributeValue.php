@@ -27,7 +27,7 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Create an AttributeValue.
      *
-     * @param mixed $value The value of this element. Can be one of:
+     * @param string|int|null|\SimpleSAML\XML\AbstractElement $value The value of this element. Can be one of:
      *  - string
      *  - int
      *  - null
@@ -35,7 +35,7 @@ class AttributeValue extends AbstractSamlElement
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied value is neither a string or a DOMElement
      */
-    public function __construct(
+    final public function __construct(
         protected string|int|null|AbstractElement $value,
     ) {
     }
@@ -70,7 +70,7 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Get this attribute value.
      *
-     * @return string|int|\SimpleSAML\XML\AbstractElement[]|null
+     * @return string|int|\SimpleSAML\XML\AbstractElement|null
      */
     public function getValue()
     {

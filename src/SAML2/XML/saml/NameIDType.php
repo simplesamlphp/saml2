@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\StringElementTrait;
 
 /**
@@ -31,15 +32,15 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
      */
     protected function __construct(
         string $value,
-        protected ?string $nameQualifier = null,
-        protected ?string $spNameQualifier = null,
-        protected ?string $format = null,
-        protected ?string $spProvidedID = null,
+        protected ?string $NameQualifier = null,
+        protected ?string $SPNameQualifier = null,
+        protected ?string $Format = null,
+        protected ?string $SPProvidedID = null,
     ) {
-        Assert::nullOrNotWhitespaceOnly($nameQualifier);
-        Assert::nullOrNotWhitespaceOnly($spNameQualifier);
-        Assert::nullOrValidURI($format); // Covers the empty string
-        Assert::nullOrNotWhitespaceOnly($spProvidedID);
+        Assert::nullOrNotWhitespaceOnly($NameQualifier);
+        Assert::nullOrNotWhitespaceOnly($SPNameQualifier);
+        Assert::nullOrValidURI($Format); // Covers the empty string
+        Assert::nullOrNotWhitespaceOnly($SPProvidedID);
 
         $this->setContent($value);
     }
@@ -52,7 +53,7 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
      */
     public function getFormat(): ?string
     {
-        return $this->format;
+        return $this->Format;
     }
 
 
@@ -63,7 +64,7 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
      */
     public function getSPProvidedID(): ?string
     {
-        return $this->spProvidedID;
+        return $this->SPProvidedID;
     }
 
 

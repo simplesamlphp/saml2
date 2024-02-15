@@ -205,7 +205,6 @@ final class LogoutRequest extends AbstractRequest
      */
     protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
-        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = parent::toUnsignedXML($parent);
 
         if ($this->getNotOnOrAfter() !== null) {
@@ -216,7 +215,7 @@ final class LogoutRequest extends AbstractRequest
             $e->setAttribute('Reason', $this->getReason());
         }
 
-        /** @psalm-var \SimpleSAML\XML\SerializableElementInterface $identifier */
+        /** @var \SimpleSAML\XML\SerializableElementInterface $identifier */
         $identifier = $this->getIdentifier();
         $identifier->toXML($e);
 

@@ -130,7 +130,6 @@ final class Logo extends AbstractMduiElement implements ArrayizableElementInterf
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
         $e->textContent = $this->getContent();
         $e->setAttribute('height', strval($this->getHeight()));

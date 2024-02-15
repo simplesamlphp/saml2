@@ -36,7 +36,7 @@ final class PDPDescriptor extends AbstractRoleDescriptorType
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors
      * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts
-     * @param list<\SimpleSAML\XML\Attribute>
+     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
         protected array $authzService,

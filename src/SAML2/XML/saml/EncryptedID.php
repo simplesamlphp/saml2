@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use InvalidArgumentException;
 use SimpleSAML\SAML2\XML\EncryptedElementTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\ElementInterface;
+use SimpleSAML\XML\SerializableElementInterface;
 use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementInterface;
 
@@ -26,10 +26,10 @@ class EncryptedID extends AbstractSamlElement implements EncryptedElementInterfa
     /**
      * @inheritDoc
      *
-     * @return \SimpleSAML\XML\ElementInterface
+     * @return \SimpleSAML\XML\SerializableElementInterface
      * @throws \InvalidArgumentException
      */
-    public function decrypt(EncryptionAlgorithmInterface $decryptor): ElementInterface
+    public function decrypt(EncryptionAlgorithmInterface $decryptor): SerializableElementInterface
     {
         $xml = DOMDocumentFactory::fromString($this->decryptData($decryptor))->documentElement;
 

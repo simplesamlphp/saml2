@@ -50,8 +50,6 @@ final class Issuer extends NameIDType
          *
          * From saml-core-2.0-os 8.3.6, when the entity Format is used: "The NameQualifier, SPNameQualifier, and
          * SPProvidedID attributes MUST be omitted."
-         *
-         * @var string
          */
         if ($Format === C::NAMEID_ENTITY || $Format === null) {
             Assert::allNull(

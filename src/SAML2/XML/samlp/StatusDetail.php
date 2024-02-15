@@ -81,11 +81,9 @@ final class StatusDetail extends AbstractSamlpElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
 
         foreach ($this->getElements() as $detail) {
-            /** @psalm-var \SimpleSAML\XML\SerializableElementInterface $detail */
             $detail->toXML($e);
         }
 

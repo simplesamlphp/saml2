@@ -230,7 +230,7 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
      *
      * @param (\SimpleSAML\SAML2\XML\md\AbstractLocalizedURL|
      *         \SimpleSAML\SAML2\XML\md\AbstractLocalizedName|
-     *         \SimpleSAML\SAML2\XML\mdui\Keywords)[] $items
+     *         \SimpleSAML\SAML2\XML\mdui\Keywords)[] $elements
      * @return void
      */
     private function testLocalizedElements(array $elements)

@@ -51,7 +51,7 @@ class AuthnRequest extends AbstractRequest
      * @param \SimpleSAML\SAML2\XML\samlp\Scoping|null $scoping
      * @throws \Exception
      */
-    public function __construct(
+    final public function __construct(
         DateTimeImmutable $issueInstant,
         protected ?RequestedAuthnContext $requestedAuthnContext = null,
         protected ?Subject $subject = null,

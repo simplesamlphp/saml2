@@ -18,7 +18,7 @@ trait IDNameQualifiersTrait
      */
     public function getNameQualifier(): ?string
     {
-        return $this->nameQualifier;
+        return $this->NameQualifier;
     }
 
 
@@ -29,6 +29,6 @@ trait IDNameQualifiersTrait
      */
     public function getSPNameQualifier(): ?string
     {
-        return $this->spNameQualifier;
+        return $this->SPNameQualifier;
     }
 }

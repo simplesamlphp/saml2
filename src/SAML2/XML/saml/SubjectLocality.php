@@ -26,7 +26,7 @@ final class SubjectLocality extends AbstractSamlElement
         protected ?string $dnsName = null,
     ) {
         Assert::nullOrIp($address, 'Invalid IP address');
-        Assert::nullOrnotWhitespaceOnly($dnsName, 'Invalid DNS name');
+        Assert::nullOrNotWhitespaceOnly($dnsName, 'Invalid DNS name');
     }
 
 

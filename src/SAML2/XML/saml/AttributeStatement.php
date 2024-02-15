@@ -22,7 +22,7 @@ class AttributeStatement extends AbstractStatementType
      * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes
      * @param \SimpleSAML\SAML2\XML\saml\EncryptedAttribute[] $encryptedAttributes
      */
-    public function __construct(
+    final public function __construct(
         protected array $attributes = [],
         protected array $encryptedAttributes = [],
     ) {

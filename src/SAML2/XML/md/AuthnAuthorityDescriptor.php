@@ -36,7 +36,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
      * @param array $keyDescriptor
      * @param array $contact
-     * @param list<\SimpleSAML\XML\Attribute>
+     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
         protected array $authnQueryService,

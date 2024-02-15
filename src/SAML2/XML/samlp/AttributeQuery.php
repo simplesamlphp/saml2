@@ -52,7 +52,7 @@ class AttributeQuery extends AbstractSubjectQuery
      * @param string|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      */
-    public function __construct(
+    final public function __construct(
         Subject $subject,
         DateTimeImmutable $issueInstant,
         protected array $attributes = [],
