@@ -86,7 +86,7 @@ final class CustomStatement extends AbstractStatement
      * Convert this Statement to XML.
      *
      * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this BaseID.
+     * @return \DOMElement The XML element after adding the data corresponding to this Statement.
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

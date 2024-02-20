@@ -123,7 +123,7 @@ final class UIInfoTest extends TestCase
             [new IPHint("192.168.6.0/24"), new IPHint("fd00:0123:aa:1001::/64")],
         );
 
-        // keywords appears twice, direcyly under UIinfo and as child of DiscoHints
+        // keywords appears twice, directly under UIinfo and as child of DiscoHints
         $discohints->addChild(new Chunk($keywords->toXML()));
 
         $uiinfo = new UIInfo(

@@ -141,7 +141,7 @@ parameters:
 			path: src/SAML2/XML/md/AbstractRoleDescriptor.php
 
 		-
-			message: "#^Call to an undefined static method static\\(SimpleSAML\\\\SAML2\\\\XML\\\\md\\\\AbstractSignedMdElement\\)\\:\\:getXsiTypeNamespaceURI\\(\\)\\.$#"
+			message: "#^Call to an undefined static method SimpleSAML\\\\SAML2\\\\XML\\\\md\\\\AbstractSignedMdElement\\:\\:getXsiTypeNamespaceURI\\(\\)\\.$#"
 			count: 1
 			path: src/SAML2/XML/md/AbstractSignedMdElement.php
 

@@ -28,36 +28,15 @@ use function dirname;
 final class AuthnContextTest extends TestCase
 {
     /** @var \DOMDocument */
-    private static DOMDocument $classRef;
-
-    /** @var \DOMDocument */
-    private static DOMDocument $declRef;
-
-    /** @var \DOMDocument */
     private static DOMDocument $decl;
-
-    /** @var \DOMDocument */
-    private static DOMDocument $authority;
 
 
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::$classRef = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextClassRef.xml',
-        );
-
-        self::$declRef = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextDeclRef.xml',
-        );
-
         self::$decl = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_AuthnContextDecl.xml',
-        );
-
-        self::$authority = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_AuthenticatingAuthority.xml',
         );
     }
 
