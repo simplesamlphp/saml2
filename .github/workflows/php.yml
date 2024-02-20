@@ -52,7 +52,7 @@ jobs:
         with:
           # Should be the higest supported version, so we can use the newest tools
           php-version: '8.3'
-          tools: composer, composer-require-checker, composer-unused, phpcs
+          tools: composer, composer-require-checker, composer-unused, phpcs, phpstan
           extensions: ctype, date, dom, filter, hash, mbstring, openssl, pcre, soap, spl, xml
           coverage: none
 
@@ -91,7 +91,7 @@ jobs:
         run: |
           phpstan analyze -c phpstan.neon
 
-      - name: Psalm (testsuite)
+      - name: PHPStan (testsuite)
         run: |
           phpstan analyze -c phpstan-dev.neon
 
