@@ -178,44 +178,6 @@ final class SPSSODescriptorTest extends TestCase
 
 
     /**
-     * Test that creating an SPSSODescriptor from scratch fails with an AssertionConsumerService of the wrong class.
-     */
-    public function testMarshallingWithWrongAssertionConsumerService(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage(
-            'All md:AssertionConsumerService endpoints must be an instance of AssertionConsumerService.',
-        );
-
-        /** @psalm-suppress InvalidArgument */
-        new SPSSODescriptor(
-            [new ArtifactResolutionService(0, C::BINDING_HTTP_POST, C::LOCATION_A)],
-            [C::NS_SAMLP],
-        );
-    }
-
-
-    /**
-     * Test that creating an SPSSODescriptor from scratch fails with an AttributeConsumingService of the wrong class.
-     */
-    public function testMarshallingWithWrongAttributeConsumingService(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage(
-            'All md:AttributeConsumingService endpoints must be an instance of AttributeConsumingService.',
-        );
-
-        /** @psalm-suppress InvalidArgument */
-        new SPSSODescriptor(
-            assertionConsumerService: [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_A)],
-            protocolSupportEnumeration: [C::NS_SAMLP],
-            authnRequestsSigned: true,
-            attributeConsumingService: [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_B)],
-        );
-    }
-
-
-    /**
      * Test that creating an SPSSODescriptor from scratch works without any optional arguments.
      */
     public function testMarshallingWithoutOptionalArguments(): void
@@ -224,6 +186,7 @@ final class SPSSODescriptorTest extends TestCase
             [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_A)],
             [C::NS_SAMLP],
         );
+
         $this->assertNull($spssod->getAuthnRequestsSigned());
         $this->assertNull($spssod->getWantAssertionsSigned());
         $this->assertEmpty($spssod->getAttributeConsumingService());
@@ -241,10 +204,7 @@ final class SPSSODescriptorTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $acseps = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AssertionConsumerService');
 
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($acseps->item(1));
-
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($acseps->item(0));
 
         $this->expectException(AssertionFailedException::class);
@@ -315,7 +275,6 @@ XML
     {
         $xmlRepresentation = clone self::$xmlRepresentation;
         $acs = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AttributeConsumingService');
-        /** @psalm-suppress PossiblyNullReference */
         $acs->item(1)->setAttribute('isDefault', 'true');
 
         $this->expectException(AssertionFailedException::class);

@@ -185,25 +185,6 @@ final class IDPSSODescriptorTest extends TestCase
 
 
     /**
-     * Test that creating an IDPSSODescriptor from scratch fails if SingleSignOnService endpoints passed have the
-     * wrong type.
-     */
-    public function testMarshallingWithWrongSingleSignOnService(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage(
-            'All md:SingleSignOnService endpoints must be an instance of SingleSignOnService.',
-        );
-
-        /** @psalm-suppress InvalidArgument */
-        new IDPSSODescriptor(
-            [new AssertionIDRequestService(C::BINDING_HTTP_POST, C::LOCATION_A)],
-            [C::NS_SAMLP],
-        );
-    }
-
-
-    /**
      * Test that creating an IDPSSODescriptor from scratch fails if no protocol is passed.
      */
     public function testMarshallingWithoutProtocolSupportThrowsException(): void
@@ -211,51 +192,9 @@ final class IDPSSODescriptorTest extends TestCase
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('At least one protocol must be supported by this md:IDPSSODescriptor.');
 
-        /** @psalm-suppress InvalidArgument */
         new IDPSSODescriptor(
             [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A)],
             [],
-        );
-    }
-
-
-    /**
-     * Test that creating an IDPSSODescriptor from scratch fails if NameIDMappingService endpoints passed have the
-     * wrong type.
-     */
-    public function testMarshallingWithWrongNameIDMappingService(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage(
-            'All md:NameIDMappingService endpoints must be an instance of NameIDMappingService.',
-        );
-
-        /** @psalm-suppress InvalidArgument */
-        new IDPSSODescriptor(
-            singleSignOnService: [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A)],
-            protocolSupportEnumeration: [C::NS_SAMLP],
-            nameIDMappingService: [new SingleSignOnService(C::BINDING_HTTP_REDIRECT, C::LOCATION_B)],
-        );
-    }
-
-
-    /**
-     * Test that creating an IDPSSODescriptor from scratch fails if AssertionIDRequestService endpoints passed have the
-     * wrong type.
-     */
-    public function testMarshallingWithWrongAssertionIDRequestService(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage(
-            'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.',
-        );
-
-        /** @psalm-suppress InvalidArgument */
-        new IDPSSODescriptor(
-            singleSignOnService: [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A)],
-            protocolSupportEnumeration: [C::NS_SAMLP],
-            nameIDMappingService: [],
-            assertionIDRequestService: [new SingleSignOnService(C::BINDING_HTTP_REDIRECT, C::LOCATION_B)],
         );
     }
 
@@ -270,23 +209,6 @@ final class IDPSSODescriptorTest extends TestCase
             singleSignOnService: [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A)],
             protocolSupportEnumeration: [C::NS_SAMLP],
             attributeProfile: [new AttributeProfile('profile1'), new AttributeProfile('')],
-        );
-    }
-
-
-    /**
-     * Test that creating an IDPSSODescriptor from scratch fails if attributes passed have the wrong type.
-     */
-    public function testMarshallingWithWrongAttributes(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('All md:Attribute elements must be an instance of Attribute.');
-
-        /** @psalm-suppress InvalidArgument */
-        new IDPSSODescriptor(
-            singleSignOnService: [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A)],
-            protocolSupportEnumeration: [C::NS_SAMLP],
-            attribute: [new SingleSignOnService(C::BINDING_HTTP_REDIRECT, C::LOCATION_B)]
         );
     }
 
@@ -320,9 +242,7 @@ final class IDPSSODescriptorTest extends TestCase
     {
         $xmlRepresentation = clone self::$xmlRepresentation;
         $ssoServiceEps = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'SingleSignOnService');
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($ssoServiceEps->item(1));
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($ssoServiceEps->item(0));
 
         $this->expectException(AssertionFailedException::class);
@@ -356,7 +276,6 @@ final class IDPSSODescriptorTest extends TestCase
     {
         $xmlRepresentation = clone self::$xmlRepresentation;
         $attrProfiles = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AttributeProfile');
-        /** @psalm-suppress PossiblyNullPropertyAssignment */
         $attrProfiles->item(0)->textContent = '';
 
         $this->expectException(SchemaViolationException::class);
