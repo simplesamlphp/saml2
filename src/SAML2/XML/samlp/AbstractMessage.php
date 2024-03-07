@@ -39,13 +39,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
 
     /**
-     * The RelayState associated with this message.
-     *
-     * @var string|null
-     */
-    protected ?string $relayState = null;
-
-    /**
      * The \DOMDocument we are currently building.
      *
      * This variable is used while generating XML from this message. It holds the
@@ -77,7 +70,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      * @param string|null $destination
      * @param string|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
-     * @param string|null $relayState
      *
      * @throws \Exception
      */
@@ -89,7 +81,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
         protected ?string $destination = null,
         protected ?string $consent = null,
         ?Extensions $extensions = null,
-        ?string $relayState = null,
     ) {
         Assert::nullOrSame($issueInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::nullOrValidNCName($id); // Covers the empty string
@@ -97,7 +88,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
         Assert::nullOrValidURI($consent); // Covers the empty string
 
         $this->setExtensions($extensions);
-        $this->setRelayState($relayState);
     }
 
 
@@ -185,30 +175,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     public function isMessageConstructedWithSignature(): bool
     {
         return $this->messageContainedSignatureUponConstruction;
-    }
-
-
-    /**
-     * Retrieve the RelayState associated with this message.
-     *
-     * @return string|null The RelayState, or NULL if no RelayState is given
-     */
-    public function getRelayState(): ?string
-    {
-        return $this->relayState;
-    }
-
-
-    /**
-     * Set the RelayState associated with this message.
-     *
-     * @param string|null $relayState The new RelayState
-     */
-    public function setRelayState(string $relayState = null): void
-    {
-        Assert::nullOrNotWhitespaceOnly($relayState);
-
-        $this->relayState = $relayState;
     }
 
 

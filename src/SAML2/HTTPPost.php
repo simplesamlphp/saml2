@@ -41,7 +41,7 @@ class HTTPPost extends Binding
         } else {
             $destination = $this->destination;
         }
-        $relayState = $message->getRelayState();
+        $relayState = $this->getRelayState();
 
         $msgStr = $message->toXML();
 
@@ -108,7 +108,7 @@ class HTTPPost extends Binding
         }
 
         if (array_key_exists('RelayState', $query)) {
-            $msg->setRelayState($query['RelayState']);
+            $this->setRelayState($query['RelayState']);
         }
 
         return $msg;

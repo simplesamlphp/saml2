@@ -76,7 +76,7 @@ final class HTTPPostTest extends TestCase
         $this->assertInstanceOf(Response::class, $response);
         $issuer = $response->getIssuer();
         $this->assertEquals('https://engine.test.surfconext.nl/authentication/idp/metadata', $issuer->getContent());
-        $relay = $response->getRelayState();
+        $relay = $hp->getRelayState();
         $this->assertEquals('relaystate001', $relay);
     }
 
@@ -159,7 +159,6 @@ final class HTTPPostTest extends TestCase
             issuer: $issuer,
             destination: 'http://example.org/login?success=yes',
         );
-        $response->setRelayState('http://example.org');
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
             C::SIG_RSA_SHA256,
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),
@@ -167,6 +166,7 @@ final class HTTPPostTest extends TestCase
         $response->sign($signer);
 
         $hr = new HTTPPost();
+        $hr->setRelayState('http://example.org');
         $hr->send($response);
     }
 }
