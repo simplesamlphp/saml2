@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\Assertion;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\SAML2\Assertion\Decrypter;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
@@ -23,10 +24,9 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use stdClass;
 
 /**
- * @covers \SimpleSAML\SAML2\Assertion\Processor
  * @package simplesamlphp/saml2
- * @runTestsInSeparateProcesses
  */
+#[CoversClass(Processor::class)]
 final class ProcessorTest extends MockeryTestCase
 {
     /**
@@ -63,9 +63,8 @@ final class ProcessorTest extends MockeryTestCase
 
 
     /**
-     * @test
      */
-    public function processorCorrectlyEncryptsAssertions(): void
+    public function testProcessorCorrectlyEncryptsAssertions(): void
     {
         $encryptedAssertion = EncryptedAssertion::fromXML(
             DOMDocumentFactory::fromFile(
@@ -101,9 +100,8 @@ final class ProcessorTest extends MockeryTestCase
 
 
     /**
-     * @test
      */
-    public function unsuportedAssertionsAreRejected(): void
+    public function testUnsuportedAssertionsAreRejected(): void
     {
         $this->expectException(InvalidAssertionException::class);
         $this->expectExceptionMessage('The assertion must be of type: EncryptedAssertion or Assertion');

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Utilities;
 
 use ArrayIterator;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\RuntimeException;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
@@ -12,9 +13,9 @@ use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use function ucfirst;
 
 /**
- * @covers \SimpleSAML\SAML2\Utilities\ArrayCollection
  * @package simplesamlphp/saml2
  */
+#[CoversClass(ArrayCollection::class)]
 final class ArrayCollectionTest extends TestCase
 {
     /**

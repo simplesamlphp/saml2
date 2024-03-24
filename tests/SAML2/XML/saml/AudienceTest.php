@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Test\SAML2\XML\saml;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\saml\AbstractConditionType;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -16,12 +20,12 @@ use function strval;
 /**
  * Class \SimpleSAML\SAML2\XML\saml\AudienceTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\Audience
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractConditionType
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
- *
  * @package simplesamlphp/saml2
  */
+#[Group('saml')]
+#[CoversClass(Audience::class)]
+#[CoversClass(AbstractConditionType::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class AudienceTest extends TestCase
 {
     use SchemaValidationTestTrait;

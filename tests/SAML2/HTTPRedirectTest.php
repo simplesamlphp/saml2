@@ -6,6 +6,8 @@ namespace SimpleSAML\Test\SAML2;
 
 use Exception;
 use Nyholm\Psr7\ServerRequest;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
@@ -21,9 +23,9 @@ use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**
- * @covers \SimpleSAML\SAML2\HTTPRedirect
  * @package simplesamlphp\saml2
  */
+#[CoversClass(HTTPRedirect::class)]
 final class HTTPRedirectTest extends TestCase
 {
     /** @var \Psr\Clock\ClockInterface */
@@ -296,8 +298,8 @@ final class HTTPRedirectTest extends TestCase
 
     /**
      * Construct an authnrequest and send it.
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testSendAuthnrequest(): void
     {
         $request = new AuthnRequest(self::$clock->now());
@@ -310,8 +312,8 @@ final class HTTPRedirectTest extends TestCase
     /**
      * Construct an authnresponse and send it.
      * Also test setting a relaystate and destination for the response.
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testSendAuthnResponse(): void
     {
         $status = new Status(new StatusCode());
@@ -331,8 +333,8 @@ final class HTTPRedirectTest extends TestCase
 
     /**
      * Test setting destination in the HR binding.
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testSendAuthnResponseBespokeDestination(): void
     {
         $status = new Status(new StatusCode());

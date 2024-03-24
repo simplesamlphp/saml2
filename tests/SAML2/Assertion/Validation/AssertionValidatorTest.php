@@ -2,9 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\SAML2\XML\saml;
+namespace SimpleSAML\Test\SAML2\Assertion\Validation;
 
 use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
@@ -12,6 +15,7 @@ use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
 use SimpleSAML\SAML2\Assertion\Processor;
 use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
+use SimpleSAML\SAML2\Assertion\Validation\AssertionValidator;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
@@ -27,9 +31,9 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Tests for the Assertion validators
  *
- * @covers \SimpleSAML\SAML2\Assertion\Validation\AssertionValidator
  * @package simplesamlphp/saml2
  */
+#[CoversClass(AssertionValidator::class)]
 final class AssertionValidatorTest extends TestCase
 {
     /** @var \Psr\Clock\ClockInterface */
@@ -120,10 +124,9 @@ XML
 
     /**
      * Verifies that the assertion validator works
-     *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
+    #[PreserveGlobalState(false)]
+    #[RunInSeparateProcess]
     public function testBasicValidation(): void
     {
         $assertion = Assertion::fromXML(self::$document->firstChild);
@@ -135,10 +138,9 @@ XML
     /**
 
      * Verifies that violations are caught
-     *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
+    #[PreserveGlobalState(false)]
+    #[RunInSeparateProcess]
     public function testAssertionNonValidation(): void
     {
         $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;

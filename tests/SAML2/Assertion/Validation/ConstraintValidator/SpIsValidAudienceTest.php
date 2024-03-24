@@ -7,6 +7,8 @@ namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
@@ -26,9 +28,9 @@ use SimpleSAML\Test\SAML2\Constants as C;
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
  * tests.
  *
- * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience
  * @package simplesamlphp/saml2
  */
+#[CoversClass(SpIsValidAudience::class)]
 final class SpIsValidAudienceTest extends MockeryTestCase
 {
     /** @var \SimpleSAML\SAML2\XML\saml\AuthnStatement */
@@ -85,10 +87,9 @@ final class SpIsValidAudienceTest extends MockeryTestCase
 
 
     /**
-     * @group assertion-validation
-     * @test
      */
-    public function whenNoValidAudiencesAreGivenTheAssertionIsValid(): void
+    #[Group('assertion-validation')]
+    public function testWhenNoValidAudiencesAreGivenTheAssertionIsValid(): void
     {
         // Create an assertion
         $assertion = new Assertion(
@@ -110,10 +111,9 @@ final class SpIsValidAudienceTest extends MockeryTestCase
 
 
     /**
-     * @group assertion-validation
-     * @test
      */
-    public function ifTheSpEntityIdIsNotInTheValidAudiencesTheAssertionIsInvalid(): void
+    #[Group('assertion-validation')]
+    public function testIfTheSpEntityIdIsNotInTheValidAudiencesTheAssertionIsInvalid(): void
     {
         // Create an assertion
         $assertion = new Assertion(
@@ -137,10 +137,9 @@ final class SpIsValidAudienceTest extends MockeryTestCase
 
 
     /**
-     * @group assertion-validation
-     * @test
      */
-    public function theAssertionIsValidWhenTheCurrentSpEntityIdIsAValidAudience(): void
+    #[Group('assertion-validation')]
+    public function testTheAssertionIsValidWhenTheCurrentSpEntityIdIsAValidAudience(): void
     {
         // Create an assertion
         $assertion = new Assertion(

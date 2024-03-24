@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
 use DateInterval;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
@@ -15,10 +17,9 @@ use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 
 /**
- * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore
- *
  * @package simplesamlphp/saml2
  */
+#[CoversClass(SubjectConfirmationNotBefore::class)]
 final class SubjectConfirmationNotBeforeTest extends TestCase
 {
     /** @var \Psr\Clock\ClockInterface */
@@ -34,10 +35,9 @@ final class SubjectConfirmationNotBeforeTest extends TestCase
 
 
     /**
-     * @group assertion-validation
-     * @test
      */
-    public function timestampInTheFutureBeyondGraceperiodIsNotValid(): void
+    #[Group('assertion-validation')]
+    public function testTimestampInTheFutureBeyondGraceperiodIsNotValid(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData(self::$clock->now()->add(new DateInterval('PT61S')));
         $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
@@ -53,10 +53,9 @@ final class SubjectConfirmationNotBeforeTest extends TestCase
 
 
     /**
-     * @group assertion-validation
-     * @test
      */
-    public function timeWithinGraceperiodIsValid(): void
+    #[Group('assertion-validation')]
+    public function testTimeWithinGraceperiodIsValid(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData(
             null,
@@ -74,10 +73,9 @@ final class SubjectConfirmationNotBeforeTest extends TestCase
 
 
     /**
-     * @group assertion-validation
-     * @test
      */
-    public function currentTimeIsValid(): void
+    #[Group('assertion-validation')]
+    public function testCurrentTimeIsValid(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData(self::$clock->now());
         $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);

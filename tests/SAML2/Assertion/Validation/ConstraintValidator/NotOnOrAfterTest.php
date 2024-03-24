@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
 use DateInterval;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\NotOnOrAfter;
@@ -19,10 +21,9 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\Test\SAML2\Constants as C;
 
 /**
- * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\NotOnOrAfter
- *
  * @package simplesamlphp/saml2
  */
+#[CoversClass(NotOnOrAfter::class)]
 final class NotOnOrAfterTest extends TestCase
 {
     /** @var \Psr\Clock\ClockInterface */
@@ -57,10 +58,9 @@ final class NotOnOrAfterTest extends TestCase
 
 
     /**
-     * @group assertion-validation
-     * @test
      */
-    public function timestampInThePastBeforeGraceperiodIsNotValid(): void
+    #[Group('assertion-validation')]
+    public function testTimestampInThePastBeforeGraceperiodIsNotValid(): void
     {
         // Create Conditions
         $conditions = new Conditions(null, self::$clock->now()->sub(new DateInterval('PT60S')));
@@ -84,10 +84,9 @@ final class NotOnOrAfterTest extends TestCase
 
 
     /**
-     * @group assertion-validation
-     * @test
      */
-    public function timeWithinGraceperiodIsValid(): void
+    #[Group('assertion-validation')]
+    public function testTimeWithinGraceperiodIsValid(): void
     {
         // Create Conditions
         $conditions = new Conditions(null, self::$clock->now()->sub(new DateInterval('PT59S')));
@@ -110,10 +109,9 @@ final class NotOnOrAfterTest extends TestCase
 
 
     /**
-     * @group assertion-validation
-     * @test
      */
-    public function currentTimeIsValid(): void
+    #[Group('assertion-validation')]
+    public function testCurrentTimeIsValid(): void
     {
         // Create Conditions
         $conditions = new Conditions(null, self::$clock->now());

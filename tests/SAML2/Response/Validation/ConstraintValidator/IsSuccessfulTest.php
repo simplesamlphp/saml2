@@ -7,6 +7,8 @@ namespace SimpleSAML\Test\SAML2\Response\Validation\ConstraintValidator;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator\IsSuccessful;
 use SimpleSAML\SAML2\Response\Validation\Result;
@@ -16,9 +18,9 @@ use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\SAML2\XML\samlp\StatusMessage;
 
 /**
- * @covers \SimpleSAML\SAML2\Response\Validation\ConstraintValidator\IsSuccessful
  * @package simplesamlphp/saml2
  */
+#[CoversClass(IsSuccessful::class)]
 final class IsSuccessfulTest extends MockeryTestCase
 {
     /** @var \Mockery\MockInterface */
@@ -34,10 +36,9 @@ final class IsSuccessfulTest extends MockeryTestCase
 
 
     /**
-     * @group response-validation
-     * @test
      */
-    public function validatingASuccessfulResponseGivesAValidValidationResult(): void
+    #[Group('response-validation')]
+    public function testValidatingASuccessfulResponseGivesAValidValidationResult(): void
     {
         $this->response->shouldReceive('isSuccess')->once()->andReturn(true);
 
@@ -51,10 +52,9 @@ final class IsSuccessfulTest extends MockeryTestCase
 
 
     /**
-     * @group response-validation
-     * @test
      */
-    public function anUnsuccessfulResponseIsNotValidAndGeneratesAProperErrorMessage(): void
+    #[Group('response-validation')]
+    public function testAnUnsuccessfulResponseIsNotValidAndGeneratesAProperErrorMessage(): void
     {
         $responseStatus = new Status(
             new StatusCode(

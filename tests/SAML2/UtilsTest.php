@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Constants as C;
@@ -18,9 +19,9 @@ use function count;
 /**
  * Class \SAML2\UtilsTest
  *
- * @covers \SimpleSAML\SAML2\Utils
  * @package simplesamlphp\saml2
  */
+#[CoversClass(Utils::class)]
 final class UtilsTest extends TestCase
 {
     /** @var \Psr\Clock\ClockInterface */

@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\SAML2\XML\samlp\StatusDetail;
@@ -21,13 +24,13 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\samlp\StatusTest
- *
- * @covers \SimpleSAML\SAML2\XML\samlp\Status
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
+ * Class \SimpleSAML\SAML2\XML\samlp\StatusTest
  *
  * @package simplesamlphp/saml2
  */
+#[Group('samlp')]
+#[CoversClass(Status::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class StatusTest extends TestCase
 {
     use SchemaValidationTestTrait;

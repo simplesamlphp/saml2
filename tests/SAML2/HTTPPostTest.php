@@ -6,6 +6,8 @@ namespace SimpleSAML\Test\SAML2;
 
 use Exception;
 use Nyholm\Psr7\ServerRequest;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\HTTPPost;
@@ -20,9 +22,9 @@ use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**
- * @covers \SimpleSAML\SAML2\HTTPPost
  * @package simplesamlphp\saml2
  */
+#[CoversClass(HTTPPost::class)]
 final class HTTPPostTest extends TestCase
 {
     /** @var \Psr\Clock\ClockInterface */
@@ -115,8 +117,8 @@ final class HTTPPostTest extends TestCase
 
     /**
      * Construct an authnrequest and send it to the destination set in the binding.
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testSendAuthnRequestWithDestinationInBinding(): void
     {
         $request = new AuthnRequest(
@@ -130,8 +132,8 @@ final class HTTPPostTest extends TestCase
 
     /**
      * Construct an authnrequest with a destination set and try to send it.
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testSendAuthnRequestWithDestination(): void
     {
         $request = new AuthnRequest(
@@ -146,8 +148,8 @@ final class HTTPPostTest extends TestCase
     /**
      * Construct an authnresponse and send it.
      * Also test setting a relaystate and destination for the response.
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testSendAuthnResponse(): void
     {
         $status = new Status(new StatusCode());

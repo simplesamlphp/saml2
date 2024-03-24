@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Certificate;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Certificate\PrivateKey;
 use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
@@ -11,9 +14,9 @@ use SimpleSAML\SAML2\Configuration\PrivateKey as ConfPrivateKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**
- * @covers \SimpleSAML\SAML2\Certificate\PrivateKeyLoader
  * @package simplesamlphp/saml2
  */
+#[CoversClass(PrivateKeyLoader::class)]
 final class PrivateKeyLoaderTest extends TestCase
 {
     /** @var \SimpleSAML\SAML2\Certificate\PrivateKeyLoader */
@@ -29,13 +32,11 @@ final class PrivateKeyLoaderTest extends TestCase
 
 
     /**
-     * @group        certificate
-     * @test
-     * @dataProvider privateKeyTestProvider
-     *
      * @param \SimpleSAML\SAML2\Configuration\PrivateKey $configuredKey
      */
-    public function loadingAConfiguredPrivateKeyReturnsACertificatePrivateKey(
+    #[Group('certificate')]
+    #[DataProvider('privateKeyTestProvider')]
+    public function testLoadingAConfiguredPrivateKeyReturnsACertificatePrivateKey(
         ConfPrivateKey $configuredKey
     ): void {
         $resultingKey = self::$privateKeyLoader->loadPrivateKey($configuredKey);

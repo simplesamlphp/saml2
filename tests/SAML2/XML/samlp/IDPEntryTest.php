@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
@@ -15,13 +18,13 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\samlp\IDPEntryTest
- *
- * @covers \SimpleSAML\SAML2\XML\samlp\IDPEntry
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
+ * Class \SimpleSAML\SAML2\XML\samlp\IDPEntryTest
  *
  * @package simplesamlphp/saml2
  */
+#[Group('samlp')]
+#[CoversClass(IDPEntry::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class IDPEntryTest extends TestCase
 {
     use ArrayizableElementTestTrait;

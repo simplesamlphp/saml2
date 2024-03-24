@@ -7,15 +7,17 @@ namespace SimpleSAML\Test\SAML2\Response\Validation\ConstraintValidator;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator\DestinationMatches;
 use SimpleSAML\SAML2\Response\Validation\Result;
 use SimpleSAML\SAML2\XML\samlp\Response;
 
 /**
- * @covers \SimpleSAML\SAML2\Response\Validation\ConstraintValidator\DestinationMatches
  * @package simplesamlphp/saml2
  */
+#[CoversClass(DestinationMatches::class)]
 final class DestinationMatchesTest extends MockeryTestCase
 {
     /** @var \Mockery\MockInterface */
@@ -31,10 +33,9 @@ final class DestinationMatchesTest extends MockeryTestCase
 
 
     /**
-     * @group response-validation
-     * @test
      */
-    public function aResponseIsValidWhenTheDestinationsMatch(): void
+    #[Group('response-validation')]
+    public function testAResponseIsValidWhenTheDestinationsMatch(): void
     {
         $expectedDestination = new Destination('VALID DESTINATION');
         $this->response->shouldReceive('getDestination')->once()->andReturn('VALID DESTINATION');
@@ -48,10 +49,9 @@ final class DestinationMatchesTest extends MockeryTestCase
 
 
     /**
-     * @group response-validation
-     * @test
      */
-    public function aResponseIsNotValidWhenTheDestinationsAreNotEqual(): void
+    #[Group('response-validation')]
+    public function testAResponseIsNotValidWhenTheDestinationsAreNotEqual(): void
     {
         $this->response->shouldReceive('getDestination')->once()->andReturn('FOO');
         $validator = new DestinationMatches(

@@ -6,6 +6,8 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMElement;
 use Exception;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Constants as C;
@@ -13,6 +15,8 @@ use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\Extensions;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SAML2\XML\samlp\Response;
@@ -28,10 +32,11 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use function dirname;
 
 /**
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
+#[Group('samlp')]
+#[CoversClass(AbstractMessage::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class AbstractMessageTest extends TestCase
 {
     /** @var \Psr\Clock\ClockInterface */
@@ -47,8 +52,8 @@ final class AbstractMessageTest extends TestCase
 
 
     /**
-     * @group Message
      */
+    #[Group('Message')]
     public function testCorrectSignatureMethodCanBeExtractedFromAuthnRequest(): void
     {
         $authnRequest = DOMDocumentFactory::fromString(<<<AUTHNREQUEST
@@ -90,8 +95,8 @@ AUTHNREQUEST
 
 
     /**
-     * @group Message
      */
+    #[Group('Message')]
     public function testIssuerParsedAsNameID(): void
     {
         $authnRequest = DOMDocumentFactory::fromString(<<<AUTHNREQUEST
@@ -127,8 +132,8 @@ AUTHNREQUEST
 
 
     /**
-     * @group Message
      */
+    #[Group('Message')]
     public function testConvertIssuerToXML(): void
     {
         $status = new Status(new StatusCode());
@@ -176,8 +181,8 @@ AUTHNREQUEST
 
 
     /**
-     * @group Message
      */
+    #[Group('Message')]
     public function testCorrectSignatureMethodCanBeExtractedFromResponse(): void
     {
         $response = DOMDocumentFactory::fromFile(
@@ -204,8 +209,8 @@ AUTHNREQUEST
 
 
     /**
-     * @group Message
      */
+    #[Group('Message')]
     public function testGetExtensions(): void
     {
         $authnRequest = DOMDocumentFactory::fromString(<<<AUTHNREQUEST
@@ -249,8 +254,8 @@ AUTHNREQUEST
 
 
     /**
-     * @group Message
      */
+    #[Group('Message')]
     public function testNamespaceMustBeProtocol(): void
     {
         $xml = <<<XML
@@ -270,8 +275,8 @@ XML;
 
 
     /**
-     * @group Message
      */
+    #[Group('Message')]
     public function testSAMLversionMustBe20(): void
     {
         $xml = <<<XML
@@ -297,8 +302,8 @@ XML;
 
 
     /**
-     * @group Message
      */
+    #[Group('Message')]
     public function testMessageMustHaveID(): void
     {
         $xml = <<<XML
@@ -322,8 +327,8 @@ XML;
 
     /**
      * Tests AQ message type and some getters/setters.
-     * @group Message
      */
+    #[Group('Message')]
     public function testParseAttributeQuery(): void
     {
         $xml = <<<XML
@@ -372,8 +377,8 @@ XML;
 
 
     /**
-     * @group Message
      */
+    #[Group('Message')]
     public function testMessageTypeMustBeKnown(): void
     {
         $xml = <<<XML

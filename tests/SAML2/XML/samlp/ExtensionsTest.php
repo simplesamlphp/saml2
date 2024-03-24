@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\Extensions;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -17,12 +20,13 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\samlp\ExtensionsTest
+ * Class \SimpleSAML\SAML2\XML\samlp\ExtensionsTest
  *
- * @covers \SimpleSAML\SAML2\XML\samlp\Extensions
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
+#[Group('samlp')]
+#[CoversClass(Extensions::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class ExtensionsTest extends TestCase
 {
     use SchemaValidationTestTrait;

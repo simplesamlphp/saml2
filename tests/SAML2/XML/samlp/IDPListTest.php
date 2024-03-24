@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\GetComplete;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
@@ -19,13 +22,13 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\samlp\IDPListTest
- *
- * @covers \SimpleSAML\SAML2\XML\samlp\IDPList
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
+ * Class \SimpleSAML\SAML2\XML\samlp\IDPListTest
  *
  * @package simplesamlphp/saml2
  */
+#[Group('samlp')]
+#[CoversClass(IDPList::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class IDPListTest extends TestCase
 {
     use ArrayizableElementTestTrait;

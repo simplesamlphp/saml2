@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Nyholm\Psr7\ServerRequest;
+use PHPUnit\Framework\Attributes\CoversClass;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use SimpleSAML\SAML2\SOAP;
 use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
@@ -18,9 +19,9 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use function dirname;
 
 /**
- * @covers \SimpleSAML\SAML2\SOAP
  * @package simplesamlphp\saml2
  */
+#[CoversClass(SOAP::class)]
 final class SOAPTest extends MockeryTestCase
 {
     /**

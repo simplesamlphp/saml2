@@ -4,10 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -34,12 +37,13 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\EncryptedAssertionTest
+ * Class \SimpleSAML\SAML2\XML\saml\EncryptedAssertionTest
  *
  * @package simplesamlphp/saml2
- * @covers \SimpleSAML\SAML2\XML\saml\EncryptedAssertion
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  */
+#[Group('saml')]
+#[CoversClass(EncryptedAssertion::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class EncryptedAssertionTest extends TestCase
 {
     use SchemaValidationTestTrait;

@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Configuration;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Configuration\Destination;
 
 /**
- * @covers \SimpleSAML\SAML2\Configuration\Destination
  * @package simplesamlphp/saml2
  */
+#[CoversClass(Destination::class)]
 final class DestinationTest extends TestCase
 {
     /**
-     * @group configuration
-     * @test
      */
-    public function twoDestinationsWithTheSameValueAreEqual(): void
+    #[Group('configuration')]
+    public function testTwoDestinationsWithTheSameValueAreEqual(): void
     {
         $destinationOne = new Destination('a');
         $destinationTwo = new Destination('a');
@@ -27,10 +28,9 @@ final class DestinationTest extends TestCase
 
 
     /**
-     * @group configuration
-     * @test
      */
-    public function twoDestinationsWithTheDifferentValuesAreNotEqual(): void
+    #[Group('configuration')]
+    public function testTwoDestinationsWithTheDifferentValuesAreNotEqual(): void
     {
         $destinationOne = new Destination('a');
         $destinationTwo = new Destination('a');

@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Certificate;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Certificate\X509;
 
 /**
- * @covers \SimpleSAML\SAML2\Certificate\X509
  * @package simplesamlphp/saml2
  */
+#[CoversClass(X509::class)]
 final class X509Test extends TestCase
 {
     /**
-     * @group certificate
-     * @test
      */
-    public function x509CertificateContentsMustBeStrippedOfWhitespace(): void
+    #[Group('certificate')]
+    public function testX509CertificateContentsMustBeStrippedOfWhitespace(): void
     {
         $toTest = [
             'X509Certificate' => ' Should   No Longer  Have Whitespaces',

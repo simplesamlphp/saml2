@@ -6,6 +6,8 @@ namespace SimpleSAML\Test\SAML2\Signature;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Certificate\Key;
 use SimpleSAML\SAML2\Certificate\KeyCollection;
@@ -21,9 +23,9 @@ use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
 /**
- * @covers \SimpleSAML\SAML2\Signature\PublicKeyValidator
  * @package simplesamlphp/saml2
  */
+#[CoversClass(PublicKeyValidator::class)]
 final class PublicKeyValidatorTest extends MockeryTestCase
 {
     /** @var \SimpleSAML\XMLSecurity\XML\SignedElementInterface */
@@ -43,10 +45,9 @@ final class PublicKeyValidatorTest extends MockeryTestCase
 
 
     /**
-     * @test
-     * @group signature
      */
-    public function itCannotValidateIfNoKeysCanBeLoaded(): void
+    #[Group('signature')]
+    public function testItCannotValidateIfNoKeysCanBeLoaded(): void
     {
         $keyloaderMock = $this->prepareKeyLoader(new KeyCollection());
         $validator = new PublicKeyValidator(new NullLogger(), $keyloaderMock);
@@ -56,10 +57,9 @@ final class PublicKeyValidatorTest extends MockeryTestCase
 
 
     /**
-     * @test
-     * @group signature
      */
-    public function itWillValidateWhenKeysCanBeLoaded(): void
+    #[Group('signature')]
+    public function testItWillValidateWhenKeysCanBeLoaded(): void
     {
         $keyloaderMock = $this->prepareKeyLoader(new KeyCollection([1, 2]));
         $validator = new PublicKeyValidator(new NullLogger(), $keyloaderMock);
@@ -69,10 +69,9 @@ final class PublicKeyValidatorTest extends MockeryTestCase
 
 
     /**
-     * @test
-     * @group signature
      */
-    public function nonX509KeysAreNotUsedForValidation(): void
+    #[Group('signature')]
+    public function testNonX509KeysAreNotUsedForValidation(): void
     {
         $controlledCollection = new KeyCollection([
             new Key(['type' => 'not_X509']),
@@ -92,10 +91,9 @@ final class PublicKeyValidatorTest extends MockeryTestCase
 
 
     /**
-     * @test
-     * @group signature
      */
-    public function signedMessageWithValidSignatureIsValidatedCorrectly(): void
+    #[Group('signature')]
+    public function testSignedMessageWithValidSignatureIsValidatedCorrectly(): void
     {
         $config = new IdentityProvider(
             ['certificateData' => PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE)],

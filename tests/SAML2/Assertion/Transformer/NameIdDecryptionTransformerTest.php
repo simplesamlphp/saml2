@@ -2,10 +2,12 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\SAML2\XML\saml;
+namespace SimpleSAML\Test\SAML2\Assertion\Transformer;
 
 use DateTimeImmutable;
 use DOMDocument;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
@@ -147,11 +149,10 @@ final class NameIdDecryptionTransformerTest extends TestCase
 
     /**
      * Verifies that we can create decrypted NameIDs.
-     *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      * @return void
      */
+    #[PreserveGlobalState(false)]
+    #[RunInSeparateProcess]
     public function testBasicNameIdDecryption(): void
     {
         $this->markTestSkipped();
@@ -169,10 +170,10 @@ final class NameIdDecryptionTransformerTest extends TestCase
     /**
      * Run the decoder through processAssertions.
      *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      * @return void
      */
+    #[PreserveGlobalState(false)]
+    #[RunInSeparateProcess]
     public function testDecryptionProcessAssertions(): void
     {
         $this->markTestSkipped();

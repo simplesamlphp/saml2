@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Constants as C;
@@ -15,6 +17,10 @@ use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
+use SimpleSAML\SAML2\XML\samlp\AbstractSubjectQuery;
 use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -28,15 +34,16 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\AttributeQueryTest
+ * Class \SimpleSAML\SAML2\XML\samlp\AttributeQueryTest
  *
- * @covers \SimpleSAML\SAML2\XML\samlp\AttributeQuery
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSubjectQuery
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractRequest
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
+#[Group('samlp')]
+#[CoversClass(AttributeQuery::class)]
+#[CoversClass(AbstractSubjectQuery::class)]
+#[CoversClass(AbstractRequest::class)]
+#[CoversClass(AbstractMessage::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class AttributeQueryTest extends TestCase
 {
     use SchemaValidationTestTrait;

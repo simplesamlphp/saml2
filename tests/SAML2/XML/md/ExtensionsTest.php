@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -12,6 +14,7 @@ use SimpleSAML\SAML2\XML\alg\SigningMethod;
 use SimpleSAML\SAML2\XML\emd\RepublishRequest;
 use SimpleSAML\SAML2\XML\emd\RepublishTarget;
 use SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponse;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
 use SimpleSAML\SAML2\XML\mdrpi\Publication;
@@ -33,14 +36,15 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\md\ExtensionsTest.
+ * Class \SimpleSAML\SAML2\XML\md\ExtensionsTest.
  *
  * This class tests for currently supported metadata extensions.
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\Extensions
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(Extensions::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class ExtensionsTest extends TestCase
 {
     use SchemaValidationTestTrait;

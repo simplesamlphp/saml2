@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\TelephoneNumber;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
@@ -14,10 +17,11 @@ use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 /**
  * Tests for SurName.
  *
- * @covers \SimpleSAML\SAML2\XML\md\TelephoneNumber
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(TelephoneNumber::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class TelephoneNumberTest extends TestCase
 {
     use ArrayizableElementTestTrait;

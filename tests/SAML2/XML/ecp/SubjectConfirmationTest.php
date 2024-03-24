@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\ecp;
 
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\ecp\AbstractEcpElement;
 use SimpleSAML\SAML2\XML\ecp\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\SOAP\Constants as SOAP;
@@ -23,10 +26,11 @@ use function dirname;
 use function strval;
 
 /**
- * @covers \SimpleSAML\SAML2\XML\ecp\AbstractEcpElement
- * @covers \SimpleSAML\SAML2\XML\ecp\SubjectConfirmation
  * @package simplesamlphp/saml2
  */
+#[Group('ecp')]
+#[CoversClass(SubjectConfirmation::class)]
+#[CoversClass(AbstractEcpElement::class)]
 final class SubjectConfirmationTest extends TestCase
 {
     use SchemaValidationTestTrait;

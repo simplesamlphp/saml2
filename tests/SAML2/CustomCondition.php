@@ -57,7 +57,7 @@ final class CustomCondition extends AbstractCondition
      * Convert XML into a Condition
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\saml\AbstractCondition
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong

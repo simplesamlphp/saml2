@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\ServiceDescription;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -16,11 +20,12 @@ use function dirname;
 /**
  * Tests for localized names.
  *
- * @covers \SimpleSAML\SAML2\XML\md\ServiceDescription
- * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedName
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(ServiceDescription::class)]
+#[CoversClass(AbstractLocalizedName::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class AbstractLocalizedNameTest extends TestCase
 {
     /** @var \DOMDocument */

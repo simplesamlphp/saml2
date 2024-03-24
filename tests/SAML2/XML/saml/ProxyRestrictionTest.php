@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -15,13 +18,13 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\saml\ProxyRestrictionTest
- *
- * @covers \SimpleSAML\SAML2\XML\saml\ProxyRestriction
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
+ * Class \SimpleSAML\SAML2\XML\saml\ProxyRestrictionTest
  *
  * @package simplesamlphp/saml2
  */
+#[Group('saml')]
+#[CoversClass(ProxyRestriction::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class ProxyRestrictionTest extends TestCase
 {
     use SchemaValidationTestTrait;

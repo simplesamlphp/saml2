@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\EncryptionMethod;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -22,11 +25,11 @@ use function strval;
 /**
  * Tests for the md:EncryptionMethod element.
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\EncryptionMethod
- * @covers \SimpleSAML\XMLSecurity\XML\xenc\AbstractEncryptionMethod
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(EncryptionMethod::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class EncryptionMethodTest extends TestCase
 {
     use SchemaValidationTestTrait;

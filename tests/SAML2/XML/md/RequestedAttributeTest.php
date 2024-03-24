@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\RequestedAttribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -19,10 +22,11 @@ use function strval;
 /**
  * Test for the RequestedAttribute metadata element.
  *
- * @covers \SimpleSAML\SAML2\XML\md\RequestedAttribute
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(RequestedAttribute::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class RequestedAttributeTest extends TestCase
 {
     use SchemaValidationTestTrait;

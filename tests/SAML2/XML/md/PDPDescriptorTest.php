@@ -4,9 +4,16 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType;
+use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AuthzService;
 use SimpleSAML\SAML2\XML\md\NameIDFormat;
@@ -22,13 +29,15 @@ use function strval;
 /**
  * Tests for md:PDPDescriptor
  *
- * @covers \SimpleSAML\SAML2\XML\md\PDPDescriptor
- * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
- * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(PDPDescriptor::class)]
+#[CoversClass(AbstractRoleDescriptor::class)]
+#[CoversClass(AbstractRoleDescriptorType::class)]
+#[CoversClass(AbstractMetadataDocument::class)]
+#[CoversClass(AbstractSignedMdElement::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class PDPDescriptorTest extends TestCase
 {
     use SchemaValidationTestTrait;

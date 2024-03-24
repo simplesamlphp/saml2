@@ -5,7 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\md\AbstractEndpointType;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AttributeService;
 use SimpleSAML\Test\SAML2\Constants as C;
@@ -23,12 +27,13 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\md\EndpointTypeTest
+ * Class \SimpleSAML\SAML2\XML\md\EndpointTypeTest
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractEndpointType
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(AbstractEndpointType::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class EndpointTypeTest extends TestCase
 {
     use ArrayizableElementTestTrait;

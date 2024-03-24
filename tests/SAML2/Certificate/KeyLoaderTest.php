@@ -7,6 +7,8 @@ namespace SimpleSAML\Test\SAML2\Certificate;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use SimpleSAML\SAML2\Certificate\Exception\InvalidCertificateStructureException;
 use SimpleSAML\SAML2\Certificate\Exception\NoKeysFoundException;
 use SimpleSAML\SAML2\Certificate\Key;
@@ -18,9 +20,9 @@ use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use function preg_replace;
 
 /**
- * @covers \SimpleSAML\SAML2\Certificate\KeyLoader
  * @package simplesamlphp/saml2
  */
+#[CoversClass(KeyLoader::class)]
 final class KeyLoaderTest extends MockeryTestCase
 {
     /** @var \SimpleSAML\SAML2\Certificate\KeyLoader */
@@ -40,10 +42,9 @@ final class KeyLoaderTest extends MockeryTestCase
 
 
     /**
-     * @group certificate
-     * @test
      */
-    public function loadKeysChecksForUsageOfKey(): void
+    #[Group('certificate')]
+    public function testLoadKeysChecksForUsageOfKey(): void
     {
         $signing = [Key::USAGE_SIGNING => true];
         $encryption = [Key::USAGE_ENCRYPTION => true];
@@ -59,10 +60,9 @@ final class KeyLoaderTest extends MockeryTestCase
 
 
     /**
-     * @group certificate
-     * @test
      */
-    public function loadKeysConstructsX509Certificate(): void
+    #[Group('certificate')]
+    public function testLoadKeysConstructsX509Certificate(): void
     {
         $keys = [[
             'X509Certificate' => PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE),
@@ -77,10 +77,9 @@ final class KeyLoaderTest extends MockeryTestCase
 
 
     /**
-     * @group certificate
-     * @test
      */
-    public function certificateDataIsLoadedAsKey(): void
+    #[Group('certificate')]
+    public function testCertificateDataIsLoadedAsKey(): void
     {
         $this->keyLoader->loadCertificateData(
             PEMCertificatesMock::getPlainCertificateContents(PEMCertificatesMock::CERTIFICATE),
@@ -104,10 +103,9 @@ final class KeyLoaderTest extends MockeryTestCase
 
 
     /**
-     * @group certificate
-     * @test
      */
-    public function loadingAFileWithTheWrongFormatThrowsAnException(): void
+    #[Group('certificate')]
+    public function testLoadingAFileWithTheWrongFormatThrowsAnException(): void
     {
         $this->expectException(InvalidCertificateStructureException::class);
         $this->keyLoader->loadCertificateFile(
@@ -117,10 +115,9 @@ final class KeyLoaderTest extends MockeryTestCase
 
 
     /**
-     * @group certificate
-     * @test
      */
-    public function loadingACertificateFromFileCreatesAKey(): void
+    #[Group('certificate')]
+    public function testLoadingACertificateFromFileCreatesAKey(): void
     {
         $this->keyLoader->loadCertificateFile(
             PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::PUBLIC_KEY),
@@ -140,10 +137,9 @@ final class KeyLoaderTest extends MockeryTestCase
 
 
     /**
-     * @group certificate
-     * @test
      */
-    public function loadingARequiredCertificateFromAnEmptyConfigurationThrowsAnException(): void
+    #[Group('certificate')]
+    public function testLoadingARequiredCertificateFromAnEmptyConfigurationThrowsAnException(): void
     {
         $this->configurationMock
             ->shouldReceive('getKeys')
@@ -162,10 +158,9 @@ final class KeyLoaderTest extends MockeryTestCase
 
 
     /**
-     * @group certificate
-     * @test
      */
-    public function loadingACertificateFileFromConfigurationCreatesKey(): void
+    #[Group('certificate')]
+    public function testLoadingACertificateFileFromConfigurationCreatesKey(): void
     {
         $file = PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::PUBLIC_KEY);
         $this->configurationMock
@@ -188,10 +183,9 @@ final class KeyLoaderTest extends MockeryTestCase
 
 
     /**
-     * @group certificate
-     * @test
      */
-    public function loadingAnInvalidCertificateFileFromConfigurationThrowsException(): void
+    #[Group('certificate')]
+    public function testLoadingAnInvalidCertificateFileFromConfigurationThrowsException(): void
     {
         $file = PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::BROKEN_PUBLIC_KEY);
         $this->configurationMock
