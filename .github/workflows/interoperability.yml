@@ -89,6 +89,13 @@ jobs:
             mkdir -p /tmp/metadata
             wget https://md.aai.grnet.gr/aggregates/grnet-metadata.xml -O /tmp/metadata/grnet.xml
 
+      - name: Download MicrosoftOnline metadata
+        if: steps.cache-metadata.outputs.cache-hit != 'true'
+        run: |
+            mkdir -p /tmp/metadata
+            wget https://nexus.microsoftonline-p.com/federationmetadata/saml20/federationmetadata.xml \
+              -O /tmp/metadata/microsoftonline.xml
+
       - name: Run unit tests
         run: |
           ./vendor/bin/phpunit -c phpunit-interoperability.xml
