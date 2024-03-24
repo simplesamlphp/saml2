@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
@@ -16,13 +18,12 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\md\NameIDPolicyTest
- *
- * @covers \SimpleSAML\SAML2\XML\samlp\NameIDPolicy
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
+ * Class \SimpleSAML\SAML2\XML\md\NameIDPolicyTest
  *
  * @package simplesamlphp/saml2
  */
+#[CoversClass(NameIDPolicy::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class NameIDPolicyTest extends TestCase
 {
     use ArrayizableElementTestTrait;

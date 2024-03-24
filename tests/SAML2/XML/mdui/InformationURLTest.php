@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
+use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\mdui\InformationURL;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -18,13 +22,12 @@ use function strval;
 /**
  * Tests for localized names.
  *
- * @covers \SimpleSAML\SAML2\XML\mdui\InformationURL
- * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedURI
- * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedName
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- *
  * @package simplesamlphp/saml2
  */
+#[CoversClass(InformationURL::class)]
+#[CoversClass(AbstractLocalizedURI::class)]
+#[CoversClass(AbstractLocalizedName::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class InformationURLTest extends TestCase
 {
     use ArrayizableElementTestTrait;

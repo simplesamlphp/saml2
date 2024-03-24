@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
@@ -29,10 +31,10 @@ use function strval;
 /**
  * Class \SAML2\XML\saml\SubjectConfirmationTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\SubjectConfirmation
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(SubjectConfirmation::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class SubjectConfirmationTest extends TestCase
 {
     use SchemaValidationTestTrait;

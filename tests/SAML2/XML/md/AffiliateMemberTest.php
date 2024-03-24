@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -21,10 +23,10 @@ use function strval;
 /**
  * Tests for AffiliateMember.
  *
- * @covers \SimpleSAML\SAML2\XML\md\AffiliateMember
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(AffiliateMember::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class AffiliateMemberTest extends TestCase
 {
     use SchemaValidationTestTrait;

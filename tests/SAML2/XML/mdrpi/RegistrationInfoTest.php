@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -21,11 +23,10 @@ use function strval;
 /**
  * Class \SAML2\XML\mdrpi\RegistrationInfoTest
  *
- * @covers \SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo
- * @covers \SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement
- *
  * @package simplesamlphp/saml2
  */
+#[CoversClass(RegistrationInfo::class)]
+#[CoversClass(AbstractMdrpiElement::class)]
 final class RegistrationInfoTest extends TestCase
 {
     use ArrayizableElementTestTrait;

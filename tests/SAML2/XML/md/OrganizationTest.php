@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\md\Organization;
 use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
@@ -25,10 +27,10 @@ use function strval;
 /**
  * Test for the Organization metadata element.
  *
- * @covers \SimpleSAML\SAML2\XML\md\Organization
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(Organization::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class OrganizationTest extends TestCase
 {
     use ArrayizableElementTestTrait;

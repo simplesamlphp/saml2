@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Action;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -16,10 +18,10 @@ use function strval;
 /**
  * Class \SAML2\XML\saml\ActionTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\Action
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(Action::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class ActionTest extends TestCase
 {
     use SerializableElementTestTrait;

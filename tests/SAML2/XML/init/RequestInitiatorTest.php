@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\init;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\init\AbstractInitElement;
 use SimpleSAML\SAML2\XML\init\RequestInitiator;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
@@ -20,10 +22,10 @@ use function strval;
 /**
  * Class \SAML2\XML\init\RequestInitiatorTest
  *
- * @covers \SimpleSAML\SAML2\XML\init\RequestInitiator
- *
  * @package simplesamlphp/saml2
  */
+#[CoversClass(RequestInitiator::class)]
+#[CoversClass(AbstractInitElement::class)]
 final class RequestInitiatorTest extends TestCase
 {
     use SchemaValidationTestTrait;

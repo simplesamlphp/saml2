@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Certificate;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Certificate\Exception\InvalidKeyUsageException;
 use SimpleSAML\SAML2\Certificate\Key;
@@ -15,12 +18,12 @@ use function call_user_func_array;
  * @covers \SimpleSAML\SAML2\Certificate\Key
  * @package simplesamlphp/saml2
  */
+#[Group('certificate')]
 final class KeyTest extends TestCase
 {
     /**
-     * @group certificate
-     * @test
      */
+    #[Test]
     public function invalidKeyUsageShouldThrowAnException(): void
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
@@ -30,10 +33,9 @@ final class KeyTest extends TestCase
 
 
     /**
-     * @group certificate
-     * @dataProvider functionProvider
-     * @test
      */
+    #[DataProvider('functionProvider')]
+    #[Test]
     public function invalidOffsetTypeShouldThrowAnException($function, $params): void
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
@@ -43,9 +45,8 @@ final class KeyTest extends TestCase
 
 
     /**
-     * @group certificate
-     * @test
      */
+    #[Test]
     public function assertThatKeyUsageCheckWorksCorrectly(): void
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
@@ -59,9 +60,8 @@ final class KeyTest extends TestCase
 
 
     /**
-     * @group certificate
-     * @test
      */
+    #[Test]
     public function assertThatOffsetgetWorksCorrectly(): void
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
@@ -70,9 +70,8 @@ final class KeyTest extends TestCase
 
 
     /**
-     * @group certificate
-     * @test
      */
+    #[Test]
     public function assertThatOffsetunsetUnsetsOffset(): void
     {
         $key = new Key([Key::USAGE_SIGNING => true, Key::USAGE_ENCRYPTION => true]);

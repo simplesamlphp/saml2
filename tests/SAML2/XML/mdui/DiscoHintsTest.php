@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
 use SimpleSAML\SAML2\XML\mdui\DomainHint;
 use SimpleSAML\SAML2\XML\mdui\GeolocationHint;
@@ -23,10 +25,10 @@ use function strval;
 /**
  * Class \SAML2\XML\mdui\DiscoHintsTest
  *
- * @covers \SimpleSAML\SAML2\XML\mdui\DiscoHints
- * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(DiscoHints::class)]
+#[CoversClass(AbstractMduiElement::class)]
 final class DiscoHintsTest extends TestCase
 {
     use ArrayizableElementTestTrait;

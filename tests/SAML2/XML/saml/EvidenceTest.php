@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Test\SAML2\XML\saml;
 
 use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\AssertionIDRef;
 use SimpleSAML\SAML2\XML\saml\AssertionURIRef;
@@ -21,11 +23,10 @@ use function strval;
 /**
  * Class \SimpleSAML\SAML2\XML\saml\EvidenceTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\Evidence
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
- *
  * @package simplesamlphp/saml2
  */
+#[CoversClass(Evidence::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class EvidenceTest extends TestCase
 {
     use SchemaValidationTestTrait;

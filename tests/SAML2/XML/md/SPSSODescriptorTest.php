@@ -5,8 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType;
+use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
 use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
 use SimpleSAML\SAML2\XML\md\AssertionConsumerService;
 use SimpleSAML\SAML2\XML\md\AttributeConsumingService;
@@ -41,14 +47,14 @@ use function strval;
 /**
  * Tests for the md:SPSSODescriptor element.
  *
- * @covers \SimpleSAML\SAML2\XML\md\SPSSODescriptor
- * @covers \SimpleSAML\SAML2\XML\md\AbstractSSODescriptor
- * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
- * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(SPSSODescriptor::class)]
+#[CoversClass(AbstractRoleDescriptor::class)]
+#[CoversClass(AbstractRoleDescriptorType::class)]
+#[CoversClass(AbstractMetadataDocument::class)]
+#[CoversClass(AbstractSignedMdElement::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class SPSSODescriptorTest extends TestCase
 {
     use SchemaValidationTestTrait;

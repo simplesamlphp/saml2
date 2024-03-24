@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -18,11 +20,11 @@ use function strval;
 /**
  * Class \SAML2\XML\saml\IssuerTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\Issuer
- * @covers \SimpleSAML\SAML2\XML\saml\NameIDType
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(Issuer::class)]
+#[CoversClass(NameIDType::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class IssuerTest extends TestCase
 {
     use SchemaValidationTestTrait;

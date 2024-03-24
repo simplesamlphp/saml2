@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
+use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
 use SimpleSAML\SAML2\XML\md\EntitiesDescriptor;
 use SimpleSAML\SAML2\XML\md\EntityDescriptor;
 use SimpleSAML\SAML2\XML\md\Extensions;
@@ -24,12 +28,12 @@ use function strval;
 /**
  * Tests for the md:EntitiesDescriptor element.
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
- * @covers \SimpleSAML\SAML2\XML\md\EntitiesDescriptor
  * @package simplesamlphp/saml2
  */
+#[CoversClass(EntitiesDescriptor::class)]
+#[CoversClass(AbstractSignedMdElement::class)]
+#[CoversClass(AbstractMetadataDocument::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class EntitiesDescriptorTest extends TestCase
 {
     use SchemaValidationTestTrait;

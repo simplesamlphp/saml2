@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -16,10 +18,10 @@ use function strval;
 /**
  * Class \SAML2\XML\saml\AuthnContextDeclRefTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(AuthnContextDeclRef::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class AuthnContextDeclRefTest extends TestCase
 {
     use SchemaValidationTestTrait;

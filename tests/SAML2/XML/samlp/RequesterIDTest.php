@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Test\SAML2\XML\samlp;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\RequesterID;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -16,11 +18,10 @@ use function strval;
 /**
  * Class \SimpleSAML\SAML2\XML\samlp\RequesterIDTest
  *
- * @covers \SimpleSAML\SAML2\XML\samlp\RequesterID
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
- *
  * @package simplesamlphp/saml2
  */
+#[CoversClass(RequesterID::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class RequesterIDTest extends TestCase
 {
     use SchemaValidationTestTrait;

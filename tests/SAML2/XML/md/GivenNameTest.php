@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\GivenName;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -16,10 +18,10 @@ use function strval;
 /**
  * Tests for GivenName.
  *
- * @covers \SimpleSAML\SAML2\XML\md\GivenName
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(GivenName::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class GivenNameTest extends TestCase
 {
     use SchemaValidationTestTrait;

@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
 use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
 use SimpleSAML\SAML2\XML\mdui\Logo;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -20,10 +22,10 @@ use function strval;
 /**
  * Class \SAML2\XML\mdui\LogoTest
  *
- * @covers \SimpleSAML\SAML2\XML\mdui\Logo
- * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(Logo::class)]
+#[CoversClass(AbstractMduiElement::class)]
 final class LogoTest extends TestCase
 {
     use ArrayizableElementTestTrait;

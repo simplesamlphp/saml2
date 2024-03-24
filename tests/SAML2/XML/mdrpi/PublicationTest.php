@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement;
 use SimpleSAML\SAML2\XML\mdrpi\Publication;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
@@ -20,11 +22,10 @@ use function strval;
 /**
  * Class \SAML2\XML\mdrpi\PublicationTest
  *
- * @covers \SimpleSAML\SAML2\XML\mdrpi\Publication
- * @covers \SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement
- *
  * @package simplesamlphp/saml2
  */
+#[CoversClass(Publication::class)]
+#[CoversClass(AbstractMdrpiElement::class)]
 final class PublicationTest extends TestCase
 {
     use ArrayizableElementTestTrait;

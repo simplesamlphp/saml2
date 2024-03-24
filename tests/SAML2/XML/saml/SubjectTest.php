@@ -6,9 +6,11 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DateTimeImmutable;
 use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
@@ -31,11 +33,10 @@ use function strval;
 /**
  * Class \SAML2\XML\saml\SubjectTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\Subject
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
- *
  * @package SimpleSAMLphp
  */
+#[CoversClass(Subject::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class SubjectTest extends TestCase
 {
     use SchemaValidationTestTrait;

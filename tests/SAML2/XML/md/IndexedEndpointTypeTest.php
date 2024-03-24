@@ -4,9 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponse;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
 use SimpleSAML\SAML2\XML\md\AssertionConsumerService;
 use SimpleSAML\Test\SAML2\Constants as C;
@@ -20,10 +23,10 @@ use function sprintf;
 /**
  * Class \SimpleSAML\SAML2\XML\md\IndexedEndpointTypeTest
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(AbstractIndexedEndpointType::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class IndexedEndpointTypeTest extends TestCase
 {
     private static string $resourcePath;
@@ -44,9 +47,8 @@ final class IndexedEndpointTypeTest extends TestCase
      * Test that creating an IndexedEndpointType from scratch without specifying isDefault works.
      *
      * @param class-string $class
-     *
-     * @dataProvider classProvider
      */
+    #[DataProvider('classProvider')]
     public function testMarshallingWithoutIsDefault(string $class): void
     {
         $binding = ($class === DiscoveryResponse::class) ? C::BINDING_IDPDISC : C::BINDING_HTTP_POST;
@@ -63,9 +65,8 @@ final class IndexedEndpointTypeTest extends TestCase
      *
      * @param class-string $class
      * @param string $xmlRepresentation
-     *
-     * @dataProvider classProvider
      */
+    #[DataProvider('classProvider')]
     public function testUnmarshallingWithNumericString(string $class, string $xmlRepresentation): void
     {
         $xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -101,9 +102,8 @@ final class IndexedEndpointTypeTest extends TestCase
      *
      * @param class-string $class
      * @param string $xmlRepresentation
-     *
-     * @dataProvider classProvider
      */
+    #[DataProvider('classProvider')]
     public function testUnmarshallingWithoutIndex(string $class, string $xmlRepresentation): void
     {
         $xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -127,9 +127,8 @@ final class IndexedEndpointTypeTest extends TestCase
      *
      * @param class-string $class
      * @param string $xmlRepresentation
-     *
-     * @dataProvider classProvider
      */
+    #[DataProvider('classProvider')]
     public function testUnmarshallingWithWrongIndex(string $class, string $xmlRepresentation): void
     {
         $xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -153,9 +152,8 @@ final class IndexedEndpointTypeTest extends TestCase
      *
      * @param class-string $class
      * @param string $xmlRepresentation
-     *
-     * @dataProvider classProvider
      */
+    #[DataProvider('classProvider')]
     public function testUnmarshallingWithoutIsDefault(string $class, string $xmlRepresentation): void
     {
         $xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -173,9 +171,8 @@ final class IndexedEndpointTypeTest extends TestCase
      *
      * @param class-string $class
      * @param string $xmlRepresentation
-     *
-     * @dataProvider classProvider
      */
+    #[DataProvider('classProvider')]
     public function testUnmarshallingWithWrongIsDefault(string $class, string $xmlRepresentation): void
     {
         $xmlRepresentation = DOMDocumentFactory::fromFile(

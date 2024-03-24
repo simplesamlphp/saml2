@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
@@ -13,6 +14,9 @@ use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\LogoutRequest;
 use SimpleSAML\SAML2\XML\samlp\SessionIndex;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -27,14 +31,14 @@ use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 use function dirname;
 
 /**
- * Class \SAML2\XML\samlp\LogoutRequestTest
+ * Class \SimpleSAML\SAML2\XML\samlp\LogoutRequestTest
  *
- * @covers \SimpleSAML\SAML2\XML\samlp\LogoutRequest
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractRequest
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(LogoutRequest::class)]
+#[CoversClass(AbstractRequest::class)]
+#[CoversClass(AbstractMessage::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class LogoutRequestTest extends TestCase
 {
     use SchemaValidationTestTrait;

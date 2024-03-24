@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMElement;
 use Exception;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Constants as C;
@@ -13,6 +14,8 @@ use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\Extensions;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SAML2\XML\samlp\Response;
@@ -28,10 +31,10 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use function dirname;
 
 /**
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(AbstractMessage::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class AbstractMessageTest extends TestCase
 {
     /** @var \Psr\Clock\ClockInterface */

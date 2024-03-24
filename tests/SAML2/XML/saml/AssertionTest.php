@@ -6,12 +6,14 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DateTimeImmutable;
 use Exception;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeStatement;
@@ -51,10 +53,10 @@ use function strval;
 /**
  * Class \SimpleSAML\SAML2\AssertionTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\Assertion
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(Assertion::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class AssertionTest extends TestCase
 {
     use SchemaValidationTestTrait;

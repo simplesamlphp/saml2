@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Certificate;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Certificate\PrivateKey;
 use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
@@ -29,12 +31,11 @@ final class PrivateKeyLoaderTest extends TestCase
 
 
     /**
-     * @group        certificate
-     * @test
-     * @dataProvider privateKeyTestProvider
-     *
      * @param \SimpleSAML\SAML2\Configuration\PrivateKey $configuredKey
      */
+    #[Test]
+    #[Group('certificate')]
+    #[DataProvider('privateKeyTestProvider')]
     public function loadingAConfiguredPrivateKeyReturnsACertificatePrivateKey(
         ConfPrivateKey $configuredKey
     ): void {

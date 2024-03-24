@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\shibmd;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\shibmd\AbstractShibmdElement;
 use SimpleSAML\SAML2\XML\shibmd\KeyAuthority;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -20,10 +22,10 @@ use function strval;
 /**
  * Class \SimpleSAML\SAML2\XML\shibmd\KeyAuthority
  *
- * @covers \SimpleSAML\SAML2\XML\shibmd\KeyAuthority
- * @covers \SimpleSAML\SAML2\XML\shibmd\AbstractShibmdElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(KeyAuthority::class)]
+#[CoversClass(AbstractShibmdElement::class)]
 final class KeyAuthorityTest extends TestCase
 {
     use SchemaValidationTestTrait;

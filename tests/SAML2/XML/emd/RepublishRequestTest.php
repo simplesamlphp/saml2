@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\emd;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\emd\AbstractEmdElement;
 use SimpleSAML\SAML2\XML\emd\RepublishRequest;
 use SimpleSAML\SAML2\XML\emd\RepublishTarget;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -18,10 +20,10 @@ use function strval;
 /**
  * Class \SimpleSAML\SAML2\XML\emd\RepublishRequest
  *
- * @covers \SimpleSAML\SAML2\XML\emd\RepublishRequest
- * @covers \SimpleSAML\SAML2\XML\emd\AbstractEmdElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(RepublishRequest::class)]
+#[CoversClass(AbstractEmdElement::class)]
 final class RepublishRequestTest extends TestCase
 {
     use ArrayizableElementTestTrait;

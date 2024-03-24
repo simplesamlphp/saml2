@@ -6,7 +6,11 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DateTimeImmutable;
 use Exception;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
+use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
 use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
@@ -27,12 +31,12 @@ use function strval;
 /**
  * Tests for the AffiliationDescriptor class.
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
- * @covers \SimpleSAML\SAML2\XML\md\AffiliationDescriptor
  * @package simplesamlphp/saml2
  */
+#[CoversClass(AffiliateDescriptor::class)]
+#[CoversClass(AbstractSignedMdElement::class)]
+#[CoversClass(AbstractMetadataDocument::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class AffiliationDescriptorTest extends TestCase
 {
     use SchemaValidationTestTrait;

@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
+use SimpleSAML\SAML2\XML\samlp\AbstractStatusResponse;
 use SimpleSAML\SAML2\XML\samlp\Extensions;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
@@ -25,11 +29,11 @@ use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 /**
  * Class \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponseTest
  *
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponse
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(AbstractStatusResponse::class)]
+#[CoversClass(AbstractMessage::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class AbstractStatusResponseTest extends TestCase
 {
     /** @var \Psr\Clock\ClockInterface */

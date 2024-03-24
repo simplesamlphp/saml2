@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\NameIDMappingService;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -18,10 +20,10 @@ use function strval;
 /**
  * Tests for md:NameIDMappingService.
  *
- * @covers \SimpleSAML\SAML2\XML\md\NameIDMappingService
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(NameIDMappingService::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class NameIDMappingServiceTest extends TestCase
 {
     use SchemaValidationTestTrait;

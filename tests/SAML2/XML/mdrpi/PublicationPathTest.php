@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement;
 use SimpleSAML\SAML2\XML\mdrpi\Publication;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationPath;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -19,11 +21,10 @@ use function strval;
 /**
  * Class \SAML2\XML\mdrpi\PublicationPathTest
  *
- * @covers \SimpleSAML\SAML2\XML\mdrpi\PublicationPath
- * @covers \SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement
- *
  * @package simplesamlphp/saml2
  */
+#[CoversClass(PublicationPath::class)]
+#[CoversClass(AbstractMdrpiElement::class)]
 final class PublicationPathTest extends TestCase
 {
     use ArrayizableElementTestTrait;

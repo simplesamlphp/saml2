@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
 use SimpleSAML\SAML2\XML\mdui\IPHint;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -16,10 +18,10 @@ use function strval;
 /**
  * Tests for IPHint.
  *
- * @covers \SimpleSAML\SAML2\XML\mdui\IPHint
- * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(IPHint::class)]
+#[CoversClass(AbstractMduiElement::class)]
 final class IPHintTest extends TestCase
 {
     use SchemaValidationTestTrait;

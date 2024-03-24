@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\ecp;
 
 use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\ecp\AbstractEcpElement;
 use SimpleSAML\SAML2\XML\ecp\Response;
 use SimpleSAML\SOAP\Constants as SOAP;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -19,10 +21,10 @@ use function dirname;
 use function strval;
 
 /**
- * @covers \SimpleSAML\SAML2\XML\ecp\AbstractEcpElement
- * @covers \SimpleSAML\SAML2\XML\ecp\Response
  * @package simplesamlphp/saml2
  */
+#[CoversClass(Response::class)]
+#[CoversClass(AbstractEcpElement::class)]
 final class ResponseTest extends TestCase
 {
     use SchemaValidationTestTrait;

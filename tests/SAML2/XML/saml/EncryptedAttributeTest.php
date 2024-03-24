@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\EncryptedAttribute;
@@ -23,9 +25,9 @@ use function dirname;
  * Class \SAML2\XML\saml\EncryptedAttributeTest
  *
  * @package simplesamlphp/saml2
- * @covers \SimpleSAML\SAML2\XML\saml\EncryptedAttribute
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  */
+#[CoversClass(EncryptedAttribute::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class EncryptedAttributeTest extends TestCase
 {
     use SchemaValidationTestTrait;

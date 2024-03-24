@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\ecp;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\ecp\AbstractEcpElement;
 use SimpleSAML\SAML2\XML\ecp\Request;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\GetComplete;
@@ -20,10 +22,10 @@ use function dirname;
 use function strval;
 
 /**
- * @covers \SimpleSAML\SAML2\XML\ecp\AbstractEcpElement
- * @covers \SimpleSAML\SAML2\XML\ecp\Request
  * @package simplesamlphp/saml2
  */
+#[CoversClass(Request::class)]
+#[CoversClass(AbstractEcpElement::class)]
 final class RequestTest extends TestCase
 {
     use SchemaValidationTestTrait;

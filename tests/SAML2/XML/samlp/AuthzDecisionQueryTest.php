@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DateTimeImmutable;
 use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\saml\Action;
 use SimpleSAML\SAML2\XML\saml\Assertion;
@@ -13,6 +14,10 @@ use SimpleSAML\SAML2\XML\saml\Evidence;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
+use SimpleSAML\SAML2\XML\samlp\AbstractSubjectQuery;
 use SimpleSAML\SAML2\XML\samlp\AuthzDecisionQuery;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -26,13 +31,13 @@ use function strval;
 /**
  * Class \SimpleSAML\SAML2\XML\samlp\AuthzDecisionQueryTest
  *
- * @covers \SimpleSAML\SAML2\XML\samlp\AuthzDecisionQuery
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSubjectQuery
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractRequest
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(AuthzDecisionQuery::class)]
+#[CoversClass(AbstractSubjectQuery::class)]
+#[CoversClass(AbstractRequest::class)]
+#[CoversClass(AbstractMessage::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class AuthzDecisionQueryTest extends TestCase
 {
     use SchemaValidationTestTrait;

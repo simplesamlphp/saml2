@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\shibmd;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\shibmd\AbstractShibmdElement;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -17,10 +19,10 @@ use function strval;
 /**
  * Class \SimpleSAML\SAML2\XML\shibmd\Scope
  *
- * @covers \SimpleSAML\SAML2\XML\shibmd\Scope
- * @covers \SimpleSAML\SAML2\XML\shibmd\AbstractShibmdElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(Scope::class)]
+#[CoversClass(AbstractShibmdElement::class)]
 final class ScopeTest extends TestCase
 {
     use SchemaValidationTestTrait;

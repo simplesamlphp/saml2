@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
@@ -22,11 +25,11 @@ use function strval;
 /**
  * Tests for md:ArtifactResolutionService.
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType
- * @covers \SimpleSAML\SAML2\XML\md\ArtifactResolutionService
  * @package simplesamlphp/saml2
  */
+#[CoversClass(ArtifactResolutionService::class)]
+#[CoversClass(AbstractIndexedEndpointType::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class ArtifactResolutionServiceTest extends TestCase
 {
     use ArrayizableElementTestTrait;

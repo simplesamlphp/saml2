@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\mdattr;
 
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\mdattr\AbstractMdattrElement;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Attribute;
@@ -30,12 +32,10 @@ use function strval;
 /**
  * Class \SAML2\XML\mdattr\EntityAttributesTest
  *
- * @covers \SimpleSAML\SAML2\XML\mdattr\EntityAttributes
- * @covers \SimpleSAML\SAML2\XML\mdattr\AbstractMdattrElement
- * @requires PHP >= 8.1
  * @package simplesamlphp/saml2
  */
-
+#[CoversClass(EntityAttributes::class)]
+#[CoversClass(AbstractMdattrElement::class)]
 final class EntityAttributesTest extends TestCase
 {
     use SchemaValidationTestTrait;

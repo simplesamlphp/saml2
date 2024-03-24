@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\mdui\Description;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
@@ -17,11 +20,11 @@ use function strval;
 /**
  * Tests for localized names.
  *
- * @covers \SimpleSAML\SAML2\XML\mdui\Description
- * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedName
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(Description::class)]
+#[CoversClass(AbstractLocalizedName::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class DescriptionTest extends TestCase
 {
     use ArrayizableElementTestTrait;

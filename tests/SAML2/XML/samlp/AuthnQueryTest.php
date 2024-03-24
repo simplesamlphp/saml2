@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\Comparison;
@@ -12,6 +13,10 @@ use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
+use SimpleSAML\SAML2\XML\samlp\AbstractSubjectQuery;
 use SimpleSAML\SAML2\XML\samlp\AuthnQuery;
 use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -25,13 +30,13 @@ use function strval;
 /**
  * Class \SimpleSAML\SAML2\XML\samlp\AuthnQueryTest
  *
- * @covers \SimpleSAML\SAML2\XML\samlp\AuthnQuery
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSubjectQuery
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractRequest
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(AuthnQuery::class)]
+#[CoversClass(AbstractSubjectQuery::class)]
+#[CoversClass(AbstractRequest::class)]
+#[CoversClass(AbstractMessage::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class AuthnQueryTest extends TestCase
 {
     use SchemaValidationTestTrait;

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
 use SimpleSAML\SAML2\XML\mdui\Description;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
 use SimpleSAML\SAML2\XML\mdui\DisplayName;
@@ -28,10 +30,10 @@ use function strval;
 /**
  * Class \SAML2\XML\mdui\UIInfoTest
  *
- * @covers \SimpleSAML\SAML2\XML\mdui\UIInfo
- * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(UIInfo::class)]
+#[CoversClass(AbstractMduiElement::class)]
 final class UIInfoTest extends TestCase
 {
     use ArrayizableElementTestTrait;

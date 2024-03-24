@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Test\SAML2\XML\saml;
 
 use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\Decision;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Action;
 use SimpleSAML\SAML2\XML\saml\AuthzDecisionStatement;
 use SimpleSAML\SAML2\XML\saml\Evidence;
@@ -20,12 +22,11 @@ use function strval;
 /**
  * Class \SimpleSAML\SAML2\XML\saml\AuthzDecisionStatementTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\AuthzDecisionStatement
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractStatement
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
- *
  * @package simplesamlphp/saml2
  */
+#[CoversClass(AuthzDecisionStatement::class)]
+#[CoversClass(AbstractStatement::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class AuthzDecisionStatementTest extends TestCase
 {
     use SchemaValidationTestTrait;

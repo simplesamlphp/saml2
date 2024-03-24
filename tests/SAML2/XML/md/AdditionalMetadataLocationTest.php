@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -19,10 +21,10 @@ use function strval;
 /**
  * Tests for the AdditionalMetadataLocation class
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation
  * @package simplesamlphp/saml2
  */
+#[CoversClass(AdditionalMetadataLocation::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class AdditionalMetadataLocationTest extends TestCase
 {
     use SchemaValidationTestTrait;

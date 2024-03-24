@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\UnknownID;
 use SimpleSAML\Test\SAML2\Constants as C;
@@ -22,13 +24,12 @@ use function strval;
 /**
  * Class \SAML2\XML\saml\BaseIDTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\UnknownID
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractBaseID
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractBaseIDType
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
- *
  * @package simplesamlphp/saml2
  */
+#[CoversClass(UnknownID::class)]
+#[CoversClass(AbstractBaseID::class)]
+#[CoversClass(AbstractBaseIDType::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class BaseIDTest extends TestCase
 {
     use SchemaValidationTestTrait;

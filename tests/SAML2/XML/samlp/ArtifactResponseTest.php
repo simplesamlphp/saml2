@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
+use SimpleSAML\SAML2\XML\samlp\AbstractStatusResponse;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
 use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
 use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
@@ -22,12 +26,12 @@ use function dirname;
 use function strval;
 
 /**
- * @covers \SimpleSAML\SAML2\XML\samlp\ArtifactResponse
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponse
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
+#[CoversClass(ArtifactResponse::class)]
+#[CoversClass(AbstractStatusResponse::class)]
+#[CoversClass(AbstractMessage::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class ArtifactResponseTest extends TestCase
 {
     use SchemaValidationTestTrait;
