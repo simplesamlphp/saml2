@@ -56,7 +56,7 @@ final class EmailAddress extends AbstractMdElement implements ArrayizableElement
      */
     protected function sanitizeContent(string $content): string
     {
-        return trim(preg_replace('/^mailto:/i', '', $content));
+        return trim(preg_replace('/^(mailto:)+/i', '', $content));
     }
 
 

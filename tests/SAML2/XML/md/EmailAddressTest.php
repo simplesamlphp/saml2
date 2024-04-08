@@ -54,11 +54,11 @@ final class EmailAddressTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = new EmailAddress('john.doe@example.org');
+        $email = new EmailAddress('john.doe@example.org');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
+            strval($email),
         );
     }
 
@@ -88,5 +88,18 @@ final class EmailAddressTest extends TestCase
         $this->expectExceptionMessage('Expected a value to be a valid e-mail address. Got: "not so valid"');
 
         EmailAddress::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test that creating an EmailAddress from XML succeeds when multiple mailto: prefixes are in place.
+     */
+    public function testUnmarshallingWithMultipleMailtoUri(): void
+    {
+        $document = clone self::$xmlRepresentation;
+        $document->documentElement->textContent = 'mailto:mailto:mailto:john.doe@example.org';
+
+        $email = EmailAddress::fromXML($document->documentElement);
+        $this->assertEquals('mailto:john.doe@example.org', $email->getContent());
     }
 }
