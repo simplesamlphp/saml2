@@ -139,10 +139,8 @@ class HTTPRedirect extends Binding
             throw new Exception(sprintf('Unknown SAMLEncoding: %s', $query['SAMLEncoding']));
         }
 
-        $message = base64_decode($message);
-        if ($message === false) {
-            throw new Exception('Error while base64 decoding SAML message.');
-        }
+        Assert::stringPlausibleBase64($message, 'Error while base64 decoding SAML message.', Exception::class);
+        $message = base64_decode($message, true); // Error handling already dealt with by assertion
 
         $message = gzinflate($message);
         if ($message === false) {

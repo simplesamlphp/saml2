@@ -90,7 +90,8 @@ class HTTPPost extends Binding
             throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
 
-        $msgStr = base64_decode($msgStr);
+        Assert::stringPlausibleBase64($msgStr, 'Error while base64 decoding SAML message.', Exception::class);
+        $msgStr = base64_decode($msgStr, true); // Error handling already dealt with by assertion
         $msgStr = DOMDocumentFactory::fromString($msgStr)->saveXML();
 
         $document = DOMDocumentFactory::fromString($msgStr);
