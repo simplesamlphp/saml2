@@ -124,7 +124,7 @@ class HTTPArtifact extends Binding
     {
         $query = $request->getQueryParams();
         if (array_key_exists('SAMLart', $query)) {
-            $artifact = base64_decode($query['SAMLart']);
+            $artifact = base64_decode($query['SAMLart'], true);
             $endpointIndex = bin2hex(substr($artifact, 2, 2));
             $sourceId = bin2hex(substr($artifact, 4, 20));
         } else {

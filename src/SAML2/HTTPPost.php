@@ -88,7 +88,7 @@ class HTTPPost extends Binding
             throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
 
-        $msgStr = base64_decode($msgStr);
+        $msgStr = base64_decode($msgStr, true);
         $msgStr = DOMDocumentFactory::fromString($msgStr)->saveXML();
 
         $document = DOMDocumentFactory::fromString($msgStr);

@@ -172,7 +172,7 @@ final class HTTPRedirectTest extends TestCase
         $signedQuery = 'SAMLRequest=' . urlencode($q['SAMLRequest']);
         $signedQuery .= '&RelayState=' . urlencode($q['RelayState']);
         $signedQuery .= '&SigAlg=' . urlencode($q['SigAlg']);
-        $this->assertTrue($verifier->verify($signedQuery, base64_decode($q['Signature'])));
+        $this->assertTrue($verifier->verify($signedQuery, base64_decode($q['Signature'], true)));
 
         // validate with another cert, should fail
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
@@ -183,7 +183,7 @@ final class HTTPRedirectTest extends TestCase
         $signedQuery = 'SAMLRequest=' . urlencode($q['SAMLRequest']);
         $signedQuery .= '&RelayState=' . urlencode($q['RelayState']);
         $signedQuery .= '&SigAlg=' . urlencode($q['SigAlg']);
-        $this->assertFalse($verifier->verify($signedQuery, base64_decode($q['Signature'])));
+        $this->assertFalse($verifier->verify($signedQuery, base64_decode($q['Signature'], true)));
     }
 
 
@@ -261,7 +261,7 @@ final class HTTPRedirectTest extends TestCase
         $request = $request->withQueryParams($q);
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Error while inflating');
+        $this->expectExceptionMessage('Error while base64 decoding SAML message.');
         $hr = new HTTPRedirect();
         @$hr->receive($request);
     }
