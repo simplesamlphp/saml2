@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Exception;
 use PHPUnit\Framework\Error\Warning;
 use SAML2\DOMDocumentFactory;
 use SAML2\HTTPRedirect;
@@ -165,7 +166,9 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $qs = 'SAMLRequest=cannotinflate';
         $_SERVER['QUERY_STRING'] = $qs;
 
-        $this->expectException(\Exception::class, 'Error while inflating');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Error while base64 decoding SAML message.');
+
         $hr = new HTTPRedirect();
         $request = @$hr->receive();
     }

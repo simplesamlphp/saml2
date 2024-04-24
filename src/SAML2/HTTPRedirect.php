@@ -116,7 +116,7 @@ class HTTPRedirect extends Binding
             throw new \Exception('Unknown SAMLEncoding: '.var_export($data['SAMLEncoding'], true));
         }
 
-        $message = base64_decode($message);
+        $message = base64_decode($message, true);
         if ($message === false) {
             throw new \Exception('Error while base64 decoding SAML message.');
         }

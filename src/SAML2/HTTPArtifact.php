@@ -100,7 +100,7 @@ class HTTPArtifact extends Binding
     public function receive(): Message
     {
         if (array_key_exists('SAMLart', $_REQUEST)) {
-            $artifact = base64_decode($_REQUEST['SAMLart']);
+            $artifact = base64_decode($_REQUEST['SAMLart'], true);
             $endpointIndex = bin2hex(substr($artifact, 2, 2));
             $sourceId = bin2hex(substr($artifact, 4, 20));
         } else {
