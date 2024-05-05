@@ -5,8 +5,15 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use Exception;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType;
+use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor;
 use SimpleSAML\SAML2\XML\md\AttributeProfile;
@@ -16,11 +23,9 @@ use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -29,14 +34,15 @@ use function strval;
 /**
  * Tests for the AttributeAuthorityDescriptor class.
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
- * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType
- * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
- * @covers \SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(AttributeAuthorityDescriptor::class)]
+#[CoversClass(AbstractRoleDescriptor::class)]
+#[CoversClass(AbstractRoleDescriptorType::class)]
+#[CoversClass(AbstractMetadataDocument::class)]
+#[CoversClass(AbstractSignedMdElement::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class AttributeAuthorityDescriptorTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -159,19 +165,6 @@ final class AttributeAuthorityDescriptorTest extends TestCase
 
 
     /**
-     * Test that creating an AttributeAuthorityDescriptor with an AttributeService of the wrong type fails.
-     */
-    public function testMarshallingWithWrongAttributeService(): void
-    {
-        $this->expectException(InvalidDOMElementException::class);
-        $this->expectExceptionMessage('AttributeService is not an instance of EndpointType.');
-
-        /** @psalm-suppress InvalidArgument */
-        new AttributeAuthorityDescriptor(['string'], [C::NS_SAMLP]);
-    }
-
-
-    /**
      * Test that creating an AttributeAuthorityDescriptor without optional parameters works.
      */
     public function testMarshallingWithoutOptionalParameters(): void
@@ -210,21 +203,6 @@ final class AttributeAuthorityDescriptorTest extends TestCase
 
 
     /**
-     * Test that creating an AttributeAuthorityDescriptor with wrong AssertionIDRequestService fails.
-     */
-    public function testMarshallingWithWrongAssertionIDRequestService(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage(
-            'Expected an instance of SimpleSAML\SAML2\XML\md\AssertionIDRequestService. Got: string',
-        );
-
-        /** @psalm-suppress InvalidArgument */
-        new AttributeAuthorityDescriptor([self::$as], [C::NS_SAMLP], ['x']);
-    }
-
-
-    /**
      * Test that creating an AttributeAuthorityDescriptor with an empty NameIDFormat fails.
      */
     public function testMarshallingWithEmptyNameIDFormat(): void
@@ -250,43 +228,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     }
 
 
-    /**
-     * Test that creating an AttributeAuthorityDescriptor with wrong Attribute fails.
-     */
-    public function testMarshallingWithWrongAttribute(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage(
-            'Expected an instance of SimpleSAML\SAML2\XML\saml\Attribute. Got: string',
-        );
-
-        /** @psalm-suppress InvalidArgument */
-        new AttributeAuthorityDescriptor(
-            [self::$as],
-            [C::NS_SAMLP],
-            [self::$aidrs],
-            [new NameIDFormat(C::NAMEID_PERSISTENT)],
-            [new AttributeProfile(C::PROFILE_1)],
-            ['x'],
-        );
-    }
-
-
     // test unmarshalling
-
-
-    /**
-     * Test creating an AttributeAuthorityDescriptor from XML
-     */
-    public function testUnmarshalling(): void
-    {
-        $aad = AttributeAuthorityDescriptor::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($aad),
-        );
-    }
 
 
     /**

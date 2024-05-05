@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Exception;
 
 use InvalidArgumentException as BuiltinInvalidArgumentException;
-use Throwable;
 
-use function gettype;
 use function get_class;
+use function gettype;
 use function is_object;
 use function sprintf;
 
-class InvalidArgumentException extends BuiltinInvalidArgumentException implements Throwable
+class InvalidArgumentException extends BuiltinInvalidArgumentException
 {
     /**
      * @param string $expected description of expected type
@@ -25,7 +24,7 @@ class InvalidArgumentException extends BuiltinInvalidArgumentException implement
         $message = sprintf(
             'Invalid Argument type: "%s" expected, "%s" given',
             $expected,
-            is_object($parameter) ? get_class($parameter) : gettype($parameter)
+            is_object($parameter) ? get_class($parameter) : gettype($parameter),
         );
 
         return new self($message);

@@ -8,9 +8,8 @@ use SimpleSAML\SAML2\Certificate\Exception\InvalidCertificateStructureException;
 use SimpleSAML\SAML2\Certificate\Exception\NoKeysFoundException;
 use SimpleSAML\SAML2\Certificate\KeyCollection;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
-use SimpleSAML\SAML2\Exception\InvalidArgumentException;
-use SimpleSAML\SAML2\Utilities\Certificate;
 use SimpleSAML\SAML2\Utilities\File;
+use SimpleSAML\XMLSecurity\Utils\Certificate;
 
 use function count;
 use function preg_match;
@@ -48,7 +47,7 @@ class KeyLoader
     public static function extractPublicKeys(
         CertificateProvider $config,
         string $usage = null,
-        bool $required = false
+        bool $required = false,
     ): KeyCollection {
         $keyLoader = new self();
 
@@ -65,7 +64,7 @@ class KeyLoader
     public function loadKeysFromConfiguration(
         CertificateProvider $config,
         string $usage = null,
-        bool $required = false
+        bool $required = false,
     ): KeyCollection {
         $keys = $config->getKeys();
         $certificateData = $config->getCertificateData();
@@ -82,7 +81,7 @@ class KeyLoader
         if ($required && !$this->hasKeys()) {
             throw new NoKeysFoundException(
                 'No keys found in configured metadata, please ensure that either the "keys", "certData" or '
-                . '"certificate" entries is available.'
+                . '"certificate" entries is available.',
             );
         }
 
@@ -96,7 +95,6 @@ class KeyLoader
      *
      * @param array|\Traversable $configuredKeys
      * @param string|null $usage
-     * @return void
      */
     public function loadKeys($configuredKeys, string $usage = null): void
     {
@@ -120,7 +118,6 @@ class KeyLoader
      * Attempts to load a key based on the given certificateData
      *
      * @param string $certificateData
-     * @return void
      */
     public function loadCertificateData(string $certificateData): void
     {
@@ -132,21 +129,19 @@ class KeyLoader
      * Loads the certificate in the file given
      *
      * @param string $certificateFile the full path to the cert file.
-     * @return void
      */
     public function loadCertificateFile(string $certificateFile): void
     {
         $certificate = File::getFileContents($certificateFile);
-
         if (!Certificate::hasValidStructure($certificate)) {
             throw new InvalidCertificateStructureException(sprintf(
                 'Could not find PEM encoded certificate in "%s"',
-                $certificateFile
+                $certificateFile,
             ));
         }
 
         // capture the certificate contents without the delimiters
-        preg_match(Certificate::CERTIFICATE_PATTERN, $certificate, $matches);
+        preg_match(Certificate::PUBLIC_KEY_PATTERN, $certificate, $matches);
         $this->loadedKeys->add(X509::createFromCertificateData($matches[1]));
     }
 

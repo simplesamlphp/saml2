@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMDocument;
-use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AttributeProfile;
-use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -20,10 +20,11 @@ use function strval;
 /**
  * Class \SimpleSAML\SAML2\XML\md\AttributeProfileTest
  *
- * @covers \SimpleSAML\SAML2\XML\md\AttributeProfile
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(AttributeProfile::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class AttributeProfileTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -51,23 +52,7 @@ final class AttributeProfileTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attributeProfile = new AttributeProfile('urn:x-simplesamlphp:profile:one');
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($attributeProfile),
-        );
-    }
-
-
-    // unmarshalling
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $attributeProfile = AttributeProfile::fromXML(self::$xmlRepresentation->documentElement);
+        $attributeProfile = new AttributeProfile(C::PROFILE_1);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

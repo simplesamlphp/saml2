@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
+use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
+use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -21,13 +23,13 @@ use function strval;
 /**
  * Tests for localized names.
  *
- * @covers \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy
- * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedURI
- * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedName
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- *
  * @package simplesamlphp/saml2
  */
+#[Group('mdrpi')]
+#[CoversClass(RegistrationPolicy::class)]
+#[CoversClass(AbstractLocalizedName::class)]
+#[CoversClass(AbstractLocalizedURI::class)]
+#[CoversClass(AbstractMdrpiElement::class)]
 final class RegistrationPolicyTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -69,20 +71,6 @@ final class RegistrationPolicyTest extends TestCase
 
 
     // test unmarshalling
-
-
-    /**
-     * Test creating a RegistrationPolicy from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = RegistrationPolicy::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
 
 
     /**

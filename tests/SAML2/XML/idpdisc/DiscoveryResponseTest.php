@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\idpdisc;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponse;
+use SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -22,13 +23,14 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\idpdisc\DiscoveryResponseTest
+ * Class \SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponseTest
  *
- * @covers \SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponse
- * @covers \SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('idpdisc')]
+#[CoversClass(DiscoveryResponse::class)]
+#[CoversClass(AbstractIndexedEndpointType::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class DiscoveryResponseTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -36,10 +38,10 @@ final class DiscoveryResponseTest extends TestCase
     use SerializableElementTestTrait;
 
     /** @var \SimpleSAML\XML\Chunk */
-    protected static Chunk $ext;
+    private static Chunk $ext;
 
     /** @var \SimpleSAML\XML\Attribute */
-    protected static XMLAttribute $attr;
+    private static XMLAttribute $attr;
 
 
     /**
@@ -83,7 +85,7 @@ final class DiscoveryResponseTest extends TestCase
         $discoResponse = new DiscoveryResponse(
             43,
             C::BINDING_IDPDISC,
-            'https://simplesamlphp.org/some/endpoint',
+            C::LOCATION_A,
             false,
             null,
             [self::$ext],
@@ -109,7 +111,7 @@ final class DiscoveryResponseTest extends TestCase
         new DiscoveryResponse(
             42,
             C::BINDING_IDPDISC,
-            'https://simplesamlphp.org/some/endpoint',
+            C::LOCATION_A,
             false,
             'https://response.location/',
         );
@@ -117,20 +119,6 @@ final class DiscoveryResponseTest extends TestCase
 
 
     // test unmarshalling
-
-
-    /**
-     * Test creating a DiscoveryResponse from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $discoResponse = DiscoveryResponse::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($discoResponse),
-        );
-    }
 
 
     /**

@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
+use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\OrganizationURL;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -21,13 +23,13 @@ use function strval;
 /**
  * Tests for localized names.
  *
- * @covers \SimpleSAML\SAML2\XML\md\OrganizationURL
- * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedURI
- * @covers \SimpleSAML\SAML2\XML\md\AbstractLocalizedName
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- *
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(OrganizationURL::class)]
+#[CoversClass(AbstractLocalizedURI::class)]
+#[CoversClass(AbstractLocalizedName::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class OrganizationURLTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -69,20 +71,6 @@ final class OrganizationURLTest extends TestCase
 
 
     // test unmarshalling
-
-
-    /**
-     * Test creating a OrganizationURL from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = OrganizationURL::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
 
 
     /**

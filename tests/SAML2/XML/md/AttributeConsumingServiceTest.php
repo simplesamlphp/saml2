@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AttributeConsumingService;
 use SimpleSAML\SAML2\XML\md\RequestedAttribute;
 use SimpleSAML\SAML2\XML\md\ServiceDescription;
@@ -18,7 +20,6 @@ use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
@@ -26,10 +27,11 @@ use function strval;
 /**
  * Tests for the AttributeConsumingService class.
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AttributeConsumingService
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(AttributeConsumingService::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class AttributeConsumingServiceTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -169,20 +171,6 @@ final class AttributeConsumingServiceTest extends TestCase
 
 
     // test unmarshalling
-
-
-    /**
-     * Test creating an AssertionConsumerService from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $acs = AttributeConsumingService::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($acs),
-        );
-    }
 
 
     /**

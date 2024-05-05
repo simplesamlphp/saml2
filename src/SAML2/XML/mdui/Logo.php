@@ -10,7 +10,6 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\StringElementTrait;
 
 use function filter_var;
@@ -131,7 +130,6 @@ final class Logo extends AbstractMduiElement implements ArrayizableElementInterf
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
         $e->textContent = $this->getContent();
         $e->setAttribute('height', strval($this->getHeight()));

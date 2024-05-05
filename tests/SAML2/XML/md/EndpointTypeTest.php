@@ -5,31 +5,35 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\md\AbstractEndpointType;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
 use SimpleSAML\SAML2\XML\md\AttributeService;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\md\EndpointTypeTest
+ * Class \SimpleSAML\SAML2\XML\md\EndpointTypeTest
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractEndpointType
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(AbstractEndpointType::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class EndpointTypeTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -37,7 +41,7 @@ final class EndpointTypeTest extends TestCase
     use SerializableElementTestTrait;
 
     /** @var \DOMDocument */
-    protected static DOMDocument $ext;
+    private static DOMDocument $ext;
 
 
     /**
@@ -74,7 +78,7 @@ final class EndpointTypeTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr = new XMLAttribute('urn:x-simplesamlphp:namespace', 'test', 'attr', 'value');
+        $attr = new XMLAttribute(C::NAMESPACE, 'test', 'attr', 'value');
 
         $endpointType = new AttributeService(
             C::BINDING_HTTP_POST,
@@ -97,7 +101,7 @@ final class EndpointTypeTest extends TestCase
     public function testMarshallingWithEmptyBinding(): void
     {
         $this->expectException(SchemaViolationException::class);
-        new AttributeService('', 'https://simplesamlphp.org/some/endpoint');
+        new AttributeService('', C::LOCATION_A);
     }
 
 
@@ -116,27 +120,13 @@ final class EndpointTypeTest extends TestCase
      */
     public function testMarshallingWithoutOptionalAttributes(): void
     {
-        $endpointType = new AttributeService(C::BINDING_HTTP_POST, 'https://simplesamlphp.org/some/endpoint');
+        $endpointType = new AttributeService(C::BINDING_HTTP_POST, C::LOCATION_A);
         $this->assertNull($endpointType->getResponseLocation());
         $this->assertEmpty($endpointType->getAttributesNS());
     }
 
 
     // test unmarshalling
-
-
-    /**
-     * Test creating an EndpointType from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $endpointType = AttributeService::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($endpointType),
-        );
-    }
 
 
     /**
@@ -216,7 +206,7 @@ final class EndpointTypeTest extends TestCase
     public function testUnmarshallingWithoutOptionalAttributes(): void
     {
         $mdNamespace = C::NS_MD;
-        $location = 'https://simplesamlphp.org/some/endpoint';
+        $location = C::LOCATION_A;
 
         $document = DOMDocumentFactory::fromString(<<<XML
 <md:AttributeService xmlns:md="{$mdNamespace}" Binding="urn:x-simplesamlphp:namespace" Location="{$location}" />

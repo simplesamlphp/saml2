@@ -9,6 +9,7 @@ use Closure;
 use SimpleSAML\SAML2\Exception\RuntimeException;
 
 use function array_filter;
+use function array_map;
 use function array_search;
 use function count;
 use function end;
@@ -32,13 +33,12 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @param mixed $key
+     * @param mixed $element
      *
-     * @return void
      */
-    public function add($key): void
+    public function add($element): void
     {
-        $this->elements[] = $key;
+        $this->elements[] = $element;
     }
 
 
@@ -67,7 +67,6 @@ class ArrayCollection implements Collection
     /**
      * @param mixed $key
      * @param mixed $value
-     * @return void
      */
     public function set($key, $value): void
     {
@@ -76,31 +75,30 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @param mixed $key
+     * @param mixed $element
      *
-     * @return void
      */
-    public function remove($key): void
+    public function remove($element): void
     {
-        $elt = array_search($key, $this->elements);
-        if ($elt === false) {
+        $key = array_search($element, $this->elements);
+        if ($key === false) {
             return;
         }
-        unset($this->elements[$elt]);
+        unset($this->elements[$key]);
     }
 
 
     /**
-     * @throws \SimpleSAML\SAML2\Exception\RuntimeException
+     * @throws RuntimeException
      * @return bool|mixed
      */
     public function getOnlyElement()
     {
         if ($this->count() !== 1) {
             throw new RuntimeException(sprintf(
-                __CLASS__ . '::' . __METHOD__ . ' requires that the collection has exactly one element, '
+                __METHOD__ . ' requires that the collection has exactly one element, '
                 . '"%d" elements found',
-                $this->count()
+                $this->count(),
             ));
         }
 
@@ -181,7 +179,6 @@ class ArrayCollection implements Collection
     /**
      * @param mixed $offset
      * @param mixed $value
-     * @return void
      */
     public function offsetSet($offset, $value): void
     {
@@ -191,7 +188,6 @@ class ArrayCollection implements Collection
 
     /**
      * @param $offset
-     * @return void
      */
     public function offsetUnset($offset): void
     {

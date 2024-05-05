@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DateTimeImmutable;
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\AssertionIDRef;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\AssertionIDRequest;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -21,14 +23,15 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\samlp\AssertionIDRequestTest
+ * Class \SimpleSAML\SAML2\XML\samlp\AssertionIDRequestTest
  *
- * @covers \SimpleSAML\SAML2\XML\samlp\AssertionIDRequest
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractRequest
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
+#[Group('samlp')]
+#[CoversClass(AssertionIDRequest::class)]
+#[CoversClass(AbstractRequest::class)]
+#[CoversClass(AbstractMessage::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class AssertionIDRequestTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -64,19 +67,6 @@ final class AssertionIDRequestTest extends TestCase
             issueInstant: new DateTimeImmutable('2014-09-22T13:42:00Z'),
             destination: 'https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO',
         );
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($assertionIDRequest),
-        );
-    }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $assertionIDRequest = AssertionIDRequest::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

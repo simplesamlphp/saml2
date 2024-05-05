@@ -6,8 +6,8 @@ namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AbstractCondition;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
@@ -57,7 +57,7 @@ final class CustomCondition extends AbstractCondition
      * Convert XML into a Condition
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return \SimpleSAML\SAML2\XML\saml\AbstractCondition
+     * @return static
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong

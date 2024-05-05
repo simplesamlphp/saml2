@@ -6,7 +6,6 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\alg\AbstractAlgElement as ALG;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
@@ -76,7 +75,7 @@ final class Extensions extends AbstractMdElement
             Scope::NS => [
                 'Scope' => Scope::class,
             ],
-            C::NS_MDATTR => [
+            EntityAttributes::NS => [
                 'EntityAttributes' => EntityAttributes::class,
             ],
             MDRPI::NS => [

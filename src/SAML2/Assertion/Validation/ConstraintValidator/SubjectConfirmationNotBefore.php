@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
 
-use Psr\Clock\ClockInterface;
 use DateInterval;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assertion\Validation\Result;

@@ -14,7 +14,6 @@ use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 
 use function array_pop;
-use function gmdate;
 use function preg_replace;
 
 /**

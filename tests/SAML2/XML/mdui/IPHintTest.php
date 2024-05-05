@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
 use SimpleSAML\SAML2\XML\mdui\IPHint;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -17,10 +19,11 @@ use function strval;
 /**
  * Tests for IPHint.
  *
- * @covers \SimpleSAML\SAML2\XML\mdui\IPHint
- * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
  * @package simplesamlphp/saml2
  */
+#[Group('mdui')]
+#[CoversClass(IPHint::class)]
+#[CoversClass(AbstractMduiElement::class)]
 final class IPHintTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -50,23 +53,6 @@ final class IPHintTest extends TestCase
     public function testMarshalling(): void
     {
         $hint = new IPHint('130.59.0.0/16');
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($hint),
-        );
-    }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test creating a IPHint from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $hint = IPHint::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

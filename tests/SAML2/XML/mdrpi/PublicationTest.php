@@ -4,28 +4,30 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
-use DOMDocument;
+use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement;
 use SimpleSAML\SAML2\XML\mdrpi\Publication;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\mdrpi\PublicationTest
- *
- * @covers \SimpleSAML\SAML2\XML\mdrpi\Publication
- * @covers \SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement
+ * Class \SimpleSAML\SAML2\XML\mdrpi\PublicationTest
  *
  * @package simplesamlphp/saml2
  */
+#[Group('mdrpi')]
+#[CoversClass(Publication::class)]
+#[CoversClass(AbstractMdrpiElement::class)]
 final class PublicationTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -59,22 +61,9 @@ final class PublicationTest extends TestCase
     {
         $publication = new Publication(
             'SomePublisher',
-            1293840000,
+            new DateTimeImmutable('2011-01-01T00:00:00Z'),
             'SomePublicationId',
         );
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($publication),
-        );
-    }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $publication = Publication::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

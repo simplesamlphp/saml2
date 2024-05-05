@@ -48,6 +48,9 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
         protected array $domainHint = [],
         protected array $geolocationHint = [],
     ) {
+        Assert::maxCount($ipHint, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($domainHint, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($geolocationHint, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($ipHint, IPHint::class);
         Assert::allIsInstanceOf($domainHint, DomainHint::class);
         Assert::allIsInstanceOf($geolocationHint, GeolocationHint::class);
@@ -153,11 +156,6 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        /** @var \SimpleSAML\XML\SerializableElementInterface $child */
-        foreach ($this->getElements() as $child) {
-            $child->toXML($e);
-        }
-
         foreach ($this->getIPHint() as $hint) {
             $hint->toXML($e);
         }
@@ -168,6 +166,11 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
 
         foreach ($this->getGeolocationHint() as $hint) {
             $hint->toXML($e);
+        }
+
+        /** @var \SimpleSAML\XML\SerializableElementInterface $child */
+        foreach ($this->getElements() as $child) {
+            $child->toXML($e);
         }
 
         return $e;

@@ -11,16 +11,12 @@ use function array_key_exists;
  */
 class ArrayAdapter implements Queryable
 {
-    /** @var array */
-    private array $configuration;
-
-
     /**
      * @param array $configuration
      */
-    public function __construct(array $configuration)
-    {
-        $this->configuration = $configuration;
+    public function __construct(
+        private array $configuration,
+    ) {
     }
 
 

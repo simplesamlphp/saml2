@@ -6,8 +6,12 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DateTimeImmutable;
 use Exception;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
+use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
 use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
@@ -18,7 +22,6 @@ use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
@@ -29,12 +32,13 @@ use function strval;
 /**
  * Tests for the AffiliationDescriptor class.
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
- * @covers \SimpleSAML\SAML2\XML\md\AffiliationDescriptor
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(AffiliationDescriptor::class)]
+#[CoversClass(AbstractSignedMdElement::class)]
+#[CoversClass(AbstractMetadataDocument::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class AffiliationDescriptorTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -118,20 +122,6 @@ final class AffiliationDescriptorTest extends TestCase
 
 
     // test unmarshalling
-
-
-    /**
-     * Test creating an AffiliationDescriptor from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $affiliationDescriptor = AffiliationDescriptor::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($affiliationDescriptor),
-        );
-    }
 
 
     /**

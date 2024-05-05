@@ -36,6 +36,7 @@ final class PDPDescriptor extends AbstractRoleDescriptorType
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors
      * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts
+     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
         protected array $authzService,
@@ -50,6 +51,7 @@ final class PDPDescriptor extends AbstractRoleDescriptorType
         ?Organization $organization = null,
         array $keyDescriptors = [],
         array $contacts = [],
+        array $namespacedAttributes = [],
     ) {
         Assert::maxCount($authzService, C::UNBOUNDED_LIMIT);
         Assert::minCount($authzService, 1, 'At least one md:AuthzService endpoint must be present.');
@@ -77,6 +79,7 @@ final class PDPDescriptor extends AbstractRoleDescriptorType
             $keyDescriptors,
             $organization,
             $contacts,
+            $namespacedAttributes,
         );
     }
 
@@ -168,6 +171,7 @@ final class PDPDescriptor extends AbstractRoleDescriptorType
             !empty($orgs) ? $orgs[0] : null,
             KeyDescriptor::getChildrenOfClass($xml),
             ContactPerson::getChildrenOfClass($xml),
+            self::getAttributesNSFromXML($xml),
         );
 
         if (!empty($signature)) {

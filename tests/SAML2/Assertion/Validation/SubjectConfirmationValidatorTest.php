@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
@@ -12,14 +13,13 @@ use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Assertion\Exception\InvalidSubjectConfirmationException;
 use SimpleSAML\SAML2\Assertion\Processor;
 use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
+use SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationValidator;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Assertion;
-use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
-use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
@@ -29,9 +29,9 @@ use SimpleSAML\XML\DOMDocumentFactory;
 /**
  * Tests for the SubjectConfirmation validators
  *
- * @covers \SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationValidator
  * @package simplesamlphp/saml2
  */
+#[CoversClass(SubjectConfirmationValidator::class)]
 final class SubjectConfirmationValidatorTest extends TestCase
 {
     /** @var \Psr\Clock\ClockInterface */
@@ -58,7 +58,7 @@ final class SubjectConfirmationValidatorTest extends TestCase
     /** @var \SimpleSAML\SAML2\Configuration\Destination */
     private static Destination $destination;
 
-    /** @var \SimpleSAML\SAML2\xml\samlp\Response */
+    /** @var \SimpleSAML\SAML2\XML\samlp\Response */
     private static Response $response;
 
 

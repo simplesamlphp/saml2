@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\Company;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -18,10 +19,11 @@ use function strval;
 /**
  * Tests for Company.
  *
- * @covers \SimpleSAML\SAML2\XML\md\Company
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(Company::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class CompanyTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -51,23 +53,6 @@ final class CompanyTest extends TestCase
     public function testMarshalling(): void
     {
         $name = new Company('Company');
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test creating a Company from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = Company::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

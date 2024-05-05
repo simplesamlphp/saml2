@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use CASE_LOWER;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
@@ -57,7 +56,7 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
      * @param string $location
      * @param string|null $responseLocation
      * @param \SimpleSAML\XML\ElementInterface[] $children
-     * @param list<\SimpleSAML\XML\Attribute> $attributes
+     * @param array<\SimpleSAML\XML\Attribute> $attributes
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
@@ -133,10 +132,7 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
             InvalidDOMElementException::class,
         );
 
-        /** @var string $binding */
         $binding = self::getAttribute($xml, 'Binding');
-
-        /** @var string $location */
         $location = self::getAttribute($xml, 'Location');
 
         $children = [];

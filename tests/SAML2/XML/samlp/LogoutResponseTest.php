@@ -5,10 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DateTimeImmutable;
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
+use SimpleSAML\SAML2\XML\samlp\AbstractStatusResponse;
 use SimpleSAML\SAML2\XML\samlp\LogoutResponse;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
@@ -21,14 +25,15 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\samlp\LogoutResponseTest
+ * Class \SimpleSAML\SAML2\XML\samlp\LogoutResponseTest
  *
- * @covers \SimpleSAML\SAML2\XML\samlp\LogoutResponse
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractStatusResponse
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
+#[Group('samlp')]
+#[CoversClass(LogoutResponse::class)]
+#[CoversClass(AbstractStatusResponse::class)]
+#[CoversClass(AbstractMessage::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class LogoutResponseTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -69,19 +74,6 @@ final class LogoutResponseTest extends TestCase
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($logoutResponse)
-        );
-    }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $logoutResponse = LogoutResponse::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($logoutResponse),
         );
     }
 }

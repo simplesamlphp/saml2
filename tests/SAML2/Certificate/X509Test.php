@@ -4,26 +4,30 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Certificate;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Certificate\X509;
 
-class X509Test extends TestCase
+/**
+ * @package simplesamlphp/saml2
+ */
+#[CoversClass(X509::class)]
+final class X509Test extends TestCase
 {
     /**
-     * @group certificate
-     * @test
-     * @return void
      */
-    public function x509_certificate_contents_must_be_stripped_of_whitespace(): void
+    #[Group('certificate')]
+    public function testX509CertificateContentsMustBeStrippedOfWhitespace(): void
     {
         $toTest = [
-            'X509Certificate' => ' Should   No Longer  Have Whitespaces'
+            'X509Certificate' => ' Should   No Longer  Have Whitespaces',
         ];
 
-        $viaConstructor                = new X509($toTest);
-        $viaSetting                    = new X509([]);
+        $viaConstructor = new X509($toTest);
+        $viaSetting = new X509([]);
         $viaSetting['X509Certificate'] = $toTest['X509Certificate'];
-        $viaFactory                    = X509::createFromCertificateData($toTest['X509Certificate']);
+        $viaFactory = X509::createFromCertificateData($toTest['X509Certificate']);
 
         $this->assertEquals($viaConstructor['X509Certificate'], 'ShouldNoLongerHaveWhitespaces');
         $this->assertEquals($viaSetting['X509Certificate'], 'ShouldNoLongerHaveWhitespaces');

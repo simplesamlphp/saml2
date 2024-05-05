@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2;
 
-use DOMElement;
 use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
@@ -12,15 +11,13 @@ use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
-use SimpleSAML\XMLSecurity\Key\PublicKey;
+use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\Utils\Security;
 
 use function array_key_exists;
 use function base64_decode;
@@ -28,8 +25,8 @@ use function base64_encode;
 use function gzdeflate;
 use function gzinflate;
 use function sprintf;
-use function strlen;
 use function str_contains;
+use function strlen;
 use function urlencode;
 
 /**
@@ -139,8 +136,10 @@ class HTTPRedirect extends Binding
             throw new Exception(sprintf('Unknown SAMLEncoding: %s', $query['SAMLEncoding']));
         }
 
-        Assert::stringPlausibleBase64($message, 'Error while base64 decoding SAML message.', Exception::class);
-        $message = base64_decode($message, true); // Error handling already dealt with by assertion
+        $message = base64_decode($message, true);
+        if ($message === false) {
+            throw new Exception('Error while base64 decoding SAML message.');
+        }
 
         $message = gzinflate($message);
         if ($message === false) {

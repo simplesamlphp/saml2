@@ -5,9 +5,15 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DateTimeImmutable;
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType;
+use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
 use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
 use SimpleSAML\SAML2\XML\md\AssertionConsumerService;
 use SimpleSAML\SAML2\XML\md\AttributeConsumingService;
@@ -32,7 +38,6 @@ use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
@@ -43,14 +48,15 @@ use function strval;
 /**
  * Tests for the md:SPSSODescriptor element.
  *
- * @covers \SimpleSAML\SAML2\XML\md\SPSSODescriptor
- * @covers \SimpleSAML\SAML2\XML\md\AbstractSSODescriptor
- * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
- * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(SPSSODescriptor::class)]
+#[CoversClass(AbstractRoleDescriptor::class)]
+#[CoversClass(AbstractRoleDescriptorType::class)]
+#[CoversClass(AbstractMetadataDocument::class)]
+#[CoversClass(AbstractSignedMdElement::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class SPSSODescriptorTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -180,44 +186,6 @@ final class SPSSODescriptorTest extends TestCase
 
 
     /**
-     * Test that creating an SPSSODescriptor from scratch fails with an AssertionConsumerService of the wrong class.
-     */
-    public function testMarshallingWithWrongAssertionConsumerService(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage(
-            'All md:AssertionConsumerService endpoints must be an instance of AssertionConsumerService.',
-        );
-
-        /** @psalm-suppress InvalidArgument */
-        new SPSSODescriptor(
-            [new ArtifactResolutionService(0, C::BINDING_HTTP_POST, C::LOCATION_A)],
-            [C::NS_SAMLP],
-        );
-    }
-
-
-    /**
-     * Test that creating an SPSSODescriptor from scratch fails with an AttributeConsumingService of the wrong class.
-     */
-    public function testMarshallingWithWrongAttributeConsumingService(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage(
-            'All md:AttributeConsumingService endpoints must be an instance of AttributeConsumingService.',
-        );
-
-        /** @psalm-suppress InvalidArgument */
-        new SPSSODescriptor(
-            assertionConsumerService: [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_A)],
-            protocolSupportEnumeration: [C::NS_SAMLP],
-            authnRequestsSigned: true,
-            attributeConsumingService: [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_B)],
-        );
-    }
-
-
-    /**
      * Test that creating an SPSSODescriptor from scratch works without any optional arguments.
      */
     public function testMarshallingWithoutOptionalArguments(): void
@@ -226,6 +194,7 @@ final class SPSSODescriptorTest extends TestCase
             [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_A)],
             [C::NS_SAMLP],
         );
+
         $this->assertNull($spssod->getAuthnRequestsSigned());
         $this->assertNull($spssod->getWantAssertionsSigned());
         $this->assertEmpty($spssod->getAttributeConsumingService());
@@ -236,20 +205,6 @@ final class SPSSODescriptorTest extends TestCase
 
 
     /**
-     * Test creating an SPSSODescriptor from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $spssod = SPSSODescriptor::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($spssod),
-        );
-    }
-
-
-    /**
      * Test that creating an SPSSODescriptor from XML fails if no AssertionConsumerService is specified.
      */
     public function testUnmarshallingWithoutAssertionConsumerService(): void
@@ -257,10 +212,7 @@ final class SPSSODescriptorTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $acseps = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AssertionConsumerService');
 
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($acseps->item(1));
-
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($acseps->item(0));
 
         $this->expectException(AssertionFailedException::class);
@@ -331,7 +283,6 @@ XML
     {
         $xmlRepresentation = clone self::$xmlRepresentation;
         $acs = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AttributeConsumingService');
-        /** @psalm-suppress PossiblyNullReference */
         $acs->item(1)->setAttribute('isDefault', 'true');
 
         $this->expectException(AssertionFailedException::class);

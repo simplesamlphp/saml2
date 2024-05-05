@@ -5,29 +5,30 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
 use DateTimeImmutable;
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\mdrpi\PublicationInfoTest
- *
- * @covers \SimpleSAML\SAML2\XML\mdrpi\PublicationInfo
- * @covers \SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement
+ * Class \SimpleSAML\SAML2\XML\mdrpi\PublicationInfoTest
  *
  * @package simplesamlphp/saml2
  */
+#[Group('mdrpi')]
+#[CoversClass(PublicationInfo::class)]
+#[CoversClass(AbstractMdrpiElement::class)]
 final class PublicationInfoTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -79,19 +80,6 @@ final class PublicationInfoTest extends TestCase
 
     /**
      */
-    public function testUnmarshalling(): void
-    {
-        $publicationInfo = PublicationInfo::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($publicationInfo),
-        );
-    }
-
-
-    /**
-     */
     public function testCreationInstantTimezoneNotZuluThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;
@@ -125,17 +113,17 @@ XML
      */
     public function testMultipleUsagePoliciesWithSameLanguageThrowsException(): void
     {
-        $document = clone self::$xmlRepresentation;
+        $document = clone self::$xmlRepresentation->documentElement;
 
         // Append another 'en' UsagePolicy to the document
         $x = new UsagePolicy('en', 'https://example.org');
-        $x->toXML($document->documentElement);
+        $x->toXML($document);
 
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'There MUST NOT be more than one <mdrpi:UsagePolicy>,'
             . ' within a given <mdrpi:PublicationInfo>, for a given language'
         );
-        PublicationInfo::fromXML($document->documentElement);
+        PublicationInfo::fromXML($document);
     }
 }

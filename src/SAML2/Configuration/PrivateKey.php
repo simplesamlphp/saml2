@@ -4,15 +4,17 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Configuration;
 
-use SimpleSAML\SAML2\Exception\InvalidArgumentException;
-use SimpleSAML\SAML2\Exception\RuntimeException;
+use SimpleSAML\Assert\Assert;
 
 /**
  * Configuration of a private key.
  */
 class PrivateKey extends ArrayAdapter
 {
+    /** @var string */
     public const NAME_NEW = 'new';
+
+    /** @var string */
     public const NAME_DEFAULT = 'default';
 
 
@@ -35,12 +37,12 @@ class PrivateKey extends ArrayAdapter
 
     /**
      * @return string
+     *
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function getFilePath(): string
     {
-        if (!$this->isFile()) {
-            throw new RuntimeException('No path provided.');
-        }
+        Assert::true($this->isFile(), 'No path provided.');
 
         return $this->filePathOrContents;
     }
@@ -51,14 +53,14 @@ class PrivateKey extends ArrayAdapter
      */
     public function hasPassPhrase(): bool
     {
-        return $this->passphrase !== null;
+        return !empty($this->passphrase);
     }
 
 
     /**
-     * @return string|null
+     * @return string
      */
-    public function getPassPhrase(): ?string
+    public function getPassPhrase(): string
     {
         return $this->passphrase;
     }
@@ -74,12 +76,12 @@ class PrivateKey extends ArrayAdapter
 
     /**
      * @return string
+     *
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function getContents(): string
     {
-        if ($this->isFile()) {
-            throw new RuntimeException('No contents provided');
-        }
+        Assert::false($this->isFile(), 'No contents provided.');
 
         return $this->filePathOrContents;
     }

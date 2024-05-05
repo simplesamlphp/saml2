@@ -5,33 +5,35 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DateTimeImmutable;
-use DOMDocument;
-use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnStatement;
 use SimpleSAML\SAML2\XML\saml\SubjectLocality;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\saml\AuthnStatementTest
+ * Class \SimpleSAML\SAML2\XML\saml\AuthnStatementTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\AuthnStatement
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
+#[Group('saml')]
+#[CoversClass(AuthnStatement::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class AuthnStatementTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -116,19 +118,6 @@ final class AuthnStatementTest extends TestCase
 
 
     // unmarshalling
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $authnStatement = AuthnStatement::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authnStatement),
-        );
-    }
 
 
     /**

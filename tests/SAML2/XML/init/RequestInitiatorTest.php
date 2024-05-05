@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\init;
 
-use DOMDocument;
-use Exception;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\init\RequestInitiator;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -21,12 +21,13 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\init\RequestInitiatorTest
- *
- * @covers \SimpleSAML\SAML2\XML\init\RequestInitiator
+ * Class \SimpleSAML\SAML2\XML\init\RequestInitiatorTest
  *
  * @package simplesamlphp/saml2
  */
+#[Group('init')]
+#[CoversClass(RequestInitiator::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class RequestInitiatorTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -62,14 +63,8 @@ final class RequestInitiatorTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr = new XMLAttribute('urn:x-simplesamlphp:namespace', 'test', 'attr', 'value');
-
-        $requestInitiator = new RequestInitiator(
-            'https://simplesamlphp.org/some/endpoint',
-            'https://simplesamlphp.org/other/endpoint',
-            [self::$ext],
-            [$attr],
-        );
+        $attr = new XMLAttribute(C::NAMESPACE, 'test', 'attr', 'value');
+        $requestInitiator = new RequestInitiator(C::LOCATION_A, C::LOCATION_B, [self::$ext], [$attr]);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -79,20 +74,6 @@ final class RequestInitiatorTest extends TestCase
 
 
     // test unmarshalling
-
-
-    /**
-     * Test creating a RequestInitiator from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $requestInitiator = RequestInitiator::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($requestInitiator),
-        );
-    }
 
 
     /**

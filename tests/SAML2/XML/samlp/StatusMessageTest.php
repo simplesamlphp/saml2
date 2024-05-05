@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Test\SAML2\XML\samlp;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\StatusMessage;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -17,11 +19,11 @@ use function strval;
 /**
  * Class \SimpleSAML\SAML2\XML\samlp\StatusMessageTest
  *
- * @covers \SimpleSAML\SAML2\XML\samlp\StatusMessage
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
- *
  * @package simplesamlphp/saml2
  */
+#[Group('samlp')]
+#[CoversClass(StatusMessage::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class StatusMessageTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -46,20 +48,6 @@ final class StatusMessageTest extends TestCase
     public function testMarshalling(): void
     {
         $statusMessage = new StatusMessage('Something went wrong');
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($statusMessage),
-        );
-    }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $statusMessage = StatusMessage::fromXML(self::$xmlRepresentation->documentElement);
-
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

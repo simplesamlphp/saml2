@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
 use DateInterval;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
-use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotOnOrAfter;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
+use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotOnOrAfter;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
@@ -16,10 +18,9 @@ use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 
 /**
- * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotOnOrAfter
- *
  * @package simplesamlphp/saml2
  */
+#[CoversClass(SubjectConfirmationNotOnOrAfter::class)]
 final class SubjectConfirmationNotOnOrAfterTest extends TestCase
 {
     /** @var \Psr\Clock\ClockInterface */
@@ -35,10 +36,9 @@ final class SubjectConfirmationNotOnOrAfterTest extends TestCase
 
 
     /**
-     * @group assertion-validation
-     * @test
      */
-    public function timestampInThePastBeforeGraceperiodIsNotValid(): void
+    #[Group('assertion-validation')]
+    public function testTimestampInThePastBeforeGraceperiodIsNotValid(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData(
             null,
@@ -57,10 +57,9 @@ final class SubjectConfirmationNotOnOrAfterTest extends TestCase
 
 
     /**
-     * @group assertion-validation
-     * @test
      */
-    public function timeWithinGraceperiodIsValid(): void
+    #[Group('assertion-validation')]
+    public function testTimeWithinGraceperiodIsValid(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData(
             null,
@@ -78,10 +77,9 @@ final class SubjectConfirmationNotOnOrAfterTest extends TestCase
 
 
     /**
-     * @group assertion-validation
-     * @test
      */
-    public function currentTimeIsValid(): void
+    #[Group('assertion-validation')]
+    public function testCurrentTimeIsValid(): void
     {
         $subjectConfirmationData = new SubjectConfirmationData(null, self::$clock->now());
         $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);

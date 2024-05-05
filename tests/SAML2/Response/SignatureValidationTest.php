@@ -5,8 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Response;
 
 use Mockery;
-use Mockery\MockInterface;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use Mockery\MockInterface;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Assertion\Processor as AssertionProcessor;
 use SimpleSAML\SAML2\Configuration\Destination;
@@ -27,9 +30,9 @@ use function dirname;
 /**
  * Test that ensures that either the response or the assertion(s) or both must be signed.
  *
- * @covers \SimpleSAML\SAML2\Response\Processor
  * @package simplesamlphp/saml2
  */
+#[CoversClass(ResponseProcessor::class)]
 final class SignatureValidationTest extends MockeryTestCase
 {
     /**
@@ -77,9 +80,9 @@ final class SignatureValidationTest extends MockeryTestCase
 
 
     /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
+    #[PreserveGlobalState(false)]
+    #[RunInSeparateProcess]
     public function testThatAnUnsignedResponseWithASignedAssertionCanBeProcessed(): void
     {
         $this->assertionProcessor->shouldReceive('decryptAssertions')
@@ -100,9 +103,9 @@ final class SignatureValidationTest extends MockeryTestCase
 
 
     /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
+    #[PreserveGlobalState(false)]
+    #[RunInSeparateProcess]
     public function testThatASignedResponseWithAnUnsignedAssertionCanBeProcessed(): void
     {
         $this->assertionProcessor->shouldReceive('decryptAssertions')
@@ -123,9 +126,9 @@ final class SignatureValidationTest extends MockeryTestCase
 
 
     /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
+    #[PreserveGlobalState(false)]
+    #[RunInSeparateProcess]
     public function testThatASignedResponseWithASignedAssertionIsValid(): void
     {
         $this->assertionProcessor->shouldReceive('decryptAssertions')
@@ -146,9 +149,9 @@ final class SignatureValidationTest extends MockeryTestCase
 
 
     /**
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      */
+    #[PreserveGlobalState(false)]
+    #[RunInSeparateProcess]
     public function testThatAnUnsignedResponseWithNoSignedAssertionsThrowsAnException(): void
     {
         $assertion = Assertion::fromXML(

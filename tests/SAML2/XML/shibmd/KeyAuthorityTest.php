@@ -4,29 +4,30 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\shibmd;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\shibmd\AbstractShibmdElement;
 use SimpleSAML\SAML2\XML\shibmd\KeyAuthority;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\X509Certificate;
 use SimpleSAML\XMLSecurity\XML\ds\X509Data;
 
-use function array_pop;
 use function dirname;
 use function strval;
 
 /**
  * Class \SimpleSAML\SAML2\XML\shibmd\KeyAuthority
  *
- * @covers \SimpleSAML\SAML2\XML\shibmd\KeyAuthority
- * @covers \SimpleSAML\SAML2\XML\shibmd\AbstractShibmdElement
  * @package simplesamlphp/saml2
  */
+#[Group('shibmd')]
+#[CoversClass(KeyAuthority::class)]
+#[CoversClass(AbstractShibmdElement::class)]
 final class KeyAuthorityTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -80,36 +81,6 @@ final class KeyAuthorityTest extends TestCase
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($keyAuthority),
-        );
-    }
-
-
-    /**
-     * Unmarshalling a KeyAuthority.
-     */
-    public function testUnmarshalling(): void
-    {
-        $keyAuthority = KeyAuthority::fromXML(self::$xmlRepresentation->documentElement);
-        $this->assertEquals(2, $keyAuthority->getVerifyDepth());
-
-        $keys = $keyAuthority->getKeys();
-        $this->assertCount(2, $keys);
-
-        $this->assertEquals('abc123', $keys[0]->getId());
-        $this->assertEquals('def456', $keys[1]->getId());
-
-        $attributes = $keyAuthority->getAttributesNS();
-        $this->assertCount(1, $attributes);
-
-        $attribute = array_pop($attributes);
-        $this->assertEquals(
-            [
-                'namespaceURI' => 'urn:test:something',
-                'namespacePrefix' => 'test',
-                'attrName' => 'attr1',
-                'attrValue' => 'testval1',
-            ],
-            $attribute->toArray(),
         );
     }
 }

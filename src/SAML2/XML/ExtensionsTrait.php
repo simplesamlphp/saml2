@@ -8,8 +8,6 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\saml\AttributeValue;
-use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
 use SimpleSAML\XML\ElementInterface;
 
 use function in_array;
@@ -21,39 +19,23 @@ use function in_array;
  */
 trait ExtensionsTrait
 {
-    /**
-     * @var (
-     *   \SimpleSAML\XML\SerializableElementInterface|
-     *   \SimpleSAML\SAML2\XML\saml\AttributeValue|
-     *   \SimpleSAML\SAML2\XML\mdattr\EntityAttributes
-     * )[] */
+    /** @var \SimpleSAML\XML\SerializableElementInterface[] */
     protected array $extensions = [];
 
 
     /**
      * Extensions constructor.
      *
-     * @param (
-     *   \SimpleSAML\XML\SerializableElementInterface|
-     *   \SimpleSAML\SAML2\XML\saml\AttributeValue|
-     *   \SimpleSAML\SAML2\XML\mdattr\EntityAttributes
-     * )[] $extensions
+     * @param \SimpleSAML\XML\SerializableElementInterface[] $extensions
      */
     public function __construct(array $extensions)
     {
-        Assert::allIsInstanceOfAny(
-            $extensions,
-            [ElementInterface::class, AttributeValue::class, EntityAttributes::class],
-        );
+        Assert::maxCount($extensions, C::UNBOUNDED_LIMIT);
+        Assert::allIsInstanceOf($extensions, ElementInterface::class);
 
         foreach ($extensions as $extension) {
-            if ($extension instanceof AttributeValue) {
-                $namespace = C::NS_SAML;
-            } elseif ($extension instanceof EntityAttributes) {
-                $namespace = C::NS_MDATTR;
-            } else {
-                $namespace = $extension->getNamespaceURI();
-            }
+            /** @var \SimpleSAML\XML\AbstractElement $extension */
+            $namespace = $extension->getNamespaceURI();
 
             Assert::notNull(
                 $namespace,
@@ -77,11 +59,7 @@ trait ExtensionsTrait
     /**
      * Get an array with all extensions present.
      *
-     * @return (
-     *   \SimpleSAML\XML\SerializableElementInterface|
-     *   \SimpleSAML\SAML2\XML\saml\AttributeValue|
-     *   \SimpleSAML\SAML2\XML\mdattr\EntityAttributes
-     * )[]
+     * @return \SimpleSAML\XML\SerializableElementInterface[]
      */
     public function getList(): array
     {
@@ -94,8 +72,17 @@ trait ExtensionsTrait
      */
     public function isEmptyElement(): bool
     {
-        // We cannot test this relyably until all child-elements are converted to ElementInterface
-        return false;
+        if (empty($this->extensions)) {
+            return true;
+        }
+
+        foreach ($this->extensions as $extension) {
+            if ($extension->isEmptyElement() === false) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 
@@ -108,9 +95,13 @@ trait ExtensionsTrait
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
+
         foreach ($this->extensions as $extension) {
-            $extension->toXML($e);
+            if (!$extension->isEmptyElement()) {
+                $extension->toXML($e);
+            }
         }
+
         return $e;
     }
 

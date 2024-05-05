@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
@@ -19,12 +19,13 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\saml\AuthnContextWithDeclRefTest
+ * Class \SimpleSAML\SAML2\XML\saml\AuthnContextWithDeclRefTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\AuthnContext
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
+#[Group('saml')]
+#[CoversClass(AuthnContext::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class AuthnContextWithDeclRefTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -55,22 +56,6 @@ final class AuthnContextWithDeclRefTest extends TestCase
             authnContextDecl: null,
             authenticatingAuthorities: [new AuthenticatingAuthority('https://idp.example.com/SAML2')],
         );
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authnContext),
-        );
-    }
-
-
-    // unmarshalling
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $authnContext = AuthnContext::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

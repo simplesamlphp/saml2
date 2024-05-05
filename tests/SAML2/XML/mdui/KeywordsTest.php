@@ -4,27 +4,28 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
 use SimpleSAML\SAML2\XML\mdui\Keywords;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\mdui\KeywordsTest
+ * Class \SimpleSAML\SAML2\XML\mdui\KeywordsTest
  *
- * @covers \SimpleSAML\SAML2\XML\mdui\Keywords
- * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
  * @package simplesamlphp/saml2
  */
+#[Group('mdui')]
+#[CoversClass(Keywords::class)]
+#[CoversClass(AbstractMduiElement::class)]
 final class KeywordsTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -74,20 +75,6 @@ final class KeywordsTest extends TestCase
         $this->expectExceptionMessage('Keywords may not contain a "+" character');
 
         new Keywords("en", ["csharp", "pascal", "c++"]);
-    }
-
-
-    /**
-     * Unmarshalling of a keywords tag
-     */
-    public function testUnmarshalling(): void
-    {
-        $keywords = Keywords::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($keywords),
-        );
     }
 
 

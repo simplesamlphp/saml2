@@ -6,12 +6,12 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\Comparison;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 
 use function array_merge;
 
@@ -36,8 +36,12 @@ final class RequestedAuthnContext extends AbstractSamlpElement
         protected ?Comparison $Comparison = null,
     ) {
         Assert::maxCount($requestedAuthnContexts, C::UNBOUNDED_LIMIT);
-        Assert::minCount($requestedAuthnContexts, 1);
-        Assert::allIsInstanceOfAny($requestedAuthnContexts, [AuthnContextClassRef::class, AuthnContextDeclRef::class]);
+        Assert::minCount($requestedAuthnContexts, 1, SchemaViolationException::class);
+        Assert::allIsInstanceOfAny(
+            $requestedAuthnContexts,
+            [AuthnContextClassRef::class, AuthnContextDeclRef::class],
+            SchemaViolationException::class,
+        );
 
         if ($requestedAuthnContexts[0] instanceof AuthnContextClassRef) {
             Assert::allIsInstanceOf(
@@ -69,7 +73,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement
     /**
      * Collect the value of the Comparison-property
      *
-     * @return SimpleSAML\SAML2\XML\Comparison|null
+     * @return \SimpleSAML\SAML2\XML\Comparison|null
      */
     public function getComparison(): ?Comparison
     {
@@ -110,7 +114,6 @@ final class RequestedAuthnContext extends AbstractSamlpElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
 
         foreach ($this->getRequestedAuthnContexts() as $context) {

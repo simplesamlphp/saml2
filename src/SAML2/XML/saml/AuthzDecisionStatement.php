@@ -13,11 +13,9 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
 use ValueError;
 
 use function array_pop;
-use function gmdate;
 use function sprintf;
 
 /**
@@ -124,10 +122,11 @@ final class AuthzDecisionStatement extends AbstractStatementType
             TooManyElementsException::class,
         );
 
+        $decision = self::getAttribute($xml, 'Decision');
         try {
-            $decision = Decision::from(self::getAttribute($xml, 'Decision'));
+            $decision = Decision::from($decision);
         } catch (ValueError) {
-            throw ProtocolViolationException(sprintf('Unknown value \'%s\' for Decision attribute.', $decision));
+            throw new ProtocolViolationException(sprintf('Unknown value \'%s\' for Decision attribute.', $decision));
         }
 
         return new static(

@@ -4,20 +4,24 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Certificate;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Certificate\PrivateKey;
-use SimpleSAML\Test\SAML2\CertificatesMock;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
-class PrivateKeyTest extends TestCase
+/**
+ * @package simplesamlphp/saml2
+ */
+#[CoversClass(PrivateKey::class)]
+final class PrivateKeyTest extends TestCase
 {
     /**
-     * @group certificate
-     * @test
-     * @return void
      */
-    public function test_create_from_key(): void
+    #[Group('certificate')]
+    public function testCreateFromKey(): void
     {
-        $key = CertificatesMock::getPlainPrivateKey();
+        $key = PEMCertificatesMock::getPlainPrivateKey();
 
         $pk_nopass = PrivateKey::create($key);
         $this->assertEquals($key, $pk_nopass->getKeyAsString());

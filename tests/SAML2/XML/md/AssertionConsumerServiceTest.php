@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AssertionConsumerService;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
-use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -23,11 +24,12 @@ use function strval;
 /**
  * Class \SimpleSAML\SAML2\XML\md\AssertionConsumerServiceTest
  *
- * @covers \SimpleSAML\SAML2\XML\md\AssertionConsumerService
- * @covers \SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(AssertionConsumerService::class)]
+#[CoversClass(AbstractIndexedEndpointType::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class AssertionConsumerServiceTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -35,10 +37,10 @@ final class AssertionConsumerServiceTest extends TestCase
     use SerializableElementTestTrait;
 
     /** @var \SimpleSAML\XML\Chunk */
-    protected static Chunk $ext;
+    private static Chunk $ext;
 
     /** @var \SimpleSAML\XML\Attribute */
-    protected static XMLAttribute $attr;
+    private static XMLAttribute $attr;
 
 
     /**
@@ -82,29 +84,12 @@ final class AssertionConsumerServiceTest extends TestCase
         $idxep = new AssertionConsumerService(
             42,
             C::BINDING_HTTP_POST,
-            'https://simplesamlphp.org/some/endpoint',
+            C::LOCATION_A,
             false,
             'https://foo.bar/',
             [self::$ext],
             [self::$attr],
         );
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($idxep),
-        );
-    }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test creating an IndexedEndpointType from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $idxep = AssertionConsumerService::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

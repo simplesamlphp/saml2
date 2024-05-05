@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\GivenName;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -18,10 +19,11 @@ use function strval;
 /**
  * Tests for GivenName.
  *
- * @covers \SimpleSAML\SAML2\XML\md\GivenName
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(GivenName::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class GivenNameTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -51,23 +53,6 @@ final class GivenNameTest extends TestCase
     public function testMarshalling(): void
     {
         $name = new GivenName('John');
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test creating a GivenName from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = GivenName::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

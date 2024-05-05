@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Test\SAML2\XML\saml;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -17,11 +19,11 @@ use function strval;
 /**
  * Class \SimpleSAML\SAML2\XML\saml\AuthenticatingAuthorityTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
- *
  * @package simplesamlphp/saml2
  */
+#[Group('saml')]
+#[CoversClass(AuthenticatingAuthority::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class AuthenticatingAuthorityTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -46,19 +48,6 @@ final class AuthenticatingAuthorityTest extends TestCase
     public function testMarshalling(): void
     {
         $authenticatingAuthority = new AuthenticatingAuthority('https://idp.example.com/SAML2');
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authenticatingAuthority),
-        );
-    }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $authenticatingAuthority = AuthenticatingAuthority::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

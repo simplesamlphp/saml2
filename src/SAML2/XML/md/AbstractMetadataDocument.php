@@ -10,7 +10,6 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\ExtendableAttributesTrait;
 
 /**
  * Class to represent a metadata document

@@ -42,7 +42,7 @@ class ArtifactResponse extends AbstractStatusResponse
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions|null $extensions
      * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage|null $message
      */
-    public function __construct(
+    final public function __construct(
         Status $status,
         DateTimeImmutable $issueInstant,
         ?Issuer $issuer = null,

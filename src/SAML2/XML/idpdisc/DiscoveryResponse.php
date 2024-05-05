@@ -35,8 +35,8 @@ final class DiscoveryResponse extends AbstractIndexedEndpointType
      * @param string $location
      * @param bool|null $isDefault
      * @param string|null $unused
-     * @param list<\SimpleSAML\XML\Attribute> $attributes
-     * @param array $children
+     * @param array<\SimpleSAML\XML\SerializableElementInterface> $children
+     * @param array<\SimpleSAML\XML\Attribute> $attributes
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
@@ -46,14 +46,14 @@ final class DiscoveryResponse extends AbstractIndexedEndpointType
         string $location,
         ?bool $isDefault = null,
         ?string $unused = null,
-        array $attributes = [],
         array $children = [],
+        array $attributes = [],
     ) {
         Assert::same($binding, C::BINDING_IDPDISC, ProtocolViolationException::class);
         Assert::null(
             $unused,
             'The \'ResponseLocation\' attribute must be omitted for idpdisc:DiscoveryResponse.',
         );
-        parent::__construct($index, C::BINDING_IDPDISC, $location, $isDefault, null, $attributes, $children);
+        parent::__construct($index, C::BINDING_IDPDISC, $location, $isDefault, null, $children, $attributes);
     }
 }

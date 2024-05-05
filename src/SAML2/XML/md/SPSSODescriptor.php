@@ -26,23 +26,23 @@ final class SPSSODescriptor extends AbstractSSODescriptor
     /**
      * SPSSODescriptor constructor.
      *
-     * @param \SimpleSAML\SAML2\XML\md\AssertionConsumerService[] $assertionConsumerService
+     * @param array<\SimpleSAML\SAML2\XML\md\AssertionConsumerService> $assertionConsumerService
      * @param string[] $protocolSupportEnumeration
      * @param bool|null $authnRequestsSigned
      * @param bool|null $wantAssertionsSigned
-     * @param \SimpleSAML\SAML2\XML\md\AttributeConsumingService[] $attributeConsumingService
+     * @param array<\SimpleSAML\SAML2\XML\md\AttributeConsumingService> $attributeConsumingService
      * @param string|null $ID
      * @param \DateTimeImmutable|null $validUntil
      * @param string|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @param string|null $errorURL
-     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors
+     * @param array<\SimpleSAML\SAML2\XML\md\KeyDescriptor> $keyDescriptors
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
-     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts
-     * @param \SimpleSAML\SAML2\XML\md\ArtifactResolutionService[] $artifactResolutionService
-     * @param \SimpleSAML\SAML2\XML\md\SingleLogoutService[] $singleLogoutService
-     * @param \SimpleSAML\SAML2\XML\md\ManageNameIDService[] $manageNameIDService
-     * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
+     * @param array<\SimpleSAML\SAML2\XML\md\ContactPerson> $contacts
+     * @param array<\SimpleSAML\SAML2\XML\md\ArtifactResolutionService> $artifactResolutionService
+     * @param array<\SimpleSAML\SAML2\XML\md\SingleLogoutService> $singleLogoutService
+     * @param array<\SimpleSAML\SAML2\XML\md\ManageNameIDService> $manageNameIDService
+     * @param array<\SimpleSAML\SAML2\XML\md\NameIDFormat> $nameIDFormat
      */
     public function __construct(
         protected array $assertionConsumerService,

@@ -4,10 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use CASE_LOWER;
-use DOMDocument;
 use DOMElement;
-use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -19,8 +16,6 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
-use SimpleSAML\XML\SerializableElementInterface;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XML\XsNamespace as NS;
 
 use function array_change_key_case;
@@ -59,14 +54,18 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
         ?Extensions $extensions = null,
         array $namespacedAttributes = [],
     ) {
-        Assert::allIsInstanceOf($organizationName, OrganizationName::class);
-        Assert::allIsInstanceOf($organizationDisplayName, OrganizationDisplayName::class);
-        Assert::allIsInstanceOf($organizationURL, OrganizationURL::class);
+        Assert::maxCount($organizationName, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($organizationDisplayName, C::UNBOUNDED_LIMIT);
+        Assert::maxCount($organizationURL, C::UNBOUNDED_LIMIT);
 
         // [One or More]
         Assert::minCount($organizationName, 1, ProtocolViolationException::class);
         Assert::minCount($organizationDisplayName, 1, ProtocolViolationException::class);
         Assert::minCount($organizationURL, 1, ProtocolViolationException::class);
+
+        Assert::allIsInstanceOf($organizationName, OrganizationName::class);
+        Assert::allIsInstanceOf($organizationDisplayName, OrganizationDisplayName::class);
+        Assert::allIsInstanceOf($organizationURL, OrganizationURL::class);
 
         $this->setExtensions($extensions);
         $this->setAttributesNS($namespacedAttributes);
@@ -286,6 +285,7 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
             'OrganizationDisplayName' => [],
             'OrganizationURL' => [],
             'Extensions' => $this->getExtensions()?->getList(),
+            'attributes' => [],
         ];
 
         foreach ($this->getOrganizationName() as $orgName) {
@@ -303,8 +303,8 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
             $data['OrganizationURL'] = array_merge($data['OrganizationURL'], $orgURL->toArray());
         }
 
-        foreach ($this->getAttributesNS() as $a) {
-            $data['attributes'][] = $a->toArray();
+        foreach ($this->getAttributesNS() as $attr) {
+            $data['attributes'][] = $attr->toArray();
         }
 
         return array_filter($data);

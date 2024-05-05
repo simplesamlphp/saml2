@@ -5,8 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Test\SAML2\XML\saml;
 
 use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\Decision;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
+use SimpleSAML\SAML2\XML\saml\AbstractStatement;
 use SimpleSAML\SAML2\XML\saml\Action;
 use SimpleSAML\SAML2\XML\saml\AuthzDecisionStatement;
 use SimpleSAML\SAML2\XML\saml\Evidence;
@@ -18,14 +22,14 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SimpleSAML\SAML2\XML\saml\AuthzDecisionStatementTest
- *
- * @covers \SimpleSAML\SAML2\XML\saml\AuthzDecisionStatement
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractStatement
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
+ * Class \SimpleSAML\SimpleSAML\SAML2\XML\saml\AuthzDecisionStatementTest
  *
  * @package simplesamlphp/saml2
  */
+#[Group('saml')]
+#[CoversClass(AuthzDecisionStatement::class)]
+#[CoversClass(AbstractStatement::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class AuthzDecisionStatementTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -66,19 +70,6 @@ final class AuthzDecisionStatementTest extends TestCase
             ],
             Evidence::fromXML(self::$evidence->documentElement),
         );
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authzDecisionStatement),
-        );
-    }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $authzDecisionStatement = AuthzDecisionStatement::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

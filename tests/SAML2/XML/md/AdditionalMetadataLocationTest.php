@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -20,10 +22,11 @@ use function strval;
 /**
  * Tests for the AdditionalMetadataLocation class
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(AdditionalMetadataLocation::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class AdditionalMetadataLocationTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -52,10 +55,7 @@ final class AdditionalMetadataLocationTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $additionalMetadataLocation = new AdditionalMetadataLocation(
-            'urn:x-simplesamlphp:namespace',
-            'https://simplesamlphp.org/some/endpoint',
-        );
+        $additionalMetadataLocation = new AdditionalMetadataLocation(C::NAMESPACE, C::LOCATION_A);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -70,25 +70,11 @@ final class AdditionalMetadataLocationTest extends TestCase
     public function testMarshallingWithEmptyNamespace(): void
     {
         $this->expectException(SchemaViolationException::class);
-        new AdditionalMetadataLocation('', 'https://simplesamlphp.org/some/endpoint');
+        new AdditionalMetadataLocation('', C::LOCATION_A);
     }
 
 
     // test unmarshalling
-
-
-    /**
-     * Test creating an AdditionalMetadataLocation object from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $additionalMetadataLocation = AdditionalMetadataLocation::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($additionalMetadataLocation),
-        );
-    }
 
 
     /**

@@ -110,7 +110,6 @@ trait EncryptedElementTrait
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
         $this->encryptedData->toXML($e);
         foreach ($this->getDecryptionKeys() as $key) {

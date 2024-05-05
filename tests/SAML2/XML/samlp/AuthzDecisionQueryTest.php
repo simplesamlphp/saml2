@@ -6,15 +6,21 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DateTimeImmutable;
 use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Action;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Evidence;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
+use SimpleSAML\SAML2\XML\samlp\AbstractSubjectQuery;
 use SimpleSAML\SAML2\XML\samlp\AuthzDecisionQuery;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -26,13 +32,14 @@ use function strval;
 /**
  * Class \SimpleSAML\SAML2\XML\samlp\AuthzDecisionQueryTest
  *
- * @covers \SimpleSAML\SAML2\XML\samlp\AuthzDecisionQuery
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSubjectQuery
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractRequest
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractMessage
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
  * @package simplesamlphp/saml2
  */
+#[Group('samlp')]
+#[CoversClass(AuthzDecisionQuery::class)]
+#[CoversClass(AbstractSubjectQuery::class)]
+#[CoversClass(AbstractRequest::class)]
+#[CoversClass(AbstractMessage::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class AuthzDecisionQueryTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -85,17 +92,6 @@ final class AuthzDecisionQueryTest extends TestCase
             id: 'aaf23196-1773-2113-474a-fe114412ab72',
             issueInstant: new DateTimeImmutable('2017-09-06T11:49:27Z'),
         );
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authzDecisionQuery),
-        );
-    }
-
-
-    public function testUnmarshalling(): void
-    {
-        $authzDecisionQuery = AuthzDecisionQuery::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

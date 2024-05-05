@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
@@ -57,7 +56,7 @@ final class EmailAddress extends AbstractMdElement implements ArrayizableElement
      */
     protected function sanitizeContent(string $content): string
     {
-        return trim(preg_replace('/^mailto:/i', '', $content));
+        return trim(preg_replace('/^(mailto:)+/i', '', $content));
     }
 
 

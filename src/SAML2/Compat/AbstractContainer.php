@@ -9,6 +9,7 @@ use Psr\Log\LoggerInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 use SimpleSAML\XML\AbstractElement;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 
 use function array_key_exists;
 use function implode;
@@ -17,13 +18,13 @@ use function is_subclass_of;
 abstract class AbstractContainer
 {
     /** @var string */
-    protected const XSI_TYPE_PREFIX = '<xsi:type>';
+    private const XSI_TYPE_PREFIX = '<xsi:type>';
 
     /** @var array */
     protected array $registry = [];
 
-    /** @var array */
-    protected $blacklistedEncryptionAlgorithms = [];
+    /** @var array|null */
+    protected ?array $blacklistedEncryptionAlgorithms;
 
 
     /**
@@ -47,15 +48,40 @@ abstract class AbstractContainer
     public function registerExtensionHandler(string $class): void
     {
         Assert::subclassOf($class, AbstractElement::class);
-
         if (is_subclass_of($class, ExtensionPointInterface::class, true)) {
             $key = implode(':', [self::XSI_TYPE_PREFIX, $class::getXsiTypeNamespaceURI(), $class::getXsiTypeName()]);
         } else {
             $className = AbstractElement::getClassName($class);
             $key = ($class::NS === null) ? $className : implode(':', [$class::NS, $className]);
         }
-
         $this->registry[$key] = $class;
+    }
+
+
+    /**
+     * Search for a class that implements an $element in the given $namespace.
+     *
+     * Such classes must have been registered previously by calling registerExtensionHandler(), and they must
+     * extend \SimpleSAML\XML\AbstractElement.
+     *
+     * @param string|null $namespace The namespace URI for the given element.
+     * @param string $element The local name of the element.
+     *
+     * @return string|null The fully-qualified name of a class extending \SimpleSAML\XML\AbstractElement and
+     * implementing support for the given element, or null if no such class has been registered before.
+     * @psalm-return class-string|null
+     */
+    public function getElementHandler(?string $namespace, string $element): ?string
+    {
+        Assert::nullOrValidURI($namespace, SchemaViolationException::class);
+        Assert::validNCName($element, SchemaViolationException::class);
+
+        $key = ($namespace === null) ? $element : implode(':', [$namespace, $element]);
+        if (array_key_exists($key, $this->registry) === true) {
+            return $this->registry[$key];
+        }
+
+        return null;
     }
 
 
@@ -74,15 +100,22 @@ abstract class AbstractContainer
     public function getExtensionHandler(string $type): ?string
     {
         Assert::notEmpty($type, 'Cannot search for identifier handlers with an empty type.');
-
         $type = implode(':', [self::XSI_TYPE_PREFIX, $type]);
         if (!array_key_exists($type, $this->registry)) {
             return null;
         }
-
         Assert::implementsInterface($this->registry[$type], ExtensionPointInterface::class);
         return $this->registry[$type];
     }
+
+
+    /**
+     * Set the list of algorithms that are blacklisted for any encryption operation.
+     *
+     * @param string[]|null $algos An array with all algorithm identifiers that are blacklisted,
+     * or null if we want to use the defaults.
+     */
+    abstract public function setBlacklistedAlgorithms(?array $algos): void;
 
 
     /**
@@ -90,13 +123,6 @@ abstract class AbstractContainer
      * @return \Psr\Log\LoggerInterface
      */
     abstract public function getLogger(): LoggerInterface;
-
-
-    /**
-     * Generate a random identifier for identifying SAML2 documents.
-     * @return string
-     */
-    abstract public function generateId(): string;
 
 
     /**
@@ -110,7 +136,6 @@ abstract class AbstractContainer
      *
      * @param \DOMElement|string $message
      * @param string $type
-     * @return void
      */
     abstract public function debugMessage($message, string $type): void;
 
@@ -122,7 +147,7 @@ abstract class AbstractContainer
      * @param array $data
      * @return string
      */
-    abstract public function getpostRedirectURL(string $url, array $data = []): string;
+    abstract public function getPOSTRedirectURL(string $url, array $data = []): string;
 
 
     /**
@@ -143,19 +168,9 @@ abstract class AbstractContainer
      *
      * @param string $filename The path to the file we want to write to.
      * @param string $data The data we should write to the file.
-     * @param int $mode The permissions to apply to the file. Defaults to 0600.
-     * @return void
+     * @param int|null $mode The permissions to apply to the file. Defaults to 0600.
      */
     abstract public function writeFile(string $filename, string $data, int $mode = null): void;
-
-
-    /**
-     * Set the list of algorithms that are blacklisted for any encryption operation.
-     *
-     * @param string[]|null $algos An array with all algorithm identifiers that are blacklisted,
-     * or null if we want to use the defaults.
-     */
-    abstract public function setBlacklistedAlgorithms(?array $algos): void;
 
 
     /**

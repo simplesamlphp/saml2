@@ -13,7 +13,6 @@ use SimpleSAML\SAML2\XML\samlp\Status;
 use function implode;
 use function sprintf;
 use function strlen;
-use function str_contains;
 use function substr;
 
 class IsSuccessful implements ConstraintValidator

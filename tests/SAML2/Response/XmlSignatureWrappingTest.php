@@ -12,9 +12,6 @@ use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Exception\ReferenceValidationFailedException;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\Utils\Certificate;
-
-use function preg_match;
 
 /**
  * @package simplesamlphp/saml2

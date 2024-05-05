@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\ecp;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SOAP\Constants as C;
+use SimpleSAML\SAML2\XML\ecp\AbstractEcpElement;
 use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
+use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -18,9 +20,10 @@ use function strval;
 
 /**
  * @package simplesamlphp/saml2
- * @covers \SimpleSAML\SAML2\XML\ecp\AbstractEcpElement
- * @covers \SimpleSAML\SAML2\XML\ecp\RequestAuthenticated
  */
+#[Group('ecp')]
+#[CoversClass(RequestAuthenticated::class)]
+#[CoversClass(AbstractEcpElement::class)]
 final class RequestAuthenticatedTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -46,19 +49,6 @@ final class RequestAuthenticatedTest extends TestCase
     public function testMarshalling(): void
     {
         $ra = new RequestAuthenticated(false);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($ra),
-        );
-    }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $ra = RequestAuthenticated::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

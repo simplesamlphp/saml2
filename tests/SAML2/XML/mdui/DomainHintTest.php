@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
+use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
 use SimpleSAML\SAML2\XML\mdui\DomainHint;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -18,10 +20,11 @@ use function strval;
 /**
  * Tests for DomainHint.
  *
- * @covers \SimpleSAML\SAML2\XML\mdui\DomainHint
- * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
  * @package simplesamlphp/saml2
  */
+#[Group('mdui')]
+#[CoversClass(DomainHint::class)]
+#[CoversClass(AbstractMduiElement::class)]
 final class DomainHintTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -60,20 +63,6 @@ final class DomainHintTest extends TestCase
 
 
     // test unmarshalling
-
-
-    /**
-     * Test creating a DomainHint from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $hint = DomainHint::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($hint),
-        );
-    }
 
 
     /**

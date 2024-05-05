@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -28,22 +29,21 @@ use SimpleSAML\XMLSecurity\XML\ds\Transforms;
 use SimpleSAML\XMLSecurity\XML\ds\XPath;
 use SimpleSAML\XMLSecurity\XML\xenc\CipherData;
 use SimpleSAML\XMLSecurity\XML\xenc\CipherValue;
-use SimpleSAML\XMLSecurity\XML\xenc\DataReference;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptedData;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptionMethod;
-use SimpleSAML\XMLSecurity\XML\xenc\ReferenceList;
 
 use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\EncryptedAssertionTest
+ * Class \SimpleSAML\SAML2\XML\saml\EncryptedAssertionTest
  *
  * @package simplesamlphp/saml2
- * @covers \SimpleSAML\SAML2\XML\saml\EncryptedAssertion
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  */
+#[Group('saml')]
+#[CoversClass(EncryptedAssertion::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class EncryptedAssertionTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -117,19 +117,6 @@ final class EncryptedAssertionTest extends TestCase
             ]),
         );
         $encryptedAssertion = new EncryptedAssertion($ed, [$ek]);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($encryptedAssertion),
-        );
-    }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $encryptedAssertion = EncryptedAssertion::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

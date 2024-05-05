@@ -146,6 +146,7 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
         return $e;
     }
 
+
     public function getBlacklistedAlgorithms(): ?array
     {
         $container = ContainerSingleton::getInstance();

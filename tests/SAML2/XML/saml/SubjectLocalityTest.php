@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DOMDocument;
-use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\SubjectLocality;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -18,12 +18,13 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\saml\SubjectLocalityTest
+ * Class \SimpleSAML\SAML2\XML\saml\SubjectLocalityTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\SubjectLocality
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
+#[Group('saml')]
+#[CoversClass(SubjectLocality::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class SubjectLocalityTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -78,18 +79,5 @@ final class SubjectLocalityTest extends TestCase
             strval($subjectLocality),
         );
         $this->assertTrue($subjectLocality->isEmptyElement());
-    }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $subjectLocality = SubjectLocality::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($subjectLocality),
-        );
     }
 }

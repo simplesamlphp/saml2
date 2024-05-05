@@ -4,12 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Utilities;
 
-use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\SAML2\Exception\RuntimeException;
 
+use function file_get_contents;
 use function is_readable;
 use function sprintf;
-use function file_get_contents;
 
 /**
  * Various File Utilities
@@ -26,7 +25,7 @@ class File
         if (!is_readable($file)) {
             throw new RuntimeException(sprintf(
                 'File "%s" does not exist or is not readable',
-                $file
+                $file,
             ));
         }
 
@@ -34,7 +33,7 @@ class File
         if ($contents === false) {
             throw new RuntimeException(sprintf(
                 'Could not read from existing and readable file "%s"',
-                $file
+                $file,
             ));
         }
 

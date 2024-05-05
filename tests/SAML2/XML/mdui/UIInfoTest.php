@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
 use SimpleSAML\SAML2\XML\mdui\Description;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
 use SimpleSAML\SAML2\XML\mdui\DisplayName;
@@ -27,12 +29,13 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\mdui\UIInfoTest
+ * Class \SimpleSAML\SAML2\XML\mdui\UIInfoTest
  *
- * @covers \SimpleSAML\SAML2\XML\mdui\UIInfo
- * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
  * @package simplesamlphp/saml2
  */
+#[Group('mdui')]
+#[CoversClass(UIInfo::class)]
+#[CoversClass(AbstractMduiElement::class)]
 final class UIInfoTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -124,7 +127,7 @@ final class UIInfoTest extends TestCase
             [new IPHint("192.168.6.0/24"), new IPHint("fd00:0123:aa:1001::/64")],
         );
 
-        // keywords appears twice, direcyly under UIinfo and as child of DiscoHints
+        // keywords appears twice, directly under UIinfo and as child of DiscoHints
         $discohints->addChild(new Chunk($keywords->toXML()));
 
         $uiinfo = new UIInfo(
@@ -191,20 +194,6 @@ final class UIInfoTest extends TestCase
             strval($uiInfo),
         );
         $this->assertTrue($uiInfo->isEmptyElement());
-    }
-
-
-    /**
-     * Test unmarshalling a basic UIInfo element
-     */
-    public function testUnmarshalling(): void
-    {
-        $uiinfo = UIInfo::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($uiinfo),
-        );
     }
 
 

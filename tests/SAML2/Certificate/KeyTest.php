@@ -4,19 +4,26 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Certificate;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Certificate\Key;
 use SimpleSAML\SAML2\Certificate\Exception\InvalidKeyUsageException;
+use SimpleSAML\SAML2\Certificate\Key;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 
-class KeyTest extends TestCase
+use function call_user_func_array;
+
+/**
+ * @package simplesamlphp/saml2
+ */
+#[CoversClass(Key::class)]
+#[Group('certificate')]
+final class KeyTest extends TestCase
 {
     /**
-     * @group certificate
-     * @test
-     * @return void
      */
-    public function invalid_key_usage_should_throw_an_exception(): void
+    public function testInvalidKeyUsageShouldThrowAnException(): void
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
         $this->expectException(InvalidKeyUsageException::class);
@@ -25,12 +32,9 @@ class KeyTest extends TestCase
 
 
     /**
-     * @group certificate
-     * @dataProvider functionProvider
-     * @test
-     * @return void
      */
-    public function invalid_offset_type_should_throw_an_exception($function, $params): void
+    #[DataProvider('functionProvider')]
+    public function testInvalidOffsetTypeShouldThrowAnException($function, $params): void
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
         $this->expectException(InvalidArgumentException::class);
@@ -39,11 +43,8 @@ class KeyTest extends TestCase
 
 
     /**
-     * @group certificate
-     * @test
-     * @return void
      */
-    public function assert_that_key_usage_check_works_correctly(): void
+    public function testAssertThatKeyUsageCheckWorksCorrectly(): void
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
 
@@ -56,11 +57,8 @@ class KeyTest extends TestCase
 
 
     /**
-     * @group certificate
-     * @test
-     * @return void
      */
-    public function assert_that_offsetget_works_correctly(): void
+    public function testAssertThatOffsetgetWorksCorrectly(): void
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
         $this->assertTrue($key->offsetGet(Key::USAGE_SIGNING));
@@ -68,11 +66,8 @@ class KeyTest extends TestCase
 
 
     /**
-     * @group certificate
-     * @test
-     * @return void
      */
-    public function assert_that_offsetunset_unsets_offset(): void
+    public function testAssertThatOffsetunsetUnsetsOffset(): void
     {
         $key = new Key([Key::USAGE_SIGNING => true, Key::USAGE_ENCRYPTION => true]);
         $this->assertTrue($key->offsetExists(Key::USAGE_SIGNING));
@@ -95,7 +90,7 @@ class KeyTest extends TestCase
             'offsetGet' => ['offsetGet', [0]],
             'offsetExists' => ['offsetExists', [0]],
             'offsetSet' => ['offsetSet', [0, 2]],
-            'offsetUnset' => ['offsetUnset', [0]]
+            'offsetUnset' => ['offsetUnset', [0]],
         ];
     }
 }

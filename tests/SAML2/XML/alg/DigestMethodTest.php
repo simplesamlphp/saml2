@@ -4,28 +4,29 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\alg;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\alg\AbstractAlgElement;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\alg\DigestMethodTest
- *
- * @covers \SimpleSAML\SAML2\XML\alg\AbstractAlgElement
- * @covers \SimpleSAML\SAML2\XML\alg\DigestMethod
+ * Class \SimpleSAML\SAML2\XML\alg\DigestMethodTest
  *
  * @package simplesamlphp/saml2
  */
+#[Group('alg')]
+#[CoversClass(DigestMethod::class)]
+#[CoversClass(AbstractAlgElement::class)]
 final class DigestMethodTest extends TestCase
 {
     use SerializableElementTestTrait;
@@ -59,19 +60,6 @@ final class DigestMethodTest extends TestCase
                 )->documentElement)
             ],
         );
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($digestMethod),
-        );
-    }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $digestMethod = DigestMethod::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

@@ -8,8 +8,6 @@ use DOMDocument;
 use Exception;
 use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Exception\InvalidArgumentException;
-use SimpleSAML\SAML2\Exception\RuntimeException;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SOAP11\Utils\XPath;
@@ -20,7 +18,6 @@ use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\UnparseableXMLException;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
 use SoapClient as BuiltinSoapClient;
 

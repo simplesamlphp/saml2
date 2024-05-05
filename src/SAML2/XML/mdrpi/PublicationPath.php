@@ -7,10 +7,9 @@ namespace SimpleSAML\SAML2\XML\mdrpi;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 /**
  * Class for handling the mdrpi:PublicationPath element.
@@ -28,6 +27,7 @@ final class PublicationPath extends AbstractMdrpiElement implements ArrayizableE
     public function __construct(
         protected array $publication = [],
     ) {
+        Assert::maxCount($publication, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($publication, Publication::class);
     }
 

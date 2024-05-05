@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -22,10 +24,11 @@ use function strval;
 /**
  * Tests for AffiliateMember.
  *
- * @covers \SimpleSAML\SAML2\XML\md\AffiliateMember
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(AffiliateMember::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class AffiliateMemberTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -83,22 +86,5 @@ final class AffiliateMemberTest extends TestCase
         );
 
         new AffiliateMember(str_pad('https://some.entity.org/id', C::ENTITYID_MAX_LENGTH + 1, 'a'));
-    }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test creating a AffiliateMember from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $affiliateMember = AffiliateMember::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($affiliateMember),
-        );
     }
 }

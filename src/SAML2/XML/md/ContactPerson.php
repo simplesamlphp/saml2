@@ -4,13 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DOMDocument;
 use DOMElement;
-use Exception;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Attribute as XMLAttribute;
@@ -18,20 +14,14 @@ use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
-use SimpleSAML\XML\SerializableElementInterface;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XML\XsNamespace as NS;
 
-use function array_filter;
 use function array_change_key_case;
+use function array_filter;
 use function array_key_exists;
 use function array_keys;
-use function array_map;
 use function array_pop;
 use function count;
-use function filter_var;
-use function preg_replace;
-use function var_export;
 
 /**
  * Class representing SAML 2 ContactPerson.
@@ -40,8 +30,8 @@ use function var_export;
  */
 final class ContactPerson extends AbstractMdElement implements ArrayizableElementInterface
 {
-    use ExtendableElementTrait;
     use ExtendableAttributesTrait;
+    use ExtendableElementTrait;
 
     /** The namespace-attribute for the xs:anyAttribute element */
     public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
@@ -82,7 +72,9 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
         array $namespacedAttribute = [],
     ) {
         Assert::oneOf($contactType, self::CONTACT_TYPES);
+        Assert::maxCount($emailAddress, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($emailAddress, EmailAddress::class);
+        Assert::maxCount($telephoneNumber, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($telephoneNumber, TelephoneNumber::class);
 
         $this->setExtensions($extensions);
@@ -367,7 +359,6 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
             $data['TelephoneNumber'] = array_merge($data['TelephoneNumber'], $telephone->toArray());
         }
 
-        /** @psalm-suppress PossiblyNullReference */
         foreach ($this->getAttributesNS() as $attr) {
             $data['attributes'][] = $attr->toArray();
         }

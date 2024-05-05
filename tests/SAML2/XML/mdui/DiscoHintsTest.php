@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
 use SimpleSAML\SAML2\XML\mdui\DomainHint;
 use SimpleSAML\SAML2\XML\mdui\GeolocationHint;
@@ -22,12 +24,13 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\mdui\DiscoHintsTest
+ * Class \SimpleSAML\SAML2\XML\mdui\DiscoHintsTest
  *
- * @covers \SimpleSAML\SAML2\XML\mdui\DiscoHints
- * @covers \SimpleSAML\SAML2\XML\mdui\AbstractMduiElement
  * @package simplesamlphp/saml2
  */
+#[Group('mdui')]
+#[CoversClass(DiscoHints::class)]
+#[CoversClass(AbstractMduiElement::class)]
 final class DiscoHintsTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -92,20 +95,6 @@ final class DiscoHintsTest extends TestCase
 
 
     /**
-     * Test unmarshalling a basic DiscoHints element
-     */
-    public function testUnmarshalling(): void
-    {
-        $discoHints = DiscoHints::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($discoHints),
-        );
-    }
-
-
-    /**
      * Add a Keywords element to the children attribute
      */
     public function testMarshallingChildren(): void
@@ -113,6 +102,7 @@ final class DiscoHintsTest extends TestCase
         $keywords = new Keywords("nl", ["voorbeeld", "specimen"]);
         $discoHints = new DiscoHints();
         $discoHints->addChild(new Chunk($keywords->toXML()));
+        $this->assertCount(1, $discoHints->getElements());
 
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $discoHints->toXML($document->documentElement);
@@ -150,6 +140,8 @@ XML
         $this->assertCount(1, $disco->getGeolocationHint());
         $this->assertEquals('geo:47.37328,8.531126', $disco->getGeolocationHint()[0]->getContent());
         $this->assertCount(1, $disco->getElements());
-        $this->assertEquals('content of tag', $disco->getElements()[0]->getXML()->textContent);
+        /** @var \SimpleSAML\XML\Chunk[] $elements */
+        $elements = $disco->getElements();
+        $this->assertEquals('content of tag', $elements[0]->getXML()->textContent);
     }
 }

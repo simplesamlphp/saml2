@@ -8,8 +8,8 @@ use DateInterval;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
-use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 
 class SubjectConfirmationNotOnOrAfter implements SubjectConfirmationConstraintValidator
 {

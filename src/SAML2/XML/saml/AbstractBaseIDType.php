@@ -14,44 +14,25 @@ use SimpleSAML\Assert\Assert;
  */
 abstract class AbstractBaseIDType extends AbstractSamlElement implements BaseIdentifierInterface
 {
+    use IDNameQualifiersTrait;
+
+
     /**
      * Initialize a saml:BaseIDAbstractType from scratch
      *
-     * @param string|null $nameQualifier
+     * @param string|null $NameQualifier
      *   The security or administrative domain that qualifies the identifier.
      *   This attribute provides a means to federate identifiers from disparate user stores without collision.
-     * @param string|null $spNameQualifier
+     * @param string|null $SPNameQualifier
      *   Further qualifies an identifier with the name of a service provider or affiliation of providers. This
      *   attribute provides an additional means to federate identifiers on the basis of the relying party or parties.
      */
     protected function __construct(
-        protected ?string $nameQualifier = null,
-        protected ?string $spNameQualifier = null,
+        protected ?string $NameQualifier = null,
+        protected ?string $SPNameQualifier = null,
     ) {
-        Assert::nullOrNotWhitespaceOnly($nameQualifier);
-        Assert::nullOrNotWhitespaceOnly($spNameQualifier);
-    }
-
-
-    /**
-     * Collect the value of the NameQualifier-property
-     *
-     * @return string|null
-     */
-    public function getNameQualifier(): ?string
-    {
-        return $this->nameQualifier;
-    }
-
-
-    /**
-     * Collect the value of the SPNameQualifier-property
-     *
-     * @return string|null
-     */
-    public function getSPNameQualifier(): ?string
-    {
-        return $this->spNameQualifier;
+        Assert::nullOrNotWhitespaceOnly($NameQualifier);
+        Assert::nullOrNotWhitespaceOnly($SPNameQualifier);
     }
 
 

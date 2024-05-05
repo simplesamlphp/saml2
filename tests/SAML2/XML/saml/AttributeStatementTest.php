@@ -4,27 +4,29 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeStatement;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XMLSecurity\PEMCertificatesMock;
 
 use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\saml\AttributeStatementTest
+ * Class \SimpleSAML\SAML2\XML\saml\AttributeStatementTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\AttributeStatement
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
+#[Group('saml')]
+#[CoversClass(AttributeStatement::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class AttributeStatementTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -86,23 +88,6 @@ final class AttributeStatementTest extends TestCase
 
 
     // unmarshalling
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $attrStatement = AttributeStatement::fromXML(self::$xmlRepresentation->documentElement);
-
-        $attributes = $attrStatement->getAttributes();
-        $this->assertCount(3, $attributes);
-        $this->assertEquals('urn:ServiceID', $attributes[0]->getName());
-        $this->assertEquals('urn:EntityConcernedID', $attributes[1]->getName());
-        $this->assertEquals('urn:EntityConcernedSubID', $attributes[2]->getName());
-
-        $this->assertEmpty($attrStatement->getEncryptedAttributes());
-        $this->assertFalse($attrStatement->hasEncryptedAttributes());
-    }
 
 
     /**

@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Assertion\Transformer;
 
-use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\IdentityProviderAware;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProviderAware;
+use SimpleSAML\SAML2\XML\saml\Assertion;
 
 class TransformerChain implements TransformerInterface
 {

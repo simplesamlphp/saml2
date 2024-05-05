@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\EncryptedAttribute;
@@ -17,19 +18,18 @@ use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Constants as C;
-use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 use function dirname;
-use function strval;
 
 /**
- * Class \SAML2\XML\saml\EncryptedAttributeTest
+ * Class \SimpleSAML\SAML2\XML\saml\EncryptedAttributeTest
  *
  * @package simplesamlphp/saml2
- * @covers \SimpleSAML\SAML2\XML\saml\EncryptedAttribute
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  */
+#[Group('saml')]
+#[CoversClass(EncryptedAttribute::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class EncryptedAttributeTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -92,17 +92,6 @@ final class EncryptedAttributeTest extends TestCase
 
 
     // unmarshalling
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $encryptedAttribute = EncryptedAttribute::fromXML(self::$xmlRepresentation->documentElement);
-
-        $encryptedData = $encryptedAttribute->getEncryptedData();
-        $this->assertEquals(C::XMLENC_ELEMENT, $encryptedData->getType());
-    }
 
 
     /**

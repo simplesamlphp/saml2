@@ -4,30 +4,29 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
-use DOMDocument;
+use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\mdrpi\PublicationPath;
+use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement;
 use SimpleSAML\SAML2\XML\mdrpi\Publication;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationPath;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\mdrpi\PublicationPathTest
- *
- * @covers \SimpleSAML\SAML2\XML\mdrpi\PublicationPath
- * @covers \SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement
+ * Class \SimpleSAML\SAML2\XML\mdrpi\PublicationPathTest
  *
  * @package simplesamlphp/saml2
  */
+#[Group('mdrpi')]
+#[CoversClass(PublicationPath::class)]
+#[CoversClass(AbstractMdrpiElement::class)]
 final class PublicationPathTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -67,8 +66,12 @@ final class PublicationPathTest extends TestCase
     public function testMarshalling(): void
     {
         $publicationPath = new PublicationPath([
-            new Publication('SomePublisher', 1293840000, 'SomePublicationId'),
-            new Publication('SomeOtherPublisher', 1293840000, 'SomeOtherPublicationId'),
+            new Publication('SomePublisher', new DateTimeImmutable('2011-01-01T00:00:00Z'), 'SomePublicationId'),
+            new Publication(
+                'SomeOtherPublisher',
+                new DateTimeImmutable('2011-01-01T00:00:00Z'),
+                'SomeOtherPublicationId',
+            ),
         ]);
 
         $this->assertEquals(
@@ -91,17 +94,5 @@ final class PublicationPathTest extends TestCase
             strval($publicationPath),
         );
         $this->assertTrue($publicationPath->isEmptyElement());
-    }
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $publicationPath = PublicationPath::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($publicationPath),
-        );
     }
 }

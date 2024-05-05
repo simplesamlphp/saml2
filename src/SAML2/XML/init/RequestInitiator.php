@@ -34,7 +34,7 @@ final class RequestInitiator extends AbstractEndpointType
      * @param string $location
      * @param string|null $responseLocation
      * @param array $children
-     * @param list<\SimpleSAML\XML\Attribute> $attributes
+     * @param array<\SimpleSAML\XML\Attribute> $attributes
      *
      * @throws \InvalidArgumentException
      */
@@ -68,7 +68,6 @@ final class RequestInitiator extends AbstractEndpointType
         );
 
         Assert::eq(
-            /** @var string $binding */
             self::getAttribute($xml, 'Binding'),
             self::NS,
             "The Binding of a RequestInitiator must be 'urn:oasis:names:tc:SAML:profiles:SSO:request-init'.",
@@ -77,13 +76,11 @@ final class RequestInitiator extends AbstractEndpointType
 
         $children = [];
         foreach ($xml->childNodes as $child) {
-            if ($child->namespaceURI === C::NS_MD) {
+            if (!($child instanceof DOMElement)) {
                 continue;
-            } elseif (!($child instanceof DOMElement)) {
-                continue;
-            }
-
-            $children[] = new Chunk($child);
+            } elseif ($child->namespaceURI !== C::NS_MD) {
+                $children[] = new Chunk($child);
+            } // else continue
         }
 
         return new static(

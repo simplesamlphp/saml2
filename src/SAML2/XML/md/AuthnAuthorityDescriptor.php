@@ -36,6 +36,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
      * @param array $keyDescriptor
      * @param array $contact
+     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
         protected array $authnQueryService,
@@ -50,6 +51,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType
         ?Organization $organization = null,
         array $keyDescriptor = [],
         array $contact = [],
+        array $namespacedAttributes = [],
     ) {
         Assert::maxCount($authnQueryService, C::UNBOUNDED_LIMIT);
         Assert::minCount($authnQueryService, 1, 'Missing at least one AuthnQueryService in AuthnAuthorityDescriptor.');
@@ -77,6 +79,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType
             $keyDescriptor,
             $organization,
             $contact,
+            $namespacedAttributes,
         );
     }
 
@@ -178,11 +181,14 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType
             !empty($orgs) ? $orgs[0] : null,
             KeyDescriptor::getChildrenOfClass($xml),
             ContactPerson::getChildrenOfClass($xml),
+            self::getAttributesNSFromXML($xml),
         );
+
         if (!empty($signature)) {
             $authority->setSignature($signature[0]);
             $authority->setXML($xml);
         }
+
         return $authority;
     }
 

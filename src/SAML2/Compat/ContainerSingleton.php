@@ -8,9 +8,7 @@ use SimpleSAML\Assert\Assert;
 
 class ContainerSingleton
 {
-    /**
-     * @var \SimpleSAML\SAML2\Compat\AbstractContainer
-     */
+    /** @var \SimpleSAML\SAML2\Compat\AbstractContainer */
     protected static AbstractContainer $container;
 
 
@@ -28,7 +26,6 @@ class ContainerSingleton
      * Set a container to use.
      *
      * @param \SimpleSAML\SAML2\Compat\AbstractContainer $container
-     * @return void
      */
     public static function setContainer(AbstractContainer $container): void
     {

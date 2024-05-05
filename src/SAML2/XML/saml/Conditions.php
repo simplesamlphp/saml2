@@ -10,11 +10,8 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function array_pop;
-use function gmdate;
-use function is_bool;
 
 /**
  * Class representing SAML 2 Conditions element.

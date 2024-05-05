@@ -12,13 +12,17 @@ use function preg_replace;
  */
 class X509 extends Key
 {
+    /**
+     * @param string $certificateContents
+     * @return \SimpleSAML\SAML2\Certificate\X509
+     */
     public static function createFromCertificateData(string $certificateContents): X509
     {
         $data = [
             'encryption'      => true,
             'signing'         => true,
             'type'            => 'X509Certificate',
-            'X509Certificate' => $certificateContents
+            'X509Certificate' => $certificateContents,
         ];
 
         return new self($data);
@@ -30,7 +34,6 @@ class X509 extends Key
      *
      * @param mixed $offset
      * @param mixed $value
-     * @return void
      *
      * Type hint not possible due to upstream method signature
      */

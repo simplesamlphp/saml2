@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
 use DateInterval;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter;
@@ -18,10 +20,9 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\Test\SAML2\Constants as C;
 
 /**
- * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter
- *
  * @package simplesamlphp/saml2
  */
+#[CoversClass(SessionNotOnOrAfter::class)]
 final class SessionNotOnOrAfterTest extends TestCase
 {
     /** @var \Psr\Clock\ClockInterface */
@@ -43,9 +44,8 @@ final class SessionNotOnOrAfterTest extends TestCase
 
 
     /**
-     * @group assertion-validation
-     * @test
      */
+    #[Group('assertion-validation')]
     public function timestampInThePastBeforeGraceperiodIsNotValid(): void
     {
         // Create the statements
@@ -73,9 +73,8 @@ final class SessionNotOnOrAfterTest extends TestCase
 
 
     /**
-     * @group assertion-validation
-     * @test
      */
+    #[Group('assertion-validation')]
     public function timeWithinGraceperiodIsValid(): void
     {
         // Create the statements
@@ -102,10 +101,9 @@ final class SessionNotOnOrAfterTest extends TestCase
 
 
     /**
-     * @group assertion-validation
-     * @test
      */
-    public function currentTimeIsValid(): void
+    #[Group('assertion-validation')]
+    public function testCurrentTimeIsValid(): void
     {
         // Create the statements
         $authnStatement = new AuthnStatement(

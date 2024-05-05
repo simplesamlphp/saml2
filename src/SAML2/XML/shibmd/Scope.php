@@ -6,7 +6,6 @@ namespace SimpleSAML\SAML2\XML\shibmd;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\StringElementTrait;
 
@@ -88,7 +87,6 @@ final class Scope extends AbstractShibmdElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
         $e->textContent = $this->getContent();
         $e->setAttribute('regexp', $this->isRegexpScope() ? 'true' : 'false');

@@ -6,12 +6,17 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DateTimeImmutable;
 use DOMText;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
+use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
 use SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation;
-use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
 use SimpleSAML\SAML2\XML\md\AffiliateMember;
+use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
 use SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor;
 use SimpleSAML\SAML2\XML\md\AttributeService;
 use SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor;
@@ -39,7 +44,6 @@ use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -47,15 +51,15 @@ use function str_pad;
 use function strval;
 
 /**
- * Class \SAML2\XML\md\EntityDescriptorTest
- *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
- * @covers \SimpleSAML\SAML2\XML\md\EntityDescriptor
+ * Class \SimpleSAML\SAML2\XML\md\EntityDescriptorTest
  *
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(EntityDescriptor::class)]
+#[CoversClass(AbstractSignedMdElement::class)]
+#[CoversClass(AbstractMetadataDocument::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class EntityDescriptorTest extends TestCase
 {
     use SchemaValidationTestTrait;

@@ -6,9 +6,8 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\StringElementTrait;
-use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 
 /**
  * SAML NameIDType abstract data type.
@@ -16,8 +15,9 @@ use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
  * @package simplesamlphp/saml2
  */
 
-abstract class NameIDType extends AbstractBaseIDType
+abstract class NameIDType extends AbstractSamlElement implements IdentifierInterface
 {
+    use IDNameQualifiersTrait;
     use StringElementTrait;
 
 
@@ -32,15 +32,15 @@ abstract class NameIDType extends AbstractBaseIDType
      */
     protected function __construct(
         string $value,
-        ?string $nameQualifier = null,
-        ?string $spNameQualifier = null,
-        protected ?string $format = null,
-        protected ?string $spProvidedID = null,
+        protected ?string $NameQualifier = null,
+        protected ?string $SPNameQualifier = null,
+        protected ?string $Format = null,
+        protected ?string $SPProvidedID = null,
     ) {
-        Assert::nullOrValidURI($format); // Covers the empty string
-        Assert::nullOrNotWhitespaceOnly($spProvidedID);
-
-        parent::__construct($nameQualifier, $spNameQualifier);
+        Assert::nullOrNotWhitespaceOnly($NameQualifier);
+        Assert::nullOrNotWhitespaceOnly($SPNameQualifier);
+        Assert::nullOrValidURI($Format); // Covers the empty string
+        Assert::nullOrNotWhitespaceOnly($SPProvidedID);
 
         $this->setContent($value);
     }
@@ -53,7 +53,7 @@ abstract class NameIDType extends AbstractBaseIDType
      */
     public function getFormat(): ?string
     {
-        return $this->format;
+        return $this->Format;
     }
 
 
@@ -64,7 +64,7 @@ abstract class NameIDType extends AbstractBaseIDType
      */
     public function getSPProvidedID(): ?string
     {
-        return $this->spProvidedID;
+        return $this->SPProvidedID;
     }
 
 
@@ -82,6 +82,29 @@ abstract class NameIDType extends AbstractBaseIDType
 
 
     /**
+     * Convert XML into an NameID
+     *
+     * @param \DOMElement $xml The XML element we should load
+     * @return static
+     *
+     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
+     */
+    public static function fromXML(DOMElement $xml): static
+    {
+        Assert::same($xml->localName, static::getLocalName(), InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, static::NS, InvalidDOMElementException::class);
+
+        $NameQualifier = self::getOptionalAttribute($xml, 'NameQualifier', null);
+        $SPNameQualifier = self::getOptionalAttribute($xml, 'SPNameQualifier', null);
+        $Format = self::getOptionalAttribute($xml, 'Format', null);
+        $SPProvidedID = self::getOptionalAttribute($xml, 'SPProvidedID', null);
+
+        return new static($xml->textContent, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
+    }
+
+
+    /**
      * Convert this NameIDType to XML.
      *
      * @param \DOMElement $parent The element we are converting to XML.
@@ -89,7 +112,15 @@ abstract class NameIDType extends AbstractBaseIDType
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        $e = parent::toXML($parent);
+        $e = $this->instantiateParentElement($parent);
+
+        if ($this->getNameQualifier() !== null) {
+            $e->setAttribute('NameQualifier', $this->getNameQualifier());
+        }
+
+        if ($this->getSPNameQualifier() !== null) {
+            $e->setAttribute('SPNameQualifier', $this->getSPNameQualifier());
+        }
 
         if ($this->getFormat() !== null) {
             $e->setAttribute('Format', $this->getFormat());

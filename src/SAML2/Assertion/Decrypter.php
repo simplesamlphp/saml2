@@ -8,7 +8,6 @@ use Exception;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\SAML2\Assertion\Exception\NotDecryptedException;
 use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\XML\saml\Assertion;
@@ -16,7 +15,6 @@ use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 
 use function count;
 use function get_class;
-use function is_null;
 use function sprintf;
 
 class Decrypter

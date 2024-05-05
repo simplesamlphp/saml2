@@ -5,18 +5,22 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Utilities;
 
 use ArrayIterator;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\Exception\RuntimeException;
+use SimpleSAML\SAML2\Utilities\ArrayCollection;
 
 use function ucfirst;
 
-class ArrayCollectionTest extends TestCase
+/**
+ * @package simplesamlphp/saml2
+ */
+#[CoversClass(ArrayCollection::class)]
+final class ArrayCollectionTest extends TestCase
 {
     /**
-     * @return void
      */
-    public function test_construct_get_add_set(): void
+    public function testConstructGetAddSet(): void
     {
         $arc = new ArrayCollection(['aap', 'aap', 'noot']);
 
@@ -40,9 +44,8 @@ class ArrayCollectionTest extends TestCase
 
 
     /**
-     * @return void
      */
-    public function test_remove(): void
+    public function testRemove(): void
     {
         $arc = new ArrayCollection(['aap', 'aap', 'noot', 'mies']);
 
@@ -73,9 +76,8 @@ class ArrayCollectionTest extends TestCase
 
 
     /**
-     * @return void
      */
-    public function test_first_last_count(): void
+    public function testFirstLastCount(): void
     {
         $arc = new ArrayCollection(['aap', 'aap', 'noot', 'mies']);
 
@@ -86,9 +88,8 @@ class ArrayCollectionTest extends TestCase
 
 
     /**
-     * @return void
      */
-    public function test_offset(): void
+    public function testOffset(): void
     {
         $arc = new ArrayCollection(['aap', 'aap', 'noot', 'mies']);
 
@@ -109,9 +110,8 @@ class ArrayCollectionTest extends TestCase
 
 
     /**
-     * @return void
      */
-    public function test_onlyelement(): void
+    public function testOnlyElement(): void
     {
         $arc = new ArrayCollection(['aap']);
         $this->assertEquals($arc->getOnlyElement(), 'aap');
@@ -119,20 +119,22 @@ class ArrayCollectionTest extends TestCase
 
 
     /**
-     * @return void
      */
-    public function test_onlyelement_fail(): void
+    public function testOnlyElementFail(): void
     {
-        $this->expectException(RuntimeException::class, 'SAML2\Utilities\ArrayCollection::SAML2\Utilities\ArrayCollection::getOnlyElement requires that the collection has exactly one element, "2" elements found');
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(sprintf(
+            '%s::getOnlyElement requires that the collection has exactly one element, "2" elements found',
+            ArrayCollection::class,
+        ));
         $arc = new ArrayCollection(['aap', 'noot']);
         $arc->getOnlyElement();
     }
 
 
     /**
-     * @return void
      */
-    public function test_getiterator(): void
+    public function testGetiterator(): void
     {
         $arc = new ArrayCollection(['aap', 'noot']);
         $this->assertInstanceOf(ArrayIterator::class, $arc->getIterator());
@@ -140,16 +142,15 @@ class ArrayCollectionTest extends TestCase
 
 
     /**
-     * @return void
      */
-    public function test_filter_map(): void
+    public function testFilterMap(): void
     {
         $arc = new ArrayCollection(['aap', 'aap', 'noot', 'mies']);
 
         $filtered = $arc->filter(
             function ($i) {
                 return $i != 'aap';
-            }
+            },
         );
         $this->assertInstanceOf(ArrayCollection::class, $filtered);
         $this->assertEquals($filtered->get(0), null);
@@ -160,7 +161,7 @@ class ArrayCollectionTest extends TestCase
         $mapped = $arc->map(
             function ($i) {
                 return ucfirst($i);
-            }
+            },
         );
         $this->assertInstanceOf(ArrayCollection::class, $mapped);
         $this->assertEquals($mapped->get(0), 'Aap');

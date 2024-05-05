@@ -4,22 +4,24 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\TelephoneNumber;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Tests for SurName.
  *
- * @covers \SimpleSAML\SAML2\XML\md\TelephoneNumber
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(TelephoneNumber::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class TelephoneNumberTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -52,23 +54,6 @@ final class TelephoneNumberTest extends TestCase
     public function testMarshalling(): void
     {
         $name = new TelephoneNumber('+1234567890');
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test creating a TelephoneNumber from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = TelephoneNumber::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

@@ -163,6 +163,10 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
             $cp->toXML($e);
         }
 
+        foreach ($this->getAttributesNS() as $attr) {
+            $attr->toXML($e);
+        }
+
         return $e;
     }
 }

@@ -8,19 +8,13 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\AbstractElement;
-use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
-use function array_pop;
 use function class_exists;
 use function explode;
 use function gettype;
 use function intval;
-use function is_array;
-use function is_int;
-use function is_null;
-use function is_string;
 use function str_contains;
 
 /**
@@ -33,7 +27,7 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Create an AttributeValue.
      *
-     * @param mixed $value The value of this element. Can be one of:
+     * @param string|int|null|\SimpleSAML\XML\AbstractElement $value The value of this element. Can be one of:
      *  - string
      *  - int
      *  - null
@@ -41,7 +35,7 @@ class AttributeValue extends AbstractSamlElement
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied value is neither a string or a DOMElement
      */
-    public function __construct(
+    final public function __construct(
         protected string|int|null|AbstractElement $value,
     ) {
     }
@@ -62,11 +56,9 @@ class AttributeValue extends AbstractSamlElement
             case "NULL":
                 return "xs:nil";
             case "object":
-                /** @var \SimpleSAML\XML\AbstractElement $this->value */
                 return sprintf(
                     '%s:%s',
                     $this->value::getNamespacePrefix(),
-                    ":",
                     AbstractElement::getClassName(get_class($this->value)),
                 );
             default:
@@ -78,7 +70,7 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Get this attribute value.
      *
-     * @return string|int|\SimpleSAML\XML\AbstractElement[]|null
+     * @return string|int|\SimpleSAML\XML\AbstractElement|null
      */
     public function getValue()
     {

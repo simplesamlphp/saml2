@@ -6,8 +6,8 @@ namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AbstractStatement;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
@@ -86,7 +86,7 @@ final class CustomStatement extends AbstractStatement
      * Convert this Statement to XML.
      *
      * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this BaseID.
+     * @return \DOMElement The XML element after adding the data corresponding to this Statement.
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {

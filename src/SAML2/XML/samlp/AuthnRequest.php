@@ -7,21 +7,17 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\Subject;
-use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
-use function filter_var;
-use function is_null;
 use function strval;
 
 /**
@@ -55,7 +51,7 @@ class AuthnRequest extends AbstractRequest
      * @param \SimpleSAML\SAML2\XML\samlp\Scoping|null $scoping
      * @throws \Exception
      */
-    public function __construct(
+    final public function __construct(
         DateTimeImmutable $issueInstant,
         protected ?RequestedAuthnContext $requestedAuthnContext = null,
         protected ?Subject $subject = null,
@@ -67,7 +63,7 @@ class AuthnRequest extends AbstractRequest
         protected ?int $assertionConsumerServiceIndex = null,
         protected ?string $protocolBinding = null,
         protected ?int $attributeConsumingServiceIndex = null,
-        protected ?string $ProviderName = null,
+        protected ?string $providerName = null,
         ?Issuer $issuer = null,
         ?string $id = null,
         string $version = '2.0',
@@ -76,7 +72,7 @@ class AuthnRequest extends AbstractRequest
         ?Extensions $extensions = null,
         protected ?Scoping $scoping = null,
     ) {
-        Assert::nullOrNotWhitespaceOnly($ProviderName);
+        Assert::nullOrNotWhitespaceOnly($providerName);
         Assert::oneOf(
             null,
             [$assertionConsumerServiceURL, $assertionConsumerServiceIndex],
@@ -157,7 +153,7 @@ class AuthnRequest extends AbstractRequest
      */
     public function getProviderName(): ?string
     {
-        return $this->ProviderName;
+        return $this->providerName;
     }
 
 

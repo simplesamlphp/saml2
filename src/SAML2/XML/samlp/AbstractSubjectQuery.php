@@ -6,9 +6,9 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DateTimeImmutable;
 use DOMElement;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\Subject;
-use SimpleSAML\Assert\Assert;
 
 /**
  * Base class for SAML 2 subject query messages.

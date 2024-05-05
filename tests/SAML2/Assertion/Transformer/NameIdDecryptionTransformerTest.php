@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\SAML2\XML\saml;
+namespace SimpleSAML\Test\SAML2\Assertion\Transformer;
 
 use DateTimeImmutable;
 use DOMDocument;
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use SimpleSAML\SAML2\Assertion\Exception\InvalidAssertionException;
 use SimpleSAML\SAML2\Assertion\Processor;
 use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
@@ -33,9 +34,7 @@ use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
-use SimpleSAML\XMLSecurity\Key\PublicKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 use function getcwd;
@@ -71,7 +70,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
     /** @var \SimpleSAML\SAML2\Configuration\Destination */
     protected static Destination $destination;
 
-    /** @var \SimpleSAML\SAML2\xml\samlp\Response */
+    /** @var \SimpleSAML\SAML2\XML\samlp\Response */
     protected static Response $response;
 
     /** @var string */
@@ -150,11 +149,10 @@ final class NameIdDecryptionTransformerTest extends TestCase
 
     /**
      * Verifies that we can create decrypted NameIDs.
-     *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      * @return void
      */
+    #[PreserveGlobalState(false)]
+    #[RunInSeparateProcess]
     public function testBasicNameIdDecryption(): void
     {
         $this->markTestSkipped();
@@ -172,10 +170,10 @@ final class NameIdDecryptionTransformerTest extends TestCase
     /**
      * Run the decoder through processAssertions.
      *
-     * @runInSeparateProcess
-     * @preserveGlobalState disabled
      * @return void
      */
+    #[PreserveGlobalState(false)]
+    #[RunInSeparateProcess]
     public function testDecryptionProcessAssertions(): void
     {
         $this->markTestSkipped();

@@ -4,22 +4,23 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Signature;
 
-use DateTimeImmutable;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Signature\MissingConfigurationException;
 use SimpleSAML\SAML2\Signature\ValidatorChain;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
-use SimpleSAML\SAML2\Signature\MissingConfigurationException;
 
 /**
- * @covers \SimpleSAML\SAML2\Signature\ValidatorChain
  * @package simplesamlphp/saml2
  */
+#[CoversClass(ValidatorChain::class)]
 final class ValidatorChainTest extends TestCase
 {
     /** @var \SimpleSAML\SAML2\Signature\ValidatorChain */
@@ -39,10 +40,9 @@ final class ValidatorChainTest extends TestCase
 
 
     /**
-     * @group signature
-     * @test
      */
-    public function ifNoValidatorsCanValidateAnExceptionIsThrown(): void
+    #[Group('signature')]
+    public function testIfNoValidatorsCanValidateAnExceptionIsThrown(): void
     {
         self::$chain->appendValidator(new MockChainedValidator(false, true));
         self::$chain->appendValidator(new MockChainedValidator(false, true));
@@ -56,10 +56,9 @@ final class ValidatorChainTest extends TestCase
 
 
     /**
-     * @group signature
-     * @test
      */
-    public function allRegisteredValidatorsShouldBeTried(): void
+    #[Group('signature')]
+    public function testAllRegisteredValidatorsShouldBeTried(): void
     {
         self::$chain->appendValidator(new MockChainedValidator(false, true));
         self::$chain->appendValidator(new MockChainedValidator(false, true));
@@ -74,10 +73,9 @@ final class ValidatorChainTest extends TestCase
 
 
     /**
-     * @group signature
-     * @test
      */
-    public function itUsesTheResultOfTheFirstValidatorThatCanValidate(): void
+    #[Group('signature')]
+    public function testItUsesTheResultOfTheFirstValidatorThatCanValidate(): void
     {
         self::$chain->appendValidator(new MockChainedValidator(false, true));
         self::$chain->appendValidator(new MockChainedValidator(true, false));

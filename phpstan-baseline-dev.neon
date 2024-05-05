@@ -1,0 +1,106 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^PHPDoc tag @var for property SimpleSAML\\\\Test\\\\SAML2\\\\Assertion\\\\Transformer\\\\NameIdDecryptionTransformerTest\\:\\:\\$validator with type SimpleSAML\\\\SAML2\\\\Response\\\\Validation\\\\Validator is incompatible with native type SimpleSAML\\\\SAML2\\\\Signature\\\\Validator\\.$#"
+			count: 1
+			path: tests/SAML2/Assertion/Transformer/NameIdDecryptionTransformerTest.php
+
+		-
+			message: "#^Unreachable statement \\- code above always terminates\\.$#"
+			count: 2
+			path: tests/SAML2/Assertion/Transformer/NameIdDecryptionTransformerTest.php
+
+		-
+			message: "#^PHPDoc tag @var for property SimpleSAML\\\\Test\\\\SAML2\\\\Assertion\\\\Validation\\\\AssertionValidatorTest\\:\\:\\$validator with type SimpleSAML\\\\SAML2\\\\Response\\\\Validation\\\\Validator is incompatible with native type SimpleSAML\\\\SAML2\\\\Signature\\\\Validator\\.$#"
+			count: 1
+			path: tests/SAML2/Assertion/Validation/AssertionValidatorTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$xml of static method SimpleSAML\\\\SAML2\\\\XML\\\\saml\\\\Assertion\\:\\:fromXML\\(\\) expects DOMElement, DOMNode\\|null given\\.$#"
+			count: 2
+			path: tests/SAML2/Assertion/Validation/AssertionValidatorTest.php
+
+		-
+			message: "#^Result of method SimpleSAML\\\\SAML2\\\\Assertion\\\\Processor\\:\\:validateAssertion\\(\\) \\(void\\) is used\\.$#"
+			count: 2
+			path: tests/SAML2/Assertion/Validation/AssertionValidatorTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$serviceProvider of method SimpleSAML\\\\SAML2\\\\Assertion\\\\Validation\\\\ConstraintValidator\\\\SpIsValidAudience\\:\\:setServiceProvider\\(\\) expects SimpleSAML\\\\SAML2\\\\Configuration\\\\ServiceProvider, Mockery\\\\MockInterface given\\.$#"
+			count: 3
+			path: tests/SAML2/Assertion/Validation/ConstraintValidator/SpIsValidAudienceTest.php
+
+		-
+			message: "#^Call to an undefined method Mockery\\\\ExpectationInterface\\|Mockery\\\\HigherOrderMessage\\:\\:andReturnNull\\(\\)\\.$#"
+			count: 2
+			path: tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationResponseToMatchesTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$response of class SimpleSAML\\\\SAML2\\\\Assertion\\\\Validation\\\\ConstraintValidator\\\\SubjectConfirmationResponseToMatches constructor expects SimpleSAML\\\\SAML2\\\\XML\\\\samlp\\\\Response, Mockery\\\\MockInterface given\\.$#"
+			count: 5
+			path: tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationResponseToMatchesTest.php
+
+		-
+			message: "#^PHPDoc tag @var for property SimpleSAML\\\\Test\\\\SAML2\\\\XML\\\\saml\\\\SubjectConfirmationValidatorTest\\:\\:\\$validator with type SimpleSAML\\\\SAML2\\\\Response\\\\Validation\\\\Validator is incompatible with native type SimpleSAML\\\\SAML2\\\\Signature\\\\Validator\\.$#"
+			count: 1
+			path: tests/SAML2/Assertion/Validation/SubjectConfirmationValidatorTest.php
+
+		-
+			message: "#^Result of method SimpleSAML\\\\SAML2\\\\Assertion\\\\Processor\\:\\:validateAssertion\\(\\) \\(void\\) is used\\.$#"
+			count: 1
+			path: tests/SAML2/Assertion/Validation/SubjectConfirmationValidatorTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$element of method SimpleSAML\\\\SAML2\\\\Certificate\\\\KeyCollection\\:\\:add\\(\\) expects SimpleSAML\\\\SAML2\\\\Certificate\\\\Key, string given\\.$#"
+			count: 1
+			path: tests/SAML2/Certificate/KeyCollectionTest.php
+
+		-
+			message: "#^Call to an undefined method Mockery\\\\ExpectationInterface\\|Mockery\\\\HigherOrderMessage\\:\\:atMost\\(\\)\\.$#"
+			count: 2
+			path: tests/SAML2/Certificate/KeyLoaderTest.php
+
+		-
+			message: "#^Call to an undefined method Mockery\\\\ExpectationInterface\\|Mockery\\\\HigherOrderMessage\\:\\:once\\(\\)\\.$#"
+			count: 1
+			path: tests/SAML2/Certificate/KeyLoaderTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$config of method SimpleSAML\\\\SAML2\\\\Certificate\\\\KeyLoader\\:\\:loadKeysFromConfiguration\\(\\) expects SimpleSAML\\\\SAML2\\\\Configuration\\\\CertificateProvider, Mockery\\\\MockInterface given\\.$#"
+			count: 3
+			path: tests/SAML2/Certificate/KeyLoaderTest.php
+
+		-
+			message: "#^Call to an undefined method Mockery\\\\ExpectationInterface\\|Mockery\\\\HigherOrderMessage\\:\\:once\\(\\)\\.$#"
+			count: 8
+			path: tests/SAML2/Response/SignatureValidationTest.php
+
+		-
+			message: "#^Call to method shouldReceive\\(\\) on an unknown class alias\\:SimpleSAML\\\\SAML2\\\\Assertion\\\\ProcessorBuilder\\.$#"
+			count: 1
+			path: tests/SAML2/Response/SignatureValidationTest.php
+
+		-
+			message: "#^Call to an undefined method Mockery\\\\ExpectationInterface\\|Mockery\\\\HigherOrderMessage\\:\\:once\\(\\)\\.$#"
+			count: 2
+			path: tests/SAML2/Response/Validation/ConstraintValidator/DestinationMatchesTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$response of method SimpleSAML\\\\SAML2\\\\Response\\\\Validation\\\\ConstraintValidator\\\\DestinationMatches\\:\\:validate\\(\\) expects SimpleSAML\\\\SAML2\\\\XML\\\\samlp\\\\Response, Mockery\\\\MockInterface given\\.$#"
+			count: 2
+			path: tests/SAML2/Response/Validation/ConstraintValidator/DestinationMatchesTest.php
+
+		-
+			message: "#^Call to an undefined method Mockery\\\\ExpectationInterface\\|Mockery\\\\HigherOrderMessage\\:\\:once\\(\\)\\.$#"
+			count: 3
+			path: tests/SAML2/Response/Validation/ConstraintValidator/IsSuccessfulTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$response of method SimpleSAML\\\\SAML2\\\\Response\\\\Validation\\\\ConstraintValidator\\\\IsSuccessful\\:\\:validate\\(\\) expects SimpleSAML\\\\SAML2\\\\XML\\\\samlp\\\\Response, Mockery\\\\MockInterface given\\.$#"
+			count: 2
+			path: tests/SAML2/Response/Validation/ConstraintValidator/IsSuccessfulTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$xml of static method SimpleSAML\\\\SAML2\\\\XML\\\\saml\\\\Assertion\\:\\:fromXML\\(\\) expects DOMElement, DOMNode\\|null given\\.$#"
+			count: 2
+			path: tests/SAML2/Response/XmlSignatureWrappingTest.php

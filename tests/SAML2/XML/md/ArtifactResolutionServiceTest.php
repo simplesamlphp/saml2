@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -23,11 +26,12 @@ use function strval;
 /**
  * Tests for md:ArtifactResolutionService.
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType
- * @covers \SimpleSAML\SAML2\XML\md\ArtifactResolutionService
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(ArtifactResolutionService::class)]
+#[CoversClass(AbstractIndexedEndpointType::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class ArtifactResolutionServiceTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -35,10 +39,10 @@ final class ArtifactResolutionServiceTest extends TestCase
     use SerializableElementTestTrait;
 
     /** @var \SimpleSAML\XML\Chunk */
-    protected static Chunk $ext;
+    private static Chunk $ext;
 
     /** @var \SimpleSAML\XML\Attribute */
-    protected static XMLAttribute $attr;
+    private static XMLAttribute $attr;
 
 
     /**
@@ -104,31 +108,11 @@ final class ArtifactResolutionServiceTest extends TestCase
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for md:ArtifactResolutionService.',
         );
-        new ArtifactResolutionService(
-            42,
-            C::BINDING_HTTP_ARTIFACT,
-            'https://simplesamlphp.org/some/endpoint',
-            false,
-            'https://response.location/',
-        );
+        new ArtifactResolutionService(42, C::BINDING_HTTP_ARTIFACT, C::LOCATION_A, false, 'https://response.location/');
     }
 
 
     // test unmarshalling
-
-
-    /**
-     * Test creating a ArtifactResolutionService from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $ars = ArtifactResolutionService::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($ars),
-        );
-    }
 
 
     /**

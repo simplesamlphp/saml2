@@ -4,20 +4,21 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Response\Validation;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Response\Validation\Result;
 
 /**
- * @covers \SimpleSAML\SAML2\Response\Validation\Result
  * @package simplesamlphp/saml2
  */
+#[CoversClass(Result::class)]
 final class ResultTest extends TestCase
 {
     /**
-     * @group response-validation
-     * @test
      */
-    public function addedErrorsCanBeRetrieved(): void
+    #[Group('response-validation')]
+    public function testAddedErrorsCanBeRetrieved(): void
     {
         $error = 'This would be an error message';
         $result = new Result();
@@ -31,10 +32,9 @@ final class ResultTest extends TestCase
 
 
     /**
-     * @group response-validation
-     * @test
      */
-    public function theResultCorrectlyReportsWhetherOrNotItIsValid(): void
+    #[Group('response-validation')]
+    public function testTheResultCorrectlyReportsWhetherOrNotItIsValid(): void
     {
         $result = new Result();
 

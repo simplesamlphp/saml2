@@ -8,11 +8,8 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function array_pop;
-use function is_null;
-use function intval;
 
 /**
  * Class for handling SAML2 Scoping.
@@ -98,7 +95,7 @@ final class Scoping extends AbstractSamlpElement
         $requesterId = RequesterID::getChildrenOfClass($xml);
 
         return new static(
-            is_null($proxyCount) ? null : $proxyCount,
+            $proxyCount,
             array_pop($idpList),
             $requesterId,
         );

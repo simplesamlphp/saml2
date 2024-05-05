@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
@@ -11,16 +13,15 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 
 /**
- * @covers \SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationMethod
  * @package simplesamlphp/saml2
  */
+#[CoversClass(SubjectConfirmationMethod::class)]
 final class SubjectConfirmationMethodTest extends TestCase
 {
     /**
-     * @group assertion-validation
-     * @test
      */
-    public function aSubjectConfirmationWithBearerMethodIsValid(): void
+    #[Group('assertion-validation')]
+    public function testASubjectConfirmationWithBearerMethodIsValid(): void
     {
         $subjectConfirmation = new SubjectConfirmation(C::CM_BEARER);
 
@@ -34,10 +35,9 @@ final class SubjectConfirmationMethodTest extends TestCase
 
 
     /**
-     * @group assertion-validation
-     * @test
      */
-    public function aSubjectConfirmationWithHolderOfKeyMethodIsNotValid(): void
+    #[Group('assertion-validation')]
+    public function testASubjectConfirmationWithHolderOfKeyMethodIsNotValid(): void
     {
         $subjectConfirmation = new SubjectConfirmation(C::CM_HOK);
 

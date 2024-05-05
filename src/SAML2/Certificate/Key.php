@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Certificate;
 
+use ArrayAccess;
+use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Certificate\Exception\InvalidKeyUsageException;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 
 use function array_key_exists;
-use function in_array;
 use function is_string;
 
 /**
  * Simple DTO wrapper for (X509) keys. Implements ArrayAccess
  * for easier backwards compatibility.
  */
-class Key implements \ArrayAccess
+class Key implements ArrayAccess
 {
     // Possible key usages
     public const USAGE_SIGNING = 'signing';
+
     public const USAGE_ENCRYPTION = 'encryption';
 
     /** @var array */
@@ -42,38 +44,27 @@ class Key implements \ArrayAccess
      *
      * @param string $usage
      * @return bool
+     * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      */
     public function canBeUsedFor(string $usage): bool
     {
-        if (!in_array($usage, static::getValidKeyUsages(), true)) {
-            throw new InvalidKeyUsageException($usage);
-        }
+        Assert::oneOf(
+            $usage,
+            [self::USAGE_ENCRYPTION, self::USAGE_SIGNING],
+            'Invalid key usage given: "%s", usages "%2$s" allowed',
+            InvalidKeyUsageException::class,
+        );
 
         return isset($this->keyData[$usage]) && $this->keyData[$usage];
     }
 
 
     /**
-     * Returns the list of valid key usage options
-     * @return array
-     */
-    public static function getValidKeyUsages(): array
-    {
-        return [
-            self::USAGE_ENCRYPTION,
-            self::USAGE_SIGNING
-        ];
-    }
-
-
-    /**
      * @param mixed $offset
-     * @throws InvalidArgumentException
+     * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      * @return bool
-     *
-     * Type hint not possible due to upstream method signature
      */
-    public function offsetExists($offset): bool
+    public function offsetExists(mixed $offset): bool
     {
         if (!is_string($offset)) {
             throw InvalidArgumentException::invalidType('string', $offset);
@@ -84,13 +75,10 @@ class Key implements \ArrayAccess
 
     /**
      * @param mixed $offset
-     * @throws InvalidArgumentException
+     * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      * @return mixed
-     *
-     * Type hint not possible due to upstream method signature
      */
-    #[\ReturnTypeWillChange]
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         if (!is_string($offset)) {
             throw InvalidArgumentException::invalidType('string', $offset);
@@ -102,10 +90,9 @@ class Key implements \ArrayAccess
     /**
      * @param mixed $offset
      * @param mixed $value
-     * @throws InvalidArgumentException
-     * @return void
+     * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      */
-    public function offsetSet($offset, $value): void
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         if (!is_string($offset)) {
             throw InvalidArgumentException::invalidType('string', $offset);
@@ -116,12 +103,9 @@ class Key implements \ArrayAccess
 
     /**
      * @param mixed $offset
-     * @throws InvalidArgumentException
-     * @return void
-     *
-     * Type hint not possible due to upstream method signature
+     * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      */
-    public function offsetUnset($offset): void
+    public function offsetUnset(mixed $offset): void
     {
         if (!is_string($offset)) {
             throw InvalidArgumentException::invalidType('string', $offset);

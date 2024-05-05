@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Configuration;
 
-use SimpleSAML\SAML2\Exception\RuntimeException;
-use Traversable;
+use RuntimeException;
 
 use function array_filter;
 use function array_pop;
@@ -15,12 +14,12 @@ use function sprintf;
 /**
  * Basic configuration wrapper
  */
-class IdentityProvider extends ArrayAdapter implements CertificateProvider, DecryptionProvider, EntityIdProvider
+final class IdentityProvider extends ArrayAdapter implements CertificateProvider, DecryptionProvider, EntityIdProvider
 {
     /**
      * @return array|\Traversable|null
      */
-    public function getKeys(): Traversable|array|null
+    public function getKeys()
     {
         return $this->get('keys');
     }
@@ -70,16 +69,6 @@ class IdentityProvider extends ArrayAdapter implements CertificateProvider, Decr
         return $this->get('sharedKey');
     }
 
-
-    /**
-     * @return mixed|null
-     */
-    public function hasBase64EncodedAttributes()
-    {
-        return $this->get('base64EncodedAttributes');
-    }
-
-
     /**
      * @param string $name
      * @param bool $required
@@ -101,7 +90,7 @@ class IdentityProvider extends ArrayAdapter implements CertificateProvider, Decr
                 'Attempted to get privateKey by name "%s", found "%d" keys, where only one was expected. Please '
                 . 'verify that your configuration is correct',
                 $name,
-                $keyCount
+                $keyCount,
             ));
         }
 

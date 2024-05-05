@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DateTimeImmutable;
-use DOMAttr;
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
 use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType;
+use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
 use SimpleSAML\SAML2\XML\md\Company;
 use SimpleSAML\SAML2\XML\md\ContactPerson;
 use SimpleSAML\SAML2\XML\md\EmailAddress;
@@ -27,7 +29,6 @@ use SimpleSAML\SAML2\XML\md\OrganizationURL;
 use SimpleSAML\SAML2\XML\md\SurName;
 use SimpleSAML\SAML2\XML\md\TelephoneNumber;
 use SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor;
-use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\CustomRoleDescriptor;
 use SimpleSAML\XML\Attribute as XMLAttribute;
@@ -46,15 +47,15 @@ use function strval;
 /**
  * This is a test for the UnknownRoleDescriptor class.
  *
- * @covers \SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor
- * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor
- * @covers \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMetadataDocument
- * @covers \SimpleSAML\SAML2\XML\md\AbstractSignedMdElement
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- *
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(UnknownRoleDescriptor::class)]
+#[CoversClass(AbstractRoleDescriptor::class)]
+#[CoversClass(AbstractRoleDescriptorType::class)]
+#[CoversClass(AbstractMetadataDocument::class)]
+#[CoversClass(AbstractSignedMdElement::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class RoleDescriptorTest extends TestCase
 {
     use SchemaValidationTestTrait;

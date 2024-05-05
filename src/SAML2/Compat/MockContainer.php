@@ -9,7 +9,8 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 use function chmod;
-use function file_get_contents;
+use function file_put_contents;
+use function strval;
 use function sys_get_temp_dir;
 
 /**
@@ -20,14 +21,7 @@ class MockContainer extends AbstractContainer
     /** @var \Psr\Clock\ClockInterface */
     private ClockInterface $clock;
 
-    /**
-     * @var string
-     */
-    private string $id = '123';
-
-    /**
-     * @var array
-     */
+    /** @var array */
     private array $debugMessages = [];
 
 
@@ -42,16 +36,6 @@ class MockContainer extends AbstractContainer
 
 
     /**
-     * Generate a random identifier for identifying SAML2 documents.
-     * @return string
-     */
-    public function generateId(): string
-    {
-        return $this->id;
-    }
-
-
-    /**
      * Log an incoming message to the debug log.
      *
      * Type can be either:
@@ -62,7 +46,6 @@ class MockContainer extends AbstractContainer
      *
      * @param \DOMElement|string $message
      * @param string $type
-     * @return void
      */
     public function debugMessage($message, string $type): void
     {
@@ -73,15 +56,15 @@ class MockContainer extends AbstractContainer
     /**
      * Trigger the user to perform a POST to the given URL with the given data.
      *
-     * @param string $url
+     * @param string|null $url
      * @param array $data
      * @return string
      */
-    public function getPostRedirectURL(
-        /** @scrutinizer ignore-unused */string $url,
+    public function getPOSTRedirectURL(
+        /** @scrutinizer ignore-unused */string $url = null,
         /** @scrutinizer ignore-unused */array $data = []
     ): string {
-        return $url;
+        return strval($url);
     }
 
 
@@ -98,7 +81,6 @@ class MockContainer extends AbstractContainer
      * @param string $filename
      * @param string $data
      * @param int|null $mode
-     * @return void
      */
     public function writeFile(string $filename, string $data, int $mode = null): void
     {

@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Configuration;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Configuration\ArrayAdapter;
 
-class ArrayAdapterTest extends TestCase
+/**
+ * @package simplesamlphp/saml2
+ */
+#[CoversClass(ArrayAdapter::class)]
+final class ArrayAdapterTest extends TestCase
 {
     /**
-     * @group configuration
-     * @test
-     * @return void
      */
-    public function setConfigurationCanBeQueried(): void
+    #[Group('configuration')]
+    public function testSetConfigurationCanBeQueried(): void
     {
         $configuration = new ArrayAdapter(['foo' => 'bar']);
 
@@ -25,11 +29,9 @@ class ArrayAdapterTest extends TestCase
 
 
     /**
-     * @group configuration
-     * @test
-     * @return void
      */
-    public function defaultValuesAreReturnedForUnavailableConfiguration(): void
+    #[Group('configuration')]
+    public function testDefaultValuesAreReturnedForUnavailableConfiguration(): void
     {
         $configuration = ['foo' => 'bar'];
 

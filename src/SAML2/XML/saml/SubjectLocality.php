@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
  * Class representing SAML2 SubjectLocality
@@ -27,7 +26,7 @@ final class SubjectLocality extends AbstractSamlElement
         protected ?string $dnsName = null,
     ) {
         Assert::nullOrIp($address, 'Invalid IP address');
-        Assert::nullOrnotWhitespaceOnly($dnsName, 'Invalid DNS name');
+        Assert::nullOrNotWhitespaceOnly($dnsName, 'Invalid DNS name');
     }
 
 

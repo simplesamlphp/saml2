@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DOMDocument;
-use DOMElement;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\AbstractStatement;
+use SimpleSAML\SAML2\XML\saml\AbstractStatementType;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\UnknownStatement;
 use SimpleSAML\Test\SAML2\Constants as C;
@@ -22,14 +24,15 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\saml\StatementTest
+ * Class \SimpleSAML\SAML2\XML\saml\StatementTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\UnknownStatement
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractStatement
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractStatementType
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
+#[Group('saml')]
+#[CoversClass(UnknownStatement::class)]
+#[CoversClass(AbstractStatement::class)]
+#[CoversClass(AbstractStatementType::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class StatementTest extends TestCase
 {
     use SchemaValidationTestTrait;

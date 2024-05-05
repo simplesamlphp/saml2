@@ -6,7 +6,6 @@ namespace SimpleSAML\SAML2\XML\shibmd;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
@@ -33,7 +32,7 @@ final class KeyAuthority extends AbstractShibmdElement
      * Create a KeyAuthority.
      *
      * @param \SimpleSAML\XMLSecurity\XML\ds\KeyInfo[] $keys
-     * @param int|null $verifyDepth
+     * @param int|null $VerifyDepth
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
@@ -41,6 +40,7 @@ final class KeyAuthority extends AbstractShibmdElement
         protected ?int $VerifyDepth = null,
         array $namespacedAttributes = [],
     ) {
+        Assert::maxCount($keys, C::UNBOUNDED_LIMIT);
         Assert::nullOrRange($VerifyDepth, 0, 255);
 
         $this->setAttributesNS($namespacedAttributes);
@@ -83,7 +83,7 @@ final class KeyAuthority extends AbstractShibmdElement
         Assert::same($xml->localName, 'KeyAuthority', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, KeyAuthority::NS, InvalidDOMElementException::class);
 
-        $verifyDepth = self::getOptionalIntegerAttribute($xml, 'VerifyDepth', null);
+        $verifyDepth = self::getOptionalIntegerAttribute($xml, 'VerifyDepth', 1);
         Assert::natural($verifyDepth);
 
         $keys = KeyInfo::getChildrenOfClass($xml);
@@ -101,7 +101,6 @@ final class KeyAuthority extends AbstractShibmdElement
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
 
         foreach ($this->getAttributesNS() as $attr) {

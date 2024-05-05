@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\emd;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\XML\emd\AbstractEmdElement;
 use SimpleSAML\SAML2\XML\emd\RepublishRequest;
 use SimpleSAML\SAML2\XML\emd\RepublishTarget;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -19,10 +21,11 @@ use function strval;
 /**
  * Class \SimpleSAML\SAML2\XML\emd\RepublishRequest
  *
- * @covers \SimpleSAML\SAML2\XML\emd\RepublishRequest
- * @covers \SimpleSAML\SAML2\XML\emd\AbstractEmdElement
  * @package simplesamlphp/saml2
  */
+#[Group('emd')]
+#[CoversClass(RepublishRequest::class)]
+#[CoversClass(AbstractEmdElement::class)]
 final class RepublishRequestTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -56,20 +59,6 @@ final class RepublishRequestTest extends TestCase
         $republishRequest = new RepublishRequest(
             new RepublishTarget('http://edugain.org/'),
         );
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($republishRequest),
-        );
-    }
-
-
-    /**
-     * Unmarshalling
-     */
-    public function testUnmarshalling(): void
-    {
-        $republishRequest = RepublishRequest::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

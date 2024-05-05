@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Certificate;
 
-use SimpleSAML\SAML2\Exception\InvalidArgumentException;
-
 class PrivateKey extends Key
 {
     /**
      * @param string $keyContents
      * @param string|null $passphrase
-     * @throws InvalidArgumentException
-     * @return PrivateKey
+     * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
+     * @return \SimpleSAML\SAML2\Certificate\PrivateKey
      */
     public static function create(string $keyContents, string $passphrase = null): PrivateKey
     {

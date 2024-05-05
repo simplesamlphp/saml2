@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2;
 
-use DOMDocument;
-use DOMElement;
 use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
@@ -90,8 +88,7 @@ class HTTPPost extends Binding
             throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
 
-        Assert::stringPlausibleBase64($msgStr, 'Error while base64 decoding SAML message.', Exception::class);
-        $msgStr = base64_decode($msgStr, true); // Error handling already dealt with by assertion
+        $msgStr = base64_decode($msgStr, true);
         $msgStr = DOMDocumentFactory::fromString($msgStr)->saveXML();
 
         $document = DOMDocumentFactory::fromString($msgStr);

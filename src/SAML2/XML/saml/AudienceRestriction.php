@@ -7,9 +7,8 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\XML\Exception\SchemaViolationException;
 
 /**
  * SAML AudienceRestriction data type.
@@ -26,8 +25,9 @@ final class AudienceRestriction extends AbstractConditionType
     public function __construct(
         protected array $audience,
     ) {
+        Assert::minCount($audience, 1, SchemaViolationException::class);
         Assert::maxCount($audience, C::UNBOUNDED_LIMIT);
-        Assert::allIsInstanceOf($audience, Audience::class);
+        Assert::allIsInstanceOf($audience, Audience::class, SchemaViolationException::class);
     }
 
 
@@ -65,7 +65,7 @@ final class AudienceRestriction extends AbstractConditionType
     /**
      * Convert this Audience to XML.
      *
-     * @param \DOMElement|null $element The element we are converting to XML.
+     * @param \DOMElement|null $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this AudienceRestriction.
      */
     public function toXML(DOMElement $parent = null): DOMElement

@@ -7,7 +7,6 @@ namespace SimpleSAML\SAML2\XML\alg;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\ExtendableElementTrait;
@@ -95,8 +94,8 @@ final class DigestMethod extends AbstractAlgElement
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Algorithm', $this->getAlgorithm());
 
-        /** @var \SimpleSAML\XML\SerializableElementInterface $element */
         foreach ($this->getElements() as $element) {
+            /** @var \SimpleSAML\XML\SerializableElementInterface $element */
             $element->toXML($e);
         }
 

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Configuration;
 
 /**
- * Interface \SAML2\Configuration\Queryable
+ * Interface \SimpleSAML\SAML2\Configuration\Queryable
  */
 interface Queryable
 {

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\StatusDetail;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -17,13 +19,13 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\samlp\StatusDetailTest
- *
- * @covers \SimpleSAML\SAML2\XML\samlp\StatusDetail
- * @covers \SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement
+ * Class \SimpleSAML\SAML2\XML\samlp\StatusDetailTest
  *
  * @package simplesamlphp/saml2
  */
+#[Group('samlp')]
+#[CoversClass(StatusDetail::class)]
+#[CoversClass(AbstractSamlpElement::class)]
 final class StatusDetailTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -73,18 +75,5 @@ final class StatusDetailTest extends TestCase
             strval($statusDetail),
         );
         $this->assertTrue($statusDetail->isEmptyElement());
-    }
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $statusDetail = StatusDetail::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($statusDetail),
-        );
     }
 }

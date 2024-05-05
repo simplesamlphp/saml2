@@ -4,11 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
  * Class representing the saml:Issuer element.
@@ -53,8 +50,6 @@ final class Issuer extends NameIDType
          *
          * From saml-core-2.0-os 8.3.6, when the entity Format is used: "The NameQualifier, SPNameQualifier, and
          * SPProvidedID attributes MUST be omitted."
-         *
-         * @var string
          */
         if ($Format === C::NAMEID_ENTITY || $Format === null) {
             Assert::allNull(
@@ -64,28 +59,5 @@ final class Issuer extends NameIDType
         }
 
         parent::__construct($value, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
-    }
-
-
-    /**
-     * Convert XML into an Issuer
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
-     *   if the qualified name of the supplied element is wrong
-     */
-    public static function fromXML(DOMElement $xml): static
-    {
-        Assert::same($xml->localName, 'Issuer', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, Issuer::NS, InvalidDOMElementException::class);
-
-        $Format = self::getOptionalAttribute($xml, 'Format', null);
-        $SPProvidedID = self::getOptionalAttribute($xml, 'SPProvidedID', null);
-        $NameQualifier = self::getOptionalAttribute($xml, 'NameQualifier', null);
-        $SPNameQualifier = self::getOptionalAttribute($xml, 'SPNameQualifier', null);
-
-        return new static($xml->textContent, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
     }
 }

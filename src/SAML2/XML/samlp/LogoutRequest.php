@@ -12,21 +12,17 @@ use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\IdentifierTrait;
-use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
 use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
-use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\Utils as XMLUtils;
-use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
-use function gmdate;
 
 /**
  * Class for SAML 2 logout request messages.
@@ -209,7 +205,6 @@ final class LogoutRequest extends AbstractRequest
      */
     protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
-        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = parent::toUnsignedXML($parent);
 
         if ($this->getNotOnOrAfter() !== null) {
@@ -220,7 +215,7 @@ final class LogoutRequest extends AbstractRequest
             $e->setAttribute('Reason', $this->getReason());
         }
 
-        /** @psalm-var \SimpleSAML\XML\SerializableElementInterface $identifier */
+        /** @var \SimpleSAML\XML\SerializableElementInterface $identifier */
         $identifier = $this->getIdentifier();
         $identifier->toXML($e);
 

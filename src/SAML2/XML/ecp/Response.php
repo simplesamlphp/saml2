@@ -12,8 +12,6 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 
-use function filter_var;
-
 /**
  * Class representing the ECP Response element.
  *

@@ -43,7 +43,7 @@ class ArtifactResolve extends AbstractRequest
      *
      * @throws \Exception
      */
-    public function __construct(
+    final public function __construct(
         protected string $artifact,
         DateTimeImmutable $issueInstant,
         ?Issuer $issuer = null,
@@ -151,7 +151,6 @@ class ArtifactResolve extends AbstractRequest
     {
         Assert::notEmpty($this->artifact, 'Cannot convert ArtifactResolve to XML without an Artifact set.');
 
-        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = parent::toUnsignedXML($parent);
         $artifactelement = $e->ownerDocument->createElementNS(C::NS_SAMLP, 'Artifact', $this->getArtifact());
         $e->appendChild($artifactelement);

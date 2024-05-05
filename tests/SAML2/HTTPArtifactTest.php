@@ -6,13 +6,14 @@ namespace SimpleSAML\Test\SAML2;
 
 use Exception;
 use Nyholm\Psr7\ServerRequest;
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\HTTPArtifact;
 
 /**
- * @covers \SimpleSAML\SAML2\HTTPArtifact
  * @package simplesamlphp\saml2
  */
+#[CoversClass(HTTPArtifact::class)]
 final class HTTPArtifactTest extends TestCase
 {
     /**

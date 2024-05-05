@@ -4,19 +4,26 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Certificate;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Configuration\PrivateKey as ConfPrivateKey;
 use SimpleSAML\SAML2\Certificate\PrivateKey;
 use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
+use SimpleSAML\SAML2\Configuration\PrivateKey as ConfPrivateKey;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
-class PrivateKeyLoaderTest extends TestCase
+/**
+ * @package simplesamlphp/saml2
+ */
+#[CoversClass(PrivateKeyLoader::class)]
+final class PrivateKeyLoaderTest extends TestCase
 {
     /** @var \SimpleSAML\SAML2\Certificate\PrivateKeyLoader */
     private static PrivateKeyLoader $privateKeyLoader;
 
 
     /**
-     * @return void
      */
     public static function setUpBeforeClass(): void
     {
@@ -25,52 +32,52 @@ class PrivateKeyLoaderTest extends TestCase
 
 
     /**
-     * @group        certificate
-     * @test
-     * @dataProvider privateKeyTestProvider
-     *
      * @param \SimpleSAML\SAML2\Configuration\PrivateKey $configuredKey
-     * @return void
      */
-    public function loading_a_configured_private_key_returns_a_certificate_private_key(
+    #[Group('certificate')]
+    #[DataProvider('privateKeyTestProvider')]
+    public function testLoadingAConfiguredPrivateKeyReturnsACertificatePrivateKey(
         ConfPrivateKey $configuredKey
     ): void {
         $resultingKey = self::$privateKeyLoader->loadPrivateKey($configuredKey);
 
         $this->assertInstanceOf(PrivateKey::class, $resultingKey);
-        $this->assertEquals($resultingKey->getKeyAsString(), "This would normally contain the private key data.\n");
+        $this->assertEquals(
+            trim($resultingKey->getKeyAsString()),
+            PEMCertificatesMock::loadPlainKeyFile(PEMCertificatesMock::BROKEN_PRIVATE_KEY),
+        );
         $this->assertEquals($resultingKey->getPassphrase(), $configuredKey->getPassPhrase());
     }
 
 
     /**
-     * Dataprovider for 'loading_a_configured_private_key_returns_a_certificate_private_key'
+     * Dataprovider for 'loadingAConfiguredPrivateKeyReturnsACertificatePrivateKey'
      *
      * @return array
      */
     public static function privateKeyTestProvider(): array
     {
         return [
-            'no passphrase'   => [
+            'no passphrase' => [
                 new ConfPrivateKey(
-                    dirname(__FILE__) . '/File/a_fake_private_key_file.pem',
-                    ConfPrivateKey::NAME_DEFAULT
-                )
+                    PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::BROKEN_PRIVATE_KEY),
+                    ConfPrivateKey::NAME_DEFAULT,
+                ),
             ],
             'with passphrase' => [
                 new ConfPrivateKey(
-                    dirname(__FILE__) . '/File/a_fake_private_key_file.pem',
+                    PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::BROKEN_PRIVATE_KEY),
                     ConfPrivateKey::NAME_DEFAULT,
-                    'foo bar baz'
-                )
+                    'foo bar baz',
+                ),
             ],
             'private key as contents' => [
                 new ConfPrivateKey(
-                    file_get_contents(dirname(__FILE__) . '/File/a_fake_private_key_file.pem'),
+                    PEMCertificatesMock::loadPlainKeyFile(PEMCertificatesMock::BROKEN_PRIVATE_KEY),
                     ConfPrivateKey::NAME_DEFAULT,
                     '',
-                    false
-                )
+                    false,
+                ),
             ],
         ];
     }

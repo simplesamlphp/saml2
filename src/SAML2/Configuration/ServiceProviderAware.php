@@ -11,7 +11,6 @@ interface ServiceProviderAware
 {
     /**
      * @param \SimpleSAML\SAML2\Configuration\ServiceProvider $serviceProvider
-     * @return void
      */
     public function setServiceProvider(ServiceProvider $serviceProvider): void;
 }

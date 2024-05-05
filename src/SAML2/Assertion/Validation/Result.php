@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Assertion\Validation;
 
-use SimpleSAML\SAML2\Exception\InvalidArgumentException;
-
 /**
  * Simple Result object
  */

@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Utils;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDecl;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
@@ -18,12 +19,13 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\saml\AuthnContextDeclTest
+ * Class \SimpleSAML\SAML2\XML\saml\AuthnContextDeclTest
  *
- * @covers \SimpleSAML\SAML2\XML\saml\AuthnContextDecl
- * @covers \SimpleSAML\SAML2\XML\saml\AbstractSamlElement
  * @package simplesamlphp/saml2
  */
+#[Group('saml')]
+#[CoversClass(AuthnContextDecl::class)]
+#[CoversClass(AbstractSamlElement::class)]
 final class AuthnContextDeclTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -65,22 +67,6 @@ XML
             [$chunk],
             [new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'attr1', 'testval1')],
         );
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authnContextDecl),
-        );
-    }
-
-
-    // unmarshalling
-
-
-    /**
-     */
-    public function testUnmarshalling(): void
-    {
-        $authnContextDecl = AuthnContextDecl::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

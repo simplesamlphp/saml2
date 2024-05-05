@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\NameIDMappingService;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -19,10 +21,11 @@ use function strval;
 /**
  * Tests for md:NameIDMappingService.
  *
- * @covers \SimpleSAML\SAML2\XML\md\NameIDMappingService
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(NameIDMappingService::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class NameIDMappingServiceTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -51,7 +54,7 @@ final class NameIDMappingServiceTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $nidmsep = new NameIDMappingService(C::BINDING_HTTP_POST, 'https://simplesamlphp.org/some/endpoint');
+        $nidmsep = new NameIDMappingService(C::BINDING_HTTP_POST, C::LOCATION_A);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -69,29 +72,11 @@ final class NameIDMappingServiceTest extends TestCase
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.',
         );
-        new NameIDMappingService(
-            C::BINDING_HTTP_POST,
-            'https://simplesamlphp.org/some/endpoint',
-            'https://response.location/',
-        );
+        new NameIDMappingService(C::BINDING_HTTP_POST, C::LOCATION_A, 'https://response.location/');
     }
 
 
     // test unmarshalling
-
-
-    /**
-     * Test creating a NameIDMappingService from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $nidmsep = NameIDMappingService::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($nidmsep),
-        );
-    }
 
 
     /**

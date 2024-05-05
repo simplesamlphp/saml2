@@ -8,7 +8,6 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
 
 /**
  * Class representing a SAML2 AttributeStatement
@@ -23,7 +22,7 @@ class AttributeStatement extends AbstractStatementType
      * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes
      * @param \SimpleSAML\SAML2\XML\saml\EncryptedAttribute[] $encryptedAttributes
      */
-    public function __construct(
+    final public function __construct(
         protected array $attributes = [],
         protected array $encryptedAttributes = [],
     ) {

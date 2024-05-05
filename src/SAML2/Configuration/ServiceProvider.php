@@ -4,9 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Configuration;
 
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\RuntimeException;
-use Traversable;
+use RuntimeException;
+use SimpleSAML\XMLSecurity\Constants as C;
 
 use function array_filter;
 use function array_pop;
@@ -21,7 +20,7 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
     /**
      * @return null|array|\Traversable
      */
-    public function getKeys(): Traversable|array|null
+    public function getKeys()
     {
         return $this->get('keys');
     }
@@ -102,7 +101,7 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
                 'Attempted to get privateKey by name "%s", found "%d" keys, where only one was expected. Please '
                 . 'verify that your configuration is correct',
                 $name,
-                $keyCount
+                $keyCount,
             ));
         }
 

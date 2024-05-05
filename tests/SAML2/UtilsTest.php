@@ -4,77 +4,62 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2;
 
+use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\AttributeQuery;
-use SimpleSAML\SAML2\XML\saml\NameID;
+use Psr\Clock\ClockInterface;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Utils as XMLUtils;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
+
+use function count;
 
 /**
- * Class \SimpleSAML\SAML2\UtilsTest
+ * Class \SAML2\UtilsTest
+ *
+ * @package simplesamlphp\saml2
  */
-class UtilsTest extends TestCase
+#[CoversClass(Utils::class)]
+final class UtilsTest extends TestCase
 {
+    /** @var \Psr\Clock\ClockInterface */
+    private static ClockInterface $clock;
+
+
     /**
-     * Test parseBoolean, XML allows both 1 and true as values.
-     * @return void
      */
-    public function testParseBoolean(): void
+    public static function setUpBeforeClass(): void
     {
-        // variations of true: "true", 1, and captalizations
-        $document = DOMDocumentFactory::fromString(
-            '<somenode anattribute="true"></somenode>'
+        self::$clock = Utils::getContainer()->getClock();
+    }
+
+
+    /**
+     * Test querying a SAML XML document.
+     */
+    public function testXpQuery(): void
+    {
+        $nameId_before = new NameID(
+            'NameIDValue',
+            'OurNameQualifier',
+            'TheSPNameQualifier',
+            C::NAMEID_TRANSIENT,
         );
-        $result = Utils::parseBoolean($document->firstChild, 'anattribute');
-        $this->assertTrue($result);
 
-        $document = DOMDocumentFactory::fromString(
-            '<somenode anattribute="1"></somenode>'
-        );
-        $result = Utils::parseBoolean($document->firstChild, 'anattribute');
-        $this->assertTrue($result);
+        $aq = new AttributeQuery(new Subject($nameId_before), self::$clock->now());
 
-        $document = DOMDocumentFactory::fromString(
-            '<somenode anattribute="True"></somenode>'
-        );
+        $xml = $aq->toXML();
 
-        // variations of false: "false", 0
-        $result = Utils::parseBoolean($document->firstChild, 'anattribute');
-        $this->assertTrue($result);
+        $xpCache = XPath::getXPath($xml);
+        $nameId_after = XPath::xpQuery($xml, './saml_assertion:Subject/saml_assertion:NameID', $xpCache);
+        $this->assertTrue(count($nameId_after) === 1);
 
-        $document = DOMDocumentFactory::fromString(
-            '<somenode anattribute="false"></somenode>'
-        );
-        $result = Utils::parseBoolean($document->firstChild, 'anattribute');
-        $this->assertFalse($result);
-
-        $document = DOMDocumentFactory::fromString(
-            '<somenode anattribute="0"></somenode>'
-        );
-        $result = Utils::parseBoolean($document->firstChild, 'anattribute');
-        $this->assertFalse($result);
-
-        // Usage of the default if attribute not found
-        $document = DOMDocumentFactory::fromString(
-            '<somenode anattribute="true"></somenode>'
-        );
-        $result = Utils::parseBoolean($document->firstChild, 'otherattribute');
-        $this->assertNull($result);
-
-        $document = DOMDocumentFactory::fromString(
-            '<somenode anattribute="true"></somenode>'
-        );
-        $result = Utils::parseBoolean($document->firstChild, 'otherattribute', '404');
-        $this->assertEquals($result, '404');
-
-        // Exception on invalid value
-        $this->expectException(\Exception::class, "Invalid value of boolean attribute 'anattribute': 'yes'");
-
-        $document = DOMDocumentFactory::fromString(
-            '<somenode anattribute="yes"></somenode>'
-        );
-        $result = Utils::parseBoolean($document->firstChild, 'anattribute');
+        /** @var \DOMNode $nameId_after[0] */
+        $this->assertEquals('NameIDValue', $nameId_after[0]->textContent);
+        $this->assertEquals(C::NAMEID_TRANSIENT, $nameId_after[0]->getAttribute("Format"));
+        $this->assertEquals('OurNameQualifier', $nameId_after[0]->getAttribute("NameQualifier"));
+        $this->assertEquals('TheSPNameQualifier', $nameId_after[0]->getAttribute("SPNameQualifier"));
     }
 }

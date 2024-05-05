@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\EncryptionMethod;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XMLSecurity\XML\ds\AbstractDsElement;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
@@ -22,10 +23,11 @@ use function strval;
 /**
  * A set of tests for the md:KeyDescriptor element
  *
- * @covers \SimpleSAML\SAML2\XML\md\KeyDescriptor
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(KeyDescriptor::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class KeyDescriptorTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -107,20 +109,6 @@ XML
 
 
     // test unmarshalling
-
-
-    /**
-     * Test creating a KeyDescriptor from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $kd = KeyDescriptor::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($kd),
-        );
-    }
 
 
     /**

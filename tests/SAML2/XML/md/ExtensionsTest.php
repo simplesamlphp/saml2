@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -13,10 +14,11 @@ use SimpleSAML\SAML2\XML\alg\SigningMethod;
 use SimpleSAML\SAML2\XML\emd\RepublishRequest;
 use SimpleSAML\SAML2\XML\emd\RepublishTarget;
 use SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponse;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
-use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\Publication;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationPath;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
@@ -34,14 +36,15 @@ use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\md\ExtensionsTest.
+ * Class \SimpleSAML\SAML2\XML\md\ExtensionsTest.
  *
  * This class tests for currently supported metadata extensions.
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\Extensions
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(Extensions::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class ExtensionsTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -116,7 +119,7 @@ final class ExtensionsTest extends TestCase
             '<md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"/>',
             strval($extensions),
         );
-        //$this->assertTrue($extensions->isEmptyElement());
+        $this->assertTrue($extensions->isEmptyElement());
     }
 
 
@@ -175,7 +178,8 @@ final class ExtensionsTest extends TestCase
     <mdui:IPHint>127.0.0.1</mdui:IPHint>
   </mdui:DiscoHints>
   <idpdisc:DiscoveryResponse Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol"
-    Location="https://example.org/authenticate/sp" index="1"/>
+    Location="https://example.org/authenticate/sp"
+    index="1"/>
   <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/>
   <alg:SigningMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha224" MinKeySize="1024" MaxKeySize="4096"/>
   <emd:RepublishRequest xmlns:emd="http://eduid.cz/schema/metadata/1.0">
@@ -200,7 +204,7 @@ XML
         $this->assertInstanceOf(SigningMethod::class, $list[9]);
         $this->assertInstanceOf(RepublishRequest::class, $list[10]);
         $this->assertInstanceOf(Chunk::class, $list[11]);
-        //$this->assertFalse($extensions->isEmptyElement());
+        $this->assertFalse($extensions->isEmptyElement());
     }
 
 

@@ -8,6 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 use function array_key_first;
@@ -33,6 +34,7 @@ final class Keywords extends AbstractMduiElement implements ArrayizableElementIn
         protected string $lang,
         protected array $keywords = [],
     ) {
+        Assert::maxCount($keywords, C::UNBOUNDED_LIMIT);
         Assert::allNotContains($keywords, '+', 'Keywords may not contain a "+" character.');
     }
 
@@ -90,8 +92,7 @@ final class Keywords extends AbstractMduiElement implements ArrayizableElementIn
         Assert::same($xml->namespaceURI, Keywords::NS, InvalidDOMElementException::class);
         Assert::stringNotEmpty($xml->textContent, 'Missing value for Keywords.');
 
-        $lang = self::getOptionalAttribute($xml, 'xml:lang');
-
+        $lang = self::getAttribute($xml, 'xml:lang');
         $Keywords = explode('+', $xml->textContent);
 
         return new static($lang, $Keywords);

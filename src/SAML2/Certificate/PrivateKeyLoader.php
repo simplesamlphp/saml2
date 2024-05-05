@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Certificate;
 
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\SAML2\Certificate\PrivateKey;
 use SimpleSAML\SAML2\Configuration\DecryptionProvider;
 use SimpleSAML\SAML2\Configuration\PrivateKey as PrivateKeyConfiguration;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\Utilities\File;
+use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 class PrivateKeyLoader
 {
@@ -39,7 +39,7 @@ class PrivateKeyLoader
      */
     public function loadDecryptionKeys(
         DecryptionProvider $identityProvider,
-        DecryptionProvider $serviceProvider
+        DecryptionProvider $serviceProvider,
     ): ArrayCollection {
         $decryptionKeys = new ArrayCollection();
 
@@ -69,7 +69,7 @@ class PrivateKeyLoader
     /**
      * @param \SimpleSAML\SAML2\Certificate\PrivateKey $privateKey
      * @throws \Exception
-     * @return \RobRichards\XMLSecLibs\XMLSecurityKey
+     * @return \SimpleSAML\XMLSecurity\XMLSecurityKey
      */
     private function convertPrivateKeyToRsaKey(PrivateKey $privateKey): XMLSecurityKey
     {

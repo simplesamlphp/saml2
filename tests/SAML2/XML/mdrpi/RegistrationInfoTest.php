@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
 use DateTimeImmutable;
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -15,19 +17,18 @@ use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
 
 /**
- * Class \SAML2\XML\mdrpi\RegistrationInfoTest
- *
- * @covers \SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo
- * @covers \SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement
+ * Class \SimpleSAML\SAML2\XML\mdrpi\RegistrationInfoTest
  *
  * @package simplesamlphp/saml2
  */
+#[Group('mdrpi')]
+#[CoversClass(RegistrationInfo::class)]
+#[CoversClass(AbstractMdrpiElement::class)]
 final class RegistrationInfoTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -80,19 +81,6 @@ final class RegistrationInfoTest extends TestCase
 
     /**
      */
-    public function testUnmarshalling(): void
-    {
-        $registrationInfo = RegistrationInfo::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($registrationInfo),
-        );
-    }
-
-
-    /**
-     */
     public function testMissingPublisherThrowsException(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -125,17 +113,17 @@ XML
      */
     public function testMultipleRegistrationPoliciesWithSameLanguageThrowsException(): void
     {
-        $document = clone self::$xmlRepresentation;
+        $document = clone self::$xmlRepresentation->documentElement;
 
         // Append another 'en' RegistrationPolicy to the document
         $x = new RegistrationPolicy('en', 'https://example.org');
-        $x->toXML($document->documentElement);
+        $x->toXML($document);
 
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'There MUST NOT be more than one <mdrpi:RegistrationPolicy>,'
             . ' within a given <mdrpi:RegistrationInfo>, for a given language'
         );
-        RegistrationInfo::fromXML($document->documentElement);
+        RegistrationInfo::fromXML($document);
     }
 }

@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\EmailAddress;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
@@ -16,10 +18,11 @@ use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 /**
  * Tests for EmailAddress.
  *
- * @covers \SimpleSAML\SAML2\XML\md\EmailAddress
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(EmailAddress::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class EmailAddressTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -51,11 +54,11 @@ final class EmailAddressTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = new EmailAddress('john.doe@example.org');
+        $email = new EmailAddress('john.doe@example.org');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
+            strval($email),
         );
     }
 
@@ -74,20 +77,6 @@ final class EmailAddressTest extends TestCase
 
 
     /**
-     * Test creating a EmailAddress from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $name = EmailAddress::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
-    }
-
-
-    /**
      * Test that creating an EmailAddress from XML fails when an invalid email address is found.
      */
     public function testUnmarshallingWithInvalidEmail(): void
@@ -99,5 +88,18 @@ final class EmailAddressTest extends TestCase
         $this->expectExceptionMessage('Expected a value to be a valid e-mail address. Got: "not so valid"');
 
         EmailAddress::fromXML($document->documentElement);
+    }
+
+
+    /**
+     * Test that creating an EmailAddress from XML succeeds when multiple mailto: prefixes are in place.
+     */
+    public function testUnmarshallingWithMultipleMailtoUri(): void
+    {
+        $document = clone self::$xmlRepresentation;
+        $document->documentElement->textContent = 'mailto:mailto:mailto:john.doe@example.org';
+
+        $email = EmailAddress::fromXML($document->documentElement);
+        $this->assertEquals('mailto:john.doe@example.org', $email->getContent());
     }
 }

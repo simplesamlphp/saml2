@@ -4,27 +4,29 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\saml\Attribute;
-use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
+use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
 use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
 use SimpleSAML\SAML2\XML\samlp\LogoutRequest;
 use SimpleSAML\SAML2\XML\samlp\LogoutResponse;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SAML2\XML\samlp\Response;
-use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 use function dirname;
-use function strval;
 
 /**
- * @covers \SimpleSAML\SAML2\XML\samlp\MessageFactory
  * @package simplesamlphp/saml2
  */
+#[Group('samlp')]
+#[CoversClass(MessageFactory::class)]
 final class MessageFactoryTest extends TestCase
 {
     /**
@@ -48,9 +50,9 @@ final class MessageFactoryTest extends TestCase
 
     /**
      * @param string $file
-     * @param class-string class
-     * @dataProvider provideMessages
+     * @param class-string $class
      */
+    #[DataProvider('provideMessages')]
     public function testMessageFactory(string $file, string $class): void
     {
         $document = DOMDocumentFactory::fromFile($file);

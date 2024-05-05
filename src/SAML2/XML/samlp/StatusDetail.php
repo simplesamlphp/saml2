@@ -6,8 +6,8 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\XsNamespace as NS;
 
@@ -76,16 +76,14 @@ final class StatusDetail extends AbstractSamlpElement
     /**
      * Convert this StatusDetail to XML.
      *
-     * @param \DOMElement|null $element The element we are converting to XML.
+     * @param \DOMElement|null $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this StatusDetail.
      */
     public function toXML(DOMElement $parent = null): DOMElement
     {
-        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
 
         foreach ($this->getElements() as $detail) {
-            /** @psalm-var \SimpleSAML\XML\SerializableElementInterface $detail */
             $detail->toXML($e);
         }
 

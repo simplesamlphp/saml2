@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\SingleSignOnService;
+use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -19,10 +21,11 @@ use function strval;
 /**
  * Tests for md:SingleSignOnService.
  *
- * @covers \SimpleSAML\SAML2\XML\md\SingleSignOnService
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(SingleSignOnService::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class SingleSignOnServiceTest extends TestCase
 {
     use SchemaValidationTestTrait;
@@ -51,7 +54,7 @@ final class SingleSignOnServiceTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $ssoep = new SingleSignOnService(C::BINDING_HTTP_POST, 'https://simplesamlphp.org/some/endpoint');
+        $ssoep = new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -70,29 +73,11 @@ final class SingleSignOnServiceTest extends TestCase
             'The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.',
         );
 
-        new SingleSignOnService(
-            C::BINDING_HTTP_POST,
-            'https://simplesamlphp.org/some/endpoint',
-            'https://response.location/',
-        );
+        new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A, 'https://response.location/');
     }
 
 
     // test unmarshalling
-
-
-    /**
-     * Test creating a SingleSignOnService from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $ssoep = SingleSignOnService::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($ssoep),
-        );
-    }
 
 
     /**

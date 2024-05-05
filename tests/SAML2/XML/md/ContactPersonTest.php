@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\md\ContactPerson;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\Company;
+use SimpleSAML\SAML2\XML\md\ContactPerson;
 use SimpleSAML\SAML2\XML\md\EmailAddress;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\md\GivenName;
@@ -23,7 +25,6 @@ use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XML\Utils as XMLUtils;
 
 use function dirname;
 use function strval;
@@ -31,10 +32,11 @@ use function strval;
 /**
  * Tests for the ContactPerson class.
  *
- * @covers \SimpleSAML\SAML2\XML\md\AbstractMdElement
- * @covers \SimpleSAML\SAML2\XML\md\ContactPerson
  * @package simplesamlphp/saml2
  */
+#[Group('md')]
+#[CoversClass(ContactPerson::class)]
+#[CoversClass(AbstractMdElement::class)]
 final class ContactPersonTest extends TestCase
 {
     use ArrayizableElementTestTrait;
@@ -42,7 +44,7 @@ final class ContactPersonTest extends TestCase
     use SerializableElementTestTrait;
 
     /** @var \DOMDocument */
-    protected static DOMDocument $ext;
+    private static DOMDocument $ext;
 
 
     /**
@@ -128,20 +130,6 @@ final class ContactPersonTest extends TestCase
 
 
     // test unmarshalling
-
-
-    /**
-     * Test creating a ContactPerson from XML.
-     */
-    public function testUnmarshalling(): void
-    {
-        $contactPerson = ContactPerson::fromXML(self::$xmlRepresentation->documentElement);
-
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($contactPerson),
-        );
-    }
 
 
     /**
