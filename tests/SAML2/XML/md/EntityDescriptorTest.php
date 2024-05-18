@@ -159,7 +159,7 @@ final class EntityDescriptorTest extends TestCase
                 publisher: 'http://publisher.ra/',
                 creationInstant: new DateTimeImmutable('2020-02-03T13:46:24Z'),
                 usagePolicy: [new UsagePolicy('en', 'http://publisher.ra/policy.txt')]
-            )
+            ),
         ]);
 
         $ed = new EntityDescriptor(

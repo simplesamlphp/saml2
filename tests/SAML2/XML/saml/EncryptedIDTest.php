@@ -102,7 +102,7 @@ final class EncryptedIDTest extends TestCase
                         new CipherValue('he5ZBjtfp/1/Y3PgE/CWspDPADig9vuZ7yZyYXDQ1wA/HBTPCldtL/p6UT5RCAFYUwN6kp3jnHkhK1yMjrI1SMw0n5NEc2wO9N5inQIeQOZ8XD9yD9M5fHvWz2ByNMGlB35RWMnBRHzDi1PRV7Irwcs9WoiODh3i6j2vYXP7cAo='),
                     ),
                     encryptionMethod: new EncryptionMethod('http://www.w3.org/2009/xmlenc11#rsa-oaep'),
-                )
+                ),
             ]),
         );
         $ek = new EncryptedKey(

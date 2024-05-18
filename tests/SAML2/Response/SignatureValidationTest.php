@@ -165,7 +165,7 @@ final class SignatureValidationTest extends MockeryTestCase
         $this->assertionProcessor->shouldReceive('decryptAssertions')
             ->once()
             ->andReturn(new ArrayCollection([
-                $assertion
+                $assertion,
             ]));
 
         $processor = new ResponseProcessor(new NullLogger());

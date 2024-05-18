@@ -61,9 +61,9 @@ final class IsSuccessfulTest extends MockeryTestCase
                 C::STATUS_SUCCESS,
                 [
                     new StatusCode(
-                        C::STATUS_PREFIX . 'bar'
-                    )
-                ]
+                        C::STATUS_PREFIX . 'bar',
+                    ),
+                ],
             ),
             new StatusMessage('this is a test message')
         );

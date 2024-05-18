@@ -77,8 +77,8 @@ final class StatusTest extends TestCase
                     DOMDocumentFactory::fromFile(
                         dirname(__FILE__, 4) . '/resources/xml/samlp_StatusDetail.xml',
                     )->documentElement,
-                )
-            ]
+                ),
+            ],
         );
 
         $this->assertEquals(

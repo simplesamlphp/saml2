@@ -140,7 +140,7 @@ final class IDPSSODescriptorTest extends TestCase
                         [new KeyName('IdentityProvider.com SSO Key')]
                     ),
                     'signing',
-                )
+                ),
             ],
             artifactResolutionService: [
                 new ArtifactResolutionService(

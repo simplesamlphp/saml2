@@ -1078,8 +1078,8 @@ XML;
             audienceRestriction: [
                 new AudienceRestriction(
                     [new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)]
-                )
-            ]
+                ),
+            ],
         );
 
         // Create a Subject

@@ -109,7 +109,7 @@ final class RoleDescriptorTest extends TestCase
             [
                 new Chunk(DOMDocumentFactory::fromString(
                     '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>'
-                )->documentElement)
+                )->documentElement),
             ],
             [C::NS_SAMLP, C::PROTOCOL],
             'TheID',

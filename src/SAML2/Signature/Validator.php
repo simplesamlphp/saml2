@@ -39,7 +39,7 @@ class Validator
         $validator = new ValidatorChain(
             $this->logger,
             [
-                new PublicKeyValidator($this->logger, new KeyLoader())
+                new PublicKeyValidator($this->logger, new KeyLoader()),
             ],
         );
 
