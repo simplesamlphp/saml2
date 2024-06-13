@@ -157,7 +157,7 @@ final class SignatureValidationTest extends MockeryTestCase
         $assertion = Assertion::fromXML(
             DOMDocumentFactory::fromFile(
                 dirname(__FILE__, 3) . '/resources/xml/saml_Assertion.xml',
-            )->documentElement
+            )->documentElement,
         );
 
         // The processAssertions is called to decrypt possible encrypted assertions,

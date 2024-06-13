@@ -18,7 +18,7 @@ ContainerSingleton::setContainer($container);
 
 $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
     C::KEY_TRANSPORT_OAEP,
-    PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY)
+    PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY),
 );
 $attribute = new Attribute(
     name: 'urn:encrypted:attribute',

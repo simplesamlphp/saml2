@@ -64,7 +64,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
         array $keyDescriptor = [],
         ?Organization $organization = null,
         array $contact = [],
-        array $namespacedAttributes = []
+        array $namespacedAttributes = [],
     ) {
         Assert::allIsInstanceOf($chunk, Chunk::class);
 
@@ -112,7 +112,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:RoleDescriptor> element.',
-            InvalidDOMElementException::class
+            InvalidDOMElementException::class,
         );
 
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');

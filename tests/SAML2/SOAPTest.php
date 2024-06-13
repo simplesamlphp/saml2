@@ -58,8 +58,7 @@ final class SOAPTest extends MockeryTestCase
       </samlp:ArtifactResolve>
   </env:Body>
 </env:Envelope>
-SOAP
-        );
+SOAP);
 
         $request = new ServerRequest('', '');
         $message = $stub->receive($request);
@@ -85,8 +84,7 @@ SOAP
         $doc = DOMDocumentFactory::fromString(<<<SOAP
 <?xml version="1.0" encoding="UTF-8"?>
 <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"><env:Body /></env:Envelope>
-SOAP
-        );
+SOAP);
 
         /** @var \DOMElement $body */
         $body = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV_11, 'Body')->item(0);
@@ -111,8 +109,7 @@ SOAP
         $doc = DOMDocumentFactory::fromString(<<<SOAP
 <?xml version="1.0" encoding="UTF-8"?>
 <env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"><env:Header /><env:Body /></env:Envelope>
-SOAP
-        );
+SOAP);
         $requestAuthenticated = new RequestAuthenticated(true);
         $ecpResponse = new Response('https://example.org/metadata');
 
