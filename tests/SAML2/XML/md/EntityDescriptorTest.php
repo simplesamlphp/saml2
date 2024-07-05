@@ -491,7 +491,7 @@ XML
 XML
         );
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('\'asdf\' is not a valid DateTime');
+        $this->expectExceptionMessage('\'asdf\' is not a valid xs:dateTime');
         EntityDescriptor::fromXML($document->documentElement);
     }
 

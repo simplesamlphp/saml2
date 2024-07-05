@@ -104,7 +104,7 @@ XML
         $document->setAttribute('registrationInstant', '2011-01-01T00:00:00WT');
 
         $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage("'2011-01-01T00:00:00WT' is not a valid DateTime");
+        $this->expectExceptionMessage("'2011-01-01T00:00:00WT' is not a DateTime expressed in the UTC timezone using the 'Z' timezone identifier.");
         RegistrationInfo::fromXML($document);
     }
 
