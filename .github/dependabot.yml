@@ -19,9 +19,11 @@ updates:
     directory: "/"  # Location of package manifests
     schedule:
       interval: "daily"
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
     groups:
+      production-dependencies:
+        dependency-type: "production"
       dev-dependencies:
         dependency-type: "development"
-        update-types:
-          - "minor"
-          - "patch"
