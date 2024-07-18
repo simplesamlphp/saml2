@@ -110,11 +110,13 @@ final class SubjectConfirmationTest extends TestCase
         );
         $ns_saml = C::NS_SAML;
 
-        $doc = DOMDocumentFactory::fromString(<<<XML
+        $doc = DOMDocumentFactory::fromString(
+            <<<XML
 <saml:SubjectConfirmation xmlns:saml="{$ns_saml}" Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
   <saml:NameID>SomeNameIDValue</saml:NameID>
 </saml:SubjectConfirmation>
 XML
+            ,
         );
 
         $this->assertEquals(
@@ -176,13 +178,15 @@ XML
     public function testManyNameIDThrowsException(): void
     {
         $samlNamespace = C::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
   <saml:NameID>SomeNameIDValue</saml:NameID>
   <saml:NameID>AnotherNameIDValue</saml:NameID>
   <saml:SubjectConfirmationData/>
 </saml:SubjectConfirmation>
 XML
+            ,
         );
 
         $this->expectException(TooManyElementsException::class);
@@ -197,19 +201,21 @@ XML
     public function testMultipleIdentifiers(): void
     {
         $samlNamespace = C::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
   <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="someType">SomeNameIDValue</saml:BaseID>
   <saml:NameID>AnotherNameIDValue</saml:NameID>
   <saml:SubjectConfirmationData/>
 </saml:SubjectConfirmation>
 XML
+            ,
         );
 
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage(
             'A <saml:SubjectConfirmation> can contain exactly one '
-            . 'of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.'
+            . 'of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>.',
         );
         SubjectConfirmation::fromXML($document->documentElement);
     }
@@ -220,13 +226,15 @@ XML
     public function testManySubjectConfirmationDataThrowsException(): void
     {
         $samlNamespace = C::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
   <saml:NameID>SomeNameIDValue</saml:NameID>
   <saml:SubjectConfirmationData Recipient="Me" />
   <saml:SubjectConfirmationData Recipient="Someone Else" />
 </saml:SubjectConfirmation>
 XML
+            ,
         );
 
         $this->expectException(TooManyElementsException::class);

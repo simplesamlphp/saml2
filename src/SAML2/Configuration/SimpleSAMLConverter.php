@@ -149,7 +149,7 @@ class SimpleSAMLConverter
 
             if ($configuration->hasValue('encryption.blacklisted-algorithms')) {
                 $baseConfiguration['blacklistedEncryptionAlgorithms'] = $configuration->getValue(
-                    'encryption.blacklisted-algorithms'
+                    'encryption.blacklisted-algorithms',
                 );
             }
         }

@@ -39,7 +39,7 @@ final class RelayStateTest extends TestCase
         self::$testedClass = RelayState::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/ecp_RelayState.xml'
+            dirname(__FILE__, 4) . '/resources/xml/ecp_RelayState.xml',
         );
     }
 

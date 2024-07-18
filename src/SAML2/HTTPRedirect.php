@@ -101,7 +101,7 @@ class HTTPRedirect extends Binding
     {
         $destination = $this->getRedirectURL($message);
         Utils::getContainer()->getLogger()->debug(
-            'Redirect to ' . strlen($destination) . ' byte URL: ' . $destination
+            'Redirect to ' . strlen($destination) . ' byte URL: ' . $destination,
         );
         return new Response(303, ['Location' => $destination]);
     }

@@ -63,7 +63,7 @@ final class SpIsValidAudienceTest extends MockeryTestCase
             null,
             null,
             [],
-            [new AudienceRestriction([new Audience(C::ENTITY_SP), new Audience(C::ENTITY_URN)])]
+            [new AudienceRestriction([new Audience(C::ENTITY_SP), new Audience(C::ENTITY_URN)])],
         );
 
         // Create the statements
@@ -71,7 +71,7 @@ final class SpIsValidAudienceTest extends MockeryTestCase
             new AuthnContext(
                 new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                 null,
-                null
+                null,
             ),
             self::$clock->now(),
         );

@@ -62,7 +62,7 @@ class MockContainer extends AbstractContainer
      */
     public function getPOSTRedirectURL(
         /** @scrutinizer ignore-unused */string $url = null,
-        /** @scrutinizer ignore-unused */array $data = []
+        /** @scrutinizer ignore-unused */array $data = [],
     ): string {
         return strval($url);
     }

@@ -65,7 +65,7 @@ final class NameIDPolicyTest extends TestCase
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($nameIdPolicy)
+            strval($nameIdPolicy),
         );
     }
 
@@ -75,7 +75,7 @@ final class NameIDPolicyTest extends TestCase
     public function testMarshallingFormatOnly(): void
     {
         $xmlRepresentation = DOMDocumentFactory::fromString(
-            '<samlp:NameIDPolicy xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" Format="urn:the:format"/>'
+            '<samlp:NameIDPolicy xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" Format="urn:the:format"/>',
         );
 
         $nameIdPolicy = new NameIDPolicy(
@@ -84,7 +84,7 @@ final class NameIDPolicyTest extends TestCase
 
         $this->assertEquals(
             $xmlRepresentation->saveXML($xmlRepresentation->documentElement),
-            strval($nameIdPolicy)
+            strval($nameIdPolicy),
         );
     }
 

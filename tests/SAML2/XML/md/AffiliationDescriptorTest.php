@@ -132,11 +132,13 @@ final class AffiliationDescriptorTest extends TestCase
         $mdNamespace = AffiliationDescriptor::NS;
         $entity_idp = C::ENTITY_IDP;
 
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="{$entity_idp}" ID="TheID"
     validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
 </md:AffiliationDescriptor>
 XML
+            ,
         );
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('List of affiliated members must not be empty.');
@@ -153,13 +155,15 @@ XML
         $entity_other = C::ENTITY_OTHER;
         $entity_sp = C::ENTITY_SP;
 
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" ID="TheID"
     validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
   <md:AffiliateMember>{$entity_sp}</md:AffiliateMember>
   <md:AffiliateMember>{$entity_other}</md:AffiliateMember>
 </md:AffiliationDescriptor>
 XML
+            ,
         );
 
         $this->expectException(MissingAttributeException::class);

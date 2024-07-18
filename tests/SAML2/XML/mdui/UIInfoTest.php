@@ -91,10 +91,10 @@ final class UIInfoTest extends TestCase
             ],
             children: [
                 new Chunk(DOMDocumentFactory::fromString(
-                    '<ssp:child1 xmlns:ssp="urn:custom:ssp" />'
+                    '<ssp:child1 xmlns:ssp="urn:custom:ssp" />',
                 )->documentElement),
                 new Chunk(DOMDocumentFactory::fromString(
-                    '<myns:child2 xmlns:myns="urn:test:mynamespace" />'
+                    '<myns:child2 xmlns:myns="urn:test:mynamespace" />',
                 )->documentElement),
             ],
         );
@@ -210,7 +210,7 @@ final class UIInfoTest extends TestCase
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'There MUST NOT be more than one <mdui:Description>,'
-            . ' within a given <mdui:UIInfo>, for a given language'
+            . ' within a given <mdui:UIInfo>, for a given language',
         );
         UIInfo::fromXML($document->documentElement);
     }
@@ -229,7 +229,7 @@ final class UIInfoTest extends TestCase
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'There MUST NOT be more than one <mdui:DisplayName>,'
-            . ' within a given <mdui:UIInfo>, for a given language'
+            . ' within a given <mdui:UIInfo>, for a given language',
         );
         UIInfo::fromXML($document->documentElement);
     }
@@ -248,7 +248,7 @@ final class UIInfoTest extends TestCase
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'There MUST NOT be more than one <mdui:Keywords>,'
-            . ' within a given <mdui:UIInfo>, for a given language'
+            . ' within a given <mdui:UIInfo>, for a given language',
         );
         UIInfo::fromXML($document->documentElement);
     }
@@ -267,7 +267,7 @@ final class UIInfoTest extends TestCase
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'There MUST NOT be more than one <mdui:InformationURL>,'
-            . ' within a given <mdui:UIInfo>, for a given language'
+            . ' within a given <mdui:UIInfo>, for a given language',
         );
         UIInfo::fromXML($document->documentElement);
     }
@@ -286,7 +286,7 @@ final class UIInfoTest extends TestCase
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'There MUST NOT be more than one <mdui:PrivacyStatementURL>,'
-            . ' within a given <mdui:UIInfo>, for a given language'
+            . ' within a given <mdui:UIInfo>, for a given language',
         );
         UIInfo::fromXML($document->documentElement);
     }

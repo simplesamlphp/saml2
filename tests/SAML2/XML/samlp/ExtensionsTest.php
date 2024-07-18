@@ -52,11 +52,13 @@ final class ExtensionsTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $ext1 = DOMDocumentFactory::fromString(<<<XML
+        $ext1 = DOMDocumentFactory::fromString(
+            <<<XML
   <myns:AttributeList xmlns:myns="urn:test:mynamespace">
     <myns:Attribute name="UserName" value=""/>
   </myns:AttributeList>
 XML
+            ,
         );
 
         $ext2 = DOMDocumentFactory::fromString(
@@ -69,7 +71,7 @@ XML
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($extensions)
+            strval($extensions),
         );
     }
 

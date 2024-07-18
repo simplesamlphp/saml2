@@ -68,13 +68,13 @@ final class ProcessorTest extends MockeryTestCase
     {
         $encryptedAssertion = EncryptedAssertion::fromXML(
             DOMDocumentFactory::fromFile(
-                dirname(__FILE__, 3) . '/resources/xml/saml_EncryptedAssertion.xml'
-            )->documentElement
+                dirname(__FILE__, 3) . '/resources/xml/saml_EncryptedAssertion.xml',
+            )->documentElement,
         );
         $assertion = Assertion::fromXML(
             DOMDocumentFactory::fromFile(
-                dirname(__FILE__, 3) . '/resources/xml/saml_Assertion.xml'
-            )->documentElement
+                dirname(__FILE__, 3) . '/resources/xml/saml_Assertion.xml',
+            )->documentElement,
         );
 
         $testData = [

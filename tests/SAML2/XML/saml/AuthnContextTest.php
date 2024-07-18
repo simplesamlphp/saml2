@@ -88,12 +88,14 @@ final class AuthnContextTest extends TestCase
      */
     public function testUnmarshallingIllegalCombination(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <saml:AuthnContext xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
   <saml:AuthnContextDeclRef xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">https://example.org/relative/path/to/document.xml</saml:AuthnContextDeclRef>
   <saml:AuthnContextDecl xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:ssp="urn:x-simplesamlphp:namespace" ssp:attr1="testval1" />
 </saml:AuthnContext>
 XML
+            ,
         );
 
         $this->expectException(AssertionFailedException::class);
@@ -108,12 +110,14 @@ XML
      */
     public function testMoreThanOneAuthnContextClassRefThrowsException(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <saml:AuthnContext xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
   <saml:AuthnContextClassRef xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</saml:AuthnContextClassRef>
   <saml:AuthnContextClassRef xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">urn:oasis:names:tc:SAML:2.0:ac:classes:Password</saml:AuthnContextClassRef>
 </saml:AuthnContext>
 XML
+            ,
         );
 
         $this->expectException(TooManyElementsException::class);
@@ -128,12 +132,14 @@ XML
      */
     public function testMoreThanOneAuthnContextDeclRefThrowsException(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <saml:AuthnContext xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
   <saml:AuthnContextDeclRef xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">https://example.org/relative/path/to/document.xml</saml:AuthnContextDeclRef>
   <saml:AuthnContextDeclRef xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">https://example.org/relative/path/to/other.xml</saml:AuthnContextDeclRef>
 </saml:AuthnContext>
 XML
+            ,
         );
 
         $this->expectException(TooManyElementsException::class);
@@ -148,12 +154,14 @@ XML
      */
     public function testMoreThanOneAuthnContextDeclThrowsException(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <saml:AuthnContext xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
   <saml:AuthnContextDecl xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:ssp="urn:x-simplesamlphp:namespace" ssp:attr1="testval1" />
   <saml:AuthnContextDecl xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:ssp="urn:x-simplesamlphp:namespace" ssp:attr2="testval2" />
 </saml:AuthnContext>
 XML
+            ,
         );
 
         $this->expectException(TooManyElementsException::class);
@@ -167,9 +175,11 @@ XML
      */
     public function testUnmarshallingEmpty(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <saml:AuthnContext xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" />
 XML
+            ,
         );
 
         $this->expectException(AssertionFailedException::class);

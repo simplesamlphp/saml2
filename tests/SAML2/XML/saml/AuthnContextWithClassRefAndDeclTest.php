@@ -54,7 +54,8 @@ final class AuthnContextWithClassRefAndDeclTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $chunk = new Chunk(DOMDocumentFactory::fromString(<<<XML
+        $chunk = new Chunk(DOMDocumentFactory::fromString(
+            <<<XML
     <ssp:AuthenticationContextDeclaration xmlns:ssp="urn:x-simplesamlphp:namespace">
       <ssp:Identification nym="verinymity">
         <ssp:Extension>
@@ -63,6 +64,7 @@ final class AuthnContextWithClassRefAndDeclTest extends TestCase
       </ssp:Identification>
     </ssp:AuthenticationContextDeclaration>
 XML
+            ,
         )->documentElement);
 
         $authnContextDecl = new AuthnContextDecl(

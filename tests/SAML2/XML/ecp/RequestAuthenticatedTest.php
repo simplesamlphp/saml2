@@ -39,7 +39,7 @@ final class RequestAuthenticatedTest extends TestCase
         self::$testedClass = RequestAuthenticated::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/ecp_RequestAuthenticated.xml'
+            dirname(__FILE__, 4) . '/resources/xml/ecp_RequestAuthenticated.xml',
         );
     }
 

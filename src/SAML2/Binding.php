@@ -132,7 +132,7 @@ abstract class Binding
 
         if (!empty($query)) {
             $logger->warning(
-                $method . " parameters: '" . implode("', '", array_map('addslashes', array_keys($query))) . "'"
+                $method . " parameters: '" . implode("', '", array_map('addslashes', array_keys($query))) . "'",
             );
         }
 

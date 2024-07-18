@@ -57,7 +57,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType
         ?Organization $organization = null,
         array $keyDescriptor = [],
         array $contact = [],
-        array $namespacedAttributes = []
+        array $namespacedAttributes = [],
     ) {
         Assert::maxCount($attributeService, C::UNBOUNDED_LIMIT);
         Assert::minCount(
@@ -91,7 +91,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType
             $keyDescriptor,
             $organization,
             $contact,
-            $namespacedAttributes
+            $namespacedAttributes,
         );
     }
 

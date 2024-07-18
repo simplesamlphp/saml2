@@ -106,7 +106,7 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:RoleDescriptor> element.',
-            SchemaViolationException::class
+            SchemaViolationException::class,
         );
 
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');

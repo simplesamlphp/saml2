@@ -63,7 +63,7 @@ final class AbstractStatusResponseTest extends TestCase
                     ),
                 ],
             ),
-            new StatusMessage('OurMessageText')
+            new StatusMessage('OurMessageText'),
         );
 
         $response = new Response($status, self::$clock->now());
@@ -101,7 +101,7 @@ final class AbstractStatusResponseTest extends TestCase
                     new StatusCode('urn:test:OurSubStatusCode'),
                 ],
             ),
-            new StatusMessage('OurMessageText')
+            new StatusMessage('OurMessageText'),
         );
 
         $issuer = new Issuer('some issuer');

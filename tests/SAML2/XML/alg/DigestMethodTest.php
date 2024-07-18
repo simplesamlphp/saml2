@@ -43,7 +43,7 @@ final class DigestMethodTest extends TestCase
         self::$testedClass = DigestMethod::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/alg_DigestMethod.xml'
+            dirname(__FILE__, 4) . '/resources/xml/alg_DigestMethod.xml',
         );
     }
 
@@ -56,7 +56,7 @@ final class DigestMethodTest extends TestCase
             C::DIGEST_SHA256,
             [
                 new Chunk(DOMDocumentFactory::fromString(
-                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>'
+                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
                 )->documentElement),
             ],
         );

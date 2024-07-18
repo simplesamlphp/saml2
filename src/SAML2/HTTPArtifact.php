@@ -153,7 +153,7 @@ class HTTPArtifact extends Binding
         }
 
         Utils::getContainer()->getLogger()->debug(
-            "ArtifactResolutionService endpoint being used is := " . $endpoint['Location']
+            "ArtifactResolutionService endpoint being used is := " . $endpoint['Location'],
         );
 
         /**

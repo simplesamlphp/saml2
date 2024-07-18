@@ -181,12 +181,14 @@ final class PDPDescriptorTest extends TestCase
     public function testUnmarshallingWithoutOptionalArguments(): void
     {
         $mdns = C::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:PDPDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
   <md:AuthzService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
       Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
 </md:PDPDescriptor>
 XML
+            ,
         );
         $pdpd = PDPDescriptor::fromXML($document->documentElement);
         $this->assertEmpty($pdpd->getAssertionIDRequestService());

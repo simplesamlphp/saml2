@@ -50,7 +50,7 @@ final class NotBeforeTest extends TestCase
             new AuthnContext(
                 new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                 null,
-                null
+                null,
             ),
             self::$clock->now(),
         );

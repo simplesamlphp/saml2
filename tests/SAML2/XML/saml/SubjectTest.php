@@ -67,9 +67,11 @@ final class SubjectTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/saml_Subject.xml',
         );
 
-        self::$subject = DOMDocumentFactory::fromString(<<<XML
+        self::$subject = DOMDocumentFactory::fromString(
+            <<<XML
 <saml:Subject xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"></saml:Subject>
 XML
+            ,
         );
 
         self::$baseId = DOMDocumentFactory::fromFile(
@@ -279,7 +281,7 @@ XML
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage(
             'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide '
-            . 'exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
+            . 'exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>',
         );
 
         Subject::fromXML($document->documentElement);
@@ -312,7 +314,8 @@ XML
         $samlNamespace = Subject::NS;
         $xsiNamespace = C::NS_XSI;
 
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <saml:Subject xmlns:saml="{$samlNamespace}">
   <saml:BaseID xmlns:xsi="{$xsiNamespace}" xsi:type="CustomBaseIDType">
     <saml:Audience>urn:some:audience</saml:Audience>
@@ -328,6 +331,7 @@ XML
   </saml:SubjectConfirmation>
 </saml:Subject>
 XML
+            ,
         );
 
         $this->expectException(TooManyElementsException::class);

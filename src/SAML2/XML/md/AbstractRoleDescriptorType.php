@@ -54,7 +54,7 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
         protected array $keyDescriptor = [],
         protected ?Organization $organization = null,
         protected array $contact = [],
-        array $namespacedAttributes = []
+        array $namespacedAttributes = [],
     ) {
         Assert::maxCount($protocolSupportEnumeration, C::UNBOUNDED_LIMIT);
         Assert::minCount(

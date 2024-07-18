@@ -67,7 +67,7 @@ final class AttributeStatementTest extends TestCase
                     name: 'urn:EntityConcernedSubID',
                     attributeValue: [new AttributeValue(1)],
                 ),
-            ]
+            ],
         );
 
         $this->assertEquals(
@@ -94,10 +94,12 @@ final class AttributeStatementTest extends TestCase
      */
     public function testUnmarshallingMissingAttributesThrowsException(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <saml:AttributeStatement xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
 </saml:AttributeStatement>
 XML
+            ,
         );
 
         $this->expectException(AssertionFailedException::class);

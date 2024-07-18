@@ -50,7 +50,7 @@ final class NotOnOrAfterTest extends TestCase
             new AuthnContext(
                 new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_URN),
                 null,
-                null
+                null,
             ),
             self::$clock->now(),
         );

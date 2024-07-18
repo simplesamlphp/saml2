@@ -56,7 +56,8 @@ final class AbstractMessageTest extends TestCase
     #[Group('Message')]
     public function testCorrectSignatureMethodCanBeExtractedFromAuthnRequest(): void
     {
-        $authnRequest = DOMDocumentFactory::fromString(<<<AUTHNREQUEST
+        $authnRequest = DOMDocumentFactory::fromString(
+            <<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -71,11 +72,12 @@ final class AbstractMessageTest extends TestCase
   </saml:Subject>
 </samlp:AuthnRequest>
 AUTHNREQUEST
+            ,
         );
 
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
             C::SIG_RSA_SHA256,
-            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY)
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),
         );
 
         $unsignedMessage = MessageFactory::fromXML($authnRequest->documentElement);
@@ -99,7 +101,8 @@ AUTHNREQUEST
     #[Group('Message')]
     public function testIssuerParsedAsNameID(): void
     {
-        $authnRequest = DOMDocumentFactory::fromString(<<<AUTHNREQUEST
+        $authnRequest = DOMDocumentFactory::fromString(
+            <<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -118,6 +121,7 @@ AUTHNREQUEST
   </saml:Subject>
 </samlp:AuthnRequest>
 AUTHNREQUEST
+            ,
         );
 
         $message = MessageFactory::fromXML($authnRequest->documentElement);
@@ -213,7 +217,8 @@ AUTHNREQUEST
     #[Group('Message')]
     public function testGetExtensions(): void
     {
-        $authnRequest = DOMDocumentFactory::fromString(<<<AUTHNREQUEST
+        $authnRequest = DOMDocumentFactory::fromString(
+            <<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -237,6 +242,7 @@ AUTHNREQUEST
   </saml:Subject>
 </samlp:AuthnRequest>
 AUTHNREQUEST
+            ,
         );
 
         $message = MessageFactory::fromXML($authnRequest->documentElement);

@@ -73,7 +73,7 @@ final class LogoutResponseTest extends TestCase
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($logoutResponse)
+            strval($logoutResponse),
         );
     }
 }

@@ -76,7 +76,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
             $artifactResolutionService,
             $singleLogoutService,
             $manageNameIDService,
-            $nameIDFormat
+            $nameIDFormat,
         );
 
         Assert::maxCount($assertionConsumerService, C::UNBOUNDED_LIMIT);
@@ -99,7 +99,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
                 $attributeConsumingService,
                 function (AttributeConsumingService $acs) {
                     return $acs->getIsDefault() === true;
-                }
+                },
             ),
             1,
             'Only one md:AttributeConsumingService can be set as default.',

@@ -94,7 +94,8 @@ final class AssertionValidatorTest extends TestCase
         $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
         $nid_transient = C::NAMEID_TRANSIENT;
 
-        self::$document = DOMDocumentFactory::fromString(<<<XML
+        self::$document = DOMDocumentFactory::fromString(
+            <<<XML
     <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                     xmlns:xs="http://www.w3.org/2001/XMLSchema"
                     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -118,6 +119,7 @@ final class AssertionValidatorTest extends TestCase
         </saml:AuthnStatement>
     </saml:Assertion>
 XML
+            ,
         );
     }
 
@@ -147,7 +149,8 @@ XML
         $entity_idp = C::ENTITY_IDP;
         $nid_transient = C::NAMEID_TRANSIENT;
 
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
     <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                     xmlns:xs="http://www.w3.org/2001/XMLSchema"
                     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -171,6 +174,7 @@ XML
         </saml:AuthnStatement>
     </saml:Assertion>
 XML
+            ,
         );
 
         $assertion = Assertion::fromXML($document->firstChild);

@@ -29,7 +29,7 @@ final class KeyDescriptor extends AbstractMdElement
     public function __construct(
         protected KeyInfo $keyInfo,
         protected ?string $use = null,
-        protected array $encryptionMethod = []
+        protected array $encryptionMethod = [],
     ) {
         Assert::nullOrOneOf(
             $use,

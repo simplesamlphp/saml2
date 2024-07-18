@@ -137,7 +137,7 @@ final class IDPSSODescriptorTest extends TestCase
             keyDescriptor: [
                 new KeyDescriptor(
                     new KeyInfo(
-                        [new KeyName('IdentityProvider.com SSO Key')]
+                        [new KeyName('IdentityProvider.com SSO Key')],
                     ),
                     'signing',
                 ),
@@ -298,12 +298,14 @@ final class IDPSSODescriptorTest extends TestCase
     public function testUnmarshallingWithoutOptionalArguments(): void
     {
         $mdns = C::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:IDPSSODescriptor xmlns:md="{$mdns}" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
   <md:SingleSignOnService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
       Location="https://IdentityProvider.com/SAML/SSO/Browser"/>
 </md:IDPSSODescriptor>
 XML
+            ,
         );
         $idpssod = IDPSSODescriptor::fromXML($document->documentElement);
         $this->assertCount(1, $idpssod->getSingleSignOnService());

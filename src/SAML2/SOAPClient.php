@@ -69,7 +69,7 @@ class SOAPClient
             if ($cert !== false) {
                 $configUtils = new Config();
                 $ctxOpts['ssl']['local_cert'] = $configUtils->getCertPath(
-                    $srcMetadata->getString('saml.SOAPClient.certificate')
+                    $srcMetadata->getString('saml.SOAPClient.certificate'),
                 );
                 if ($srcMetadata->hasValue('saml.SOAPClient.privatekey_pass')) {
                     $ctxOpts['ssl']['passphrase'] = $srcMetadata->getString('saml.SOAPClient.privatekey_pass');

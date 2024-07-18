@@ -133,11 +133,13 @@ XML
     {
         $ns = IDPList::NS;
 
-        $xmlRepresentation = DOMDocumentFactory::fromString(<<<XML
+        $xmlRepresentation = DOMDocumentFactory::fromString(
+            <<<XML
 <samlp:IDPList xmlns:samlp="{$ns}">
   <samlp:GetComplete>https://some/location</samlp:GetComplete>
 </samlp:IDPList>
 XML
+            ,
         );
 
         $this->expectException(MissingElementException::class);

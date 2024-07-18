@@ -167,7 +167,7 @@ final class AuthnRequestTest extends TestCase
             nameIdPolicy: $nameIdPolicy,
             conditions: $conditions,
             issuer: new Issuer('https://gateway.stepup.org/saml20/sp/metadata'),
-            scoping: $scoping
+            scoping: $scoping,
         );
 
         $authnRequestElement = $authnRequest->toXML();
@@ -450,7 +450,7 @@ AUTHNREQUEST;
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage(
             'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide '
-            . 'exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
+            . 'exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>',
         );
         AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
     }

@@ -133,13 +133,13 @@ final class EntityAttributesTest extends TestCase
             '_93af655219464fb403b34436cfb0c5cb1d9a5502',
             $subject,
             $conditions,
-            [$attrStatement]
+            [$attrStatement],
         );
 
         // Sign the assertion
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
             C::SIG_RSA_SHA256,
-            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY)
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
         $unsignedAssertion->sign($signer);
         $signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());

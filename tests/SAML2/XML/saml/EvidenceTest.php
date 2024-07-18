@@ -104,7 +104,7 @@ final class EvidenceTest extends TestCase
         $evidence = new Evidence();
         $this->assertEquals(
             '<saml:Evidence xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"/>',
-            strval($evidence)
+            strval($evidence),
         );
         $this->assertTrue($evidence->isEmptyElement());
     }

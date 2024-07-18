@@ -43,7 +43,7 @@ final class RequestTest extends TestCase
         self::$testedClass = Request::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/ecp_Request.xml'
+            dirname(__FILE__, 4) . '/resources/xml/ecp_Request.xml',
         );
     }
 

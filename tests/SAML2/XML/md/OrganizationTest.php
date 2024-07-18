@@ -52,7 +52,7 @@ final class OrganizationTest extends TestCase
         self::$testedClass = Organization::class;
 
         self::$ext = DOMDocumentFactory::fromString(
-            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>'
+            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>',
         );
 
         self::$arrayRepresentation = [

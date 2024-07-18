@@ -27,7 +27,7 @@ final class RequestAuthenticated extends AbstractEcpElement
      * @param bool $mustUnderstand
      */
     public function __construct(
-        protected bool $mustUnderstand
+        protected bool $mustUnderstand,
     ) {
     }
 

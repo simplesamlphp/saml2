@@ -237,12 +237,14 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     public function testUnmarshallingWithoutOptionalElements(): void
     {
         $mdns = C::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
   <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
       Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
 </md:AttributeAuthorityDescriptor>
 XML
+            ,
         );
 
         $aad = AttributeAuthorityDescriptor::fromXML($document->documentElement);
@@ -265,13 +267,15 @@ XML
     public function testUnmarshallingWithEmptyNameIDFormat(): void
     {
         $mdns = C::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
   <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
       Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
   <md:NameIDFormat></md:NameIDFormat>
 </md:AttributeAuthorityDescriptor>
 XML
+            ,
         );
         $this->expectException(SchemaViolationException::class);
         AttributeAuthorityDescriptor::fromXML($document->documentElement);
@@ -284,13 +288,15 @@ XML
     public function testUnmarshallingWithEmptyAttributeProfile(): void
     {
         $mdns = C::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
   <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
       Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
   <md:AttributeProfile></md:AttributeProfile>
 </md:AttributeAuthorityDescriptor>
 XML
+            ,
         );
         $this->expectException(SchemaViolationException::class);
         AttributeAuthorityDescriptor::fromXML($document->documentElement);

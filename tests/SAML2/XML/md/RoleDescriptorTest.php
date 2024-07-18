@@ -108,7 +108,7 @@ final class RoleDescriptorTest extends TestCase
         $roleDescriptor = new CustomRoleDescriptor(
             [
                 new Chunk(DOMDocumentFactory::fromString(
-                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>'
+                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
                 )->documentElement),
             ],
             [C::NS_SAMLP, C::PROTOCOL],
@@ -117,8 +117,8 @@ final class RoleDescriptorTest extends TestCase
             'PT5000S',
             new Extensions([new Chunk(
                 DOMDocumentFactory::fromString(
-                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>'
-                )->documentElement
+                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
+                )->documentElement,
             )]),
             'https://error.reporting/',
             [

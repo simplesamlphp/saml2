@@ -46,7 +46,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
         array $keyDescriptors = [],
         ?Organization $organization = null,
         array $contacts = [],
-        array $namespacedAttributes = []
+        array $namespacedAttributes = [],
     ) {
         parent::__construct(
             $type,

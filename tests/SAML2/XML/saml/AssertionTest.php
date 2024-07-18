@@ -122,11 +122,11 @@ final class AssertionTest extends TestCase
             authnContext: new AuthnContext(
                 new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
                 null,
-                null
+                null,
             ),
             authnInstant: new DateTimeImmutable('2011-08-31T08:51:05Z'),
             sessionIndex: '_93af655219464fb403b34436cfb0c5cb1d9a5502',
-            subjectLocality: new SubjectLocality('127.0.0.1')
+            subjectLocality: new SubjectLocality('127.0.0.1'),
         );
 
         // Create the AttributeStatement
@@ -467,7 +467,8 @@ XML;
     #[Group("Assertion")]
     public function testCorrectSignatureMethodCanBeExtracted(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
     <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                     Version="2.0"
                     ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
@@ -503,6 +504,7 @@ XML;
       </saml:AttributeStatement>
     </saml:Assertion>
 XML
+            ,
         );
 
         $privateKey = PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY);
@@ -952,7 +954,7 @@ XML;
         $this->expectException(Exception::class);
         $this->expectExceptionMessage(
             'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide '
-            . 'exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
+            . 'exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>',
         );
         Assertion::fromXML($document->documentElement);
     }
@@ -1077,7 +1079,7 @@ XML;
         $conditions = new Conditions(
             audienceRestriction: [
                 new AudienceRestriction(
-                    [new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)]
+                    [new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)],
                 ),
             ],
         );
@@ -1143,7 +1145,7 @@ XML;
 
         // Create the conditions
         $conditions = new Conditions(
-            audienceRestriction: [new AudienceRestriction([new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)])]
+            audienceRestriction: [new AudienceRestriction([new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)])],
         );
 
         // Create AttributeStatement
@@ -1175,7 +1177,7 @@ XML;
 
         // Create Subject
         $subject = new Subject(
-            new NameID("just_a_basic_identifier", C::NAMEID_TRANSIENT)
+            new NameID("just_a_basic_identifier", C::NAMEID_TRANSIENT),
         );
 
         $statements = [$authnStatement, $attributeStatement];

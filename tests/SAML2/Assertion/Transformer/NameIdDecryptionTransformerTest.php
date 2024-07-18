@@ -116,7 +116,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
             self::$destination,
             self::$identityProviderConfiguration,
             self::$serviceProviderConfiguration,
-            self::$response
+            self::$response,
         );
 
         $encryptor = (new KeyTransportAlgorithmFactory([]))->getAlgorithm(

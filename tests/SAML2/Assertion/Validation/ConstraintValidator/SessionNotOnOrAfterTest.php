@@ -53,7 +53,7 @@ final class SessionNotOnOrAfterTest extends TestCase
             new AuthnContext(
                 new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                 null,
-                null
+                null,
             ),
             self::$clock->now(),
             self::$clock->now()->sub(new DateInterval('PT60S')),
@@ -82,7 +82,7 @@ final class SessionNotOnOrAfterTest extends TestCase
             new AuthnContext(
                 new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                 null,
-                null
+                null,
             ),
             self::$clock->now(),
             self::$clock->now()->sub(new DateInterval('PT59S')),
@@ -110,7 +110,7 @@ final class SessionNotOnOrAfterTest extends TestCase
             new AuthnContext(
                 new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                 null,
-                null
+                null,
             ),
             self::$clock->now(),
             self::$clock->now(),

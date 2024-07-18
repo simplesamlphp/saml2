@@ -208,9 +208,11 @@ final class EndpointTypeTest extends TestCase
         $mdNamespace = C::NS_MD;
         $location = C::LOCATION_A;
 
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:AttributeService xmlns:md="{$mdNamespace}" Binding="urn:x-simplesamlphp:namespace" Location="{$location}" />
 XML
+            ,
         );
         $as = AttributeService::fromXML($document->documentElement);
         $this->assertNull($as->getResponseLocation());

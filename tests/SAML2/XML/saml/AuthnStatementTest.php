@@ -125,13 +125,15 @@ final class AuthnStatementTest extends TestCase
     public function testUnmarshallingWithoutAuthnContextThrowsException(): void
     {
         $samlNamespace = C::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <saml:AuthnStatement xmlns:saml="{$samlNamespace}"
     AuthnInstant="2020-03-23T23:37:24Z"
     SessionIndex="123"
     SessionNotOnOrAfter="2020-03-23T23:37:24Z">
 </saml:AuthnStatement>
 XML
+            ,
         );
 
         $this->expectException(MissingElementException::class);
