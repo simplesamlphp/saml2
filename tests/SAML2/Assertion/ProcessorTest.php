@@ -30,8 +30,7 @@ final class ProcessorTest extends MockeryTestCase
 {
     private static Processor $processor;
 
-    /** @var \SimpleSAML\SAML2\Assertion\Decrypter|\Mockery\MockInterface */
-    private static Decrypter $decrypter;
+    private static $decrypter;
 
 
     public static function setUpBeforeClass(): void
