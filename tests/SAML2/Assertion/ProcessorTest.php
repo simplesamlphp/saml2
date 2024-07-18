@@ -29,12 +29,15 @@ use stdClass;
 final class ProcessorTest extends MockeryTestCase
 {
     private static Processor $processor;
+
+    /** @var \SimpleSAML\SAML2\Assertion\Decrypter&\Mockery\MockInterface */
     private static Decrypter $decrypter;
 
 
     public static function setUpBeforeClass(): void
     {
         self::$decrypter = Mockery::mock(Decrypter::class);
+
         /** @var \SimpleSAML\SAML2\Signature\Validator */
         $validator = Mockery::mock(Validator::class);
         /** @var \SimpleSAML\SAML2\Assertion\Validation\AssertionValidator */
