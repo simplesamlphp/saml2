@@ -6,7 +6,6 @@ namespace SimpleSAML\Test\SAML2\Assertion;
 
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
-use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Psr\Log\LoggerInterface;
 use SimpleSAML\SAML2\Assertion\Decrypter;
@@ -29,25 +28,23 @@ use stdClass;
 #[CoversClass(Processor::class)]
 final class ProcessorTest extends MockeryTestCase
 {
-    /**
-     * @var \SimpleSAML\SAML2\Assertion\Processor
-     */
     private static Processor $processor;
-
-    /**
-     * @var MockInterface&Decrypter
-     */
-    private static MockInterface $decrypter;
+    private static Decrypter $decrypter;
 
 
     public static function setUpBeforeClass(): void
     {
         self::$decrypter = Mockery::mock(Decrypter::class);
+        /** @var \SimpleSAML\SAML2\Signature\Validator */
         $validator = Mockery::mock(Validator::class);
+        /** @var \SimpleSAML\SAML2\Assertion\Validation\AssertionValidator */
         $assertionValidator = Mockery::mock(AssertionValidator::class);
+        /** @var \SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationValidator */
         $subjectConfirmationValidator = Mockery::mock(SubjectConfirmationValidator::class);
+        /** @var \SimpleSAML\SAML2\Assertion\Transformer\TransformerInterface */
         $transformer = Mockery::mock(TransformerInterface::class);
         $identityProvider = new IdentityProvider([]);
+        /** @var \Psr\Log\LoggerInterface */
         $logger = Mockery::mock(LoggerInterface::class);
 
         self::$processor = new Processor(
