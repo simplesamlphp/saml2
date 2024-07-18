@@ -1,4 +1,4 @@
-<md:IDPSSODescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" WantAuthnRequestsSigned="true">
+<md:IDPSSODescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="phpunit" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" WantAuthnRequestsSigned="true">
   <md:KeyDescriptor use="signing">
     <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
       <ds:KeyName>IdentityProvider.com SSO Key</ds:KeyName>

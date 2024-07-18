@@ -81,6 +81,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             [C::NS_SAMLP, C::PROTOCOL],
             [self::$aidrs],
             [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)],
+            'phpunit',
         );
 
         $this->assertEquals(

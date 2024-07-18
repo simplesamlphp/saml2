@@ -1,6 +1,41 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Parameter \\#1 \\$decrypter of class SimpleSAML\\\\SAML2\\\\Assertion\\\\Processor constructor expects SimpleSAML\\\\SAML2\\\\Assertion\\\\Decrypter, Mockery\\\\MockInterface given\\.$#"
+			count: 1
+			path: tests/SAML2/Assertion/ProcessorTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$signatureValidator of class SimpleSAML\\\\SAML2\\\\Assertion\\\\Processor constructor expects SimpleSAML\\\\SAML2\\\\Signature\\\\Validator, Mockery\\\\MockInterface given\\.$#"
+			count: 1
+			path: tests/SAML2/Assertion/ProcessorTest.php
+
+		-
+			message: "#^Parameter \\#3 \\$assertionValidator of class SimpleSAML\\\\SAML2\\\\Assertion\\\\Processor constructor expects SimpleSAML\\\\SAML2\\\\Assertion\\\\Validation\\\\AssertionValidator, Mockery\\\\MockInterface given\\.$#"
+			count: 1
+			path: tests/SAML2/Assertion/ProcessorTest.php
+
+		-
+			message: "#^Parameter \\#4 \\$subjectConfirmationValidator of class SimpleSAML\\\\SAML2\\\\Assertion\\\\Processor constructor expects SimpleSAML\\\\SAML2\\\\Assertion\\\\Validation\\\\SubjectConfirmationValidator, Mockery\\\\MockInterface given\\.$#"
+			count: 1
+			path: tests/SAML2/Assertion/ProcessorTest.php
+
+		-
+			message: "#^Parameter \\#5 \\$transformer of class SimpleSAML\\\\SAML2\\\\Assertion\\\\Processor constructor expects SimpleSAML\\\\SAML2\\\\Assertion\\\\Transformer\\\\TransformerInterface, Mockery\\\\MockInterface given\\.$#"
+			count: 1
+			path: tests/SAML2/Assertion/ProcessorTest.php
+
+		-
+			message: "#^Parameter \\#7 \\$logger of class SimpleSAML\\\\SAML2\\\\Assertion\\\\Processor constructor expects Psr\\\\Log\\\\LoggerInterface, Mockery\\\\MockInterface given\\.$#"
+			count: 1
+			path: tests/SAML2/Assertion/ProcessorTest.php
+
+		-
+			message: "#^Static property SimpleSAML\\\\Test\\\\SAML2\\\\Assertion\\\\ProcessorTest\\:\\:\\$decrypter \\(Mockery\\\\MockInterface&SimpleSAML\\\\SAML2\\\\Assertion\\\\Decrypter\\) does not accept Mockery\\\\MockInterface\\.$#"
+			count: 1
+			path: tests/SAML2/Assertion/ProcessorTest.php
+
+		-
 			message: "#^PHPDoc tag @var for property SimpleSAML\\\\Test\\\\SAML2\\\\Assertion\\\\Transformer\\\\NameIdDecryptionTransformerTest\\:\\:\\$validator with type SimpleSAML\\\\SAML2\\\\Response\\\\Validation\\\\Validator is incompatible with native type SimpleSAML\\\\SAML2\\\\Signature\\\\Validator\\.$#"
 			count: 1
 			path: tests/SAML2/Assertion/Transformer/NameIdDecryptionTransformerTest.php
@@ -76,11 +111,6 @@ parameters:
 			path: tests/SAML2/Response/SignatureValidationTest.php
 
 		-
-			message: "#^Call to method shouldReceive\\(\\) on an unknown class alias\\:SimpleSAML\\\\SAML2\\\\Assertion\\\\ProcessorBuilder\\.$#"
-			count: 1
-			path: tests/SAML2/Response/SignatureValidationTest.php
-
-		-
 			message: "#^Call to an undefined method Mockery\\\\ExpectationInterface\\|Mockery\\\\HigherOrderMessage\\:\\:once\\(\\)\\.$#"
 			count: 2
 			path: tests/SAML2/Response/Validation/ConstraintValidator/DestinationMatchesTest.php
@@ -104,3 +134,13 @@ parameters:
 			message: "#^Parameter \\#1 \\$xml of static method SimpleSAML\\\\SAML2\\\\XML\\\\saml\\\\Assertion\\:\\:fromXML\\(\\) expects DOMElement, DOMNode\\|null given\\.$#"
 			count: 2
 			path: tests/SAML2/Response/XmlSignatureWrappingTest.php
+
+		-
+			message: "#^Property SimpleSAML\\\\Test\\\\SAML2\\\\Signature\\\\PublicKeyValidatorTest\\:\\:\\$mockConfiguration \\(SimpleSAML\\\\SAML2\\\\Configuration\\\\CertificateProvider\\) does not accept Mockery\\\\MockInterface\\.$#"
+			count: 1
+			path: tests/SAML2/Signature/PublicKeyValidatorTest.php
+
+		-
+			message: "#^Property SimpleSAML\\\\Test\\\\SAML2\\\\Signature\\\\PublicKeyValidatorTest\\:\\:\\$mockSignedElement \\(SimpleSAML\\\\XMLSecurity\\\\XML\\\\SignedElementInterface\\) does not accept Mockery\\\\MockInterface\\.$#"
+			count: 1
+			path: tests/SAML2/Signature/PublicKeyValidatorTest.php

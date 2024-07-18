@@ -93,6 +93,7 @@ final class PDPDescriptorTest extends TestCase
                 new NameIDFormat(C::NAMEID_PERSISTENT),
                 new NameIDFormat(C::NAMEID_TRANSIENT),
             ],
+            'phpunit',
         );
 
         $this->assertEquals(

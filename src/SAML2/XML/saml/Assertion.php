@@ -11,6 +11,8 @@ use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\SignableElementTrait;
+use SimpleSAML\SAML2\XML\SignedElementTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -20,9 +22,7 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
-use SimpleSAML\XMLSecurity\XML\SignableElementTrait;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
-use SimpleSAML\XMLSecurity\XML\SignedElementTrait;
 
 use function array_filter;
 use function array_merge;
