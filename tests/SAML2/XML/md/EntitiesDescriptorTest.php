@@ -92,6 +92,7 @@ final class EntitiesDescriptorTest extends TestCase
             entitiesDescriptors: [$childEntitiesd],
             Name: 'Federation',
             extensions: $extensions,
+            ID: 'phpunit',
         );
 
         $this->assertEquals(

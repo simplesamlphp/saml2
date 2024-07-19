@@ -79,6 +79,7 @@ final class IDPSSODescriptorTest extends TestCase
     public function testMarshalling(): void
     {
         $idpssod = new IDPSSODescriptor(
+            ID: 'phpunit',
             singleSignOnService: [
                 new SingleSignOnService(
                     C::BINDING_HTTP_REDIRECT,

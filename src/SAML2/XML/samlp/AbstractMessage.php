@@ -15,11 +15,11 @@ use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\SignableElementTrait;
+use SimpleSAML\SAML2\XML\SignedElementTrait;
 use SimpleSAML\XML\Utils\Random as RandomUtils;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
-use SimpleSAML\XMLSecurity\XML\SignableElementTrait;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
-use SimpleSAML\XMLSecurity\XML\SignedElementTrait;
 
 use function array_pop;
 

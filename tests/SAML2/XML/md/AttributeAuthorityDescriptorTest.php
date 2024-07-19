@@ -121,6 +121,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
                 new AttributeProfile(C::PROFILE_2),
             ],
             [$attr1, $attr2],
+            'phpunit',
         );
 
         $this->assertEquals(
