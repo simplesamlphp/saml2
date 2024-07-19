@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
@@ -41,6 +42,19 @@ final class NameID extends NameIDType implements EncryptableElementInterface
         ?string $Format = null,
         ?string $SPProvidedID = null,
     ) {
+        if ($Format === C::NAMEID_EMAIL_ADDRESS) {
+            Assert::email(
+                $value,
+                "The content %s of the NameID was not in the format specified by the Format attribute",
+            );
+        }
+
+        if ($Format === C::NAMEID_ENTITY) {
+            Assert::null($NameQualifier, "Entity Identifier included a disallowed NameQualifier attribute.");
+            Assert::null($SPNameQualifier, "Entity Identifier included a disallowed SPNameQualifier attribute.");
+            Assert::null($SPProvidedID, "Entity Identifier included a disallowed SPProvidedID attribute.");
+        }
+
         parent::__construct($value, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
     }
 
