@@ -51,6 +51,12 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
         Assert::maxCount($attributeValue, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($attributeValue, AttributeValue::class, 'Invalid AttributeValue.');
 
+        if ($nameFormat === C::NAMEFORMAT_URI) {
+            Assert::validURI($name, "Attribute name does not match its declared format");
+        } elseif ($nameFormat === C::NAMEFORMAT_BASIC) {
+            Assert::validNCName($name, "Attribute name does not match its declared format");
+        }
+
         $this->setAttributesNS($namespacedAttribute);
     }
 
