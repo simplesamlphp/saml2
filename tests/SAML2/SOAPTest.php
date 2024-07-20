@@ -64,7 +64,7 @@ SOAP);
         $message = $stub->receive($request);
 
         $this->assertInstanceOf(ArtifactResolve::class, $message);
-        $this->assertEquals($artifact, $message->getArtifact());
+        $this->assertEquals($artifact, $message->getArtifact()->getContent());
         $this->assertEquals($id, $message->getId());
         $this->assertEquals($issuer, $message->getIssuer()->getContent());
 
