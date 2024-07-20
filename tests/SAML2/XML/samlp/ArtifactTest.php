@@ -47,7 +47,7 @@ final class ArtifactTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $artifact = new Artifact('cGhwdW5pdA==');
+        $artifact = new Artifact('AAQAAM0ARI+cUaUKAx19/KC3fOV/vznNj8oE0JKKPQC8nTesXxPke7uRy+8=');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
