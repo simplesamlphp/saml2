@@ -60,7 +60,8 @@
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "simplesamlphp/composer-module-installer": false
+            "simplesamlphp/composer-module-installer": false,
+            "phpstan/extension-installer": true
         }
     }
 }
