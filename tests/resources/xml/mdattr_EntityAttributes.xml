@@ -1,5 +1,5 @@
 <mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute">
-  <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="attrib1" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+  <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="attrib1" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
     <saml:AttributeValue>is</saml:AttributeValue>
     <saml:AttributeValue>really</saml:AttributeValue>
     <saml:AttributeValue>cool</saml:AttributeValue>

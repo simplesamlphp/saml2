@@ -83,7 +83,7 @@ final class AttributeTest extends TestCase
 
         $attribute = new Attribute(
             'TheName',
-            C::NAMEFORMAT_URI,
+            C::NAMEFORMAT_BASIC,
             'TheFriendlyName',
             [
                 new AttributeValue('FirstValue'),

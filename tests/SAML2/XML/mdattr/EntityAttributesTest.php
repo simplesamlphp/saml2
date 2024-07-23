@@ -64,7 +64,7 @@ final class EntityAttributesTest extends TestCase
     {
         $attribute1 = new Attribute(
             name: 'attrib1',
-            nameFormat: C::NAMEFORMAT_URI,
+            nameFormat: C::NAMEFORMAT_BASIC,
             attributeValue: [
                 new AttributeValue('is'),
                 new AttributeValue('really'),
