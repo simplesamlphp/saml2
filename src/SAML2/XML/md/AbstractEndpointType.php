@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Attribute as XMLAttribute;
@@ -67,9 +68,9 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
         array $children = [],
         array $attributes = [],
     ) {
-        Assert::validURI($binding, SchemaViolationException::class); // Covers the empty string
-        Assert::validURI($location, SchemaViolationException::class); // Covers the empty string
-        Assert::nullOrValidURI($responseLocation, SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::validURI($binding);
+        SAMLAssert::validURI($location);
+        SAMLAssert::nullOrValidURI($responseLocation);
 
         $this->setElements($children);
         $this->setAttributesNS($attributes);

@@ -8,6 +8,7 @@ use DOMDocument;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractEndpointType;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
@@ -18,7 +19,6 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -100,7 +100,7 @@ final class EndpointTypeTest extends TestCase
      */
     public function testMarshallingWithEmptyBinding(): void
     {
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
         new AttributeService('', C::LOCATION_A);
     }
 
@@ -110,7 +110,7 @@ final class EndpointTypeTest extends TestCase
      */
     public function testMarshallingWithEmptyLocation(): void
     {
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
         new AttributeService(C::BINDING_HTTP_POST, '');
     }
 
@@ -165,7 +165,7 @@ final class EndpointTypeTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
 
         $xmlRepresentation->documentElement->setAttribute('Binding', '');
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
 
         AttributeService::fromXML($xmlRepresentation->documentElement);
     }
@@ -194,7 +194,7 @@ final class EndpointTypeTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $xmlRepresentation->documentElement->setAttribute('Location', '');
 
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
 
         AttributeService::fromXML($xmlRepresentation->documentElement);
     }

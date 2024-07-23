@@ -9,6 +9,7 @@ use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
 use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
@@ -19,7 +20,6 @@ use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
@@ -99,7 +99,7 @@ final class AffiliationDescriptorTest extends TestCase
      */
     public function testMarhsallingWithEmptyOwnerID(): void
     {
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
         new AffiliationDescriptor(
             affiliationOwnerId: '',
             affiliateMember: [new AffiliateMember(C::ENTITY_SP), new AffiliateMember(C::ENTITY_OTHER)],

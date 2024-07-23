@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -53,7 +54,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         protected array $keyDescriptor = [],
         array $namespacedAttribute = [],
     ) {
-        Assert::validURI($affiliationOwnerId, SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::validURI($affiliationOwnerId);
         Assert::maxLength(
             $affiliationOwnerId,
             C::ENTITYID_MAX_LENGTH,

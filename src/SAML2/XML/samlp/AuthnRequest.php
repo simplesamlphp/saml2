@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -88,7 +89,7 @@ class AuthnRequest extends AbstractRequest
             ProtocolViolationException::class,
         );
         Assert::nullOrValidURL($assertionConsumerServiceURL);
-        Assert::nullOrValidURI($protocolBinding); // Covers the empty string
+        SAMLAssert::nullOrValidURI($protocolBinding);
         Assert::nullOrRange($attributeConsumingServiceIndex, 0, 65535);
         Assert::nullOrRange($assertionConsumerServiceIndex, 0, 65535);
 

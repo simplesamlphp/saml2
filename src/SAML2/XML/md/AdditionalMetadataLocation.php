@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\StringElementTrait;
@@ -32,8 +33,7 @@ final class AdditionalMetadataLocation extends AbstractMdElement
         protected string $namespace,
         string $location,
     ) {
-        Assert::validURI($namespace, SchemaViolationException::class); // Covers the empty string
-
+        SAMLAssert::validURI($namespace);
         $this->setContent($location);
     }
 
@@ -58,7 +58,7 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      */
     protected function validateContent(string $content): void
     {
-        Assert::validURI($content, SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::validURI($content, SchemaViolationException::class); // Covers the empty string
     }
 
 

@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\StringElementTrait;
@@ -30,7 +31,7 @@ final class Action extends AbstractSamlElement
         protected string $namespace,
         string $content,
     ) {
-        Assert::validURI($namespace, SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::validURI($namespace);
 
         $this->setContent($content);
     }

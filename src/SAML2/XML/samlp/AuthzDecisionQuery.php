@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
@@ -58,7 +59,7 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery
         ?string $consent = null,
         ?Extensions $extensions = null,
     ) {
-        Assert::validURI($resource);
+        SAMLAssert::validURI($resource);
         Assert::maxCount($action, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($action, Action::class, SchemaViolationException::class);
 

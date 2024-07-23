@@ -1,11 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$decrypter of class SimpleSAML\\\\SAML2\\\\Assertion\\\\Processor constructor expects SimpleSAML\\\\SAML2\\\\Assertion\\\\Decrypter, Mockery\\\\MockInterface given\\.$#"
-			count: 1
-			path: tests/SAML2/Assertion/ProcessorTest.php
-
-		-
 			message: "#^PHPDoc tag @var for property SimpleSAML\\\\Test\\\\SAML2\\\\Assertion\\\\Transformer\\\\NameIdDecryptionTransformerTest\\:\\:\\$validator with type SimpleSAML\\\\SAML2\\\\Response\\\\Validation\\\\Validator is incompatible with native type SimpleSAML\\\\SAML2\\\\Signature\\\\Validator\\.$#"
 			count: 1
 			path: tests/SAML2/Assertion/Transformer/NameIdDecryptionTransformerTest.php
@@ -36,11 +31,6 @@ parameters:
 			path: tests/SAML2/Assertion/Validation/ConstraintValidator/SpIsValidAudienceTest.php
 
 		-
-			message: "#^Call to an undefined method Mockery\\\\ExpectationInterface\\|Mockery\\\\HigherOrderMessage\\:\\:andReturnNull\\(\\)\\.$#"
-			count: 2
-			path: tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationResponseToMatchesTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$response of class SimpleSAML\\\\SAML2\\\\Assertion\\\\Validation\\\\ConstraintValidator\\\\SubjectConfirmationResponseToMatches constructor expects SimpleSAML\\\\SAML2\\\\XML\\\\samlp\\\\Response, Mockery\\\\MockInterface given\\.$#"
 			count: 5
 			path: tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationResponseToMatchesTest.php
@@ -61,13 +51,8 @@ parameters:
 			path: tests/SAML2/Certificate/KeyCollectionTest.php
 
 		-
-			message: "#^Call to an undefined method Mockery\\\\ExpectationInterface\\|Mockery\\\\HigherOrderMessage\\:\\:atMost\\(\\)\\.$#"
-			count: 2
-			path: tests/SAML2/Certificate/KeyLoaderTest.php
-
-		-
-			message: "#^Call to an undefined method Mockery\\\\ExpectationInterface\\|Mockery\\\\HigherOrderMessage\\:\\:once\\(\\)\\.$#"
-			count: 1
+			message: "#^Call to an undefined method Mockery\\\\Expectation\\:\\:shouldReceive\\(\\)\\.$#"
+			count: 3
 			path: tests/SAML2/Certificate/KeyLoaderTest.php
 
 		-
@@ -76,24 +61,9 @@ parameters:
 			path: tests/SAML2/Certificate/KeyLoaderTest.php
 
 		-
-			message: "#^Call to an undefined method Mockery\\\\ExpectationInterface\\|Mockery\\\\HigherOrderMessage\\:\\:once\\(\\)\\.$#"
-			count: 8
-			path: tests/SAML2/Response/SignatureValidationTest.php
-
-		-
-			message: "#^Call to an undefined method Mockery\\\\ExpectationInterface\\|Mockery\\\\HigherOrderMessage\\:\\:once\\(\\)\\.$#"
-			count: 2
-			path: tests/SAML2/Response/Validation/ConstraintValidator/DestinationMatchesTest.php
-
-		-
 			message: "#^Parameter \\#1 \\$response of method SimpleSAML\\\\SAML2\\\\Response\\\\Validation\\\\ConstraintValidator\\\\DestinationMatches\\:\\:validate\\(\\) expects SimpleSAML\\\\SAML2\\\\XML\\\\samlp\\\\Response, Mockery\\\\MockInterface given\\.$#"
 			count: 2
 			path: tests/SAML2/Response/Validation/ConstraintValidator/DestinationMatchesTest.php
-
-		-
-			message: "#^Call to an undefined method Mockery\\\\ExpectationInterface\\|Mockery\\\\HigherOrderMessage\\:\\:once\\(\\)\\.$#"
-			count: 3
-			path: tests/SAML2/Response/Validation/ConstraintValidator/IsSuccessfulTest.php
 
 		-
 			message: "#^Parameter \\#1 \\$response of method SimpleSAML\\\\SAML2\\\\Response\\\\Validation\\\\ConstraintValidator\\\\IsSuccessful\\:\\:validate\\(\\) expects SimpleSAML\\\\SAML2\\\\XML\\\\samlp\\\\Response, Mockery\\\\MockInterface given\\.$#"
@@ -104,13 +74,3 @@ parameters:
 			message: "#^Parameter \\#1 \\$xml of static method SimpleSAML\\\\SAML2\\\\XML\\\\saml\\\\Assertion\\:\\:fromXML\\(\\) expects DOMElement, DOMNode\\|null given\\.$#"
 			count: 2
 			path: tests/SAML2/Response/XmlSignatureWrappingTest.php
-
-		-
-			message: "#^Property SimpleSAML\\\\Test\\\\SAML2\\\\Signature\\\\PublicKeyValidatorTest\\:\\:\\$mockConfiguration \\(SimpleSAML\\\\SAML2\\\\Configuration\\\\CertificateProvider\\) does not accept Mockery\\\\MockInterface\\.$#"
-			count: 1
-			path: tests/SAML2/Signature/PublicKeyValidatorTest.php
-
-		-
-			message: "#^Property SimpleSAML\\\\Test\\\\SAML2\\\\Signature\\\\PublicKeyValidatorTest\\:\\:\\$mockSignedElement \\(SimpleSAML\\\\XMLSecurity\\\\XML\\\\SignedElementInterface\\) does not accept Mockery\\\\MockInterface\\.$#"
-			count: 1
-			path: tests/SAML2/Signature/PublicKeyValidatorTest.php

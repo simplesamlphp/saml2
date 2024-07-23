@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
@@ -62,8 +63,8 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
             1,
             'At least one protocol must be supported by this ' . static::NS_PREFIX . ':' . static::getLocalName() . '.',
         );
-        Assert::allValidURI($protocolSupportEnumeration, SchemaViolationException::class);
-        Assert::nullOrValidURI($errorURL, SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::allValidURI($protocolSupportEnumeration, SchemaViolationException::class);
+        SAMLAssert::nullOrValidURI($errorURL, SchemaViolationException::class);
         Assert::maxCount($contact, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $contact,

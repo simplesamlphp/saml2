@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -68,7 +69,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.',
             ProtocolViolationException::class,
         );
-        Assert::validURI($entityId, SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::validURI($entityId);
         Assert::maxLength(
             $entityId,
             C::ENTITYID_MAX_LENGTH,

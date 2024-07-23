@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\XML\IdentifierTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -35,7 +36,7 @@ final class SubjectConfirmation extends AbstractSamlElement
         ?IdentifierInterface $identifier = null,
         protected ?SubjectConfirmationData $subjectConfirmationData = null,
     ) {
-        Assert::validURI($method, SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::validURI($method);
         $this->setIdentifier($identifier);
     }
 

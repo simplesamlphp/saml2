@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -35,7 +36,7 @@ final class NameIDPolicy extends AbstractSamlpElement implements ArrayizableElem
         protected ?string $SPNameQualifier = null,
         protected ?bool $AllowCreate = null,
     ) {
-        Assert::nullOrValidURI($Format); // Covers the empty string
+        SAMLAssert::nullOrValidURI($Format);
         Assert::nullOrNotWhitespaceOnly($SPNameQualifier);
     }
 

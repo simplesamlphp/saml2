@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\StringElementTrait;
 
@@ -39,7 +40,7 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
     ) {
         Assert::nullOrNotWhitespaceOnly($NameQualifier);
         Assert::nullOrNotWhitespaceOnly($SPNameQualifier);
-        Assert::nullOrValidURI($Format); // Covers the empty string
+        SAMLAssert::nullOrValidURI($Format);
         Assert::nullOrNotWhitespaceOnly($SPProvidedID);
 
         $this->setContent($value);

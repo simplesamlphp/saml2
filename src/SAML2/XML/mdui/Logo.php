@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\mdui;
 use DOMElement;
 use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
+//use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -56,7 +57,7 @@ final class Logo extends AbstractMduiElement implements ArrayizableElementInterf
     protected function validateContent(string $content): void
     {
         // NOTE:  we override the validateContent from the trait to be able to be less restrictive
-        // Assert::validURI($content, SchemaViolationException::class); // Covers the empty string
+        // SAMLAssert::validURI($content, SchemaViolationException::class); // Covers the empty string
         if (!filter_var(trim($content), FILTER_VALIDATE_URL) && substr(trim($content), 0, 5) !== 'data:') {
             throw new InvalidArgumentException('mdui:Logo is not a valid URL.');
         }

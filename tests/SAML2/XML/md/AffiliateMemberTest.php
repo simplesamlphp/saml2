@@ -12,7 +12,6 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
@@ -70,7 +69,7 @@ final class AffiliateMemberTest extends TestCase
      */
     public function testMarshallingEmptyThrowsException(): void
     {
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
 
         new AffiliateMember('');
     }

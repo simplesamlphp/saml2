@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\ecp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\SOAP\Constants as C;
@@ -31,7 +32,7 @@ final class SubjectConfirmation extends AbstractEcpElement
         protected string $method,
         protected ?SubjectConfirmationData $subjectConfirmationData = null,
     ) {
-        Assert::validURI($method, SchemaViolationException::class);
+        SAMLAssert::validURI($method);
     }
 
 

@@ -9,8 +9,6 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 
-use function sprintf;
-
 /**
  * @package simplesamlphp/assert
  */
@@ -34,12 +32,9 @@ trait CustomAssertionTrait
     private static function validDateTime(string $value, string $message = ''): void
     {
         try {
-            BaseAssert::validDateTime($value, '\'%s\' is not a valid xs:dateTime');
+            BaseAssert::validDateTime($value);
         } catch (AssertionFailedException $e) {
-            throw new SchemaViolationException(sprintf(
-                $e->getMessage(),
-                $value,
-            ));
+            throw new SchemaViolationException($e->getMessage());
         }
 
         try {
@@ -49,10 +44,7 @@ trait CustomAssertionTrait
                 '\'%s\' is not a DateTime expressed in the UTC timezone using the \'Z\' timezone identifier.',
             );
         } catch (AssertionFailedException $e) {
-            throw new ProtocolViolationException(sprintf(
-                $e->getMessage(),
-                $value,
-            ));
+            throw new ProtocolViolationException($e->getMessage());
         }
     }
 
@@ -64,12 +56,9 @@ trait CustomAssertionTrait
     private static function validURI(string $value, string $message = ''): void
     {
         try {
-            BaseAssert::validURI($value, '\'%s\' is not a valid RFC3986 compliant URI');
+            BaseAssert::validURI($value);
         } catch (AssertionFailedException $e) {
-            throw new SchemaViolationException(sprintf(
-                $e->getMessage(),
-                $value,
-            ));
+            throw new SchemaViolationException($e->getMessage());
         }
 
         try {
@@ -78,10 +67,7 @@ trait CustomAssertionTrait
             // If it doesn't have a scheme, it's not an absolute URI
             BaseAssert::regex($value, self::SCHEME_REGEX, $message ?: '\'%s\' is not a SAML2-compliant URI');
         } catch (AssertionFailedException $e) {
-            throw new ProtocolViolationException(sprintf(
-                $e->getMessage(),
-                $value,
-            ));
+            throw new ProtocolViolationException($e->getMessage());
         }
     }
 }

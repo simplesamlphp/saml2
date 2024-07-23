@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\ecp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -27,7 +28,7 @@ final class Response extends AbstractEcpElement
     public function __construct(
         protected string $assertionConsumerServiceURL,
     ) {
-        Assert::validURI($assertionConsumerServiceURL, SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::validURI($assertionConsumerServiceURL);
     }
 
 

@@ -7,12 +7,12 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
@@ -69,7 +69,7 @@ final class AdditionalMetadataLocationTest extends TestCase
      */
     public function testMarshallingWithEmptyNamespace(): void
     {
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
         new AdditionalMetadataLocation('', C::LOCATION_A);
     }
 

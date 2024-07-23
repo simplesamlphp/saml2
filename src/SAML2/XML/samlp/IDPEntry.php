@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -34,9 +35,9 @@ final class IDPEntry extends AbstractSamlpElement
         protected ?string $name = null,
         protected ?string $loc = null,
     ) {
-        Assert::validURI($providerId, SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::validURI($providerId);
         Assert::nullOrNotWhitespaceOnly($name);
-        Assert::nullOrValidURI($loc, SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::nullOrValidURI($loc);
     }
 
 

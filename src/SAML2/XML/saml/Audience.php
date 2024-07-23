@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\StringElementTrait;
@@ -38,7 +39,7 @@ final class Audience extends AbstractSamlElement
      */
     protected function validateContent(string $content): void
     {
-        Assert::validURI($content, SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::validURI($content);
     }
 
 

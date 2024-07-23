@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\alg;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -42,7 +43,7 @@ final class SigningMethod extends AbstractAlgElement
         protected ?int $maxKeySize = null,
         array $elements = [],
     ) {
-        Assert::validURI($algorithm, SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::validURI($algorithm);
         Assert::nullOrPositiveInteger($minKeySize);
         Assert::nullOrPositiveInteger($maxKeySize);
 
