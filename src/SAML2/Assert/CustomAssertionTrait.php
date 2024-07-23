@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Assert;
 
 use SimpleSAML\Assert\Assert as BaseAssert;
-use SimpleSAML\AssertionFailedException;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 

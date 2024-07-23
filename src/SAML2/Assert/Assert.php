@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Assert;
 
 use BadMethodCallException; // Requires ext-spl
+use DateTime; // requires ext-date
+use DateTimeImmutable; // requires ext-date
 use InvalidArgumentException; // Requires ext-spl
 use SimpleSAML\Assert\Assert as BaseAssert;
 use SimpleSAML\Assert\AssertionFailedException;
