@@ -41,7 +41,7 @@ trait CustomAssertionTrait
             BaseAssert::endsWith(
                 $value,
                 'Z',
-                '\'%s\' is not a DateTime expressed in the UTC timezone using the \'Z\' timezone identifier.',
+                '%s is not a DateTime expressed in the UTC timezone using the \'Z\' timezone identifier.',
             );
         } catch (AssertionFailedException $e) {
             throw new ProtocolViolationException($e->getMessage());

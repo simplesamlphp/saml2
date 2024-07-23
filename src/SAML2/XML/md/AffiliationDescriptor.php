@@ -129,7 +129,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         $keyDescriptors = KeyDescriptor::getChildrenOfClass($xml);
 
         $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
-        Assert::nullOrValidDateTimeZulu($validUntil);
+        SAMLAssert::nullOrValidDateTime($validUntil);
 
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(

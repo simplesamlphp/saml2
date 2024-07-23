@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\mdrpi;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -130,7 +131,7 @@ final class PublicationInfo extends AbstractMdrpiElement implements ArrayizableE
             // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
             $creationInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $creationInstant, 1);
 
-            Assert::validDateTimeZulu($creationInstant, ProtocolViolationException::class);
+            SAMLAssert::validDateTime($creationInstant, ProtocolViolationException::class);
             $creationInstant = new DateTimeImmutable($creationInstant);
         }
 
@@ -210,7 +211,7 @@ final class PublicationInfo extends AbstractMdrpiElement implements ArrayizableE
 
         if (array_key_exists('creationinstant', $data)) {
             Assert::string($data['creationinstant'], ArrayValidationException::class);
-            Assert::validDateTimeZulu($data['creationinstant'], ArrayValidationException::class);
+            SAMLAssert::validDateTime($data['creationinstant'], ArrayValidationException::class);
             $retval['creationInstant'] = new DateTimeImmutable($data['creationinstant']);
         }
 

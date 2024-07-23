@@ -120,7 +120,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
         Assert::same($xml->namespaceURI, EntityDescriptor::NS, InvalidDOMElementException::class);
 
         $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
-        Assert::nullOrValidDateTimeZulu($validUntil);
+        SAMLAssert::nullOrValidDateTime($validUntil);
 
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);

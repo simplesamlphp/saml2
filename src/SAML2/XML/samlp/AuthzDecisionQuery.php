@@ -131,7 +131,7 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
         $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
 
-        Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
+        SAMLAssert::validDateTime($issueInstant, ProtocolViolationException::class);
         $issueInstant = new DateTimeImmutable($issueInstant);
 
         $issuer = Issuer::getChildrenOfClass($xml);

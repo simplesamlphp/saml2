@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\mdrpi;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -115,7 +116,7 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
             // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
             $registrationInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $registrationInstant, 1);
 
-            Assert::validDateTimeZulu($registrationInstant, ProtocolViolationException::class);
+            SAMLAssert::validDateTime($registrationInstant, ProtocolViolationException::class);
             $registrationInstant = new DateTimeImmutable($registrationInstant);
         }
         $RegistrationPolicy = RegistrationPolicy::getChildrenOfClass($xml);
@@ -188,7 +189,7 @@ final class RegistrationInfo extends AbstractMdrpiElement implements Arrayizable
 
         if (array_key_exists('registrationinstant', $data)) {
             Assert::string($data['registrationinstant'], ArrayValidationException::class);
-            Assert::validDateTimeZulu($data['registrationinstant'], ArrayValidationException::class);
+            SAMLAssert::validDateTime($data['registrationinstant'], ArrayValidationException::class);
             $retval['registrationInstant'] = new DateTimeImmutable($data['registrationinstant']);
         }
 
