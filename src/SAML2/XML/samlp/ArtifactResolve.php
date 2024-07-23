@@ -12,9 +12,9 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
@@ -33,7 +33,7 @@ class ArtifactResolve extends AbstractRequest
     /**
      * Initialize an ArtifactResolve.
      *
-     * @param string $artifact
+     * @param \SimpleSAML\SAML2\XML\samlp\Artifact $artifact
      * @param \DateTimeImmutable $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param string|null $id
@@ -45,7 +45,7 @@ class ArtifactResolve extends AbstractRequest
      * @throws \Exception
      */
     final public function __construct(
-        protected string $artifact,
+        protected Artifact $artifact,
         DateTimeImmutable $issueInstant,
         ?Issuer $issuer = null,
         ?string $id = null,
@@ -54,20 +54,14 @@ class ArtifactResolve extends AbstractRequest
         ?string $consent = null,
         ?Extensions $extensions = null,
     ) {
-        Assert::stringNotEmpty($artifact);
-
         parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
     }
 
 
     /**
      * Retrieve the Artifact in this response.
-     *
-     * @return string artifact.
-     *
-     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
-    public function getArtifact(): string
+    public function getArtifact(): Artifact
     {
         return $this->artifact;
     }
@@ -119,11 +113,12 @@ class ArtifactResolve extends AbstractRequest
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
-        $results = XPath::xpQuery($xml, './saml_protocol:Artifact', XPath::getXPath($xml));
-        $artifact = $results[0]->textContent;
+        $artifact = Artifact::getChildrenOfClass($xml);
+        Assert::minCount($artifact, 1, 'At least one samlp:Artifact is required.', MissingElementException::class);
+        Assert::maxCount($artifact, 1, 'Only one samlp:Artifact is allowed.', TooManyElementsException::class);
 
         $resolve = new static(
-            $artifact,
+            $artifact[0],
             $issueInstant,
             array_pop($issuer),
             $id,
@@ -153,8 +148,7 @@ class ArtifactResolve extends AbstractRequest
         Assert::notEmpty($this->artifact, 'Cannot convert ArtifactResolve to XML without an Artifact set.');
 
         $e = parent::toUnsignedXML($parent);
-        $artifactelement = $e->ownerDocument->createElementNS(C::NS_SAMLP, 'Artifact', $this->getArtifact());
-        $e->appendChild($artifactelement);
+        $this->getArtifact()->toXML($e);
 
         return $e;
     }

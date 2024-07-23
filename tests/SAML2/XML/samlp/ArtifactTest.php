@@ -2,40 +2,32 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\SAML2\XML\samlp;
+namespace SimpleSAML\SAML2\Test\SAML2\XML\samlp;
 
-use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
-use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\Artifact;
-use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
 use function strval;
 
 /**
+ * Class \SimpleSAML\SAML2\XML\samlp\ArtifactTest
+ *
  * @package simplesamlphp/saml2
  */
 #[Group('samlp')]
-#[CoversClass(ArtifactResolve::class)]
-#[CoversClass(AbstractRequest::class)]
-#[CoversClass(AbstractMessage::class)]
+#[CoversClass(Artifact::class)]
 #[CoversClass(AbstractSamlpElement::class)]
-final class ArtifactResolveTest extends TestCase
+final class ArtifactTest extends TestCase
 {
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
-    use SignedElementTestTrait;
-
 
     /**
      */
@@ -43,10 +35,10 @@ final class ArtifactResolveTest extends TestCase
     {
         self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
-        self::$testedClass = ArtifactResolve::class;
+        self::$testedClass = Artifact::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/samlp_ArtifactResolve.xml',
+            dirname(__FILE__, 4) . '/resources/xml/samlp_Artifact.xml',
         );
     }
 
@@ -55,20 +47,11 @@ final class ArtifactResolveTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $issuer = new Issuer('https://ServiceProvider.com/SAML');
-        $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
-
-        $artifactResolve = new ArtifactResolve(
-            new Artifact($artifact),
-            new DateTimeImmutable('2004-01-21T19:00:49Z'),
-            $issuer,
-            '_6c3a4f8b9c2d',
-            '2.0',
-        );
+        $artifact = new Artifact('AAQAAM0ARI+cUaUKAx19/KC3fOV/vznNj8oE0JKKPQC8nTesXxPke7uRy+8=');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($artifactResolve),
+            strval($artifact),
         );
     }
 }

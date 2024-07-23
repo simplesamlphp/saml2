@@ -16,6 +16,7 @@ use SimpleSAML\Module\saml\Message as MSG;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\Artifact;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
 use SimpleSAML\Store\StoreFactory;
@@ -168,7 +169,7 @@ class HTTPArtifact extends Binding
         $issuer = new Issuer($this->spMetadata->getString('entityid'));
 
         // Construct the ArtifactResolve Request
-        $ar = new ArtifactResolve($query['SAMLart'], null, $issuer, null, '2.0', $endpoint['Location']);
+        $ar = new ArtifactResolve(new Artifact($artifact), null, $issuer, null, '2.0', $endpoint['Location']);
 
         // sign the request
         /** @psalm-suppress UndefinedClass */
@@ -193,6 +194,7 @@ class HTTPArtifact extends Binding
 
         $samlResponse->addValidator([get_class($this), 'validateSignature'], $artifactResponse);
 
+        $query = $request->getQueryParams();
         if (isset($query['RelayState'])) {
             $this->setRelayState($query['RelayState']);
         }
