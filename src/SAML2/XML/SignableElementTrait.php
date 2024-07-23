@@ -9,8 +9,8 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmInterface;
 use SimpleSAML\XMLSecurity\Constants as C;
-use SimpleSAML\XMLSecurity\Exception\UnsupportedAlgorithmException;
 use SimpleSAML\XMLSecurity\Exception\RuntimeException;
+use SimpleSAML\XMLSecurity\Exception\UnsupportedAlgorithmException;
 use SimpleSAML\XMLSecurity\Utils\XML;
 use SimpleSAML\XMLSecurity\XML\ds\CanonicalizationMethod;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
@@ -22,7 +22,7 @@ use SimpleSAML\XMLSecurity\XML\ds\SignatureValue;
 use SimpleSAML\XMLSecurity\XML\ds\SignedInfo;
 use SimpleSAML\XMLSecurity\XML\SignableElementTrait as BaseSignableElementTrait;
 
-use function base_encode;
+use function base64_encode;
 
 /**
  * Helper trait for processing signable elements.

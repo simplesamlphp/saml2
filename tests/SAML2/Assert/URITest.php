@@ -7,8 +7,8 @@ namespace SimpleSAML\Test\SAML2\Assert;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Assert\Assert as SAML2Assert;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Assert\Assert as SAML2Assert;
 
 /**
  * Class \SimpleSAML\SAML2\Assert\URITest

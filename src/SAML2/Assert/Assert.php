@@ -56,12 +56,7 @@ final class Assert
         }
 
         try {
-            // Putting Webmozart first, since the most calls will be to their native assertions
-            /*if (method_exists(BaseAssert::class, $name)) {
-                call_user_func_array([BaseAssert::class, $name], $arguments);
-                return;
-            } else
-*/if (method_exists(static::class, $name)) {
+            if (method_exists(static::class, $name)) {
                 call_user_func_array([static::class, $name], $arguments);
                 return;
             } elseif (preg_match('/^nullOr(.*)$/i', $name, $matches)) {
