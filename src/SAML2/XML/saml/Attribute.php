@@ -53,9 +53,15 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
         Assert::allIsInstanceOf($attributeValue, AttributeValue::class, 'Invalid AttributeValue.');
 
         if ($nameFormat === C::NAMEFORMAT_URI) {
-            SAMLAssert::validURI($name, sprintf("Attribute name `%s` does not match its declared format `%s`", $name, $nameFormat));
+            SAMLAssert::validURI(
+                $name,
+                sprintf("Attribute name `%s` does not match its declared format `%s`", $name, $nameFormat),
+            );
         } elseif ($nameFormat === C::NAMEFORMAT_BASIC) {
-            Assert::validNCName($name, sprintf("Attribute name `%s` does not match its declared format `%s`", $name, $nameFormat));
+            Assert::validNCName(
+                $name,
+                sprintf("Attribute name `%s` does not match its declared format `%s`", $name, $nameFormat),
+            );
         }
 
         $this->setAttributesNS($namespacedAttribute);

@@ -6,7 +6,6 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 
 /**
  * Abstract class implementing LocalizedURIType.

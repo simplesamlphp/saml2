@@ -29,7 +29,7 @@ final class DateTimeTest extends TestCase
         try {
             SAML2Assert::validDateTime($timestamp);
             $this->assertTrue($shouldPass);
-        } catch (ProtocolViolationException|SchemaViolationException $e) {
+        } catch (ProtocolViolationException | SchemaViolationException $e) {
             $this->assertFalse($shouldPass);
         }
     }

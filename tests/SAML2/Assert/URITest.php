@@ -29,7 +29,7 @@ final class URITest extends TestCase
         try {
             SAML2Assert::validURI($uri);
             $this->assertTrue($shouldPass);
-        } catch (ProtocolViolationException|SchemaViolationException $e) {
+        } catch (ProtocolViolationException | SchemaViolationException $e) {
             $this->assertFalse($shouldPass);
         }
     }
