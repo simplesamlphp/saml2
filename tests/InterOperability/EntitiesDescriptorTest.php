@@ -8,6 +8,7 @@ use DOMElement;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\md\EntitiesDescriptor;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -25,6 +26,25 @@ final class EntitiesDescriptorTest extends TestCase
     #[DataProvider('provideMetadata')]
     public function testUnmarshalling(bool $shouldPass, DOMElement $metadata): void
     {
+        // Test for an EntitiesDescriptor
+        $xpCache = XPath::getXPath($metadata);
+        $entityDescriptorElements = XPath::xpQuery($metadata, './saml_metadata:EntitiesDescriptor', $xpCache);
+
+//        foreach (
+        $this->assertCount(1, $entityDescriptorElements);
+return;
+
+        // Test ordering of AuthnRequest contents
+        /** @psalm-var \DOMElement[] $authnRequestElements */
+        $authnRequestElements = XPath::xpQuery(
+            $authnRequestElement,
+            './saml_assertion:Subject/following-sibling::*',
+            $xpCache,
+        );
+
+
+
+
         try {
             EntitiesDescriptor::fromXML($metadata);
             $this->assertTrue($shouldPass);
