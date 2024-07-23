@@ -6,9 +6,9 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\StringElementTrait;
 
 use function array_key_first;
@@ -41,7 +41,7 @@ final class GetComplete extends AbstractSamlpElement
      */
     protected function validateContent(string $content): void
     {
-        Assert::validURI($content, SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::validURI($content);
     }
 
 

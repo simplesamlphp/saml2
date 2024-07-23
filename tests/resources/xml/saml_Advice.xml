@@ -2,7 +2,7 @@
   <saml:AssertionIDRef>_Test</saml:AssertionIDRef>
   <saml:AssertionURIRef>urn:x-simplesamlphp:reference</saml:AssertionURIRef>
   <saml:Assertion Version="2.0" ID="_93af655219464fb403b34436cfb0c5cb1d9a5502" IssueInstant="1970-01-01T01:33:31Z">
-    <saml:Issuer>Provider</saml:Issuer>
+    <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
     <saml:Subject>
       <saml:NameID SPNameQualifier="https://sp.example.org/authentication/sp/metadata" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">SomeNameIDValue</saml:NameID>
       <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">

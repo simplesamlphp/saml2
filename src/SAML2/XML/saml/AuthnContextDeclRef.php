@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\XML\StringElementTrait;
 
 /**
@@ -36,6 +35,6 @@ final class AuthnContextDeclRef extends AbstractSamlElement
      */
     protected function validateContent(string $content): void
     {
-        Assert::validURI($content, SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::validURI($content);
     }
 }

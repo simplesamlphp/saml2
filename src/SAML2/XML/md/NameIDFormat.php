@@ -6,9 +6,11 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\StringElementTrait;
+
+use function trim;
 
 /**
  * Class representing a md:NameIDFormat element.
@@ -38,7 +40,7 @@ final class NameIDFormat extends AbstractMdElement
      */
     protected function validateContent(string $content): void
     {
-        Assert::validURI($content, SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::validURI($content);
     }
 
 
@@ -56,6 +58,6 @@ final class NameIDFormat extends AbstractMdElement
         Assert::same($xml->localName, 'NameIDFormat', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, NameIDFormat::NS, InvalidDOMElementException::class);
 
-        return new static($xml->textContent);
+        return new static(trim($xml->textContent));
     }
 }

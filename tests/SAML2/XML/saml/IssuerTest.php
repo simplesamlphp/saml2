@@ -55,9 +55,9 @@ final class IssuerTest extends TestCase
     public function testMarshalling(): void
     {
         $issuer = new Issuer(
-            'TheIssuerValue',
-            'TheNameQualifier',
-            'TheSPNameQualifier',
+            'urn:x-simplesamlphp:issuer',
+            'urn:x-simplesamlphp:namequalifier',
+            'urn:x-simplesamlphp:spnamequalifier',
             'urn:the:format',
             'TheSPProvidedID',
         );
@@ -78,9 +78,9 @@ final class IssuerTest extends TestCase
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
         new Issuer(
-            'TheIssuerValue',
-            'TheNameQualifier',
-            'TheSPNameQualifier',
+            'urn:x-simplesamlphp:issuer',
+            'urn:x-simplesamlphp:namequalifier',
+            'urn:x-simplesamlphp:spnamequalifier',
             C::NAMEID_ENTITY,
             'TheSPProvidedID',
         );
@@ -97,9 +97,9 @@ final class IssuerTest extends TestCase
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
         new Issuer(
-            value: 'TheIssuerValue',
-            NameQualifier: 'TheNameQualifier',
-            SPNameQualifier: 'TheSPNameQualifier',
+            value: 'urn:x-simplesamlphp:issuer',
+            NameQualifier: 'urn:x-simplesamlphp:namequalifier',
+            SPNameQualifier: 'urn:x-simplesamlphp:spnamequalifier',
             SPProvidedID: 'TheSPProvidedID',
         );
     }

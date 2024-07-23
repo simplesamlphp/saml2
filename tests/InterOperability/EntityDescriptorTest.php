@@ -42,7 +42,7 @@ final class EntityDescriptorTest extends TestCase
     public static function provideMetadata(): array
     {
         return [
-            // Known bug: Microsoft doensn't produce a schema-valid XML
+            // Known bug: Microsoft doesn't produce a schema-valid XML
             // This was reported to them in 2022: TrackingID#2210040050001949
             'MicrosoftOnline' => [
                 true,

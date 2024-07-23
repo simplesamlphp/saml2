@@ -7,10 +7,9 @@ namespace SimpleSAML\SAML2\XML\md;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\XsNamespace as NS;
@@ -53,13 +52,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         protected array $keyDescriptor = [],
         array $namespacedAttribute = [],
     ) {
-        Assert::validURI($affiliationOwnerId, SchemaViolationException::class); // Covers the empty string
-        Assert::maxLength(
-            $affiliationOwnerId,
-            C::ENTITYID_MAX_LENGTH,
-            sprintf('The AffiliationOwnerID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
-            ProtocolViolationException::class,
-        );
+        SAMLAssert::validEntityID($affiliationOwnerId);
         Assert::notEmpty($affiliateMember, 'List of affiliated members must not be empty.');
         Assert::maxCount($affiliateMember, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($affiliateMember, AffiliateMember::class);
@@ -128,7 +121,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         $keyDescriptors = KeyDescriptor::getChildrenOfClass($xml);
 
         $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
-        Assert::nullOrValidDateTimeZulu($validUntil);
+        SAMLAssert::nullOrValidDateTime($validUntil);
 
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(

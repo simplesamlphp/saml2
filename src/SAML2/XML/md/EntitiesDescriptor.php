@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -104,7 +105,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument
         Assert::same($xml->namespaceURI, EntitiesDescriptor::NS, InvalidDOMElementException::class);
 
         $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
-        Assert::nullOrValidDateTimeZulu($validUntil);
+        SAMLAssert::nullOrValidDateTime($validUntil);
 
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(

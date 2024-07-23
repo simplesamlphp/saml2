@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -171,7 +172,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor
 
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
         $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
-        Assert::nullOrValidDateTimeZulu($validUntil);
+        SAMLAssert::nullOrValidDateTime($validUntil);
 
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(

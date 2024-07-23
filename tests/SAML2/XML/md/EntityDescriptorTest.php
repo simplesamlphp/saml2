@@ -40,7 +40,6 @@ use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -327,7 +326,7 @@ XML
      */
     public function testMarshallingWithEmptyEntityID(): void
     {
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
         new EntityDescriptor(
             entityId: '',
             affiliationDescriptor: new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_SP)]),
@@ -342,7 +341,7 @@ XML
     {
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
-            sprintf('The entityID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
+            sprintf('An entityID cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
         );
 
         new EntityDescriptor(

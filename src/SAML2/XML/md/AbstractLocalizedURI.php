@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 
 /**
  * Abstract class implementing LocalizedURIType.
@@ -71,7 +71,7 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
      */
     protected function validateContent(string $content): void
     {
-        Assert::validURI($this->sanitizeContent($content), SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::validURI($this->sanitizeContent($content));
     }
 
 
@@ -90,7 +90,7 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
 
         $value = $data[$lang];
         Assert::stringNotEmpty($value);
-        Assert::validURI($value);
+        SAMLAssert::validURI($value);
 
         return new static($lang, $value);
     }

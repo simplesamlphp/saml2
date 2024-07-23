@@ -3,8 +3,6 @@
 
 require_once(dirname(__FILE__, 3) . '/vendor/autoload.php');
 
-use DateTimeImmutable;
-use DateTimeZone;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\Response;
@@ -25,6 +23,7 @@ $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
 
 $unsignedAssertion = Assertion::fromXML($document->documentElement);
 $unsignedAssertion->sign($signer);
+$signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
 
 $unsignedResponse = new Response(
     issueInstant: new DateTimeImmutable('now', new DateTimeZone('Z')),
@@ -34,7 +33,7 @@ $unsignedResponse = new Response(
     inResponseTo: 'PHPUnit',
     destination: C::ENTITY_OTHER,
     consent: C::ENTITY_SP,
-    assertions: [$unsignedAssertion],
+    assertions: [$signedAssertion],
 );
 
 echo $unsignedResponse->toXML()->ownerDocument->saveXML();

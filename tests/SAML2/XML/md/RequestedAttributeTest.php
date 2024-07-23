@@ -58,7 +58,7 @@ final class RequestedAttributeTest extends TestCase
         $ra = new RequestedAttribute(
             'attr',
             true,
-            C::NAMEFORMAT_URI,
+            C::NAMEFORMAT_BASIC,
             'Attribute',
             [new AttributeValue('value1')],
         );

@@ -107,7 +107,7 @@ final class AssertionTest extends TestCase
     public function testMarshalling(): void
     {
         // Create an Issuer
-        $issuer = new Issuer('Provider');
+        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
 
         // Create the conditions
         $conditions = new Conditions(
@@ -203,7 +203,7 @@ final class AssertionTest extends TestCase
                 Version="2.0"
                 IssueInstant="2010-03-05T13:34:28Z"
 >
-  <saml:Issuer>testIssuer</saml:Issuer>
+  <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
   <saml:Conditions>
     <saml:AudienceRestriction>
       <saml:Audience>{$entity_sp}</saml:Audience>
@@ -254,7 +254,7 @@ XML;
     public function testMarshallingUnmarshallingChristmas(): void
     {
         // Create an Issuer
-        $issuer = new Issuer('testIssuer');
+        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
 
         // Create Conditions
         $conditions = new Conditions(
@@ -368,7 +368,7 @@ XML;
     public function testMarshallingUnmarshallingAttributeValTypes(): void
     {
         // Create an Issuer
-        $issuer = new Issuer('testIssuer');
+        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
 
         // Create Conditions
         $conditions = new Conditions(
@@ -473,7 +473,7 @@ XML;
                     Version="2.0"
                     ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
                     IssueInstant="1970-01-01T01:33:31Z">
-      <saml:Issuer>Provider</saml:Issuer>
+      <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
       <saml:Subject>
         <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">s00000000:123456789</saml:NameID>
         <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
@@ -540,7 +540,7 @@ XML
                     Version="2.0"
                     ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
                     IssueInstant="1970-01-01T01:33:31Z">
-      <saml:Issuer>Provider</saml:Issuer>
+      <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
       <saml:Conditions/>
       <saml:AttributeStatement>
         <saml:Attribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.10" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
@@ -595,7 +595,7 @@ XML;
                     Version="2.0"
                     ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
                     IssueInstant="1970-01-01T01:33:31Z">
-      <saml:Issuer>Provider</saml:Issuer>
+      <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
       <saml:Conditions/>
       <saml:AttributeStatement>
         <saml:Attribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.10" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
@@ -634,7 +634,7 @@ XML;
                     Version="2.0"
                     ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
                     IssueInstant="1970-01-01T01:33:31Z">
-      <saml:Issuer>Provider</saml:Issuer>
+      <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
       <saml:Conditions/>
       <saml:AttributeStatement>
         <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonTargetedID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
@@ -700,7 +700,7 @@ XML;
 
         // Double-check that we can actually retrieve some basics.
         $this->assertEquals("_93af655219464fb403b34436cfb0c5cb1d9a5502", $verified->getId());
-        $this->assertEquals("Provider", $verified->getIssuer()->getContent());
+        $this->assertEquals("urn:x-simplesamlphp:issuer", $verified->getIssuer()->getContent());
         $this->assertEquals("1970-01-01T01:33:31Z", $verified->getIssueInstant()->format(C::DATETIME_FORMAT));
     }
 
@@ -811,7 +811,7 @@ XML;
                 Version="2.0"
                 IssueInstant="2010-03-05T13:34:28Z"
 >
-  <saml:Issuer>testIssuer</saml:Issuer>
+  <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
   <saml:Conditions>
     <saml:AudienceRestriction>
       <saml:Audience>{$entity_sp}</saml:Audience>
@@ -898,7 +898,7 @@ XML;
                 Version="2.0"
                 IssueInstant="2010-03-05T13:34:28Z"
 >
-  <saml:Issuer>testIssuer</saml:Issuer>
+  <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
   <saml:Subject>
     <saml:NameID Format="{$nameid_transient}">5</saml:NameID>
   </saml:Subject>
@@ -936,7 +936,7 @@ XML;
                 Version="2.0"
                 IssueInstant="2010-03-05T13:34:28Z"
 >
-  <saml:Issuer>testIssuer</saml:Issuer>
+  <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
   <saml:Subject>
     <Something>not a nameid or subject confirmation</Something>
   </saml:Subject>
@@ -976,7 +976,7 @@ XML;
                 Version="2.0"
                 IssueInstant="2010-03-05T13:34:28Z"
 >
-  <saml:Issuer>testIssuer</saml:Issuer>
+  <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
   <saml:Conditions>
     <saml:AudienceRestriction>
       <saml:Audience>{$entity_sp}</saml:Audience>
@@ -1022,7 +1022,7 @@ XML;
                 Version="2.0"
                 IssueInstant="2010-03-05T13:34:28Z"
 >
-  <saml:Issuer>testIssuer</saml:Issuer>
+  <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
   <saml:Conditions>
     <saml:AudienceRestriction>
       <saml:Audience>{$entity_sp}</saml:Audience>
@@ -1073,7 +1073,7 @@ XML;
     public function testNameIdEncryption(): void
     {
         // Create an Issuer
-        $issuer = new Issuer('testIssuer');
+        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
 
         // Create the Conditions
         $conditions = new Conditions(
@@ -1141,7 +1141,7 @@ XML;
     public function testMarshallingElementOrdering(): void
     {
         // Create an Issuer
-        $issuer = new Issuer('testIssuer');
+        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
 
         // Create the conditions
         $conditions = new Conditions(
@@ -1203,7 +1203,7 @@ XML;
         $xpCache = XPath::getXPath($assertionElement);
         $issuerElements = XPath::xpQuery($assertionElement, './saml_assertion:Issuer', $xpCache);
         $this->assertCount(1, $issuerElements);
-        $this->assertEquals('testIssuer', $issuerElements[0]->textContent);
+        $this->assertEquals('urn:x-simplesamlphp:issuer', $issuerElements[0]->textContent);
 
         // Test ordering of Assertion contents
         /** @psalm-var \DOMElement[] $assertionElements */
@@ -1237,7 +1237,7 @@ XML;
                 Version="2.0"
                 IssueInstant="2010-03-05T13:34:28Z"
 >
-  <saml:Issuer>testIssuer</saml:Issuer>
+  <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
   <saml:Conditions>
     <saml:AudienceRestriction>
       <saml:Audience>{$entity_sp}</saml:Audience>

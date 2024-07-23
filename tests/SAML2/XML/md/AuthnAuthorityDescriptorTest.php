@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
 use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
@@ -19,7 +20,6 @@ use SimpleSAML\SAML2\XML\md\AuthnQueryService;
 use SimpleSAML\SAML2\XML\md\NameIDFormat;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
@@ -126,7 +126,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallWithEmptyNameIDFormat(): void
     {
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
         new AuthnAuthorityDescriptor(
             [self::$aqs],
             [C::NS_SAMLP, C::PROTOCOL],
@@ -197,7 +197,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $nidf = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'NameIDFormat');
         /** @psalm-suppress PossiblyNullPropertyAssignment */
         $nidf->item(0)->textContent = '';
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
 
         AuthnAuthorityDescriptor::fromXML($xmlRepresentation->documentElement);
     }

@@ -153,7 +153,7 @@ final class HTTPPostTest extends TestCase
     public function testSendAuthnResponse(): void
     {
         $status = new Status(new StatusCode());
-        $issuer  = new Issuer('testIssuer');
+        $issuer  = new Issuer('urn:x-simplesamlphp:issuer');
 
         $response = new Response(
             issueInstant: self::$clock->now(),

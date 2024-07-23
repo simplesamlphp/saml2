@@ -28,7 +28,7 @@ $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
 );
 
 $unsignedAssertion = new Assertion(
-    issuer: new Issuer('testIssuer'),
+    issuer: new Issuer('urn:x-simplesamlphp:issuer'),
     issueInstant: new DateTimeImmutable('now', new DateTimeZone('Z')),
     id: '_93af655219464fb403b34436cfb0c5cb1d9a5502',
     subject: new Subject(new NameID(
@@ -75,7 +75,7 @@ $signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
 $entityAttributes = new EntityAttributes([
     new Attribute(
         name: 'attrib1',
-        nameFormat: C::NAMEFORMAT_URI,
+        nameFormat: C::NAMEFORMAT_BASIC,
         attributeValue: [new AttributeValue('is'), new AttributeValue('really'), new AttributeValue('cool')],
     ),
     $signedAssertion,

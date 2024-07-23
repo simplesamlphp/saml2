@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\Decision;
@@ -39,7 +40,7 @@ final class AuthzDecisionStatement extends AbstractStatementType
         protected array $action,
         protected ?Evidence $evidence = null,
     ) {
-        Assert::validURI($resource);
+        SAMLAssert::validURI($resource);
         Assert::maxCount($action, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($action, Action::class, SchemaViolationException::class);
     }

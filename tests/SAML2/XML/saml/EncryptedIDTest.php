@@ -188,7 +188,7 @@ final class EncryptedIDTest extends TestCase
         );
 
         // test with a NameID
-        $nameid = new NameID('value', 'name_qualifier');
+        $nameid = new NameID('value', 'urn:x-simplesamlphp:namequalifier');
         $encid = new EncryptedID($nameid->encrypt($encryptor));
         /** @psalm-suppress ArgumentTypeCoercion */
         $doc = DOMDocumentFactory::fromString(strval($encid));
@@ -206,8 +206,8 @@ final class EncryptedIDTest extends TestCase
         // test a custom BaseID that's registered
         $customId = new CustomBaseID(
             [new Audience('urn:some:audience')],
-            'TheNameQualifier',
-            'TheSPNameQualifier',
+            'urn:x-simplesamlphp:namequalifier',
+            'urn:x-simplesamlphp:spnamequalifier',
         );
 
         $encid = new EncryptedID($customId->encrypt($encryptor));

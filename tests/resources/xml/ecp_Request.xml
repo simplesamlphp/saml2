@@ -1,5 +1,5 @@
 <ecp:Request xmlns:ecp="urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp" xmlns:env="http://schemas.xmlsoap.org/soap/envelope/" env:mustUnderstand="1" env:actor="http://schemas.xmlsoap.org/soap/actor/next" ProviderName="PHPUnit" IsPassive="1">
-  <saml:Issuer xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" NameQualifier="TheNameQualifier" SPNameQualifier="TheSPNameQualifier" Format="urn:the:format" SPProvidedID="TheSPProvidedID">TheIssuerValue</saml:Issuer>
+  <saml:Issuer xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" NameQualifier="urn:x-simplesamlphp:namequalifier" SPNameQualifier="urn:x-simplesamlphp:spnamequalifier" Format="urn:the:format" SPProvidedID="TheSPProvidedID">urn:x-simplesamlphp:issuer</saml:Issuer>
   <samlp:IDPList xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol">
     <samlp:IDPEntry ProviderID="urn:some:requester1" Name="testName1" Loc="urn:test:testLoc1"/>
     <samlp:IDPEntry ProviderID="urn:some:requester2" Name="testName2" Loc="urn:test:testLoc2"/>

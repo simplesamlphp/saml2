@@ -12,7 +12,6 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
@@ -70,7 +69,7 @@ final class AffiliateMemberTest extends TestCase
      */
     public function testMarshallingEmptyThrowsException(): void
     {
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
 
         new AffiliateMember('');
     }
@@ -82,7 +81,7 @@ final class AffiliateMemberTest extends TestCase
     {
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
-            sprintf('The AffiliateMember cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
+            sprintf('An entityID cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
         );
 
         new AffiliateMember(str_pad('https://some.entity.org/id', C::ENTITYID_MAX_LENGTH + 1, 'a'));

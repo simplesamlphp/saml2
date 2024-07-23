@@ -59,7 +59,7 @@ final class NameIDPolicyTest extends TestCase
     {
         $nameIdPolicy = new NameIDPolicy(
             'urn:the:format',
-            'TheSPNameQualifier',
+            'urn:x-simplesamlphp:spnamequalifier',
             true,
         );
 

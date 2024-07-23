@@ -8,6 +8,7 @@ use DateTimeImmutable;
 use DOMDocument;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -84,8 +85,8 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     ) {
         Assert::nullOrSame($issueInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::nullOrValidNCName($id); // Covers the empty string
-        Assert::nullOrValidURI($destination); // Covers the empty string
-        Assert::nullOrValidURI($consent); // Covers the empty string
+        SAMLAssert::nullOrValidURI($destination);
+        SAMLAssert::nullOrValidURI($consent);
 
         $this->setExtensions($extensions);
     }

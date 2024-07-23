@@ -122,13 +122,13 @@ final class AuthnRequestTest extends TestCase
 
         // Create Subject
         $subject = new Subject(
-            new Issuer('some issuer'),
+            new Issuer('urn:x-simplesamlphp:issuer'),
         );
 
         // Create NameIDPolicy
         $nameIdPolicy = new NameIDPolicy(
             'urn:the:format',
-            'TheSPNameQualifier',
+            'urn:x-simplesamlphp:spnamequalifier',
             true,
         );
 

@@ -6,9 +6,9 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 
 /**
  * SAML StatusCode data type.
@@ -27,7 +27,7 @@ final class StatusCode extends AbstractSamlpElement
         protected string $Value = C::STATUS_SUCCESS,
         protected array $subCodes = [],
     ) {
-        Assert::validURI($Value, SchemaViolationException::class); // Covers the empty string
+        SAMLAssert::validURI($Value);
         Assert::maxCount($subCodes, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($subCodes, StatusCode::class);
     }

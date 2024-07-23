@@ -64,7 +64,7 @@ final class EntityAttributesTest extends TestCase
     {
         $attribute1 = new Attribute(
             name: 'attrib1',
-            nameFormat: C::NAMEFORMAT_URI,
+            nameFormat: C::NAMEFORMAT_BASIC,
             attributeValue: [
                 new AttributeValue('is'),
                 new AttributeValue('really'),
@@ -73,7 +73,7 @@ final class EntityAttributesTest extends TestCase
         );
 
         // Create an Issuer
-        $issuer = new Issuer('testIssuer');
+        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
 
         // Create the conditions
         $conditions = new Conditions(
@@ -129,7 +129,7 @@ final class EntityAttributesTest extends TestCase
         // Create an assertion
         $unsignedAssertion = new Assertion(
             $issuer,
-            new DateTimeImmutable('2022-10-16T22:51:18Z'),
+            new DateTimeImmutable('2024-07-23T20:35:34Z'),
             '_93af655219464fb403b34436cfb0c5cb1d9a5502',
             $subject,
             $conditions,

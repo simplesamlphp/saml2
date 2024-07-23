@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\mdui;
 
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\XML\StringElementTrait;
 
 /**
@@ -70,7 +70,7 @@ final class GeolocationHint extends AbstractMduiElement
         //     '/^geo:([-+]?\d+(?:\.\d+)?),([-+]?\d+(?:\.\d+)?)(?:\?z=(\d{1,2}))?$/',
         //     'Content is not a valid geolocation:  %s'
         // );
-        // The regex above is incomplete, so for now we only test for a valid URI (according to the schema, anyURI)
-        Assert::validURI($content, SchemaViolationException::class);
+        // The regex above is incomplete, so for now we only test for a valid URI
+        SAMLAssert::validURI($content);
     }
 }

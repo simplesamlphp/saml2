@@ -80,8 +80,8 @@ final class BaseIDTest extends TestCase
     {
         $baseId = new CustomBaseID(
             [new Audience('urn:some:audience')],
-            'TheNameQualifier',
-            'TheSPNameQualifier',
+            'urn:x-simplesamlphp:namequalifier',
+            'urn:x-simplesamlphp:spnamequalifier',
         );
 
         $this->assertEquals(
@@ -102,8 +102,8 @@ final class BaseIDTest extends TestCase
         $baseId = AbstractBaseID::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertInstanceOf(CustomBaseID::class, $baseId);
-        $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
-        $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
+        $this->assertEquals('urn:x-simplesamlphp:namequalifier', $baseId->getNameQualifier());
+        $this->assertEquals('urn:x-simplesamlphp:spnamequalifier', $baseId->getSPNameQualifier());
         $this->assertEquals('ssp:CustomBaseIDType', $baseId->getXsiType());
 
         $audience = $baseId->getAudience();
@@ -127,8 +127,8 @@ final class BaseIDTest extends TestCase
         $baseId = AbstractBaseID::fromXML($element);
 
         $this->assertInstanceOf(UnknownID::class, $baseId);
-        $this->assertEquals('TheNameQualifier', $baseId->getNameQualifier());
-        $this->assertEquals('TheSPNameQualifier', $baseId->getSPNameQualifier());
+        $this->assertEquals('urn:x-simplesamlphp:namequalifier', $baseId->getNameQualifier());
+        $this->assertEquals('urn:x-simplesamlphp:spnamequalifier', $baseId->getSPNameQualifier());
         $this->assertEquals('urn:x-simplesamlphp:namespace:UnknownBaseIDType', $baseId->getXsiType());
 
         $chunk = $baseId->getRawIdentifier();

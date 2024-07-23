@@ -53,9 +53,9 @@ final class RequestTest extends TestCase
     public function testMarshalling(): void
     {
         $issuer = new Issuer(
-            'TheIssuerValue',
-            'TheNameQualifier',
-            'TheSPNameQualifier',
+            'urn:x-simplesamlphp:issuer',
+            'urn:x-simplesamlphp:namequalifier',
+            'urn:x-simplesamlphp:spnamequalifier',
             'urn:the:format',
             'TheSPProvidedID',
         );

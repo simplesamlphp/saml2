@@ -79,7 +79,7 @@ final class PrivacyStatementURLTest extends TestCase
     public function testUnmarshallingFailsInvalidURL(): void
     {
         $document = clone self::$xmlRepresentation;
-        $document->documentElement->textContent = 'this is no url';
+        $document->documentElement->textContent = 'https://a⒈com';
 
         $this->expectException(SchemaViolationException::class);
         PrivacyStatementURL::fromXML($document->documentElement);

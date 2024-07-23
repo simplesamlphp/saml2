@@ -3,8 +3,6 @@
 
 require_once(dirname(__FILE__, 3) . '/vendor/autoload.php');
 
-use DateTimeImmutable;
-use DateTimeZone;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\Response;
