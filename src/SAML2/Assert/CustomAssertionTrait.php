@@ -36,7 +36,7 @@ trait CustomAssertionTrait
         try {
             BaseAssert::validDateTime($value, '\'%s\' is not a valid xs:dateTime');
         } catch (AssertionFailedException $e) {
-            throw new SchemaValidationException(sprintf(
+            throw new SchemaViolationException(sprintf(
                 $e->getMessage(),
                 $value,
             ));
