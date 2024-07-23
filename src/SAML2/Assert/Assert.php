@@ -6,9 +6,9 @@ namespace SimpleSAML\SAML2\Assert;
 
 use BadMethodCallException; // Requires ext-spl
 use InvalidArgumentException; // Requires ext-spl
-use Throwable;
 use SimpleSAML\Assert\Assert as BaseAssert;
 use SimpleSAML\Assert\AssertionFailedException;
+use Throwable;
 
 use function array_pop;
 use function array_unshift;

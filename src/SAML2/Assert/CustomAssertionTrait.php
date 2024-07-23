@@ -16,6 +16,8 @@ use function sprintf;
  */
 trait CustomAssertionTrait
 {
+    private const SCHEME_REGEX = '/^([a-z][a-z0-9\+\-\.]+[:])/i';
+
     /***********************************************************************************
      *  NOTE:  Custom assertions may be added below this line.                         *
      *         They SHOULD be marked as `private` to ensure the call is forced         *
@@ -74,7 +76,7 @@ trait CustomAssertionTrait
             BaseAssert::notWhitespaceOnly($value, $message ?: '\'%s\' is not a SAML2-compliant URI');
 
             // If it doesn't have a scheme, it's not an absolute URI
-            BaseAssert::regex($value, '/^([a-z][a-z0-9\+\-\.]+[:])/i', $message ?: '\'%s\' is not a SAML2-compliant URI');
+            BaseAssert::regex($value, self::SCHEME_REGEX, $message ?: '\'%s\' is not a SAML2-compliant URI');
         } catch (AssertionFailedException $e) {
             throw new ProtocolViolationException(sprintf(
                 $e->getMessage(),

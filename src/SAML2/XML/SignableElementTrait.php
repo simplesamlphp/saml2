@@ -14,12 +14,12 @@ use SimpleSAML\XMLSecurity\Exception\UnsupportedAlgorithmException;
 use SimpleSAML\XMLSecurity\Utils\XML;
 use SimpleSAML\XMLSecurity\XML\ds\CanonicalizationMethod;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
-use SimpleSAML\XMLSecurity\XML\ds\Transform;
-use SimpleSAML\XMLSecurity\XML\ds\Transforms;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XML\ds\SignatureMethod;
 use SimpleSAML\XMLSecurity\XML\ds\SignatureValue;
 use SimpleSAML\XMLSecurity\XML\ds\SignedInfo;
+use SimpleSAML\XMLSecurity\XML\ds\Transform;
+use SimpleSAML\XMLSecurity\XML\ds\Transforms;
 use SimpleSAML\XMLSecurity\XML\SignableElementTrait as BaseSignableElementTrait;
 
 use function base64_encode;
