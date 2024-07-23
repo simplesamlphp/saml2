@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -38,12 +37,6 @@ final class AffiliateMember extends AbstractMdElement
      */
     protected function validateContent(string $content): void
     {
-        SAMLAssert::validURI($content);
-        Assert::maxLength(
-            $content,
-            C::ENTITYID_MAX_LENGTH,
-            sprintf('The AffiliateMember cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
-            ProtocolViolationException::class,
-        );
+        SAMLAssert::validEntityID($content);
     }
 }

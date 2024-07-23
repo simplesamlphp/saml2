@@ -318,7 +318,7 @@ final class HTTPRedirectTest extends TestCase
     public function testSendAuthnResponse(): void
     {
         $status = new Status(new StatusCode());
-        $issuer = new Issuer('testIssuer');
+        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
 
         $response = new Response(
             status: $status,
@@ -340,7 +340,7 @@ final class HTTPRedirectTest extends TestCase
     public function testSendAuthnResponseBespokeDestination(): void
     {
         $status = new Status(new StatusCode());
-        $issuer = new Issuer('testIssuer');
+        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
 
         $response = new Response($status, self::$clock->now(), $issuer);
         $hr = new HTTPRedirect();

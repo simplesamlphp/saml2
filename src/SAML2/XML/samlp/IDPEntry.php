@@ -34,7 +34,7 @@ final class IDPEntry extends AbstractSamlpElement
         protected ?string $name = null,
         protected ?string $loc = null,
     ) {
-        SAMLAssert::validURI($providerId);
+        SAMLAssert::validEntityID($providerId);
         Assert::nullOrNotWhitespaceOnly($name);
         SAMLAssert::nullOrValidURI($loc);
     }

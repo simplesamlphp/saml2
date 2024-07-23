@@ -81,7 +81,7 @@ final class AffiliateMemberTest extends TestCase
     {
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
-            sprintf('The AffiliateMember cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
+            sprintf('An entityID cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
         );
 
         new AffiliateMember(str_pad('https://some.entity.org/id', C::ENTITYID_MAX_LENGTH + 1, 'a'));

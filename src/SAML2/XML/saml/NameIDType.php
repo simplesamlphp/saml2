@@ -38,8 +38,8 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
         protected ?string $Format = null,
         protected ?string $SPProvidedID = null,
     ) {
-        Assert::nullOrNotWhitespaceOnly($NameQualifier);
-        Assert::nullOrNotWhitespaceOnly($SPNameQualifier);
+        SAMLAssert::nullOrValidEntityID($NameQualifier);
+        SAMLAssert::nullOrValidEntityID($SPNameQualifier);
         SAMLAssert::nullOrValidURI($Format);
         Assert::nullOrNotWhitespaceOnly($SPProvidedID);
 

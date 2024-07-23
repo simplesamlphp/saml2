@@ -221,8 +221,8 @@ XML
         $subject = new Subject(
             new CustomBaseID(
                 [new Audience('urn:some:audience')],
-                'TheNameQualifier',
-                'TheSPNameQualifier',
+                'urn:x-simplesamlphp:namequalifier',
+                'urn:x-simplesamlphp:spnamequalifier',
             ),
             [
                 new SubjectConfirmation(

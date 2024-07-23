@@ -1,1 +1,1 @@
-<samlp:NameIDPolicy xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" Format="urn:the:format" SPNameQualifier="TheSPNameQualifier" AllowCreate="true"/>
+<samlp:NameIDPolicy xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" Format="urn:the:format" SPNameQualifier="urn:x-simplesamlphp:spnamequalifier" AllowCreate="true"/>

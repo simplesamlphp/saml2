@@ -133,7 +133,7 @@ final class EncryptedAssertionTest extends TestCase
         $assertion = new Assertion(
             id: C::MSGID,
             issueInstant: self::$clock->now(),
-            issuer: new Issuer('Test'),
+            issuer: new Issuer('urn:x-simplesamlphp:issuer'),
             subject: new Subject(new NameID('Someone')),
         );
 

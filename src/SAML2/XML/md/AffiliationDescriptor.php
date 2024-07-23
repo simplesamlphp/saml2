@@ -53,13 +53,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument
         protected array $keyDescriptor = [],
         array $namespacedAttribute = [],
     ) {
-        SAMLAssert::validURI($affiliationOwnerId);
-        Assert::maxLength(
-            $affiliationOwnerId,
-            C::ENTITYID_MAX_LENGTH,
-            sprintf('The AffiliationOwnerID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
-            ProtocolViolationException::class,
-        );
+        SAMLAssert::validEntityID($affiliationOwnerId);
         Assert::notEmpty($affiliateMember, 'List of affiliated members must not be empty.');
         Assert::maxCount($affiliateMember, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($affiliateMember, AffiliateMember::class);

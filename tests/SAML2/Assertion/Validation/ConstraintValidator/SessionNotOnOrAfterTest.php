@@ -39,7 +39,7 @@ final class SessionNotOnOrAfterTest extends TestCase
         self::$clock = Utils::getContainer()->getClock();
 
         // Create an Issuer
-        self::$issuer = new Issuer('testIssuer');
+        self::$issuer = new Issuer('urn:x-simplesamlphp:issuer');
     }
 
 

@@ -41,7 +41,7 @@ final class RequesterID extends AbstractSamlpElement
      */
     protected function validateContent(string $content): void
     {
-        SAMLAssert::validURI($content);
+        SAMLAssert::validEntityID($content);
     }
 
 

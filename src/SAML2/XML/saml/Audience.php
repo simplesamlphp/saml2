@@ -38,7 +38,7 @@ final class Audience extends AbstractSamlElement
      */
     protected function validateContent(string $content): void
     {
-        SAMLAssert::validURI($content);
+        SAMLAssert::validEntityID($content);
     }
 
 

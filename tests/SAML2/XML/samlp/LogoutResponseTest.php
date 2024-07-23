@@ -59,7 +59,7 @@ final class LogoutResponseTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $issuer = new Issuer('max.example.org');
+        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
         $status = new Status(new StatusCode(C::STATUS_SUCCESS));
 
         $logoutResponse = new LogoutResponse(

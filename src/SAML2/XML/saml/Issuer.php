@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Constants as C;
 
 /**
@@ -56,6 +57,8 @@ final class Issuer extends NameIDType
                 [$NameQualifier, $SPNameQualifier, $SPProvidedID],
                 'Illegal combination of attributes being used',
             );
+
+            SamlAssert::validEntityID($value);
         }
 
         parent::__construct($value, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);

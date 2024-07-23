@@ -104,7 +104,7 @@ final class AbstractStatusResponseTest extends TestCase
             new StatusMessage('OurMessageText'),
         );
 
-        $issuer = new Issuer('some issuer');
+        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
 
         $scope = new Scope("scope");
 
@@ -153,7 +153,7 @@ final class AbstractStatusResponseTest extends TestCase
                 Version="2.0"
                 IssueInstant="2007-12-10T11:39:48Z"
                 Destination="http://somewhere.example.org/simplesaml/saml2/sp/AssertionConsumerService.php">
-    <saml:Issuer>max.example.org</saml:Issuer>
+    <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
     <samlp:Status>
         <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Responder" />
         <samlp:StatusMessage>Something is wrong...</samlp:StatusMessage>
@@ -188,7 +188,7 @@ XML;
                 Version="2.0"
                 IssueInstant="2007-12-10T11:39:48Z"
                 Destination="http://somewhere.example.org/simplesaml/saml2/sp/AssertionConsumerService.php">
-    <saml:Issuer>max.example.org</saml:Issuer>
+    <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
     <samlp:Status>
         <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success" />
     </samlp:Status>
@@ -257,14 +257,14 @@ XML;
                 Version="2.0"
                 IssueInstant="2007-12-10T11:39:48Z"
                 Destination="http://somewhere.example.org/simplesaml/saml2/sp/AssertionConsumerService.php">
-    <saml:Issuer>max.example.org</saml:Issuer>
+    <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
     <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                     xmlns:xs="http://www.w3.org/2001/XMLSchema"
                     ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5c"
                     Version="2.0"
                     IssueInstant="2007-12-10T11:39:48Z"
                     >
-        <saml:Issuer>max.example.org</saml:Issuer>
+        <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
      </saml:Assertion>
 </samlp:Response>
 XML;
@@ -289,7 +289,7 @@ XML;
                 Version="2.0"
                 IssueInstant="2007-12-10T11:39:48Z"
                 Destination="http://somewhere.example.org/simplesaml/saml2/sp/AssertionConsumerService.php">
-    <saml:Issuer>max.example.org</saml:Issuer>
+    <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
     <samlp:Status>
         <samlp:StatusMessage>Something is wrong...</samlp:StatusMessage>
     </samlp:Status>

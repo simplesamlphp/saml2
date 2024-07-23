@@ -68,13 +68,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.',
             ProtocolViolationException::class,
         );
-        SAMLAssert::validURI($entityId);
-        Assert::maxLength(
-            $entityId,
-            C::ENTITYID_MAX_LENGTH,
-            sprintf('The entityID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
-            ProtocolViolationException::class,
-        );
+        SAMLAssert::validEntityID($entityId);
         Assert::maxCount($roleDescriptor, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $roleDescriptor,

@@ -341,7 +341,7 @@ XML
     {
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
-            sprintf('The entityID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
+            sprintf('An entityID cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
         );
 
         new EntityDescriptor(

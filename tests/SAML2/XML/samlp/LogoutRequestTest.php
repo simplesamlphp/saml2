@@ -153,7 +153,7 @@ final class LogoutRequestTest extends TestCase
         $issuer = $logoutRequest->getIssuer();
 
         $this->assertInstanceOf(Issuer::class, $issuer);
-        $this->assertEquals('urn:test:TheIssuer', $issuer->getContent());
+        $this->assertEquals('urn:x-simplesamlphp:issuer', $issuer->getContent());
 
         $encid = $logoutRequest->getIdentifier();
         $this->assertInstanceOf(EncryptedID::class, $encid);
@@ -206,7 +206,7 @@ final class LogoutRequestTest extends TestCase
     ID="SomeIDValue"
     Version="2.0"
     IssueInstant="2010-07-22T11:30:19Z">
-  <saml:Issuer>TheIssuer</saml:Issuer>
+  <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
   <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>
 </samlp:LogoutRequest>
 XML;
@@ -233,7 +233,7 @@ XML;
     Version="2.0"
     ID="SomeIDValue"
     IssueInstant="2010-07-22T11:30:19Z">
-  <saml:Issuer>TheIssuer</saml:Issuer>
+  <saml:Issuer>urn:x-simplesamlphp</saml:Issuer>
 </samlp:LogoutRequest>
 XML;
         $document = DOMDocumentFactory::fromString($xml);
@@ -258,7 +258,7 @@ XML;
     Version="2.0"
     ID="SomeIDValue"
     IssueInstant="2010-07-22T11:30:19Z">
-  <saml:Issuer>TheIssuer</saml:Issuer>
+  <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
   <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>
   <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">willem</saml:NameID>
 </samlp:LogoutRequest>
@@ -284,7 +284,7 @@ XML;
     ID="SomeIDValue"
     IssueInstant="2010-07-22T11:30:19Z"
     NotOnOrAfter="2018-11-28T19:33:12Z">
-  <saml:Issuer>TheIssuer</saml:Issuer>
+  <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
   <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>
 </samlp:LogoutRequest>
 XML;
@@ -326,7 +326,7 @@ XML;
     IssueInstant="2010-07-22T11:30:19Z"
     NotOnOrAfter="2018-11-28T19:33:12Z"
     Reason="$reason">
-  <saml:Issuer>TheIssuer</saml:Issuer>
+  <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
   <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>
 </samlp:LogoutRequest>
 XML;
@@ -365,7 +365,7 @@ XML;
     Version="2.0"
     ID="SomeIDValue"
     IssueInstant="2010-07-22T11:30:19Z">
-  <saml:Issuer>TheIssuer</saml:Issuer>
+  <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
   <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:unspecified">frits</saml:NameID>
 </samlp:LogoutRequest>
 XML;
