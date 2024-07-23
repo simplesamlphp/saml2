@@ -8,10 +8,7 @@ use DOMElement;
 use Exception;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\md\EntitiesDescriptor;
 use SimpleSAML\SAML2\XML\md\EntityDescriptor;
 use SimpleSAML\XML\DOMDocumentFactory;
 
@@ -51,11 +48,14 @@ final class EntitiesDescriptorTest extends TestCase
             // Test for an EntitiesDescriptor or EntityDescriptor
             $entityDescriptorElements = XPath::xpQuery($metadata, './saml_metadata:EntityDescriptor', $xpCache);
             $entitiesDescriptorElements = XPath::xpQuery($metadata, './saml_metadata:EntitiesDescriptor', $xpCache);
-            $descriptors = array_merge($entityDescriptorElements ?? [], $entitiesDescriptorElement ?? []);
+            $descriptors = array_merge($entityDescriptorElements, $entitiesDescriptorElements);
+
             foreach ($descriptors as $descriptor) {
+                /** @var \DOMElement $descriptor */
                 $this->parseMetadata($descriptor);
             }
         } elseif ($metadata->localName === 'EntityDescriptor') {
+            /** @var \DOMAttr[] $entityID */
             $entityID = XPath::xpQuery($metadata, './@entityID', $xpCache);
 
             try {

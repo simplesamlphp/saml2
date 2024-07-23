@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\StringElementTrait;
 
 /**

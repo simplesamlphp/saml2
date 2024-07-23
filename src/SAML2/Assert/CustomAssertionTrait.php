@@ -15,7 +15,7 @@ use SimpleSAML\XML\Exception\SchemaViolationException;
  */
 trait CustomAssertionTrait
 {
-    private const SCHEME_REGEX = '/^([a-z][a-z0-9\+\-\.]+[:])/i';
+    private static string $scheme_regex = '/^([a-z][a-z0-9\+\-\.]+[:])/i';
 
     /***********************************************************************************
      *  NOTE:  Custom assertions may be added below this line.                         *
@@ -66,7 +66,7 @@ trait CustomAssertionTrait
             BaseAssert::notWhitespaceOnly($value, $message ?: '%s is not a SAML2-compliant URI');
 
             // If it doesn't have a scheme, it's not an absolute URI
-            BaseAssert::regex($value, self::SCHEME_REGEX, $message ?: '%s is not a SAML2-compliant URI');
+            BaseAssert::regex($value, self::$scheme_regex, $message ?: '%s is not a SAML2-compliant URI');
         } catch (AssertionFailedException $e) {
             throw new ProtocolViolationException($e->getMessage());
         }
