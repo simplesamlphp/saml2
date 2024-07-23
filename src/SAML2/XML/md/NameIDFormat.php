@@ -32,42 +32,6 @@ final class NameIDFormat extends AbstractMdElement
 
 
     /**
-     * Get the content of the element.
-     *
-     * @return string
-     */
-    public function getContent(): string
-    {
-        return $this->sanitizeContent($this->getRawContent());
-    }
-
-
-    /**
-     * Get the raw and unsanitized content of the element.
-     *
-     * @return string
-     */
-    public function getRawContent(): string
-    {
-        return $this->content;
-    }
-
-
-    /**
-     * Sanitize the content of the element.
-     *
-     * @param string $content  The unsanitized textContent
-     * @throws \Exception on failure
-     * @return string
-     */
-    protected function sanitizeContent(string $content): string
-    {
-        // We've seen metadata in the wild that had stray whitespace around URIs, causing assertions to fail
-        return trim($content);
-    }
-
-
-    /**
      * Validate the content of the element.
      *
      * @param string $content  The value to go in the XML textContent
@@ -94,6 +58,6 @@ final class NameIDFormat extends AbstractMdElement
         Assert::same($xml->localName, 'NameIDFormat', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, NameIDFormat::NS, InvalidDOMElementException::class);
 
-        return new static($xml->textContent);
+        return new static(trim($xml->textContent));
     }
 }
