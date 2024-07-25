@@ -66,19 +66,19 @@ final class Assert
                 return;
             } elseif (preg_match('/^nullOr(.*)$/i', $name, $matches)) {
                 $method = lcfirst($matches[1]);
-                if (method_exists(BaseAssert::class, $method)) {
-                    call_user_func_array([static::class, 'nullOr'], [[BaseAssert::class, $method], $arguments]);
-                } elseif (method_exists(static::class, $method)) {
+                if (method_exists(static::class, $method)) {
                     call_user_func_array([static::class, 'nullOr'], [[static::class, $method], $arguments]);
+                } elseif (method_exists(BaseAssert::class, $method)) {
+                    call_user_func_array([static::class, 'nullOr'], [[BaseAssert::class, $method], $arguments]);
                 } else {
                     throw new BadMethodCallException(sprintf("Assertion named `%s` does not exists.", $method));
                 }
             } elseif (preg_match('/^all(.*)$/i', $name, $matches)) {
                 $method = lcfirst($matches[1]);
-                if (method_exists(BaseAssert::class, $method)) {
-                    call_user_func_array([static::class, 'all'], [[BaseAssert::class, $method], $arguments]);
-                } elseif (method_exists(static::class, $method)) {
+                if (method_exists(static::class, $method)) {
                     call_user_func_array([static::class, 'all'], [[static::class, $method], $arguments]);
+                } elseif (method_exists(BaseAssert::class, $method)) {
+                    call_user_func_array([static::class, 'all'], [[BaseAssert::class, $method], $arguments]);
                 } else {
                     throw new BadMethodCallException(sprintf("Assertion named `%s` does not exists.", $method));
                 }

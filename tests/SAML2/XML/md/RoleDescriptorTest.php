@@ -36,7 +36,6 @@ use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
@@ -86,6 +85,13 @@ final class RoleDescriptorTest extends TestCase
         ContainerSingleton::setContainer($container);
     }
 
+
+    public function setUp(): void
+    {
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_RoleDescriptor.xml',
+        );
+    }
 
     /**
      */
@@ -213,7 +219,7 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingUnregistered(): void
     {
-        $element = clone self::$xmlRepresentation->documentElement;
+        $element = self::$xmlRepresentation->documentElement;
         $element->setAttributeNS(
             'http://www.w3.org/2000/xmlns/',
             'xmlns:ssp',
@@ -264,15 +270,14 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutSupportedProtocols(): void
     {
-        $xmlRepresentation = clone self::$xmlRepresentation;
-        $xmlRepresentation->documentElement->removeAttribute('protocolSupportEnumeration');
+        self::$xmlRepresentation->documentElement->removeAttribute('protocolSupportEnumeration');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage(
             'Missing \'protocolSupportEnumeration\' attribute on md:RoleDescriptor.',
         );
 
-        UnknownRoleDescriptor::fromXML($xmlRepresentation->documentElement);
+        UnknownRoleDescriptor::fromXML(self::$xmlRepresentation->documentElement);
     }
 
 
@@ -281,12 +286,11 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithEmptySupportedProtocols(): void
     {
-        $xmlRepresentation = clone self::$xmlRepresentation;
-        $xmlRepresentation->documentElement->setAttribute('protocolSupportEnumeration', '');
+        self::$xmlRepresentation->documentElement->setAttribute('protocolSupportEnumeration', '');
 
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
 
-        UnknownRoleDescriptor::fromXML($xmlRepresentation->documentElement);
+        UnknownRoleDescriptor::fromXML(self::$xmlRepresentation->documentElement);
     }
 
 
@@ -295,11 +299,10 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithInvalidErrorURL(): void
     {
-        $xmlRepresentation = clone self::$xmlRepresentation;
-        $xmlRepresentation->documentElement->setAttribute('errorURL', 'not a URL');
+        self::$xmlRepresentation->documentElement->setAttribute('errorURL', 'not a URL');
 
         $this->expectException(ProtocolViolationException::class);
 
-        UnknownRoleDescriptor::fromXML($xmlRepresentation->documentElement);
+        UnknownRoleDescriptor::fromXML(self::$xmlRepresentation->documentElement);
     }
 }
