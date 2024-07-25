@@ -20,6 +20,7 @@ use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
+use function array_merge;
 use function array_pop;
 
 /**
@@ -137,21 +138,6 @@ class Response extends AbstractStatusResponse
             TooManyElementsException::class,
         );
 
-        $assertions = [];
-        foreach ($xml->childNodes as $node) {
-            if ($node->namespaceURI !== C::NS_SAML) {
-                continue;
-            } elseif (!($node instanceof DOMElement)) {
-                continue;
-            }
-
-            if ($node->localName === 'Assertion') {
-                $assertions[] = Assertion::fromXML($node);
-            } elseif ($node->localName === 'EncryptedAssertion') {
-                $assertions[] = EncryptedAssertion::fromXML($node);
-            }
-        }
-
         $response = new static(
             array_pop($status),
             $issueInstant,
@@ -162,7 +148,7 @@ class Response extends AbstractStatusResponse
             $destination,
             $consent,
             empty($extensions) ? null : array_pop($extensions),
-            $assertions,
+            array_merge(Assertion::getChildrenOfClass($xml), EncryptedAssertion::getChildrenOfClass($xml)),
         );
 
         if (!empty($signature)) {
