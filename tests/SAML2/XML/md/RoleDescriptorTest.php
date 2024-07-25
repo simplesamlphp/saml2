@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
 use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
@@ -297,7 +298,7 @@ final class RoleDescriptorTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $xmlRepresentation->documentElement->setAttribute('errorURL', 'not a URL');
 
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
 
         UnknownRoleDescriptor::fromXML($xmlRepresentation->documentElement);
     }
