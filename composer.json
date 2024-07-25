@@ -36,6 +36,8 @@
         "simplesamlphp/xml-soap": "^1.4"
     },
     "require-dev": {
+        "ext-intl": "*",
+
         "beste/clock": "^3.0",
         "mockery/mockery": "^1.6",
         "simplesamlphp/simplesamlphp-test-framework": "^1.7"
