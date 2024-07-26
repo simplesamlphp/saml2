@@ -42,17 +42,35 @@ final class NameID extends NameIDType implements EncryptableElementInterface
         ?string $Format = null,
         ?string $SPProvidedID = null,
     ) {
-        if ($Format === C::NAMEID_EMAIL_ADDRESS) {
-            Assert::email(
-                $value,
-                "The content %s of the NameID was not in the format specified by the Format attribute",
-            );
-        }
-
-        if ($Format === C::NAMEID_ENTITY) {
-            Assert::null($NameQualifier, "Entity Identifier included a disallowed NameQualifier attribute.");
-            Assert::null($SPNameQualifier, "Entity Identifier included a disallowed SPNameQualifier attribute.");
-            Assert::null($SPProvidedID, "Entity Identifier included a disallowed SPProvidedID attribute.");
+        switch ($Format) {
+            case C::NAMEID_EMAIL_ADDRESS:
+                Assert::email(
+                    $value,
+                    "The content %s of the NameID was not in the format specified by the Format attribute",
+                );
+                break;
+            case C::NAMEID_ENTITY:
+                /* 8.3.6: he NameQualifier, SPNameQualifier, and SPProvidedID attributes MUST be omitted. */
+                Assert::null($NameQualifier, "Entity Identifier included a disallowed NameQualifier attribute.");
+                Assert::null($SPNameQualifier, "Entity Identifier included a disallowed SPNameQualifier attribute.");
+                Assert::null($SPProvidedID, "Entity Identifier included a disallowed SPProvidedID attribute.");
+                break;
+            case C::NAMEID_PERSISTENT:
+                /* 8.3.7: Persistent name identifier values MUST NOT exceed a length of 256 characters. */
+                Assert::maxLength(
+                    $value,
+                    256,
+                    "Persistent name identifier values MUST NOT exceed a length of 256 characters.",
+                );
+                break;
+            case C::NAMEID_TRANSIENT:
+                /* 8.3.8: Transient name identifier values MUST NOT exceed a length of 256 characters. */
+                Assert::maxLength(
+                    $value,
+                    256,
+                    "Transient name identifier values MUST NOT exceed a length of 256 characters.",
+                );
+                break;
         }
 
         parent::__construct($value, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
