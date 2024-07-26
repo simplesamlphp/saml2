@@ -21,24 +21,24 @@ class IdentityProvider extends AbstractProvider
      */
     public function __construct(
         string $entityId,
-        EncryptionAlgorithmFactory|KeyTransportAlgorithmFactory|null $encryptionAlgorithmFactory = null,
-        SignatureAlgorithmFactory|null $signatureAlgorithmFactory = null,
         string $signatureAlgorithm = C::SIG_RSA_SHA256,
         array $validatingKeys = [],
-        PrivateKey|null $signingKey = null,
-        PublicKey|SymmetricKey|null $encryptionKey = null,
+        ?PrivateKey $signingKey = null,
+        ?PublicKey $encryptionKey = null,
         array $decryptionKeys = [],
+        ?SymmetricKey $preSharedKey = null,
+        string $preSharedKeyAlgorithm = C::BLOCK_ENC_AES256_GCM,
         array $IDPList = [],
     ) {
         parent::__construct(
             $entityId,
-            $encryptionAlgorithmFactory,
-            $signatureAlgorithmFactory,
             $signatureAlgorithm,
             $validatingKeys,
             $signingKey,
             $encryptionKey,
             $decryptionKeys,
+            $preSharedKey,
+            $preSharedKeyAlgorithm,
             $IDPList,
         );
     }

@@ -28,7 +28,7 @@ $unsignedResponse = new Response(
     issuer: new Issuer('https://IdentityProvider.com'),
     issueInstant: new DateTimeImmutable('now', new DateTimeZone('Z')),
     id: 'abc123',
-    inResponseTo: 'PHPUnit',
+    //inResponseTo: 'PHPUnit',
     destination: C::ENTITY_OTHER,
     consent: C::ENTITY_SP,
     assertions: [$signedAssertion],
