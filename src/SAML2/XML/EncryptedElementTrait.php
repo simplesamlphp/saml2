@@ -12,6 +12,7 @@ use SimpleSAML\XML\AbstractElement;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
+use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementTrait as ParentEncryptedElementTrait;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptedData;
 use SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey;
@@ -37,6 +38,12 @@ trait EncryptedElementTrait
         protected array $decryptionKeys = [],
     ) {
         Assert::allIsInstanceOf($decryptionKeys, EncryptedKey::class, ProtocolViolationException::class);
+
+        /**
+         * 6.2: The <EncryptedData> element's Type attribute SHOULD be used and, if it is
+         * present, MUST have the value http://www.w3.org/2001/04/xmlenc#Element.
+         */
+        Assert::nullOrSame($encryptedData->getType(), C::XMLENC_ELEMENT);
 
         $keyInfo = $this->encryptedData->getKeyInfo();
         if ($keyInfo === null) {
@@ -100,7 +107,6 @@ trait EncryptedElementTrait
         );
 
         $ek = EncryptedKey::getChildrenOfClass($xml);
-
         return new static($ed[0], $ek);
     }
 
