@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\SAML2;
+namespace SimpleSAML\Test\SAML2\Binding;
 
 use Exception;
 use Nyholm\Psr7\ServerRequest;
@@ -10,9 +10,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
+use SimpleSAML\SAML2\Binding\HTTPRedirect;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\HTTPRedirect;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
 use SimpleSAML\SAML2\XML\samlp\AuthnRequest;

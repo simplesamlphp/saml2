@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use SimpleSAML\SAML2\Binding\{HTTPArtifact, HTTPPost, HTTPRedirect, SOAP};
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
@@ -90,9 +91,9 @@ abstract class Binding
             case 'GET':
                 $query = $request->getQueryParams();
                 if (array_key_exists('SAMLRequest', $query) || array_key_exists('SAMLResponse', $query)) {
-                    return new HTTPRedirect();
+                    return new Binding\HTTPRedirect();
                 } elseif (array_key_exists('SAMLart', $query)) {
-                    return new HTTPArtifact();
+                    return new Binding\HTTPArtifact();
                 }
                 break;
 
@@ -106,9 +107,9 @@ abstract class Binding
 
                 $query = $request->getParsedBody();
                 if (array_key_exists('SAMLRequest', $query) || array_key_exists('SAMLResponse', $query)) {
-                    return new HTTPPost();
+                    return new Binding\HTTPPost();
                 } elseif (array_key_exists('SAMLart', $query)) {
-                    return new HTTPArtifact();
+                    return new Binding\HTTPArtifact();
                 } else {
                     /**
                      * The registration information for text/xml is in all respects the same
@@ -120,7 +121,7 @@ abstract class Binding
                         || ($request->hasHeader('SOAPAction')
                             && $request->getHeader('SOAPAction')[0] === 'http://www.oasis-open.org/committees/security')
                     ) {
-                        return new SOAP();
+                        return new Binding\SOAP();
                     }
                 }
                 break;

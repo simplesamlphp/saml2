@@ -1,6 +1,46 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Call to static method addSign\\(\\) on an unknown class SimpleSAML\\\\Module\\\\saml\\\\Message\\.$#"
+			count: 1
+			path: src/SAML2/Binding/HTTPArtifact.php
+
+		-
+			message: "#^Call to static method getInstance\\(\\) on an unknown class SimpleSAML\\\\Configuration\\.$#"
+			count: 2
+			path: src/SAML2/Binding/HTTPArtifact.php
+
+		-
+			message: "#^Call to static method getInstance\\(\\) on an unknown class SimpleSAML\\\\Store\\\\StoreFactory\\.$#"
+			count: 1
+			path: src/SAML2/Binding/HTTPArtifact.php
+
+		-
+			message: "#^Call to static method getMetadataHandler\\(\\) on an unknown class SimpleSAML\\\\Metadata\\\\MetaDataStorageHandler\\.$#"
+			count: 1
+			path: src/SAML2/Binding/HTTPArtifact.php
+
+		-
+			message: "#^Instantiated class SimpleSAML\\\\Utils\\\\HTTP not found\\.$#"
+			count: 1
+			path: src/SAML2/Binding/HTTPArtifact.php
+
+		-
+			message: "#^Parameter \\$key of method SimpleSAML\\\\SAML2\\\\Binding\\\\HTTPArtifact\\:\\:validateSignature\\(\\) has invalid type SimpleSAML\\\\XMLSecurity\\\\XMLSecurityKey\\.$#"
+			count: 1
+			path: src/SAML2/Binding/HTTPArtifact.php
+
+		-
+			message: "#^Parameter \\$sp of method SimpleSAML\\\\SAML2\\\\Binding\\\\HTTPArtifact\\:\\:setSPMetadata\\(\\) has invalid type SimpleSAML\\\\Configuration\\.$#"
+			count: 1
+			path: src/SAML2/Binding/HTTPArtifact.php
+
+		-
+			message: "#^Property SimpleSAML\\\\SAML2\\\\Binding\\\\HTTPArtifact\\:\\:\\$spMetadata has unknown class SimpleSAML\\\\Configuration as its type\\.$#"
+			count: 1
+			path: src/SAML2/Binding/HTTPArtifact.php
+
+		-
 			message: "#^Access to constant AES128_CBC on an unknown class SimpleSAML\\\\XMLSecurity\\\\XMLSecurityKey\\.$#"
 			count: 1
 			path: src/SAML2/Certificate/PrivateKeyLoader.php
@@ -49,46 +89,6 @@ parameters:
 			message: "#^Parameter \\$configuration of method SimpleSAML\\\\SAML2\\\\Configuration\\\\SimpleSAMLConverter\\:\\:pluckConfiguration\\(\\) has invalid type SimpleSAML\\\\Configuration\\.$#"
 			count: 1
 			path: src/SAML2/Configuration/SimpleSAMLConverter.php
-
-		-
-			message: "#^Call to static method addSign\\(\\) on an unknown class SimpleSAML\\\\Module\\\\saml\\\\Message\\.$#"
-			count: 1
-			path: src/SAML2/HTTPArtifact.php
-
-		-
-			message: "#^Call to static method getInstance\\(\\) on an unknown class SimpleSAML\\\\Configuration\\.$#"
-			count: 2
-			path: src/SAML2/HTTPArtifact.php
-
-		-
-			message: "#^Call to static method getInstance\\(\\) on an unknown class SimpleSAML\\\\Store\\\\StoreFactory\\.$#"
-			count: 1
-			path: src/SAML2/HTTPArtifact.php
-
-		-
-			message: "#^Call to static method getMetadataHandler\\(\\) on an unknown class SimpleSAML\\\\Metadata\\\\MetaDataStorageHandler\\.$#"
-			count: 1
-			path: src/SAML2/HTTPArtifact.php
-
-		-
-			message: "#^Instantiated class SimpleSAML\\\\Utils\\\\HTTP not found\\.$#"
-			count: 1
-			path: src/SAML2/HTTPArtifact.php
-
-		-
-			message: "#^Parameter \\$key of method SimpleSAML\\\\SAML2\\\\HTTPArtifact\\:\\:validateSignature\\(\\) has invalid type SimpleSAML\\\\XMLSecurity\\\\XMLSecurityKey\\.$#"
-			count: 1
-			path: src/SAML2/HTTPArtifact.php
-
-		-
-			message: "#^Parameter \\$sp of method SimpleSAML\\\\SAML2\\\\HTTPArtifact\\:\\:setSPMetadata\\(\\) has invalid type SimpleSAML\\\\Configuration\\.$#"
-			count: 1
-			path: src/SAML2/HTTPArtifact.php
-
-		-
-			message: "#^Property SimpleSAML\\\\SAML2\\\\HTTPArtifact\\:\\:\\$spMetadata has unknown class SimpleSAML\\\\Configuration as its type\\.$#"
-			count: 1
-			path: src/SAML2/HTTPArtifact.php
 
 		-
 			message: "#^Instantiated class SimpleSAML\\\\Utils\\\\Config not found\\.$#"

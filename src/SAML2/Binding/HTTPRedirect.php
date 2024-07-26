@@ -2,15 +2,17 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\SAML2;
+namespace SimpleSAML\SAML2\Binding;
 
 use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Binding;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;

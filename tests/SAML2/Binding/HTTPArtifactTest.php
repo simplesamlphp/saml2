@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\SAML2;
+namespace SimpleSAML\Test\SAML2\Binding;
 
 use Exception;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\HTTPArtifact;
+use SimpleSAML\SAML2\Binding\HTTPArtifact;
 
 /**
  * @package simplesamlphp\saml2

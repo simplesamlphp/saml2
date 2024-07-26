@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\SAML2;
+namespace SimpleSAML\Test\SAML2\Binding;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
+use SimpleSAML\SAML2\Binding\SOAP;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
-use SimpleSAML\SAML2\SOAP;
 use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
 use SimpleSAML\SAML2\XML\ecp\Response;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
@@ -77,7 +77,7 @@ SOAP);
     public function testSendArtifactResponse(): void
     {
         $artifact = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 2) . '/resources/xml/samlp_ArtifactResponse.xml',
+            dirname(__FILE__, 3) . '/resources/xml/samlp_ArtifactResponse.xml',
         );
         $message = MessageFactory::fromXML($artifact->documentElement);
 
@@ -102,7 +102,7 @@ SOAP);
     public function testSendResponse(): void
     {
         $response = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 2) . '/resources/xml/samlp_Response.xml',
+            dirname(__FILE__, 3) . '/resources/xml/samlp_Response.xml',
         );
         $message = MessageFactory::fromXML($response->documentElement);
 
@@ -131,7 +131,7 @@ SOAP);
 
 
     /**
-     * @return \SimpleSAML\SAML2\SOAP
+     * @return \SimpleSAML\SAML2\Binding\SOAP
      */
     private function getStubWithInput($input): SOAP
     {
