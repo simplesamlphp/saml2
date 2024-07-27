@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Metadata;
 
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmFactory;
-use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
-use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\Key\{PrivateKey, PublicKey, SymmetricKey};
+
+use function array_keys;
 
 /**
  * Class holding common configuration for SAML2 entities.
@@ -21,38 +21,23 @@ abstract class AbstractProvider
      */
     protected function __construct(
         protected string $entityId,
-        protected EncryptionAlgorithmFactory|KeyTransportAlgorithmFactory|null $encryptionAlgorithmFactory,
-        protected SignatureAlgorithmFactory|null $signatureAlgorithmFactory,
         protected string $signatureAlgorithm,
         protected array $validatingKeys,
-        protected PrivateKey|null $signingKey,
-        protected PublicKey|SymmetricKey|null $encryptionKey,
+        protected ?PrivateKey $signingKey,
+        protected ?PublicKey $encryptionKey,
         protected array $decryptionKeys,
+        protected ?SymmetricKey $preSharedKey,
+        protected string $preSharedKeyAlgorithm,
         protected array $IDPList,
     ) {
         Assert::validURI($entityId);
         Assert::validURI($signatureAlgorithm);
-        Assert::allIsInstanceOfAny($decryptionKeys, [SymmetricKey::class, PrivateKey::class]);
+        Assert::oneOf($signatureAlgorithm, array_keys(C::$RSA_DIGESTS));
+        Assert::allIsInstanceOf($decryptionKeys, PrivateKey::class);
         Assert::allIsInstanceOf($validatingKeys, PublicKey::class);
         Assert::allValidURI($IDPList);
-    }
-
-
-    /**
-     * Retrieve the SignatureAlgorithmFactory used for signing and verifying messages.
-     */
-    public function getSignatureAlgorithmFactory(): ?SignatureAlgorithmFactory
-    {
-        return $this->signatureAlgorithmFactory;
-    }
-
-
-    /**
-     * Retrieve the EncryptionAlgorithmFactory used for encrypting and decrypting messages.
-     */
-    public function getEncryptionAlgorithmFactory(): EncryptionAlgorithmFactory|KeyTransportAlgorithmFactory|null
-    {
-        return $this->encryptionAlgorithmFactory;
+        Assert::nullOrValidURI($preSharedKeyAlgorithm);
+        Assert::oneOf($preSharedKeyAlgorithm, array_keys(C::$BLOCK_CIPHER_ALGORITHMS));
     }
 
 
@@ -88,20 +73,42 @@ abstract class AbstractProvider
 
 
     /**
-     * Get the private key to use for signing messages.
+     * Get the public key to use for encrypting messages.
      *
-     * @return \SimpleSAML\XMLSecurity\Key\PublicKey|\SimpleSAML\XMLSecurity\Key\SymmetricKey|null
+     * @return \SimpleSAML\XMLSecurity\Key\PublicKey|null
      */
-    public function getEncryptionKey(): PublicKey|SymmetricKey|null
+    public function getEncryptionKey(): ?PublicKey
     {
         return $this->encryptionKey;
     }
 
 
     /**
+     * Get the symmetric key to use for encrypting/decrypting messages.
+     *
+     * @return \SimpleSAML\XMLSecurity\Key\SymmetricKey|null
+     */
+    public function getPreSharedKey(): ?SymmetricKey
+    {
+        return $this->preSharedKey;
+    }
+
+
+    /**
+     * Get the symmetric encrypting/decrypting algorithm to use.
+     *
+     * @return string|null
+     */
+    public function getPreSharedKeyAlgorithm(): ?string
+    {
+        return $this->preSharedKeyAlgorithm;
+    }
+
+
+    /**
      * Get the decryption keys to decrypt the assertion with.
      *
-     * @return array<\SimpleSAML\XMLSecurity\Key\PrivateKey|\SimpleSAML\XMLSecurity\Key\SymmetricKey>
+     * @return array<\SimpleSAML\XMLSecurity\Key\PrivateKey>
      */
     public function getDecryptionKeys(): array
     {

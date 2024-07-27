@@ -7,9 +7,6 @@ namespace SimpleSAML\SAML2\Metadata;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\md\AssertionConsumerService;
 use SimpleSAML\XMLSecurity\Constants as C;
-use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmFactory;
-use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
-use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Key\{PrivateKey, PublicKey, SymmetricKey};
 
 /**
@@ -23,27 +20,28 @@ class ServiceProvider extends AbstractProvider
      */
     public function __construct(
         string $entityId,
-        EncryptionAlgorithmFactory|KeyTransportAlgorithmFactory|null $encryptionAlgorithmFactory = null,
-        SignatureAlgorithmFactory|null $signatureAlgorithmFactory = null,
         string $signatureAlgorithm = C::SIG_RSA_SHA256,
         array $validatingKeys = [],
-        PrivateKey|null $signingKey = null,
-        PublicKey|SymmetricKey|null $encryptionKey = null,
+        ?PrivateKey $signingKey = null,
+        ?PublicKey $encryptionKey = null,
         protected array $assertionConsumerService = [],
         array $decryptionKeys = [],
+        ?SymmetricKey $preSharedKey = null,
+        string $preSharedKeyAlgorithm = C::BLOCK_ENC_AES256_GCM,
         array $IDPList = [],
+        protected bool $wantAssertionsSigned = false, // Default false by specification
     ) {
         Assert::allIsInstanceOf($assertionConsumerService, AssertionConsumerService::class);
 
         parent::__construct(
             $entityId,
-            $encryptionAlgorithmFactory,
-            $signatureAlgorithmFactory,
             $signatureAlgorithm,
             $validatingKeys,
             $signingKey,
             $encryptionKey,
             $decryptionKeys,
+            $preSharedKey,
+            $preSharedKeyAlgorithm,
             $IDPList,
         );
     }
@@ -57,5 +55,16 @@ class ServiceProvider extends AbstractProvider
     public function getAssertionConsumerService(): array
     {
         return $this->assertionConsumerService;
+    }
+
+
+    /**
+     * Retrieve the configured value for whether assertions must be signed.
+     *
+     * @return bool
+     */
+    public function getWantAssertionsSigned(): bool
+    {
+        return $this->wantAssertionsSigned;
     }
 }
