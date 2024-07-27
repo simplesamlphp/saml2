@@ -29,6 +29,8 @@ use SimpleSAML\SAML2\XML\saml\{
 };
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
 use SimpleSAML\XMLSecurity\XML\{
     EncryptableElementInterface,
@@ -49,6 +51,9 @@ final class ServiceProvider
     protected ?StateProviderInterface $stateProvider = null;
     protected ?StorageProviderInterface $storageProvider = null;
     protected ?Metadata\IdentityProvider $idpMetadata = null;
+    protected SignatureAlgorithmFactory $signatureAlgorithmFactory;
+    protected EncryptionAlgorithmFactory $encryptionAlgorithmFactory;
+    protected KeyTransportAlgorithmFactory $keyTransportAlgorithmFactory;
 
 
     /**
@@ -75,6 +80,9 @@ final class ServiceProvider
         // Use with caution - will leave any form of constraint validation up to the implementer
         protected readonly bool $bypassConstraintValidation = false,
     ) {
+        $this->signatureAlgorithmFactory = new SignatureAlgorithmFactory();
+        $this->encryptionAlgorithmFactory = new EncryptionAlgorithmFactory();
+        $this->keyTransportAlgorithmFactory = new KeyTransportAlgorithmFactory();
     }
 
 
@@ -205,6 +213,10 @@ final class ServiceProvider
         );
         $responseValidator->validate($verifiedResponse);
 
+        if ($this->encryptedAssertions === true) {
+            Assert::allIsInstanceOf($verifiedResponse->getAssertions(), EncryptedAssertion::class);
+        }
+
         // Decrypt and verify assertions, then rebuild the response.
         $verifiedAssertions = $this->decryptAndVerifyAssertions($verifiedResponse->getAssertions());
         $decryptedResponse = new Response(
@@ -241,6 +253,8 @@ final class ServiceProvider
      */
     protected function decryptAndVerifyAssertions(array $unverifiedAssertions): array
     {
+        $wantAssertionsSigned = $this->spMetadata->getWantAssertionsSigned();
+
         /**
          * See paragraph 6.2 of the SAML 2.0 core specifications for the applicable processing rules
          *
@@ -254,6 +268,11 @@ final class ServiceProvider
                 ? $this->decryptElement($assertion)
                 : $assertion;
 
+            // Verify that the request is signed, if we require this by configuration
+            if ($wantAssertionsSigned === true) {
+                Assert::true($decryptedAssertion->isSigned(), RuntimeException::class);
+            }
+
             // Verify the signature on the assertions (if any)
             $verifiedAssertion = $this->verifyElementSignature($decryptedAssertion);
 
@@ -262,7 +281,12 @@ final class ServiceProvider
 
             if ($nameID instanceof EncryptedID) {
                 $decryptedNameID = $this->decryptElement($nameID);
-                $subject = new Subject($decryptedNameID, $verifiedAssertion->getSubjectConfirmation());
+                // Anything we can't decrypt, we leave up for the application to deal with
+                try {
+                    $subject = new Subject($decryptedNameID, $verifiedAssertion->getSubjectConfirmation());
+                } catch (RuntimeException) {
+                    $subject = $verifiedAssertion->getSubject();
+                }
             } else {
                 $subject = $verifiedAssertion->getSubject();
             }
@@ -274,7 +298,12 @@ final class ServiceProvider
                     $attributes = $statement->getAttributes();
                     if ($statement->hasEncryptedAttributes()) {
                         foreach ($statement->getEncryptedAttributes() as $encryptedAttribute) {
-                            $attributes[] = $this->decryptElement($encryptedAttribute);
+                            // Anything we can't decrypt, we leave up for the application to deal with
+                            try {
+                                $attributes[] = $this->decryptElement($encryptedAttribute);
+                            } catch (RuntimeException) {
+                                $attributes[] = $encryptedAttribute;
+                            }
                         }
                     }
 
@@ -307,13 +336,26 @@ final class ServiceProvider
      */
     protected function decryptElement(EncryptedElementInterface $element): EncryptableElementInterface
     {
-        $factory = $this->spMetadata->getEncryptionAlgorithmFactory();
+        // TODO: When CBC-mode encryption is used, the assertion OR the Response must be signed
+        $factory = $this->encryptionAlgorithmFactory;
 
-        $encryptionAlgorithm = ($factory instanceof EncryptionAlgorithmFactory)
-            ? $element->getEncryptedData()->getEncryptionMethod()
-            : $element->getEncryptedKey()->getEncryptionMethod();
+        // If the IDP has a pre-shared key, try decrypting with that
+        $preSharedKey = $this->idpMetadata->getPreSharedKey();
+        if ($preSharedKey !== null) {
+            $encryptionAlgorithm = $element?->getEncryptedKey()?->getEncryptionMethod()
+              ?? $this->idpMetadata->getPreSharedKeyAlgorithm();
 
-        foreach ($this->spMetadata->getDecriptionKeys() as $decryptionKey) {
+            $decryptor = $factory->getAlgorithm($encryptionAlgorithm, $preSharedKey);
+            try {
+                return $element->decrypt($decryptor);
+            } catch (Exception $e) {
+                // Continue to try decrypting with asymmetric keys.
+            }
+        }
+
+        $encryptionAlgorithm = $element->getEncryptedKey()->getEncryptionMethod()->getAlgorithm();
+        foreach ($this->spMetadata->getDecryptionKeys() as $decryptionKey) {
+            $factory = $this->keyTransportAlgorithmFactory;
             $decryptor = $factory->getAlgorithm($encryptionAlgorithm, $decryptionKey);
             try {
                 return $element->decrypt($decryptor);
@@ -339,11 +381,10 @@ final class ServiceProvider
      */
     protected function verifyElementSignature(SignedElementInterface $element): SignableElementInterface
     {
-        $factory = $this->spMetadata->getSignatureAlgorithmFactory();
         $signatureAlgorithm = $element->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm();
 
         foreach ($this->idpMetadata->getValidatingKeys() as $validatingKey) {
-            $verifier = $factory->getAlgorithm($signatureAlgorithm, $validatingKey);
+            $verifier = $this->signatureAlgorithmFactory->getAlgorithm($signatureAlgorithm, $validatingKey);
 
             try {
                 return $element->verify($verifier);
