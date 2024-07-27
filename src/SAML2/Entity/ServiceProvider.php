@@ -54,7 +54,7 @@ final class ServiceProvider
     protected SignatureAlgorithmFactory $signatureAlgorithmFactory;
     protected EncryptionAlgorithmFactory $encryptionAlgorithmFactory;
     protected KeyTransportAlgorithmFactory $keyTransportAlgorithmFactory;
-
+    protected bool $responseWasSigned;
 
     /**
      * @param bool $encryptedAssertions  Whether assertions must be encrypted
@@ -160,7 +160,8 @@ final class ServiceProvider
         }
 
         // Verify the signature (if any)
-        $verifiedResponse = $rawResponse->isSigned() ? $this->verifyElementSignature($rawResponse) : $rawResponse;
+        $this->responseWasSigned = $rawResponse->isSigned();
+        $verifiedResponse = $this->responseWasSigned ? $this->verifyElementSignature($rawResponse) : $rawResponse;
 
         $state = null;
         $stateId = $verifiedResponse->getInResponseTo();
