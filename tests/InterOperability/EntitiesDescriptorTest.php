@@ -63,8 +63,8 @@ final class EntitiesDescriptorTest extends TestCase
             } catch (Exception $e) {
                 $this->failures = $this->failures + 1;
 
-                echo "Failure: " . $entityID[0]->value . PHP_EOL;
-                echo "         " . $e->getMessage() . PHP_EOL;
+                echo "EntityID: " . $entityID[0]->value . PHP_EOL;
+                echo "          " . $e->getMessage() . PHP_EOL;
                 ob_flush();
             }
         } else {
