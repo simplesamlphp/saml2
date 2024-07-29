@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML;
 
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\XMLSecurity\Exception\ReferenceValidationFailedException;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XML\SignedElementTrait as BaseSignedElementTrait;
@@ -46,5 +47,12 @@ trait SignedElementTrait
         );
 
         $this->signature = $signature;
+    }
+
+
+    public function getBlacklistedAlgorithms(): ?array
+    {
+        $container = ContainerSingleton::getInstance();
+        return $container->getBlacklistedEncryptionAlgorithms();
     }
 }

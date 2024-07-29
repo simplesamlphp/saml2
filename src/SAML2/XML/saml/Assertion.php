@@ -8,10 +8,10 @@ use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\EncryptableElementTrait;
 use SimpleSAML\SAML2\XML\SignableElementTrait;
 use SimpleSAML\SAML2\XML\SignedElementTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -21,7 +21,6 @@ use SimpleSAML\XML\Utils\Random as RandomUtils;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
-use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
@@ -40,7 +39,10 @@ final class Assertion extends AbstractSamlElement implements
     SignableElementInterface,
     SignedElementInterface
 {
-    use EncryptableElementTrait;
+    use EncryptableElementTrait {
+        EncryptableElementTrait::getBlacklistedAlgorithms insteadof SignedElementTrait;
+        EncryptableElementTrait::getBlacklistedAlgorithms insteadof SignableElementTrait;
+    }
     use SignableElementTrait;
     use SignedElementTrait;
 
@@ -217,13 +219,6 @@ final class Assertion extends AbstractSamlElement implements
     protected function getOriginalXML(): DOMElement
     {
         return $this->xml ?? $this->toUnsignedXML();
-    }
-
-
-    public function getBlacklistedAlgorithms(): ?array
-    {
-        $container = ContainerSingleton::getInstance();
-        return $container->getBlacklistedEncryptionAlgorithms();
     }
 
 

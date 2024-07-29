@@ -9,7 +9,6 @@ use DOMDocument;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
@@ -36,7 +35,9 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 {
     use ExtendableElementTrait;
     use SignableElementTrait;
-    use SignedElementTrait;
+    use SignedElementTrait {
+        SignedElementTrait::getBlacklistedAlgorithms insteadof SignableElementTrait;
+    }
 
 
     /**
@@ -207,16 +208,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     protected function getOriginalXML(): DOMElement
     {
         return $this->xml ?? $this->toUnsignedXML();
-    }
-
-
-    /**
-     * @return string[]|null
-     */
-    public function getBlacklistedAlgorithms(): ?array
-    {
-        $container = ContainerSingleton::getInstance();
-        return $container->getBlacklistedEncryptionAlgorithms();
     }
 
 

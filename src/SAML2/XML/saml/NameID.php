@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\XML\EncryptableElementTrait;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
-use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
 
 use function array_change_key_case;
 use function array_filter;
@@ -74,13 +73,6 @@ final class NameID extends NameIDType implements EncryptableElementInterface
         }
 
         parent::__construct($value, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
-    }
-
-
-    public function getBlacklistedAlgorithms(): ?array
-    {
-        $container = ContainerSingleton::getInstance();
-        return $container->getBlacklistedEncryptionAlgorithms();
     }
 
 

@@ -7,14 +7,13 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\XML\EncryptableElementTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\XsNamespace as NS;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
-use SimpleSAML\XMLSecurity\XML\EncryptableElementTrait;
 
 /**
  * Class representing SAML 2 Attribute.
@@ -109,13 +108,6 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
     public function getAttributeValues(): array
     {
         return $this->attributeValue;
-    }
-
-
-    public function getBlacklistedAlgorithms(): ?array
-    {
-        $container = ContainerSingleton::getInstance();
-        return $container->getBlacklistedEncryptionAlgorithms();
     }
 
 

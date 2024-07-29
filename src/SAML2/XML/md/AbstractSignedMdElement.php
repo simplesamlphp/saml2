@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\XML\SignableElementTrait;
 use SimpleSAML\SAML2\XML\SignedElementTrait;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
@@ -23,7 +22,9 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements
     SignedElementInterface
 {
     use SignableElementTrait;
-    use SignedElementTrait;
+    use SignedElementTrait {
+        SignedElementTrait::getBlacklistedAlgorithms insteadof SignableElementTrait;
+    }
 
     /**
      * The original signed XML
@@ -52,16 +53,6 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements
     protected function setXML(DOMElement $xml): void
     {
         $this->xml = $xml;
-    }
-
-
-    /**
-     * @return array|null
-     */
-    public function getBlacklistedAlgorithms(): ?array
-    {
-        $container = ContainerSingleton::getInstance();
-        return $container->getBlacklistedEncryptionAlgorithms();
     }
 
 

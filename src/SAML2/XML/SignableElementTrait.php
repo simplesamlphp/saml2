@@ -122,4 +122,11 @@ trait SignableElementTrait
         $this->signature = new Signature($signedInfo, new SignatureValue($signedData), $this->keyInfo);
         return DOMDocumentFactory::fromString($canonicalDocument)->documentElement;
     }
+
+
+    public function getBlacklistedAlgorithms(): ?array
+    {
+        $container = ContainerSingleton::getInstance();
+        return $container->getBlacklistedEncryptionAlgorithms();
+    }
 }
