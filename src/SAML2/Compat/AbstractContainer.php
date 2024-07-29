@@ -10,6 +10,9 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 use SimpleSAML\XML\AbstractElement;
 use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 
 use function array_key_exists;
 use function implode;
@@ -24,7 +27,11 @@ abstract class AbstractContainer
     protected array $registry = [];
 
     /** @var array|null */
-    protected ?array $blacklistedEncryptionAlgorithms;
+    protected ?array $blacklistedEncryptionAlgorithms = [
+        EncryptionAlgorithmFactory::DEFAULT_BLACKLIST,
+        KeyTransportAlgorithmFactory::DEFAULT_BLACKLIST,
+        SignatureAlgorithmFactory::DEFAULT_BLACKLIST,
+    ];
 
 
     /**
