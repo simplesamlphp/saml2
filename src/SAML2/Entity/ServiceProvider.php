@@ -337,7 +337,6 @@ final class ServiceProvider
      */
     protected function decryptElement(EncryptedElementInterface $element): EncryptableElementInterface
     {
-        // TODO: When CBC-mode encryption is used, the assertion OR the Response must be signed
         $factory = $this->encryptionAlgorithmFactory;
 
         // If the IDP has a pre-shared key, try decrypting with that
