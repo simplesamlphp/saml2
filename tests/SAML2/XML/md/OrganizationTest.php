@@ -95,8 +95,6 @@ final class OrganizationTest extends TestCase
             ),
             [new XMLAttribute(C::NAMESPACE, 'ssp', 'attr1', 'value1')],
         );
-        $root = DOMDocumentFactory::fromString('<root/>');
-        $root->formatOutput = true;
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
