@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -78,12 +79,61 @@ final class AttributeValueTest extends TestCase
 
 
     /**
+     * Test creating an AttributeValue from scratch using an integer.
+     */
+    public function testMarshallingInteger(): void
+    {
+        $av = new AttributeValue(3);
+
+        $this->assertEquals(3, $av->getValue());
+        $this->assertEquals('xs:integer', $av->getXsiType());
+
+        $nssaml = C::NS_SAML;
+        $nsxs = C::NS_XS;
+        $nsxsi = C::NS_XSI;
+        $xml = <<<XML
+<saml:AttributeValue xmlns:saml="{$nssaml}" xmlns:xsi="{$nsxsi}" xmlns:xs="{$nsxs}" xsi:type="xs:integer">3</saml:AttributeValue>
+XML;
+        $this->assertEquals(
+            $xml,
+            strval($av),
+        );
+    }
+
+
+    /**
+     * Test creating an AttributeValue from scratch using an dateTime.
+     */
+    public function testMarshallingDateTime(): void
+    {
+        $av = new AttributeValue(new DateTimeImmutable("2024-04-04T04:44:44Z"));
+
+        /** @var \DateTimeInterface $value */
+        $value = $av->getValue();
+        $this->assertEquals('2024-04-04T04:44:44Z', $value->format(C::DATETIME_FORMAT));
+        $this->assertEquals('xs:dateTime', $av->getXsiType());
+
+        $nssaml = C::NS_SAML;
+        $nsxs = C::NS_XS;
+        $nsxsi = C::NS_XSI;
+        $xml = <<<XML
+<saml:AttributeValue xmlns:saml="{$nssaml}" xmlns:xsi="{$nsxsi}" xmlns:xs="{$nsxs}" xsi:type="xs:dateTime">2024-04-04T04:44:44Z</saml:AttributeValue>
+XML;
+        $this->assertEquals(
+            $xml,
+            strval($av),
+        );
+    }
+
+
+    /**
      */
     public function testMarshallingNull(): void
     {
         $av = new AttributeValue(null);
         $this->assertNull($av->getValue());
         $this->assertEquals('xs:nil', $av->getXsiType());
+
         $nssaml = C::NS_SAML;
         $nsxsi = C::NS_XSI;
         $xml = <<<XML
