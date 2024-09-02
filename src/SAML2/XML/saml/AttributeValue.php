@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use DateTimeImmutable;
+use DateTimeInterface;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
@@ -27,16 +29,18 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Create an AttributeValue.
      *
-     * @param string|int|null|\SimpleSAML\XML\AbstractElement $value The value of this element. Can be one of:
+     * The value of this element. Can be one of:
      *  - string
      *  - int
      *  - null
+     *  - \DateTimeInterface
      *  - \SimpleSAML\XML\AbstractElement
      *
+     * @param string|int|null|\DateTimeInterface|\SimpleSAML\XML\AbstractElement $value
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied value is neither a string or a DOMElement
      */
     final public function __construct(
-        protected string|int|null|AbstractElement $value,
+        protected string|int|null|DateTimeInterface|AbstractElement $value,
     ) {
     }
 
@@ -56,6 +60,10 @@ class AttributeValue extends AbstractSamlElement
             case "NULL":
                 return "xs:nil";
             case "object":
+                if ($this->value instanceof DateTimeInterface) {
+                    return 'xs:dateTime';
+                }
+
                 return sprintf(
                     '%s:%s',
                     $this->value::getNamespacePrefix(),
@@ -111,14 +119,25 @@ class AttributeValue extends AbstractSamlElement
             $xml->hasAttributeNS(C::NS_XSI, "type") &&
             $xml->getAttributeNS(C::NS_XSI, "type") === "xs:integer"
         ) {
+            Assert::numeric($xml->textContent);
+
             // we have an integer as value
             $value = intval($xml->textContent);
+        } elseif (
+            $xml->hasAttributeNS(C::NS_XSI, "type") &&
+            $xml->getAttributeNS(C::NS_XSI, "type") === "xs:dateTime"
+        ) {
+            Assert::validDateTime($xml->textContent);
+
+            // we have a dateTime as value
+            $value = new DateTimeImmutable($xml->textContent);
         } elseif (
             // null value
             $xml->hasAttributeNS(C::NS_XSI, "nil") &&
             ($xml->getAttributeNS(C::NS_XSI, "nil") === "1" ||
                 $xml->getAttributeNS(C::NS_XSI, "nil") === "true")
         ) {
+            Assert::isEmpty($xml->textContent);
             $value = null;
         } else {
             $value = $xml->textContent;
@@ -155,7 +174,14 @@ class AttributeValue extends AbstractSamlElement
                 $e->textContent = '';
                 break;
             case "object":
-                $this->getValue()->toXML($e);
+                if ($this->value instanceof DateTimeInterface) {
+                    $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C::NS_XSI);
+                    $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xs', C::NS_XS);
+                    $e->setAttributeNS(C::NS_XSI, 'xsi:type', 'xs:dateTime');
+                    $e->textContent = $this->value->format(C::DATETIME_FORMAT);
+                } else {
+                    $this->getValue()->toXML($e);
+                }
                 break;
             default: // string
                 $e->textContent = $this->getValue();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -74,6 +75,32 @@ final class AttributeValueTest extends TestCase
 
         $this->assertEquals('value', $av->getValue());
         $this->assertEquals('xs:string', $av->getXsiType());
+    }
+
+
+    /**
+     * Test creating an AttributeValue from scratch using an integer.
+     */
+    public function testMarshallingInteger(): void
+    {
+        $av = new AttributeValue(3);
+
+        $this->assertEquals(3, $av->getValue());
+        $this->assertEquals('xs:integer', $av->getXsiType());
+    }
+
+
+    /**
+     * Test creating an AttributeValue from scratch using an dateTime.
+     */
+    public function testMarshallingDateTime(): void
+    {
+        $av = new AttributeValue(new DateTimeImmutable("2024-04-04T04:44:44Z"));
+
+        /** @var \DateTimeInterface $value */
+        $value = $av->getValue();
+        $this->assertEquals('2024-04-04T04:44:44Z', $value->format(C::DATETIME_FORMAT));
+        $this->assertEquals('xs:dateTime', $av->getXsiType());
     }
 
 
