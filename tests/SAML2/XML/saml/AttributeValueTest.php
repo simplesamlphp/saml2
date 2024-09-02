@@ -87,6 +87,17 @@ final class AttributeValueTest extends TestCase
 
         $this->assertEquals(3, $av->getValue());
         $this->assertEquals('xs:integer', $av->getXsiType());
+
+        $nssaml = C::NS_SAML;
+        $nsxs = C::NS_XS;
+        $nsxsi = C::NS_XSI;
+        $xml = <<<XML
+<saml:AttributeValue xmlns:saml="{$nssaml}" xmlns:xsi="{$nsxsi}" xmlns:xs="{$nsxs}" xsi:type="xs:integer">3</saml:AttributeValue>
+XML;
+        $this->assertEquals(
+            $xml,
+            strval($av),
+        );
     }
 
 
@@ -101,6 +112,17 @@ final class AttributeValueTest extends TestCase
         $value = $av->getValue();
         $this->assertEquals('2024-04-04T04:44:44Z', $value->format(C::DATETIME_FORMAT));
         $this->assertEquals('xs:dateTime', $av->getXsiType());
+
+        $nssaml = C::NS_SAML;
+        $nsxs = C::NS_XS;
+        $nsxsi = C::NS_XSI;
+        $xml = <<<XML
+<saml:AttributeValue xmlns:saml="{$nssaml}" xmlns:xsi="{$nsxsi}" xmlns:xs="{$nsxs}" xsi:type="xs:dateTime">2024-04-04T04:44:44Z</saml:AttributeValue>
+XML;
+        $this->assertEquals(
+            $xml,
+            strval($av),
+        );
     }
 
 
@@ -111,6 +133,7 @@ final class AttributeValueTest extends TestCase
         $av = new AttributeValue(null);
         $this->assertNull($av->getValue());
         $this->assertEquals('xs:nil', $av->getXsiType());
+
         $nssaml = C::NS_SAML;
         $nsxsi = C::NS_XSI;
         $xml = <<<XML

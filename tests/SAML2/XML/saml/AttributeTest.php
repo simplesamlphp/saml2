@@ -33,6 +33,7 @@ use function strval;
  */
 #[Group('saml')]
 #[CoversClass(Attribute::class)]
+#[CoversClass(AttributeValue::class)]
 #[CoversClass(AbstractSamlElement::class)]
 final class AttributeTest extends TestCase
 {

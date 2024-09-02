@@ -52,7 +52,8 @@ class AttributeValue extends AbstractSamlElement
      */
     public function getXsiType(): string
     {
-        $type = gettype($this->value);
+        $value = $this->getValue();
+        $type = gettype($value);
 
         switch ($type) {
             case "integer":
@@ -60,14 +61,14 @@ class AttributeValue extends AbstractSamlElement
             case "NULL":
                 return "xs:nil";
             case "object":
-                if ($this->value instanceof DateTimeInterface) {
+                if ($value instanceof DateTimeInterface) {
                     return 'xs:dateTime';
                 }
 
                 return sprintf(
                     '%s:%s',
-                    $this->value::getNamespacePrefix(),
-                    AbstractElement::getClassName(get_class($this->value)),
+                    $value::getNamespacePrefix(),
+                    AbstractElement::getClassName(get_class($value)),
                 );
             default:
                 return "xs:string";
@@ -138,6 +139,7 @@ class AttributeValue extends AbstractSamlElement
                 $xml->getAttributeNS(C::NS_XSI, "nil") === "true")
         ) {
             Assert::isEmpty($xml->textContent);
+
             $value = null;
         } else {
             $value = $xml->textContent;
@@ -158,7 +160,8 @@ class AttributeValue extends AbstractSamlElement
     {
         $e = parent::instantiateParentElement($parent);
 
-        $type = gettype($this->value);
+        $value = $this->getValue();
+        $type = gettype($value);
 
         switch ($type) {
             case "integer":
@@ -166,7 +169,7 @@ class AttributeValue extends AbstractSamlElement
                 $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C::NS_XSI);
                 $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xs', C::NS_XS);
                 $e->setAttributeNS(C::NS_XSI, 'xsi:type', 'xs:integer');
-                $e->textContent = strval($this->getValue());
+                $e->textContent = strval($value);
                 break;
             case "NULL":
                 $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C::NS_XSI);
@@ -174,17 +177,17 @@ class AttributeValue extends AbstractSamlElement
                 $e->textContent = '';
                 break;
             case "object":
-                if ($this->value instanceof DateTimeInterface) {
+                if ($value instanceof DateTimeInterface) {
                     $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C::NS_XSI);
                     $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xs', C::NS_XS);
                     $e->setAttributeNS(C::NS_XSI, 'xsi:type', 'xs:dateTime');
-                    $e->textContent = $this->value->format(C::DATETIME_FORMAT);
+                    $e->textContent = $value->format(C::DATETIME_FORMAT);
                 } else {
-                    $this->getValue()->toXML($e);
+                    $value->toXML($e);
                 }
                 break;
             default: // string
-                $e->textContent = $this->getValue();
+                $e->textContent = $value;
                 break;
         }
 
