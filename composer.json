@@ -1,6 +1,7 @@
 {
     "name": "simplesamlphp/saml2",
     "description": "SAML2 PHP library from SimpleSAMLphp",
+    "type": "simplesamlphp-xmlprovider",
     "license": "LGPL-2.1-or-later",
     "authors": [
         {
@@ -30,10 +31,10 @@
         "psr/clock": "^1.0",
         "psr/http-message": "^2.0",
         "psr/log": "^2.0 || ^3.0",
-        "simplesamlphp/assert": "^1.1",
-        "simplesamlphp/xml-common": "^1.16",
-        "simplesamlphp/xml-security": "v1.9.2",
-        "simplesamlphp/xml-soap": "^1.4"
+        "simplesamlphp/assert": "~1.3.1",
+        "simplesamlphp/xml-common": "~1.18.0",
+        "simplesamlphp/xml-security": "~1.9.5",
+        "simplesamlphp/xml-soap": "~1.5.3"
     },
     "require-dev": {
         "ext-intl": "*",
