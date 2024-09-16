@@ -32,7 +32,7 @@
         "psr/log": "^2.0 || ^3.0",
         "simplesamlphp/assert": "^1.1",
         "simplesamlphp/xml-common": "^1.16",
-        "simplesamlphp/xml-security": "^1.7",
+        "simplesamlphp/xml-security": "v1.9.2",
         "simplesamlphp/xml-soap": "^1.4"
     },
     "require-dev": {
@@ -44,7 +44,7 @@
     },
     "autoload": {
         "psr-4": {
-            "SimpleSAML\\SAML2\\": "src/SAML2"
+            "SimpleSAML\\SAML2\\": "src/"
         }
     },
     "autoload-dev": {
@@ -63,7 +63,8 @@
             "composer/package-versions-deprecated": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "simplesamlphp/composer-module-installer": false,
-            "phpstan/extension-installer": true
+            "phpstan/extension-installer": true,
+            "simplesamlphp/composer-xmlprovider-installer": true
         }
     }
 }
