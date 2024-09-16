@@ -112,8 +112,8 @@ final class EncryptedAssertionTest extends TestCase
             type: C::XMLENC_ELEMENT,
             encryptionMethod: new EncryptionMethod(C::BLOCK_ENC_AES256_GCM),
             keyInfo: new KeyInfo([
-                $ek,
                 $retrievalMethod,
+                $ek,
             ]),
         );
         $encryptedAssertion = new EncryptedAssertion($ed, [$ek]);
