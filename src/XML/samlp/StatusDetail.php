@@ -6,7 +6,6 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\XsNamespace as NS;
@@ -60,16 +59,9 @@ final class StatusDetail extends AbstractSamlpElement
         Assert::same($xml->localName, 'StatusDetail', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, StatusDetail::NS, InvalidDOMElementException::class);
 
-        $details = [];
-        foreach ($xml->childNodes as $detail) {
-            if (!($detail instanceof DOMElement)) {
-                continue;
-            }
-
-            $details[] = new Chunk($detail);
-        }
-
-        return new static($details);
+        return new static(
+            self::getChildElementsFromXML($xml),
+        );
     }
 
 

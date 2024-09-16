@@ -10,7 +10,6 @@ use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Attribute as XMLAttribute;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\ExtendableElementTrait;
@@ -132,23 +131,11 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
             InvalidDOMElementException::class,
         );
 
-        $binding = self::getAttribute($xml, 'Binding');
-        $location = self::getAttribute($xml, 'Location');
-
-        $children = [];
-        foreach ($xml->childNodes as $child) {
-            if (!($child instanceof DOMElement)) {
-                continue;
-            } elseif ($child->namespaceURI !== static::NS) {
-                $children[] = new Chunk($child);
-            } // else continue
-        }
-
         return new static(
-            $binding,
-            $location,
+            self::getAttribute($xml, 'Binding'),
+            self::getAttribute($xml, 'Location'),
             self::getOptionalAttribute($xml, 'ResponseLocation', null),
-            $children,
+            self::getChildElementsFromXML($xml),
             self::getAttributesNSFromXML($xml),
         );
     }

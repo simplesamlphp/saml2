@@ -6,11 +6,9 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Attribute as XMLAttribute;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\SerializableElementInterface;
 
@@ -83,26 +81,13 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
             InvalidDOMElementException::class,
         );
 
-        $index = self::getIntegerAttribute($xml, 'index');
-        $binding = self::getAttribute($xml, 'Binding');
-        $location = self::getAttribute($xml, 'Location');
-
-        $children = [];
-        foreach ($xml->childNodes as $child) {
-            if (!($child instanceof DOMElement)) {
-                continue;
-            } elseif ($child->namespaceURI !== C::NS_MD) {
-                $children[] = new Chunk($child);
-            } // else continue
-        }
-
         return new static(
-            $index,
-            $binding,
-            $location,
+            self::getIntegerAttribute($xml, 'index'),
+            self::getAttribute($xml, 'Binding'),
+            self::getAttribute($xml, 'Location'),
             self::getOptionalBooleanAttribute($xml, 'isDefault', null),
             self::getOptionalAttribute($xml, 'ResponseLocation', null),
-            $children,
+            self::getChildElementsFromXML($xml),
             self::getAttributesNSFromXML($xml),
         );
     }

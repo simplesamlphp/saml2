@@ -6,7 +6,6 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\ExtendableElementTrait;
@@ -69,18 +68,10 @@ final class AuthnContextDecl extends AbstractSamlElement
         Assert::same($xml->localName, 'AuthnContextDecl', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AuthnContextDecl::NS, InvalidDOMElementException::class);
 
-        $elements = [];
-        foreach ($xml->childNodes as $element) {
-            if ($element->namespaceURI === static::NS) {
-                continue;
-            } elseif (!($element instanceof DOMElement)) {
-                continue;
-            }
-
-            $elements[] = new Chunk($element);
-        }
-
-        return new static($elements, self::getAttributesNSFromXML($xml));
+        return new static(
+            self::getChildElementsFromXML($xml),
+            self::getAttributesNSFromXML($xml),
+        );
     }
 
 

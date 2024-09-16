@@ -46,18 +46,17 @@ final class SOAPTest extends MockeryTestCase
         $issuer = 'https://ServiceProvider.com/SAML';
 
         $stub = $this->getStubWithInput(<<<SOAP
-<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/">
-  <env:Body>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+  <SOAP-ENV:Body>
       <samlp:ArtifactResolve
         xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-        xmlns="urn:oasis:names:tc:SAML:2.0:assertion"
         Version="2.0" ID="{$id}"
         IssueInstant="2004-01-21T19:00:49Z">
-          <Issuer>{$issuer}</Issuer>
+          <saml:Issuer xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">{$issuer}</saml:Issuer>
           <samlp:Artifact>{$artifact}</samlp:Artifact>
       </samlp:ArtifactResolve>
-  </env:Body>
-</env:Envelope>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
 SOAP);
 
         $request = new ServerRequest('', '');
@@ -83,7 +82,7 @@ SOAP);
 
         $doc = DOMDocumentFactory::fromString(<<<SOAP
 <?xml version="1.0" encoding="UTF-8"?>
-<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"><env:Body /></env:Envelope>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Body /></SOAP-ENV:Envelope>
 SOAP);
 
         /** @var \DOMElement $body */
@@ -108,7 +107,7 @@ SOAP);
 
         $doc = DOMDocumentFactory::fromString(<<<SOAP
 <?xml version="1.0" encoding="UTF-8"?>
-<env:Envelope xmlns:env="http://schemas.xmlsoap.org/soap/envelope/"><env:Header /><env:Body /></env:Envelope>
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Header /><SOAP-ENV:Body /></SOAP-ENV:Envelope>
 SOAP);
         $requestAuthenticated = new RequestAuthenticated(true);
         $ecpResponse = new Response('https://example.org/metadata');

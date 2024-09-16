@@ -7,7 +7,6 @@ namespace SimpleSAML\SAML2\XML\alg;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\XsNamespace as NS;
@@ -99,20 +98,12 @@ final class SigningMethod extends AbstractAlgElement
         Assert::same($xml->localName, 'SigningMethod', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SigningMethod::NS, InvalidDOMElementException::class);
 
-        $Algorithm = self::getAttribute($xml, 'Algorithm');
-        $MinKeySize = self::getOptionalIntegerAttribute($xml, 'MinKeySize', null);
-        $MaxKeySize = self::getOptionalIntegerAttribute($xml, 'MaxKeySize', null);
-
-        $elements = [];
-        foreach ($xml->childNodes as $element) {
-            if (!($element instanceof DOMElement)) {
-                continue;
-            }
-
-            $elements[] = new Chunk($element);
-        }
-
-        return new static($Algorithm, $MinKeySize, $MaxKeySize, $elements);
+        return new static(
+            self::getAttribute($xml, 'Algorithm'),
+            self::getOptionalIntegerAttribute($xml, 'MinKeySize', null),
+            self::getOptionalIntegerAttribute($xml, 'MaxKeySize', null),
+            self::getChildElementsFromXML($xml),
+        );
     }
 
 

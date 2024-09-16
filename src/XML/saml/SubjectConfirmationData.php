@@ -11,12 +11,10 @@ use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\XsNamespace as NS;
-use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 
 use function filter_var;
 use function is_null;
@@ -186,26 +184,13 @@ final class SubjectConfirmationData extends AbstractSamlElement
         $InResponseTo = self::getOptionalAttribute($xml, 'InResponseTo', null);
         $Address = self::getOptionalAttribute($xml, 'Address', null);
 
-        $children = [];
-        foreach ($xml->childNodes as $n) {
-            if (!($n instanceof DOMElement)) {
-                continue;
-            } elseif ($n->namespaceURI === C::NS_XDSIG && $n->localName === 'KeyInfo') {
-                $children[] = KeyInfo::fromXML($n);
-                continue;
-            } else {
-                $children[] = new Chunk($n);
-                continue;
-            }
-        }
-
         return new static(
             $NotBefore,
             $NotOnOrAfter,
             $Recipient,
             $InResponseTo,
             $Address,
-            $children,
+            self::getChildElementsFromXML($xml),
             self::getAttributesNSFromXML($xml),
         );
     }

@@ -7,7 +7,6 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\ExtendableElementTrait;
@@ -128,23 +127,12 @@ final class Advice extends AbstractSamlElement
         $assertion = Assertion::getChildrenOfClass($xml);
         $encryptedAssertion = EncryptedAssertion::getChildrenOfClass($xml);
 
-        $elements = [];
-        foreach ($xml->childNodes as $element) {
-            if ($element->namespaceURI === C::NS_SAML) {
-                continue;
-            } elseif (!($element instanceof DOMElement)) {
-                continue;
-            }
-
-            $elements[] = new Chunk($element);
-        }
-
         return new static(
             $assertionIDRef,
             $assertionURIRef,
             $assertion,
             $encryptedAssertion,
-            $elements,
+            self::getChildElementsFromXML($xml),
         );
     }
 

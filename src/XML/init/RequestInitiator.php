@@ -6,10 +6,8 @@ namespace SimpleSAML\SAML2\XML\init;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractEndpointType;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 
 /**
@@ -74,19 +72,10 @@ final class RequestInitiator extends AbstractEndpointType
             ProtocolViolationException::class,
         );
 
-        $children = [];
-        foreach ($xml->childNodes as $child) {
-            if (!($child instanceof DOMElement)) {
-                continue;
-            } elseif ($child->namespaceURI !== C::NS_MD) {
-                $children[] = new Chunk($child);
-            } // else continue
-        }
-
         return new static(
             self::getAttribute($xml, 'Location'),
             self::getOptionalAttribute($xml, 'ResponseLocation', null),
-            $children,
+            self::getChildElementsFromXML($xml),
             self::getAttributesNSFromXML($xml),
         );
     }

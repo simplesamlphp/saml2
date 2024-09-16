@@ -16,10 +16,10 @@ use SimpleSAML\SAML2\XML\ecp\Response as ECPResponse;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SAML2\XML\samlp\Response as SAML2_Response;
-use SimpleSAML\SOAP11\Utils\XPath;
-use SimpleSAML\SOAP11\XML\env\Body;
-use SimpleSAML\SOAP11\XML\env\Envelope;
-use SimpleSAML\SOAP11\XML\env\Header;
+use SimpleSAML\SOAP\Utils\XPath;
+use SimpleSAML\SOAP\XML\env_200106\Body;
+use SimpleSAML\SOAP\XML\env_200106\Envelope;
+use SimpleSAML\SOAP\XML\env_200106\Header;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function file_get_contents;
@@ -100,7 +100,7 @@ class SOAP extends Binding
 
         $xpCache = XPath::getXPath($document->documentElement);
         /** @var \DOMElement[] $results */
-        $results = XPath::xpQuery($xml, '/env:Envelope/env:Body/*[1]', $xpCache);
+        $results = XPath::xpQuery($xml, '/SOAP-ENV:Envelope/SOAP-ENV:Body/*[1]', $xpCache);
 
         return MessageFactory::fromXML($results[0]);
     }
