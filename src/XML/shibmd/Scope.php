@@ -24,11 +24,11 @@ final class Scope extends AbstractShibmdElement
      * Create a Scope.
      *
      * @param string $scope
-     * @param bool $regexp
+     * @param bool|null $regexp
      */
     public function __construct(
         string $scope,
-        protected bool $regexp = false,
+        protected ?bool $regexp = false,
     ) {
         $this->setContent($scope);
     }
@@ -50,9 +50,9 @@ final class Scope extends AbstractShibmdElement
     /**
      * Collect the value of the regexp-property
      *
-     * @return bool
+     * @return bool|null
      */
-    public function isRegexpScope(): bool
+    public function isRegexpScope(): ?bool
     {
         return $this->regexp;
     }
@@ -73,7 +73,7 @@ final class Scope extends AbstractShibmdElement
         Assert::same($xml->namespaceURI, Scope::NS, InvalidDOMElementException::class);
 
         $scope = $xml->textContent;
-        $regexp = self::getOptionalBooleanAttribute($xml, 'regexp', false);
+        $regexp = self::getOptionalBooleanAttribute($xml, 'regexp', null);
 
         return new static($scope, $regexp);
     }
@@ -89,7 +89,10 @@ final class Scope extends AbstractShibmdElement
     {
         $e = $this->instantiateParentElement($parent);
         $e->textContent = $this->getContent();
-        $e->setAttribute('regexp', $this->isRegexpScope() ? 'true' : 'false');
+
+        if ($this->isRegexpScope() !== null) {
+            $e->setAttribute('regexp', $this->isRegexpScope() ? 'true' : 'false');
+        }
 
         return $e;
     }
