@@ -24,10 +24,10 @@ final class RequestAuthenticated extends AbstractEcpElement
     /**
      * Create a ECP RequestAuthenticated element.
      *
-     * @param bool $mustUnderstand
+     * @param bool|null $mustUnderstand
      */
     public function __construct(
-        protected bool $mustUnderstand,
+        protected ?bool $mustUnderstand = false,
     ) {
     }
 
@@ -35,9 +35,9 @@ final class RequestAuthenticated extends AbstractEcpElement
     /**
      * Collect the value of the mustUnderstand-property
      *
-     * @return bool
+     * @return bool|null
      */
-    public function getMustUnderstand(): bool
+    public function getMustUnderstand(): ?bool
     {
         return $this->mustUnderstand;
     }
@@ -66,15 +66,21 @@ final class RequestAuthenticated extends AbstractEcpElement
             MissingAttributeException::class,
         );
 
-        $mustUnderstand = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand');
-        $actor = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'actor');
+        $mustUnderstand = null;
+        if ($xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand')) {
+            $mustUnderstand = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand');
 
-        Assert::oneOf(
-            $mustUnderstand,
-            ['0', '1'],
-            'Invalid value of env:mustUnderstand attribute in <ecp:RequestAuthenticated>.',
-            ProtocolViolationException::class,
-        );
+            Assert::nullOrOneOf(
+               $mustUnderstand,
+                ['0', '1'],
+                'Invalid value of env:mustUnderstand attribute in <ecp:RequestAuthenticated>.',
+                ProtocolViolationException::class,
+            );
+
+            $mustUnderstand = boolval($mustUnderstand);
+        }
+
+        $actor = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'actor');
         Assert::same(
             $actor,
             'http://schemas.xmlsoap.org/soap/actor/next',
@@ -82,7 +88,7 @@ final class RequestAuthenticated extends AbstractEcpElement
             ProtocolViolationException::class,
         );
 
-        return new static(boolval($mustUnderstand));
+        return new static($mustUnderstand);
     }
 
 
@@ -95,7 +101,11 @@ final class RequestAuthenticated extends AbstractEcpElement
     public function toXML(DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', strval(intval($this->getMustUnderstand())));
+
+        if ($this->getMustUnderstand() !== null) {
+            $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', strval(intval($this->getMustUnderstand())));
+        }
+
         $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', C::SOAP_ACTOR_NEXT);
 
         return $e;
