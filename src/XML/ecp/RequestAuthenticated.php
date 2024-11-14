@@ -71,7 +71,7 @@ final class RequestAuthenticated extends AbstractEcpElement
             $mustUnderstand = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand');
 
             Assert::nullOrOneOf(
-               $mustUnderstand,
+                $mustUnderstand,
                 ['0', '1'],
                 'Invalid value of env:mustUnderstand attribute in <ecp:RequestAuthenticated>.',
                 ProtocolViolationException::class,
