@@ -10,10 +10,10 @@ use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
-use SimpleSAML\SOAP11\Utils\XPath;
-use SimpleSAML\SOAP11\XML\env\Body;
-use SimpleSAML\SOAP11\XML\env\Envelope;
-use SimpleSAML\SOAP11\XML\env\Fault;
+use SimpleSAML\SOAP\Utils\XPath;
+use SimpleSAML\SOAP\XML\env_200106\Body;
+use SimpleSAML\SOAP\XML\env_200106\Envelope;
+use SimpleSAML\SOAP\XML\env_200106\Fault;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
 use SimpleSAML\XML\Chunk;
@@ -255,7 +255,7 @@ class SOAPClient
      * Extracts the SOAP Fault from SOAP message
      *
      * @param \DOMDocument $soapMessage Soap response needs to be type DOMDocument
-     * @return \SimpleSAML\SOAP11\XML\env\Fault|null
+     * @return \SimpleSAML\SOAP\XML\env_200106\Fault|null
      */
     private function getSOAPFault(DOMDocument $soapMessage): ?Fault
     {

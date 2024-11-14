@@ -91,47 +91,12 @@ parameters:
 			path: src/Configuration/SimpleSAMLConverter.php
 
 		-
-			message: "#^Call to static method fromXML\\(\\) on an unknown class SimpleSAML\\\\SOAP11\\\\XML\\\\env\\\\Envelope\\.$#"
-			count: 1
-			path: src/SOAPClient.php
-
-		-
-			message: "#^Call to static method fromXML\\(\\) on an unknown class SimpleSAML\\\\SOAP11\\\\XML\\\\env\\\\Fault\\.$#"
-			count: 1
-			path: src/SOAPClient.php
-
-		-
-			message: "#^Call to static method getXPath\\(\\) on an unknown class SimpleSAML\\\\SOAP11\\\\Utils\\\\XPath\\.$#"
-			count: 1
-			path: src/SOAPClient.php
-
-		-
-			message: "#^Call to static method xpQuery\\(\\) on an unknown class SimpleSAML\\\\SOAP11\\\\Utils\\\\XPath\\.$#"
-			count: 1
-			path: src/SOAPClient.php
-
-		-
-			message: "#^Instantiated class SimpleSAML\\\\SOAP11\\\\XML\\\\env\\\\Body not found\\.$#"
-			count: 1
-			path: src/SOAPClient.php
-
-		-
-			message: "#^Instantiated class SimpleSAML\\\\SOAP11\\\\XML\\\\env\\\\Envelope not found\\.$#"
-			count: 1
-			path: src/SOAPClient.php
-
-		-
 			message: "#^Instantiated class SimpleSAML\\\\Utils\\\\Config not found\\.$#"
 			count: 1
 			path: src/SOAPClient.php
 
 		-
 			message: "#^Instantiated class SimpleSAML\\\\Utils\\\\Crypto not found\\.$#"
-			count: 1
-			path: src/SOAPClient.php
-
-		-
-			message: "#^Method SimpleSAML\\\\SAML2\\\\SOAPClient\\:\\:getSOAPFault\\(\\) has invalid return type SimpleSAML\\\\SOAP11\\\\XML\\\\env\\\\Fault\\.$#"
 			count: 1
 			path: src/SOAPClient.php
 
