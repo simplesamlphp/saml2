@@ -16,6 +16,9 @@ use function array_pop;
 use function array_unshift;
 use function call_user_func_array;
 use function end;
+use function enum_exists;
+use function function_exists;
+use function get_class;
 use function is_object;
 use function is_resource;
 use function is_string;
@@ -157,6 +160,10 @@ final class Assert
 
             if ($value instanceof DateTime || $value instanceof DateTimeImmutable) {
                 return $value::class . ': ' . self::valueToString($value->format('c'));
+            }
+
+            if (function_exists('enum_exists') && enum_exists(get_class($value))) {
+                return get_class($value) . '::' . $value->name;
             }
 
             return $value::class;
