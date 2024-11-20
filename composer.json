@@ -25,6 +25,9 @@
         "sebastian/phpcpd": "~4.1 || ^5.0 || ^6.0",
         "squizlabs/php_codesniffer": "~3.5"
     },
+    "conflict": {
+        "robrichards/xmlseclibs": "3.1.2"
+    },
     "autoload": {
         "psr-4": {
             "SAML2\\": "src/SAML2"
