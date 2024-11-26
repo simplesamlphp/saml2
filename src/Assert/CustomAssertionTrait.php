@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 
 /**
- * @package simplesamlphp/assert
+ * @package simplesamlphp/saml2
  */
 trait CustomAssertionTrait
 {
