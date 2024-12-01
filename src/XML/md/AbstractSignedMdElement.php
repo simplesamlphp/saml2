@@ -61,7 +61,7 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements
      * @return \DOMElement
      * @throws \Exception
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         if ($this->isSigned() === true && $this->signer === null) {
             // We already have a signed document and no signer was set to re-sign it
@@ -100,5 +100,5 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements
      * @param  \DOMElement|null $parent
      * @return \DOMElement
      */
-    abstract public function toUnsignedXML(DOMElement $parent = null): DOMElement;
+    abstract public function toUnsignedXML(?DOMElement $parent = null): DOMElement;
 }

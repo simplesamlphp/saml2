@@ -90,7 +90,7 @@ final class AdditionalMetadataLocation extends AbstractMdElement
      * @param \DOMElement|null $parent The element we should append to.
      * @return \DOMElement This AdditionalMetadataLocation-element.
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
         $e->textContent = $this->getContent();

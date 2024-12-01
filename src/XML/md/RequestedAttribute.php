@@ -90,7 +90,7 @@ final class RequestedAttribute extends Attribute
      * @param \DOMElement|null $parent The element we should append this RequestedAttribute to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
 

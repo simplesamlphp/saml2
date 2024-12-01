@@ -52,7 +52,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           # Should be the higest supported version, so we can use the newest tools
-          php-version: '8.3'
+          php-version: '8.4'
           tools: composer, composer-require-checker, composer-unused, phpcs
           extensions: ctype, date, dom, filter, hash, mbstring, openssl, pcre, soap, spl, xml
           coverage: none
@@ -145,7 +145,7 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ['8.1', '8.2', '8.3']
+        php-versions: ['8.1', '8.2', '8.3', '8.4']
 
     steps:
       - name: Setup PHP, with composer and extensions
@@ -185,15 +185,15 @@ jobs:
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: Run unit tests with coverage
-        if: ${{ matrix.php-versions == '8.3' }}
+        if: ${{ matrix.php-versions == '8.4' }}
         run: vendor/bin/phpunit
 
       - name: Run unit tests (no coverage)
-        if: ${{ matrix.php-versions != '8.3' }}
+        if: ${{ matrix.php-versions != '8.4' }}
         run: vendor/bin/phpunit --no-coverage
 
       - name: Save coverage data
-        if: ${{ matrix.php-versions == '8.3' }}
+        if: ${{ matrix.php-versions == '8.4' }}
         uses: actions/upload-artifact@v4
         with:
           name: coverage-data
@@ -207,7 +207,7 @@ jobs:
       fail-fast: true
       matrix:
         operating-system: [windows-latest]
-        php-versions: ['8.1', '8.2', '8.3']
+        php-versions: ['8.1', '8.2', '8.3', '8.4']
 
     steps:
       - name: Setup PHP, with composer and extensions

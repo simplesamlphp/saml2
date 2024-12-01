@@ -61,7 +61,7 @@ class MockContainer extends AbstractContainer
      * @return string
      */
     public function getPOSTRedirectURL(
-        /** @scrutinizer ignore-unused */string $url = null,
+        /** @scrutinizer ignore-unused */?string $url = null,
         /** @scrutinizer ignore-unused */array $data = [],
     ): string {
         return strval($url);
@@ -82,7 +82,7 @@ class MockContainer extends AbstractContainer
      * @param string $data
      * @param int|null $mode
      */
-    public function writeFile(string $filename, string $data, int $mode = null): void
+    public function writeFile(string $filename, string $data, ?int $mode = null): void
     {
         if ($mode === null) {
             $mode = 0600;

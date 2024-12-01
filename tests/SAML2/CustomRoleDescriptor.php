@@ -174,7 +174,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this RoleDescriptor.
      */
-    public function toUnsignedXML(DOMElement $parent = null): DOMElement
+    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toUnsignedXML($parent);
 

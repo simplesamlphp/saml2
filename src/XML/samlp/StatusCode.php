@@ -87,7 +87,7 @@ final class StatusCode extends AbstractSamlpElement
      * @param \DOMElement|null $parent The element we should append this StatusCode to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Value', $this->getValue());

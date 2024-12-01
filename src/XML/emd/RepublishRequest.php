@@ -74,7 +74,7 @@ final class RepublishRequest extends AbstractEmdElement implements ArrayizableEl
      * @param \DOMElement|null $parent The element we should append to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 

@@ -99,7 +99,7 @@ final class KeyAuthority extends AbstractShibmdElement
      * @param \DOMElement|null $parent The element we should append this Scope to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 

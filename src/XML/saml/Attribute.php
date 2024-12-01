@@ -151,7 +151,7 @@ class Attribute extends AbstractSamlElement implements EncryptableElementInterfa
      * @param \DOMElement|null $parent The element we should append this Attribute to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Name', $this->getName());

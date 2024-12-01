@@ -90,7 +90,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
      *
      * @return \DOMElement
      */
-    public function toUnsignedXML(DOMElement $parent = null): DOMElement
+    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 

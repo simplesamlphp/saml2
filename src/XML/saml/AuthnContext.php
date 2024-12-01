@@ -154,7 +154,7 @@ final class AuthnContext extends AbstractSamlElement
      * @param \DOMElement|null $parent The element we should append this AuthnContextDeclRef to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 

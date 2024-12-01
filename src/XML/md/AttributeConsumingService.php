@@ -151,7 +151,7 @@ final class AttributeConsumingService extends AbstractMdElement
      * @param \DOMElement $parent The element we should append this AttributeConsumingService to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('index', strval($this->getIndex()));

@@ -55,7 +55,7 @@ final class EntityDescriptor extends AbstractMetadataDocument
         ?string $id = null,
         ?DateTimeImmutable $validUntil = null,
         ?string $cacheDuration = null,
-        Extensions $extensions = null,
+        ?Extensions $extensions = null,
         protected array $roleDescriptor = [],
         protected ?AffiliationDescriptor $affiliationDescriptor = null,
         protected ?Organization $organization = null,

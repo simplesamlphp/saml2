@@ -46,7 +46,7 @@ class KeyLoader
      */
     public static function extractPublicKeys(
         CertificateProvider $config,
-        string $usage = null,
+        ?string $usage = null,
         bool $required = false,
     ): KeyCollection {
         $keyLoader = new self();
@@ -63,7 +63,7 @@ class KeyLoader
      */
     public function loadKeysFromConfiguration(
         CertificateProvider $config,
-        string $usage = null,
+        ?string $usage = null,
         bool $required = false,
     ): KeyCollection {
         $keys = $config->getKeys();
@@ -96,7 +96,7 @@ class KeyLoader
      * @param array|\Traversable $configuredKeys
      * @param string|null $usage
      */
-    public function loadKeys($configuredKeys, string $usage = null): void
+    public function loadKeys($configuredKeys, ?string $usage = null): void
     {
         foreach ($configuredKeys as $keyData) {
             if (isset($keyData['X509Certificate'])) {

@@ -129,7 +129,7 @@ final class Logo extends AbstractMduiElement implements ArrayizableElementInterf
      * @param \DOMElement|null $parent The element we should append this Logo to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
         $e->textContent = $this->getContent();

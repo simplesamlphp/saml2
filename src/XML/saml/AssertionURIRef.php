@@ -66,7 +66,7 @@ final class AssertionURIRef extends AbstractSamlElement
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this Condition.
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $element = $this->instantiateParentElement($parent);
         $element->textContent = $this->getContent();

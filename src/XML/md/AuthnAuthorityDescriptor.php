@@ -44,7 +44,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType
         array $protocolSupportEnumeration,
         protected array $assertionIDRequestService = [],
         protected array $nameIDFormat = [],
-        string $ID = null,
+        ?string $ID = null,
         ?DateTimeImmutable $validUntil = null,
         ?string $cacheDuration = null,
         ?Extensions $extensions = null,

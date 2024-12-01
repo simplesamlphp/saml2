@@ -50,7 +50,7 @@ class SOAPClient
     public function send(
         AbstractMessage $msg,
         Configuration $srcMetadata,
-        Configuration $dstMetadata = null,
+        ?Configuration $dstMetadata = null,
     ): AbstractMessage {
         $issuer = $msg->getIssuer();
 

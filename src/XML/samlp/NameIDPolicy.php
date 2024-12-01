@@ -113,7 +113,7 @@ final class NameIDPolicy extends AbstractSamlpElement implements ArrayizableElem
      * @param \DOMElement|null $parent The element we should append this NameIDPolicy to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 

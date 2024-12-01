@@ -114,7 +114,7 @@ trait EncryptedElementTrait
     /**
      * @inheritDoc
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
         $this->encryptedData->toXML($e);

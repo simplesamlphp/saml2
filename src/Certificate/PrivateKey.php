@@ -12,7 +12,7 @@ class PrivateKey extends Key
      * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      * @return \SimpleSAML\SAML2\Certificate\PrivateKey
      */
-    public static function create(string $keyContents, string $passphrase = null): PrivateKey
+    public static function create(string $keyContents, ?string $passphrase = null): PrivateKey
     {
         $keyData = ['PEM' => $keyContents, self::USAGE_ENCRYPTION => true];
         if ($passphrase) {

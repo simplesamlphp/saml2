@@ -158,7 +158,7 @@ final class AssertionIDRequest extends AbstractRequest
      * @param \DOMElement|null $parent The element we should append this AssertionIDRequest element to.
      * @return \DOMElement
      */
-    public function toUnsignedXML(DOMElement $parent = null): DOMElement
+    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toUnsignedXML($parent);
 

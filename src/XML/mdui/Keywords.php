@@ -106,7 +106,7 @@ final class Keywords extends AbstractMduiElement implements ArrayizableElementIn
      * @throws \Exception
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);

@@ -147,7 +147,7 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
      * @param \DOMElement $parent The element we should append this endpoint to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::instantiateParentElement($parent);
 

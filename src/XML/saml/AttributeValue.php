@@ -156,7 +156,7 @@ class AttributeValue extends AbstractSamlElement
      *
      * @return \DOMElement The generated AttributeValue element.
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::instantiateParentElement($parent);
 

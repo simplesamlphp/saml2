@@ -92,7 +92,7 @@ trait ExtensionsTrait
      * @param \DOMElement|null $parent The element we should add this Extensions element to.
      * @return \DOMElement The new md:Extensions XML element.
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 
@@ -110,5 +110,5 @@ trait ExtensionsTrait
      * @param \DOMElement|null $parent
      * @return \DOMElement
      */
-    abstract public function instantiateParentElement(DOMElement $parent = null): DOMElement;
+    abstract public function instantiateParentElement(?DOMElement $parent = null): DOMElement;
 }

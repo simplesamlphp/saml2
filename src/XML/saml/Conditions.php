@@ -195,7 +195,7 @@ final class Conditions extends AbstractSamlElement
      * @param  \DOMElement|null $parent The parent element we should append this element to.
      * @return \DOMElement This element, as XML.
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 

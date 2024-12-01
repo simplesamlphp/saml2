@@ -203,7 +203,7 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
      *
      * @return \DOMElement The new ContactPerson-element.
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 

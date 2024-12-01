@@ -74,7 +74,7 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
      * @param bool $required
      * @return mixed|null
      */
-    public function getPrivateKey(string $name, bool $required = null)
+    public function getPrivateKey(string $name, ?bool $required = null)
     {
         if ($required === null) {
             $required = false;

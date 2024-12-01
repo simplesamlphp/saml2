@@ -97,7 +97,7 @@ final class IDPEntry extends AbstractSamlpElement
      * @param \DOMElement|null $parent The element we should append this IDPEntry to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('ProviderID', $this->getProviderId());

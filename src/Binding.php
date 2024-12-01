@@ -161,7 +161,7 @@ abstract class Binding
      *
      * @param string|null $relayState The RelayState.
      */
-    public function setRelayState(string $relayState = null): void
+    public function setRelayState(?string $relayState = null): void
     {
         $this->relayState = $relayState;
     }
@@ -185,7 +185,7 @@ abstract class Binding
      *
      * @param string|null $destination The destination the message should be delivered to.
      */
-    public function setDestination(string $destination = null): void
+    public function setDestination(?string $destination = null): void
     {
         $this->destination = $destination;
     }

@@ -38,8 +38,8 @@ final class CustomBaseID extends AbstractBaseID
      */
     public function __construct(
         protected array $audience,
-        string $NameQualifier = null,
-        string $SPNameQualifier = null,
+        ?string $NameQualifier = null,
+        ?string $SPNameQualifier = null,
     ) {
         Assert::allIsInstanceOf($audience, Audience::class);
 
@@ -88,7 +88,7 @@ final class CustomBaseID extends AbstractBaseID
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this BaseID.
      */
-    public function toXML(DOMElement $parent = null): DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toXML($parent);
 
