@@ -103,6 +103,22 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
      * @group                    domdocument
      * @return void
      */
+    public function testStringThatContainsDocTypeIsNotAccepted2(): void
+    {
+        $xml = '<?xml version="1.0" encoding="ISO-8859-1"?>
+               <!DOCTYPE foo [<!ENTITY % exfiltrate SYSTEM "file://dev/random">%exfiltrate;]>
+               <foo>y</foo>';
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage(
+            'Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body',
+        );
+        DOMDocumentFactory::fromString($xml);
+    }
+
+    /**
+     * @group                    domdocument
+     * @return void
+     */
     public function testEmptyFileIsNotValid() : void
     {
         $this->expectException(RuntimeException::class, 'does not have content');
