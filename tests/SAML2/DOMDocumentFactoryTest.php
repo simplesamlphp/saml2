@@ -110,7 +110,7 @@ class DOMDocumentFactoryTest extends \PHPUnit\Framework\TestCase
                <foo>y</foo>';
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage(
-            'Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body',
+            'Dangerous XML detected, DOCTYPE nodes are not allowed in the XML body'
         );
         DOMDocumentFactory::fromString($xml);
     }
