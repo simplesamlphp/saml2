@@ -56,7 +56,7 @@ class EntitiesDescriptor extends SignedElementHelper
      *
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         parent::__construct($xml);
 
@@ -107,7 +107,7 @@ class EntitiesDescriptor extends SignedElementHelper
      * @param string|null $name
      * @return void
      */
-    public function setName(string $name = null) : void
+    public function setName(?string $name = null) : void
     {
         $this->Name = $name;
     }
@@ -130,7 +130,7 @@ class EntitiesDescriptor extends SignedElementHelper
      * @param string|null $Id
      * @return void
      */
-    public function setID(string $Id = null) : void
+    public function setID(?string $Id = null) : void
     {
         $this->ID = $Id;
     }
@@ -151,7 +151,7 @@ class EntitiesDescriptor extends SignedElementHelper
      * @param int|null $validUntil
      * @return void
      */
-    public function setValidUntil(int $validUntil = null) : void
+    public function setValidUntil(?int $validUntil = null) : void
     {
         $this->validUntil = $validUntil;
     }
@@ -172,7 +172,7 @@ class EntitiesDescriptor extends SignedElementHelper
      * @param string|null $cacheDuration
      * @return void
      */
-    public function setCacheDuration(string $cacheDuration = null) : void
+    public function setCacheDuration(?string $cacheDuration = null) : void
     {
         $this->cacheDuration = $cacheDuration;
     }
@@ -255,7 +255,7 @@ class EntitiesDescriptor extends SignedElementHelper
      * @param \DOMElement|null $parent The EntitiesDescriptor we should append this EntitiesDescriptor to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null) : DOMElement
+    public function toXML(?DOMElement $parent = null) : DOMElement
     {
         if ($parent === null) {
             $doc = DOMDocumentFactory::create();

@@ -53,7 +53,7 @@ class Attribute
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -118,7 +118,7 @@ class Attribute
      * @param string|null $nameFormat
      * @return void
      */
-    public function setNameFormat(string $nameFormat = null) : void
+    public function setNameFormat(?string $nameFormat = null) : void
     {
         $this->NameFormat = $nameFormat;
     }
@@ -141,7 +141,7 @@ class Attribute
      * @param string|null $friendlyName
      * @return void
      */
-    public function setFriendlyName(string $friendlyName = null) : void
+    public function setFriendlyName(?string $friendlyName = null) : void
     {
         $this->FriendlyName = $friendlyName;
     }

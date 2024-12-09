@@ -103,7 +103,7 @@ class MockContainer extends AbstractContainer
      * @param array $data
      * @return void
      */
-    public function postRedirect(string $url = null, array $data = []) : void
+    public function postRedirect(?string $url = null, array $data = []) : void
     {
         $this->postRedirectUrl = $url;
         $this->postRedirectData = $data;
@@ -125,7 +125,7 @@ class MockContainer extends AbstractContainer
      * @param int|null $mode
      * @return void
      */
-    public function writeFile(string $filename, string $data, int $mode = null) : void
+    public function writeFile(string $filename, string $data, ?int $mode = null) : void
     {
         if ($mode === null) {
             $mode = 0600;

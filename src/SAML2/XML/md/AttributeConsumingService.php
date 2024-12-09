@@ -64,7 +64,7 @@ class AttributeConsumingService
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -131,7 +131,7 @@ class AttributeConsumingService
      * @param bool|null $flag
      * @return void
      */
-    public function setIsDefault(bool $flag = null) : void
+    public function setIsDefault(?bool $flag = null) : void
     {
         $this->isDefault = $flag;
     }

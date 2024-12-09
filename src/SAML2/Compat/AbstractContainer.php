@@ -80,5 +80,5 @@ abstract class AbstractContainer
      * @param int $mode The permissions to apply to the file. Defaults to 0600.
      * @return void
      */
-    abstract public function writeFile(string $filename, string $data, int $mode = null) : void;
+    abstract public function writeFile(string $filename, string $data, ?int $mode = null) : void;
 }

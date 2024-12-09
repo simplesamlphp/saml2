@@ -47,7 +47,7 @@ class SigningMethod
      *
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -108,7 +108,7 @@ class SigningMethod
      * @param int|null $minKeySize
      * @return void
      */
-    public function setMinKeySize(int $minKeySize = null) : void
+    public function setMinKeySize(?int $minKeySize = null) : void
     {
         $this->MinKeySize = $minKeySize;
     }
@@ -131,7 +131,7 @@ class SigningMethod
      * @param int|null $maxKeySize
      * @return void
      */
-    public function setMaxKeySize(int $maxKeySize = null) : void
+    public function setMaxKeySize(?int $maxKeySize = null) : void
     {
         $this->MaxKeySize = $maxKeySize;
     }

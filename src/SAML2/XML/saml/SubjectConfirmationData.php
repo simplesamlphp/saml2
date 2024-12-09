@@ -83,7 +83,7 @@ class SubjectConfirmationData
      * @param int|null $notBefore
      * @return void
      */
-    public function setNotBefore(int $notBefore = null) : void
+    public function setNotBefore(?int $notBefore = null) : void
     {
         $this->NotBefore = $notBefore;
     }
@@ -106,7 +106,7 @@ class SubjectConfirmationData
      * @param int|null $notOnOrAfter
      * @return void
      */
-    public function setNotOnOrAfter(int $notOnOrAfter = null) : void
+    public function setNotOnOrAfter(?int $notOnOrAfter = null) : void
     {
         $this->NotOnOrAfter = $notOnOrAfter;
     }
@@ -129,7 +129,7 @@ class SubjectConfirmationData
      * @param string|null $recipient
      * @return void
      */
-    public function setRecipient(string $recipient = null) : void
+    public function setRecipient(?string $recipient = null) : void
     {
         $this->Recipient = $recipient;
     }
@@ -152,7 +152,7 @@ class SubjectConfirmationData
      * @param string|null $inResponseTo
      * @return void
      */
-    public function setInResponseTo(string $inResponseTo = null) : void
+    public function setInResponseTo(?string $inResponseTo = null) : void
     {
         $this->InResponseTo = $inResponseTo;
     }
@@ -175,7 +175,7 @@ class SubjectConfirmationData
      * @param string|null $address
      * @return void
      */
-    public function setAddress(string $address = null) : void
+    public function setAddress(?string $address = null) : void
     {
         if (!is_null($address) && !filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)) {
             Utils::getContainer()->getLogger()->warning(sprintf('Provided argument (%s) is not a valid IP address.', $address));
@@ -225,7 +225,7 @@ class SubjectConfirmationData
      *
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         if ($xml === null) {
             return;

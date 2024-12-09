@@ -45,7 +45,7 @@ class SubjectConfirmation
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -114,7 +114,7 @@ class SubjectConfirmation
      * @param \SAML2\XML\saml\NameID $nameId
      * @return void
      */
-    public function setNameID(NameID $nameId = null) : void
+    public function setNameID(?NameID $nameId = null) : void
     {
         $this->NameID = $nameId;
     }
@@ -137,7 +137,7 @@ class SubjectConfirmation
      * @param \SAML2\XML\saml\SubjectConfirmationData|null $subjectConfirmationData
      * @return void
      */
-    public function setSubjectConfirmationData(SubjectConfirmationData $subjectConfirmationData = null) : void
+    public function setSubjectConfirmationData(?SubjectConfirmationData $subjectConfirmationData = null) : void
     {
         $this->SubjectConfirmationData = $subjectConfirmationData;
     }

@@ -53,7 +53,7 @@ class SPSSODescriptor extends SSODescriptorType
      *
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         parent::__construct('md:SPSSODescriptor', $xml);
 
@@ -93,7 +93,7 @@ class SPSSODescriptor extends SSODescriptorType
      * @param bool|null $flag
      * @return void
      */
-    public function setAuthnRequestsSigned(bool $flag = null) : void
+    public function setAuthnRequestsSigned(?bool $flag = null) : void
     {
         $this->AuthnRequestsSigned = $flag;
     }
@@ -116,7 +116,7 @@ class SPSSODescriptor extends SSODescriptorType
      * @param bool|null $flag
      * @return void
      */
-    public function setWantAssertionsSigned(bool $flag = null) : void
+    public function setWantAssertionsSigned(?bool $flag = null) : void
     {
         $this->WantAssertionsSigned = $flag;
     }

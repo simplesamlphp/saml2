@@ -40,7 +40,7 @@ class KeyInfo
      *
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -91,7 +91,7 @@ class KeyInfo
      * @param string|null $id
      * @return void
      */
-    public function setId(string $id = null) : void
+    public function setId(?string $id = null) : void
     {
         $this->Id = $id;
     }

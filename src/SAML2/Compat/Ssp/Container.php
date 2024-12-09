@@ -125,7 +125,7 @@ class Container extends AbstractContainer
      * @param int|null $mode
      * @return void
      */
-    public function writeFile(string $filename, string $data, int $mode = null) : void
+    public function writeFile(string $filename, string $data, ?int $mode = null) : void
     {
         if ($mode === null) {
             $mode = 0600;

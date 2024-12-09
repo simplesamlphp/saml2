@@ -14,7 +14,7 @@ class PrivateKey extends Key
      * @throws InvalidArgumentException
      * @return PrivateKey
      */
-    public static function create(string $keyContents, string $passphrase = null) : PrivateKey
+    public static function create(string $keyContents, ?string $passphrase = null) : PrivateKey
     {
         $keyData = ['PEM' => $keyContents, self::USAGE_ENCRYPTION => true];
         if ($passphrase) {

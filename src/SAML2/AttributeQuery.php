@@ -47,7 +47,7 @@ class AttributeQuery extends SubjectQuery
      * @param \DOMElement|null $xml The input message.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         parent::__construct('AttributeQuery', $xml);
 

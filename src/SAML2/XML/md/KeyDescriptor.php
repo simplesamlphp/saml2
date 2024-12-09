@@ -51,7 +51,7 @@ class KeyDescriptor
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -94,7 +94,7 @@ class KeyDescriptor
      * @param string|null $use
      * @return void
      */
-    public function setUse(string $use = null) : void
+    public function setUse(?string $use = null) : void
     {
         $this->use = $use;
     }

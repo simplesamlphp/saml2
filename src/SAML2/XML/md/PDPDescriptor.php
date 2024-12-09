@@ -51,7 +51,7 @@ class PDPDescriptor extends RoleDescriptor
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         parent::__construct('md:PDPDescriptor', $xml);
 

@@ -35,7 +35,7 @@ abstract class SubjectQuery extends Request
      * @param string $tagName The tag name of the root element.
      * @param \DOMElement|null $xml The input message.
      */
-    protected function __construct(string $tagName, DOMElement $xml = null)
+    protected function __construct(string $tagName, ?DOMElement $xml = null)
     {
         parent::__construct($tagName, $xml);
 
@@ -92,7 +92,7 @@ abstract class SubjectQuery extends Request
      * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
-    public function setNameId(NameID $nameId = null) : void
+    public function setNameId(?NameID $nameId = null) : void
     {
         $this->nameId = $nameId;
     }

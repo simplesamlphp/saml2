@@ -139,7 +139,7 @@ class AuthnRequest extends Request
      * @param \DOMElement|null $xml The input message.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         parent::__construct('AuthnRequest', $xml);
 
@@ -567,7 +567,7 @@ class AuthnRequest extends Request
      * @param string|null $assertionConsumerServiceURL The AssertionConsumerServiceURL attribute.
      * @return void
      */
-    public function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL = null) : void
+    public function setAssertionConsumerServiceURL(?string $assertionConsumerServiceURL = null) : void
     {
         $this->assertionConsumerServiceURL = $assertionConsumerServiceURL;
     }
@@ -590,7 +590,7 @@ class AuthnRequest extends Request
      * @param string $protocolBinding The ProtocolBinding attribute.
      * @return void
      */
-    public function setProtocolBinding(string $protocolBinding = null) : void
+    public function setProtocolBinding(?string $protocolBinding = null) : void
     {
         $this->protocolBinding = $protocolBinding;
     }
@@ -613,7 +613,7 @@ class AuthnRequest extends Request
      * @param int|null $attributeConsumingServiceIndex The AttributeConsumingServiceIndex attribute.
      * @return void
      */
-    public function setAttributeConsumingServiceIndex(int $attributeConsumingServiceIndex = null) : void
+    public function setAttributeConsumingServiceIndex(?int $attributeConsumingServiceIndex = null) : void
     {
         $this->attributeConsumingServiceIndex = $attributeConsumingServiceIndex;
     }
@@ -636,7 +636,7 @@ class AuthnRequest extends Request
      * @param int|null $assertionConsumerServiceIndex The AssertionConsumerServiceIndex attribute.
      * @return void
      */
-    public function setAssertionConsumerServiceIndex(int $assertionConsumerServiceIndex = null) : void
+    public function setAssertionConsumerServiceIndex(?int $assertionConsumerServiceIndex = null) : void
     {
         $this->assertionConsumerServiceIndex = $assertionConsumerServiceIndex;
     }
@@ -659,7 +659,7 @@ class AuthnRequest extends Request
      * @param array|null $requestedAuthnContext The RequestedAuthnContext.
      * @return void
      */
-    public function setRequestedAuthnContext(array $requestedAuthnContext = null) : void
+    public function setRequestedAuthnContext(?array $requestedAuthnContext = null) : void
     {
         $this->requestedAuthnContext = $requestedAuthnContext;
     }
@@ -687,7 +687,7 @@ class AuthnRequest extends Request
      * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
-    public function setNameId(NameID $nameId = null) : void
+    public function setNameId(?NameID $nameId = null) : void
     {
         $this->nameId = $nameId;
     }

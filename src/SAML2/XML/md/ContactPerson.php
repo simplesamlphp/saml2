@@ -93,7 +93,7 @@ class ContactPerson
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -204,7 +204,7 @@ class ContactPerson
      * @param string|null $company
      * @return void
      */
-    public function setCompany(string $company = null) : void
+    public function setCompany(?string $company = null) : void
     {
         $this->Company = $company;
     }
@@ -227,7 +227,7 @@ class ContactPerson
      * @param string|null $givenName
      * @return void
      */
-    public function setGivenName(string $givenName = null) : void
+    public function setGivenName(?string $givenName = null) : void
     {
         $this->GivenName = $givenName;
     }
@@ -250,7 +250,7 @@ class ContactPerson
      * @param string|null $surName
      * @return void
      */
-    public function setSurName(string $surName = null) : void
+    public function setSurName(?string $surName = null) : void
     {
         $this->SurName = $surName;
     }

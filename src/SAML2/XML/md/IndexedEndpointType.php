@@ -36,7 +36,7 @@ class IndexedEndpointType extends EndpointType
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         parent::__construct($xml);
 
@@ -93,7 +93,7 @@ class IndexedEndpointType extends EndpointType
      * @param bool|null $flag
      * @return void
      */
-    public function setIsDefault(bool $flag = null) : void
+    public function setIsDefault(?bool $flag = null) : void
     {
         $this->isDefault = $flag;
     }

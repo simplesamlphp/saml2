@@ -42,7 +42,7 @@ class Issuer extends NameIDType
      *
      * @param \DOMElement|null $xml The XML element we should load, if any.
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         /**
          * The format of this NameIDType.
@@ -99,7 +99,7 @@ class Issuer extends NameIDType
      * @param \DOMElement|null $parent The element we should append to.
      * @return \DOMElement The current Issuer object converted into a \DOMElement.
      */
-    public function toXML(DOMElement $parent = null) : DOMElement
+    public function toXML(?DOMElement $parent = null) : DOMElement
     {
         if (($this->Saml2IssuerShowAll && ($this->Format === Constants::NAMEID_ENTITY))
             || ($this->Format !== Constants::NAMEID_ENTITY)

@@ -116,7 +116,7 @@ class Chunk implements Serializable
      * @param string|null $namespaceURI
      * @return void
      */
-    public function setNamespaceURI(string $namespaceURI = null) : void
+    public function setNamespaceURI(?string $namespaceURI = null) : void
     {
         $this->namespaceURI = $namespaceURI;
     }

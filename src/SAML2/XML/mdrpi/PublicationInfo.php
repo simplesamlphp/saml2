@@ -54,7 +54,7 @@ class PublicationInfo
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -139,7 +139,7 @@ class PublicationInfo
      * @param int|null $creationInstant
      * @return void
      */
-    public function setCreationInstant(int $creationInstant = null) : void
+    public function setCreationInstant(?int $creationInstant = null) : void
     {
         $this->creationInstant = $creationInstant;
     }
@@ -151,7 +151,7 @@ class PublicationInfo
      * @param string|null $publicationId
      * @return void
      */
-    public function setPublicationId(string $publicationId = null) : void
+    public function setPublicationId(?string $publicationId = null) : void
     {
         $this->publicationId = $publicationId;
     }

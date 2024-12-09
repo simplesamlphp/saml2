@@ -137,7 +137,7 @@ abstract class Binding
      * @param string|null $destination The destination the message should be delivered to.
      * @return void
      */
-    public function setDestination(string $destination = null) : void
+    public function setDestination(?string $destination = null) : void
     {
         $this->destination = $destination;
     }
