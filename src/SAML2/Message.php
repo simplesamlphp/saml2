@@ -136,7 +136,7 @@ abstract class Message extends SignedElement
      *
      * @throws \Exception
      */
-    protected function __construct(string $tagName, DOMElement $xml = null)
+    protected function __construct(string $tagName, ?DOMElement $xml = null)
     {
         $this->tagName = $tagName;
 
@@ -337,7 +337,7 @@ abstract class Message extends SignedElement
      * @param string|null $destination The new destination of this message
      * @return void
      */
-    public function setDestination(string $destination = null) : void
+    public function setDestination(?string $destination = null) : void
     {
         $this->destination = $destination;
     }
@@ -387,7 +387,7 @@ abstract class Message extends SignedElement
      * @param \SAML2\XML\saml\Issuer|null $issuer The new issuer of this message
      * @return void
      */
-    public function setIssuer(Issuer $issuer = null) : void
+    public function setIssuer(?Issuer $issuer = null) : void
     {
         $this->issuer = $issuer;
     }
@@ -421,7 +421,7 @@ abstract class Message extends SignedElement
      * @param string|null $relayState The new RelayState
      * @return void
      */
-    public function setRelayState(string $relayState = null) : void
+    public function setRelayState(?string $relayState = null) : void
     {
         $this->relayState = $relayState;
     }
@@ -520,7 +520,7 @@ abstract class Message extends SignedElement
      * @param XMLSecurityKey|null $signatureKey
      * @return void
      */
-    public function setSignatureKey(XMLSecurityKey $signatureKey = null) : void
+    public function setSignatureKey(?XMLSecurityKey $signatureKey = null) : void
     {
         $this->signatureKey = $signatureKey;
     }

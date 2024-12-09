@@ -24,7 +24,7 @@ interface DecryptionProvider
      *
      * @return mixed
      */
-    public function getPrivateKey(string $name, bool $required = null);
+    public function getPrivateKey(string $name, ?bool $required = null);
 
 
 

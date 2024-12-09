@@ -18,7 +18,7 @@ class LogoutResponse extends StatusResponse
      *
      * @param \DOMElement|null $xml     The input message.
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         parent::__construct('LogoutResponse', $xml);
 

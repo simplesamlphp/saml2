@@ -86,7 +86,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         parent::__construct($xml);
 
@@ -211,7 +211,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param string|null $Id
      * @return void
      */
-    public function setID(string $Id = null) : void
+    public function setID(?string $Id = null) : void
     {
         $this->ID = $Id;
     }
@@ -232,7 +232,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param int|null $validUntil
      * @return void
      */
-    public function setValidUntil(int $validUntil = null) : void
+    public function setValidUntil(?int $validUntil = null) : void
     {
         $this->validUntil = $validUntil;
     }
@@ -253,7 +253,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param string|null $cacheDuration
      * @return void
      */
-    public function setCacheDuration(string $cacheDuration = null) : void
+    public function setCacheDuration(?string $cacheDuration = null) : void
     {
         $this->cacheDuration = $cacheDuration;
     }
@@ -346,7 +346,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param \SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor
      * @return void
      */
-    public function setAffiliationDescriptor(AffiliationDescriptor $affiliationDescriptor = null) : void
+    public function setAffiliationDescriptor(?AffiliationDescriptor $affiliationDescriptor = null) : void
     {
         $this->AffiliationDescriptor = $affiliationDescriptor;
     }
@@ -369,7 +369,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param \SAML2\XML\md\Organization|null $organization
      * @return void
      */
-    public function setOrganization(Organization $organization = null) : void
+    public function setOrganization(?Organization $organization = null) : void
     {
         $this->Organization = $organization;
     }
@@ -451,7 +451,7 @@ class EntityDescriptor extends SignedElementHelper
      * @param \DOMElement|null $parent The EntitiesDescriptor we should append this EntityDescriptor to.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent = null) : DOMElement
+    public function toXML(?DOMElement $parent = null) : DOMElement
     {
         if (empty($this->entityID)) {
             throw new \Exception('Cannot convert EntityDescriptor to XML without an EntityID set.');

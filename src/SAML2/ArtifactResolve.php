@@ -25,7 +25,7 @@ class ArtifactResolve extends Request
      *
      * @param \DOMElement|null $xml The input assertion.
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         parent::__construct('ArtifactResolve', $xml);
 

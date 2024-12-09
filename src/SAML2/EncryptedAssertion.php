@@ -35,7 +35,7 @@ class EncryptedAssertion
      * @param \DOMElement|null $xml The encrypted assertion XML element.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -133,7 +133,7 @@ class EncryptedAssertion
      * @param  \DOMNode|null $parentElement The DOM node the assertion should be created in.
      * @return \DOMElement   This encrypted assertion.
      */
-    public function toXML(DOMNode $parentElement = null) : DOMElement
+    public function toXML(?DOMNode $parentElement = null) : DOMElement
     {
         if ($parentElement === null) {
             $document = DOMDocumentFactory::create();

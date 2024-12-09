@@ -30,7 +30,7 @@ class ArtifactResponse extends StatusResponse
      * @param \DOMElement|null $xml The input assertion.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         parent::__construct('ArtifactResponse', $xml);
 
@@ -54,7 +54,7 @@ class ArtifactResponse extends StatusResponse
      * @param \DOMElement|null $any
      * @return void
      */
-    public function setAny(DOMElement $any = null) : void
+    public function setAny(?DOMElement $any = null) : void
     {
         $this->any = $any;
     }

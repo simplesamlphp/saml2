@@ -30,7 +30,7 @@ class RequestedAttribute extends Attribute
      *
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         parent::__construct($xml);
 
@@ -59,7 +59,7 @@ class RequestedAttribute extends Attribute
      * @param bool|null $flag
      * @return void
      */
-    public function setIsRequired(bool $flag = null) : void
+    public function setIsRequired(?bool $flag = null) : void
     {
         $this->isRequired = $flag;
     }

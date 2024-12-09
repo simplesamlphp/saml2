@@ -247,7 +247,7 @@ class Assertion extends SignedElement
      * @param \DOMElement|null $xml The input assertion.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         // Create an Issuer
         $issuer = new Issuer();
@@ -771,7 +771,7 @@ class Assertion extends SignedElement
      * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
      * @return void
      */
-    public function setNameId(NameID $nameId = null) : void
+    public function setNameId(?NameID $nameId = null) : void
     {
         $this->nameId = $nameId;
     }
@@ -937,7 +937,7 @@ class Assertion extends SignedElement
      * @param int|null $notBefore The earliest timestamp this assertion is valid.
      * @return void
      */
-    public function setNotBefore(int $notBefore = null) : void
+    public function setNotBefore(?int $notBefore = null) : void
     {
         $this->notBefore = $notBefore;
     }
@@ -965,7 +965,7 @@ class Assertion extends SignedElement
      * @param int|null $notOnOrAfter The latest timestamp this assertion is valid.
      * @return void
      */
-    public function setNotOnOrAfter(int $notOnOrAfter = null) : void
+    public function setNotOnOrAfter(?int $notOnOrAfter = null) : void
     {
         $this->notOnOrAfter = $notOnOrAfter;
     }
@@ -1015,7 +1015,7 @@ class Assertion extends SignedElement
      * @param array|null $validAudiences The allowed audiences.
      * @return void
      */
-    public function setValidAudiences(array $validAudiences = null) : void
+    public function setValidAudiences(?array $validAudiences = null) : void
     {
         $this->validAudiences = $validAudiences;
     }
@@ -1038,7 +1038,7 @@ class Assertion extends SignedElement
      * @param int|null $authnInstant Timestamp the user was authenticated, or NULL if we don't want an AuthnStatement.
      * @return void
      */
-    public function setAuthnInstant(int $authnInstant = null) : void
+    public function setAuthnInstant(?int $authnInstant = null) : void
     {
         $this->authnInstant = $authnInstant;
     }
@@ -1066,7 +1066,7 @@ class Assertion extends SignedElement
      * @param int|null $sessionNotOnOrAfter The latest timestamp this session is valid.
      * @return void
      */
-    public function setSessionNotOnOrAfter(int $sessionNotOnOrAfter = null) : void
+    public function setSessionNotOnOrAfter(?int $sessionNotOnOrAfter = null) : void
     {
         $this->sessionNotOnOrAfter = $sessionNotOnOrAfter;
     }
@@ -1092,7 +1092,7 @@ class Assertion extends SignedElement
      * @param string|null $sessionIndex The session index of the user at the IdP.
      * @return void
      */
-    public function setSessionIndex(string $sessionIndex = null) : void
+    public function setSessionIndex(?string $sessionIndex = null) : void
     {
         $this->sessionIndex = $sessionIndex;
     }
@@ -1121,7 +1121,7 @@ class Assertion extends SignedElement
      * @param string|null $authnContextClassRef The authentication method.
      * @return void
      */
-    public function setAuthnContextClassRef(string $authnContextClassRef = null) : void
+    public function setAuthnContextClassRef(?string $authnContextClassRef = null) : void
     {
         $this->authnContextClassRef = $authnContextClassRef;
     }
@@ -1144,7 +1144,7 @@ class Assertion extends SignedElement
      * @param string|null $signatureMethod
      * @return void
      */
-    public function setSignatureMethod(string $signatureMethod = null) : void
+    public function setSignatureMethod(?string $signatureMethod = null) : void
     {
         $this->signatureMethod = $signatureMethod;
     }
@@ -1190,7 +1190,7 @@ class Assertion extends SignedElement
      * @throws \Exception
      * @return void
      */
-    public function setAuthnContextDeclRef(string $authnContextDeclRef = null) : void
+    public function setAuthnContextDeclRef(?string $authnContextDeclRef = null) : void
     {
         if (!empty($this->authnContextDecl)) {
             throw new \Exception(
@@ -1274,7 +1274,7 @@ class Assertion extends SignedElement
      * @param array|null $signatureData
      * @return void
      */
-    public function setSignatureData(array $signatureData = null) : void
+    public function setSignatureData(?array $signatureData = null) : void
     {
         $this->signatureData = $signatureData;
     }
@@ -1394,7 +1394,7 @@ class Assertion extends SignedElement
      * @param XMLSecurityKey|null $signatureKey
      * @return void
      */
-    public function setSignatureKey(XMLSecurityKey $signatureKey = null) : void
+    public function setSignatureKey(?XMLSecurityKey $signatureKey = null) : void
     {
         $this->signatureKey = $signatureKey;
     }
@@ -1418,7 +1418,7 @@ class Assertion extends SignedElement
      * @param XMLSecurityKey|null $Key
      * @return void
      */
-    public function setEncryptionKey(XMLSecurityKey $Key = null) : void
+    public function setEncryptionKey(?XMLSecurityKey $Key = null) : void
     {
         $this->encryptionKey = $Key;
     }
@@ -1464,7 +1464,7 @@ class Assertion extends SignedElement
      * @param  \DOMNode|null $parentElement The DOM node the assertion should be created in.
      * @return \DOMElement   This assertion.
      */
-    public function toXML(\DOMNode $parentElement = null) : DOMElement
+    public function toXML(?\DOMNode $parentElement = null) : DOMElement
     {
         if ($parentElement === null) {
             $document = DOMDocumentFactory::create();

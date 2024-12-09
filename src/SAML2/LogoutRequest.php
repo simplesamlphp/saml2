@@ -63,7 +63,7 @@ class LogoutRequest extends Request
      * @param \DOMElement|null $xml The input message.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         parent::__construct('LogoutRequest', $xml);
 
@@ -120,7 +120,7 @@ class LogoutRequest extends Request
      * @param int|null $notOnOrAfter The expiration time of this request.
      * @return void
      */
-    public function setNotOnOrAfter(int $notOnOrAfter = null) : void
+    public function setNotOnOrAfter(?int $notOnOrAfter = null) : void
     {
         $this->notOnOrAfter = $notOnOrAfter;
     }
@@ -295,7 +295,7 @@ class LogoutRequest extends Request
      * @param string|null $sessionIndex The sesion index of the session that should be terminated.
      * @return void
      */
-    public function setSessionIndex(string $sessionIndex = null) : void
+    public function setSessionIndex(?string $sessionIndex = null) : void
     {
         if (is_null($sessionIndex)) {
             $this->sessionIndexes = [];

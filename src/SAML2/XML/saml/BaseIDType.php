@@ -35,7 +35,7 @@ abstract class BaseIDType
      *
      * @param \DOMElement|null $xml The XML element we should load, if any.
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -57,7 +57,7 @@ abstract class BaseIDType
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this BaseID.
      */
-    public function toXML(DOMElement $parent = null) : DOMElement
+    public function toXML(?DOMElement $parent = null) : DOMElement
     {
         if ($parent === null) {
             $parent = DOMDocumentFactory::create();

@@ -53,7 +53,7 @@ class DiscoHints
      *
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         if ($xml === null) {
             return;

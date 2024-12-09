@@ -41,7 +41,7 @@ class SOAPClient
      *
      * @psalm-suppress UndefinedClass
      */
-    public function send(Message $msg, Configuration $srcMetadata, Configuration $dstMetadata = null) : Message
+    public function send(Message $msg, Configuration $srcMetadata, ?Configuration $dstMetadata = null) : Message
     {
         $issuer = $msg->getIssuer();
 

@@ -50,7 +50,7 @@ class EndpointType
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -196,7 +196,7 @@ class EndpointType
      * @param string|null $location
      * @return void
      */
-    public function setLocation(string $location = null) : void
+    public function setLocation(?string $location = null) : void
     {
         $this->Location = $location;
     }
@@ -219,7 +219,7 @@ class EndpointType
      * @param string|null $responseLocation
      * @return void
      */
-    public function setResponseLocation(string $responseLocation = null) : void
+    public function setResponseLocation(?string $responseLocation = null) : void
     {
         $this->ResponseLocation = $responseLocation;
     }

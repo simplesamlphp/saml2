@@ -75,7 +75,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         parent::__construct('md:IDPSSODescriptor', $xml);
 
@@ -126,7 +126,7 @@ class IDPSSODescriptor extends SSODescriptorType
      * @param bool|null $flag
      * @return void
      */
-    public function setWantAuthnRequestsSigned(bool $flag = null) : void
+    public function setWantAuthnRequestsSigned(?bool $flag = null) : void
     {
         $this->WantAuthnRequestsSigned = $flag;
     }

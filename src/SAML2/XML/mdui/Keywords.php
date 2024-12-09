@@ -38,7 +38,7 @@ class Keywords
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         if ($xml === null) {
             return;

@@ -66,7 +66,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         parent::__construct($xml);
 
@@ -145,7 +145,7 @@ class AffiliationDescriptor extends SignedElementHelper
      * @param string|null $Id
      * @return void
      */
-    public function setID(string $Id = null) : void
+    public function setID(?string $Id = null) : void
     {
         $this->ID = $Id;
     }

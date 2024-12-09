@@ -59,7 +59,7 @@ abstract class SSODescriptorType extends RoleDescriptor
      * @param string $elementName The name of this element.
      * @param \DOMElement|null $xml The XML element we should load.
      */
-    protected function __construct(string $elementName, DOMElement $xml = null)
+    protected function __construct(string $elementName, ?DOMElement $xml = null)
     {
         parent::__construct($elementName, $xml);
 

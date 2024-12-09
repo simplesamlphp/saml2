@@ -50,7 +50,7 @@ trait IDNameQualifiersTrait
      * @param string|null $nameQualifier
      * @return void
      */
-    public function setNameQualifier(string $nameQualifier = null) : void
+    public function setNameQualifier(?string $nameQualifier = null) : void
     {
         $this->NameQualifier = $nameQualifier;
     }
@@ -73,7 +73,7 @@ trait IDNameQualifiersTrait
      * @param string|null $spNameQualifier
      * @return void
      */
-    public function setSPNameQualifier(string $spNameQualifier = null) : void
+    public function setSPNameQualifier(?string $spNameQualifier = null) : void
     {
         $this->SPNameQualifier = $spNameQualifier;
     }

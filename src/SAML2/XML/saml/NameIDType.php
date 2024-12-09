@@ -63,7 +63,7 @@ abstract class NameIDType implements Serializable
      *
      * @param \DOMElement|null $xml The XML element we should load, if any.
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -106,7 +106,7 @@ abstract class NameIDType implements Serializable
      * @param string|null $format
      * @return void
      */
-    public function setFormat(string $format = null) : void
+    public function setFormat(?string $format = null) : void
     {
         $this->Format = $format;
     }
@@ -152,7 +152,7 @@ abstract class NameIDType implements Serializable
      * @param string|null $spProvidedID
      * @return void
      */
-    public function setSPProvidedID(string $spProvidedID = null) : void
+    public function setSPProvidedID(?string $spProvidedID = null) : void
     {
         $this->SPProvidedID = $spProvidedID;
     }
@@ -164,7 +164,7 @@ abstract class NameIDType implements Serializable
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this NameIDType.
      */
-    public function toXML(DOMElement $parent = null) : DOMElement
+    public function toXML(?DOMElement $parent = null) : DOMElement
     {
         if ($parent === null) {
             $parent = DOMDocumentFactory::create();

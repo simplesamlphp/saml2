@@ -88,7 +88,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    protected function __construct(string $elementName, DOMElement $xml = null)
+    protected function __construct(string $elementName, ?DOMElement $xml = null)
     {
         parent::__construct($xml);
         $this->elementName = $elementName;
@@ -155,7 +155,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param string|null $Id
      * @return void
      */
-    public function setID(string $Id = null) : void
+    public function setID(?string $Id = null) : void
     {
         $this->ID = $Id;
     }
@@ -176,7 +176,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param int|null $validUntil
      * @return void
      */
-    public function setValidUntil(int $validUntil = null) : void
+    public function setValidUntil(?int $validUntil = null) : void
     {
         $this->validUntil = $validUntil;
     }
@@ -197,7 +197,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param string|null $cacheDuration
      * @return void
      */
-    public function setCacheDuration(string $cacheDuration = null) : void
+    public function setCacheDuration(?string $cacheDuration = null) : void
     {
         $this->cacheDuration = $cacheDuration;
     }
@@ -244,7 +244,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param string|null $errorURL
      * @return void
      */
-    public function setErrorURL(string $errorURL = null) : void
+    public function setErrorURL(?string $errorURL = null) : void
     {
         if (!is_null($errorURL) && !filter_var($errorURL, FILTER_VALIDATE_URL)) {
             throw new \InvalidArgumentException('RoleDescriptor errorURL is not a valid URL.');
@@ -316,7 +316,7 @@ class RoleDescriptor extends SignedElementHelper
      * @param \SAML2\XML\md\Organization|null $organization
      * @return void
      */
-    public function setOrganization(Organization $organization = null) : void
+    public function setOrganization(?Organization $organization = null) : void
     {
         $this->Organization = $organization;
     }

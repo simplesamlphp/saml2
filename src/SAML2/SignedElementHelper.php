@@ -44,7 +44,7 @@ class SignedElementHelper extends SignedElement
      *
      * @param \DOMElement|null $xml The XML element which may be signed.
      */
-    protected function __construct(DOMElement $xml = null)
+    protected function __construct(?DOMElement $xml = null)
     {
         $this->certificates = [];
         $this->validators = [];
@@ -146,7 +146,7 @@ class SignedElementHelper extends SignedElement
      * @param XMLSecurityKey|null $signatureKey
      * @return void
      */
-    public function setSignatureKey(XMLSecurityKey $signatureKey = null) : void
+    public function setSignatureKey(?XMLSecurityKey $signatureKey = null) : void
     {
         $this->signatureKey = $signatureKey;
     }
@@ -225,7 +225,7 @@ class SignedElementHelper extends SignedElement
      * @param int|null $validUntil
      * @return void
      */
-    public function setValidUntil(int $validUntil = null) : void
+    public function setValidUntil(?int $validUntil = null) : void
     {
         $this->validUntil = $validUntil;
     }
@@ -248,7 +248,7 @@ class SignedElementHelper extends SignedElement
      * @param string|null $cacheDuration
      * @return void
      */
-    public function setCacheDuration(string $cacheDuration = null) : void
+    public function setCacheDuration(?string $cacheDuration = null) : void
     {
         $this->cacheDuration = $cacheDuration;
     }
@@ -261,7 +261,7 @@ class SignedElementHelper extends SignedElement
      * @param \DOMNode|null $insertBefore The element we should insert the signature node before.
      * @return \DOMElement|null
      */
-    protected function signElement(DOMElement $root, DOMNode $insertBefore = null) : ?DOMElement
+    protected function signElement(DOMElement $root, ?DOMNode $insertBefore = null) : ?DOMElement
     {
         if ($this->signatureKey === null) {
             /* We cannot sign this element. */

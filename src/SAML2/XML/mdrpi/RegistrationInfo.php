@@ -46,7 +46,7 @@ class RegistrationInfo
      * @param \DOMElement|null $xml The XML element we should load.
      * @throws \Exception
      */
-    public function __construct(DOMElement $xml = null)
+    public function __construct(?DOMElement $xml = null)
     {
         if ($xml === null) {
             return;
@@ -107,7 +107,7 @@ class RegistrationInfo
      * @param int|null $registrationInstant
      * @return void
      */
-    public function setRegistrationInstant(int $registrationInstant = null) : void
+    public function setRegistrationInstant(?int $registrationInstant = null) : void
     {
         $this->registrationInstant = $registrationInstant;
     }
