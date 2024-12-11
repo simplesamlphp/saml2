@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use DateTimeImmutable;
-use DOMDocument;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
@@ -39,16 +38,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
         SignedElementTrait::getBlacklistedAlgorithms insteadof SignableElementTrait;
     }
 
-
-    /**
-     * The \DOMDocument we are currently building.
-     *
-     * This variable is used while generating XML from this message. It holds the
-     * \DOMDocument of the XML we are generating.
-     *
-     * @var \DOMDocument|null
-     */
-    protected ?DOMDocument $document = null;
 
     /** @var bool */
     protected bool $messageContainedSignatureUponConstruction = false;
