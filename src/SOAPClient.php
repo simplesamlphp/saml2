@@ -172,6 +172,17 @@ class SOAPClient
             );
         }
 
+        $xpCache = XPath::getXPath($document->documentElement);
+        /** @var \DOMElement[] $results */
+        $results = XPath::xpQuery($xml, '/SOAP-ENV:Envelope/SOAP-ENV:Body/*[1]', $xpCache);
+
+        // This is already too late to perform schema validation.
+        // TODO:  refactor the SOAPClient and artifact binding. The SOAPClient should be a generic tool from xml-soap
+        $document = DOMDocumentFactory::fromString(
+            xml: $results[0]->ownerDocument->saveXML(),
+            schemaFile: $this->getSchemaValidation() ? self::$schemaFile : null,
+        );
+
         // Extract the message from the response
         /** @var \SimpleSAML\XML\SerializableElementInterface[] $messages */
         $messages = $env->getBody()->getElements();
