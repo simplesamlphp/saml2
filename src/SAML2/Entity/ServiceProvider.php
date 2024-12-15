@@ -57,6 +57,7 @@ final class ServiceProvider
     protected bool $responseWasSigned;
 
     /**
+     * @param bool $performSchemaValidation  Whether messages must be validated against the schema
      * @param bool $encryptedAssertions  Whether assertions must be encrypted
      * @param bool $disableScoping  Whether to send the samlp:Scoping element in requests
      * @param bool $enableUnsolicited  Whether to process unsolicited responses
@@ -68,6 +69,7 @@ final class ServiceProvider
     public function __construct(
         protected MetadataProviderInterface $metadataProvider,
         protected Metadata\ServiceProvider $spMetadata,
+        protected readonly bool $performSchemaValidation = true,
         protected readonly bool $encryptedAssertions = false,
         protected readonly bool $disableScoping = false,
         protected readonly bool $enableUnsolicited = false,
@@ -139,6 +141,7 @@ final class ServiceProvider
             $binding->setSPMetadata($this->spMetadata);
         }
 
+        $binding->setSchemaValidation($this->performSchemaValidation);
         $rawResponse = $binding->receive($request);
         Assert::isInstanceOf($rawResponse, Response::class, ResourceNotRecognizedException::class); // Wrong type of msg
 
