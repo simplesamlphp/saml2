@@ -33,7 +33,7 @@
         "psr/log": "^2.0 || ^3.0",
         "simplesamlphp/assert": "~1.6.0",
         "simplesamlphp/xml-common": "~1.22.0",
-        "simplesamlphp/xml-security": "~1.11.0",
+        "simplesamlphp/xml-security": "~1.12.0",
         "simplesamlphp/xml-soap": "~1.5.6"
     },
     "require-dev": {
