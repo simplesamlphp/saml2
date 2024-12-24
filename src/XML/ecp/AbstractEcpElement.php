@@ -21,4 +21,7 @@ abstract class AbstractEcpElement extends AbstractElement
 
     /** @var string */
     public const NS_PREFIX = 'ecp';
+
+    /** @var string */
+    public const SCHEMA = 'resources/schemas/saml-schema-ecp-2.0.xsd';
 }

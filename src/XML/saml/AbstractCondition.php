@@ -14,6 +14,8 @@ use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function count;
 use function explode;
@@ -23,9 +25,12 @@ use function explode;
  *
  * @package simplesamlphp/saml2
  */
-abstract class AbstractCondition extends AbstractConditionType implements ExtensionPointInterface
+abstract class AbstractCondition extends AbstractConditionType implements
+    ExtensionPointInterface,
+    SchemaValidatableElementInterface
 {
     use ExtensionPointTrait;
+    use SchemaValidatableElementTrait;
 
     /** @var string */
     public const LOCALNAME = 'Condition';

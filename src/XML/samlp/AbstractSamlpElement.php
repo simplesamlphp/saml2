@@ -19,4 +19,7 @@ abstract class AbstractSamlpElement extends AbstractElement
 
     /** @var string */
     public const NS_PREFIX = 'samlp';
+
+    /** @var string */
+    public const SCHEMA = 'resources/schemas/saml-schema-protocol-2.0.xsd';
 }

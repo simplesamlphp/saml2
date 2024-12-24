@@ -9,6 +9,8 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\StringElementTrait;
 
 use function trim;
@@ -18,8 +20,9 @@ use function trim;
  *
  * @package simplesamlphp/saml2
  */
-final class AdditionalMetadataLocation extends AbstractMdElement
+final class AdditionalMetadataLocation extends AbstractMdElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
     use StringElementTrait;
 
 

@@ -79,8 +79,6 @@ final class AssertionTest extends TestCase
 
         self::$clock = Utils::getContainer()->getClock();
 
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = Assertion::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(

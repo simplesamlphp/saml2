@@ -11,6 +11,8 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\StringElementTrait;
 
 use function filter_var;
@@ -24,8 +26,11 @@ use function trim;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package simplesamlphp/saml2
  */
-final class Logo extends AbstractMduiElement implements ArrayizableElementInterface
+final class Logo extends AbstractMduiElement implements
+    ArrayizableElementInterface,
+    SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
     use StringElementTrait;
 
 

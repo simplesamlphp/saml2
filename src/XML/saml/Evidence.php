@@ -9,14 +9,18 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 /**
  * Class representing a saml:Evidence element.
  *
  * @package simplesaml/saml2
  */
-final class Evidence extends AbstractSamlElement
+final class Evidence extends AbstractSamlElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * @param \SimpleSAML\SAML2\XML\saml\AssertionIDRef[] $assertionIDRef
      * @param \SimpleSAML\SAML2\XML\saml\AssertionURIRef[] $assertionURIRef

@@ -13,6 +13,8 @@ use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeStatement;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function array_filter;
 use function array_merge;
@@ -24,8 +26,10 @@ use function sprintf;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-metadata-attr-cs-01.pdf
  * @package simplesamlphp/saml2
  */
-final class EntityAttributes extends AbstractMdattrElement
+final class EntityAttributes extends AbstractMdattrElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Create a EntityAttributes element.
      *

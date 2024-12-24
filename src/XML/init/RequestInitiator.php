@@ -9,6 +9,8 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractEndpointType;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 /**
  * Class for handling the init:RequestInitiator element.
@@ -17,14 +19,18 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
  *
  * @package simplesamlphp/saml2
  */
-final class RequestInitiator extends AbstractEndpointType
+final class RequestInitiator extends AbstractEndpointType implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /** @var string */
     public const NS = 'urn:oasis:names:tc:SAML:profiles:SSO:request-init';
 
     /** @var string */
     public const NS_PREFIX = 'init';
 
+    /** @var string */
+    public const SCHEMA = 'resources/schemas/sstc-request-initiation.xsd';
 
     /**
      * EndpointType constructor.

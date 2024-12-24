@@ -18,6 +18,8 @@ use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
@@ -38,8 +40,10 @@ use function in_array;
  *
  * @package simplesamlphp/saml2
  */
-class AttributeQuery extends AbstractSubjectQuery
+class AttributeQuery extends AbstractSubjectQuery implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Constructor for SAML 2 AttributeQuery.
      *

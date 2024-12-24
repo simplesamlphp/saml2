@@ -8,6 +8,8 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\StringElementTrait;
 
 /**
@@ -15,8 +17,9 @@ use SimpleSAML\XML\StringElementTrait;
  *
  * @package simplesaml/saml2
  */
-final class AssertionIDRef extends AbstractSamlElement
+final class AssertionIDRef extends AbstractSamlElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
     use StringElementTrait;
 
 

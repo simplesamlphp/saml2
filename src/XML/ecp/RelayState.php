@@ -10,6 +10,8 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\StringElementTrait;
 
 /**
@@ -17,8 +19,9 @@ use SimpleSAML\XML\StringElementTrait;
  *
  * @package simplesamlphp/saml2
  */
-final class RelayState extends AbstractEcpElement
+final class RelayState extends AbstractEcpElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
     use StringElementTrait;
 
     /**

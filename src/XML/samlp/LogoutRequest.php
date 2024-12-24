@@ -21,6 +21,8 @@ use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
@@ -30,10 +32,10 @@ use function array_pop;
  *
  * @package simplesamlphp/saml2
  */
-final class LogoutRequest extends AbstractRequest
+final class LogoutRequest extends AbstractRequest implements SchemaValidatableElementInterface
 {
     use IdentifierTrait;
-
+    use SchemaValidatableElementTrait;
 
     /**
      * Constructor for SAML 2 AttributeQuery.

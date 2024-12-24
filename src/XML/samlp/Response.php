@@ -18,6 +18,8 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_merge;
@@ -28,8 +30,10 @@ use function array_pop;
  *
  * @package simplesamlphp/saml2
  */
-class Response extends AbstractStatusResponse
+class Response extends AbstractStatusResponse implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Constructor for SAML 2 response messages.
      *

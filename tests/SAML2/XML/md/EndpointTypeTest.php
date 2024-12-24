@@ -52,8 +52,6 @@ final class EndpointTypeTest extends TestCase
             '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
         );
 
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = AttributeService::class;
 
         self::$arrayRepresentation = [

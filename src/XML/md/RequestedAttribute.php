@@ -6,7 +6,6 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -21,10 +20,13 @@ use function is_bool;
 final class RequestedAttribute extends Attribute
 {
     /** @var string */
-    public const NS = C::NS_MD;
+    public const NS = AbstractMdElement::NS;
 
     /** @var string */
-    public const NS_PREFIX = 'md';
+    public const NS_PREFIX = AbstractMdElement::NS_PREFIX;
+
+    /** @var string */
+    public const SCHEMA = AbstractMdElement::SCHEMA;
 
 
     /**

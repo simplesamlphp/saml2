@@ -8,14 +8,18 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 /**
  * Class representing a SAML2 AttributeStatement
  *
  * @package simplesamlphp/saml2
  */
-class AttributeStatement extends AbstractStatementType
+class AttributeStatement extends AbstractStatementType implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * AttributeStatement constructor.
      *

@@ -7,6 +7,8 @@ namespace SimpleSAML\SAML2\XML\shibmd;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\StringElementTrait;
 
 /**
@@ -15,8 +17,9 @@ use SimpleSAML\XML\StringElementTrait;
  * @link https://wiki.shibboleth.net/confluence/display/SC/ShibMetaExt+V1.0
  * @package simplesamlphp/saml2
  */
-final class Scope extends AbstractShibmdElement
+final class Scope extends AbstractShibmdElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
     use StringElementTrait;
 
 

@@ -48,8 +48,6 @@ final class DiscoveryResponseTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-idp-discovery.xsd';
-
         self::$testedClass = DiscoveryResponse::class;
 
         self::$attr = new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'attr1', 'testval1');

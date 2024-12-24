@@ -72,8 +72,6 @@ final class AuthnRequestTest extends TestCase
     {
         self::$clock = Utils::getContainer()->getClock();
 
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = AuthnRequest::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(

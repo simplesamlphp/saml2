@@ -13,6 +13,8 @@ use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function preg_replace;
 
@@ -22,8 +24,12 @@ use function preg_replace;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
  * @package simplesamlphp/saml2
  */
-final class RegistrationInfo extends AbstractMdrpiElement implements ArrayizableElementInterface
+final class RegistrationInfo extends AbstractMdrpiElement implements
+    ArrayizableElementInterface,
+    SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Create/parse a mdrpi:RegistrationInfo element.
      *

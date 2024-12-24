@@ -10,6 +10,8 @@ use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 
 /**
@@ -17,8 +19,10 @@ use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
  *
  * @package simplesamlphp/saml2
  */
-final class KeyDescriptor extends AbstractMdElement
+final class KeyDescriptor extends AbstractMdElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * KeyDescriptor constructor.
      *

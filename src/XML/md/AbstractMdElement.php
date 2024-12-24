@@ -19,4 +19,7 @@ abstract class AbstractMdElement extends AbstractElement
 
     /** @var string */
     public const NS_PREFIX = 'md';
+
+    /** @var string */
+    public const SCHEMA = 'resources/schemas/saml-schema-metadata-2.0.xsd';
 }

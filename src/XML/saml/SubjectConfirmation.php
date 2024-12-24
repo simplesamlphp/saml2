@@ -10,6 +10,8 @@ use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\XML\IdentifierTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function array_pop;
 
@@ -18,10 +20,10 @@ use function array_pop;
  *
  * @package simplesamlphp/saml2
  */
-final class SubjectConfirmation extends AbstractSamlElement
+final class SubjectConfirmation extends AbstractSamlElement implements SchemaValidatableElementInterface
 {
     use IdentifierTrait;
-
+    use SchemaValidatableElementTrait;
 
     /**
      * Initialize (and parse) a SubjectConfirmation element.

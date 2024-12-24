@@ -42,8 +42,6 @@ final class DiscoHintsTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
-
         self::$testedClass = DiscoHints::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(

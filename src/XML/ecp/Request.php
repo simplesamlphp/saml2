@@ -13,6 +13,8 @@ use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function intval;
 use function strval;
@@ -22,8 +24,10 @@ use function strval;
  *
  * @package simplesamlphp/saml2
  */
-final class Request extends AbstractEcpElement
+final class Request extends AbstractEcpElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Create a ECP Request element.
      *

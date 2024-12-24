@@ -14,6 +14,8 @@ use SimpleSAML\SAML2\Utils;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\ExtendableElementTrait;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\XsNamespace as NS;
 
 use function filter_var;
@@ -24,10 +26,11 @@ use function is_null;
  *
  * @package simplesamlphp/saml2
  */
-final class SubjectConfirmationData extends AbstractSamlElement
+final class SubjectConfirmationData extends AbstractSamlElement implements SchemaValidatableElementInterface
 {
     use ExtendableAttributesTrait;
     use ExtendableElementTrait;
+    use SchemaValidatableElementTrait;
 
     /** The namespace-attribute for the xs:any element */
     public const XS_ANY_ELT_NAMESPACE = NS::ANY;

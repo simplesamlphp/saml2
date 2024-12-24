@@ -8,6 +8,8 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\XML\EncryptableElementTrait;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
 
@@ -21,9 +23,12 @@ use function array_keys;
  *
  * @package simplesamlphp/saml2
  */
-final class NameID extends NameIDType implements EncryptableElementInterface
+final class NameID extends NameIDType implements
+    EncryptableElementInterface,
+    SchemaValidatableElementInterface
 {
     use EncryptableElementTrait;
+    use SchemaValidatableElementTrait;
 
     /**
      * Initialize a saml:NameID

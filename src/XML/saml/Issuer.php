@@ -7,14 +7,18 @@ namespace SimpleSAML\SAML2\XML\saml;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 /**
  * Class representing the saml:Issuer element.
  *
  * @package simplesamlphp/saml2
  */
-final class Issuer extends NameIDType
+final class Issuer extends NameIDType implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Initialize a saml:Issuer
      *

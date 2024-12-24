@@ -6,6 +6,8 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\StringElementTrait;
 
 /**
@@ -13,8 +15,9 @@ use SimpleSAML\XML\StringElementTrait;
  *
  * @package simplesamlphp/saml2
  */
-final class GeolocationHint extends AbstractMduiElement
+final class GeolocationHint extends AbstractMduiElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
     use StringElementTrait;
 
 

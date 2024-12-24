@@ -12,6 +12,8 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 /**
@@ -19,8 +21,10 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
  *
  * @package simplesamlphp/saml2
  */
-final class EntitiesDescriptor extends AbstractMetadataDocument
+final class EntitiesDescriptor extends AbstractMetadataDocument implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * EntitiesDescriptor constructor.
      *

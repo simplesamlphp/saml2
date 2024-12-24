@@ -8,15 +8,18 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Base64ElementTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 /**
  * Class for SAML artifacts.
  *
  * @package simplesamlphp/saml2
  */
-final class Artifact extends AbstractSamlpElement
+final class Artifact extends AbstractSamlpElement implements SchemaValidatableElementInterface
 {
     use Base64ElementTrait;
+    use SchemaValidatableElementTrait;
 
     /**
      * Initialize an artifact.

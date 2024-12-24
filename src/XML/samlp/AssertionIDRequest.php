@@ -16,6 +16,8 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
@@ -25,8 +27,10 @@ use function version_compare;
 /**
  * @package simplesamlphp/saml2
  */
-final class AssertionIDRequest extends AbstractRequest
+final class AssertionIDRequest extends AbstractRequest implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Initialize an AssertionIDRequest.
      *

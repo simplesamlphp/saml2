@@ -11,6 +11,8 @@ use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function array_change_key_case;
 use function array_filter;
@@ -23,8 +25,10 @@ use function array_pop;
  *
  * @package simplesamlphp/saml2
  */
-final class IDPList extends AbstractSamlpElement
+final class IDPList extends AbstractSamlpElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Initialize an IDPList element.
      *

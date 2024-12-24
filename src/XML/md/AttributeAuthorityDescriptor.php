@@ -13,6 +13,8 @@ use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function preg_split;
@@ -22,8 +24,11 @@ use function preg_split;
  *
  * @package simplesamlphp/saml2
  */
-final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType
+final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType implements
+    SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * AttributeAuthorityDescriptor constructor.
      *

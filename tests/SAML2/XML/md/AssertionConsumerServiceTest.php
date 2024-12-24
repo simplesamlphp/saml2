@@ -53,8 +53,6 @@ final class AssertionConsumerServiceTest extends TestCase
 
         self::$attr = new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'attr1', 'testval1');
 
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = AssertionConsumerService::class;
 
         self::$arrayRepresentation = [

@@ -56,8 +56,6 @@ final class PDPDescriptorTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = PDPDescriptor::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(

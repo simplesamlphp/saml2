@@ -39,8 +39,6 @@ final class PublicationTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
-
         self::$testedClass = Publication::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(

@@ -13,6 +13,8 @@ use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function array_change_key_case;
 use function array_keys;
@@ -24,8 +26,12 @@ use function preg_replace;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
  * @package simplesamlphp/saml2
  */
-final class PublicationInfo extends AbstractMdrpiElement implements ArrayizableElementInterface
+final class PublicationInfo extends AbstractMdrpiElement implements
+    ArrayizableElementInterface,
+    SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Create/parse a mdrpi:PublicationInfo element.
      *

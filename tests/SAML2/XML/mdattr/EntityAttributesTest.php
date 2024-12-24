@@ -48,8 +48,6 @@ final class EntityAttributesTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-metadata-attr.xsd';
-
         self::$testedClass = EntityAttributes::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(

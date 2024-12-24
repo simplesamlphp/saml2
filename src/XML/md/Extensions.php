@@ -25,6 +25,8 @@ use SimpleSAML\SAML2\XML\mdui\UIInfo;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function array_key_exists;
 
@@ -33,10 +35,10 @@ use function array_key_exists;
  *
  * @package simplesamlphp/saml2
  */
-final class Extensions extends AbstractMdElement
+final class Extensions extends AbstractMdElement implements SchemaValidatableElementInterface
 {
     use ExtensionsTrait;
-
+    use SchemaValidatableElementTrait;
 
     /**
      * Create an Extensions object from its md:Extensions XML representation.

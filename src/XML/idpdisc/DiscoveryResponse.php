@@ -8,6 +8,8 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 /**
  * Abstract class to be implemented by all the classes in this namespace
@@ -16,14 +18,18 @@ use SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType;
  *
  * @see http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-idp-discovery.html
  */
-final class DiscoveryResponse extends AbstractIndexedEndpointType
+final class DiscoveryResponse extends AbstractIndexedEndpointType implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /** @var string */
     public const NS = C::NS_IDPDISC;
 
     /** @var string */
     public const NS_PREFIX = 'idpdisc';
 
+    /** @var string */
+    public const SCHEMA = 'resources/schemas/sstc-saml-idp-discovery.xsd';
 
     /**
      * DiscoveryResponse constructor.

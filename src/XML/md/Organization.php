@@ -16,6 +16,8 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\XsNamespace as NS;
 
 use function array_change_key_case;
@@ -29,10 +31,13 @@ use function array_merge;
  *
  * @package simplesamlphp/saml2
  */
-final class Organization extends AbstractMdElement implements ArrayizableElementInterface
+final class Organization extends AbstractMdElement implements
+    ArrayizableElementInterface,
+    SchemaValidatableElementInterface
 {
     use ExtendableAttributesTrait;
     use ExtendableElementTrait;
+    use SchemaValidatableElementTrait;
 
     /** The namespace-attribute for the xs:anyAttribute element */
     public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;

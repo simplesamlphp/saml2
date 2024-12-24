@@ -19,4 +19,7 @@ abstract class AbstractAlgElement extends AbstractElement
 
     /** @var string */
     public const NS_PREFIX = 'alg';
+
+    /** @var string */
+    public const SCHEMA = 'resources/schemas/sstc-saml-metadata-algsupport-v1.0.xsd';
 }

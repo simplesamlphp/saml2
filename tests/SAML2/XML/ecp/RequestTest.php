@@ -38,8 +38,6 @@ final class RequestTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-ecp-2.0.xsd';
-
         self::$testedClass = Request::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(

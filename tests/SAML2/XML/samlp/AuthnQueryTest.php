@@ -50,8 +50,6 @@ final class AuthnQueryTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = AuthnQuery::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
