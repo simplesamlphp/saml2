@@ -12,6 +12,8 @@ use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function preg_split;
@@ -21,8 +23,10 @@ use function preg_split;
  *
  * @package simplesamlphp/saml2
  */
-final class IDPSSODescriptor extends AbstractSSODescriptor
+final class IDPSSODescriptor extends AbstractSSODescriptor implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * IDPSSODescriptor constructor.
      *

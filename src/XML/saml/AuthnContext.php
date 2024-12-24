@@ -12,6 +12,8 @@ use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function array_pop;
 use function is_null;
@@ -21,8 +23,10 @@ use function is_null;
  *
  * @package simplesamlphp/saml2
  */
-final class AuthnContext extends AbstractSamlElement
+final class AuthnContext extends AbstractSamlElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Initialize an AuthnContext.
      *

@@ -10,6 +10,8 @@ use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function array_pop;
 
@@ -18,8 +20,12 @@ use function array_pop;
  *
  * @package simplesamlphp/saml2
  */
-final class RepublishRequest extends AbstractEmdElement implements ArrayizableElementInterface
+final class RepublishRequest extends AbstractEmdElement implements
+    ArrayizableElementInterface,
+    SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * @param \SimpleSAML\SAML2\XML\emd\RepublishTarget $republishTarget
      */

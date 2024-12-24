@@ -7,6 +7,8 @@ namespace SimpleSAML\SAML2\XML\md;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\StringElementTrait;
 
 use function array_key_first;
@@ -19,8 +21,11 @@ use function trim;
  *
  * @package simplesamlphp/saml2
  */
-final class EmailAddress extends AbstractMdElement implements ArrayizableElementInterface
+final class EmailAddress extends AbstractMdElement implements
+    ArrayizableElementInterface,
+    SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
     use StringElementTrait;
 
 

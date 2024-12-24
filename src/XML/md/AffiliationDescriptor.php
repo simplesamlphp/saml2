@@ -12,6 +12,8 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\XsNamespace as NS;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
@@ -20,9 +22,10 @@ use SimpleSAML\XMLSecurity\XML\ds\Signature;
  *
  * @package simplesamlphp/saml2
  */
-final class AffiliationDescriptor extends AbstractMetadataDocument
+final class AffiliationDescriptor extends AbstractMetadataDocument implements SchemaValidatableElementInterface
 {
     use ExtendableAttributesTrait;
+    use SchemaValidatableElementTrait;
 
     /** The namespace-attribute for the xs:anyAttribute element */
     public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;

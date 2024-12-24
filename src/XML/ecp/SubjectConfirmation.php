@@ -13,14 +13,18 @@ use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 /**
  * Class representing the ECP SubjectConfirmation element.
  *
  * @package simplesamlphp/saml2
  */
-final class SubjectConfirmation extends AbstractEcpElement
+final class SubjectConfirmation extends AbstractEcpElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Create a ECP SubjectConfirmation element.
      *

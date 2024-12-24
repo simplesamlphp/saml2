@@ -17,6 +17,8 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function array_pop;
 use function count;
@@ -27,9 +29,12 @@ use function implode;
  *
  * @package simplesamlphp/saml2
  */
-abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType implements ExtensionPointInterface
+abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType implements
+    ExtensionPointInterface,
+    SchemaValidatableElementInterface
 {
     use ExtensionPointTrait;
+    use SchemaValidatableElementTrait;
 
     /** @var string */
     public const LOCALNAME = 'RoleDescriptor';

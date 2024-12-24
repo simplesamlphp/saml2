@@ -6,6 +6,8 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use SimpleSAML\SAML2\XML\EncryptedElementTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementInterface;
 
@@ -14,9 +16,12 @@ use SimpleSAML\XMLSecurity\XML\EncryptedElementInterface;
  *
  * @package simplesamlphp/saml2
  */
-final class EncryptedAssertion extends AbstractSamlElement implements EncryptedElementInterface
+final class EncryptedAssertion extends AbstractSamlElement implements
+    EncryptedElementInterface,
+    SchemaValidatableElementInterface
 {
     use EncryptedElementTrait;
+    use SchemaValidatableElementTrait;
 
     /** @var bool */
     protected bool $wasSignedAtConstruction = false;

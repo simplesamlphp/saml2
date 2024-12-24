@@ -17,6 +17,8 @@ use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
@@ -28,8 +30,10 @@ use function version_compare;
  *
  * @package simplesamlphp/saml2
  */
-final class AuthnQuery extends AbstractSubjectQuery
+final class AuthnQuery extends AbstractSubjectQuery implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Constructor for SAML 2 AuthnQuery.
      *

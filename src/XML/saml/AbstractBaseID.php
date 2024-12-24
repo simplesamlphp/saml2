@@ -15,6 +15,8 @@ use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
 
@@ -28,10 +30,12 @@ use function explode;
  */
 abstract class AbstractBaseID extends AbstractBaseIDType implements
     EncryptableElementInterface,
-    ExtensionPointInterface
+    ExtensionPointInterface,
+    SchemaValidatableElementInterface
 {
     use EncryptableElementTrait;
     use ExtensionPointTrait;
+    use SchemaValidatableElementTrait;
 
     /** @var string */
     public const LOCALNAME = 'BaseID';

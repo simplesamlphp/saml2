@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\StringElementTrait;
 
 /**
@@ -12,8 +14,9 @@ use SimpleSAML\XML\StringElementTrait;
  *
  * @package simplesamlphp/saml2
  */
-final class AffiliateMember extends AbstractMdElement
+final class AffiliateMember extends AbstractMdElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
     use StringElementTrait;
 
 

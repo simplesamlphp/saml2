@@ -11,6 +11,8 @@ use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_filter;
@@ -22,8 +24,10 @@ use function preg_split;
  *
  * @package simplesamlphp/saml2
  */
-final class SPSSODescriptor extends AbstractSSODescriptor
+final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * SPSSODescriptor constructor.
      *

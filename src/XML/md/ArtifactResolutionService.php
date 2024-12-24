@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 /**
  * A class implementing the md:ArtifactResolutionService element.
  *
  * @package simplesamlphp/saml2
  */
-final class ArtifactResolutionService extends AbstractIndexedEndpointType
+final class ArtifactResolutionService extends AbstractIndexedEndpointType implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * ArtifactResolutionService constructor.
      *

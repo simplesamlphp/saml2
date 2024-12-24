@@ -10,6 +10,8 @@ use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function array_change_key_case;
 use function array_filter;
@@ -22,8 +24,12 @@ use function var_export;
  *
  * @package simplesamlphp/saml2
  */
-final class NameIDPolicy extends AbstractSamlpElement implements ArrayizableElementInterface
+final class NameIDPolicy extends AbstractSamlpElement implements
+    ArrayizableElementInterface,
+    SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Initialize a NameIDPolicy.
      *

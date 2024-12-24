@@ -12,6 +12,8 @@ use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function array_merge;
 
@@ -20,8 +22,10 @@ use function array_merge;
  *
  * @package simplesamlphp/saml2
  */
-final class RequestedAuthnContext extends AbstractSamlpElement
+final class RequestedAuthnContext extends AbstractSamlpElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Initialize a RequestedAuthnContext.
      *

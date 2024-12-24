@@ -10,6 +10,8 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function boolval;
 use function strval;
@@ -19,8 +21,10 @@ use function strval;
  *
  * @package simplesamlphp/saml2
  */
-final class RequestAuthenticated extends AbstractEcpElement
+final class RequestAuthenticated extends AbstractEcpElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Create a ECP RequestAuthenticated element.
      *

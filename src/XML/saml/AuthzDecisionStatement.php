@@ -14,6 +14,8 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use ValueError;
 
 use function array_pop;
@@ -24,8 +26,10 @@ use function sprintf;
  *
  * @package simplesamlphp/saml2
  */
-final class AuthzDecisionStatement extends AbstractStatementType
+final class AuthzDecisionStatement extends AbstractStatementType implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Initialize an AuthzDecisionStatement.
      *

@@ -8,14 +8,18 @@ use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function strval;
 
 /**
  * @package simplesamlphp/saml2
  */
-final class ProxyRestriction extends AbstractConditionType
+final class ProxyRestriction extends AbstractConditionType implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * ProxyRestriction constructor.
      *

@@ -6,6 +6,8 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\StringElementTrait;
 
 use function filter_var;
@@ -18,8 +20,9 @@ use function sprintf;
  *
  * @package simplesamlphp/saml2
  */
-final class DomainHint extends AbstractMduiElement
+final class DomainHint extends AbstractMduiElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
     use StringElementTrait;
 
 

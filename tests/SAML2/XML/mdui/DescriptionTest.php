@@ -12,7 +12,6 @@ use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\mdui\Description;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
@@ -30,7 +29,6 @@ use function strval;
 final class DescriptionTest extends TestCase
 {
     use ArrayizableElementTestTrait;
-    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
 
@@ -38,8 +36,6 @@ final class DescriptionTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
-
         self::$testedClass = Description::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(

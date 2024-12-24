@@ -11,6 +11,8 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\EncryptableElementTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\XsNamespace as NS;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
@@ -20,10 +22,13 @@ use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
  *
  * @package simplesamlphp/saml2
  */
-class Attribute extends AbstractSamlElement implements EncryptableElementInterface
+class Attribute extends AbstractSamlElement implements
+    EncryptableElementInterface,
+    SchemaValidatableElementInterface
 {
     use EncryptableElementTrait;
     use ExtendableAttributesTrait;
+    use SchemaValidatableElementTrait;
 
     /** The namespace-attribute for the xs:anyAttribute element */
     public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;

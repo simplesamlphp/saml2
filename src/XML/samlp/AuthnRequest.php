@@ -16,6 +16,8 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
@@ -26,8 +28,10 @@ use function strval;
  *
  * @package simplesamlphp/saml2
  */
-class AuthnRequest extends AbstractRequest
+class AuthnRequest extends AbstractRequest implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Constructor for SAML 2 AuthnRequest
      *

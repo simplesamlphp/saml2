@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\mdui;
 
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\StringElementTrait;
 
 /**
@@ -12,8 +14,9 @@ use SimpleSAML\XML\StringElementTrait;
  *
  * @package simplesamlphp/saml2
  */
-final class IPHint extends AbstractMduiElement
+final class IPHint extends AbstractMduiElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
     use StringElementTrait;
 
 

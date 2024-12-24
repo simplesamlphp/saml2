@@ -21,4 +21,7 @@ abstract class AbstractMdrpiElement extends AbstractElement
 
     /** @var string */
     public const NS_PREFIX = 'mdrpi';
+
+    /** @var string */
+    public const SCHEMA = 'resources/schemas/saml-metadata-rpi-v1.0.xsd';
 }

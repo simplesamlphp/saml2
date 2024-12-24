@@ -45,8 +45,6 @@ final class RequestInitiatorTest extends TestCase
             '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>',
         )->documentElement);
 
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-request-initiation.xsd';
-
         self::$testedClass = RequestInitiator::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(

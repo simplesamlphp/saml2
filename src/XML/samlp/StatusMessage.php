@@ -7,6 +7,8 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\StringElementTrait;
 
 /**
@@ -14,8 +16,9 @@ use SimpleSAML\XML\StringElementTrait;
  *
  * @package simplesaml/saml2
  */
-final class StatusMessage extends AbstractSamlpElement
+final class StatusMessage extends AbstractSamlpElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
     use StringElementTrait;
 
 

@@ -5,14 +5,18 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 /**
  * Class representing an md:NameIDMappingService element.
  *
  * @package simplesamlphp/saml2
  */
-final class NameIDMappingService extends AbstractEndpointType
+final class NameIDMappingService extends AbstractEndpointType implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * NameIDMappingService constructor.
      *

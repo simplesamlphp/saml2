@@ -19,4 +19,7 @@ abstract class AbstractShibmdElement extends AbstractElement
 
     /** @var string */
     public const NS_PREFIX = 'shibmd';
+
+    /** @var string */
+    public const SCHEMA = 'resources/schemas/sstc-saml-metadata-shibmd-v1.0.xsd';
 }

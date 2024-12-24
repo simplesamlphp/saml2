@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\XML\xenc\AbstractEncryptionMethod;
 
 /**
@@ -12,11 +13,16 @@ use SimpleSAML\XMLSecurity\XML\xenc\AbstractEncryptionMethod;
  *
  * @package simplesamlphp/saml2
  */
-class EncryptionMethod extends AbstractEncryptionMethod
+class EncryptionMethod extends AbstractEncryptionMethod implements SchemaValidatableElementInterface
 {
-    /** @var string */
-    public const NS = C::NS_MD;
+    use SchemaValidatableElementTrait;
 
     /** @var string */
-    public const NS_PREFIX = 'md';
+    public const NS = AbstractMdElement::NS;
+
+    /** @var string */
+    public const NS_PREFIX = AbstractMdElement::NS_PREFIX;
+
+    /** @var string */
+    public const SCHEMA = AbstractMdElement::SCHEMA;
 }

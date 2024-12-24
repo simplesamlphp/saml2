@@ -15,6 +15,8 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
@@ -27,8 +29,10 @@ use function preg_replace;
  *
  * @package simplesamlphp/saml2
  */
-class ArtifactResolve extends AbstractRequest
+class ArtifactResolve extends AbstractRequest implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Initialize an ArtifactResolve.
      *

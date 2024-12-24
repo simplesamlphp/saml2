@@ -13,6 +13,8 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function array_pop;
 use function preg_replace;
@@ -22,8 +24,10 @@ use function preg_replace;
  *
  * @package simplesamlphp/saml2
  */
-final class AuthnStatement extends AbstractStatementType
+final class AuthnStatement extends AbstractStatementType implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Initialize an AuthnStatement.
      *

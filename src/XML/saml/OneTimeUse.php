@@ -7,14 +7,18 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 /**
  * Class representing a saml:OneTimeUse element.
  *
  * @package simplesaml/saml2
  */
-final class OneTimeUse extends AbstractConditionType
+final class OneTimeUse extends AbstractConditionType implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Convert XML into an OneTimeUse
      *

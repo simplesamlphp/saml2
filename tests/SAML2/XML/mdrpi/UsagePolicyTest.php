@@ -14,7 +14,6 @@ use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
@@ -33,7 +32,6 @@ use function strval;
 final class UsagePolicyTest extends TestCase
 {
     use ArrayizableElementTestTrait;
-    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
 
@@ -41,8 +39,6 @@ final class UsagePolicyTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
-
         self::$testedClass = UsagePolicy::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(

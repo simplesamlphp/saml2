@@ -17,6 +17,8 @@ use SimpleSAML\SAML2\XML\SignedElementTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\Utils\Random as RandomUtils;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
@@ -36,6 +38,7 @@ use function array_values;
  */
 final class Assertion extends AbstractSamlElement implements
     EncryptableElementInterface,
+    SchemaValidatableElementInterface,
     SignableElementInterface,
     SignedElementInterface
 {
@@ -43,6 +46,7 @@ final class Assertion extends AbstractSamlElement implements
         EncryptableElementTrait::getBlacklistedAlgorithms insteadof SignedElementTrait;
         EncryptableElementTrait::getBlacklistedAlgorithms insteadof SignableElementTrait;
     }
+    use SchemaValidatableElementTrait;
     use SignableElementTrait;
     use SignedElementTrait;
 

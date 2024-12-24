@@ -9,6 +9,8 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function strval;
 
@@ -17,9 +19,10 @@ use function strval;
  *
  * @package simplesamlphp/saml2
  */
-final class AttributeConsumingService extends AbstractMdElement
+final class AttributeConsumingService extends AbstractMdElement implements SchemaValidatableElementInterface
 {
     use IndexedElementTrait;
+    use SchemaValidatableElementTrait;
 
     /**
      * AttributeConsumingService constructor.

@@ -10,15 +10,18 @@ use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtensionsTrait;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 /**
  * Class for handling SAML2 extensions.
  *
  * @package simplesamlphp/saml2
  */
-final class Extensions extends AbstractSamlpElement
+final class Extensions extends AbstractSamlpElement implements SchemaValidatableElementInterface
 {
     use ExtensionsTrait;
+    use SchemaValidatableElementTrait;
 
     /**
      * Create an Extensions object from its samlp:Extensions XML representation.

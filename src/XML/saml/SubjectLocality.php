@@ -7,14 +7,18 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 /**
  * Class representing SAML2 SubjectLocality
  *
  * @package simplesamlphp/saml2
  */
-final class SubjectLocality extends AbstractSamlElement
+final class SubjectLocality extends AbstractSamlElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Initialize an SubjectLocality.
      *

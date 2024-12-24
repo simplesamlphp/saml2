@@ -21,4 +21,7 @@ abstract class AbstractMduiElement extends AbstractElement
 
     /** @var string */
     public const NS_PREFIX = 'mdui';
+
+    /** @var string */
+    public const SCHEMA = 'resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
 }

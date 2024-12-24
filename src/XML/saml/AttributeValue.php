@@ -12,6 +12,8 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\AbstractElement;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 use function class_exists;
 use function explode;
@@ -24,8 +26,10 @@ use function str_contains;
  *
  * @package simplesamlphp/saml2
  */
-class AttributeValue extends AbstractSamlElement
+class AttributeValue extends AbstractSamlElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Create an AttributeValue.
      *
@@ -138,6 +142,7 @@ class AttributeValue extends AbstractSamlElement
             ($xml->getAttributeNS(C::NS_XSI, "nil") === "1" ||
                 $xml->getAttributeNS(C::NS_XSI, "nil") === "true")
         ) {
+            Assert::isEmpty($xml->nodeValue);
             Assert::isEmpty($xml->textContent);
 
             $value = null;
@@ -174,7 +179,6 @@ class AttributeValue extends AbstractSamlElement
             case "NULL":
                 $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C::NS_XSI);
                 $e->setAttributeNS(C::NS_XSI, 'xsi:nil', '1');
-                $e->textContent = '';
                 break;
             case "object":
                 if ($value instanceof DateTimeInterface) {

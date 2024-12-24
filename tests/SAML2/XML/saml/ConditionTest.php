@@ -51,7 +51,7 @@ final class ConditionTest extends TestCase
 
         self::$schemaFile = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
 
-        self::$testedClass = CustomCondition::class;
+        self::$testedClass = AbstractCondition::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Condition.xml',

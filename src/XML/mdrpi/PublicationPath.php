@@ -10,6 +10,8 @@ use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 /**
  * Class for handling the mdrpi:PublicationPath element.
@@ -17,8 +19,12 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
  * @package simplesamlphp/saml2
  */
-final class PublicationPath extends AbstractMdrpiElement implements ArrayizableElementInterface
+final class PublicationPath extends AbstractMdrpiElement implements
+    ArrayizableElementInterface,
+    SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
     /**
      * Create/parse a mdrpi:PublicationPath element.
      *

@@ -10,15 +10,18 @@ use SimpleSAML\SAML2\XML\IdentifierTrait;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 /**
  * Class representing SAML 2 Subject element.
  *
  * @package simplesamlphp/saml2
  */
-final class Subject extends AbstractSamlElement
+final class Subject extends AbstractSamlElement implements SchemaValidatableElementInterface
 {
     use IdentifierTrait;
+    use SchemaValidatableElementTrait;
 
     /**
      * Initialize a Subject element.

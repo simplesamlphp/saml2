@@ -51,7 +51,7 @@ final class StatementTest extends TestCase
 
         self::$schemaFile = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
 
-        self::$testedClass = CustomStatement::class;
+        self::$testedClass = AbstractStatement::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Statement.xml',
