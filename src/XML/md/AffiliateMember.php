@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\XML\StringElementTrait;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\StringElementTrait;
 
 /**
  * Class implementing AffiliateMember.

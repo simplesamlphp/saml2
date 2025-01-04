@@ -8,12 +8,13 @@ use DOMDocument;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\ServiceDescription;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Exception\MissingAttributeException;
 
 use function dirname;
 
@@ -50,8 +51,8 @@ final class AbstractLocalizedNameTest extends TestCase
      */
     public function testMarshallingWithEmptyLang(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('xml:lang cannot be empty.');
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
 
         new ServiceDescription('', 'Academic Journals R US and only us');
     }
@@ -62,8 +63,8 @@ final class AbstractLocalizedNameTest extends TestCase
      */
     public function testMarshallingWithEmptyValue(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Expected a non-empty value. Got: ""');
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
 
         new ServiceDescription('en', '');
     }
@@ -80,7 +81,7 @@ final class AbstractLocalizedNameTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $xmlRepresentation->documentElement->removeAttributeNS(C::NS_XML, 'lang');
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing xml:lang from ServiceDescription');
 
         ServiceDescription::fromXML($xmlRepresentation->documentElement);
@@ -95,8 +96,8 @@ final class AbstractLocalizedNameTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $xmlRepresentation->documentElement->setAttributeNS(C::NS_XML, 'lang', '');
 
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('xml:lang cannot be empty.');
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
 
         ServiceDescription::fromXML($xmlRepresentation->documentElement);
     }
@@ -110,8 +111,8 @@ final class AbstractLocalizedNameTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $xmlRepresentation->documentElement->textContent = '';
 
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Expected a non-empty value. Got: ""');
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
 
         ServiceDescription::fromXML($xmlRepresentation->documentElement);
     }

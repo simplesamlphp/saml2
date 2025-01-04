@@ -4,14 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DOMElement;
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\XML\URIElementTrait;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\StringElementTrait;
 
 use function array_key_first;
 
@@ -23,7 +20,7 @@ use function array_key_first;
 final class RequesterID extends AbstractSamlpElement implements SchemaValidatableElementInterface
 {
     use SchemaValidatableElementTrait;
-    use StringElementTrait;
+    use URIElementTrait;
 
 
     /**
@@ -32,37 +29,6 @@ final class RequesterID extends AbstractSamlpElement implements SchemaValidatabl
     public function __construct(string $content)
     {
         $this->setContent($content);
-    }
-
-
-    /**
-     * Validate the content of the element.
-     *
-     * @param string $content  The value to go in the XML textContent
-     * @throws \Exception on failure
-     * @return void
-     */
-    protected function validateContent(string $content): void
-    {
-        SAMLAssert::validEntityID($content);
-    }
-
-
-    /**
-     * Convert XML into an RequesterID
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
-     *   If the qualified name of the supplied element is wrong
-     */
-    public static function fromXML(DOMElement $xml): static
-    {
-        Assert::same($xml->localName, 'RequesterID', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, RequesterID::NS, InvalidDOMElementException::class);
-
-        return new static($xml->textContent);
     }
 
 

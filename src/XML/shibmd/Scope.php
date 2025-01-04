@@ -6,10 +6,10 @@ namespace SimpleSAML\SAML2\XML\shibmd;
 
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\XML\StringElementTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\StringElementTrait;
 
 /**
  * Class which represents the Scope element found in Shibboleth metadata.
@@ -34,19 +34,6 @@ final class Scope extends AbstractShibmdElement implements SchemaValidatableElem
         protected ?bool $regexp = false,
     ) {
         $this->setContent($scope);
-    }
-
-
-    /**
-     * Validate the content of the element.
-     *
-     * @param string $content  The value to go in the XML textContent
-     * @throws \Exception on failure
-     * @return void
-     */
-    protected function validateContent(string $content): void
-    {
-        Assert::notWhitespaceOnly($content);
     }
 
 

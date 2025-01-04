@@ -63,8 +63,6 @@ trait CustomAssertionTrait
         }
 
         try {
-            BaseAssert::notWhitespaceOnly($value, $message ?: '%s is not a SAML2-compliant URI');
-
             // If it doesn't have a scheme, it's not an absolute URI
             BaseAssert::regex($value, self::$scheme_regex, $message ?: '%s is not a SAML2-compliant URI');
         } catch (AssertionFailedException $e) {
@@ -82,6 +80,7 @@ trait CustomAssertionTrait
         static::validURI($value);
 
         try {
+            BaseAssert::notWhitespaceOnly($value);
             BaseAssert::maxLength(
                 $value,
                 C::ENTITYID_MAX_LENGTH,

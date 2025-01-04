@@ -6,9 +6,10 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\StringElementTrait;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\StringElementTrait;
 
 /**
  * Class implementing GeolocationHint.
@@ -67,7 +68,7 @@ final class GeolocationHint extends AbstractMduiElement implements SchemaValidat
      */
     protected function validateContent(string $content): void
     {
-        Assert::notEmpty($content, 'GeolocationHint cannot be empty');
+        Assert::notWhitespaceOnly($content, ProtocolViolationException::class);
         // Assert::regex(
         //     $content,
         //     '/^geo:([-+]?\d+(?:\.\d+)?),([-+]?\d+(?:\.\d+)?)(?:\?z=(\d{1,2}))?$/',

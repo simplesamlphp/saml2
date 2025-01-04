@@ -7,11 +7,12 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\StringElementTrait;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\StringElementTrait;
 
 use function array_key_first;
 
@@ -35,22 +36,9 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
         protected string $language,
         string $value,
     ) {
-        Assert::notEmpty($language, 'xml:lang cannot be empty.');
+        Assert::notWhitespaceOnly($language, ProtocolViolationException::class);
 
         $this->setContent($value);
-    }
-
-
-    /**
-     * Validate the content of the element.
-     *
-     * @param string $content  The value to go in the XML textContent
-     * @throws \Exception on failure
-     * @return void
-     */
-    protected function validateContent(string $content): void
-    {
-        Assert::notEmpty($content);
     }
 
 

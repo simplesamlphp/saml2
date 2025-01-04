@@ -6,10 +6,10 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\XML\StringElementTrait;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\StringElementTrait;
 
 use function array_key_first;
 
@@ -32,19 +32,6 @@ final class TelephoneNumber extends AbstractMdElement implements
     public function __construct(string $content)
     {
         $this->setContent($content);
-    }
-
-
-    /**
-     * Validate the content of the element.
-     *
-     * @param string $content  The value to go in the XML textContent
-     * @throws \Exception on failure
-     * @return void
-     */
-    protected function validateContent(string $content): void
-    {
-        Assert::notEmpty($content, 'TelephoneNumber cannot be empty');
     }
 
 

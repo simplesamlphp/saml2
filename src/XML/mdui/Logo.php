@@ -9,11 +9,12 @@ use InvalidArgumentException;
 use SimpleSAML\Assert\Assert;
 //use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\StringElementTrait;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\StringElementTrait;
 
 use function filter_var;
 use function strval;
@@ -62,7 +63,8 @@ final class Logo extends AbstractMduiElement implements
     protected function validateContent(string $content): void
     {
         // NOTE:  we override the validateContent from the trait to be able to be less restrictive
-        // SAMLAssert::validURI($content, SchemaViolationException::class); // Covers the empty string
+        // SAMLAssert::validURI($content, SchemaViolationException::class);
+        Assert::notWhitespaceOnly($content, ProtocolViolationException::class);
         if (!filter_var(trim($content), FILTER_VALIDATE_URL) && substr(trim($content), 0, 5) !== 'data:') {
             throw new InvalidArgumentException('mdui:Logo is not a valid URL.');
         }

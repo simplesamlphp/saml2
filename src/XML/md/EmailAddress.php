@@ -6,10 +6,10 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\XML\StringElementTrait;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\StringElementTrait;
 
 use function array_key_first;
 use function preg_filter;
@@ -26,7 +26,9 @@ final class EmailAddress extends AbstractMdElement implements
     SchemaValidatableElementInterface
 {
     use SchemaValidatableElementTrait;
-    use StringElementTrait;
+    use StringElementTrait {
+        StringElementTrait::validateContent as baseValidateContent;
+    }
 
 
     /**
@@ -47,7 +49,7 @@ final class EmailAddress extends AbstractMdElement implements
      */
     protected function validateContent(string $content): void
     {
-        Assert::notEmpty($content, 'EmailAddress cannot be empty');
+        $this->baseValidateContent($content);
         Assert::email($content);
     }
 

@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\emd;
 
 use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\XML\StringElementTrait;
+use SimpleSAML\SAML2\XML\URIElementTrait;
 
 /**
  * Class implementing RepublishTarget.
@@ -15,7 +14,9 @@ use SimpleSAML\XML\StringElementTrait;
  */
 final class RepublishTarget extends AbstractEmdElement
 {
-    use StringElementTrait;
+    use URIElementTrait {
+        URIElementTrait::validateContent as baseValidateContent;
+    }
 
 
     /**
@@ -36,7 +37,7 @@ final class RepublishTarget extends AbstractEmdElement
      */
     protected function validateContent(string $content): void
     {
-        SAMLAssert::validURI($content);
+        $this->baseValidateContent($content);
         Assert::same($content, 'http://edugain.org/');
     }
 }

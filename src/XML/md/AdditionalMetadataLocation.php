@@ -7,11 +7,10 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\XML\URIElementTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\StringElementTrait;
 
 use function trim;
 
@@ -23,7 +22,7 @@ use function trim;
 final class AdditionalMetadataLocation extends AbstractMdElement implements SchemaValidatableElementInterface
 {
     use SchemaValidatableElementTrait;
-    use StringElementTrait;
+    use URIElementTrait;
 
 
     /**
@@ -49,19 +48,6 @@ final class AdditionalMetadataLocation extends AbstractMdElement implements Sche
     public function getNamespace(): string
     {
         return $this->namespace;
-    }
-
-
-    /**
-     * Validate the content of the element.
-     *
-     * @param string $content  The value to go in the XML textContent
-     * @throws \Exception on failure
-     * @return void
-     */
-    protected function validateContent(string $content): void
-    {
-        SAMLAssert::validURI($content, SchemaViolationException::class); // Covers the empty string
     }
 
 

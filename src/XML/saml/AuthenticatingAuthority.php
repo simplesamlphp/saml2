@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DOMElement;
-use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\XML\URIElementTrait;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\StringElementTrait;
 
 /**
  * Class representing a saml:AuthenticatingAuthority element.
@@ -20,7 +17,7 @@ use SimpleSAML\XML\StringElementTrait;
 final class AuthenticatingAuthority extends AbstractSamlElement implements SchemaValidatableElementInterface
 {
     use SchemaValidatableElementTrait;
-    use StringElementTrait;
+    use URIElementTrait;
 
 
     /**
@@ -41,24 +38,6 @@ final class AuthenticatingAuthority extends AbstractSamlElement implements Schem
      */
     protected function validateContent(string $content): void
     {
-        SAMLAssert::validURI($content);
-    }
-
-
-    /**
-     * Convert XML into an AuthenticatingAuthority
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
-     *   If the qualified name of the supplied element is wrong
-     */
-    public static function fromXML(DOMElement $xml): static
-    {
-        Assert::same($xml->localName, 'AuthenticatingAuthority', InvalidDOMElementException::class);
-        Assert::same($xml->namespaceURI, AuthenticatingAuthority::NS, InvalidDOMElementException::class);
-
-        return new static($xml->textContent);
+        SAMLAssert::validEntityID($content);
     }
 }

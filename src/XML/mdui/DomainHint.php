@@ -6,9 +6,10 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\StringElementTrait;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\StringElementTrait;
 
 use function filter_var;
 use function preg_replace;
@@ -59,7 +60,7 @@ final class DomainHint extends AbstractMduiElement implements SchemaValidatableE
     protected function validateContent(string $content): void
     {
         $sanitizedContent = $this->sanitizeContent($content);
-        Assert::notEmpty($sanitizedContent, 'DomainHint cannot be empty');
+        Assert::notWhitespaceOnly($sanitizedContent, ProtocolViolationException::class);
 
         if (!filter_var($sanitizedContent, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
             throw new InvalidArgumentException(sprintf('DomainHint is not a valid hostname;  %s', $sanitizedContent));
