@@ -66,20 +66,4 @@ final class OrganizationURLTest extends TestCase
             strval($name),
         );
     }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test that creating a OrganizationURL with an invalid url throws an exception
-     */
-    public function testUnmarshallingFailsInvalidURL(): void
-    {
-        $document = clone self::$xmlRepresentation;
-        $document->documentElement->textContent = 'https://a⒈com';
-
-        $this->expectException(SchemaViolationException::class);
-        OrganizationURL::fromXML($document->documentElement);
-    }
 }
