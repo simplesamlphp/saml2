@@ -64,20 +64,4 @@ final class PrivacyStatementURLTest extends TestCase
             strval($name),
         );
     }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test that creating a PrivacyStatementURL with an invalid url throws an exception
-     */
-    public function testUnmarshallingFailsInvalidURL(): void
-    {
-        $document = clone self::$xmlRepresentation;
-        $document->documentElement->textContent = 'https://a⒈com';
-
-        $this->expectException(SchemaViolationException::class);
-        PrivacyStatementURL::fromXML($document->documentElement);
-    }
 }

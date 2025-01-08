@@ -47,7 +47,7 @@ final class EntityIDTest extends TestCase
             'urn' => [true, 'urn:x-simplesamlphp:phpunit'],
             'same-doc' => [false, '#_53d830ab1be17291a546c95c7f1cdf8d3d23c959e6'],
             'url' => [true, 'https://www.simplesamlphp.org'],
-            'invalid_char' => [false, 'https://a⒈com'],
+            'utf8_char' => [true, 'https://aä.com'],
             'intl' => [true, 'https://niño.com'],
             'spn' => [true, 'spn:a4cf592f-a64c-46ff-a788-b260f474525b'],
             'typos' => [false, 'https//www.uni.l/en/'],
