@@ -31,10 +31,10 @@
         "psr/clock": "^1.0",
         "psr/http-message": "^2.0",
         "psr/log": "^2.0 || ^3.0",
-        "simplesamlphp/assert": "~1.7.0",
-        "simplesamlphp/xml-common": "~1.23.0",
-        "simplesamlphp/xml-security": "~1.12.0",
-        "simplesamlphp/xml-soap": "~1.6.0"
+        "simplesamlphp/assert": "~1.8.0",
+        "simplesamlphp/xml-common": "~1.24.0",
+        "simplesamlphp/xml-security": "~1.13.0",
+        "simplesamlphp/xml-soap": "~1.7.0"
     },
     "require-dev": {
         "ext-intl": "*",
