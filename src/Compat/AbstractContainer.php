@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\Compat;
 
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 use SimpleSAML\XML\AbstractElement;
 use SimpleSAML\XML\Exception\SchemaViolationException;

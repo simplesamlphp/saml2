@@ -6,8 +6,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
@@ -140,7 +139,7 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
         $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
 
-        SAMLAssert::validDateTime($issueInstant, ProtocolViolationException::class);
+        Assert::validDateTime($issueInstant, ProtocolViolationException::class);
         $issueInstant = new DateTimeImmutable($issueInstant);
 
         $notOnOrAfter = self::getOptionalAttribute($xml, 'NotOnOrAfter', null);
@@ -148,7 +147,7 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
             // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
             $notOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $notOnOrAfter, 1);
 
-            SAMLAssert::validDateTime($notOnOrAfter, ProtocolViolationException::class);
+            Assert::validDateTime($notOnOrAfter, ProtocolViolationException::class);
             $notOnOrAfter = new DateTimeImmutable($notOnOrAfter);
         }
 

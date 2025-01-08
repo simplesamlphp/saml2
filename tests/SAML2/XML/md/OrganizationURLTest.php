@@ -12,7 +12,6 @@ use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\OrganizationURL;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;

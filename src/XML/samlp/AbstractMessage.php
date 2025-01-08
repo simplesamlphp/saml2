@@ -6,8 +6,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
@@ -75,8 +74,8 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     ) {
         Assert::nullOrSame($issueInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::nullOrValidNCName($id); // Covers the empty string
-        SAMLAssert::nullOrValidURI($destination);
-        SAMLAssert::nullOrValidURI($consent);
+        Assert::nullOrValidURI($destination);
+        Assert::nullOrValidURI($consent);
 
         $this->setExtensions($extensions);
     }

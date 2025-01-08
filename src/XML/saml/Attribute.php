@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\EncryptableElementTrait;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -51,13 +50,13 @@ class Attribute extends AbstractSamlElement implements
         array $namespacedAttribute = [],
     ) {
         Assert::notWhitespaceOnly($name, 'Cannot specify an empty name for an Attribute.');
-        SAMLAssert::nullOrValidURI($nameFormat);
+        Assert::nullOrValidURI($nameFormat);
         Assert::nullOrNotWhitespaceOnly($friendlyName, 'FriendlyName cannot be an empty string.');
         Assert::maxCount($attributeValue, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($attributeValue, AttributeValue::class, 'Invalid AttributeValue.');
 
         if ($nameFormat === C::NAMEFORMAT_URI) {
-            SAMLAssert::validURI(
+            Assert::validURI(
                 $name,
                 sprintf("Attribute name `%s` does not match its declared format `%s`", $name, $nameFormat),
             );

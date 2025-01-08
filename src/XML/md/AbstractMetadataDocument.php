@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\Exception\SchemaViolationException;
