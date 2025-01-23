@@ -12,6 +12,7 @@ use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Binding;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
@@ -168,7 +169,8 @@ class HTTPRedirect extends Binding
          * message MUST contain the URL to which the sender has instructed the user agent to deliver the
          * message.
          */
-        Assert::notNull($message->getDestination()); // Validation of the value must be done upstream
+        Assert::notNull($message->getDestination(), ProtocolViolationException::class);
+        // Validation of the Destination must be done upstream
 
         if (!array_key_exists('SigAlg', $query)) {
             throw new Exception('Missing signature algorithm.');
