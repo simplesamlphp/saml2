@@ -26,6 +26,20 @@ use function var_export;
 abstract class Binding
 {
     /**
+     * The schema to be used for schema validation
+     *
+     * @var string
+     */
+    protected static string $schemaFile = 'resources/schemas/saml-schema-protocol-2.0.xsd';
+
+    /**
+     * Whether or not to perform schema validation
+     *
+     * @var bool
+     */
+    protected bool $schemaValidation = true;
+
+    /**
      * The RelayState associated with the message.
      *
      * @var string|null
@@ -157,7 +171,20 @@ abstract class Binding
 
 
     /**
-     * Set the RelayState associated with he message.
+     * Override the destination of a message.
+     *
+     * Set to null to use the destination set in the message.
+     *
+     * @param string|null $destination The destination the message should be delivered to.
+     */
+    public function setDestination(?string $destination = null): void
+    {
+        $this->destination = $destination;
+    }
+
+
+    /**
+     * Set the RelayState associated with the message.
      *
      * @param string|null $relayState The RelayState.
      */
@@ -179,15 +206,24 @@ abstract class Binding
 
 
     /**
-     * Override the destination of a message.
+     * Set the schema validation for the message.
      *
-     * Set to null to use the destination set in the message.
-     *
-     * @param string|null $destination The destination the message should be delivered to.
+     * @param bool $schemaValidation
      */
-    public function setDestination(?string $destination = null): void
+    public function setSchemaValidation(bool $schemaValidation): void
     {
-        $this->destination = $destination;
+        $this->schemaValidation = $schemaValidation;
+    }
+
+
+    /**
+     * Get the schema validation setting.
+     *
+     * @return bool
+     */
+    public function getSchemaValidation(): bool
+    {
+        return $this->schemaValidation;
     }
 
 

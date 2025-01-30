@@ -101,8 +101,12 @@ class SOAP extends Binding
         $xpCache = XPath::getXPath($document->documentElement);
         /** @var \DOMElement[] $results */
         $results = XPath::xpQuery($xml, '/SOAP-ENV:Envelope/SOAP-ENV:Body/*[1]', $xpCache);
+        $document = DOMDocumentFactory::fromString(
+            xml: $results[0]->ownerDocument->saveXML($results[0]),
+            schemaFile: $this->getSchemaValidation() ? self::$schemaFile : null,
+        );
 
-        return MessageFactory::fromXML($results[0]);
+        return MessageFactory::fromXML($document->documentElement);
     }
 
 
