@@ -4,15 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
-use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\md\{AbstractLocalizedName, AbstractMdElement};
 use SimpleSAML\SAML2\XML\mdui\Description;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\LanguageValue;
 
 use function dirname;
 use function strval;
@@ -54,7 +53,10 @@ final class DescriptionTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = new Description('en', 'Just an example');
+        $name = new Description(
+            LanguageValue::fromString('en'),
+            SAMLStringValue::fromString('Just an example'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

@@ -6,24 +6,23 @@ namespace SimpleSAML\Test\SAML2\Binding;
 
 use Exception;
 use Nyholm\Psr7\ServerRequest;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
+use PHPUnit\Framework\Attributes\{CoversClass, DoesNotPerformAssertions, Group};
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Binding\HTTPPost;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
-use SimpleSAML\SAML2\XML\samlp\Response;
-use SimpleSAML\SAML2\XML\samlp\Status;
-use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\XML\samlp\{AuthnRequest, Response, Status, StatusCode};
+use SimpleSAML\XML\Type\IDValue;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
-use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**
  * @package simplesamlphp\saml2
  */
+#[Group('bindings')]
 #[CoversClass(HTTPPost::class)]
 final class HTTPPostTest extends TestCase
 {
@@ -106,7 +105,8 @@ final class HTTPPostTest extends TestCase
     public function testSendMissingDestination(): void
     {
         $request = new AuthnRequest(
-            issueInstant: self::$clock->now(),
+            id: IDValue::fromString('abc123'),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
         );
         $hp = new HTTPPost();
         $this->expectException(Exception::class);
@@ -122,7 +122,8 @@ final class HTTPPostTest extends TestCase
     public function testSendAuthnRequestWithDestinationInBinding(): void
     {
         $request = new AuthnRequest(
-            issueInstant: self::$clock->now(),
+            id: IDValue::fromString('abc123'),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
         );
         $hp = new HTTPPost();
         $hp->setDestination('https://example.org');
@@ -137,8 +138,9 @@ final class HTTPPostTest extends TestCase
     public function testSendAuthnRequestWithDestination(): void
     {
         $request = new AuthnRequest(
-            issueInstant: self::$clock->now(),
-            destination: 'https://example.org',
+            id: IDValue::fromString('abc123'),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+            destination: SAMLAnyURIValue::fromString('https://example.org'),
         );
         $hp = new HTTPPost();
         $hp->send($request);
@@ -152,14 +154,21 @@ final class HTTPPostTest extends TestCase
     #[DoesNotPerformAssertions]
     public function testSendAuthnResponse(): void
     {
-        $status = new Status(new StatusCode());
-        $issuer  = new Issuer('urn:x-simplesamlphp:issuer');
+        $status = new Status(
+            new StatusCode(
+                SAMLAnyURIValue::fromString(C::STATUS_SUCCESS),
+            ),
+        );
+        $issuer  = new Issuer(
+            SAMLStringValue::fromString('urn:x-simplesamlphp:issuer'),
+        );
 
         $response = new Response(
-            issueInstant: self::$clock->now(),
+            id: IDValue::fromString('abc123'),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             status: $status,
             issuer: $issuer,
-            destination: 'http://example.org/login?success=yes',
+            destination: SAMLAnyURIValue::fromString('http://example.org/login?success=yes'),
         );
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
             C::SIG_RSA_SHA256,

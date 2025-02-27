@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\SerializableElementInterface;
+use SimpleSAML\XML\Type\{BooleanValue, UnsignedShortValue};
 
 use function array_filter;
 use function array_key_exists;
 use function array_keys;
-use function is_bool;
-use function strval;
 
 /**
  * Class representing a SAML2 IndexedEndpointType.
@@ -36,20 +36,20 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
      * static methods to get its properties from a given \DOMElement for your convenience. Look at the implementation
      * of fromXML() to know how to use them.
      *
-     * @param int $index
-     * @param string $binding
-     * @param string $location
-     * @param bool|null $isDefault
-     * @param string|null $responseLocation
+     * @param \SimpleSAML\XML\Type\UnsignedShortValue $index
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $binding
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $location
+     * @param \SimpleSAML\XML\Type\BooleanValue|null $isDefault
+     * @param \SimpleSAML\SAML2\Type\AnyURIValue|null $responseLocation
      * @param array $children
      * @param list<\SimpleSAML\XML\Attribute> $attributes
      */
     public function __construct(
-        int $index,
-        string $binding,
-        string $location,
-        ?bool $isDefault = null,
-        ?string $responseLocation = null,
+        UnsignedShortValue $index,
+        SAMLAnyURIValue $binding,
+        SAMLAnyURIValue $location,
+        ?BooleanValue $isDefault = null,
+        ?SAMLAnyURIValue $responseLocation = null,
         array $children = [],
         array $attributes = [],
     ) {
@@ -82,11 +82,11 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
         );
 
         return new static(
-            self::getIntegerAttribute($xml, 'index'),
-            self::getAttribute($xml, 'Binding'),
-            self::getAttribute($xml, 'Location'),
-            self::getOptionalBooleanAttribute($xml, 'isDefault', null),
-            self::getOptionalAttribute($xml, 'ResponseLocation', null),
+            self::getAttribute($xml, 'index', UnsignedShortValue::class),
+            self::getAttribute($xml, 'Binding', SAMLAnyURIValue::class),
+            self::getAttribute($xml, 'Location', SAMLAnyURIValue::class),
+            self::getOptionalAttribute($xml, 'isDefault', BooleanValue::class, null),
+            self::getOptionalAttribute($xml, 'ResponseLocation', SAMLAnyURIValue::class, null),
             self::getChildElementsFromXML($xml),
             self::getAttributesNSFromXML($xml),
         );
@@ -102,17 +102,17 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::instantiateParentElement($parent);
+        $e->setAttribute('Binding', $this->getBinding()->getValue());
+        $e->setAttribute('Location', $this->getLocation()->getValue());
 
-        $e->setAttribute('Binding', $this->getBinding());
-        $e->setAttribute('Location', $this->getLocation());
         if ($this->getResponseLocation() !== null) {
-            $e->setAttribute('ResponseLocation', $this->getResponseLocation());
+            $e->setAttribute('ResponseLocation', $this->getResponseLocation()->getValue());
         }
 
-        $e->setAttribute('index', strval($this->getIndex()));
+        $e->setAttribute('index', $this->getIndex()->getValue());
 
-        if (is_bool($this->getIsDefault())) {
-            $e->setAttribute('isDefault', $this->getIsDefault() ? 'true' : 'false');
+        if ($this->getIsDefault() !== null) {
+            $e->setAttribute('isDefault', $this->getIsDefault()->getValue());
         }
 
         foreach ($this->getAttributesNS() as $attr) {
@@ -141,11 +141,11 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
         $data = self::processArrayContents($data);
 
         return new static(
-            $data['index'],
-            $data['Binding'],
-            $data['Location'],
-            $data['isDefault'] ?? null,
-            $data['ResponseLocation'] ?? null,
+            UnsignedShortValue::fromInteger($data['index']),
+            SAMLAnyURIValue::fromString($data['Binding']),
+            SAMLAnyURIValue::fromString($data['Location']),
+            $data['isDefault'] !== null ? BooleanValue::fromBoolean($data['isDefault']) : null,
+            ($data['ResponseLocation'] ?? null) ? SAMLAnyURIValue::fromString($data['ResponseLocation']) : null,
             $data['children'] ?? [],
             $data['attributes'] ?? [],
         );
@@ -226,8 +226,8 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
     public function toArray(): array
     {
         $data = parent::toArray();
-        $data['index'] = $this->getIndex();
-        $data['isDefault'] = $this->getIsDefault();
+        $data['index'] = $this->getIndex()->toInteger();
+        $data['isDefault'] = $this->getIsDefault()->toBoolean();
 
         return array_filter($data);
     }

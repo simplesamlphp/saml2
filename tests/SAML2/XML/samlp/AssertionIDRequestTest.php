@@ -4,19 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
-use DateTimeImmutable;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\saml\AssertionIDRef;
-use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
-use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
-use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
-use SimpleSAML\SAML2\XML\samlp\AssertionIDRequest;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
+use SimpleSAML\SAML2\XML\saml\{AssertionIDRef, Issuer};
+use SimpleSAML\SAML2\XML\samlp\{AbstractMessage, AbstractRequest, AbstractSamlpElement, AssertionIDRequest};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\{IDValue, NCNameValue};
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -59,11 +54,20 @@ final class AssertionIDRequestTest extends TestCase
     public function testMarshalling(): void
     {
         $assertionIDRequest = new AssertionIDRequest(
-            assertionIDRef: [new AssertionIDRef('_abc123'), new AssertionIDRef('_def456')],
-            issuer: new Issuer('https://gateway.stepup.org/saml20/sp/metadata'),
-            id: '_2b0226190ca1c22de6f66e85f5c95158',
-            issueInstant: new DateTimeImmutable('2014-09-22T13:42:00Z'),
-            destination: 'https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO',
+            assertionIDRef: [
+                new AssertionIDRef(
+                    NCNameValue::fromString('_abc123'),
+                ),
+                new AssertionIDRef(
+                    NCNameValue::fromString('_def456'),
+                ),
+            ],
+            issuer: new Issuer(
+                SAMLStringValue::fromString('https://gateway.stepup.org/saml20/sp/metadata'),
+            ),
+            id: IDValue::fromString('_2b0226190ca1c22de6f66e85f5c95158'),
+            issueInstant: SAMLDateTimeValue::fromString('2014-09-22T13:42:00Z'),
+            destination: SAMLAnyURIValue::fromString('https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO'),
         );
 
         $this->assertEquals(

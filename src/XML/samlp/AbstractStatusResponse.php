@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\XML\Type\{IDValue, NCNameValue};
 
 /**
  * Base class for all SAML 2 response messages.
  *
- * Implements samlp:StatusResponseType. All of the elements in that type is
- * stored in the \SimpleSAML\SAML2\Message class, and this class is therefore more
+ * Implements samlp:StatusResponseType. All of the elements in that type are
+ * stored in the \SimpleSAML\SAML2\XML\AbstractMessage class, and this class is therefore more
  * or less empty. It is included mainly to make it easy to separate requests from
  * responses.
  *
@@ -25,32 +25,28 @@ abstract class AbstractStatusResponse extends AbstractMessage
     /**
      * Constructor for SAML 2 response messages.
      *
+     * @param \SimpleSAML\XML\Type\IDValue $id
      * @param \SimpleSAML\SAML2\XML\samlp\Status $status
-     * @param \DateTimeImmutable $issueInstant
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
-     * @param string|null $id
-     * @param string $version
-     * @param string|null $inResponseTo
-     * @param string|null $destination
-     * @param string|null $consent
+     * @param \SimpleSAML\XML\Type\NCNameValue|null $inResponseTo
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions|null $extensions
      *
      * @throws \Exception
      */
     protected function __construct(
+        IDValue $id,
         protected Status $status,
-        DateTimeImmutable $issueInstant,
+        SAMLDateTimeValue $issueInstant,
         ?Issuer $issuer = null,
-        ?string $id = null,
-        string $version = '2.0',
-        protected ?string $inResponseTo = null,
-        ?string $destination = null,
-        ?string $consent = null,
+        protected ?NCNameValue $inResponseTo = null,
+        ?SAMLAnyURIValue $destination = null,
+        ?SAMLAnyURIValue $consent = null,
         ?Extensions $extensions = null,
     ) {
-        Assert::nullOrValidNCName($inResponseTo); // Covers the empty string
-
-        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
+        parent::__construct($id, $issuer, $issueInstant, $destination, $consent, $extensions);
     }
 
 
@@ -61,16 +57,16 @@ abstract class AbstractStatusResponse extends AbstractMessage
      */
     public function isSuccess(): bool
     {
-        return $this->status->getStatusCode()->getValue() === C::STATUS_SUCCESS;
+        return strval($this->status->getStatusCode()->getValue()) === C::STATUS_SUCCESS;
     }
 
 
     /**
      * Retrieve the ID of the request this is a response to.
      *
-     * @return string|null The ID of the request.
+     * @return \SimpleSAML\XML\Type\NCNameValue|null The ID of the request.
      */
-    public function getInResponseTo(): ?string
+    public function getInResponseTo(): ?NCNameValue
     {
         return $this->inResponseTo;
     }
@@ -98,7 +94,7 @@ abstract class AbstractStatusResponse extends AbstractMessage
         $e = parent::toUnsignedXML($parent);
 
         if ($this->getInResponseTo() !== null) {
-            $e->setAttribute('InResponseTo', $this->getInResponseTo());
+            $e->setAttribute('InResponseTo', $this->getInResponseTo()->getValue());
         }
 
         $this->getStatus()->toXML($e);

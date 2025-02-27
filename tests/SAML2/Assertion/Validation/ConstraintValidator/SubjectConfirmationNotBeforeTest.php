@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
 use DateInterval;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
-use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
+use SimpleSAML\SAML2\XML\saml\{SubjectConfirmation, SubjectConfirmationData};
 
 /**
  * @package simplesamlphp/saml2
@@ -39,8 +38,16 @@ final class SubjectConfirmationNotBeforeTest extends TestCase
     #[Group('assertion-validation')]
     public function testTimestampInTheFutureBeyondGraceperiodIsNotValid(): void
     {
-        $subjectConfirmationData = new SubjectConfirmationData(self::$clock->now()->add(new DateInterval('PT61S')));
-        $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
+        $subjectConfirmationData = new SubjectConfirmationData(
+            SAMLDateTimeValue::fromDateTime(
+                self::$clock->now()->add(new DateInterval('PT61S')),
+            ),
+        );
+        $subjectConfirmation = new SubjectConfirmation(
+            SAMLAnyURIValue::fromString(C::CM_HOK),
+            null,
+            $subjectConfirmationData,
+        );
 
         $validator = new SubjectConfirmationNotBefore();
         $result = new Result();
@@ -59,9 +66,15 @@ final class SubjectConfirmationNotBeforeTest extends TestCase
     {
         $subjectConfirmationData = new SubjectConfirmationData(
             null,
-            self::$clock->now()->add(new DateInterval('PT60S')),
+            SAMLDateTimeValue::fromDateTime(
+                self::$clock->now()->add(new DateInterval('PT60S')),
+            ),
         );
-        $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
+        $subjectConfirmation = new SubjectConfirmation(
+            SAMLAnyURIValue::fromString(C::CM_HOK),
+            null,
+            $subjectConfirmationData,
+        );
 
         $validator = new SubjectConfirmationNotBefore();
         $result = new Result();
@@ -77,8 +90,14 @@ final class SubjectConfirmationNotBeforeTest extends TestCase
     #[Group('assertion-validation')]
     public function testCurrentTimeIsValid(): void
     {
-        $subjectConfirmationData = new SubjectConfirmationData(self::$clock->now());
-        $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
+        $subjectConfirmationData = new SubjectConfirmationData(
+            SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+        );
+        $subjectConfirmation = new SubjectConfirmation(
+            SAMLAnyURIValue::fromString(C::CM_HOK),
+            null,
+            $subjectConfirmationData,
+        );
 
         $validator = new SubjectConfirmationNotBefore();
         $result = new Result();

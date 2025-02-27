@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\ExtendableAttributesTrait;
-use SimpleSAML\XML\ExtendableElementTrait;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XML\{
+    ExtendableAttributesTrait,
+    ExtendableElementTrait,
+    SchemaValidatableElementInterface,
+    SchemaValidatableElementTrait,
+    XsNamespace as NS,
+};
 
 /**
  * Class representing SAML2 AuthnContextDecl

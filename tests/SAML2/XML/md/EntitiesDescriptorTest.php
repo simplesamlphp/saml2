@@ -4,23 +4,23 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DateTimeImmutable;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\md\AbstractMdElement;
-use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
-use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
-use SimpleSAML\SAML2\XML\md\EntitiesDescriptor;
-use SimpleSAML\SAML2\XML\md\EntityDescriptor;
-use SimpleSAML\SAML2\XML\md\Extensions;
-use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
-use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
+use SimpleSAML\SAML2\XML\md\{
+    AbstractMdElement,
+    AbstractMetadataDocument,
+    AbstractSignedMdElement,
+    EntitiesDescriptor,
+    EntityDescriptor,
+    Extensions,
+};
+use SimpleSAML\SAML2\XML\mdrpi\{PublicationInfo, UsagePolicy};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\{IDValue, LanguageValue};
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -65,9 +65,14 @@ final class EntitiesDescriptorTest extends TestCase
     {
         $extensions = new Extensions([
             new PublicationInfo(
-                publisher: 'http://publisher.ra/',
-                creationInstant: new DateTimeImmutable('2020-02-03T13:46:24Z'),
-                usagePolicy: [new UsagePolicy('en', 'http://publisher.ra/policy.txt')],
+                publisher: SAMLStringValue::fromString('http://publisher.ra/'),
+                creationInstant: SAMLDateTimeValue::fromString('2020-02-03T13:46:24Z'),
+                usagePolicy: [
+                    new UsagePolicy(
+                        LanguageValue::fromString('en'),
+                        SAMLAnyURIValue::fromString('http://publisher.ra/policy.txt'),
+                    ),
+                ],
             ),
         ]);
         $entitiesdChildElement = self::$xmlRepresentation->documentElement->getElementsByTagNameNS(
@@ -88,9 +93,9 @@ final class EntitiesDescriptorTest extends TestCase
         $entitiesd = new EntitiesDescriptor(
             entityDescriptors: [$childEntityd],
             entitiesDescriptors: [$childEntitiesd],
-            Name: 'Federation',
+            Name: SAMLStringValue::fromString('Federation'),
             extensions: $extensions,
-            ID: 'phpunit',
+            ID: IDValue::fromString('phpunit'),
         );
 
         $this->assertEquals(
@@ -161,18 +166,6 @@ final class EntitiesDescriptorTest extends TestCase
         $xmlRepresentation->documentElement->removeAttribute('Name');
         $entitiesd = EntitiesDescriptor::fromXML($xmlRepresentation->documentElement);
         $this->assertNull($entitiesd->getName());
-    }
-
-
-    /**
-     * Test that creating an EntitiesDescriptor with an empty Name from XML works.
-     */
-    public function testUnmarshallingWithEmptyName(): void
-    {
-        $xmlRepresentation = clone self::$xmlRepresentation;
-        $xmlRepresentation->documentElement->setAttribute('Name', '');
-        $entitiesd = EntitiesDescriptor::fromXML($xmlRepresentation->documentElement);
-        $this->assertEquals('', $entitiesd->getName());
     }
 
 
