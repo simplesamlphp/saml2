@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\ecp;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\ecp\AbstractEcpElement;
-use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
+use SimpleSAML\SAML2\XML\ecp\{AbstractEcpElement, RequestAuthenticated};
 use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\BooleanValue;
 
 use function dirname;
 use function strval;
@@ -46,7 +44,9 @@ final class RequestAuthenticatedTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $ra = new RequestAuthenticated(false);
+        $ra = new RequestAuthenticated(
+            BooleanValue::fromBoolean(false),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

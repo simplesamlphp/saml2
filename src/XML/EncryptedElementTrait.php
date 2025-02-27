@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\AbstractElement;
@@ -43,7 +43,7 @@ trait EncryptedElementTrait
          * 6.2: The <EncryptedData> element's Type attribute SHOULD be used and, if it is
          * present, MUST have the value http://www.w3.org/2001/04/xmlenc#Element.
          */
-        Assert::nullOrSame($encryptedData->getType(), C::XMLENC_ELEMENT);
+        Assert::nullOrSame($encryptedData->getType()->getValue(), C::XMLENC_ELEMENT);
 
         $keyInfo = $this->encryptedData->getKeyInfo();
         if ($keyInfo === null) {

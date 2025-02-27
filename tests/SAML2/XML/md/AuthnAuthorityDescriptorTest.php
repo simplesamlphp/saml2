@@ -4,24 +4,26 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\md\AbstractMdElement;
-use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
-use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
-use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType;
-use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
-use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
-use SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor;
-use SimpleSAML\SAML2\XML\md\AuthnQueryService;
-use SimpleSAML\SAML2\XML\md\NameIDFormat;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\XML\md\{
+    AbstractMdElement,
+    AbstractMetadataDocument,
+    AbstractRoleDescriptor,
+    AbstractRoleDescriptorType,
+    AbstractSignedMdElement,
+    AssertionIDRequestService,
+    AuthnAuthorityDescriptor,
+    AuthnQueryService,
+    NameIDFormat,
+};
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\IDValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -61,8 +63,15 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/md_AuthnAuthorityDescriptor.xml',
         );
 
-        self::$aqs = new AuthnQueryService(C::BINDING_HTTP_POST, 'http://www.example.com/aqs');
-        self::$aidrs = new AssertionIDRequestService(C::BINDING_HTTP_POST, 'http://www.example.com/aidrs');
+        self::$aqs = new AuthnQueryService(
+            SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+            SAMLAnyURIValue::fromString('http://www.example.com/aqs'),
+        );
+
+        self::$aidrs = new AssertionIDRequestService(
+            SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+            SAMLAnyURIValue::fromString('http://www.example.com/aidrs'),
+        );
     }
 
 
@@ -78,8 +87,15 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             [self::$aqs],
             [C::NS_SAMLP, C::PROTOCOL],
             [self::$aidrs],
-            [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)],
-            'phpunit',
+            [
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
+                ),
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
+                ),
+            ],
+            IDValue::fromString('phpunit'),
         );
 
         $this->assertEquals(
@@ -100,7 +116,14 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             [],
             [C::NS_SAMLP, C::PROTOCOL],
             [self::$aidrs],
-            [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)],
+            [
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
+                ),
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
+                ),
+            ],
         );
     }
 
@@ -120,21 +143,6 @@ final class AuthnAuthorityDescriptorTest extends TestCase
 
 
     /**
-     * Test that creating an AuthnAuthorityDescriptor with an empty NameIDFormat fails.
-     */
-    public function testMarshallWithEmptyNameIDFormat(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        new AuthnAuthorityDescriptor(
-            [self::$aqs],
-            [C::NS_SAMLP, C::PROTOCOL],
-            [self::$aidrs],
-            [new NameIDFormat(''), new NameIDFormat(C::NAMEID_TRANSIENT)],
-        );
-    }
-
-
-    /**
      * Test that creating an AuthnAuthorityDescriptor with a wrong AuthnQueryService fails.
      */
     public function testMarshallingWithWrongAuthnQueryService(): void
@@ -145,7 +153,14 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             [self::$aqs, ''],
             [C::NS_SAMLP, C::PROTOCOL],
             [self::$aidrs],
-            [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)],
+            [
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
+                ),
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
+                ),
+            ],
         );
     }
 
@@ -161,7 +176,14 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             [self::$aqs],
             [C::NS_SAMLP, C::PROTOCOL],
             [self::$aidrs, ''],
-            [new NameIDFormat(C::NAMEID_PERSISTENT), new NameIDFormat(C::NAMEID_TRANSIENT)],
+            [
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
+                ),
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
+                ),
+            ],
         );
     }
 

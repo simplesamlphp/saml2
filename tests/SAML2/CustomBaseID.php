@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
-use SimpleSAML\SAML2\XML\saml\Audience;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\saml\{AbstractBaseID, Audience};
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, SchemaViolationException};
+use SimpleSAML\XML\Type\QNameValue;
 
 /**
  * Example class to demonstrate how BaseID can be extended.
@@ -33,17 +33,23 @@ final class CustomBaseID extends AbstractBaseID
      * CustomBaseID constructor.
      *
      * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
-     * @param string|null $NameQualifier
-     * @param string|null $SPNameQualifier
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $NameQualifier
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $SPNameQualifier
      */
     public function __construct(
         protected array $audience,
-        ?string $NameQualifier = null,
-        ?string $SPNameQualifier = null,
+        ?SAMLStringValue $NameQualifier = null,
+        ?SAMLStringValue $SPNameQualifier = null,
     ) {
         Assert::allIsInstanceOf($audience, Audience::class);
 
-        parent::__construct(self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME, $NameQualifier, $SPNameQualifier);
+        parent::__construct(
+            QNameValue::fromString(
+                '{' . self::XSI_TYPE_NAMESPACE . '}' . self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME,
+            ),
+            $NameQualifier,
+            $SPNameQualifier,
+        );
     }
 
 
@@ -75,10 +81,11 @@ final class CustomBaseID extends AbstractBaseID
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');
         Assert::same($type, self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME);
 
-        $nameQualifier = self::getOptionalAttribute($xml, 'NameQualifier', null);
-        $spNameQualifier = self::getOptionalAttribute($xml, 'SPNameQualifier', null);
-
-        return new static(Audience::getChildrenOfClass($xml), $nameQualifier, $spNameQualifier);
+        return new static(
+            Audience::getChildrenOfClass($xml),
+            self::getOptionalAttribute($xml, 'NameQualifier', SAMLStringValue::class, null),
+            self::getOptionalAttribute($xml, 'SPNameQualifier', SAMLStringValue::class, null),
+        );
     }
 
 

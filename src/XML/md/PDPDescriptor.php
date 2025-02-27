@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, TooManyElementsException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\{DurationValue, IDValue};
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function preg_split;
@@ -33,11 +31,11 @@ final class PDPDescriptor extends AbstractRoleDescriptorType implements SchemaVa
      * @param string[] $protocolSupportEnumeration
      * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
      * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
-     * @param string|null $ID
-     * @param \DateTimeImmutable|null $validUntil
-     * @param string|null $cacheDuration
+     * @param \SimpleSAML\XML\Type\IDValue|null $ID
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil
+     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
-     * @param string|null $errorURL
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $errorURL
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors
      * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts
@@ -48,11 +46,11 @@ final class PDPDescriptor extends AbstractRoleDescriptorType implements SchemaVa
         array $protocolSupportEnumeration,
         protected array $assertionIDRequestService = [],
         protected array $nameIDFormat = [],
-        ?string $ID = null,
-        ?DateTimeImmutable $validUntil = null,
-        ?string $cacheDuration = null,
+        ?IDValue $ID = null,
+        ?SAMLDateTimeValue $validUntil = null,
+        ?DurationValue $cacheDuration = null,
         ?Extensions $extensions = null,
-        ?string $errorURL = null,
+        ?SAMLAnyURIValue $errorURL = null,
         ?Organization $organization = null,
         array $keyDescriptors = [],
         array $contacts = [],
@@ -141,8 +139,6 @@ final class PDPDescriptor extends AbstractRoleDescriptorType implements SchemaVa
         Assert::same($xml->namespaceURI, PDPDescriptor::NS, InvalidDOMElementException::class);
 
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
-        SAMLAssert::nullOrValidDateTime($validUntil);
 
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
@@ -165,14 +161,14 @@ final class PDPDescriptor extends AbstractRoleDescriptorType implements SchemaVa
 
         $pdp = new static(
             AuthzService::getChildrenOfClass($xml),
-            preg_split('/[\s]+/', trim($protocols)),
+            preg_split('/[\s]+/', trim($protocols->getValue())),
             AssertionIDRequestService::getChildrenOfClass($xml),
             NameIDFormat::getChildrenOfClass($xml),
-            self::getOptionalAttribute($xml, 'ID', null),
-            $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
-            self::getOptionalAttribute($xml, 'cacheDuration', null),
+            self::getOptionalAttribute($xml, 'ID', IDValue::class, null),
+            self::getOptionalAttribute($xml, 'validUntil', SAMLDateTimeValue::class, null),
+            self::getOptionalAttribute($xml, 'cacheDuration', DurationValue::class, null),
             !empty($extensions) ? $extensions[0] : null,
-            self::getOptionalAttribute($xml, 'errorURL', null),
+            self::getOptionalAttribute($xml, 'errorURL', SAMLAnyURIValue::class, null),
             !empty($orgs) ? $orgs[0] : null,
             KeyDescriptor::getChildrenOfClass($xml),
             ContactPerson::getChildrenOfClass($xml),

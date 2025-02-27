@@ -4,33 +4,23 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\alg\DigestMethod;
-use SimpleSAML\SAML2\XML\alg\SigningMethod;
-use SimpleSAML\SAML2\XML\emd\RepublishRequest;
-use SimpleSAML\SAML2\XML\emd\RepublishTarget;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, CIDRValue, SAMLStringValue};
+use SimpleSAML\SAML2\XML\alg\{DigestMethod, SigningMethod};
+use SimpleSAML\SAML2\XML\emd\{RepublishRequest, RepublishTarget};
 use SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponse;
-use SimpleSAML\SAML2\XML\md\AbstractMdElement;
-use SimpleSAML\SAML2\XML\md\Extensions;
+use SimpleSAML\SAML2\XML\md\{AbstractMdElement, Extensions};
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
-use SimpleSAML\SAML2\XML\mdrpi\Publication;
-use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
-use SimpleSAML\SAML2\XML\mdrpi\PublicationPath;
-use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
-use SimpleSAML\SAML2\XML\mdui\DiscoHints;
-use SimpleSAML\SAML2\XML\mdui\DisplayName;
-use SimpleSAML\SAML2\XML\mdui\IPHint;
-use SimpleSAML\SAML2\XML\mdui\UIInfo;
+use SimpleSAML\SAML2\XML\mdrpi\{Publication, PublicationInfo, PublicationPath, RegistrationInfo};
+use SimpleSAML\SAML2\XML\mdui\{DiscoHints, DisplayName, IPHint, UIInfo};
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
-use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\{LanguageValue, PositiveIntegerValue, UnsignedShortValue};
 
 use function dirname;
 use function strval;
@@ -71,20 +61,51 @@ final class ExtensionsTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $scope = new Scope('SomeScope');
-        $ra = new RegistrationInfo('SomeAuthority');
-        $pubInfo = new PublicationInfo('SomePublisher');
+        $scope = new Scope(
+            SAMLStringValue::fromString('SomeScope'),
+        );
+        $ra = new RegistrationInfo(
+            SAMLStringValue::fromString('SomeAuthority'),
+        );
+        $pubInfo = new PublicationInfo(
+            SAMLStringValue::fromString('SomePublisher'),
+        );
         $pubPath = new PublicationPath(
             [
-                new Publication('SomePublisher'),
+                new Publication(
+                    SAMLStringValue::fromString('SomePublisher'),
+                ),
             ],
         );
-        $uiinfo = new UIInfo([new DisplayName('en', 'Example')]);
-        $idpdisc = new DiscoveryResponse(1, C::NS_IDPDISC, 'https://example.org/authenticate/sp');
-        $discoHints = new DiscoHints([], [new IPHint('127.0.0.1')]);
-        $digestMethod = new DigestMethod(C::DIGEST_SHA256);
-        $signingMethod = new SigningMethod(C::SIG_RSA_SHA256, 1024, 4096);
-        $republishRequest = new RepublishRequest(new RepublishTarget('http://edugain.org/'));
+        $uiinfo = new UIInfo([
+            new DisplayName(
+                LanguageValue::fromString('en'),
+                SAMLStringValue::fromString('Example'),
+            ),
+        ]);
+        $idpdisc = new DiscoveryResponse(
+            UnsignedShortValue::fromInteger(1),
+            SAMLAnyURIValue::fromString(C::NS_IDPDISC),
+            SAMLAnyURIValue::fromString('https://example.org/authenticate/sp'),
+        );
+        $discoHints = new DiscoHints([], [
+            new IPHint(
+                CIDRValue::fromString('127.0.0.0/8'),
+            ),
+        ]);
+        $digestMethod = new DigestMethod(
+            SAMLAnyURIValue::fromString(C::DIGEST_SHA256),
+        );
+        $signingMethod = new SigningMethod(
+            SAMLAnyURIValue::fromString(C::SIG_RSA_SHA256),
+            PositiveIntegerValue::fromInteger(1024),
+            PositiveIntegerValue::fromInteger(4096),
+        );
+        $republishRequest = new RepublishRequest(
+            new RepublishTarget(
+                SAMLAnyURIValue::fromString('http://edugain.org/'),
+            ),
+        );
 
         $extensions = new Extensions([
             $scope,
@@ -174,7 +195,7 @@ final class ExtensionsTest extends TestCase
     <mdui:DisplayName xml:lang="en">Example</mdui:DisplayName>
   </mdui:UIInfo>
   <mdui:DiscoHints>
-    <mdui:IPHint>127.0.0.1</mdui:IPHint>
+    <mdui:IPHint>127.0.0.0/8</mdui:IPHint>
   </mdui:DiscoHints>
   <idpdisc:DiscoveryResponse Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol"
     Location="https://example.org/authenticate/sp"

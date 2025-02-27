@@ -4,43 +4,44 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DateTimeImmutable;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\XML\md\AbstractMdElement;
-use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
-use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
-use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType;
-use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
-use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
-use SimpleSAML\SAML2\XML\md\AssertionConsumerService;
-use SimpleSAML\SAML2\XML\md\AttributeConsumingService;
-use SimpleSAML\SAML2\XML\md\ContactPerson;
-use SimpleSAML\SAML2\XML\md\EmailAddress;
-use SimpleSAML\SAML2\XML\md\Extensions;
-use SimpleSAML\SAML2\XML\md\KeyDescriptor;
-use SimpleSAML\SAML2\XML\md\ManageNameIDService;
-use SimpleSAML\SAML2\XML\md\NameIDFormat;
-use SimpleSAML\SAML2\XML\md\Organization;
-use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
-use SimpleSAML\SAML2\XML\md\OrganizationName;
-use SimpleSAML\SAML2\XML\md\OrganizationURL;
-use SimpleSAML\SAML2\XML\md\RequestedAttribute;
-use SimpleSAML\SAML2\XML\md\ServiceName;
-use SimpleSAML\SAML2\XML\md\SingleLogoutService;
-use SimpleSAML\SAML2\XML\md\SPSSODescriptor;
-use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
-use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, EmailAddressValue, KeyTypesValue, SAMLStringValue};
+use SimpleSAML\SAML2\XML\md\{
+    AbstractMdElement,
+    AbstractMetadataDocument,
+    AbstractRoleDescriptor,
+    AbstractRoleDescriptorType,
+    AbstractSignedMdElement,
+    ArtifactResolutionService,
+    AssertionConsumerService,
+    AttributeConsumingService,
+    ContactPerson,
+    EmailAddress,
+    Extensions,
+    KeyDescriptor,
+    KeyTypesEnum,
+    ManageNameIDService,
+    NameIDFormat,
+    Organization,
+    OrganizationDisplayName,
+    OrganizationName,
+    OrganizationURL,
+    RequestedAttribute,
+    ServiceName,
+    SingleLogoutService,
+    SPSSODescriptor,
+};
+use SimpleSAML\SAML2\XML\mdrpi\{PublicationInfo, UsagePolicy};
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\{BooleanValue, DurationValue, IDValue, LanguageValue, StringValue, UnsignedShortValue};
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
-use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
-use SimpleSAML\XMLSecurity\XML\ds\KeyName;
+use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
 
 use function dirname;
 use function strval;
@@ -85,80 +86,136 @@ final class SPSSODescriptorTest extends TestCase
     public function testMarshalling(): void
     {
         $slo1 = new SingleLogoutService(
-            C::BINDING_SOAP,
-            'https://ServiceProvider.com/SAML/SLO/SOAP',
+            SAMLAnyURIValue::fromString(C::BINDING_SOAP),
+            SAMLAnyURIValue::fromString('https://ServiceProvider.com/SAML/SLO/SOAP'),
         );
         $slo2 = new SingleLogoutService(
-            C::BINDING_HTTP_REDIRECT,
-            'https://ServiceProvider.com/SAML/SLO/Browser',
-            'https://ServiceProvider.com/SAML/SLO/Response',
+            SAMLAnyURIValue::fromString(C::BINDING_HTTP_REDIRECT),
+            SAMLAnyURIValue::fromString('https://ServiceProvider.com/SAML/SLO/Browser'),
+            SAMLAnyURIValue::fromString('https://ServiceProvider.com/SAML/SLO/Response'),
         );
         $acs1 = new AssertionConsumerService(
-            0,
-            C::BINDING_HTTP_ARTIFACT,
-            'https://ServiceProvider.com/SAML/SSO/Artifact',
-            true,
+            UnsignedShortValue::fromInteger(0),
+            SAMLAnyURIValue::fromString(C::BINDING_HTTP_ARTIFACT),
+            SAMLAnyURIValue::fromString('https://ServiceProvider.com/SAML/SSO/Artifact'),
+            BooleanValue::fromBoolean(true),
         );
         $acs2 = new AssertionConsumerService(
-            1,
-            C::BINDING_HTTP_POST,
-            'https://ServiceProvider.com/SAML/SSO/POST',
+            UnsignedShortValue::fromInteger(1),
+            SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+            SAMLAnyURIValue::fromString('https://ServiceProvider.com/SAML/SSO/POST'),
         );
         $reqAttr = new RequestedAttribute(
-            Name: 'urn:oid:1.3.6.1.4.1.5923.1.1.1.7',
-            NameFormat: C::NAMEFORMAT_URI,
-            FriendlyName: 'eduPersonEntitlement',
-            AttributeValues: [new AttributeValue('https://ServiceProvider.com/entitlements/123456789')],
+            Name: SAMLStringValue::fromString('urn:oid:1.3.6.1.4.1.5923.1.1.1.7'),
+            NameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
+            FriendlyName: SAMLStringValue::fromString('eduPersonEntitlement'),
+            AttributeValues: [
+                new AttributeValue(
+                    'https://ServiceProvider.com/entitlements/123456789',
+                ),
+            ],
         );
         $attrcs1 = new AttributeConsumingService(
-            0,
-            [new ServiceName('en', 'Academic Journals R US')],
+            UnsignedShortValue::fromInteger(0),
+            [
+                new ServiceName(
+                    LanguageValue::fromString('en'),
+                    SAMLStringValue::fromString('Academic Journals R US'),
+                ),
+            ],
             [$reqAttr],
-            true,
+            BooleanValue::fromBoolean(true),
         );
         $attrcs2 = new AttributeConsumingService(
-            1,
-            [new ServiceName('en', 'Academic Journals R US')],
+            UnsignedShortValue::fromInteger(1),
+            [
+                new ServiceName(
+                    LanguageValue::fromString('en'),
+                    SAMLStringValue::fromString('Academic Journals R US'),
+                ),
+            ],
             [$reqAttr],
         );
         $extensions = new Extensions([
             new PublicationInfo(
-                publisher: 'http://publisher.ra/',
-                creationInstant: new DateTimeImmutable('2020-02-03T13:46:24Z'),
-                usagePolicy: [new UsagePolicy('en', 'http://publisher.ra/policy.txt')],
+                publisher: SAMLStringValue::fromString('http://publisher.ra/'),
+                creationInstant: SAMLDateTimeValue::fromString('2020-02-03T13:46:24Z'),
+                usagePolicy: [
+                    new UsagePolicy(
+                        LanguageValue::fromString('en'),
+                        SAMLAnyURIValue::fromString('http://publisher.ra/policy.txt'),
+                    ),
+                ],
             ),
         ]);
-        $kd = new KeyDescriptor(new KeyInfo([new KeyName('ServiceProvider.com SSO Key')]), 'signing');
+        $kd = new KeyDescriptor(
+            new KeyInfo([
+                new KeyName(
+                    StringValue::fromString('ServiceProvider.com SSO Key'),
+                ),
+            ]),
+            KeyTypesValue::fromEnum(KeyTypesEnum::SIGNING),
+        );
         $org = new Organization(
-            [new OrganizationName('en', 'Identity Providers R US')],
-            [new OrganizationDisplayName('en', 'Identity Providers R US, a Division of Lerxst Corp.')],
-            [new OrganizationURL('en', 'https://IdentityProvider.com')],
+            [
+                new OrganizationName(
+                    LanguageValue::fromString('en'),
+                    SAMLStringValue::fromString('Identity Providers R US'),
+                ),
+            ],
+            [
+                new OrganizationDisplayName(
+                    LanguageValue::fromString('en'),
+                    SAMLStringValue::fromString('Identity Providers R US, a Division of Lerxst Corp.'),
+                ),
+            ],
+            [
+                new OrganizationURL(
+                    LanguageValue::fromString('en'),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com'),
+                ),
+            ],
         );
         $contact = new ContactPerson(
-            contactType: 'other',
-            emailAddress: [new EmailAddress('john.doe@test.company')],
+            contactType: SAMLStringValue::fromString('other'),
+            emailAddress: [
+                new EmailAddress(
+                    EmailAddressValue::fromString('john.doe@test.company'),
+                ),
+            ],
         );
-        $ars = new ArtifactResolutionService(0, C::BINDING_HTTP_ARTIFACT, C::LOCATION_A);
-        $mnids = new ManageNameIDService(C::BINDING_HTTP_POST, C::LOCATION_B);
+        $ars = new ArtifactResolutionService(
+            UnsignedShortValue::fromInteger(0),
+            SAMLAnyURIValue::fromString(C::BINDING_HTTP_ARTIFACT),
+            SAMLAnyURIValue::fromString(C::LOCATION_A),
+        );
+        $mnids = new ManageNameIDService(
+            SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+            SAMLAnyURIValue::fromString(C::LOCATION_B),
+        );
 
         $spssod = new SPSSODescriptor(
             [$acs1, $acs2],
             [C::NS_SAMLP],
-            true,
-            false,
+            BooleanValue::fromBoolean(true),
+            BooleanValue::fromBoolean(false),
             [$attrcs1, $attrcs2],
-            'someID',
-            new DateTimeImmutable('2010-02-01T12:34:56Z'),
-            'PT9000S',
+            IDValue::fromString('someID'),
+            SAMLDateTimeValue::fromString('2010-02-01T12:34:56Z'),
+            DurationValue::fromString('PT9000S'),
             $extensions,
-            'https://error.url/',
+            SAMLAnyURIValue::fromString('https://error.url/'),
             [$kd],
             $org,
             [$contact],
             [$ars],
             [$slo1, $slo2],
             [$mnids],
-            [new NameIDFormat(C::NAMEID_TRANSIENT)],
+            [
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
+                ),
+            ],
         );
 
         $this->assertEquals(
@@ -189,7 +246,13 @@ final class SPSSODescriptorTest extends TestCase
     public function testMarshallingWithoutOptionalArguments(): void
     {
         $spssod = new SPSSODescriptor(
-            [new AssertionConsumerService(0, C::BINDING_HTTP_POST, C::LOCATION_A)],
+            [
+                new AssertionConsumerService(
+                    UnsignedShortValue::fromInteger(0),
+                    SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+                    SAMLAnyURIValue::fromString(C::LOCATION_A),
+                ),
+            ],
             [C::NS_SAMLP],
         );
 
@@ -228,9 +291,7 @@ final class SPSSODescriptorTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $xmlRepresentation->documentElement->setAttribute('AuthnRequestsSigned', 'not a boolean');
 
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The \'AuthnRequestsSigned\' attribute of md:SPSSODescriptor must be a boolean.');
-
+        $this->expectException(SchemaViolationException::class);
         SPSSODescriptor::fromXML($xmlRepresentation->documentElement);
     }
 
@@ -243,11 +304,7 @@ final class SPSSODescriptorTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $xmlRepresentation->documentElement->setAttribute('WantAssertionsSigned', 'not a boolean');
 
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage(
-            'The \'WantAssertionsSigned\' attribute of md:SPSSODescriptor must be a boolean.',
-        );
-
+        $this->expectException(SchemaViolationException::class);
         SPSSODescriptor::fromXML($xmlRepresentation->documentElement);
     }
 
