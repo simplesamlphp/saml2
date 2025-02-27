@@ -5,21 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
-use InvalidArgumentException;
-use SimpleSAML\Assert\Assert;
-//use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\SAML2\Exception\ArrayValidationException;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\StringElementTrait;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Exception\{ArrayValidationException, ProtocolViolationException};
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
-
-use function filter_var;
-use function strval;
-use function substr;
-use function trim;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, SchemaViolationException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\{LanguageValue, PositiveIntegerValue};
+use SimpleSAML\XML\TypedTextContentTrait;
 
 /**
  * Class for handling the Logo metadata extensions for login and discovery user interface
@@ -32,22 +25,28 @@ final class Logo extends AbstractMduiElement implements
     SchemaValidatableElementInterface
 {
     use SchemaValidatableElementTrait;
-    use StringElementTrait;
+    use TypedTextContentTrait;
+
+    /** @var string */
+    public const TEXTCONTENT_TYPE = SAMLAnyURIValue::class;
+
+    /** @var string */
+    private static string $scheme_regex = '/^(data|http[s]?[:])/i';
 
 
     /**
      * Initialize a Logo.
      *
-     * @param string $url
-     * @param int $height
-     * @param int $width
-     * @param string|null $lang
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $url
+     * @param \SimpleSAML\XML\Type\PositiveIntegerValue $height
+     * @param \SimpleSAML\XML\Type\PositiveIntegerValue $width
+     * @param \SimpleSAML\XML\Type\LanguageValue|null $lang
      */
     public function __construct(
-        protected string $url,
-        protected int $height,
-        protected int $width,
-        protected ?string $lang = null,
+        SAMLAnyURIValue $url,
+        protected PositiveIntegerValue $height,
+        protected PositiveIntegerValue $width,
+        protected ?LanguageValue $lang = null,
     ) {
         $this->setContent($url);
     }
@@ -62,21 +61,17 @@ final class Logo extends AbstractMduiElement implements
      */
     protected function validateContent(string $content): void
     {
-        // NOTE:  we override the validateContent from the trait to be able to be less restrictive
-        // SAMLAssert::validURI($content, SchemaViolationException::class);
-        Assert::notWhitespaceOnly($content, ProtocolViolationException::class);
-        if (!filter_var(trim($content), FILTER_VALIDATE_URL) && substr(trim($content), 0, 5) !== 'data:') {
-            throw new InvalidArgumentException('mdui:Logo is not a valid URL.');
-        }
+        Assert::validURI($content, SchemaViolationException::class);
+        Assert::regex(self::$scheme_regex, $content, ProtocolViolationException::class);
     }
 
 
     /**
      * Collect the value of the lang-property
      *
-     * @return string|null
+     * @return \SimpleSAML\XML\Type\LanguageValue|null
      */
-    public function getLanguage(): ?string
+    public function getLanguage(): ?LanguageValue
     {
         return $this->lang;
     }
@@ -85,9 +80,9 @@ final class Logo extends AbstractMduiElement implements
     /**
      * Collect the value of the height-property
      *
-     * @return int
+     * @return \SimpleSAML\XML\Type\PositiveIntegerValue
      */
-    public function getHeight(): int
+    public function getHeight(): PositiveIntegerValue
     {
         return $this->height;
     }
@@ -96,9 +91,9 @@ final class Logo extends AbstractMduiElement implements
     /**
      * Collect the value of the width-property
      *
-     * @return int
+     * @return \SimpleSAML\XML\Type\PositiveIntegerValue
      */
-    public function getWidth(): int
+    public function getWidth(): PositiveIntegerValue
     {
         return $this->width;
     }
@@ -121,10 +116,10 @@ final class Logo extends AbstractMduiElement implements
         Assert::same($xml->namespaceURI, Logo::NS, InvalidDOMElementException::class);
         Assert::stringNotEmpty($xml->textContent, 'Missing url value for Logo.');
 
-        $Url = $xml->textContent;
-        $Width = self::getIntegerAttribute($xml, 'width');
-        $Height = self::getIntegerAttribute($xml, 'height');
-        $lang = self::getOptionalAttribute($xml, 'xml:lang', null);
+        $Url = SAMLAnyURIValue::fromString($xml->textContent);
+        $Width = self::getAttribute($xml, 'width', PositiveIntegerValue::class);
+        $Height = self::getAttribute($xml, 'height', PositiveIntegerValue::class);
+        $lang = self::getOptionalAttribute($xml, 'xml:lang', LanguageValue::class, null);
 
         return new static($Url, $Height, $Width, $lang);
     }
@@ -139,12 +134,12 @@ final class Logo extends AbstractMduiElement implements
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->textContent = $this->getContent();
-        $e->setAttribute('height', strval($this->getHeight()));
-        $e->setAttribute('width', strval($this->getWidth()));
+        $e->textContent = $this->getContent()->getValue();
+        $e->setAttribute('height', $this->getHeight()->getValue());
+        $e->setAttribute('width', $this->getWidth()->getValue());
 
         if ($this->getLanguage() !== null) {
-            $e->setAttribute('xml:lang', $this->getLanguage());
+            $e->setAttribute('xml:lang', $this->getLanguage()->getValue());
         }
 
         return $e;
@@ -161,7 +156,12 @@ final class Logo extends AbstractMduiElement implements
     {
         $data = self::processArrayContents($data);
 
-        return new static($data['url'], $data['height'], $data['width'], $data['lang'] ?? null);
+        return new static(
+            SAMLAnyURIValue::fromString($data['url']),
+            PositiveIntegerValue::fromInteger($data['height']),
+            PositiveIntegerValue::fromInteger($data['width']),
+            $data['lang'] !== null ? LanguageValue::fromString($data['lang']) : null,
+        );
     }
 
 
@@ -217,12 +217,12 @@ final class Logo extends AbstractMduiElement implements
      */
     public function toArray(): array
     {
-        $lang = $this->getLanguage();
+        $lang = $this->getLanguage()?->getValue();
 
         return [
-            'url' => $this->getContent(),
-            'width' => $this->getWidth(),
-            'height' => $this->getHeight(),
+            'url' => $this->getContent()->getValue(),
+            'width' => $this->getWidth()->toInteger(),
+            'height' => $this->getHeight()->toInteger(),
         ] + (isset($lang) ? ['lang' => $lang] : []);
     }
 }

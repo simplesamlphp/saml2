@@ -5,22 +5,22 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\md\AbstractMdElement;
-use SimpleSAML\SAML2\XML\md\Extensions;
-use SimpleSAML\SAML2\XML\md\Organization;
-use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
-use SimpleSAML\SAML2\XML\md\OrganizationName;
-use SimpleSAML\SAML2\XML\md\OrganizationURL;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
+use SimpleSAML\SAML2\XML\md\{
+    AbstractMdElement,
+    Extensions,
+    Organization,
+    OrganizationDisplayName,
+    OrganizationName,
+    OrganizationURL,
+};
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
-use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
+use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\{LanguageValue, StringValue};
 
 use function dirname;
 use function strval;
@@ -84,15 +84,30 @@ final class OrganizationTest extends TestCase
     public function testMarshalling(): void
     {
         $org = new Organization(
-            [new OrganizationName('en', 'Identity Providers R US')],
-            [new OrganizationDisplayName('en', 'Identity Providers R US, a Division of Lerxst Corp.')],
-            [new OrganizationURL('en', 'https://IdentityProvider.com')],
+            [
+                new OrganizationName(
+                    LanguageValue::fromString('en'),
+                    SAMLStringValue::fromString('Identity Providers R US'),
+                ),
+            ],
+            [
+                new OrganizationDisplayName(
+                    LanguageValue::fromString('en'),
+                    SAMLStringValue::fromString('Identity Providers R US, a Division of Lerxst Corp.'),
+                ),
+            ],
+            [
+                new OrganizationURL(
+                    LanguageValue::fromString('en'),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com'),
+                ),
+            ],
             new Extensions(
                 [
                     new Chunk(self::$ext->documentElement),
                 ],
             ),
-            [new XMLAttribute(C::NAMESPACE, 'ssp', 'attr1', 'value1')],
+            [new XMLAttribute(C::NAMESPACE, 'ssp', 'attr1', StringValue::fromString('value1'))],
         );
 
         $this->assertEquals(

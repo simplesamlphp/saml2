@@ -4,24 +4,16 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
-use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Exception\Protocol\{RequestVersionTooHighException, RequestVersionTooLowException};
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\IdentifierTrait;
-use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
-use SimpleSAML\SAML2\XML\saml\EncryptedID;
-use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
-use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\XML\saml\NameID;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\SAML2\XML\saml\{AbstractBaseID, EncryptedID, IdentifierInterface, Issuer, NameID};
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingElementException, TooManyElementsException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\IDValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
@@ -40,36 +32,34 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
     /**
      * Constructor for SAML 2 AttributeQuery.
      *
+     * @param \SimpleSAML\XML\Type\IDValue $id
      * @param \SimpleSAML\SAML2\XML\saml\IdentifierInterface $identifier
-     * @param \DateTimeImmutable $issueInstant
-     * @param \DateTimeImmutable|null $notOnOrAfter
-     * @param string|null $reason
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $issueInstant
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $notOnOrAfter
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $reason
      * @param \SimpleSAML\SAML2\XML\samlp\SessionIndex[] $sessionIndexes
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
-     * @param string|null $id
-     * @param string $version
-     * @param string|null $destination
-     * @param string|null $consent
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      * @throws \Exception
      */
     public function __construct(
+        IDValue $id,
         IdentifierInterface $identifier,
-        DateTimeImmutable $issueInstant,
-        protected ?DateTimeImmutable $notOnOrAfter = null,
-        protected ?string $reason = null,
+        SAMLDateTimeValue $issueInstant,
+        protected ?SAMLDateTimeValue $notOnOrAfter = null,
+        protected ?SAMLStringValue $reason = null,
         protected array $sessionIndexes = [],
         ?Issuer $issuer = null,
-        ?string $id = null,
-        string $version = '2.0',
-        ?string $destination = null,
-        ?string $consent = null,
+        ?SAMLAnyURIValue $destination = null,
+        ?SAMLAnyURIValue $consent = null,
         ?Extensions $extensions = null,
     ) {
         Assert::maxCount($sessionIndexes, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($sessionIndexes, SessionIndex::class);
 
-        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
+        parent::__construct($id, $issuer, $issueInstant, $destination, $consent, $extensions);
 
         $this->setIdentifier($identifier);
     }
@@ -78,9 +68,9 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
     /**
      * Retrieve the expiration time of this request.
      *
-     * @return \DateTimeImmutable|null The expiration time of this request.
+     * @return \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null The expiration time of this request.
      */
-    public function getNotOnOrAfter(): ?DateTimeImmutable
+    public function getNotOnOrAfter(): ?SAMLDateTimeValue
     {
         return $this->notOnOrAfter;
     }
@@ -89,9 +79,9 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
     /**
      * Retrieve the reason for this request.
      *
-     * @return string|null The reason for this request.
+     * @return \SimpleSAML\SAML2\Type\StringValue|null The reason for this request.
      */
-    public function getReason(): ?string
+    public function getReason(): ?SAMLStringValue
     {
         return $this->reason;
     }
@@ -129,28 +119,14 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
         Assert::same($xml->localName, 'LogoutRequest', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, LogoutRequest::NS, InvalidDOMElementException::class);
 
-        $version = self::getAttribute($xml, 'Version');
-        Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
-        Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
+        $version = self::getAttribute($xml, 'Version', SAMLStringValue::class);
+        Assert::true(version_compare('2.0', strval($version), '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', strval($version), '>='), RequestVersionTooHighException::class);
 
-        $id = self::getAttribute($xml, 'ID');
-        Assert::validNCName($id); // Covers the empty string
+        $id = self::getAttribute($xml, 'ID', IDValue::Class);
+        $issueInstant = self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class);
 
-        $issueInstant = self::getAttribute($xml, 'IssueInstant');
-        // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
-        $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
-
-        Assert::validDateTime($issueInstant, ProtocolViolationException::class);
-        $issueInstant = new DateTimeImmutable($issueInstant);
-
-        $notOnOrAfter = self::getOptionalAttribute($xml, 'NotOnOrAfter', null);
-        if ($notOnOrAfter !== null) {
-            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
-            $notOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $notOnOrAfter, 1);
-
-            Assert::validDateTime($notOnOrAfter, ProtocolViolationException::class);
-            $notOnOrAfter = new DateTimeImmutable($notOnOrAfter);
-        }
+        $notOnOrAfter = self::getOptionalAttribute($xml, 'NotOnOrAfter', SAMLDateTimeValue::class, null);
 
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::countBetween($issuer, 0, 1);
@@ -177,16 +153,15 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
         $sessionIndex = SessionIndex::getChildrenOfClass($xml);
 
         $request = new static(
+            $id,
             $identifier,
             $issueInstant,
             $notOnOrAfter,
-            self::getOptionalAttribute($xml, 'Reason', null),
+            self::getOptionalAttribute($xml, 'Reason', SAMLStringValue::class, null),
             $sessionIndex,
             array_pop($issuer),
-            $id,
-            $version,
-            self::getOptionalAttribute($xml, 'Destination', null),
-            self::getOptionalAttribute($xml, 'Consent', null),
+            self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
+            self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
             array_pop($extensions),
         );
 
@@ -211,11 +186,11 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
         $e = parent::toUnsignedXML($parent);
 
         if ($this->getNotOnOrAfter() !== null) {
-            $e->setAttribute('NotOnOrAfter', $this->getNotOnOrAfter()->format(C::DATETIME_FORMAT));
+            $e->setAttribute('NotOnOrAfter', $this->getNotOnOrAfter()->getValue());
         }
 
         if ($this->getReason() !== null) {
-            $e->setAttribute('Reason', $this->getReason());
+            $e->setAttribute('Reason', $this->getReason()->getValue());
         }
 
         /** @var \SimpleSAML\XML\SerializableElementInterface $identifier */

@@ -4,25 +4,20 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
-use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\saml\Assertion;
-use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
-use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\SAML2\Exception\Protocol\{RequestVersionTooHighException, RequestVersionTooLowException};
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
+use SimpleSAML\SAML2\XML\saml\{Assertion, EncryptedAssertion, Issuer};
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingElementException, TooManyElementsException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\{IDValue, NCNameValue};
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_merge;
 use function array_pop;
+use function strval;
 
 /**
  * Class for SAML 2 Response messages.
@@ -37,26 +32,24 @@ class Response extends AbstractStatusResponse implements SchemaValidatableElemen
     /**
      * Constructor for SAML 2 response messages.
      *
+     * @param \SimpleSAML\SAML2\IDValue $id
      * @param \SimpleSAML\SAML2\XML\samlp\Status $status
-     * @param \DateTimeImmutable $issueInstant
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
-     * @param string|null $id
-     * @param string $version
-     * @param string $inResponseTo
-     * @param string|null $destination
-     * @param string|null $consent
+     * @param \SimpleSAML\XML\Type\NCNameValue|null $inResponseTo
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      * @param (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\EncryptedAssertion)[] $assertions
      */
     final public function __construct(
+        IDValue $id,
         Status $status,
-        DateTimeImmutable $issueInstant,
+        SAMLDateTimeValue $issueInstant,
         ?Issuer $issuer = null,
-        ?string $id = null,
-        string $version = '2.0',
-        ?string $inResponseTo = null,
-        ?string $destination = null,
-        ?string $consent = null,
+        ?NCNameValue $inResponseTo = null,
+        ?SAMLAnyURIValue $destination = null,
+        ?SAMLAnyURIValue $consent = null,
         ?Extensions $extensions = null,
         protected array $assertions = [],
     ) {
@@ -64,11 +57,10 @@ class Response extends AbstractStatusResponse implements SchemaValidatableElemen
         Assert::allIsInstanceOfAny($assertions, [Assertion::class, EncryptedAssertion::class]);
 
         parent::__construct(
+            $id,
             $status,
             $issueInstant,
             $issuer,
-            $id,
-            $version,
             $inResponseTo,
             $destination,
             $consent,
@@ -106,26 +98,12 @@ class Response extends AbstractStatusResponse implements SchemaValidatableElemen
         Assert::same($xml->localName, 'Response', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Response::NS, InvalidDOMElementException::class);
 
-        $version = self::getAttribute($xml, 'Version');
-        Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
-        Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
+        $version = self::getAttribute($xml, 'Version', SAMLStringValue::class);
+        Assert::true(version_compare('2.0', strval($version), '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', strval($version), '>='), RequestVersionTooHighException::class);
 
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
-
-        $id = self::getAttribute($xml, 'ID');
-        Assert::validNCName($id); // Covers the empty string
-
-        $inResponseTo = self::getOptionalAttribute($xml, 'InResponseTo', null);
-        $destination = self::getOptionalAttribute($xml, 'Destination', null);
-        $consent = self::getOptionalAttribute($xml, 'Consent', null);
-
-        $issueInstant = self::getAttribute($xml, 'IssueInstant');
-        // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
-        $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
-
-        Assert::validDateTime($issueInstant, ProtocolViolationException::class);
-        $issueInstant = new DateTimeImmutable($issueInstant);
 
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::countBetween($issuer, 0, 1);
@@ -143,14 +121,13 @@ class Response extends AbstractStatusResponse implements SchemaValidatableElemen
         );
 
         $response = new static(
+            self::getAttribute($xml, 'ID', IDValue::class),
             array_pop($status),
-            $issueInstant,
+            self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
             empty($issuer) ? null : array_pop($issuer),
-            $id,
-            $version,
-            $inResponseTo,
-            $destination,
-            $consent,
+            self::getOptionalAttribute($xml, 'InResponseTo', NCNameValue::class, null),
+            self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
+            self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
             empty($extensions) ? null : array_pop($extensions),
             array_merge(Assertion::getChildrenOfClass($xml), EncryptedAssertion::getChildrenOfClass($xml)),
         );

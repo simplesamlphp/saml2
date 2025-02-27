@@ -5,14 +5,13 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingElementException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\{BooleanValue, UnsignedShortValue};
 
-use function strval;
+use function var_export;
 
 /**
  * Class representing SAML 2 Metadata AttributeConsumingService element.
@@ -28,17 +27,17 @@ final class AttributeConsumingService extends AbstractMdElement implements Schem
     /**
      * AttributeConsumingService constructor.
      *
-     * @param int $index
+     * @param \SimpleSAML\XML\Type\UnsignedShort $index
      * @param \SimpleSAML\SAML2\XML\md\ServiceName[] $serviceName
      * @param \SimpleSAML\SAML2\XML\md\RequestedAttribute[] $requestedAttribute
-     * @param bool|null $isDefault
+     * @param \SimpleSAML\XML\Type\BooleanValue|null $isDefault
      * @param \SimpleSAML\SAML2\XML\md\ServiceDescription[] $serviceDescription
      */
     public function __construct(
-        int $index,
+        UnsignedShortValue $index,
         protected array $serviceName,
         protected array $requestedAttribute,
-        ?bool $isDefault = null,
+        ?BooleanValue $isDefault = null,
         protected array $serviceDescription = [],
     ) {
         Assert::maxCount($serviceName, C::UNBOUNDED_LIMIT);
@@ -93,7 +92,6 @@ final class AttributeConsumingService extends AbstractMdElement implements Schem
         Assert::same($xml->localName, 'AttributeConsumingService', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AttributeConsumingService::NS, InvalidDOMElementException::class);
 
-        $index = self::getIntegerAttribute($xml, 'index');
         $names = ServiceName::getChildrenOfClass($xml);
         Assert::minCount(
             $names,
@@ -107,10 +105,10 @@ final class AttributeConsumingService extends AbstractMdElement implements Schem
         $requestedAttrs = RequestedAttribute::getChildrenOfClass($xml);
 
         return new static(
-            $index,
+            self::getAttribute($xml, 'index', UnsignedShortValue::class),
             $names,
             $requestedAttrs,
-            self::getOptionalBooleanAttribute($xml, 'isDefault', null),
+            self::getOptionalAttribute($xml, 'isDefault', BooleanValue::class, null),
             $descriptions,
         );
     }
@@ -158,12 +156,10 @@ final class AttributeConsumingService extends AbstractMdElement implements Schem
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('index', strval($this->getIndex()));
+        $e->setAttribute('index', $this->getIndex()->getValue());
 
-        if ($this->getIsDefault() === true) {
-            $e->setAttribute('isDefault', 'true');
-        } elseif ($this->getIsDefault() === false) {
-            $e->setAttribute('isDefault', 'false');
+        if ($this->getIsDefault() !== null) {
+            $e->setAttribute('isDefault', var_export($this->getIsDefault()->toBoolean(), true));
         }
 
         foreach ($this->getServiceName() as $name) {

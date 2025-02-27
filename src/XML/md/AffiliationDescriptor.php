@@ -4,16 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\ExtendableAttributesTrait;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\SAML2\Type\{SAMLDateTimeValue, EntityIDValue};
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, TooManyElementsException};
+use SimpleSAML\XML\{ExtendableAttributesTrait, SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\{DurationValue, IDValue};
 use SimpleSAML\XML\XsNamespace as NS;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
@@ -35,28 +32,29 @@ final class AffiliationDescriptor extends AbstractMetadataDocument implements Sc
     /**
      * Generic constructor for SAML metadata documents.
      *
-     * @param string $affiliationOwnerId The ID of the owner of this affiliation.
+     * @param \SimpleSAML\SAML2\Type\EntityIDValue $affiliationOwnerId The ID of the owner of this affiliation.
      * @param \SimpleSAML\SAML2\XML\md\AffiliateMember[] $affiliateMember
      *   A non-empty array of members of this affiliation.
-     * @param string|null $ID The ID for this document. Defaults to null.
-     * @param \DateTimeImmutable|null $validUntil Unix time of validity for this document. Defaults to null.
-     * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
+     * @param \SimpleSAML\XML\Type\IDValue|null $ID The ID for this document. Defaults to null.
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
+     *   Defaults to null.
+     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration Maximum time this document can be cached.
+     *   Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to an empty array.
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor
      *   An optional array of KeyDescriptors. Defaults to an empty array.
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttribute
      */
     public function __construct(
-        protected string $affiliationOwnerId,
+        protected EntityIDValue $affiliationOwnerId,
         protected array $affiliateMember,
-        ?string $ID = null,
-        ?DateTimeImmutable $validUntil = null,
-        ?string $cacheDuration = null,
+        ?IDValue $ID = null,
+        ?SAMLDateTimeValue $validUntil = null,
+        ?DurationValue $cacheDuration = null,
         ?Extensions $extensions = null,
         protected array $keyDescriptor = [],
         array $namespacedAttribute = [],
     ) {
-        SAMLAssert::validEntityID($affiliationOwnerId);
         Assert::notEmpty($affiliateMember, 'List of affiliated members must not be empty.');
         Assert::maxCount($affiliateMember, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($affiliateMember, AffiliateMember::class);
@@ -72,9 +70,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument implements Sc
     /**
      * Collect the value of the affiliationOwnerId-property
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\EntityIDValue
      */
-    public function getAffiliationOwnerId(): string
+    public function getAffiliationOwnerId(): EntityIDValue
     {
         return $this->affiliationOwnerId;
     }
@@ -120,12 +118,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument implements Sc
         Assert::same($xml->localName, 'AffiliationDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AffiliationDescriptor::NS, InvalidDOMElementException::class);
 
-        $owner = self::getAttribute($xml, 'affiliationOwnerID');
+        $owner = self::getAttribute($xml, 'affiliationOwnerID', EntityIDValue::class);
         $members = AffiliateMember::getChildrenOfClass($xml);
         $keyDescriptors = KeyDescriptor::getChildrenOfClass($xml);
-
-        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
-        SAMLAssert::nullOrValidDateTime($validUntil);
 
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
@@ -154,9 +149,9 @@ final class AffiliationDescriptor extends AbstractMetadataDocument implements Sc
         $afd = new static(
             $owner,
             $members,
-            self::getOptionalAttribute($xml, 'ID', null),
-            $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
-            self::getOptionalAttribute($xml, 'cacheDuration', null),
+            self::getOptionalAttribute($xml, 'ID', IDValue::class, null),
+            self::getOptionalAttribute($xml, 'validUntil', SAMLDateTimeValue::class, null),
+            self::getOptionalAttribute($xml, 'cacheDuration', DurationValue::class, null),
             !empty($extensions) ? $extensions[0] : null,
             $keyDescriptors,
             self::getAttributesNSFromXML($xml),
@@ -180,7 +175,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument implements Sc
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toUnsignedXML($parent);
-        $e->setAttribute('affiliationOwnerID', $this->getAffiliationOwnerId());
+        $e->setAttribute('affiliationOwnerID', $this->getAffiliationOwnerId()->getValue());
 
         foreach ($this->getAttributesNS() as $attr) {
             $attr->toXML($e);

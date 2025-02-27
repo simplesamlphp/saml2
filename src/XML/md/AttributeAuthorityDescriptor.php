@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingElementException, TooManyElementsException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\{DurationValue, IDValue};
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function preg_split;
@@ -39,11 +36,11 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType impl
      * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
      * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfile
      * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attribute
-     * @param string|null $ID
-     * @param \DateTimeImmutable|null $validUntil
-     * @param string|null $cacheDuration
+     * @param \SimpleSAML\XML\Type\IDValue|null $ID
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil
+     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
-     * @param string|null $errorURL
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $errorURL
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor
      * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contact
@@ -56,11 +53,11 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType impl
         protected array $nameIDFormat = [],
         protected array $attributeProfile = [],
         protected array $attribute = [],
-        ?string $ID = null,
-        ?DateTimeImmutable $validUntil = null,
-        ?string $cacheDuration = null,
+        ?IDValue $ID = null,
+        ?SAMLDateTimeValue $validUntil = null,
+        ?DurationValue $cacheDuration = null,
         ?Extensions $extensions = null,
-        ?string $errorURL = null,
+        ?SAMLAnyURIValue $errorURL = null,
         ?Organization $organization = null,
         array $keyDescriptor = [],
         array $contact = [],
@@ -178,9 +175,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType impl
         Assert::same($xml->localName, 'AttributeAuthorityDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AttributeAuthorityDescriptor::NS, InvalidDOMElementException::class);
 
-        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
-        SAMLAssert::nullOrValidDateTime($validUntil);
+        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration', SAMLStringValue::class);
 
         $attrServices = AttributeService::getChildrenOfClass($xml);
         Assert::notEmpty(
@@ -220,16 +215,16 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType impl
 
         $authority = new static(
             $attrServices,
-            preg_split('/[\s]+/', trim($protocols)),
+            preg_split('/[\s]+/', $protocols->getValue()),
             $assertIDReqServices,
             $nameIDFormats,
             $attrProfiles,
             $attributes,
-            self::getOptionalAttribute($xml, 'ID', null),
-            $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
-            self::getOptionalAttribute($xml, 'cacheDuration', null),
+            self::getOptionalAttribute($xml, 'ID', IDValue::class, null),
+            self::getOptionalAttribute($xml, 'validUntil', SAMLDateTimeValue::class, null),
+            self::getOptionalAttribute($xml, 'cacheDuration', DurationValue::class, null),
             !empty($extensions) ? $extensions[0] : null,
-            self::getOptionalAttribute($xml, 'errorURL', null),
+            self::getOptionalAttribute($xml, 'errorURL', SAMLAnyURIValue::class, null),
             !empty($orgs) ? $orgs[0] : null,
             KeyDescriptor::getChildrenOfClass($xml),
             ContactPerson::getChildrenOfClass($xml),

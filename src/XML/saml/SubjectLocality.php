@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\{DomainValue, SAMLStringValue};
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 
 /**
  * Class representing SAML2 SubjectLocality
@@ -23,24 +23,23 @@ final class SubjectLocality extends AbstractSamlElement implements SchemaValidat
     /**
      * Initialize an SubjectLocality.
      *
-     * @param string|null $address
-     * @param string|null $dnsName
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $address
+     * @param \SimpleSAML\SAML2\Type\DomainValue|null $dnsName
      */
     public function __construct(
-        protected ?string $address = null,
-        protected ?string $dnsName = null,
+        protected ?SAMLStringValue $address = null,
+        protected ?DomainValue $dnsName = null,
     ) {
-        Assert::nullOrIp($address, 'Invalid IP address');
-        Assert::nullOrNotWhitespaceOnly($dnsName, 'Invalid DNS name');
+        Assert::nullOrIp($address?->getValue(), 'Invalid IP address');
     }
 
 
     /**
      * Collect the value of the address-property
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue|null
      */
-    public function getAddress(): ?string
+    public function getAddress(): ?SAMLStringValue
     {
         return $this->address;
     }
@@ -49,9 +48,9 @@ final class SubjectLocality extends AbstractSamlElement implements SchemaValidat
     /**
      * Collect the value of the dnsName-property
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\DomainValue|null
      */
-    public function getDnsName(): ?string
+    public function getDnsName(): ?DomainValue
     {
         return $this->dnsName;
     }
@@ -64,8 +63,8 @@ final class SubjectLocality extends AbstractSamlElement implements SchemaValidat
      */
     public function isEmptyElement(): bool
     {
-        return empty($this->address)
-            && empty($this->dnsName);
+        return empty($this->getAddress())
+            && empty($this->getDnsName());
     }
 
 
@@ -84,8 +83,8 @@ final class SubjectLocality extends AbstractSamlElement implements SchemaValidat
         Assert::same($xml->namespaceURI, SubjectLocality::NS, InvalidDOMElementException::class);
 
         return new static(
-            self::getOptionalAttribute($xml, 'Address', null),
-            self::getOptionalAttribute($xml, 'DNSName', null),
+            self::getOptionalAttribute($xml, 'Address', SAMLStringValue::class, null),
+            self::getOptionalAttribute($xml, 'DNSName', DomainValue::class, null),
         );
     }
 
@@ -101,11 +100,11 @@ final class SubjectLocality extends AbstractSamlElement implements SchemaValidat
         $e = $this->instantiateParentElement($parent);
 
         if ($this->getAddress() !== null) {
-            $e->setAttribute('Address', $this->getAddress());
+            $e->setAttribute('Address', $this->getAddress()->getValue());
         }
 
         if ($this->getDnsName() !== null) {
-            $e->setAttribute('DNSName', $this->getDnsName());
+            $e->setAttribute('DNSName', $this->getDnsName()->getValue());
         }
 
         return $e;

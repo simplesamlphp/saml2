@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\XML\md\AbstractMdElement;
-use SimpleSAML\SAML2\XML\md\SingleSignOnService;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\XML\md\{AbstractMdElement, SingleSignOnService};
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
 
 use function dirname;
 use function strval;
@@ -52,7 +50,10 @@ final class SingleSignOnServiceTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $ssoep = new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A);
+        $ssoep = new SingleSignOnService(
+            SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+            SAMLAnyURIValue::fromString(C::LOCATION_A),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -66,12 +67,16 @@ final class SingleSignOnServiceTest extends TestCase
      */
     public function testMarshallingWithResponseLocation(): void
     {
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.',
         );
 
-        new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A, 'https://response.location/');
+        new SingleSignOnService(
+            SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+            SAMLAnyURIValue::fromString(C::LOCATION_A),
+            SAMLAnyURIValue::fromString('https://response.location/'),
+        );
     }
 
 
@@ -86,7 +91,7 @@ final class SingleSignOnServiceTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $xmlRepresentation->documentElement->setAttribute('ResponseLocation', 'https://response.location/');
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for md:SingleSignOnService.',
         );

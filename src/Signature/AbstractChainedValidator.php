@@ -45,7 +45,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
         foreach ($pemCandidates as $index => $candidateKey) {
             $cert = new X509(PEM::fromString($candidateKey->getCertificate()));
             $verifier = (new SignatureAlgorithmFactory([]))->getAlgorithm(
-                $element->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+                $element->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm()->getValue(),
                 $cert->getPublicKey(),
             );
 

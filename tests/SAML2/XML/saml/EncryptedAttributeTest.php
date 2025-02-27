@@ -4,18 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Compat\AbstractContainer;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
-use SimpleSAML\SAML2\XML\saml\Attribute;
-use SimpleSAML\SAML2\XML\saml\AttributeValue;
-use SimpleSAML\SAML2\XML\saml\EncryptedAttribute;
+use SimpleSAML\SAML2\Compat\{AbstractContainer, ContainerSingleton};
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\saml\{AbstractSamlElement, Attribute, AttributeValue, EncryptedAttribute};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
@@ -74,8 +69,10 @@ final class EncryptedAttributeTest extends TestCase
     public function testMarshalling(): void
     {
         $attribute = new Attribute(
-            name: 'urn:encrypted:attribute',
-            attributeValue: [new AttributeValue('very secret data')],
+            name: SAMLStringValue::fromString('urn:encrypted:attribute'),
+            attributeValue: [
+                new AttributeValue('very secret data'),
+            ],
         );
 
         $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
@@ -101,7 +98,7 @@ final class EncryptedAttributeTest extends TestCase
 
         /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encryptedAttribute->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
+            $encryptedAttribute->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
 

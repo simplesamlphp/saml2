@@ -5,18 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\ArrayValidationException;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Exception\{ArrayValidationException, ProtocolViolationException};
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableElementTrait;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\SerializableElementInterface;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait, SerializableElementInterface};
 use SimpleSAML\XML\XsNamespace as NS;
 
 use function array_filter;
@@ -222,13 +218,13 @@ final class UIInfo extends AbstractMduiElement implements
      */
     public function isEmptyElement(): bool
     {
-        return empty($this->displayName)
-            && empty($this->description)
-            && empty($this->informationURL)
-            && empty($this->privacyStatementURL)
-            && empty($this->keywords)
-            && empty($this->logo)
-            && empty($this->elements);
+        return empty($this->getDisplayName())
+            && empty($this->getDescription())
+            && empty($this->getInformationURL())
+            && empty($this->getPrivacyStatementURL())
+            && empty($this->getKeywords())
+            && empty($this->getLogo())
+            && empty($this->getElements());
     }
 
 
@@ -282,14 +278,7 @@ final class UIInfo extends AbstractMduiElement implements
         $PrivacyStatementURL = PrivacyStatementURL::getChildrenOfClass($xml);
         $Keywords = Keywords::getChildrenOfClass($xml);
         $Logo = Logo::getChildrenOfClass($xml);
-        $children = [];
-
-        /** @var \DOMElement $node */
-        foreach (XPath::xpQuery($xml, './*', XPath::getXPath($xml)) as $node) {
-            if ($node->namespaceURI !== UIInfo::NS) {
-                $children[] = new Chunk($node);
-            }
-        }
+        $children = self::getChildElementsFromXML($xml);
 
         return new static(
             $DisplayName,

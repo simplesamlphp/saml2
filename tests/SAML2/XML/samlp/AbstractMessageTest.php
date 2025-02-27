@@ -6,25 +6,27 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMElement;
 use Exception;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, EntityIDValue, SAMLStringValue};
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
-use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
-use SimpleSAML\SAML2\XML\samlp\Extensions;
-use SimpleSAML\SAML2\XML\samlp\MessageFactory;
-use SimpleSAML\SAML2\XML\samlp\Response;
-use SimpleSAML\SAML2\XML\samlp\Status;
-use SimpleSAML\SAML2\XML\samlp\StatusCode;
-use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\SAML2\XML\samlp\{
+    AbstractMessage,
+    AbstractSamlpElement,
+    Extensions,
+    MessageFactory,
+    Response,
+    Status,
+    StatusCode,
+};
+use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
 use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\Type\IDValue;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
@@ -81,8 +83,6 @@ AUTHNREQUEST
         );
 
         $unsignedMessage = MessageFactory::fromXML($authnRequest->documentElement);
-        $this->assertEquals('2.0', $unsignedMessage->getVersion());
-
         $unsignedMessage->sign($signer);
 
         $signedMessage = MessageFactory::fromXML($unsignedMessage->toXML());
@@ -140,12 +140,25 @@ AUTHNREQUEST
     #[Group('Message')]
     public function testConvertIssuerToXML(): void
     {
-        $status = new Status(new StatusCode());
+        $status = new Status(
+            new StatusCode(
+                SAMLAnyURIValue::fromString(
+                    C::STATUS_SUCCESS,
+                ),
+            ),
+        );
 
         // first, try with common Issuer objects (Format=entity)
-        $issuer = new Issuer('https://gateway.stepup.org/saml20/sp/metadata');
+        $issuer = new Issuer(
+            SAMLStringValue::fromString('https://gateway.stepup.org/saml20/sp/metadata'),
+        );
 
-        $response = new Response($status, self::$clock->now(), $issuer);
+        $response = new Response(
+            id: IDValue::fromString('SomeIDValue'),
+            status: $status,
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+            issuer: $issuer,
+        );
         $xml = $response->toXML();
         $xpCache = XPath::getXPath($xml);
         $xml_issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
@@ -156,13 +169,18 @@ AUTHNREQUEST
 
         // now, try an Issuer with another format and attributes
         $issuer = new Issuer(
-            'https://gateway.stepup.org/saml20/sp/metadata',
-            'urn:x-simplesamlphp:namequalifier',
-            'urn:x-simplesamlphp:spnamequalifier',
-            C::NAMEID_UNSPECIFIED,
-            'SomeSPProvidedID',
+            SAMLStringValue::fromString('https://gateway.stepup.org/saml20/sp/metadata'),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:namequalifier'),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),
+            SAMLAnyURIValue::fromString(C::NAMEID_UNSPECIFIED),
+            SAMLStringValue::fromString('SomeSPProvidedID'),
         );
-        $response = new Response($status, self::$clock->now(), $issuer);
+        $response = new Response(
+            id: IDValue::fromString('SomeIDValue'),
+            status: $status,
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+            issuer: $issuer,
+        );
         $xml = $response->toXML();
         $xpCache = XPath::getXPath($xml);
         $xml_issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
@@ -176,7 +194,11 @@ AUTHNREQUEST
         $this->assertEquals($issuer->getSPProvidedID(), $xml_issuer->getAttribute('SPProvidedID'));
 
         // finally, make sure we can skip the Issuer by setting it to null
-        $response = new Response($status, self::$clock->now());
+        $response = new Response(
+            id: IDValue::fromString('SomeIDValue'),
+            status: $status,
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+        );
         $xml = $response->toXML();
 
         $xpCache = XPath::getXPath($xml);

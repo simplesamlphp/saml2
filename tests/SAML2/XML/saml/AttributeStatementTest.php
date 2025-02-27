@@ -4,17 +4,16 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeStatement;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
 
 use function dirname;
 use function strval;
@@ -55,16 +54,22 @@ final class AttributeStatementTest extends TestCase
         $attrStatement = new AttributeStatement(
             [
                 new Attribute(
-                    name: 'urn:ServiceID',
-                    attributeValue: [new AttributeValue(1)],
+                    name: SAMLStringValue::fromString('urn:ServiceID'),
+                    attributeValue: [
+                        new AttributeValue(1),
+                    ],
                 ),
                 new Attribute(
-                    name: 'urn:EntityConcernedID',
-                    attributeValue: [new AttributeValue(1)],
+                    name: SAMLStringValue::fromString('urn:EntityConcernedID'),
+                    attributeValue: [
+                        new AttributeValue(1),
+                    ],
                 ),
                 new Attribute(
-                    name: 'urn:EntityConcernedSubID',
-                    attributeValue: [new AttributeValue(1)],
+                    name: SAMLStringValue::fromString('urn:EntityConcernedSubID'),
+                    attributeValue: [
+                        new AttributeValue(1),
+                    ],
                 ),
             ],
         );

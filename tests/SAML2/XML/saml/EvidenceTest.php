@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Test\SAML2\XML\saml;
 
 use DOMDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
-use SimpleSAML\SAML2\XML\saml\Assertion;
-use SimpleSAML\SAML2\XML\saml\AssertionIDRef;
-use SimpleSAML\SAML2\XML\saml\AssertionURIRef;
-use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
-use SimpleSAML\SAML2\XML\saml\Evidence;
+use SimpleSAML\SAML2\XML\saml\{
+    AbstractSamlElement,
+    Assertion,
+    AssertionIDRef,
+    AssertionURIRef,
+    EncryptedAssertion,
+    Evidence,
+};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
 
 use function dirname;
 use function strval;

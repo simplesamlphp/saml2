@@ -4,35 +4,36 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\md\AbstractMdElement;
-use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
-use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
-use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType;
-use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
-use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
-use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
-use SimpleSAML\SAML2\XML\md\AttributeProfile;
-use SimpleSAML\SAML2\XML\md\IDPSSODescriptor;
-use SimpleSAML\SAML2\XML\md\KeyDescriptor;
-use SimpleSAML\SAML2\XML\md\ManageNameIDService;
-use SimpleSAML\SAML2\XML\md\NameIDFormat;
-use SimpleSAML\SAML2\XML\md\NameIDMappingService;
-use SimpleSAML\SAML2\XML\md\SingleLogoutService;
-use SimpleSAML\SAML2\XML\md\SingleSignOnService;
-use SimpleSAML\SAML2\XML\saml\Attribute;
-use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, KeyTypesValue, SAMLStringValue};
+use SimpleSAML\SAML2\XML\md\{
+    AbstractMdElement,
+    AbstractMetadataDocument,
+    AbstractRoleDescriptor,
+    AbstractRoleDescriptorType,
+    AbstractSignedMdElement,
+    ArtifactResolutionService,
+    AssertionIDRequestService,
+    AttributeProfile,
+    IDPSSODescriptor,
+    KeyDescriptor,
+    KeyTypesEnum,
+    ManageNameIDService,
+    NameIDFormat,
+    NameIDMappingService,
+    SingleLogoutService,
+    SingleSignOnService,
+};
+use SimpleSAML\SAML2\XML\saml\{Attribute, AttributeValue};
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\{BooleanValue, IDValue, UnsignedShortValue};
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
-use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
-use SimpleSAML\XMLSecurity\XML\ds\KeyName;
+use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
 
 use function dirname;
 use function strval;
@@ -77,53 +78,57 @@ final class IDPSSODescriptorTest extends TestCase
     public function testMarshalling(): void
     {
         $idpssod = new IDPSSODescriptor(
-            ID: 'phpunit',
+            ID: IDValue::fromString('phpunit'),
             singleSignOnService: [
                 new SingleSignOnService(
-                    C::BINDING_HTTP_REDIRECT,
-                    'https://IdentityProvider.com/SAML/SSO/Browser',
+                    SAMLAnyURIValue::fromString(C::BINDING_HTTP_REDIRECT),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/SSO/Browser'),
                 ),
                 new SingleSignOnService(
-                    C::BINDING_HTTP_POST,
-                    'https://IdentityProvider.com/SAML/SSO/Browser',
+                    SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/SSO/Browser'),
                 ),
             ],
             protocolSupportEnumeration: [C::NS_SAMLP],
-            wantAuthnRequestsSigned: true,
+            wantAuthnRequestsSigned: BooleanValue::fromBoolean(true),
             nameIDMappingService: [
                 new NameIDMappingService(
-                    C::BINDING_HTTP_REDIRECT,
-                    'https://IdentityProvider.com/SAML/SSO/Browser',
+                    SAMLAnyURIValue::fromString(C::BINDING_HTTP_REDIRECT),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/SSO/Browser'),
                 ),
                 new NameIDMappingService(
-                    C::BINDING_HTTP_POST,
-                    'https://IdentityProvider.com/SAML/SSO/Browser',
+                    SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/SSO/Browser'),
                 ),
             ],
             assertionIDRequestService: [
                 new AssertionIDRequestService(
-                    C::BINDING_HTTP_REDIRECT,
-                    'https://IdentityProvider.com/SAML/SSO/Browser',
+                    SAMLAnyURIValue::fromString(C::BINDING_HTTP_REDIRECT),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/SSO/Browser'),
                 ),
                 new AssertionIDRequestService(
-                    C::BINDING_HTTP_POST,
-                    'https://IdentityProvider.com/SAML/SSO/Browser',
+                    SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/SSO/Browser'),
                 ),
             ],
             attributeProfile: [
-                new AttributeProfile('urn:attribute:profile1'),
-                new AttributeProfile('urn:attribute:profile2'),
+                new AttributeProfile(
+                    SAMLAnyURIValue::fromString('urn:attribute:profile1'),
+                ),
+                new AttributeProfile(
+                    SAMLAnyURIValue::fromString('urn:attribute:profile2'),
+                ),
             ],
             attribute: [
                 new Attribute(
-                    'urn:oid:1.3.6.1.4.1.5923.1.1.1.6',
-                    C::NAMEFORMAT_URI,
-                    'eduPersonPrincipalName',
+                    SAMLStringValue::fromString('urn:oid:1.3.6.1.4.1.5923.1.1.1.6'),
+                    SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
+                    SAMLStringValue::fromString('eduPersonPrincipalName'),
                 ),
                 new Attribute(
-                    'urn:oid:1.3.6.1.4.1.5923.1.1.1.1',
-                    C::NAMEFORMAT_URI,
-                    'eduPersonAffiliation',
+                    SAMLStringValue::fromString('urn:oid:1.3.6.1.4.1.5923.1.1.1.1'),
+                    SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
+                    SAMLStringValue::fromString('eduPersonAffiliation'),
                     [
                         new AttributeValue('member'),
                         new AttributeValue('student'),
@@ -135,41 +140,49 @@ final class IDPSSODescriptorTest extends TestCase
             ],
             keyDescriptor: [
                 new KeyDescriptor(
-                    new KeyInfo(
-                        [new KeyName('IdentityProvider.com SSO Key')],
-                    ),
-                    'signing',
+                    new KeyInfo([
+                        new KeyName(
+                            SAMLStringValue::fromString('IdentityProvider.com SSO Key'),
+                        ),
+                    ]),
+                    KeyTypesValue::fromEnum(KeyTypesEnum::SIGNING),
                 ),
             ],
             artifactResolutionService: [
                 new ArtifactResolutionService(
-                    0,
-                    C::BINDING_SOAP,
-                    'https://IdentityProvider.com/SAML/Artifact',
-                    true,
+                    UnsignedShortValue::fromInteger(0),
+                    SAMLAnyURIValue::fromString(C::BINDING_SOAP),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/Artifact'),
+                    BooleanValue::fromBoolean(true),
                 ),
             ],
             singleLogoutService: [
                 new SingleLogoutService(
-                    C::BINDING_SOAP,
-                    'https://IdentityProvider.com/SAML/SLO/SOAP',
+                    SAMLAnyURIValue::fromString(C::BINDING_SOAP),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/SLO/SOAP'),
                 ),
                 new SingleLogoutService(
-                    C::BINDING_HTTP_REDIRECT,
-                    'https://IdentityProvider.com/SAML/SLO/Browser',
-                    'https://IdentityProvider.com/SAML/SLO/Response',
+                    SAMLAnyURIValue::fromString(C::BINDING_HTTP_REDIRECT),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/SLO/Browser'),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/SLO/Response'),
                 ),
             ],
             manageNameIDService: [
                 new ManageNameIDService(
-                    C::BINDING_HTTP_POST,
-                    'https://IdentityProvider.com/SAML/SSO/Browser',
+                    SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/SSO/Browser'),
                 ),
             ],
             nameIDFormat: [
-                new NameIDFormat(C::NAMEID_X509_SUBJECT_NAME),
-                new NameIDFormat(C::NAMEID_PERSISTENT),
-                new NameIDFormat(C::NAMEID_TRANSIENT),
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_X509_SUBJECT_NAME),
+                ),
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
+                ),
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
+                ),
             ],
         );
 
@@ -200,22 +213,13 @@ final class IDPSSODescriptorTest extends TestCase
         $this->expectExceptionMessage('At least one protocol must be supported by this md:IDPSSODescriptor.');
 
         new IDPSSODescriptor(
-            [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A)],
+            [
+                new SingleSignOnService(
+                    SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+                    SAMLAnyURIValue::fromString(C::LOCATION_A),
+                ),
+            ],
             [],
-        );
-    }
-
-
-    /**
-     * Test that creating an IDPSSODescriptor from scratch fails if an empty AttributeProfile is provided.
-     */
-    public function testMarshallingWithEmptyAttributeProfile(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        new IDPSSODescriptor(
-            singleSignOnService: [new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A)],
-            protocolSupportEnumeration: [C::NS_SAMLP],
-            attributeProfile: [new AttributeProfile('profile1'), new AttributeProfile('')],
         );
     }
 
@@ -227,8 +231,14 @@ final class IDPSSODescriptorTest extends TestCase
     {
         $idpssod = new IDPSSODescriptor(
             [
-                new SingleSignOnService(C::BINDING_HTTP_POST, C::LOCATION_A),
-                new SingleSignOnService(C::BINDING_HTTP_REDIRECT, C::LOCATION_B),
+                new SingleSignOnService(
+                    SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+                    SAMLAnyURIValue::fromString(C::LOCATION_A),
+                ),
+                new SingleSignOnService(
+                    SAMLAnyURIValue::fromString(C::BINDING_HTTP_REDIRECT),
+                    SAMLAnyURIValue::fromString(C::LOCATION_B),
+                ),
             ],
             [C::NS_SAMLP, C::PROTOCOL],
         );
@@ -254,23 +264,6 @@ final class IDPSSODescriptorTest extends TestCase
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('At least one SingleSignOnService must be specified.');
-
-        IDPSSODescriptor::fromXML($xmlRepresentation->documentElement);
-    }
-
-
-    /**
-     * Test that creating an IDPSSODescriptor from XML fails if WantAuthnRequestsSigned is not boolean.
-     */
-    public function testUnmarshallingWithWrongWantAuthnRequestsSigned(): void
-    {
-        $xmlRepresentation = clone self::$xmlRepresentation;
-        $xmlRepresentation->documentElement->setAttribute('WantAuthnRequestsSigned', 'not a boolean');
-
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage(
-            'The \'WantAuthnRequestsSigned\' attribute of md:IDPSSODescriptor must be a boolean.',
-        );
 
         IDPSSODescriptor::fromXML($xmlRepresentation->documentElement);
     }

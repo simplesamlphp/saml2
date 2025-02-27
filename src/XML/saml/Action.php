@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\SAML2\XML\StringElementTrait;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\TypedTextContentTrait;
+
+use function strval;
 
 /**
  * Class representing SAML2 Action
@@ -17,21 +19,23 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
  */
 final class Action extends AbstractSamlElement
 {
-    use StringElementTrait;
+    use TypedTextContentTrait;
+
+    /** @var string */
+    public const TEXTCONTENT_TYPE = SAMLStringValue::class;
 
 
     /**
      * Initialize an Action.
      *
-     * @param string $namespace  This attribute was marked REQUIRED in the 2012 SAML errata (E36)
-     * @param string $content
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $namespace
+     *   NOTE: This attribute was marked REQUIRED in the 2012 SAML errata (E36)
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue $content
      */
     public function __construct(
-        protected string $namespace,
-        string $content,
+        protected SAMLAnyURIValue $namespace,
+        SAMLStringValue $content,
     ) {
-        SAMLAssert::validURI($namespace);
-
         $this->setContent($content);
     }
 
@@ -39,9 +43,9 @@ final class Action extends AbstractSamlElement
     /**
      * Collect the value of the namespace-property
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue
      */
-    public function getNamespace(): string
+    public function getNamespace(): SAMLAnyURIValue
     {
         return $this->namespace;
     }
@@ -62,8 +66,8 @@ final class Action extends AbstractSamlElement
         Assert::same($xml->namespaceURI, Action::NS, InvalidDOMElementException::class);
 
         return new self(
-            self::getAttribute($xml, 'Namespace'),
-            $xml->textContent,
+            self::getAttribute($xml, 'Namespace', SAMLAnyURIValue::class),
+            SAMLStringValue::fromString($xml->textContent),
         );
     }
 
@@ -78,8 +82,8 @@ final class Action extends AbstractSamlElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        $e->setAttribute('Namespace', $this->getNamespace());
-        $e->textContent = $this->getContent();
+        $e->setAttribute('Namespace', strval($this->getNamespace()));
+        $e->textContent = strval($this->getContent());
 
         return $e;
     }

@@ -5,17 +5,15 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
-use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Type\{CIDRValue, DomainValue, GeolocationValue};
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableElementTrait;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\SerializableElementInterface;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait, SerializableElementInterface};
 use SimpleSAML\XML\XsNamespace as NS;
 
 use function array_filter;
@@ -116,10 +114,10 @@ final class DiscoHints extends AbstractMduiElement implements
      */
     public function isEmptyElement(): bool
     {
-        return empty($this->elements)
-            && empty($this->ipHint)
-            && empty($this->domainHint)
-            && empty($this->geolocationHint);
+        return empty($this->getElements())
+            && empty($this->getIPHint())
+            && empty($this->getDomainHint())
+            && empty($this->getGeolocationHint());
     }
 
 
@@ -140,13 +138,7 @@ final class DiscoHints extends AbstractMduiElement implements
         $IPHint = IPHint::getChildrenOfClass($xml);
         $DomainHint = DomainHint::getChildrenOfClass($xml);
         $GeolocationHint = GeolocationHint::getChildrenOfClass($xml);
-        $children = [];
-
-        /** @var \DOMElement[] $nodes */
-        $nodes = XPath::xpQuery($xml, "./*[namespace-uri()!='" . DiscoHints::NS . "']", XPath::getXPath($xml));
-        foreach ($nodes as $node) {
-            $children[] = new Chunk($node);
-        }
+        $children = self::getChildElementsFromXML($xml);
 
         return new static($children, $IPHint, $DomainHint, $GeolocationHint);
     }
@@ -231,7 +223,9 @@ final class DiscoHints extends AbstractMduiElement implements
             Assert::isArray($data['iphint'], ArrayValidationException::class);
             Assert::allString($data['iphint'], ArrayValidationException::class);
             foreach ($data['iphint'] as $hint) {
-                $retval['IPHint'][] = new IPHint($hint);
+                $retval['IPHint'][] = new IPHint(
+                    CIDRValue::fromString($hint),
+                );
             }
         }
 
@@ -239,7 +233,9 @@ final class DiscoHints extends AbstractMduiElement implements
             Assert::isArray($data['domainhint'], ArrayValidationException::class);
             Assert::allString($data['domainhint'], ArrayValidationException::class);
             foreach ($data['domainhint'] as $hint) {
-                $retval['DomainHint'][] = new DomainHint($hint);
+                $retval['DomainHint'][] = new DomainHint(
+                    DomainValue::fromString($hint),
+                );
             }
         }
 
@@ -247,7 +243,9 @@ final class DiscoHints extends AbstractMduiElement implements
             Assert::isArray($data['geolocationhint'], ArrayValidationException::class);
             Assert::allString($data['geolocationhint'], ArrayValidationException::class);
             foreach ($data['geolocationhint'] as $hint) {
-                $retval['GeolocationHint'][] = new GeolocationHint($hint);
+                $retval['GeolocationHint'][] = new GeolocationHint(
+                    GeolocationValue::fromString($hint),
+                );
             }
         }
 

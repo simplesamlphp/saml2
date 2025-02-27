@@ -4,26 +4,26 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, CIDRValue, ListOfStringsValue, SAMLStringValue};
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
-use SimpleSAML\SAML2\XML\mdui\Description;
-use SimpleSAML\SAML2\XML\mdui\DiscoHints;
-use SimpleSAML\SAML2\XML\mdui\DisplayName;
-use SimpleSAML\SAML2\XML\mdui\InformationURL;
-use SimpleSAML\SAML2\XML\mdui\IPHint;
-use SimpleSAML\SAML2\XML\mdui\Keywords;
-use SimpleSAML\SAML2\XML\mdui\Logo;
-use SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL;
-use SimpleSAML\SAML2\XML\mdui\UIInfo;
-use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\SAML2\XML\mdui\{
+    AbstractMduiElement,
+    Description,
+    DiscoHints,
+    DisplayName,
+    InformationURL,
+    IPHint,
+    Keywords,
+    Logo,
+    PrivacyStatementURL,
+    UIInfo,
+};
+use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
+use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\{LanguageValue, PositiveIntegerValue};
 
 use function dirname;
 use function strval;
@@ -70,22 +70,45 @@ final class UIInfoTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $logo = new Logo("https://example.org/idp/images/logo_87x88.png", 88, 87, "fy");
+        $logo = new Logo(
+            SAMLAnyURIValue::fromString("https://example.org/idp/images/logo_87x88.png"),
+            PositiveIntegerValue::fromInteger(88),
+            PositiveIntegerValue::fromInteger(87),
+            LanguageValue::fromString('fy'),
+        );
 
         $uiinfo = new UIInfo(
             displayName: [
-                new DisplayName("en", "University of Examples"),
-                new DisplayName("el", "Univërsitä øf Exåmpleß"),
+                new DisplayName(
+                    LanguageValue::fromString('en'),
+                    SAMLStringValue::fromString('University of Examples'),
+                ),
+                new DisplayName(
+                    LanguageValue::fromString('el'),
+                    SAMLStringValue::fromString('Univërsitä øf Exåmpleß'),
+                ),
             ],
             description: [
-                new Description("en", "Just an example"),
+                new Description(
+                    LanguageValue::fromString('en'),
+                    SAMLStringValue::fromString('Just an example'),
+                ),
             ],
             informationURL: [
-                new InformationURL("en", "http://www.example.edu/en/"),
-                new InformationURL("el", "http://www.example.edu/"),
+                new InformationURL(
+                    LanguageValue::fromString('en'),
+                    SAMLAnyURIValue::fromString('http://www.example.edu/en/'),
+                ),
+                new InformationURL(
+                    LanguageValue::fromString('el'),
+                    SAMLAnyURIValue::fromString('http://www.example.edu/'),
+                ),
             ],
             privacyStatementURL: [
-                new PrivacyStatementURL("en", "https://example.org/privacy"),
+                new PrivacyStatementURL(
+                    LanguageValue::fromString('en'),
+                    SAMLAnyURIValue::fromString('https://example.org/privacy'),
+                ),
             ],
             children: [
                 new Chunk(DOMDocumentFactory::fromString(
@@ -97,10 +120,16 @@ final class UIInfoTest extends TestCase
             ],
         );
 
-        $keyword = new Keywords('en', ['University Fictional']);
+        $keyword = new Keywords(
+            LanguageValue::fromString('en'),
+            ListOfStringsValue::fromString('University Fictional'),
+        );
         $uiinfo->addKeyword($keyword);
 
-        $keyword = new Keywords('fr', ['Université Fictif']);
+        $keyword = new Keywords(
+            LanguageValue::fromString('fr'),
+            ListOfStringsValue::fromString('Université Fictif'),
+        );
         $uiinfo->addKeyword($keyword);
 
         $uiinfo->addLogo($logo);
@@ -117,12 +146,27 @@ final class UIInfoTest extends TestCase
      */
     public function testMarshallingChildren(): void
     {
-        $keywords = new Keywords("nl", ["voorbeeld", "specimen"]);
-        $logo = new Logo("https://example.edu/logo.png", 30, 20, "nl");
+        $keywords = new Keywords(
+            LanguageValue::fromString('nl'),
+            ListOfStringsValue::fromString("voorbeeld+specimen"),
+        );
+        $logo = new Logo(
+            SAMLAnyURIValue::fromString('https://example.edu/logo.png'),
+            PositiveIntegerValue::fromInteger(30),
+            PositiveIntegerValue::fromInteger(20),
+            LanguageValue::fromString('nl'),
+        );
 
         $discohints = new DiscoHints(
             [],
-            [new IPHint("192.168.6.0/24"), new IPHint("fd00:0123:aa:1001::/64")],
+            [
+                new IPHint(
+                    CIDRValue::fromString("192.168.6.0/24"),
+                ),
+                new IPHint(
+                    CIDRValue::fromString("fd00:0123:aa:1001::/64"),
+                ),
+            ],
         );
 
         // keywords appears twice, directly under UIinfo and as child of DiscoHints
@@ -202,7 +246,10 @@ final class UIInfoTest extends TestCase
         $document = clone self::$xmlRepresentation;
 
         // Append another 'en' mdui:Description to the document
-        $x = new Description('en', 'Something');
+        $x = new Description(
+            LanguageValue::fromString('en'),
+            SAMLStringValue::fromString('Something'),
+        );
         $x->toXML($document->documentElement);
 
         $this->expectException(ProtocolViolationException::class);
@@ -221,7 +268,10 @@ final class UIInfoTest extends TestCase
         $document = clone self::$xmlRepresentation;
 
         // Append another 'en' mdui:DisplayName to the document
-        $x = new DisplayName('en', 'Something');
+        $x = new DisplayName(
+            LanguageValue::fromString('en'),
+            SAMLStringValue::fromString('Something'),
+        );
         $x->toXML($document->documentElement);
 
         $this->expectException(ProtocolViolationException::class);
@@ -240,7 +290,10 @@ final class UIInfoTest extends TestCase
         $document = clone self::$xmlRepresentation;
 
         // Append another 'en' mdui:Keywords to the document
-        $x = new Keywords('en', ['Something', 'else']);
+        $x = new Keywords(
+            LanguageValue::fromString('en'),
+            ListOfStringsValue::fromString('Something else'),
+        );
         $x->toXML($document->documentElement);
 
         $this->expectException(ProtocolViolationException::class);
@@ -259,7 +312,10 @@ final class UIInfoTest extends TestCase
         $document = clone self::$xmlRepresentation;
 
         // Append another 'en' mdui:InformationURL to the document
-        $x = new InformationURL('en', 'https://example.org');
+        $x = new InformationURL(
+            LanguageValue::fromString('en'),
+            SAMLAnyURIValue::fromString('https://example.org'),
+        );
         $x->toXML($document->documentElement);
 
         $this->expectException(ProtocolViolationException::class);
@@ -278,7 +334,10 @@ final class UIInfoTest extends TestCase
         $document = clone self::$xmlRepresentation;
 
         // Append another 'en' mdui:PrivacyStatementURL to the document
-        $x = new PrivacyStatementURL('en', 'https://example.org');
+        $x = new PrivacyStatementURL(
+            LanguageValue::fromString('en'),
+            SAMLAnyURIValue::fromString('https://example.org'),
+        );
         $x->toXML($document->documentElement);
 
         $this->expectException(ProtocolViolationException::class);

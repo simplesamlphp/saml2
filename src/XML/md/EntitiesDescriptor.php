@@ -4,17 +4,21 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\{SAMLDateTimeValue, SAMLStringValue};
+use SimpleSAML\SAML2\XML\mdrpi\{PublicationInfo, PublicationPath, RegistrationInfo};
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, TooManyElementsException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\{DurationValue, IDValue};
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
+
+use function count;
+use function array_filter;
+use function array_merge;
+use function array_values;
 
 /**
  * Class representing SAML 2 EntitiesDescriptor element.
@@ -31,19 +35,19 @@ final class EntitiesDescriptor extends AbstractMetadataDocument implements Schem
      *
      * @param \SimpleSAML\SAML2\XML\md\EntityDescriptor[] $entityDescriptors
      * @param \SimpleSAML\SAML2\XML\md\EntitiesDescriptor[] $entitiesDescriptors
-     * @param string|null $Name
-     * @param string|null $ID
-     * @param \DateTimeImmutable|null $validUntil
-     * @param string|null $cacheDuration
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $Name
+     * @param \SimpleSAML\XML\Type\IDValue|null $ID
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil
+     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      */
     public function __construct(
         protected array $entityDescriptors = [],
         protected array $entitiesDescriptors = [],
-        protected ?string $Name = null,
-        ?string $ID = null,
-        ?DateTimeImmutable $validUntil = null,
-        ?string $cacheDuration = null,
+        protected ?SAMLStringValue $Name = null,
+        ?IDValue $ID = null,
+        ?SAMLDateTimeValue $validUntil = null,
+        ?DurationValue $cacheDuration = null,
         ?Extensions $extensions = null,
     ) {
         Assert::true(
@@ -56,7 +60,107 @@ final class EntitiesDescriptor extends AbstractMetadataDocument implements Schem
         Assert::allIsInstanceOf($entitiesDescriptors, EntitiesDescriptor::class);
         Assert::allIsInstanceOf($entityDescriptors, EntityDescriptor::class);
 
+        if ($extensions !== null) {
+            /**
+             * When a <mdrpi:RegistrationInfo> element appears in the <md:Extensions> element of a
+             * <md:EntitiesDescriptor> element it applies to all descendant <md:EntitiesDescriptor> and
+             * <md:EntityDescriptor> elements. That is to say, this is equivalent to putting an identical
+             * <mdrpi:RegistrationInfo> on every descendant <md:EntityDescriptor>. When used in this
+             * manner, descendant <md:EntitiesDescriptor> and <md:EntityDescriptor> elements MUST
+             * NOT contain a <mdrpi:RegistrationInfo> element in their <md:Extensions> element.
+             */
+            $toplevel_regInfo = array_values(array_filter($extensions->getList(), function ($ext) {
+                return $ext instanceof RegistrationInfo;
+            }));
+
+            /**
+             * The <mdrpi:PublicationInfo> element SHOULD only be used on the root element of a metadata document.
+             */
+            $toplevel_pubInfo = array_values(array_filter($extensions->getList(), function ($ext) {
+                return $ext instanceof PublicationInfo;
+            }));
+
+            /**
+             * When a <mdrpi:PublicationPath> element appears in the <md:Extensions> element of a
+             * <md:EntitiesDescriptor> element it applies to all descendant <md:EntitiesDescriptor> and
+             * <md:EntityDescriptor> elements. That is to say, this is equivalent to putting an identical
+             * <mdrpi:PublicationPath> on every descendant <md:EntitiesDescriptor> and <md:EntityDescriptor>.
+             * When used in this manner, descendant <md:EntitiesDescriptor> and <md:EntityDescriptor>
+             * elements MUST NOT contain a <mdrpi:PublicationPath> element in their <md:Extensions> element.
+             */
+            $toplevel_pubPath = array_values(array_filter($extensions->getList(), function ($ext) {
+                return $ext instanceof PublicationPath;
+            }));
+
+            if (count($toplevel_regInfo) > 0 || count($toplevel_pubInfo) > 0 || count($toplevel_pubPath)) {
+                $nestedExtensions = [];
+                foreach (array_merge($entityDescriptors, $entitiesDescriptors) as $ed) {
+                    $nestedExtensions = array_merge($nestedExtensions, $this->getRecursiveExtensions($ed));
+                }
+
+                if (count($toplevel_regInfo) > 0) {
+                    $nested_regInfo = array_values(array_filter($nestedExtensions, function ($ext) {
+                        return $ext instanceof RegistrationInfo;
+                    }));
+
+                    Assert::count(
+                        $nested_regInfo,
+                        0,
+                        "<mdrpi:RegistrationInfo> already set at top-level.",
+                        ProtocolViolationException::class,
+                    );
+                }
+
+                if (count($toplevel_pubInfo) > 0) {
+                    $nested_pubInfo = array_values(array_filter($nestedExtensions, function ($ext) {
+                        return $ext instanceof PublicationInfo;
+                    }));
+
+                    Assert::count(
+                        $nested_pubInfo,
+                        0,
+                        "<mdrpi:PublicationInfo> already set at top-level.",
+                        ProtocolViolationException::class,
+                    );
+                }
+
+                if (count($toplevel_pubPath) > 0) {
+                    $nested_pubPath = array_values(array_filter($nestedExtensions, function ($ext) {
+                        return $ext instanceof PublicationPath;
+                    }));
+
+                    Assert::count(
+                        $nested_pubPath,
+                        0,
+                        "<mdrpi:PublicationPath> already set at top-level.",
+                        ProtocolViolationException::class,
+                    );
+                }
+            }
+        }
+
         parent::__construct($ID, $validUntil, $cacheDuration, $extensions);
+    }
+
+
+    /**
+     * Get all extensions from all nested entity/entities descriptors
+     */
+    private function getRecursiveExtensions(EntityDescriptor|EntitiesDescriptor $descriptor): array
+    {
+        $extensions = [];
+        if ($descriptor->getExtensions() !== null) {
+            $extensions = $descriptor->getExtensions()->getList();
+
+            if ($descriptor instanceof EntitiesDescriptor) {
+                $eds = array_merge($descriptor->getEntitiesDescriptors(), $descriptor->getEntityDescriptors());
+                foreach ($eds as $ed) {
+                    $extensions = array_merge($extensions, $descriptor->getRecursiveExtensions($ed));
+                }
+            }
+        }
+
+        return $extensions;
     }
 
 
@@ -85,9 +189,9 @@ final class EntitiesDescriptor extends AbstractMetadataDocument implements Schem
     /**
      * Collect the value of the Name property.
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue|null
      */
-    public function getName(): ?string
+    public function getName(): ?SAMLStringValue
     {
         return $this->Name;
     }
@@ -108,9 +212,6 @@ final class EntitiesDescriptor extends AbstractMetadataDocument implements Schem
     {
         Assert::same($xml->localName, 'EntitiesDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, EntitiesDescriptor::NS, InvalidDOMElementException::class);
-
-        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
-        SAMLAssert::nullOrValidDateTime($validUntil);
 
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
@@ -139,10 +240,10 @@ final class EntitiesDescriptor extends AbstractMetadataDocument implements Schem
         $entities = new static(
             EntityDescriptor::getChildrenOfClass($xml),
             EntitiesDescriptor::getChildrenOfClass($xml),
-            self::getOptionalAttribute($xml, 'Name', null),
-            self::getOptionalAttribute($xml, 'ID', null),
-            $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
-            self::getOptionalAttribute($xml, 'cacheDuration', null),
+            self::getOptionalAttribute($xml, 'Name', SAMLStringValue::class, null),
+            self::getOptionalAttribute($xml, 'ID', IDValue::class, null),
+            self::getOptionalAttribute($xml, 'validUntil', SAMLDateTimeValue::class, null),
+            self::getOptionalAttribute($xml, 'cacheDuration', DurationValue::class, null),
             !empty($extensions) ? $extensions[0] : null,
         );
 
@@ -165,8 +266,8 @@ final class EntitiesDescriptor extends AbstractMetadataDocument implements Schem
     {
         $e = parent::toUnsignedXML($parent);
 
-        if ($this->Name !== null) {
-            $e->setAttribute('Name', $this->Name);
+        if ($this->getName() !== null) {
+            $e->setAttribute('Name', $this->getName()->getValue());
         }
 
         foreach ($this->getEntitiesDescriptors() as $entitiesDescriptor) {

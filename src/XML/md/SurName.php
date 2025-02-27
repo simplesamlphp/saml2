@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use SimpleSAML\SAML2\XML\StringElementTrait;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\TypedTextContentTrait;
 
 /**
  * Class implementing SurName.
@@ -16,14 +16,8 @@ use SimpleSAML\XML\SchemaValidatableElementTrait;
 final class SurName extends AbstractMdElement implements SchemaValidatableElementInterface
 {
     use SchemaValidatableElementTrait;
-    use StringElementTrait;
+    use TypedTextContentTrait;
 
-
-    /**
-     * @param string $content
-     */
-    public function __construct(string $content)
-    {
-        $this->setContent($content);
-    }
+    /** @var string */
+    public const TEXTCONTENT_TYPE = SAMLStringValue::class;
 }

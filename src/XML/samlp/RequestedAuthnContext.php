@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\Comparison;
-use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
-use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
+use SimpleSAML\SAML2\XML\saml\{AuthnContextClassRef, AuthnContextDeclRef};
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, SchemaViolationException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 
 use function array_merge;
 
@@ -53,12 +52,14 @@ final class RequestedAuthnContext extends AbstractSamlpElement implements Schema
                 $requestedAuthnContexts,
                 AuthnContextClassRef::class,
                 'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.',
+                ProtocolViolationException::class,
             );
         } else { // Can only be AuthnContextDeclRef
             Assert::allIsInstanceOf(
                 $requestedAuthnContexts,
                 AuthnContextDeclRef::class,
                 'You need either AuthnContextClassRef or AuthnContextDeclRef, not both.',
+                ProtocolViolationException::class,
             );
         }
     }
@@ -100,13 +101,19 @@ final class RequestedAuthnContext extends AbstractSamlpElement implements Schema
         Assert::same($xml->localName, 'RequestedAuthnContext', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, RequestedAuthnContext::NS, InvalidDOMElementException::class);
 
-        $Comparison = self::getOptionalAttribute($xml, 'Comparison', 'unknown');
+        $Comparison = self::getOptionalAttribute(
+            $xml,
+            'Comparison',
+            SAMLStringValue::class,
+            SAMLStringValue::fromString('unknown'),
+        );
+
         return new static(
             array_merge(
                 AuthnContextClassRef::getChildrenOfClass($xml),
                 AuthnContextDeclRef::getChildrenOfClass($xml),
             ),
-            Comparison::tryFrom($Comparison),
+            Comparison::tryFrom($Comparison->getValue()),
         );
     }
 

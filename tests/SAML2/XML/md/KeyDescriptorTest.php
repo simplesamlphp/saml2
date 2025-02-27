@@ -4,18 +4,15 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\XML\md\AbstractMdElement;
-use SimpleSAML\SAML2\XML\md\EncryptionMethod;
-use SimpleSAML\SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, KeyTypesValue};
+use SimpleSAML\SAML2\XML\md\{AbstractMdElement, EncryptionMethod, KeyDescriptor, KeyTypesEnum};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
-use SimpleSAML\XMLSecurity\XML\ds\KeyName;
+use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\StringValue;
+use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
 
 use function dirname;
 use function strval;
@@ -55,9 +52,17 @@ final class KeyDescriptorTest extends TestCase
     public function testMarshalling(): void
     {
         $kd = new KeyDescriptor(
-            new KeyInfo([new KeyName('IdentityProvider.com SSO Key')]),
-            'signing',
-            [new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5')],
+            new KeyInfo([
+                new KeyName(
+                    StringValue::fromString('IdentityProvider.com SSO Key'),
+                ),
+            ]),
+            KeyTypesValue::fromEnum(KeyTypesEnum::SIGNING),
+            [
+                new EncryptionMethod(
+                    SAMLAnyURIValue::fromString('http://www.w3.org/2001/04/xmlenc#rsa-1_5'),
+                ),
+            ],
         );
 
         $this->assertEquals(
@@ -68,26 +73,17 @@ final class KeyDescriptorTest extends TestCase
 
 
     /**
-     * Test that creating a KeyDescriptor from scratch with a wrong use fails.
-     */
-    public function testMarshallingWrongUse(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".');
-
-        new KeyDescriptor(
-            new KeyInfo([new KeyName('IdentityProvider.com SSO Key')]),
-            'wrong',
-        );
-    }
-
-
-    /**
      * Test that creating a KeyDescriptor from scratch without any optional argument works.
      */
     public function testMarshallingWithoutOptionalParameters(): void
     {
-        $kd = new KeyDescriptor(new KeyInfo([new KeyName('IdentityProvider.com SSO Key')]));
+        $kd = new KeyDescriptor(
+            new KeyInfo([
+                new KeyName(
+                    StringValue::fromString('IdentityProvider.com SSO Key'),
+                ),
+            ]),
+        );
 
         $this->assertNull($kd->getUse());
         $this->assertEmpty($kd->getEncryptionMethod());
@@ -117,8 +113,8 @@ XML
         $xmlRepresentation = clone self::$xmlRepresentation;
         $xmlRepresentation->documentElement->setAttribute('use', 'wrong');
 
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".');
+        $this->expectException(SchemaViolationException::class);
+        $this->expectExceptionMessage('Expected one of: "signing", "encryption". Got: "wrong"');
 
         KeyDescriptor::fromXML($xmlRepresentation->documentElement);
     }

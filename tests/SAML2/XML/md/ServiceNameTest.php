@@ -4,19 +4,15 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
-use SimpleSAML\SAML2\XML\md\AbstractMdElement;
-use SimpleSAML\SAML2\XML\md\ServiceName;
+use SimplesAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\md\{AbstractLocalizedName, AbstractMdElement, ServiceName};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\LanguageValue;
 
 use function dirname;
 use function strval;
@@ -59,24 +55,15 @@ final class ServiceNameTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = new ServiceName('en', 'Academic Journals R US');
+        $name = new ServiceName(
+            LanguageValue::fromString('en'),
+            SAMLStringValue::fromString('Academic Journals R US'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
-    }
-
-
-    /**
-     * Test that creating a ServiceName from scratch with an empty language fails.
-     */
-    public function testMarshallingWithEmptyLang(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
-
-        new ServiceName('', 'Academic Journals R US');
     }
 
 
@@ -91,23 +78,8 @@ final class ServiceNameTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $xmlRepresentation->documentElement->removeAttributeNS(C::NS_XML, 'lang');
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing xml:lang from ServiceName');
-
-        ServiceName::fromXML($xmlRepresentation->documentElement);
-    }
-
-
-    /**
-     * Test that creating a ServiceName from XML fails when xml:lang is empty.
-     */
-    public function testUnmarshallingWithEmptyLang(): void
-    {
-        $xmlRepresentation = clone self::$xmlRepresentation;
-        $xmlRepresentation->documentElement->setAttributeNS(C::NS_XML, 'lang', '');
-
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
 
         ServiceName::fromXML($xmlRepresentation->documentElement);
     }

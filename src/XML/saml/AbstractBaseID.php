@@ -8,20 +8,15 @@ use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\EncryptableElementTrait;
-use SimpleSAML\SAML2\XML\ExtensionPointInterface;
-use SimpleSAML\SAML2\XML\ExtensionPointTrait;
+use SimpleSAML\SAML2\XML\{EncryptableElementTrait, ExtensionPointInterface, ExtensionPointTrait};
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, SchemaViolationException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\QNameValue;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
-
-use function count;
-use function explode;
 
 /**
  * SAML BaseID data type.
@@ -45,23 +40,23 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
     /**
      * Initialize a saml:BaseID from scratch
      *
-     * @param string $type
-     * @param string|null $NameQualifier
-     * @param string|null $SPNameQualifier
+     * @param \SimpleSAML\XML\Type\QNameValue $type
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $NameQualifier
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $SPNameQualifier
      */
     protected function __construct(
-        protected string $type,
-        ?string $NameQualifier = null,
-        ?string $SPNameQualifier = null,
+        protected QNameValue $type,
+        ?SAMLStringValue $NameQualifier = null,
+        ?SAMLStringValue $SPNameQualifier = null,
     ) {
         parent::__construct($NameQualifier, $SPNameQualifier);
     }
 
 
     /**
-     * @inheritDoc
+     * @return \SimpleSAML\XML\Type\QNameValue
      */
-    public function getXsiType(): string
+    public function getXsiType(): QNameValue
     {
         return $this->type;
     }
@@ -86,19 +81,7 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
             SchemaViolationException::class,
         );
 
-        $type = $xml->getAttributeNS(C::NS_XSI, 'type');
-        Assert::validQName($type, SchemaViolationException::class);
-
-        // first, try to resolve the type to a full namespaced version
-        $qname = explode(':', $type, 2);
-        if (count($qname) === 2) {
-            list($prefix, $element) = $qname;
-        } else {
-            $prefix = null;
-            list($element) = $qname;
-        }
-        $ns = $xml->lookupNamespaceUri($prefix);
-        $type = ($ns === null) ? $element : implode(':', [$ns, $element]);
+        $type = QNameValue::fromDocument($xml->getAttributeNS(C::NS_XSI, 'type'), $xml);
 
         // now check if we have a handler registered for it
         $handler = Utils::getContainer()->getExtensionHandler($type);
@@ -107,8 +90,8 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
             return new UnknownID(
                 new Chunk($xml),
                 $type,
-                self::getOptionalAttribute($xml, 'NameQualifier', null),
-                self::getOptionalAttribute($xml, 'SPNameQualifier', null),
+                self::getOptionalAttribute($xml, 'NameQualifier', SAMLStringValue::class, null),
+                self::getOptionalAttribute($xml, 'SPNameQualifier', SAMLStringValue::class, null),
             );
         }
 
@@ -133,18 +116,18 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
         $e->setAttributeNS(
             'http://www.w3.org/2000/xmlns/',
             'xmlns:' . static::getXsiTypePrefix(),
-            static::getXsiTypeNamespaceURI(),
+            static::getXsiTypeNamespaceURI()->getValue(),
         );
 
         $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', $this->getXsiType());
         $type->toXML($e);
 
         if ($this->getNameQualifier() !== null) {
-            $e->setAttribute('NameQualifier', $this->getNameQualifier());
+            $e->setAttribute('NameQualifier', $this->getNameQualifier()->getValue());
         }
 
         if ($this->getSPNameQualifier() !== null) {
-            $e->setAttribute('SPNameQualifier', $this->getSPNameQualifier());
+            $e->setAttribute('SPNameQualifier', $this->getSPNameQualifier()->getValue());
         }
 
         return $e;

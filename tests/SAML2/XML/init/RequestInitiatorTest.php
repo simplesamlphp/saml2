@@ -4,18 +4,16 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\init;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\init\RequestInitiator;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
-use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
 
 use function dirname;
 use function strval;
@@ -62,8 +60,13 @@ final class RequestInitiatorTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr = new XMLAttribute(C::NAMESPACE, 'test', 'attr', 'value');
-        $requestInitiator = new RequestInitiator(C::LOCATION_A, C::LOCATION_B, [self::$ext], [$attr]);
+        $attr = new XMLAttribute(C::NAMESPACE, 'test', 'attr', SAMLStringValue::fromString('value'));
+        $requestInitiator = new RequestInitiator(
+            SAMLAnyURIValue::fromString(C::LOCATION_A),
+            SAMLAnyURIValue::fromString(C::LOCATION_B),
+            [self::$ext],
+            [$attr],
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

@@ -4,18 +4,17 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Signature;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
-use SimpleSAML\SAML2\Signature\MissingConfigurationException;
-use SimpleSAML\SAML2\Signature\ValidatorChain;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Signature\{MissingConfigurationException, ValidatorChain};
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\samlp\Response;
-use SimpleSAML\SAML2\XML\samlp\Status;
-use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\XML\samlp\{Response, Status, StatusCode};
+use SimpleSAML\XML\Type\IDValue;
 
 /**
  * @package simplesamlphp/saml2
@@ -23,6 +22,9 @@ use SimpleSAML\SAML2\XML\samlp\StatusCode;
 #[CoversClass(ValidatorChain::class)]
 final class ValidatorChainTest extends TestCase
 {
+    /** @var \SimpleSAML\SAML2\XML\samlp\Response */
+    private static Response $response;
+
     /** @var \SimpleSAML\SAML2\Signature\ValidatorChain */
     private static ValidatorChain $chain;
 
@@ -36,6 +38,15 @@ final class ValidatorChainTest extends TestCase
     {
         self::$chain = new ValidatorChain(new NullLogger(), []);
         self::$clock = Utils::getContainer()->getClock();
+        self::$response = new Response(
+            id: IDValue::fromString('abc123'),
+            status: new Status(
+                new StatusCode(
+                    SAMLAnyURIValue::fromString(C::STATUS_SUCCESS),
+                ),
+            ),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+        );
     }
 
 
@@ -49,7 +60,7 @@ final class ValidatorChainTest extends TestCase
 
         $this->expectException(MissingConfigurationException::class);
         self::$chain->hasValidSignature(
-            new Response(new Status(new StatusCode()), self::$clock->now()),
+            self::$response,
             new IdentityProvider([]),
         );
     }
@@ -65,7 +76,7 @@ final class ValidatorChainTest extends TestCase
         self::$chain->appendValidator(new MockChainedValidator(true, false));
 
         $validationResult = self::$chain->hasValidSignature(
-            new Response(new Status(new StatusCode()), self::$clock->now()),
+            self::$response,
             new IdentityProvider([]),
         );
         $this->assertFalse($validationResult, 'The validation result is not what is expected');
@@ -82,7 +93,7 @@ final class ValidatorChainTest extends TestCase
         self::$chain->appendValidator(new MockChainedValidator(false, true));
 
         $validationResult = self::$chain->hasValidSignature(
-            new Response(new Status(new StatusCode()), self::$clock->now()),
+            self::$response,
             new IdentityProvider([]),
         );
         $this->assertFalse($validationResult, 'The validation result is not what is expected');

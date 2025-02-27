@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\IdentifierTrait;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, TooManyElementsException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 
 use function array_pop;
 
@@ -29,16 +27,15 @@ final class SubjectConfirmation extends AbstractSamlElement implements SchemaVal
     /**
      * Initialize (and parse) a SubjectConfirmation element.
      *
-     * @param string $method
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $method
      * @param \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null $identifier
      * @param \SimpleSAML\SAML2\XML\saml\SubjectConfirmationData|null $subjectConfirmationData
      */
     public function __construct(
-        protected string $method,
+        protected SAMLAnyURIValue $method,
         ?IdentifierInterface $identifier = null,
         protected ?SubjectConfirmationData $subjectConfirmationData = null,
     ) {
-        SAMLAssert::validURI($method);
         $this->setIdentifier($identifier);
     }
 
@@ -46,9 +43,9 @@ final class SubjectConfirmation extends AbstractSamlElement implements SchemaVal
     /**
      * Collect the value of the Method-property
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue
      */
-    public function getMethod(): string
+    public function getMethod(): SAMLAnyURIValue
     {
         return $this->method;
     }
@@ -83,10 +80,7 @@ final class SubjectConfirmation extends AbstractSamlElement implements SchemaVal
         Assert::same($xml->localName, 'SubjectConfirmation', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SubjectConfirmation::NS, InvalidDOMElementException::class);
 
-        $Method = self::getAttribute($xml, 'Method');
-        $identifier = self::getIdentifierFromXML($xml);
         $subjectConfirmationData = SubjectConfirmationData::getChildrenOfClass($xml);
-
         Assert::maxCount(
             $subjectConfirmationData,
             1,
@@ -95,8 +89,8 @@ final class SubjectConfirmation extends AbstractSamlElement implements SchemaVal
         );
 
         return new static(
-            $Method,
-            $identifier,
+            self::getAttribute($xml, 'Method', SAMLAnyURIValue::class),
+            self::getIdentifierFromXML($xml),
             array_pop($subjectConfirmationData),
         );
     }
@@ -111,7 +105,7 @@ final class SubjectConfirmation extends AbstractSamlElement implements SchemaVal
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('Method', $this->getMethod());
+        $e->setAttribute('Method', $this->getMethod()->getValue());
 
         /** @var \SimpleSAML\XML\SerializableElementInterface|null $identifier */
         $identifier = $this->getIdentifier();

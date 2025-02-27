@@ -5,16 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingElementException, TooManyElementsException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 
 use function array_pop;
+use function strval;
 
 /**
  * SAML Status data type.
@@ -39,7 +37,7 @@ final class Status extends AbstractSamlpElement implements SchemaValidatableElem
         protected array $statusDetails = [],
     ) {
         Assert::oneOf(
-            $statusCode->getValue(),
+            strval($statusCode->getValue()),
             [
                 C::STATUS_SUCCESS,
                 C::STATUS_REQUESTER,

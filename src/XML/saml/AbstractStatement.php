@@ -8,17 +8,12 @@ use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\ExtensionPointInterface;
-use SimpleSAML\SAML2\XML\ExtensionPointTrait;
+use SimpleSAML\SAML2\XML\{ExtensionPointInterface, ExtensionPointTrait};
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
-
-use function count;
-use function explode;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, SchemaViolationException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\QNameValue;
 
 /**
  * Class implementing the <saml:Statement> extension point.
@@ -40,18 +35,18 @@ abstract class AbstractStatement extends AbstractStatementType implements
     /**
      * Initialize a custom saml:Statement element.
      *
-     * @param string $type
+     * @param \SimpleSAML\XML\Type\QNameValue $type
      */
     protected function __construct(
-        protected string $type,
+        protected QNameValue $type,
     ) {
     }
 
 
     /**
-     * @inheritDoc
+     * @return \SimpleSAML\XML\Type\QNameValue
      */
-    public function getXsiType(): string
+    public function getXsiType(): QNameValue
     {
         return $this->type;
     }
@@ -76,19 +71,7 @@ abstract class AbstractStatement extends AbstractStatementType implements
             SchemaViolationException::class,
         );
 
-        $type = $xml->getAttributeNS(C::NS_XSI, 'type');
-        Assert::validQName($type, SchemaViolationException::class);
-
-        // first, try to resolve the type to a full namespaced version
-        $qname = explode(':', $type, 2);
-        if (count($qname) === 2) {
-            list($prefix, $element) = $qname;
-        } else {
-            $prefix = null;
-            list($element) = $qname;
-        }
-        $ns = $xml->lookupNamespaceUri($prefix);
-        $type = ($ns === null) ? $element : implode(':', [$ns, $element]);
+        $type = QNameValue::fromDocument($xml->getAttributeNS(C::NS_XSI, 'type'), $xml);
 
         // now check if we have a handler registered for it
         $handler = Utils::getContainer()->getExtensionHandler($type);
@@ -118,7 +101,7 @@ abstract class AbstractStatement extends AbstractStatementType implements
         $e->setAttributeNS(
             'http://www.w3.org/2000/xmlns/',
             'xmlns:' . static::getXsiTypePrefix(),
-            static::getXsiTypeNamespaceURI(),
+            static::getXsiTypeNamespaceURI()->getValue(),
         );
 
         $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', $this->getXsiType());

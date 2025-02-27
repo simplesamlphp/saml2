@@ -4,29 +4,26 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DateTimeImmutable;
 use DOMDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, EntityIDValue, SAMLStringValue};
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
-use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
-use SimpleSAML\SAML2\XML\saml\Audience;
-use SimpleSAML\SAML2\XML\saml\NameID;
-use SimpleSAML\SAML2\XML\saml\Subject;
-use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
-use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
-use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\Test\SAML2\CustomBaseID;
-use SimpleSAML\XML\Attribute as XMLAttribute;
-use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\SAML2\XML\saml\{
+    AbstractBaseID,
+    AbstractSamlElement,
+    Audience,
+    NameID,
+    Subject,
+    SubjectConfirmation,
+    SubjectConfirmationData,
+};
+use SimpleSAML\Test\SAML2\{Constants as C, CustomBaseID};
+use SimpleSAML\XML\{Attribute as XMLAttribute, Chunk, DOMDocumentFactory};
 use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
-use SimpleSAML\XMLSecurity\XML\ds\KeyName;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\{NCNameValue, StringValue};
+use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
 
 use function dirname;
 use function strval;
@@ -96,17 +93,19 @@ XML
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 
-        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
-        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', StringValue::fromString('testval1'));
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', StringValue::fromString('testval2'));
 
         $subjectConfirmationData = new SubjectConfirmationData(
-            new DateTimeImmutable('2001-04-19T04:25:21Z'),
-            new DateTimeImmutable('2009-02-13T23:31:30Z'),
-            C::ENTITY_SP,
-            'SomeRequestID',
-            '127.0.0.1',
+            SAMLDateTimeValue::fromString('2001-04-19T04:25:21Z'),
+            SAMLDateTimeValue::fromString('2009-02-13T23:31:30Z'),
+            EntityIDValue::fromString(C::ENTITY_SP),
+            NCNameValue::fromString('SomeRequestID'),
+            SAMLStringValue::fromString('127.0.0.1'),
             [
-                new KeyInfo([new KeyName('SomeKey')]),
+                new KeyInfo([
+                    new KeyName(StringValue::fromString('SomeKey')),
+                ]),
                 new Chunk($arbitrary->documentElement),
             ],
             [$attr1, $attr2],
@@ -114,17 +113,19 @@ XML
 
         $subject = new Subject(
             new NameID(
-                value: 'SomeNameIDValue',
-                SPNameQualifier: 'https://sp.example.org/authentication/sp/metadata',
-                Format: C::NAMEID_TRANSIENT,
+                value: SAMLStringValue::fromString('SomeNameIDValue'),
+                SPNameQualifier: SAMLStringValue::fromString('https://sp.example.org/authentication/sp/metadata'),
+                Format: SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
             ),
             [
                 new SubjectConfirmation(
-                    'urn:oasis:names:tc:SAML:2.0:cm:bearer',
+                    SAMLAnyURIValue::fromString('urn:oasis:names:tc:SAML:2.0:cm:bearer'),
                     new NameID(
-                        value: 'SomeOtherNameIDValue',
-                        SPNameQualifier: 'https://sp.example.org/authentication/sp/metadata',
-                        Format: C::NAMEID_TRANSIENT,
+                        value: SAMLStringValue::fromString('SomeOtherNameIDValue'),
+                        SPNameQualifier: SAMLStringValue::fromString(
+                            'https://sp.example.org/authentication/sp/metadata',
+                        ),
+                        Format: SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
                     ),
                     $subjectConfirmationData,
                 ),
@@ -144,17 +145,19 @@ XML
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 
-        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
-        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', StringValue::fromString('testval1'));
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', StringValue::fromString('testval2'));
 
         $subjectConfirmationData = new SubjectConfirmationData(
-            new DateTimeImmutable('2001-04-19T04:25:21Z'),
-            new DateTimeImmutable('2009-02-13T23:31:30Z'),
-            C::ENTITY_SP,
-            'SomeRequestID',
-            '127.0.0.1',
+            SAMLDateTimeValue::fromString('2001-04-19T04:25:21Z'),
+            SAMLDateTimeValue::fromString('2009-02-13T23:31:30Z'),
+            EntityIDValue::fromString(C::ENTITY_SP),
+            NCNameValue::fromString('SomeRequestID'),
+            SAMLStringValue::fromString('127.0.0.1'),
             [
-                new KeyInfo([new KeyName('SomeKey')]),
+                new KeyInfo([
+                    new KeyName(StringValue::fromString('SomeKey')),
+                ]),
                 new Chunk($arbitrary->documentElement),
             ],
             [$attr1, $attr2],
@@ -162,17 +165,19 @@ XML
 
         $subject = new Subject(
             new NameID(
-                value: 'SomeNameIDValue',
-                SPNameQualifier: 'https://sp.example.org/authentication/sp/metadata',
-                Format: C::NAMEID_TRANSIENT,
+                value: SAMLStringValue::fromString('SomeNameIDValue'),
+                SPNameQualifier: SAMLStringValue::fromString('https://sp.example.org/authentication/sp/metadata'),
+                Format: SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
             ),
             [
                 new SubjectConfirmation(
-                    'urn:oasis:names:tc:SAML:2.0:cm:bearer',
+                    SAMLAnyURIValue::fromString('urn:oasis:names:tc:SAML:2.0:cm:bearer'),
                     new NameID(
-                        value: 'SomeOtherNameIDValue',
-                        SPNameQualifier: 'https://sp.example.org/authentication/sp/metadata',
-                        Format: C::NAMEID_TRANSIENT,
+                        value: SAMLStringValue::fromString('SomeOtherNameIDValue'),
+                        SPNameQualifier: SAMLStringValue::fromString(
+                            'https://sp.example.org/authentication/sp/metadata',
+                        ),
+                        Format: SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
                     ),
                     $subjectConfirmationData,
                 ),
@@ -201,17 +206,19 @@ XML
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 
-        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
-        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', StringValue::fromString('testval1'));
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', StringValue::fromString('testval2'));
 
         $subjectConfirmationData = new SubjectConfirmationData(
-            new DateTimeImmutable('2001-04-19T04:25:21Z'),
-            new DateTimeImmutable('2009-02-13T23:31:30Z'),
-            C::ENTITY_SP,
-            'SomeRequestID',
-            '127.0.0.1',
+            SAMLDateTimeValue::fromString('2001-04-19T04:25:21Z'),
+            SAMLDateTimeValue::fromString('2009-02-13T23:31:30Z'),
+            EntityIDValue::fromString(C::ENTITY_SP),
+            NCNameValue::fromString('SomeRequestID'),
+            SAMLStringValue::fromString('127.0.0.1'),
             [
-                new KeyInfo([new KeyName('SomeKey')]),
+                new KeyInfo([
+                    new KeyName(StringValue::fromString('SomeKey')),
+                ]),
                 new Chunk($arbitrary->documentElement),
             ],
             [$attr1, $attr2],
@@ -219,17 +226,21 @@ XML
 
         $subject = new Subject(
             new CustomBaseID(
-                [new Audience('urn:some:audience')],
-                'urn:x-simplesamlphp:namequalifier',
-                'urn:x-simplesamlphp:spnamequalifier',
+                [
+                    new Audience(EntityIDValue::fromString('urn:some:audience')),
+                ],
+                SAMLStringValue::fromString('urn:x-simplesamlphp:namequalifier'),
+                SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),
             ),
             [
                 new SubjectConfirmation(
-                    'urn:oasis:names:tc:SAML:2.0:cm:bearer',
+                    SAMLAnyURIValue::fromString('urn:oasis:names:tc:SAML:2.0:cm:bearer'),
                     new NameID(
-                        value: 'SomeNameIDValue',
-                        SPNameQualifier: 'https://sp.example.org/authentication/sp/metadata',
-                        Format: C::NAMEID_TRANSIENT,
+                        value: SAMLStringValue::fromString('SomeNameIDValue'),
+                        SPNameQualifier: SAMLStringValue::fromString(
+                            'https://sp.example.org/authentication/sp/metadata',
+                        ),
+                        Format: SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
                     ),
                     $subjectConfirmationData,
                 ),
@@ -316,7 +327,7 @@ XML
         $document = DOMDocumentFactory::fromString(
             <<<XML
 <saml:Subject xmlns:saml="{$samlNamespace}">
-  <saml:BaseID xmlns:xsi="{$xsiNamespace}" xsi:type="CustomBaseIDType">
+  <saml:BaseID xmlns:ssp="urn:x-simplesamlphp:namespace" xmlns:xsi="{$xsiNamespace}" xsi:type="ssp:CustomBaseIDType">
     <saml:Audience>urn:some:audience</saml:Audience>
   </saml:BaseID>
   <saml:NameID

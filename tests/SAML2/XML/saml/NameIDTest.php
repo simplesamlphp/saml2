@@ -4,16 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
-use SimpleSAML\SAML2\XML\saml\NameID;
-use SimpleSAML\SAML2\XML\saml\NameIDType;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
+use SimpleSAML\SAML2\XML\saml\{AbstractSamlElement, NameID, NameIDType};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SchemaValidationTestTrait, SerializableElementTestTrait};
 
 use function dirname;
 use function strval;
@@ -62,11 +58,11 @@ final class NameIDTest extends TestCase
     public function testMarshalling(): void
     {
         $nameId = new NameID(
-            'TheNameIDValue',
-            'urn:x-simplesamlphp:namequalifier',
-            'urn:x-simplesamlphp:spnamequalifier',
-            'urn:the:format',
-            'TheSPProvidedID',
+            SAMLStringValue::fromString('TheNameIDValue'),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:namequalifier'),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),
+            SAMLAnyURIValue::fromString('urn:the:format'),
+            SAMLStringValue::fromString('TheSPProvidedID'),
         );
 
         $this->assertEquals(

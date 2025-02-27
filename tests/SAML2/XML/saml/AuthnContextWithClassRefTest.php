@@ -4,17 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
-use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
-use SimpleSAML\SAML2\XML\saml\AuthnContext;
-use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, EntityIDValue};
+use SimpleSAML\SAML2\XML\saml\{AbstractSamlElement, AuthenticatingAuthority, AuthnContext, AuthnContextClassRef};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
 
 use function dirname;
 use function strval;
@@ -51,10 +47,16 @@ final class AuthnContextWithClassRefTest extends TestCase
     public function testMarshalling(): void
     {
         $authnContext = new AuthnContext(
-            authnContextClassRef: new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
+            authnContextClassRef: new AuthnContextClassRef(
+                SAMLAnyURIValue::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT),
+            ),
             authnContextDeclRef: null,
             authnContextDecl: null,
-            authenticatingAuthorities: [new AuthenticatingAuthority('https://idp.example.com/SAML2')],
+            authenticatingAuthorities: [
+                new AuthenticatingAuthority(
+                    EntityIDValue::fromString('https://idp.example.com/SAML2'),
+                ),
+            ],
         );
 
         $this->assertEquals(

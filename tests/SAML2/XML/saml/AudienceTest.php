@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Test\SAML2\XML\saml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\saml\AbstractConditionType;
-use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
-use SimpleSAML\SAML2\XML\saml\Audience;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\XML\saml\{AbstractConditionType, AbstractSamlElement, Audience};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
 
 use function dirname;
 use function strval;
@@ -48,7 +45,9 @@ final class AudienceTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $audience = new Audience('urn:test:audience1');
+        $audience = new Audience(
+            SAMLAnyURIValue::fromString('urn:test:audience1'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

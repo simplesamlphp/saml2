@@ -4,49 +4,48 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DateTimeImmutable;
 use Exception;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
-use SimpleSAML\SAML2\Compat\AbstractContainer;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\{AbstractContainer, ContainerSingleton};
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, DomainValue, EntityIDValue, SAMLStringValue};
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
-use SimpleSAML\SAML2\XML\saml\Assertion;
-use SimpleSAML\SAML2\XML\saml\Attribute;
-use SimpleSAML\SAML2\XML\saml\AttributeStatement;
-use SimpleSAML\SAML2\XML\saml\AttributeValue;
-use SimpleSAML\SAML2\XML\saml\Audience;
-use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
-use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
-use SimpleSAML\SAML2\XML\saml\AuthnContext;
-use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
-use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
-use SimpleSAML\SAML2\XML\saml\AuthnStatement;
-use SimpleSAML\SAML2\XML\saml\Conditions;
-use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
-use SimpleSAML\SAML2\XML\saml\EncryptedID;
-use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\XML\saml\NameID;
-use SimpleSAML\SAML2\XML\saml\Subject;
-use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
-use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
-use SimpleSAML\SAML2\XML\saml\SubjectLocality;
+use SimpleSAML\SAML2\XML\saml\{
+    AbstractSamlElement,
+    Assertion,
+    Attribute,
+    AttributeStatement,
+    AttributeValue,
+    Audience,
+    AudienceRestriction,
+    AuthenticatingAuthority,
+    AuthnContext,
+    AuthnContextClassRef,
+    AuthnContextDeclRef,
+    AuthnStatement,
+    Conditions,
+    EncryptedAssertion,
+    EncryptedID,
+    Issuer,
+    NameID,
+    Subject,
+    SubjectConfirmation,
+    SubjectConfirmationData,
+    SubjectLocality,
+};
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\{Base64BinaryValue, IDValue, NCNameValue};
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
-use SimpleSAML\XMLSecurity\XML\ds\X509Certificate;
-use SimpleSAML\XMLSecurity\XML\ds\X509Data;
+use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, X509Certificate, X509Data};
 
 use function dirname;
 use function strval;
@@ -106,63 +105,81 @@ final class AssertionTest extends TestCase
     public function testMarshalling(): void
     {
         // Create an Issuer
-        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
+        $issuer = new Issuer(
+            SAMLStringValue::fromString('urn:x-simplesamlphp:issuer'),
+        );
 
         // Create the conditions
         $conditions = new Conditions(
-            notBefore: new DateTimeImmutable('2011-08-31T08:51:05Z'),
-            notOnOrAfter: new DateTimeImmutable('2011-08-31T10:51:05Z'),
+            notBefore: SAMLDateTimeValue::fromString('2011-08-31T08:51:05Z'),
+            notOnOrAfter: SAMLDateTimeValue::fromString('2011-08-31T10:51:05Z'),
             condition: [],
-            audienceRestriction: [new AudienceRestriction([new Audience(C::ENTITY_SP)])],
+            audienceRestriction: [
+                new AudienceRestriction([
+                    new Audience(
+                        EntityIDValue::fromString(C::ENTITY_SP),
+                    ),
+                ]),
+            ],
         );
 
         // Create the AuthnStatement
         $authnStatement = new AuthnStatement(
             authnContext: new AuthnContext(
-                new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
+                new AuthnContextClassRef(
+                    SAMLAnyURIValue::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT),
+                ),
                 null,
                 null,
             ),
-            authnInstant: new DateTimeImmutable('2011-08-31T08:51:05Z'),
-            sessionIndex: '_93af655219464fb403b34436cfb0c5cb1d9a5502',
-            subjectLocality: new SubjectLocality('127.0.0.1'),
+            authnInstant: SAMLDateTimeValue::fromString('2011-08-31T08:51:05Z'),
+            sessionIndex: SAMLStringValue::fromString('_93af655219464fb403b34436cfb0c5cb1d9a5502'),
+            subjectLocality: new SubjectLocality(
+                SAMLStringValue::fromString('127.0.0.1'),
+            ),
         );
 
         // Create the AttributeStatement
         $attrStatement = new AttributeStatement([
             new Attribute(
-                name: 'urn:test:ServiceID',
-                attributeValue: [new AttributeValue(1)],
+                name: SAMLStringValue::fromString('urn:test:ServiceID'),
+                attributeValue: [
+                    new AttributeValue(1),
+                ],
             ),
             new Attribute(
-                name: 'urn:test:EntityConcernedID',
-                attributeValue: [new AttributeValue(1)],
+                name: SAMLStringValue::fromString('urn:test:EntityConcernedID'),
+                attributeValue: [
+                    new AttributeValue(1),
+                ],
             ),
             new Attribute(
-                name: 'urn:test:EntityConcernedSubID',
-                attributeValue: [new AttributeValue(1)],
+                name: SAMLStringValue::fromString('urn:test:EntityConcernedSubID'),
+                attributeValue: [
+                    new AttributeValue(1),
+                ],
             ),
         ]);
 
         // Create the Subject
         $subject = new Subject(
             new NameID(
-                value: 'SomeNameIDValue',
-                SPNameQualifier: 'https://sp.example.org/authentication/sp/metadata',
-                Format: C::NAMEID_TRANSIENT,
+                value: SAMLStringValue::fromString('SomeNameIDValue'),
+                SPNameQualifier: SAMLStringValue::fromString('https://sp.example.org/authentication/sp/metadata'),
+                Format: SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
             ),
             [
                 new SubjectConfirmation(
-                    'urn:oasis:names:tc:SAML:2.0:cm:bearer',
+                    SAMLAnyURIValue::fromString('urn:oasis:names:tc:SAML:2.0:cm:bearer'),
                     new NameID(
-                        value: 'SomeOtherNameIDValue',
-                        SPNameQualifier: 'https://sp.example.org/authentication/sp/metadata',
-                        Format: C::NAMEID_TRANSIENT,
+                        value: SAMLStringValue::fromString('SomeOtherNameIDValue'),
+                        SPNameQualifier: SAMLStringValue::fromString('https://sp.example.org/authentication/sp/metadata'),
+                        Format: SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
                     ),
                     new SubjectConfirmationData(
-                        notOnOrAfter: new DateTimeImmutable('2011-08-31T08:51:05Z'),
-                        recipient: 'https://sp.example.org/authentication/sp/consume-assertion',
-                        inResponseTo: '_13603a6565a69297e9809175b052d115965121c8',
+                        notOnOrAfter: SAMLDateTimeValue::fromString('2011-08-31T08:51:05Z'),
+                        recipient: EntityIDValue::fromString('https://sp.example.org/authentication/sp/consume-assertion'),
+                        inResponseTo: NCNameValue::fromString('_13603a6565a69297e9809175b052d115965121c8'),
                     ),
                 ),
             ],
@@ -171,8 +188,8 @@ final class AssertionTest extends TestCase
         // Create an assertion
         $assertion = new Assertion(
             $issuer,
-            new DateTimeImmutable('1970-01-01T01:33:31Z'),
-            '_93af655219464fb403b34436cfb0c5cb1d9a5502',
+            SAMLDateTimeValue::fromString('1970-01-01T01:33:31Z'),
+            IDValue::fromString('_93af655219464fb403b34436cfb0c5cb1d9a5502'),
             $subject,
             $conditions,
             [$authnStatement, $attrStatement],
@@ -253,15 +270,20 @@ XML;
     public function testMarshallingUnmarshallingChristmas(): void
     {
         // Create an Issuer
-        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
+        $issuer = new Issuer(
+            SAMLStringValue::fromString('urn:x-simplesamlphp:issuer'),
+        );
 
         // Create Conditions
         $conditions = new Conditions(
-            notBefore: new DateTimeImmutable('2011-08-31T08:51:05Z'),
-            notOnOrAfter: new DateTimeImmutable('2011-08-31T10:51:05Z'),
+            notBefore: SAMLDateTimeValue::fromString('2011-08-31T08:51:05Z'),
+            notOnOrAfter: SAMLDateTimeValue::fromString('2011-08-31T10:51:05Z'),
             audienceRestriction: [
                 new AudienceRestriction(
-                    [new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)],
+                    [
+                        new Audience(EntityIDValue::fromString(C::ENTITY_SP)),
+                        new Audience(EntityIDValue::fromString(C::ENTITY_OTHER)),
+                    ],
                 ),
             ],
         );
@@ -269,18 +291,29 @@ XML;
         // Create AuthnStatement
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
+                new AuthnContextClassRef(
+                    SAMLAnyURIValue::fromString(C::AUTHNCONTEXT_CLASS_REF_LOA1),
+                ),
                 null,
-                new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml'),
+                new AuthnContextDeclRef(
+                    SAMLAnyURIValue::fromString('https://example.org/relative/path/to/document.xml'),
+                ),
                 [
-                    new AuthenticatingAuthority(C::ENTITY_IDP),
-                    new AuthenticatingAuthority(C::ENTITY_OTHER),
+                    new AuthenticatingAuthority(
+                        EntityIDValue::fromString(C::ENTITY_IDP),
+                    ),
+                    new AuthenticatingAuthority(
+                        EntityIDValue::fromString(C::ENTITY_OTHER),
+                    ),
                 ],
             ),
-            new DateTimeImmutable('2011-08-31T08:51:04Z'),
-            new DateTimeImmutable('2011-08-31T08:54:25Z'),
-            'idx1',
-            new SubjectLocality('127.0.0.1', 'no.place.like.home'),
+            SAMLDateTimeValue::fromString('2011-08-31T08:51:04Z'),
+            SAMLDateTimeValue::fromString('2011-08-31T08:54:25Z'),
+            SAMLStringValue::fromString('idx1'),
+            new SubjectLocality(
+                SAMLStringValue::fromString('127.0.0.1'),
+                DomainValue::fromString('no.place.like.home'),
+            ),
         );
 
         // Create AttributeStatement
@@ -288,18 +321,25 @@ XML;
             // Attribute
             [
                 new Attribute(
-                    name: 'name1',
-                    attributeValue: [new AttributeValue('value1'), new AttributeValue('value2')],
+                    name: SAMLStringValue::fromString('name1'),
+                    attributeValue: [
+                        new AttributeValue('value1'),
+                        new AttributeValue('value2'),
+                    ],
                 ),
                 new Attribute(
-                    name: 'name2',
-                    nameFormat: C::NAMEFORMAT_UNSPECIFIED,
-                    attributeValue: [new AttributeValue(2)],
+                    name: SAMLStringValue::fromString('name2'),
+                    nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_UNSPECIFIED),
+                    attributeValue: [
+                        new AttributeValue(2),
+                    ],
                 ),
                 new Attribute(
-                    name: 'name3',
-                    nameFormat: C::NAMEFORMAT_BASIC,
-                    attributeValue: [new AttributeValue(null)],
+                    name: SAMLStringValue::fromString('name3'),
+                    nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_BASIC),
+                    attributeValue: [
+                        new AttributeValue(null),
+                    ],
                 ),
             ],
         );
@@ -308,8 +348,8 @@ XML;
         $statements = [$authnStatement, $attributeStatement];
         $assertion = new Assertion(
             issuer: $issuer,
-            id: '_123abc',
-            issueInstant: new DateTimeImmutable('2011-08-31T08:51:05Z'),
+            id: IDValue::fromString('_123abc'),
+            issueInstant: SAMLDateTimeValue::fromString('2011-08-31T08:51:05Z'),
             conditions: $conditions,
             statements: $statements,
         );
@@ -326,22 +366,22 @@ XML;
         $authnStatement = $authnStatements[0];
         $this->assertEquals(
             'https://example.org/relative/path/to/document.xml',
-            $authnStatement->getAuthnContext()->getAuthnContextDeclRef()?->getContent(),
+            $authnStatement->getAuthnContext()->getAuthnContextDeclRef()?->getContent()->getValue(),
         );
-        $this->assertEquals('_123abc', $assertionToVerify->getId());
-        $this->assertEquals('2011-08-31T08:51:05Z', $assertionToVerify->getIssueInstant()->format(C::DATETIME_FORMAT));
-        $this->assertEquals('2011-08-31T08:54:25Z', $authnStatement->getSessionNotOnOrAfter()->format(C::DATETIME_FORMAT));
-        $this->assertEquals('2011-08-31T08:51:04Z', $authnStatement->getAuthnInstant()->format(C::DATETIME_FORMAT));
-        $this->assertEquals('idx1', $authnStatement->getSessionIndex());
+        $this->assertEquals('_123abc', $assertionToVerify->getId()->getValue());
+        $this->assertEquals('2011-08-31T08:51:05Z', $assertionToVerify->getIssueInstant()->getValue());
+        $this->assertEquals('2011-08-31T08:54:25Z', $authnStatement->getSessionNotOnOrAfter()->getValue());
+        $this->assertEquals('2011-08-31T08:51:04Z', $authnStatement->getAuthnInstant()->getValue());
+        $this->assertEquals('idx1', $authnStatement->getSessionIndex()->getValue());
 
         $subjectLocality = $authnStatement->getSubjectLocality();
-        $this->assertEquals('127.0.0.1', $subjectLocality?->getAddress());
-        $this->assertEquals('no.place.like.home', $subjectLocality?->getDnsName());
+        $this->assertEquals('127.0.0.1', $subjectLocality->getAddress()->getValue());
+        $this->assertEquals('no.place.like.home', $subjectLocality->getDnsName()->getValue());
 
         $authauth = $authnStatement->getAuthnContext()->getAuthenticatingAuthorities();
         $this->assertCount(2, $authauth);
-        $this->assertEquals(C::ENTITY_IDP, $authauth[0]->getContent());
-        $this->assertEquals(C::ENTITY_OTHER, $authauth[1]->getContent());
+        $this->assertEquals(C::ENTITY_IDP, $authauth[0]->getContent()->getValue());
+        $this->assertEquals(C::ENTITY_OTHER, $authauth[1]->getContent()->getValue());
 
         $attributeStatements = $assertionToVerify->getAttributeStatements();
         $this->assertCount(1, $attributeStatements);
@@ -513,7 +553,9 @@ XML
         );
         $keyInfo = new KeyInfo([
             new X509Data([
-                new X509Certificate(PEMCertificatesMock::getPlainPublicKeyContents(PEMCertificatesMock::PUBLIC_KEY)),
+                new X509Certificate(
+                    Base64BinaryValue::fromString(PEMCertificatesMock::getPlainPublicKeyContents(PEMCertificatesMock::PUBLIC_KEY)),
+                ),
             ]),
         ]);
 
@@ -687,7 +729,7 @@ XML;
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
@@ -700,7 +742,7 @@ XML;
         // Double-check that we can actually retrieve some basics.
         $this->assertEquals("_93af655219464fb403b34436cfb0c5cb1d9a5502", $verified->getId());
         $this->assertEquals("urn:x-simplesamlphp:issuer", $verified->getIssuer()->getContent());
-        $this->assertEquals("1970-01-01T01:33:31Z", $verified->getIssueInstant()->format(C::DATETIME_FORMAT));
+        $this->assertEquals("1970-01-01T01:33:31Z", $verified->getIssueInstant()->getValue());
     }
 
 
@@ -714,7 +756,7 @@ XML;
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
@@ -740,7 +782,7 @@ XML;
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
@@ -782,7 +824,7 @@ XML;
         $assertion = Assertion::fromXML($doc->documentElement);
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            $assertion->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY),
         );
 
@@ -843,8 +885,7 @@ XML;
         $document = clone self::$xmlRepresentation;
         $document->documentElement->setAttribute('Version', '1.3');
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Unsupported version: "1.3"');
+        $this->expectException(RequestVersionTooLowException::class);
 
         Assertion::fromXML($document->documentElement);
     }
@@ -1072,21 +1113,26 @@ XML;
     public function testNameIdEncryption(): void
     {
         // Create an Issuer
-        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
+        $issuer = new Issuer(
+            SAMLStringValue::fromString('urn:x-simplesamlphp:issuer'),
+        );
 
         // Create the Conditions
         $conditions = new Conditions(
             audienceRestriction: [
                 new AudienceRestriction(
-                    [new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)],
+                    [
+                        new Audience(SAMLAnyURIValue::fromString(C::ENTITY_SP)),
+                        new Audience(SAMLAnyURIValue::fromString(C::ENTITY_OTHER)),
+                    ],
                 ),
             ],
         );
 
         // Create a Subject
         $nameId = new NameID(
-            value: "just_a_basic_identifier",
-            Format: C::NAMEID_TRANSIENT,
+            value: SAMLStringValue::fromString("just_a_basic_identifier"),
+            Format: SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
         );
         $this->assertInstanceOf(NameID::class, $nameId);
 
@@ -1101,17 +1147,20 @@ XML;
         // Create the statements
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA2),
+                new AuthnContextClassRef(
+                    SAMLAnyURIValue::fromString(C::AUTHNCONTEXT_CLASS_REF_LOA2),
+                ),
                 null,
                 null,
             ),
-            self::$clock->now(),
+            SAMLDateTimeValue::fromDateTime(self::$clock->now()),
         );
 
         // Create an assertion
         $assertion = new Assertion(
             issuer: $issuer,
-            issueInstant: self::$clock->now(),
+            id: IDValue::fromString('phpunit'),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             subject: $subject,
             conditions: $conditions,
             statements: [$authnStatement],
@@ -1126,25 +1175,32 @@ XML;
         $this->assertInstanceOf(EncryptedID::class, $identifier);
 
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $identifier->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
+            $identifier->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
         $nameID = $identifier->decrypt($decryptor);
 
         $this->assertInstanceOf(NameID::class, $nameID);
-        $this->assertEquals('just_a_basic_identifier', $nameID->getContent());
-        $this->assertEquals(C::NAMEID_TRANSIENT, $nameID->getFormat());
+        $this->assertEquals('just_a_basic_identifier', $nameID->getContent()->getValue());
+        $this->assertEquals(C::NAMEID_TRANSIENT, $nameID->getFormat()->getValue());
     }
 
 
     public function testMarshallingElementOrdering(): void
     {
         // Create an Issuer
-        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
+        $issuer = new Issuer(
+            SAMLStringValue::fromString('urn:x-simplesamlphp:issuer'),
+        );
 
         // Create the conditions
         $conditions = new Conditions(
-            audienceRestriction: [new AudienceRestriction([new Audience(C::ENTITY_SP), new Audience(C::ENTITY_OTHER)])],
+            audienceRestriction: [
+                new AudienceRestriction([
+                    new Audience(SAMLAnyURIValue::fromString(C::ENTITY_SP)),
+                    new Audience(SAMLAnyURIValue::fromString(C::ENTITY_OTHER)),
+                ]),
+            ],
         );
 
         // Create AttributeStatement
@@ -1152,14 +1208,19 @@ XML;
             // Attribute
             [
                 new Attribute(
-                    name: 'name1',
-                    nameFormat: C::NAMEFORMAT_UNSPECIFIED,
-                    attributeValue: [new AttributeValue('value1'), new AttributeValue('value2')],
+                    name: SAMLStringValue::fromString('name1'),
+                    nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_UNSPECIFIED),
+                    attributeValue: [
+                        new AttributeValue('value1'),
+                        new AttributeValue('value2'),
+                    ],
                 ),
                 new Attribute(
-                    name: 'name2',
-                    nameFormat: C::NAMEFORMAT_UNSPECIFIED,
-                    attributeValue: [new AttributeValue('value3')],
+                    name: SAMLStringValue::fromString('name2'),
+                    nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_UNSPECIFIED),
+                    attributeValue: [
+                        new AttributeValue('value3'),
+                    ],
                 ),
             ],
         );
@@ -1167,16 +1228,21 @@ XML;
         // Create the statements
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_URN),
+                new AuthnContextClassRef(
+                    SAMLAnyURIValue::fromString(C::AUTHNCONTEXT_CLASS_REF_URN),
+                ),
                 null,
                 null,
             ),
-            self::$clock->now(),
+            SAMLDateTimeValue::fromDateTime(self::$clock->now()),
         );
 
         // Create Subject
         $subject = new Subject(
-            new NameID("just_a_basic_identifier", C::NAMEID_TRANSIENT),
+            new NameID(
+                value: SAMLStringValue::fromString("just_a_basic_identifier"),
+                Format: SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
+            ),
         );
 
         $statements = [$authnStatement, $attributeStatement];
@@ -1184,7 +1250,8 @@ XML;
         // Create a signed assertion
         $assertion = new Assertion(
             issuer: $issuer,
-            issueInstant: self::$clock->now(),
+            id: IDValue::fromString('phpunit'),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             subject: $subject,
             conditions: $conditions,
             statements: $statements,
@@ -1264,7 +1331,7 @@ XML;
         $doc = DOMDocumentFactory::fromString(strval($encass));
 
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encass->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
+            $encass->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::OTHER_PRIVATE_KEY),
         );
 

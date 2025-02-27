@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\Type\{DurationValue, IDValue};
 use SimpleSAML\XML\XsNamespace as NS;
 
 use function implode;
@@ -33,11 +34,14 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
      * Initialize a RoleDescriptor.
      *
      * @param string[] $protocolSupportEnumeration A set of URI specifying the protocols supported.
-     * @param string|null $ID The ID for this document. Defaults to null.
-     * @param \DateTimeImmutable|null $validUntil Unix time of validity for this document. Defaults to null.
-     * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
+     * @param \SimpleSAML\XML\Type\IDValue|null $ID The ID for this document. Defaults to null.
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
+     *   Defaults to null.
+     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration Maximum time this document can be cached.
+     *   Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An Extensions object. Defaults to null.
-     * @param string|null $errorURL An URI where to redirect users for support. Defaults to null.
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $errorURL An URI where to redirect users for support.
+     *   Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor An array of KeyDescriptor elements.
      *   Defaults to an empty array.
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
@@ -48,11 +52,11 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
      */
     public function __construct(
         protected array $protocolSupportEnumeration,
-        ?string $ID = null,
-        ?DateTimeImmutable $validUntil = null,
-        ?string $cacheDuration = null,
+        ?IDValue $ID = null,
+        ?SAMLDateTimeValue $validUntil = null,
+        ?DurationValue $cacheDuration = null,
         ?Extensions $extensions = null,
-        protected ?string $errorURL = null,
+        protected ?SAMLAnyURIValue $errorURL = null,
         protected array $keyDescriptor = [],
         protected ?Organization $organization = null,
         protected array $contact = [],
@@ -65,7 +69,6 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
             'At least one protocol must be supported by this ' . static::NS_PREFIX . ':' . static::getLocalName() . '.',
         );
         SAMLAssert::allValidURI($protocolSupportEnumeration, SchemaViolationException::class);
-        SAMLAssert::nullOrValidURI($errorURL, SchemaViolationException::class);
         Assert::maxCount($contact, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $contact,
@@ -88,9 +91,9 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
     /**
      * Collect the value of the errorURL property.
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\XML\SAMLAnyURIValue|null
      */
-    public function getErrorURL(): ?string
+    public function getErrorURL(): ?SAMLAnyURIValue
     {
         return $this->errorURL;
     }
@@ -152,7 +155,7 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
         $e->setAttribute('protocolSupportEnumeration', implode(' ', $this->getProtocolSupportEnumeration()));
 
         if ($this->getErrorURL() !== null) {
-            $e->setAttribute('errorURL', $this->getErrorURL());
+            $e->setAttribute('errorURL', $this->getErrorURL()->getValue());
         }
 
         foreach ($this->getKeyDescriptor() as $kd) {

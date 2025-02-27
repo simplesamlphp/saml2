@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
-use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\SAML2\XML\mdrpi\{PublicationInfo, PublicationPath, RegistrationInfo};
+use SimpleSAML\SAML2\XML\mdui\{DiscoHints, UIInfo};
+use SimpleSAML\XML\Type\{DurationValue, IDValue};
 
 /**
  * Class to represent a metadata document
@@ -24,20 +26,63 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     /**
      * Generic constructor for SAML metadata documents.
      *
-     * @param string|null $id The ID for this document. Defaults to null.
-     * @param \DateTimeImmutable|null    $validUntil Unix time of validity for this document. Defaults to null.
-     * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
+     * @param \SimpleSAML\XML\Type\IDValue|null $id The ID for this document. Defaults to null.
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
+     *   Defaults to null.
+     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration Maximum time this document can be cached.
+     *   Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to null.
      */
     public function __construct(
-        protected ?string $id = null,
-        protected ?DateTimeImmutable $validUntil = null,
-        protected ?string $cacheDuration = null,
+        protected ?IDValue $id = null,
+        protected ?SAMLDateTimeValue $validUntil = null,
+        protected ?DurationValue $cacheDuration = null,
         ?Extensions $extensions = null,
     ) {
-        Assert::nullOrValidNCName($id, SchemaViolationException::class);
-        Assert::nullOrSame($validUntil?->getTimeZone()->getName(), 'Z');
-        Assert::nullOrValidDuration($cacheDuration, SchemaViolationException::class);
+        if ($extensions !== null) {
+            $exts = $extensions->getList();
+
+            /**
+             * MDUI 2.1: this element MUST NOT appear more than once within a given <md:Extensions> element.
+             */
+            $uiInfo = array_values(array_filter($exts, function ($ext) {
+                return $ext instanceof UIInfo;
+            }));
+            Assert::maxCount($uiInfo, 1, ProtocolViolationException::class);
+
+            /**
+             * MDUI 2.2: this element MUST NOT appear more than once within a given <md:Extensions> element.
+             */
+            $discoHints = array_values(array_filter($exts, function ($ext) {
+                return $ext instanceof DiscoHints;
+            }));
+            Assert::maxCount($discoHints, 1, ProtocolViolationException::class);
+
+            /**
+             * MDRPI 2.1: this element MUST NOT appear more than once within a given <md:Extensions> element.
+             */
+            $regInfo = array_values(array_filter($exts, function ($ext) {
+                return $ext instanceof RegistrationInfo;
+            }));
+            Assert::maxCount($regInfo, 1, ProtocolViolationException::class);
+
+            /**
+             * MDRPI 2.2: this element MUST NOT appear more than once within a given <md:Extensions> element.
+             */
+            $pubInfo = array_values(array_filter($exts, function ($ext) {
+                return $ext instanceof PublicationInfo;
+            }));
+            Assert::maxCount($regInfo, 1, ProtocolViolationException::class);
+
+            /**
+             * MDRPI 2.3: The <mdrpi:PublicationPath> element MUST NOT appear more than once within the
+             * <md:Extensions> element of a given <md:EntitiesDescriptor> or <md:EntityDescriptor> element.
+             */
+            $pubPath = array_values(array_filter($exts, function ($ext) {
+                return $ext instanceof PublicationPath;
+            }));
+            Assert::maxCount($pubPath, 1, ProtocolViolationException::class);
+        }
 
         $this->setExtensions($extensions);
     }
@@ -46,9 +91,9 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     /**
      * Collect the value of the id property.
      *
-     * @return string|null
+     * @return \SimpleSAML\XML\Type\IDValue|null
      */
-    public function getId(): ?string
+    public function getId(): ?IDValue
     {
         return $this->id;
     }
@@ -57,9 +102,9 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     /**
      * Collect the value of the validUntil property.
      *
-     * @return \DateTimeImmutable|null
+     * @return \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null
      */
-    public function getValidUntil(): ?DateTimeImmutable
+    public function getValidUntil(): ?SAMLDateTimeValue
     {
         return $this->validUntil;
     }
@@ -68,9 +113,9 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     /**
      * Collect the value of the cacheDuration property.
      *
-     * @return string|null
+     * @return \SimpleSAML\XML\Type\DurationValue|null
      */
-    public function getCacheDuration(): ?string
+    public function getCacheDuration(): ?DurationValue
     {
         return $this->cacheDuration;
     }
@@ -95,15 +140,15 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
         $e = $this->instantiateParentElement($parent);
 
         if ($this->getId() !== null) {
-            $e->setAttribute('ID', $this->getId());
+            $e->setAttribute('ID', $this->getId()->getValue());
         }
 
         if ($this->getValidUntil() !== null) {
-            $e->setAttribute('validUntil', $this->getValidUntil()->format(C::DATETIME_FORMAT));
+            $e->setAttribute('validUntil', $this->getValidUntil()->getValue());
         }
 
         if ($this->getCacheDuration() !== null) {
-            $e->setAttribute('cacheDuration', $this->getCacheDuration());
+            $e->setAttribute('cacheDuration', $this->getCacheDuration()->getValue());
         }
 
         $extensions = $this->getExtensions();

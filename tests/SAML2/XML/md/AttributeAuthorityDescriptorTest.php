@@ -5,27 +5,29 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use Exception;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\md\AbstractMdElement;
-use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
-use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
-use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType;
-use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
-use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
-use SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor;
-use SimpleSAML\SAML2\XML\md\AttributeProfile;
-use SimpleSAML\SAML2\XML\md\AttributeService;
-use SimpleSAML\SAML2\XML\md\NameIDFormat;
-use SimpleSAML\SAML2\XML\saml\Attribute;
-use SimpleSAML\SAML2\XML\saml\AttributeValue;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
+use SimpleSAML\SAML2\XML\md\{
+    AbstractMdElement,
+    AbstractMetadataDocument,
+    AbstractRoleDescriptor,
+    AbstractRoleDescriptorType,
+    AbstractSignedMdElement,
+    AssertionIDRequestService,
+    AttributeAuthorityDescriptor,
+    AttributeProfile,
+    AttributeService,
+    NameIDFormat,
+};
+use SimpleSAML\SAML2\XML\saml\{Attribute, AttributeValue};
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\IDValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -68,13 +70,13 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         );
 
         self::$as = new AttributeService(
-            C::BINDING_SOAP,
-            "https://IdentityProvider.com/SAML/AA/SOAP",
+            SAMLAnyURIValue::fromString(C::BINDING_SOAP),
+            SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/AA/SOAP'),
         );
 
         self::$aidrs = new AssertionIDRequestService(
-            C::BINDING_URI,
-            "https://IdentityProvider.com/SAML/AA/URI",
+            SAMLAnyURIValue::fromString(C::BINDING_URI),
+            SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/AA/URI'),
         );
     }
 
@@ -88,15 +90,15 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     public function testMarshalling(): void
     {
         $attr1 = new Attribute(
-            "urn:oid:1.3.6.1.4.1.5923.1.1.1.6",
-            C::NAMEFORMAT_URI,
-            "eduPersonPrincipalName",
+            SAMLStringValue::fromString('urn:oid:1.3.6.1.4.1.5923.1.1.1.6'),
+            SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
+            SAMLStringValue::fromString("eduPersonPrincipalName"),
         );
 
         $attr2 = new Attribute(
-            "urn:oid:1.3.6.1.4.1.5923.1.1.1.1",
-            C::NAMEFORMAT_URI,
-            'eduPersonAffiliation',
+            SAMLStringValue::fromString('urn:oid:1.3.6.1.4.1.5923.1.1.1.1'),
+            SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
+            SAMLStringValue::fromString('eduPersonAffiliation'),
             [
                 new AttributeValue('member'),
                 new AttributeValue('student'),
@@ -110,16 +112,26 @@ final class AttributeAuthorityDescriptorTest extends TestCase
             [C::NS_SAMLP],
             [self::$aidrs],
             [
-                new NameIDFormat(C::NAMEID_X509_SUBJECT_NAME),
-                new NameIDFormat(C::NAMEID_PERSISTENT),
-                new NameIDFormat(C::NAMEID_TRANSIENT),
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_X509_SUBJECT_NAME),
+                ),
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
+                ),
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
+                ),
             ],
             [
-                new AttributeProfile(C::PROFILE_1),
-                new AttributeProfile(C::PROFILE_2),
+                new AttributeProfile(
+                    SAMLAnyURIValue::fromString(C::PROFILE_1),
+                ),
+                new AttributeProfile(
+                    SAMLAnyURIValue::fromString(C::PROFILE_2),
+                ),
             ],
             [$attr1, $attr2],
-            'phpunit',
+            IDValue::fromString('phpunit'),
         );
 
         $this->assertEquals(
@@ -157,7 +169,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithoutAttributeServices(): void
     {
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage('AttributeAuthorityDescriptor must contain at least one AttributeService.');
         new AttributeAuthorityDescriptor([], [C::NS_SAMLP]);
     }
@@ -198,32 +210,6 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         $this->assertEmpty($aad->getOrganization());
         $this->assertEmpty($aad->getKeyDescriptor());
         $this->assertEmpty($aad->getContactPerson());
-    }
-
-
-    /**
-     * Test that creating an AttributeAuthorityDescriptor with an empty NameIDFormat fails.
-     */
-    public function testMarshallingWithEmptyNameIDFormat(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        new AttributeAuthorityDescriptor([self::$as], [C::NS_SAMLP], [self::$aidrs], [new NameIDFormat('')]);
-    }
-
-
-    /**
-     * Test that creating an AttributeAuthorityDescriptor with an empty AttributeProfile fails.
-     */
-    public function testMarshallingWithEmptyAttributeProfile(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        new AttributeAuthorityDescriptor(
-            [self::$as],
-            [C::NS_SAMLP],
-            [self::$aidrs],
-            [new NameIDFormat(C::NAMEID_TRANSIENT)],
-            [new AttributeProfile('')],
-        );
     }
 
 

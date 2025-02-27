@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\init;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\md\AbstractEndpointType;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 
 /**
  * Class for handling the init:RequestInitiator element.
@@ -37,20 +37,26 @@ final class RequestInitiator extends AbstractEndpointType implements SchemaValid
     /**
      * EndpointType constructor.
      *
-     * @param string $location
-     * @param string|null $responseLocation
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $location
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $responseLocation
      * @param array $children
      * @param array<\SimpleSAML\XML\Attribute> $attributes
      *
      * @throws \InvalidArgumentException
      */
     public function __construct(
-        string $location,
-        ?string $responseLocation = null,
+        SAMLAnyURIValue $location,
+        ?SAMLAnyURIValue $responseLocation = null,
         array $children = [],
         array $attributes = [],
     ) {
-        parent::__construct(self::NS, $location, $responseLocation, $children, $attributes);
+        parent::__construct(
+            SAMLAnyURIValue::fromString(self::NS),
+            $location,
+            $responseLocation,
+            $children,
+            $attributes,
+        );
     }
 
 
@@ -81,8 +87,8 @@ final class RequestInitiator extends AbstractEndpointType implements SchemaValid
         );
 
         return new static(
-            self::getAttribute($xml, 'Location'),
-            self::getOptionalAttribute($xml, 'ResponseLocation', null),
+            self::getAttribute($xml, 'Location', SAMLAnyURIValue::class),
+            self::getOptionalAttribute($xml, 'ResponseLocation', SAMLAnyURIValue::class, null),
             self::getChildElementsFromXML($xml),
             self::getAttributesNSFromXML($xml),
         );

@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Assert;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\{CoversClass, DataProvider, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Assert\Assert as SAML2Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\SchemaViolationException;
@@ -19,7 +18,8 @@ use function str_pad;
  *
  * @package simplesamlphp/saml2
  */
-#[CoversClass(SAML2Assert::class)]
+#[Group('assert')]
+#[CoversClass(Assert::class)]
 final class EntityIDTest extends TestCase
 {
     /**
@@ -30,7 +30,7 @@ final class EntityIDTest extends TestCase
     public function testValidEntityID(bool $shouldPass, string $entityID): void
     {
         try {
-            SAML2Assert::validEntityID($entityID);
+            Assert::validEntityID($entityID);
             $this->assertTrue($shouldPass);
         } catch (ProtocolViolationException | SchemaViolationException $e) {
             $this->assertFalse($shouldPass);

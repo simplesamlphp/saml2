@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\emd;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, SchemaViolationException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 
 use function array_pop;
 
@@ -102,7 +101,11 @@ final class RepublishRequest extends AbstractEmdElement implements
         Assert::keyExists($data, 'RepublishTarget', ArrayValidationException::class);
         Assert::string($data['RepublishTarget'], ArrayValidationException::class);
 
-        return new static(new RepublishTarget($data['RepublishTarget']));
+        return new static(
+            new RepublishTarget(
+                SAMLAnyURIValue::fromString($data['RepublishTarget']),
+            ),
+        );
     }
 
 
@@ -113,6 +116,6 @@ final class RepublishRequest extends AbstractEmdElement implements
      */
     public function toArray(): array
     {
-        return ['RepublishTarget' => $this->getRepublishTarget()->getContent()];
+        return ['RepublishTarget' => $this->getRepublishTarget()->getContent()->getValue()];
     }
 }

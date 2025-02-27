@@ -8,11 +8,12 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\saml\NameID;
-use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\saml\{NameID, Subject};
 use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
+use SimpleSAML\XML\Type\IDValue;
 
 use function count;
 
@@ -42,13 +43,17 @@ final class UtilsTest extends TestCase
     public function testXpQuery(): void
     {
         $nameId_before = new NameID(
-            'NameIDValue',
-            'urn:x-simplesamlphp:namequalifier',
-            'urn:x-simplesamlphp:spnamequalifier',
-            C::NAMEID_TRANSIENT,
+            SAMLStringValue::fromString('NameIDValue'),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:namequalifier'),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),
+            SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
         );
 
-        $aq = new AttributeQuery(new Subject($nameId_before), self::$clock->now());
+        $aq = new AttributeQuery(
+            id: IDValue::fromString('abc123'),
+            subject: new Subject($nameId_before),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+        );
 
         $xml = $aq->toXML();
 

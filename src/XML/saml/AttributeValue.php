@@ -12,8 +12,7 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\AbstractElement;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 
 use function class_exists;
 use function explode;

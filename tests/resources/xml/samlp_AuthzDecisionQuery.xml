@@ -1,11 +1,11 @@
-<samlp:AuthzDecisionQuery xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Version="2.0" ID="aaf23196-1773-2113-474a-fe114412ab72" IssueInstant="2017-09-06T11:49:27Z" Resource="urn:x-simplesamlphp:resource">
-  <saml:Issuer Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
-  <saml:Subject>
+<samlp:AuthzDecisionQuery xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" Version="2.0" ID="aaf23196-1773-2113-474a-fe114412ab72" IssueInstant="2017-09-06T11:49:27Z" Resource="urn:x-simplesamlphp:resource">
+  <saml:Issuer xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:entity">https://example.org/</saml:Issuer>
+  <saml:Subject xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
     <saml:NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">urn:example:subject</saml:NameID>
   </saml:Subject>
-  <saml:Action Namespace="urn:x-simplesamlphp:namespace">SomeAction</saml:Action>
-  <saml:Action Namespace="urn:x-simplesamlphp:alt-namespace">SomeOtherAction</saml:Action>
-  <saml:Evidence>
+  <saml:Action xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Namespace="urn:x-simplesamlphp:namespace">SomeAction</saml:Action>
+  <saml:Action xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Namespace="urn:x-simplesamlphp:alt-namespace">SomeOtherAction</saml:Action>
+  <saml:Evidence xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
     <saml:Assertion Version="2.0" ID="_93af655219464fb403b34436cfb0c5cb1d9a5502" IssueInstant="1970-01-01T01:33:31Z">
       <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
       <saml:Subject>

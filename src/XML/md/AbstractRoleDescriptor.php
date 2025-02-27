@@ -4,24 +4,18 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\ExtensionPointInterface;
-use SimpleSAML\SAML2\XML\ExtensionPointTrait;
-use SimpleSAML\XML\Attribute as XMLAttribute;
+use SimpleSAML\SAML2\XML\{ExtensionPointInterface, ExtensionPointTrait};
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, SchemaViolationException, TooManyElementsException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\{DurationValue, IDValue, QNameValue, StringValue};
 
 use function array_pop;
-use function count;
-use function implode;
 
 /**
  * Class representing a SAML2 RoleDescriptor element.
@@ -43,13 +37,16 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
     /**
      * Initialize a md:RoleDescriptor from scratch.
      *
-     * @param string $type
+     * @param \SimpleSAML\XML\Type\QNameValue $type
      * @param string[] $protocolSupportEnumeration A set of URI specifying the protocols supported.
-     * @param string|null $ID The ID for this document. Defaults to null.
-     * @param \DateTimeImmutable|null $validUntil Unix time of validity for this document. Defaults to null.
-     * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
+     * @param \SimpleSAML\XML\Type\IDValue|null $ID The ID for this document. Defaults to null.
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
+     *   Defaults to null.
+     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration Maximum time this document can be cached.
+     *   Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An Extensions object. Defaults to null.
-     * @param string|null $errorURL An URI where to redirect users for support. Defaults to null.
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $errorURL An URI where to redirect users for support.
+     *   Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor
      *   An array of KeyDescriptor elements. Defaults to an empty array.
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
@@ -59,13 +56,13 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
-        protected string $type,
+        protected QNameValue $type,
         array $protocolSupportEnumeration,
-        ?string $ID = null,
-        ?DateTimeImmutable $validUntil = null,
-        ?string $cacheDuration = null,
+        ?IDValue $ID = null,
+        ?SAMLDateTimeValue $validUntil = null,
+        ?DurationValue $cacheDuration = null,
         ?Extensions $extensions = null,
-        ?string $errorURL = null,
+        ?SAMLAnyURIValue $errorURL = null,
         array $keyDescriptor = [],
         ?Organization $organization = null,
         array $contactPerson = [],
@@ -89,9 +86,9 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
     /**
      * Return the xsi:type value corresponding this element.
      *
-     * @return string
+     * @return \SimpleSAML\XML\Type\QNameValue
      */
-    public function getXsiType(): string
+    public function getXsiType(): QNameValue
     {
         return $this->type;
     }
@@ -111,32 +108,17 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
         Assert::same($xml->namespaceURI, C::NS_MD, InvalidDOMElementException::class);
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
-            'Missing required xsi:type in <saml:RoleDescriptor> element.',
+            'Missing required xsi:type in <md:RoleDescriptor> element.',
             SchemaViolationException::class,
         );
 
-        $type = $xml->getAttributeNS(C::NS_XSI, 'type');
-        Assert::validQName($type, SchemaViolationException::class);
-
-        // first, try to resolve the type to a full namespaced version
-        $qname = explode(':', $type, 2);
-        if (count($qname) === 2) {
-            list($prefix, $element) = $qname;
-        } else {
-            $prefix = null;
-            list($element) = $qname;
-        }
-        $ns = $xml->lookupNamespaceUri($prefix);
-        $type = ($ns === null) ? $element : implode(':', [$ns, $element]);
+        $type = QNameValue::fromDocument($xml->getAttributeNS(C::NS_XSI, 'type'), $xml);
 
         // now check if we have a handler registered for it
         $handler = Utils::getContainer()->getExtensionHandler($type);
         if ($handler === null) {
             // we don't have a handler, proceed with unknown RoleDescriptor
-            $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-
-            $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
-            Assert::nullOrValidDateTime($validUntil);
+            $protocols = self::getAttribute($xml, 'protocolSupportEnumeration', SAMLStringValue::class);
 
             $orgs = Organization::getChildrenOfClass($xml);
             Assert::maxCount(
@@ -157,12 +139,12 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
             return new UnknownRoleDescriptor(
                 new Chunk($xml),
                 $type,
-                preg_split('/[\s]+/', trim($protocols)),
-                self::getOptionalAttribute($xml, 'ID', null),
-                $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
-                self::getOptionalAttribute($xml, 'cacheDuration', null),
+                preg_split('/[\s]+/', trim($protocols->getValue())),
+                self::getOptionalAttribute($xml, 'ID', IDValue::class, null),
+                self::getOptionalAttribute($xml, 'validUntil', SAMLDateTimeValue::class, null),
+                self::getOptionalAttribute($xml, 'cacheDuration', DurationValue::class, null),
                 array_pop($extensions),
-                self::getOptionalAttribute($xml, 'errorURL', null),
+                self::getOptionalAttribute($xml, 'errorURL', SAMLAnyURIValue::class, null),
                 KeyDescriptor::getChildrenOfClass($xml),
                 array_pop($orgs),
                 ContactPerson::getChildrenOfClass($xml),
@@ -177,22 +159,5 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
         );
 
         return $handler::fromXML($xml);
-    }
-
-
-    /**
-     * Convert this RoleDescriptor to XML.
-     *
-     * @param \DOMElement|null $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this RoleDescriptor.
-     */
-    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
-    {
-        $e = parent::toUnsignedXML($parent);
-
-        $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', $this->getXsiType());
-        $type->toXML($e);
-
-        return $e;
     }
 }

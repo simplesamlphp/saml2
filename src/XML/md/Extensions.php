@@ -5,28 +5,33 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\alg\AbstractAlgElement as ALG;
-use SimpleSAML\SAML2\XML\alg\DigestMethod;
-use SimpleSAML\SAML2\XML\alg\SigningMethod;
+use SimpleSAML\SAML2\XML\alg\{
+    AbstractAlgElement as ALG,
+    DigestMethod,
+    SigningMethod,
+};
 use SimpleSAML\SAML2\XML\emd\RepublishRequest;
 use SimpleSAML\SAML2\XML\ExtensionsTrait;
 use SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponse;
 use SimpleSAML\SAML2\XML\init\RequestInitiator;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
-use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement as MDRPI;
-use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
-use SimpleSAML\SAML2\XML\mdrpi\PublicationPath;
-use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
-use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement as MDUI;
-use SimpleSAML\SAML2\XML\mdui\DiscoHints;
-use SimpleSAML\SAML2\XML\mdui\UIInfo;
+use SimpleSAML\SAML2\XML\mdrpi\{
+    AbstractMdrpiElement as MDRPI,
+    PublicationInfo,
+    PublicationPath,
+    RegistrationInfo,
+};
+use SimpleSAML\SAML2\XML\mdui\{
+    AbstractMduiElement as MDUI,
+    DiscoHints,
+    UIInfo,
+};
 use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 
 use function array_key_exists;
 

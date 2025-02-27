@@ -4,13 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
-use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
-use SimpleSAML\SAML2\XML\saml\AuthnContext;
-use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, EntityIDValue};
+use SimpleSAML\SAML2\XML\saml\{AbstractSamlElement, AuthenticatingAuthority, AuthnContext, AuthnContextDeclRef};
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -51,9 +48,15 @@ final class AuthnContextWithDeclRefTest extends TestCase
     {
         $authnContext = new AuthnContext(
             authnContextClassRef: null,
-            authnContextDeclRef: new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml'),
+            authnContextDeclRef: new AuthnContextDeclRef(
+                SAMLAnyURIValue::fromString('https://example.org/relative/path/to/document.xml'),
+            ),
             authnContextDecl: null,
-            authenticatingAuthorities: [new AuthenticatingAuthority('https://idp.example.com/SAML2')],
+            authenticatingAuthorities: [
+                new AuthenticatingAuthority(
+                    EntityIDValue::fromString('https://idp.example.com/SAML2'),
+                ),
+            ],
         );
 
         $this->assertEquals(

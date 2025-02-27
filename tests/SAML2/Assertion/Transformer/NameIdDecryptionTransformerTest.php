@@ -4,36 +4,31 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Assertion\Transformer;
 
-use DateTimeImmutable;
 use DOMDocument;
-use PHPUnit\Framework\Attributes\PreserveGlobalState;
-use PHPUnit\Framework\Attributes\RunInSeparateProcess;
+use PHPUnit\Framework\Attributes\{PreserveGlobalState, RunInSeparateProcess};
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
-use Psr\Log\LoggerInterface;
-use Psr\Log\NullLogger;
-use SimpleSAML\SAML2\Assertion\Processor;
-use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
+use Psr\Log\{LoggerInterface, NullLogger};
+use SimpleSAML\SAML2\Assertion\{Processor, ProcessorBuilder};
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Configuration\Destination;
-use SimpleSAML\SAML2\Configuration\IdentityProvider;
-use SimpleSAML\SAML2\Configuration\PrivateKey;
-use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\Configuration\{Destination, IdentityProvider, PrivateKey, ServiceProvider};
 use SimpleSAML\SAML2\Signature\Validator;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\saml\Assertion;
-use SimpleSAML\SAML2\XML\saml\AuthnContext;
-use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
-use SimpleSAML\SAML2\XML\saml\AuthnStatement;
-use SimpleSAML\SAML2\XML\saml\EncryptedID;
-use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\XML\saml\NameID;
-use SimpleSAML\SAML2\XML\saml\Subject;
-use SimpleSAML\SAML2\XML\samlp\Response;
-use SimpleSAML\SAML2\XML\samlp\Status;
-use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\XML\saml\{
+    Assertion,
+    AuthnContext,
+    AuthnContextClassRef,
+    AuthnStatement,
+    EncryptedID,
+    Issuer,
+    NameID,
+    Subject,
+};
+use SimpleSAML\SAML2\XML\samlp\{Response, Status, StatusCode};
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\XML\Type\IDValue;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
@@ -91,7 +86,13 @@ final class NameIdDecryptionTransformerTest extends TestCase
         self::$logger = new NullLogger();
         self::$validator = new Validator(self::$logger);
         self::$destination = new Destination(C::ENTITY_SP);
-        self::$response = new Response(new Status(new StatusCode()), self::$clock->now());
+        self::$response = new Response(
+            id: IDValue::fromString('SomeIDValue'),
+            status: new Status(
+                new StatusCode(SAMLAnyURIValue::fromString(C::STATUS_SUCCESS)),
+            ),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+        );
 
         self::$identityProviderConfiguration = new IdentityProvider(['assertionEncryptionEnabled' => true]);
         $base = getcwd() . DIRECTORY_SEPARATOR . self::FRAMEWORK;
@@ -124,22 +125,29 @@ final class NameIdDecryptionTransformerTest extends TestCase
             C::KEY_TRANSPORT_RSA_1_5,
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY),
         );
-        $nameId = new NameID('value', 'urn:x-simplesamlphp:namequalifier');
+        $nameId = new NameID(
+            SAMLStringValue::fromString('value'),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:namequalifier'),
+        );
         $encryptedId = new EncryptedID($nameId->encrypt($encryptor));
 
         $assertion = new Assertion(
-            issuer: new Issuer(C::ENTITY_IDP),
-            id: '_45e42090d8cbbfa52d5a394b01049fc2221e274182',
-            issueInstant: new DateTimeImmutable('2023-05-27T16:20:52Z'),
+            issuer: new Issuer(
+                SAMLStringValue::fromString(C::ENTITY_IDP),
+            ),
+            id: IDValue::fromString('_45e42090d8cbbfa52d5a394b01049fc2221e274182'),
+            issueInstant: SAMLDateTimeValue::fromString('2023-05-27T16:20:52Z'),
             subject: new Subject($encryptedId),
             statements: [
                 new AuthnStatement(
                     new AuthnContext(
-                        new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
+                        new AuthnContextClassRef(
+                            SAMLAnyURIValue::fromString(C::AUTHNCONTEXT_CLASS_REF_LOA1),
+                        ),
                         null,
                         null,
                     ),
-                    new DateTimeImmutable('2023-05-27T16:20:52Z'),
+                    SAMLDateTimeValue::fromString('2023-05-27T16:20:52Z'),
                 ),
             ],
         );
@@ -163,8 +171,8 @@ final class NameIdDecryptionTransformerTest extends TestCase
         $identifier = $processed->getSubject()->getIdentifier();
 
         $this->assertInstanceOf(NameID::class, $identifier);
-        $this->assertEquals('value', $identifier->getContent());
-        $this->assertEquals('urn:x-simplesamlphp:namequalifier', $identifier->getNameQualifier());
+        $this->assertEquals('value', $identifier->getContent()->getValue());
+        $this->assertEquals('urn:x-simplesamlphp:namequalifier', $identifier->getNameQualifier()->getValue());
     }
 
 
@@ -187,7 +195,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
         $identifier = $processed->getOnlyElement()->getSubject()->getIdentifier();
 
         $this->assertInstanceOf(NameID::class, $identifier);
-        $this->assertEquals('value', $identifier->getContent());
-        $this->assertEquals('urn:x-simplesamlphp:namequalifier', $identifier->getNameQualifier());
+        $this->assertEquals('value', $identifier->getContent()->getValue());
+        $this->assertEquals('urn:x-simplesamlphp:namequalifier', $identifier->getNameQualifier()->getValue());
     }
 }

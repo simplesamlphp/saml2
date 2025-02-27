@@ -90,6 +90,9 @@ final class EntitiesDescriptorTest extends TestCase
             'GRNET' => [
                 DOMDocumentFactory::fromFile('/tmp/metadata/grnet.xml')->documentElement,
             ],
+            'EduID' => [
+                DOMDocumentFactory::fromFile('eduid.xml')->documentElement,
+            ],
         ];
     }
 }

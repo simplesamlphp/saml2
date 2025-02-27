@@ -4,20 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\{SAMLDateTimeValue, SAMLStringValue};
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingElementException, TooManyElementsException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 
 use function array_pop;
-use function preg_replace;
 
 /**
  * Class representing a SAML2 AuthnStatement
@@ -33,20 +26,18 @@ final class AuthnStatement extends AbstractStatementType implements SchemaValida
      * Initialize an AuthnStatement.
      *
      * @param \SimpleSAML\SAML2\XML\saml\AuthnContext $authnContext
-     * @param \DateTimeImmutable $authnInstant
-     * @param \DateTimeImmutable|null $sessionNotOnOrAfter
-     * @param string|null $sessionIndex
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $authnInstant
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $sessionNotOnOrAfter
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $sessionIndex
      * @param \SimpleSAML\SAML2\XML\saml\SubjectLocality|null $subjectLocality
      */
     public function __construct(
         protected AuthnContext $authnContext,
-        protected DateTimeImmutable $authnInstant,
-        protected ?DateTimeImmutable $sessionNotOnOrAfter = null,
-        protected ?string $sessionIndex = null,
+        protected SAMLDateTimeValue $authnInstant,
+        protected ?SAMLDateTimeValue $sessionNotOnOrAfter = null,
+        protected ?SAMLStringValue $sessionIndex = null,
         protected ?SubjectLocality $subjectLocality = null,
     ) {
-        Assert::same($authnInstant->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
-        Assert::nullOrSame($sessionNotOnOrAfter?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::nullOrNotWhitespaceOnly($sessionIndex);
     }
 
@@ -65,9 +56,9 @@ final class AuthnStatement extends AbstractStatementType implements SchemaValida
     /**
      * Collect the value of the AuthnInstant-property
      *
-     * @return \DateTimeImmutable
+     * @return \SimpleSAML\SAML2\Type\SAMLDateTimeValue
      */
-    public function getAuthnInstant(): DateTimeImmutable
+    public function getAuthnInstant(): SAMLDateTimeValue
     {
         return $this->authnInstant;
     }
@@ -76,9 +67,9 @@ final class AuthnStatement extends AbstractStatementType implements SchemaValida
     /**
      * Collect the value of the sessionNotOnOrAfter-property
      *
-     * @return \DateTimeImmutable|null
+     * @return \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null
      */
-    public function getSessionNotOnOrAfter(): ?DateTimeImmutable
+    public function getSessionNotOnOrAfter(): ?SAMLDateTimeValue
     {
         return $this->sessionNotOnOrAfter;
     }
@@ -87,9 +78,9 @@ final class AuthnStatement extends AbstractStatementType implements SchemaValida
     /**
      * Collect the value of the sessionIndex-property
      *
-     * @return ?string
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue|null
      */
-    public function getSessionIndex(): ?string
+    public function getSessionIndex(): ?SAMLStringValue
     {
         return $this->sessionIndex;
     }
@@ -137,29 +128,13 @@ final class AuthnStatement extends AbstractStatementType implements SchemaValida
             TooManyElementsException::class,
         );
 
-        $authnInstant = self::getAttribute($xml, 'AuthnInstant');
-        // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
-        $authnInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $authnInstant, 1);
-
-        SAMLAssert::validDateTime($authnInstant, ProtocolViolationException::class);
-        $authnInstant = new DateTimeImmutable($authnInstant);
-
-        $sessionNotOnOrAfter = self::getOptionalAttribute($xml, 'SessionNotOnOrAfter', null);
-        if ($sessionNotOnOrAfter !== null) {
-            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
-            $sessionNotOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $sessionNotOnOrAfter, 1);
-
-            SAMLAssert::validDateTime($sessionNotOnOrAfter, ProtocolViolationException::class);
-            $sessionNotOnOrAfter = new DateTimeImmutable($sessionNotOnOrAfter);
-        }
-
         $subjectLocality = SubjectLocality::getChildrenOfClass($xml);
 
         return new static(
             array_pop($authnContext),
-            $authnInstant,
-            $sessionNotOnOrAfter,
-            self::getOptionalAttribute($xml, 'SessionIndex', null),
+            self::getAttribute($xml, 'AuthnInstant', SAMLDateTimeValue::class),
+            self::getOptionalAttribute($xml, 'SessionNotOnOrAfter', SAMLDateTimeValue::class, null),
+            self::getOptionalAttribute($xml, 'SessionIndex', SAMLStringValue::class, null),
             array_pop($subjectLocality),
         );
     }
@@ -181,14 +156,14 @@ final class AuthnStatement extends AbstractStatementType implements SchemaValida
 
         $this->getAuthnContext()->toXML($e);
 
-        $e->setAttribute('AuthnInstant', $this->getAuthnInstant()->format(C::DATETIME_FORMAT));
+        $e->setAttribute('AuthnInstant', $this->getAuthnInstant()->getValue());
 
         if ($this->getSessionIndex() !== null) {
-            $e->setAttribute('SessionIndex', $this->getSessionIndex());
+            $e->setAttribute('SessionIndex', $this->getSessionIndex()->getValue());
         }
 
         if ($this->getSessionNotOnOrAfter() !== null) {
-            $e->setAttribute('SessionNotOnOrAfter', $this->getSessionNotOnOrAfter()->format(C::DATETIME_FORMAT));
+            $e->setAttribute('SessionNotOnOrAfter', $this->getSessionNotOnOrAfter()->getValue());
         }
 
         return $e;

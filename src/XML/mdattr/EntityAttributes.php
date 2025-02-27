@@ -5,16 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\mdattr;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\saml\Assertion;
-use SimpleSAML\SAML2\XML\saml\Attribute;
-use SimpleSAML\SAML2\XML\saml\AttributeStatement;
-use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\{Assertion, Attribute, AttributeStatement, NameID};
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 
 use function array_filter;
 use function array_merge;
@@ -80,7 +76,7 @@ final class EntityAttributes extends AbstractMdattrElement implements SchemaVali
             );
 
             Assert::isEmpty(
-                $subject?->getSubjectConfirmation(),
+                $subject->getSubjectConfirmation(),
                 'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must NOT contain any SubjectConfirmation',
                 ProtocolViolationException::class,
             );
@@ -94,7 +90,7 @@ final class EntityAttributes extends AbstractMdattrElement implements SchemaVali
                 ProtocolViolationException::class,
             );
             Assert::same(
-                $nameId?->getFormat(),
+                $nameId?->getFormat()->getValue(),
                 C::NAMEID_ENTITY,
                 sprintf('The NameID format must be %s', C::NAMEID_ENTITY),
                 ProtocolViolationException::class,

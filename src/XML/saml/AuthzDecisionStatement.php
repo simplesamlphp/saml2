@@ -5,17 +5,19 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\Decision;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Exception\{
+    InvalidDOMElementException,
+    MissingElementException,
+    SchemaViolationException,
+    TooManyElementsException,
+};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\AnyURIValue;
 use ValueError;
 
 use function array_pop;
@@ -34,18 +36,18 @@ final class AuthzDecisionStatement extends AbstractStatementType implements Sche
     /**
      * Initialize an AuthzDecisionStatement.
      *
-     * @param string $resource
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $resource
      * @param \SimpleSAML\SAML2\XML\Decision $decision
      * @param \SimpleSAML\SAML2\XML\saml\Action[] $action
      * @param \SimpleSAML\SAML2\XML\saml\Evidence|null $evidence
      */
     public function __construct(
-        protected string $resource,
+        // Uses the base AnyURIValue because the SAML-specification allows this attribute to be an empty string
+        protected AnyURIValue $resource,
         protected Decision $decision,
         protected array $action,
         protected ?Evidence $evidence = null,
     ) {
-        SAMLAssert::validURI($resource);
         Assert::maxCount($action, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($action, Action::class, SchemaViolationException::class);
     }
@@ -54,9 +56,9 @@ final class AuthzDecisionStatement extends AbstractStatementType implements Sche
     /**
      * Collect the value of the resource-property
      *
-     * @return string
+     * @return \SimpleSAML\XML\Type\AnyURIValue
      */
-    public function getResource(): string
+    public function getResource(): AnyURIValue
     {
         return $this->resource;
     }
@@ -128,15 +130,15 @@ final class AuthzDecisionStatement extends AbstractStatementType implements Sche
             TooManyElementsException::class,
         );
 
-        $decision = self::getAttribute($xml, 'Decision');
+        $decision = self::getAttribute($xml, 'Decision', SAMLStringValue::class);
         try {
-            $decision = Decision::from($decision);
+            $decision = Decision::from($decision->getValue());
         } catch (ValueError) {
             throw new ProtocolViolationException(sprintf('Unknown value \'%s\' for Decision attribute.', $decision));
         }
 
         return new static(
-            self::getAttribute($xml, 'Resource'),
+            self::getAttribute($xml, 'Resource', AnyURIValue::class),
             $decision,
             $action,
             array_pop($evidence),
@@ -154,7 +156,7 @@ final class AuthzDecisionStatement extends AbstractStatementType implements Sche
     {
         $e = $this->instantiateParentElement($parent);
 
-        $e->setAttribute('Resource', $this->getResource());
+        $e->setAttribute('Resource', $this->getResource()->getValue());
         $e->setAttribute('Decision', $this->getDecision()->value);
 
         foreach ($this->getAction() as $action) {

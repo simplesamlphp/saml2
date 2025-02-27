@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\Assertion\Transformer;
 
 use Exception;
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Assertion\Exception\NotDecryptedException;
 use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;

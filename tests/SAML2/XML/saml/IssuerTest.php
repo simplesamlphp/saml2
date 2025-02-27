@@ -4,17 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
-use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\XML\saml\NameIDType;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
+use SimpleSAML\SAML2\XML\saml\{AbstractSamlElement, Issuer, NameIDType};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
 
 use function dirname;
 use function strval;
@@ -54,11 +51,11 @@ final class IssuerTest extends TestCase
     public function testMarshalling(): void
     {
         $issuer = new Issuer(
-            'urn:x-simplesamlphp:issuer',
-            'urn:x-simplesamlphp:namequalifier',
-            'urn:x-simplesamlphp:spnamequalifier',
-            'urn:the:format',
-            'TheSPProvidedID',
+            SAMLStringValue::fromString('urn:x-simplesamlphp:issuer'),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:namequalifier'),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),
+            SAMLAnyURIValue::fromString('urn:the:format'),
+            SAMLStringValue::fromString('TheSPProvidedID'),
         );
 
         $this->assertEquals(
@@ -77,11 +74,11 @@ final class IssuerTest extends TestCase
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
         new Issuer(
-            'urn:x-simplesamlphp:issuer',
-            'urn:x-simplesamlphp:namequalifier',
-            'urn:x-simplesamlphp:spnamequalifier',
-            C::NAMEID_ENTITY,
-            'TheSPProvidedID',
+            SAMLStringValue::fromString('urn:x-simplesamlphp:issuer'),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:namequalifier'),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),
+            SAMLAnyURIValue::fromString(C::NAMEID_ENTITY),
+            SAMLStringValue::fromString('TheSPProvidedID'),
         );
     }
 
@@ -96,10 +93,10 @@ final class IssuerTest extends TestCase
         $this->expectExceptionMessage('Illegal combination of attributes being used');
 
         new Issuer(
-            value: 'urn:x-simplesamlphp:issuer',
-            NameQualifier: 'urn:x-simplesamlphp:namequalifier',
-            SPNameQualifier: 'urn:x-simplesamlphp:spnamequalifier',
-            SPProvidedID: 'TheSPProvidedID',
+            value: SAMLStringValue::fromString('urn:x-simplesamlphp:issuer'),
+            NameQualifier: SAMLStringValue::fromString('urn:x-simplesamlphp:namequalifier'),
+            SPNameQualifier: SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),
+            SPProvidedID: SAMLStringValue::fromString('TheSPProvidedID'),
         );
     }
 

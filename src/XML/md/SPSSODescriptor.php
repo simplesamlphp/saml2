@@ -4,20 +4,18 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, TooManyElementsException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\{BooleanValue, DurationValue, IDValue};
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_filter;
-use function is_bool;
 use function preg_split;
+use function var_export;
 
 /**
  * Class representing SAML 2 SPSSODescriptor.
@@ -34,14 +32,14 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
      *
      * @param array<\SimpleSAML\SAML2\XML\md\AssertionConsumerService> $assertionConsumerService
      * @param string[] $protocolSupportEnumeration
-     * @param bool|null $authnRequestsSigned
-     * @param bool|null $wantAssertionsSigned
+     * @param \SimpleSAML\XML\Type\BooleanValue|null $authnRequestsSigned
+     * @param \SimpleSAML\XML\Type\BooleanValue|null $wantAssertionsSigned
      * @param array<\SimpleSAML\SAML2\XML\md\AttributeConsumingService> $attributeConsumingService
-     * @param string|null $ID
-     * @param \DateTimeImmutable|null $validUntil
-     * @param string|null $cacheDuration
+     * @param \SimpleSAML\XML\Type\IDValue|null $ID
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil
+     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
-     * @param string|null $errorURL
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $errorURL
      * @param array<\SimpleSAML\SAML2\XML\md\KeyDescriptor> $keyDescriptors
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
      * @param array<\SimpleSAML\SAML2\XML\md\ContactPerson> $contacts
@@ -53,14 +51,14 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
     public function __construct(
         protected array $assertionConsumerService,
         array $protocolSupportEnumeration,
-        protected ?bool $authnRequestsSigned = null,
-        protected ?bool $wantAssertionsSigned = null,
+        protected ?BooleanValue $authnRequestsSigned = null,
+        protected ?BooleanValue $wantAssertionsSigned = null,
         protected array $attributeConsumingService = [],
-        ?string $ID = null,
-        ?DateTimeImmutable $validUntil = null,
-        ?string $cacheDuration = null,
+        ?IDValue $ID = null,
+        ?SAMLDateTimeValue $validUntil = null,
+        ?DurationValue $cacheDuration = null,
         ?Extensions $extensions = null,
-        ?string $errorURL = null,
+        ?SAMLAnyURIValue $errorURL = null,
         array $keyDescriptors = [],
         ?Organization $organization = null,
         array $contacts = [],
@@ -106,7 +104,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
             array_filter(
                 $attributeConsumingService,
                 function (AttributeConsumingService $acs) {
-                    return $acs->getIsDefault() === true;
+                    return $acs->getIsDefault()?->toBoolean() === true;
                 },
             ),
             1,
@@ -118,9 +116,9 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
     /**
      * Collect the value of the AuthnRequestsSigned-property
      *
-     * @return bool|null
+     * @return \SimpleSAML\XML\Type\BooleanValue|null
      */
-    public function getAuthnRequestsSigned(): ?bool
+    public function getAuthnRequestsSigned(): ?BooleanValue
     {
         return $this->authnRequestsSigned;
     }
@@ -129,9 +127,9 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
     /**
      * Collect the value of the WantAssertionsSigned-property
      *
-     * @return bool|null
+     * @return \SimpleSAML\XML\Type\BooleanValue|null
      */
-    public function getWantAssertionsSigned(): ?bool
+    public function getWantAssertionsSigned(): ?BooleanValue
     {
         return $this->wantAssertionsSigned;
     }
@@ -177,9 +175,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
         Assert::same($xml->localName, 'SPSSODescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SPSSODescriptor::NS, InvalidDOMElementException::class);
 
-        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
-        SAMLAssert::nullOrValidDateTime($validUntil);
+        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration', SAMLStringValue::class);
 
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
@@ -207,15 +203,15 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
 
         $spssod = new static(
             AssertionConsumerService::getChildrenOfClass($xml),
-            preg_split('/[\s]+/', trim($protocols)),
-            self::getOptionalBooleanAttribute($xml, 'AuthnRequestsSigned', null),
-            self::getOptionalBooleanAttribute($xml, 'WantAssertionsSigned', null),
+            preg_split('/[\s]+/', trim($protocols->getValue())),
+            self::getOptionalAttribute($xml, 'AuthnRequestsSigned', BooleanValue::class, null),
+            self::getOptionalAttribute($xml, 'WantAssertionsSigned', BooleanValue::class, null),
             AttributeConsumingService::getChildrenOfClass($xml),
-            self::getOptionalAttribute($xml, 'ID', null),
-            $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
-            self::getOptionalAttribute($xml, 'cacheDuration', null),
+            self::getOptionalAttribute($xml, 'ID', IDValue::class, null),
+            self::getOptionalAttribute($xml, 'validUntil', SAMLDateTimeValue::class, null),
+            self::getOptionalAttribute($xml, 'cacheDuration', DurationValue::class, null),
             !empty($extensions) ? $extensions[0] : null,
-            self::getOptionalAttribute($xml, 'errorURL', null),
+            self::getOptionalAttribute($xml, 'errorURL', SAMLAnyURIValue::class, null),
             KeyDescriptor::getChildrenOfClass($xml),
             !empty($orgs) ? $orgs[0] : null,
             ContactPerson::getChildrenOfClass($xml),
@@ -244,12 +240,12 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
     {
         $e = parent::toUnsignedXML($parent);
 
-        if (is_bool($this->getAuthnRequestsSigned())) {
-            $e->setAttribute('AuthnRequestsSigned', $this->getAuthnRequestsSigned() ? 'true' : 'false');
+        if ($this->getAuthnRequestsSigned() !== null) {
+            $e->setAttribute('AuthnRequestsSigned', var_export($this->getAuthnRequestsSigned()->toBoolean(), true));
         }
 
-        if (is_bool($this->getWantAssertionsSigned())) {
-            $e->setAttribute('WantAssertionsSigned', $this->getWantAssertionsSigned() ? 'true' : 'false');
+        if ($this->getWantAssertionsSigned() !== null) {
+            $e->setAttribute('WantAssertionsSigned', var_export($this->getWantAssertionsSigned()->toBoolean(), true));
         }
 
         foreach ($this->getAssertionConsumerService() as $ep) {

@@ -7,15 +7,12 @@ namespace SimpleSAML\Test\SAML2\Response\Validation\ConstraintValidator;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator\IsSuccessful;
 use SimpleSAML\SAML2\Response\Validation\Result;
-use SimpleSAML\SAML2\XML\samlp\Response;
-use SimpleSAML\SAML2\XML\samlp\Status;
-use SimpleSAML\SAML2\XML\samlp\StatusCode;
-use SimpleSAML\SAML2\XML\samlp\StatusMessage;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
+use SimpleSAML\SAML2\XML\samlp\{Response, Status, StatusCode, StatusMessage};
 
 /**
  * @package simplesamlphp/saml2
@@ -58,14 +55,16 @@ final class IsSuccessfulTest extends MockeryTestCase
     {
         $responseStatus = new Status(
             new StatusCode(
-                C::STATUS_SUCCESS,
+                SAMLAnyURIValue::fromString(C::STATUS_SUCCESS),
                 [
                     new StatusCode(
-                        C::STATUS_PREFIX . 'bar',
+                        SAMLAnyURIVAlue::fromString(C::STATUS_PREFIX . 'bar'),
                     ),
                 ],
             ),
-            new StatusMessage('this is a test message'),
+            new StatusMessage(
+                SAMLStringValue::fromString('this is a test message'),
+            ),
         );
 
         $this->response->shouldReceive('isSuccess')->once()->andReturn(false);

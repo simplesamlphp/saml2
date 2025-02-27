@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\XML\Constants as C;
+use SimpleSAML\XML\Type\{IDValue, DurationValue};
 
 /**
  * Class representing SAML 2 SSODescriptorType.
@@ -21,11 +22,14 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptorType
      * Initialize a RoleDescriptor.
      *
      * @param string[] $protocolSupportEnumeration A set of URI specifying the protocols supported.
-     * @param string|null $ID The ID for this document. Defaults to null.
-     * @param \DateTimeImmutable|null $validUntil Unix time of validity for this document. Defaults to null.
-     * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
+     * @param \SimpleSAML\XML\Type\IDValue|null $ID The ID for this document. Defaults to null.
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
+     *   Defaults to null.
+     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration Maximum time this document can be cached.
+     *   Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to an empty array.
-     * @param string|null $errorURL An URI where to redirect users for support. Defaults to null.
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $errorURL An URI where to redirect users for support.
+     *   Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptors An array of KeyDescriptor elements.
      *   Defaults to an empty array.
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
@@ -43,11 +47,11 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptorType
      */
     public function __construct(
         array $protocolSupportEnumeration,
-        ?string $ID = null,
-        ?DateTimeImmutable $validUntil = null,
-        ?string $cacheDuration = null,
+        ?IDValue $ID = null,
+        ?SAMLDateTimeValue $validUntil = null,
+        ?DurationValue $cacheDuration = null,
         ?Extensions $extensions = null,
-        ?string $errorURL = null,
+        ?SAMLAnyURIValue $errorURL = null,
         array $keyDescriptors = [],
         ?Organization $organization = null,
         array $contacts = [],

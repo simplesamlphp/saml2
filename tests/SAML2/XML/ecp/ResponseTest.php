@@ -5,18 +5,15 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\ecp;
 
 use DOMDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\ecp\AbstractEcpElement;
-use SimpleSAML\SAML2\XML\ecp\Response;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\XML\ecp\{AbstractEcpElement, Response};
 use SimpleSAML\SOAP\Constants as SOAP;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
 
 use function dirname;
 use function strval;
@@ -49,7 +46,9 @@ final class ResponseTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $response = new Response('https://example.com/ACS');
+        $response = new Response(
+            SAMLAnyURIValue::fromString('https://example.com/ACS'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -65,23 +64,15 @@ final class ResponseTest extends TestCase
         $doc = new DOMDocument('1.0', 'UTF-8');
         $element = $doc->createElement('Foobar');
 
-        $response = new Response('https://example.com/ACS');
+        $response = new Response(
+            SAMLAnyURIValue::fromString('https://example.com/ACS'),
+        );
         $return = $response->toXML($element);
 
         $elements = $element->getElementsByTagNameNS(C::NS_ECP, 'Response');
 
         $this->assertEquals(1, $elements->length);
         $this->assertEquals($return, $elements->item(0));
-    }
-
-
-    /**
-     */
-    public function testInvalidACSThrowsException(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-
-        new Response('some non-url');
     }
 
 

@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, DataProvider, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponse;
-use SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType;
-use SimpleSAML\SAML2\XML\md\AbstractMdElement;
-use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
-use SimpleSAML\SAML2\XML\md\AssertionConsumerService;
+use SimpleSAML\SAML2\XML\md\{
+    AbstractIndexedEndpointType,
+    AbstractMdElement,
+    ArtifactResolutionService,
+    AssertionConsumerService,
+};
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingAttributeException};
+use SimpleSAML\XML\Type\UnsignedShortValue;
 
 use function dirname;
 use function sprintf;
@@ -56,7 +56,11 @@ final class IndexedEndpointTypeTest extends TestCase
     public function testMarshallingWithoutIsDefault(string $class, string $xmlRepresentation): void
     {
         $binding = ($class === DiscoveryResponse::class) ? C::BINDING_IDPDISC : C::BINDING_HTTP_POST;
-        $idxep = new $class(42, $binding, C::LOCATION_A);
+        $idxep = new $class(
+            UnsignedShortValue::fromInteger(42),
+            SAMLAnyURIValue::fromString($binding),
+            SAMLAnyURIValue::fromString(C::LOCATION_A),
+        );
         $this->assertNull($idxep->getIsDefault());
     }
 
@@ -79,7 +83,7 @@ final class IndexedEndpointTypeTest extends TestCase
         $xmlRepresentation->documentElement->setAttribute('index', '+0000000000000000000005');
 
         $endpoint = $class::fromXML($xmlRepresentation->documentElement);
-        $this->assertEquals(5, $endpoint->getIndex());
+        $this->assertEquals(5, $endpoint->getIndex()->toInteger());
     }
 
 
@@ -127,31 +131,6 @@ final class IndexedEndpointTypeTest extends TestCase
 
 
     /**
-     * Test that creating an IndexedEndpointType from XML with a non-numeric index fails.
-     *
-     * @param class-string $class
-     * @param string $xmlRepresentation
-     */
-    #[DataProvider('classProvider')]
-    public function testUnmarshallingWithWrongIndex(string $class, string $xmlRepresentation): void
-    {
-        $xmlRepresentation = DOMDocumentFactory::fromFile(
-            self::$resourcePath . $xmlRepresentation,
-        );
-        $xmlRepresentation->documentElement->setAttribute('index', 'value');
-
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage(sprintf(
-            'The \'index\' attribute of %s:%s must be numerical.',
-            $class::getNamespacePrefix(),
-            $class::getLocalName(),
-        ));
-
-        $class::fromXML($xmlRepresentation->documentElement);
-    }
-
-
-    /**
      * Test that creating an IndexedEndpointType from XML without isDefault works.
      *
      * @param class-string $class
@@ -167,31 +146,6 @@ final class IndexedEndpointTypeTest extends TestCase
         $xmlRepresentation->documentElement->removeAttribute('isDefault');
         $acs = $class::fromXML($xmlRepresentation->documentElement);
         $this->assertNull($acs->getIsDefault());
-    }
-
-
-    /**
-     * Test that creating an IndexedEndpointType from XML with isDefault of a non-boolean value fails.
-     *
-     * @param class-string $class
-     * @param string $xmlRepresentation
-     */
-    #[DataProvider('classProvider')]
-    public function testUnmarshallingWithWrongIsDefault(string $class, string $xmlRepresentation): void
-    {
-        $xmlRepresentation = DOMDocumentFactory::fromFile(
-            self::$resourcePath . $xmlRepresentation,
-        );
-        $xmlRepresentation->documentElement->setAttribute('isDefault', 'non-bool');
-
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage(sprintf(
-            'The \'isDefault\' attribute of %s:%s must be a boolean.',
-            $class::getNamespacePrefix(),
-            $class::getLocalName(),
-        ));
-
-        $class::fromXML($xmlRepresentation->documentElement);
     }
 
 

@@ -18,18 +18,13 @@ class NotBefore implements AssertionConstraintValidator
      */
     public function validate(Assertion $assertion, Result $result): void
     {
-        $conditions = $assertion->getConditions();
-        if ($conditions !== null) {
-            $notBeforeTimestamp = $conditions->getNotBefore();
-            $clock = Utils::getContainer()->getClock();
-            if (
-                ($notBeforeTimestamp !== null) &&
-                ($notBeforeTimestamp > ($clock->now()->add(new DateInterval('PT60S'))))
-            ) {
-                $result->addError(
-                    'Received an assertion that is valid in the future. Check clock synchronization on IdP and SP.',
-                );
-            }
+        $notBefore = $assertion->getConditions()?->getNotBefore()?->toDateTime();
+        $clock = Utils::getContainer()->getClock();
+
+        if (($notBefore !== null) && ($notBefore > ($clock->now()->add(new DateInterval('PT60S'))))) {
+            $result->addError(
+                'Received an assertion that is valid in the future. Check clock synchronization on IdP and SP.',
+            );
         }
     }
 }

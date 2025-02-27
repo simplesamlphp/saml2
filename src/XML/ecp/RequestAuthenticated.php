@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\ecp;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SOAP\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingAttributeException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\BooleanValue;
 
-use function boolval;
+use function intval;
 use function strval;
 
 /**
@@ -29,10 +28,10 @@ final class RequestAuthenticated extends AbstractEcpElement implements SchemaVal
     /**
      * Create a ECP RequestAuthenticated element.
      *
-     * @param bool|null $mustUnderstand
+     * @param \SimpleSAML\XML\Type\BooleanValue|null $mustUnderstand
      */
     public function __construct(
-        protected ?bool $mustUnderstand = false,
+        protected ?BooleanValue $mustUnderstand,
     ) {
     }
 
@@ -40,9 +39,9 @@ final class RequestAuthenticated extends AbstractEcpElement implements SchemaVal
     /**
      * Collect the value of the mustUnderstand-property
      *
-     * @return bool|null
+     * @return \SimpleSAML\XML\Type\BooleanValue|null
      */
-    public function getMustUnderstand(): ?bool
+    public function getMustUnderstand(): ?BooleanValue
     {
         return $this->mustUnderstand;
     }
@@ -73,22 +72,12 @@ final class RequestAuthenticated extends AbstractEcpElement implements SchemaVal
 
         $mustUnderstand = null;
         if ($xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand')) {
-            $mustUnderstand = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand');
-
-            Assert::nullOrOneOf(
-                $mustUnderstand,
-                ['0', '1'],
-                'Invalid value of env:mustUnderstand attribute in <ecp:RequestAuthenticated>.',
-                ProtocolViolationException::class,
-            );
-
-            $mustUnderstand = boolval($mustUnderstand);
+            $mustUnderstand = BooleanValue::fromString($xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand'));
         }
 
-        $actor = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'actor');
         Assert::same(
-            $actor,
-            'http://schemas.xmlsoap.org/soap/actor/next',
+            $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'actor'),
+            C::SOAP_ACTOR_NEXT,
             'Invalid value of env:actor attribute in <ecp:RequestAuthenticated>.',
             ProtocolViolationException::class,
         );
@@ -108,7 +97,11 @@ final class RequestAuthenticated extends AbstractEcpElement implements SchemaVal
         $e = $this->instantiateParentElement($parent);
 
         if ($this->getMustUnderstand() !== null) {
-            $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', strval(intval($this->getMustUnderstand())));
+            $e->setAttributeNS(
+                C::NS_SOAP_ENV_11,
+                'env:mustUnderstand',
+                strval(intval($this->getMustUnderstand()->getValue())),
+            );
         }
 
         $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', C::SOAP_ACTOR_NEXT);

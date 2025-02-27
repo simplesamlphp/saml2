@@ -4,19 +4,19 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, DataProvider, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\saml\Attribute;
-use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
-use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
-use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
-use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
-use SimpleSAML\SAML2\XML\samlp\LogoutRequest;
-use SimpleSAML\SAML2\XML\samlp\LogoutResponse;
-use SimpleSAML\SAML2\XML\samlp\MessageFactory;
-use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\samlp\{
+    ArtifactResolve,
+    ArtifactResponse,
+    AttributeQuery,
+    AuthnRequest,
+    LogoutRequest,
+    LogoutResponse,
+    MessageFactory,
+    Response,
+};
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 

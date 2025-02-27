@@ -6,23 +6,23 @@ namespace SimpleSAML\Test\SAML2\Binding;
 
 use Exception;
 use Nyholm\Psr7\ServerRequest;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
+use PHPUnit\Framework\Attributes\{CoversClass, DoesNotPerformAssertions, Group};
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Binding\HTTPRedirect;
-use SimpleSAML\SAML2\Compat\AbstractContainer;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\{AbstractContainer, ContainerSingleton};
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
-use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
-use SimpleSAML\SAML2\XML\samlp\Response;
-use SimpleSAML\SAML2\XML\samlp\Status;
-use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\XML\samlp\{AbstractRequest, AuthnRequest, Response, Status, StatusCode};
+use SimpleSAML\XML\Type\IDValue;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**
  * @package simplesamlphp\saml2
  */
+#[Group('bindings')]
 #[CoversClass(HTTPRedirect::class)]
 final class HTTPRedirectTest extends TestCase
 {
@@ -182,6 +182,7 @@ final class HTTPRedirectTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Unknown SAMLEncoding:');
+
         $hr = new HTTPRedirect();
         $hr->receive($request);
     }
@@ -201,6 +202,7 @@ final class HTTPRedirectTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing signature algorithm');
+
         $hr = new HTTPRedirect();
         $hr->receive($request);
     }
@@ -217,6 +219,7 @@ final class HTTPRedirectTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Error while base64 decoding SAML message.');
+
         $hr = new HTTPRedirect();
         @$hr->receive($request);
     }
@@ -233,6 +236,7 @@ final class HTTPRedirectTest extends TestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Missing SAMLRequest or SAMLResponse parameter.');
+
         $hr = new HTTPRedirect();
         $hr->receive($request);
     }
@@ -243,7 +247,11 @@ final class HTTPRedirectTest extends TestCase
      */
     public function testSendWithoutDestination(): void
     {
-        $request = new AuthnRequest(self::$clock->now());
+        $request = new AuthnRequest(
+            id: IDValue::fromString('abc123'),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+        );
+
         $hr = new HTTPRedirect();
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Cannot build a redirect URL, no destination set.');
@@ -257,7 +265,10 @@ final class HTTPRedirectTest extends TestCase
     #[DoesNotPerformAssertions]
     public function testSendAuthnrequest(): void
     {
-        $request = new AuthnRequest(self::$clock->now());
+        $request = new AuthnRequest(
+            id: IDValue::fromString('abc123'),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+        );
         $hr = new HTTPRedirect();
         $hr->setDestination('https://idp.example.org/');
         $hr->send($request);
@@ -271,14 +282,21 @@ final class HTTPRedirectTest extends TestCase
     #[DoesNotPerformAssertions]
     public function testSendAuthnResponse(): void
     {
-        $status = new Status(new StatusCode());
-        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
+        $status = new Status(
+            new StatusCode(
+                SAMLAnyURIValue::fromString(C::STATUS_SUCCESS),
+            ),
+        );
+        $issuer = new Issuer(
+            SAMLStringValue::fromString('urn:x-simplesamlphp:issuer'),
+        );
 
         $response = new Response(
+            id: IDValue::fromString('abc123'),
             status: $status,
-            issueInstant: self::$clock->now(),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             issuer: $issuer,
-            destination: 'http://example.org/login?success=yes',
+            destination: SAMLAnyURIValue::fromString('http://example.org/login?success=yes'),
         );
 
         $hr = new HTTPRedirect();
@@ -293,10 +311,22 @@ final class HTTPRedirectTest extends TestCase
     #[DoesNotPerformAssertions]
     public function testSendAuthnResponseBespokeDestination(): void
     {
-        $status = new Status(new StatusCode());
-        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
+        $status = new Status(
+            new StatusCode(
+                SAMLAnyURIValue::fromString(C::STATUS_SUCCESS),
+            ),
+        );
+        $issuer = new Issuer(
+            SAMLStringValue::fromString('urn:x-simplesamlphp:issuer'),
+        );
 
-        $response = new Response($status, self::$clock->now(), $issuer);
+        $response = new Response(
+            id: IDValue::fromString('abc123'),
+            status: $status,
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+            issuer: $issuer,
+        );
+
         $hr = new HTTPRedirect();
         $hr->setDestination('gopher://myurl');
         $hr->send($response);

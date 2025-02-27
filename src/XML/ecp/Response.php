@@ -5,14 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\ecp;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SOAP\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingAttributeException};
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 
 /**
  * Class representing the ECP Response element.
@@ -27,21 +25,20 @@ final class Response extends AbstractEcpElement implements SchemaValidatableElem
     /**
      * Create a ECP Response element.
      *
-     * @param string $assertionConsumerServiceURL
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $assertionConsumerServiceURL
      */
     public function __construct(
-        protected string $assertionConsumerServiceURL,
+        protected SAMLAnyURIValue $assertionConsumerServiceURL,
     ) {
-        SAMLAssert::validURI($assertionConsumerServiceURL);
     }
 
 
     /**
      * Collect the value of the AssertionConsumerServiceURL-property
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue
      */
-    public function getAssertionConsumerServiceURL(): string
+    public function getAssertionConsumerServiceURL(): SAMLAnyURIValue
     {
         return $this->assertionConsumerServiceURL;
     }
@@ -80,23 +77,21 @@ final class Response extends AbstractEcpElement implements SchemaValidatableElem
             MissingAttributeException::class,
         );
 
-        $mustUnderstand = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand');
-        $actor = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'actor');
-
         Assert::same(
-            $mustUnderstand,
+            $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand'),
             '1',
             'Invalid value of env:mustUnderstand attribute in <ecp:Response>.',
             ProtocolViolationException::class,
         );
+
         Assert::same(
-            $actor,
-            'http://schemas.xmlsoap.org/soap/actor/next',
+            $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'actor'),
+            C::SOAP_ACTOR_NEXT,
             'Invalid value of env:actor attribute in <ecp:Response>.',
             ProtocolViolationException::class,
         );
 
-        return new static(self::getAttribute($xml, 'AssertionConsumerServiceURL'));
+        return new static(self::getAttribute($xml, 'AssertionConsumerServiceURL', SAMLAnyURIValue::class));
     }
 
 
@@ -111,8 +106,8 @@ final class Response extends AbstractEcpElement implements SchemaValidatableElem
         $response = $this->instantiateParentElement($parent);
 
         $response->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', '1');
-        $response->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', 'http://schemas.xmlsoap.org/soap/actor/next');
-        $response->setAttribute('AssertionConsumerServiceURL', $this->getAssertionConsumerServiceURL());
+        $response->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', C::SOAP_ACTOR_NEXT);
+        $response->setAttribute('AssertionConsumerServiceURL', $this->getAssertionConsumerServiceURL()->getValue());
 
         return $response;
     }

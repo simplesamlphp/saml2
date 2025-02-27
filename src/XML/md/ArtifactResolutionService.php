@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\{BooleanValue, UnsignedShortValue};
 
 /**
  * A class implementing the md:ArtifactResolutionService element.
@@ -23,22 +24,22 @@ final class ArtifactResolutionService extends AbstractIndexedEndpointType implem
      *
      * This is an endpoint with one restriction: it cannot contain a ResponseLocation.
      *
-     * @param int $index
-     * @param string $binding
-     * @param string $location
-     * @param bool|null $isDefault
-     * @param string|null $unused
+     * @param \SimpleSAML\XML\Type\UnsignedShortValue $index
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $binding
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $location
+     * @param \SimpleSAML\XML\Type\BooleanValue|null $isDefault
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $unused
      * @param list<\SimpleSAML\XML\Attribute> $attributes
      * @param array $children
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function __construct(
-        int $index,
-        string $binding,
-        string $location,
-        ?bool $isDefault = null,
-        ?string $unused = null,
+        UnsignedShortValue $index,
+        SAMLAnyURIValue $binding,
+        SAMLAnyURIValue $location,
+        ?BooleanValue $isDefault = null,
+        ?SAMLAnyURIValue $unused = null,
         array $children = [],
         array $attributes = [],
     ) {

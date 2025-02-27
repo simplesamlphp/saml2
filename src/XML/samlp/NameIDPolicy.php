@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\BooleanValue;
 
 use function array_change_key_case;
 use function array_filter;
@@ -34,42 +34,40 @@ final class NameIDPolicy extends AbstractSamlpElement implements
     /**
      * Initialize a NameIDPolicy.
      *
-     * @param string|null $Format
-     * @param string|null $SPNameQualifier
-     * @param bool|null $AllowCreate
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $Format
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $SPNameQualifier
+     * @param \SimpleSAML\XML\Type\BooleanValue|null $AllowCreate
      */
     public function __construct(
-        protected ?string $Format = null,
-        protected ?string $SPNameQualifier = null,
-        protected ?bool $AllowCreate = null,
+        protected ?SAMLAnyURIValue $Format = null,
+        protected ?SAMLStringValue $SPNameQualifier = null,
+        protected ?BooleanValue $AllowCreate = null,
     ) {
-        SAMLAssert::nullOrValidURI($Format);
-        Assert::nullOrNotWhitespaceOnly($SPNameQualifier);
     }
 
 
     /**
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null
      */
-    public function getFormat(): ?string
+    public function getFormat(): ?SAMLAnyURIValue
     {
         return $this->Format;
     }
 
 
     /**
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue|null
      */
-    public function getSPNameQualifier(): ?string
+    public function getSPNameQualifier(): ?SAMLStringValue
     {
         return $this->SPNameQualifier;
     }
 
 
     /**
-     * @return bool|null
+     * @return \SimpleSAML\XML\Type\BooleanValue|null
      */
-    public function getAllowCreate(): ?bool
+    public function getAllowCreate(): ?BooleanValue
     {
         return $this->AllowCreate;
     }
@@ -82,9 +80,9 @@ final class NameIDPolicy extends AbstractSamlpElement implements
      */
     public function isEmptyElement(): bool
     {
-        return empty($this->Format)
-            && empty($this->SPNameQualifier)
-            && empty($this->AllowCreate);
+        return empty($this->getFormat())
+            && empty($this->getSPNameQualifier())
+            && empty($this->getAllowCreate());
     }
 
 
@@ -102,9 +100,9 @@ final class NameIDPolicy extends AbstractSamlpElement implements
         Assert::same($xml->localName, 'NameIDPolicy', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, NameIDPolicy::NS, InvalidDOMElementException::class);
 
-        $Format = self::getOptionalAttribute($xml, 'Format', null);
-        $SPNameQualifier = self::getOptionalAttribute($xml, 'SPNameQualifier', null);
-        $AllowCreate = self::getOptionalBooleanAttribute($xml, 'AllowCreate', null);
+        $Format = self::getOptionalAttribute($xml, 'Format', SAMLAnyURIValue::class, null);
+        $SPNameQualifier = self::getOptionalAttribute($xml, 'SPNameQualifier', SAMLStringValue::class, null);
+        $AllowCreate = self::getOptionalAttribute($xml, 'AllowCreate', BooleanValue::class, null);
 
         return new static(
             $Format,
@@ -125,15 +123,15 @@ final class NameIDPolicy extends AbstractSamlpElement implements
         $e = $this->instantiateParentElement($parent);
 
         if ($this->getFormat()) {
-            $e->setAttribute('Format', $this->getFormat());
+            $e->setAttribute('Format', $this->getFormat()->getValue());
         }
 
         if ($this->getSPNameQualifier()) {
-            $e->setAttribute('SPNameQualifier', $this->getSPNameQualifier());
+            $e->setAttribute('SPNameQualifier', $this->getSPNameQualifier()->getValue());
         }
 
         if ($this->getAllowCreate() !== null) {
-            $e->setAttribute('AllowCreate', var_export($this->getAllowCreate(), true));
+            $e->setAttribute('AllowCreate', var_export($this->getAllowCreate()->toBoolean(), true));
         }
 
         return $e;
@@ -151,9 +149,9 @@ final class NameIDPolicy extends AbstractSamlpElement implements
         $data = self::processArrayContents($data);
 
         return new static(
-            $data['Format'] ?? null,
-            $data['SPNameQualifier'] ?? null,
-            $data['AllowCreate'] ?? null,
+            $data['Format'] !== null ? SAMLAnyURIValue::fromString($data['Format']) : null,
+            $data['SPNameQualifier'] !== null ? SAMLStringValue::fromString($data['SPNameQualifier']) : null,
+            $data['AllowCreate'] !== null ? BooleanValue::fromBoolean($data['AllowCreate']) : null,
         );
     }
 
@@ -206,9 +204,9 @@ final class NameIDPolicy extends AbstractSamlpElement implements
     public function toArray(): array
     {
         $data = [
-            'Format' => $this->getFormat(),
-            'SPNameQualifier' => $this->getSPNameQualifier(),
-            'AllowCreate' => $this->getAllowCreate(),
+            'Format' => $this->getFormat()->getValue(),
+            'SPNameQualifier' => $this->getSPNameQualifier()->getValue(),
+            'AllowCreate' => $this->getAllowCreate()->toBoolean(),
         ];
 
         return array_filter($data);

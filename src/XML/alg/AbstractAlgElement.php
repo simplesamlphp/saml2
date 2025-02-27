@@ -10,6 +10,7 @@ use SimpleSAML\XML\AbstractElement;
 /**
  * Abstract class to be implemented by all the classes in this namespace
  *
+ * @see http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-algsupport-v1.0-cs01.pdf
  * @package simplesamlphp/saml2
  */
 abstract class AbstractAlgElement extends AbstractElement

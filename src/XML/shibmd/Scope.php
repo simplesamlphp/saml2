@@ -5,11 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\shibmd;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\XML\StringElementTrait;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\BooleanValue;
+use SimpleSAML\XML\TypedTextContentTrait;
 
 /**
  * Class which represents the Scope element found in Shibboleth metadata.
@@ -20,18 +21,21 @@ use SimpleSAML\XML\SchemaValidatableElementTrait;
 final class Scope extends AbstractShibmdElement implements SchemaValidatableElementInterface
 {
     use SchemaValidatableElementTrait;
-    use StringElementTrait;
+    use TypedTextContentTrait;
+
+    /** @var string */
+    public const TEXTCONTENT_TYPE = SAMLStringValue::class;
 
 
     /**
      * Create a Scope.
      *
-     * @param string $scope
-     * @param bool|null $regexp
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue $scope
+     * @param \SimpleSAML\XML\Type\BooleanValue|null $regexp
      */
     public function __construct(
-        string $scope,
-        protected ?bool $regexp = false,
+        SAMLStringValue $scope,
+        protected ?BooleanValue $regexp = null,
     ) {
         $this->setContent($scope);
     }
@@ -40,9 +44,9 @@ final class Scope extends AbstractShibmdElement implements SchemaValidatableElem
     /**
      * Collect the value of the regexp-property
      *
-     * @return bool|null
+     * @return \SimpleSAML\XML\Type\BooleanValue|null
      */
-    public function isRegexpScope(): ?bool
+    public function isRegexpScope(): ?BooleanValue
     {
         return $this->regexp;
     }
@@ -62,10 +66,10 @@ final class Scope extends AbstractShibmdElement implements SchemaValidatableElem
         Assert::same($xml->localName, 'Scope', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Scope::NS, InvalidDOMElementException::class);
 
-        $scope = $xml->textContent;
-        $regexp = self::getOptionalBooleanAttribute($xml, 'regexp', null);
-
-        return new static($scope, $regexp);
+        return new static(
+            SAMLStringValue::fromString($xml->textContent),
+            self::getOptionalAttribute($xml, 'regexp', BooleanValue::class, null),
+        );
     }
 
 
@@ -78,10 +82,10 @@ final class Scope extends AbstractShibmdElement implements SchemaValidatableElem
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->textContent = $this->getContent();
+        $e->textContent = strval($this->getContent());
 
         if ($this->isRegexpScope() !== null) {
-            $e->setAttribute('regexp', $this->isRegexpScope() ? 'true' : 'false');
+            $e->setAttribute('regexp', strval($this->isRegexpScope()));
         }
 
         return $e;

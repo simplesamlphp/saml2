@@ -5,18 +5,19 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Test\SAML2\XML\saml;
 
 use DOMDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\Decision;
-use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
-use SimpleSAML\SAML2\XML\saml\AbstractStatement;
-use SimpleSAML\SAML2\XML\saml\Action;
-use SimpleSAML\SAML2\XML\saml\AuthzDecisionStatement;
-use SimpleSAML\SAML2\XML\saml\Evidence;
+use SimpleSAML\SAML2\XML\saml\{
+    AbstractSamlElement,
+    AbstractStatement,
+    Action,
+    AuthzDecisionStatement,
+    Evidence,
+};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
 
 use function dirname;
 use function strval;
@@ -61,11 +62,17 @@ final class AuthzDecisionStatementTest extends TestCase
     public function testMarshalling(): void
     {
         $authzDecisionStatement = new AuthzDecisionStatement(
-            'urn:x-simplesamlphp:resource',
+            SAMLAnyURIValue::fromString('urn:x-simplesamlphp:resource'),
             Decision::PERMIT,
             [
-                new Action('urn:x-simplesamlphp:namespace', 'SomeAction'),
-                new Action('urn:x-simplesamlphp:namespace', 'OtherAction'),
+                new Action(
+                    SAMLAnyURIValue::fromString('urn:x-simplesamlphp:namespace'),
+                    SAMLStringValue::fromString('SomeAction'),
+                ),
+                new Action(
+                    SAMLAnyURIValue::fromString('urn:x-simplesamlphp:namespace'),
+                    SAMLStringValue::fromString('OtherAction'),
+                ),
             ],
             Evidence::fromXML(self::$evidence->documentElement),
         );

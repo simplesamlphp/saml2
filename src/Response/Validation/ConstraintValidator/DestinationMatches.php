@@ -36,7 +36,7 @@ final class DestinationMatches implements ConstraintValidator
         if ($destination === null) {
             throw new Exception('No destination set in the response.');
         }
-        if (!$this->expectedDestination->equals(new Destination($destination))) {
+        if (!$this->expectedDestination->equals(new Destination($destination->getValue()))) {
             $result->addError(sprintf(
                 'Destination in response "%s" does not match the expected destination "%s"',
                 $destination,

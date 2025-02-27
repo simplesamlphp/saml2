@@ -4,15 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
-use SimpleSAML\SAML2\XML\saml\Audience;
-use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\XML\saml\{AbstractSamlElement, Audience, AudienceRestriction};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
 
 use function dirname;
 use function strval;
@@ -52,8 +49,12 @@ final class AudienceRestrictionTest extends TestCase
     {
         $condition = new AudienceRestriction(
             [
-                new Audience('urn:test:audience1'),
-                new Audience('urn:test:audience2'),
+                new Audience(
+                    SAMLAnyURIValue::fromString('urn:test:audience1'),
+                ),
+                new Audience(
+                    SAMLAnyURIValue::fromString('urn:test:audience2'),
+                ),
             ],
         );
 

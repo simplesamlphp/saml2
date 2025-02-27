@@ -4,21 +4,17 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdrpi;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\ArrayValidationException;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Exception\{ArrayValidationException, ProtocolViolationException};
+use SimpleSAML\SAML2\Type\{SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 
 use function array_change_key_case;
 use function array_keys;
-use function preg_replace;
 
 /**
  * Class for handling the mdrpi:PublicationInfo element.
@@ -36,18 +32,17 @@ final class PublicationInfo extends AbstractMdrpiElement implements
     /**
      * Create/parse a mdrpi:PublicationInfo element.
      *
-     * @param string $publisher
-     * @param \DateTimeImmutable|null $creationInstant
-     * @param string|null $publicationId
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue $publisher
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $creationInstant
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $publicationId
      * @param \SimpleSAML\SAML2\XML\mdrpi\UsagePolicy[] $usagePolicy
      */
     public function __construct(
-        protected string $publisher,
-        protected ?DateTimeImmutable $creationInstant = null,
-        protected ?string $publicationId = null,
+        protected SAMLStringValue $publisher,
+        protected ?SAMLDateTimeValue $creationInstant = null,
+        protected ?SAMLStringValue $publicationId = null,
         protected array $usagePolicy = [],
     ) {
-        Assert::nullOrSame($creationInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::maxCount($usagePolicy, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($usagePolicy, UsagePolicy::class);
 
@@ -73,9 +68,9 @@ final class PublicationInfo extends AbstractMdrpiElement implements
     /**
      * Collect the value of the publisher-property
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue
      */
-    public function getPublisher(): string
+    public function getPublisher(): SAMLStringValue
     {
         return $this->publisher;
     }
@@ -84,9 +79,9 @@ final class PublicationInfo extends AbstractMdrpiElement implements
     /**
      * Collect the value of the creationInstant-property
      *
-     * @return \DateTimeImmutable|null
+     * @return \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null
      */
-    public function getCreationInstant(): ?DateTimeImmutable
+    public function getCreationInstant(): ?SAMLDateTimeValue
     {
         return $this->creationInstant;
     }
@@ -95,9 +90,9 @@ final class PublicationInfo extends AbstractMdrpiElement implements
     /**
      * Collect the value of the publicationId-property
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue|null
      */
-    public function getPublicationId(): ?string
+    public function getPublicationId(): ?SAMLStringValue
     {
         return $this->publicationId;
     }
@@ -130,19 +125,9 @@ final class PublicationInfo extends AbstractMdrpiElement implements
         Assert::same($xml->localName, 'PublicationInfo', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, PublicationInfo::NS, InvalidDOMElementException::class);
 
-        $publisher = self::getAttribute($xml, 'publisher');
-        $creationInstant = self::getOptionalAttribute($xml, 'creationInstant', null);
-
-        // 2.2.1:  Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier
-        if ($creationInstant !== null) {
-            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
-            $creationInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $creationInstant, 1);
-
-            SAMLAssert::validDateTime($creationInstant, ProtocolViolationException::class);
-            $creationInstant = new DateTimeImmutable($creationInstant);
-        }
-
-        $publicationId = self::getOptionalAttribute($xml, 'publicationId', null);
+        $publisher = self::getAttribute($xml, 'publisher', SAMLStringValue::class);
+        $creationInstant = self::getOptionalAttribute($xml, 'creationInstant', SAMLDateTimeValue::class, null);
+        $publicationId = self::getOptionalAttribute($xml, 'publicationId', SAMLStringValue::class, null);
         $UsagePolicy = UsagePolicy::getChildrenOfClass($xml);
 
         return new static($publisher, $creationInstant, $publicationId, $UsagePolicy);
@@ -158,14 +143,14 @@ final class PublicationInfo extends AbstractMdrpiElement implements
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('publisher', $this->getPublisher());
+        $e->setAttribute('publisher', $this->getPublisher()->getValue());
 
         if ($this->getCreationInstant() !== null) {
-            $e->setAttribute('creationInstant', $this->getCreationInstant()->format(C::DATETIME_FORMAT));
+            $e->setAttribute('creationInstant', $this->getCreationInstant()->getValue());
         }
 
         if ($this->getPublicationId() !== null) {
-            $e->setAttribute('publicationId', $this->getPublicationId());
+            $e->setAttribute('publicationId', $this->getPublicationId()->getValue());
         }
 
         foreach ($this->getUsagePolicy() as $up) {
@@ -187,9 +172,9 @@ final class PublicationInfo extends AbstractMdrpiElement implements
         $data = self::processArrayContents($data);
 
         return new static(
-            $data['publisher'],
-            $data['creationInstant'] ?? null,
-            $data['publicationId'] ?? null,
+            SAMLStringValue::fromString($data['publisher']),
+            $data['creationInstant'] !== null ? SAMLDateTimeValue::fromString($data['creationInstant']) : null,
+            $data['publicationId'] !== null ? SAMLStringValue::fromString($data['publicationId']) : null,
             $data['UsagePolicy'] ?? [],
         );
     }
@@ -218,8 +203,8 @@ final class PublicationInfo extends AbstractMdrpiElement implements
 
         if (array_key_exists('creationinstant', $data)) {
             Assert::string($data['creationinstant'], ArrayValidationException::class);
-            SAMLAssert::validDateTime($data['creationinstant'], ArrayValidationException::class);
-            $retval['creationInstant'] = new DateTimeImmutable($data['creationinstant']);
+            Assert::validSAMLDateTime($data['creationinstant'], ArrayValidationException::class);
+            $retval['creationInstant'] = $data['creationinstant'];
         }
 
         if (array_key_exists('publicationid', $data)) {
@@ -246,14 +231,14 @@ final class PublicationInfo extends AbstractMdrpiElement implements
     public function toArray(): array
     {
         $data = [];
-        $data['publisher'] = $this->getPublisher();
+        $data['publisher'] = $this->getPublisher()->getValue();
 
         if ($this->getCreationInstant() !== null) {
-            $data['creationInstant'] = $this->getCreationInstant()->format(C::DATETIME_FORMAT);
+            $data['creationInstant'] = $this->getCreationInstant()->getValue();
         }
 
         if ($this->getPublicationId() !== null) {
-            $data['publicationId'] = $this->getPublicationId();
+            $data['publicationId'] = $this->getPublicationId()->getValue();
         }
 
         if (!empty($this->getUsagePolicy())) {

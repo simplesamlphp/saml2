@@ -5,13 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
-
-use function strval;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\NonNegativeIntegerValue;
 
 /**
  * @package simplesamlphp/saml2
@@ -25,13 +23,12 @@ final class ProxyRestriction extends AbstractConditionType implements SchemaVali
      * ProxyRestriction constructor.
      *
      * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
-     * @param int|null $count
+     * @param \SimpleSAML\XML\Type\NonNegativeIntegerValue|null $count
      */
     public function __construct(
         protected array $audience = [],
-        protected ?int $count = null,
+        protected ?NonNegativeIntegerValue $count = null,
     ) {
-        Assert::nullOrNatural($count, 'Count must be a non-negative integer.');
         Assert::maxCount($audience, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($audience, Audience::class);
     }
@@ -40,9 +37,9 @@ final class ProxyRestriction extends AbstractConditionType implements SchemaVali
     /**
      * Get the value of the count-attribute.
      *
-     * @return int|null
+     * @return \SimpleSAML\XML\Type\NonNegativeIntegerValue|null
      */
-    public function getCount(): ?int
+    public function getCount(): ?NonNegativeIntegerValue
     {
         return $this->count;
     }
@@ -71,7 +68,7 @@ final class ProxyRestriction extends AbstractConditionType implements SchemaVali
         Assert::same($xml->localName, 'ProxyRestriction', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ProxyRestriction::NS, InvalidDOMElementException::class);
 
-        $count = self::getOptionalIntegerAttribute($xml, 'Count', null);
+        $count = self::getOptionalAttribute($xml, 'Count', NonNegativeIntegerValue::class, null);
         $audience = Audience::getChildrenOfClass($xml);
 
         return new static($audience, $count);
@@ -89,7 +86,7 @@ final class ProxyRestriction extends AbstractConditionType implements SchemaVali
         $e = $this->instantiateParentElement($parent);
 
         if ($this->getCount() !== null) {
-            $e->setAttribute('Count', strval($this->getCount()));
+            $e->setAttribute('Count', $this->getCount()->getValue());
         }
 
         foreach ($this->getAudience() as $audience) {

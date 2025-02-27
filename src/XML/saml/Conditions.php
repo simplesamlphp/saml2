@@ -4,15 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 
 use function array_pop;
 
@@ -29,23 +27,21 @@ final class Conditions extends AbstractSamlElement implements SchemaValidatableE
     /**
      * Initialize a Conditions element.
      *
-     * @param \DateTimeImmutable|null $notBefore
-     * @param \DateTimeImmutable|null $notOnOrAfter
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $notBefore
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $notOnOrAfter
      * @param \SimpleSAML\SAML2\XML\saml\AbstractCondition[] $condition
      * @param \SimpleSAML\SAML2\XML\saml\AudienceRestriction[] $audienceRestriction
      * @param \SimpleSAML\SAML2\XML\saml\OneTimeUse|null $oneTimeUse
      * @param \SimpleSAML\SAML2\XML\saml\ProxyRestriction|null $proxyRestriction
      */
     public function __construct(
-        protected ?DateTimeImmutable $notBefore = null,
-        protected ?DateTimeImmutable $notOnOrAfter = null,
+        protected ?SAMLDateTimeValue $notBefore = null,
+        protected ?SAMLDateTimeValue $notOnOrAfter = null,
         protected array $condition = [],
         protected array $audienceRestriction = [],
         protected ?OneTimeUse $oneTimeUse = null,
         protected ?ProxyRestriction $proxyRestriction = null,
     ) {
-        Assert::nullOrSame($notBefore?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
-        Assert::nullOrSame($notOnOrAfter?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::maxCount($condition, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($condition, AbstractCondition::class);
         Assert::maxCount($audienceRestriction, C::UNBOUNDED_LIMIT);
@@ -56,9 +52,9 @@ final class Conditions extends AbstractSamlElement implements SchemaValidatableE
     /**
      * Collect the value of the notBefore-property
      *
-     * @return \DateTimeImmutable|null
+     * @return \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null
      */
-    public function getNotBefore(): ?DateTimeImmutable
+    public function getNotBefore(): ?SAMLDateTimeValue
     {
         return $this->notBefore;
     }
@@ -67,9 +63,9 @@ final class Conditions extends AbstractSamlElement implements SchemaValidatableE
     /**
      * Collect the value of the notOnOrAfter-property
      *
-     * @return \DateTimeImmutable|null
+     * @return \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null
      */
-    public function getNotOnOrAfter(): ?DateTimeImmutable
+    public function getNotOnOrAfter(): ?SAMLDateTimeValue
     {
         return $this->notOnOrAfter;
     }
@@ -126,12 +122,12 @@ final class Conditions extends AbstractSamlElement implements SchemaValidatableE
      */
     public function isEmptyElement(): bool
     {
-        return empty($this->notBefore)
-            && empty($this->notOnOrAfter)
-            && empty($this->condition)
-            && empty($this->audienceRestriction)
-            && empty($this->oneTimeUse)
-            && empty($this->proxyRestriction);
+        return empty($this->getNotBefore())
+            && empty($this->getNotOnOrAfter())
+            && empty($this->getCondition())
+            && empty($this->getAudienceRestriction())
+            && empty($this->getOneTimeUse())
+            && empty($this->getProxyRestriction());
     }
 
 
@@ -148,22 +144,6 @@ final class Conditions extends AbstractSamlElement implements SchemaValidatableE
     {
         Assert::same($xml->localName, 'Conditions', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Conditions::NS, InvalidDOMElementException::class);
-
-        $notBefore = self::getOptionalAttribute($xml, 'NotBefore', null);
-        if ($notBefore !== null) {
-            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
-            $notBefore = preg_replace('/([.][0-9]+Z)$/', 'Z', $notBefore, 1);
-
-            SAMLAssert::validDateTime($notBefore, ProtocolViolationException::class);
-        }
-
-        $notOnOrAfter = self::getOptionalAttribute($xml, 'NotOnOrAfter', null);
-        if ($notOnOrAfter !== null) {
-            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
-            $notOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $notOnOrAfter, 1);
-
-            SAMLAssert::validDateTime($notOnOrAfter, ProtocolViolationException::class);
-        }
 
         $condition = AbstractCondition::getChildrenOfClass($xml);
         $audienceRestriction = AudienceRestriction::getChildrenOfClass($xml);
@@ -184,8 +164,8 @@ final class Conditions extends AbstractSamlElement implements SchemaValidatableE
         );
 
         return new static(
-            $notBefore !== null ? new DateTimeImmutable($notBefore) : null,
-            $notOnOrAfter !== null ? new DateTimeImmutable($notOnOrAfter) : null,
+            self::getOptionalAttribute($xml, 'NotBefore', SAMLDateTimeValue::class, null),
+            self::getOptionalAttribute($xml, 'NotOnOrAfter', SAMLDateTimeValue::class, null),
             $condition,
             $audienceRestriction,
             array_pop($oneTimeUse),
@@ -205,11 +185,11 @@ final class Conditions extends AbstractSamlElement implements SchemaValidatableE
         $e = $this->instantiateParentElement($parent);
 
         if ($this->getNotBefore() !== null) {
-            $e->setAttribute('NotBefore', $this->getNotBefore()->format(C::DATETIME_FORMAT));
+            $e->setAttribute('NotBefore', $this->getNotBefore()->getValue());
         }
 
         if ($this->getNotOnOrAfter() !== null) {
-            $e->setAttribute('NotOnOrAfter', $this->getNotOnOrAfter()->format(C::DATETIME_FORMAT));
+            $e->setAttribute('NotOnOrAfter', $this->getNotOnOrAfter()->getValue());
         }
 
         foreach ($this->getCondition() as $condition) {

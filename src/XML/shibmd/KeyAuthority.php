@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\shibmd;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\ExtendableAttributesTrait;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\{ExtendableAttributesTrait, SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\Type\UnsignedByteValue;
 use SimpleSAML\XML\XsNamespace as NS;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 
@@ -36,16 +35,15 @@ final class KeyAuthority extends AbstractShibmdElement implements SchemaValidata
      * Create a KeyAuthority.
      *
      * @param \SimpleSAML\XMLSecurity\XML\ds\KeyInfo[] $keys
-     * @param int|null $VerifyDepth
+     * @param \SimpleSAML\XML\Type\UnsignedByteValue|null $VerifyDepth
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
         protected array $keys,
-        protected ?int $VerifyDepth = null,
+        protected ?UnsignedByteValue $VerifyDepth = null,
         array $namespacedAttributes = [],
     ) {
         Assert::maxCount($keys, C::UNBOUNDED_LIMIT);
-        Assert::nullOrRange($VerifyDepth, 0, 255);
 
         $this->setAttributesNS($namespacedAttributes);
     }
@@ -54,9 +52,9 @@ final class KeyAuthority extends AbstractShibmdElement implements SchemaValidata
     /**
      * Collect the value of the VerifyDepth-property
      *
-     * @return int|null
+     * @return \SimpleSAML\XML\Type\UnsigedByteValue|null
      */
-    public function getVerifyDepth(): ?int
+    public function getVerifyDepth(): ?UnsignedByteValue
     {
         return $this->VerifyDepth;
     }
@@ -87,8 +85,7 @@ final class KeyAuthority extends AbstractShibmdElement implements SchemaValidata
         Assert::same($xml->localName, 'KeyAuthority', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, KeyAuthority::NS, InvalidDOMElementException::class);
 
-        $verifyDepth = self::getOptionalIntegerAttribute($xml, 'VerifyDepth', 1);
-        Assert::natural($verifyDepth);
+        $verifyDepth = self::getOptionalAttribute($xml, 'VerifyDepth', UnsignedByteValue::class, null);
 
         $keys = KeyInfo::getChildrenOfClass($xml);
         Assert::minCount($keys, 1);
@@ -98,9 +95,9 @@ final class KeyAuthority extends AbstractShibmdElement implements SchemaValidata
 
 
     /**
-     * Convert this Scope to XML.
+     * Convert this KeyAuthority to XML.
      *
-     * @param \DOMElement|null $parent The element we should append this Scope to.
+     * @param \DOMElement|null $parent The element we should append this KeyAuthority to.
      * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement

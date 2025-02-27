@@ -4,49 +4,52 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DateTimeImmutable;
 use DOMText;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\md\AbstractMdElement;
-use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
-use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
-use SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation;
-use SimpleSAML\SAML2\XML\md\AffiliateMember;
-use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
-use SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor;
-use SimpleSAML\SAML2\XML\md\AttributeService;
-use SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor;
-use SimpleSAML\SAML2\XML\md\AuthnQueryService;
-use SimpleSAML\SAML2\XML\md\AuthzService;
-use SimpleSAML\SAML2\XML\md\ContactPerson;
-use SimpleSAML\SAML2\XML\md\EmailAddress;
-use SimpleSAML\SAML2\XML\md\EntityDescriptor;
-use SimpleSAML\SAML2\XML\md\Extensions;
-use SimpleSAML\SAML2\XML\md\IDPSSODescriptor;
-use SimpleSAML\SAML2\XML\md\Organization;
-use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
-use SimpleSAML\SAML2\XML\md\OrganizationName;
-use SimpleSAML\SAML2\XML\md\OrganizationURL;
-use SimpleSAML\SAML2\XML\md\PDPDescriptor;
-use SimpleSAML\SAML2\XML\md\SingleSignOnService;
-use SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor;
-use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
-use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
+use SimpleSAML\SAML2\Type\{
+    SAMLAnyURIValue,
+    SAMLDateTimeValue,
+    EmailAddressValue,
+    EntityIDValue,
+    SAMLStringValue,
+};
+use SimpleSAML\SAML2\XML\md\{
+    AbstractMdElement,
+    AbstractMetadataDocument,
+    AbstractSignedMdElement,
+    AdditionalMetadataLocation,
+    AffiliateMember,
+    AffiliationDescriptor,
+    AttributeAuthorityDescriptor,
+    AttributeService,
+    AuthnAuthorityDescriptor,
+    AuthnQueryService,
+    AuthzService,
+    ContactPerson,
+    EmailAddress,
+    EntityDescriptor,
+    Extensions,
+    IDPSSODescriptor,
+    Organization,
+    OrganizationDisplayName,
+    OrganizationName,
+    OrganizationURL,
+    PDPDescriptor,
+    SingleSignOnService,
+    UnknownRoleDescriptor,
+};
+use SimpleSAML\SAML2\XML\mdrpi\{PublicationInfo, UsagePolicy};
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Exception\{MissingAttributeException, TooManyElementsException};
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\{DurationValue, IDValue, LanguageValue, StringValue};
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
-use function str_pad;
 use function strval;
 
 /**
@@ -86,17 +89,16 @@ final class EntityDescriptorTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', StringValue::fromString('testval1'));
 
-        $entityid = C::ENTITY_IDP;
-        $id = "_5A3CHB081";
-        $now = 1580895565;
-        $duration = "P2Y6M5DT12H35M30S";
+        $entityid = EntityIDValue::fromString(C::ENTITY_IDP);
+        $id = IDValue::fromString("_5A3CHB081");
+        $duration = DurationValue::fromString("P2Y6M5DT12H35M30S");
         $idpssod = new IDPSSODescriptor(
             [
                 new SingleSignOnService(
-                    C::BINDING_HTTP_REDIRECT,
-                    'https://engine.test.example.edu/authentication/idp/single-sign-on',
+                    SAMLAnyURIValue::fromString(C::BINDING_HTTP_REDIRECT),
+                    SAMLAnyURIValue::fromString('https://engine.test.example.edu/authentication/idp/single-sign-on'),
                 ),
             ],
             [C::NS_SAMLP],
@@ -104,8 +106,8 @@ final class EntityDescriptorTest extends TestCase
         $attrad = new AttributeAuthorityDescriptor(
             [
                 new AttributeService(
-                    C::BINDING_SOAP,
-                    'https://idp.example.org/AttributeService',
+                    SAMLAnyURIValue::fromString(C::BINDING_SOAP),
+                    SAMLAnyURIValue::fromString('https://idp.example.org/AttributeService'),
                 ),
             ],
             [C::NS_SAMLP],
@@ -113,8 +115,8 @@ final class EntityDescriptorTest extends TestCase
         $authnad = new AuthnAuthorityDescriptor(
             [
                 new AuthnQueryService(
-                    C::BINDING_HTTP_REDIRECT,
-                    'http://www.example.com/aqs',
+                    SAMLAnyURIValue::fromString(C::BINDING_HTTP_REDIRECT),
+                    SAMLAnyURIValue::fromString('http://www.example.com/aqs'),
                 ),
             ],
             [C::NS_SAMLP],
@@ -122,47 +124,85 @@ final class EntityDescriptorTest extends TestCase
         $pdpd = new PDPDescriptor(
             [
                 new AuthzService(
-                    C::BINDING_SOAP,
-                    'https://IdentityProvider.com/SAML/AA/SOAP',
+                    SAMLAnyURIValue::fromString(C::BINDING_SOAP),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/AA/SOAP'),
                 ),
             ],
             [C::NS_SAMLP],
         );
         $org = new Organization(
-            [new OrganizationName('en', 'orgNameTest (en)')],
-            [new OrganizationDisplayName('en', 'orgDispNameTest (en)')],
-            [new OrganizationURL('en', 'https://IdentityProvider.com')],
+            [
+                new OrganizationName(
+                    LanguageValue::fromString('en'),
+                    SAMLStringValue::fromString('orgNameTest (en)'),
+                ),
+            ],
+            [
+                new OrganizationDisplayName(
+                    LanguageValue::fromString('en'),
+                    SAMLStringValue::fromString('orgDispNameTest (en)'),
+                ),
+            ],
+            [
+                new OrganizationURL(
+                    LanguageValue::fromString('en'),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com'),
+                ),
+            ],
         );
         $contacts = [
             new ContactPerson(
-                contactType: 'support',
-                emailAddress: [new EmailAddress('help@example.edu')],
+                contactType: SAMLStringValue::fromString('support'),
+                emailAddress: [
+                    new EmailAddress(
+                        EmailAddressValue::fromString('help@example.edu'),
+                    ),
+                ],
             ),
             new ContactPerson(
-                contactType: 'technical',
-                emailAddress: [new EmailAddress('root@example.edu')],
+                contactType: SAMLStringValue::fromString('technical'),
+                emailAddress: [
+                    new EmailAddress(
+                        EmailAddressValue::fromString('root@example.edu'),
+                    ),
+                ],
             ),
             new ContactPerson(
-                contactType: 'administrative',
-                emailAddress: [new EmailAddress('info@example.edu')],
+                contactType: SAMLStringValue::fromString('administrative'),
+                emailAddress: [
+                    new EmailAddress(
+                        EmailAddressValue::fromString('info@example.edu'),
+                    ),
+                ],
             ),
         ];
         $mdloc = [
-            new AdditionalMetadataLocation(C::NAMESPACE, 'https://example.edu/some/metadata.xml'),
-            new AdditionalMetadataLocation(C::NAMESPACE, 'https://example.edu/more/metadata.xml'),
+            new AdditionalMetadataLocation(
+                SAMLAnyURIValue::fromString(C::NAMESPACE),
+                SAMLAnyURIValue::fromString('https://example.edu/some/metadata.xml'),
+            ),
+            new AdditionalMetadataLocation(
+                SAMLAnyURIValue::fromString(C::NAMESPACE),
+                SAMLAnyURIValue::fromString('https://example.edu/more/metadata.xml'),
+            ),
         ];
         $extensions = new Extensions([
             new PublicationInfo(
-                publisher: 'http://publisher.ra/',
-                creationInstant: new DateTimeImmutable('2020-02-03T13:46:24Z'),
-                usagePolicy: [new UsagePolicy('en', 'http://publisher.ra/policy.txt')],
+                publisher: SAMLStringValue::fromString('http://publisher.ra/'),
+                creationInstant: SAMLDateTimeValue::fromString('2020-02-03T13:46:24Z'),
+                usagePolicy: [
+                    new UsagePolicy(
+                        LanguageValue::fromString('en'),
+                        SAMLAnyURIValue::fromString('http://publisher.ra/policy.txt'),
+                    ),
+                ],
             ),
         ]);
 
         $ed = new EntityDescriptor(
             entityId: $entityid,
             id: $id,
-            validUntil: new DateTimeImmutable('2020-02-05T09:39:25Z'),
+            validUntil: SAMLDateTimeValue::fromString('2020-02-05T09:39:25Z'),
             cacheDuration: $duration,
             extensions: $extensions,
             roleDescriptor: [
@@ -229,45 +269,90 @@ XML
             ,
         );
 
-        $entityid = C::ENTITY_IDP;
-        $id = "_5A3CHB081";
-        $duration = "P2Y6M5DT12H35M30S";
-        $ad = new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_OTHER)]);
+        $entityid = EntityIDValue::fromString(C::ENTITY_IDP);
+        $id = IDValue::fromString("_5A3CHB081");
+        $duration = DurationValue::fromString("P2Y6M5DT12H35M30S");
+        $ad = new AffiliationDescriptor(
+            $entityid,
+            [
+                new AffiliateMember(
+                    EntityIDValue::fromString(C::ENTITY_OTHER),
+                ),
+            ],
+        );
         $org = new Organization(
-            [new OrganizationName('en', 'orgNameTest (en)')],
-            [new OrganizationDisplayName('en', 'orgDispNameTest (en)')],
-            [new OrganizationURL('en', 'https://IdentityProvider.com')],
+            [
+                new OrganizationName(
+                    LanguageValue::fromString('en'),
+                    SAMLStringValue::fromString('orgNameTest (en)'),
+                ),
+            ],
+            [
+                new OrganizationDisplayName(
+                    LanguageValue::fromString('en'),
+                    SAMLStringValue::fromString('orgDispNameTest (en)'),
+                ),
+            ],
+            [
+                new OrganizationURL(
+                    LanguageValue::fromString('en'),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com'),
+                ),
+            ],
         );
         $contacts = [
             new ContactPerson(
-                contactType: 'support',
-                emailAddress: [new EmailAddress('help@example.edu')],
+                contactType: SAMLStringValue::fromString('support'),
+                emailAddress: [
+                    new EmailAddress(
+                        EmailAddressValue::fromString('help@example.edu'),
+                    ),
+                ],
             ),
             new ContactPerson(
-                contactType: 'technical',
-                emailAddress: [new EmailAddress('root@example.edu')],
+                contactType: SAMLStringValue::fromString('technical'),
+                emailAddress: [
+                    new EmailAddress(
+                        EmailAddressValue::fromString('root@example.edu'),
+                    ),
+                ],
             ),
             new ContactPerson(
-                contactType: 'administrative',
-                emailAddress: [new EmailAddress('info@example.edu')],
+                contactType: SAMLStringValue::fromString('administrative'),
+                emailAddress: [
+                    new EmailAddress(
+                        EmailAddressValue::fromString('info@example.edu'),
+                    ),
+                ],
             ),
         ];
         $mdloc = [
-            new AdditionalMetadataLocation(C::NAMESPACE, 'https://example.edu/some/metadata.xml'),
-            new AdditionalMetadataLocation(C::NAMESPACE, 'https://example.edu/more/metadata.xml'),
+            new AdditionalMetadataLocation(
+                SAMLAnyURIValue::fromString(C::NAMESPACE),
+                SAMLAnyURIValue::fromString('https://example.edu/some/metadata.xml'),
+            ),
+            new AdditionalMetadataLocation(
+                SAMLAnyURIValue::fromString(C::NAMESPACE),
+                SAMLAnyURIValue::fromString('https://example.edu/more/metadata.xml'),
+            ),
         ];
         $extensions = new Extensions([
             new PublicationInfo(
-                publisher: 'http://publisher.ra/',
-                creationInstant: new DateTimeImmutable('2020-02-03T13:46:24Z'),
-                usagePolicy: [new UsagePolicy('en', 'http://publisher.ra/policy.txt')],
+                publisher: SAMLStringValue::fromString('http://publisher.ra/'),
+                creationInstant: SAMLDateTimeValue::fromString('2020-02-03T13:46:24Z'),
+                usagePolicy: [
+                    new UsagePolicy(
+                        LanguageValue::fromString('en'),
+                        SAMLAnyURIValue::fromString('http://publisher.ra/policy.txt'),
+                    ),
+                ],
             ),
         ]);
 
         $ed = new EntityDescriptor(
             entityId: $entityid,
             id: $id,
-            validUntil: new DateTimeImmutable('2020-02-05T09:39:25Z'),
+            validUntil: SAMLDateTimeValue::fromString('2020-02-05T09:39:25Z'),
             cacheDuration: $duration,
             extensions: $extensions,
             affiliationDescriptor: $ad,
@@ -275,10 +360,10 @@ XML
             contactPerson: $contacts,
             additionalMetadataLocation: $mdloc,
         );
-        $this->assertEquals($entityid, $ed->getEntityID());
-        $this->assertEquals($id, $ed->getID());
-        $this->assertEquals('2020-02-05T09:39:25Z', $ed->getValidUntil()->format(C::DATETIME_FORMAT));
-        $this->assertEquals($duration, $ed->getCacheDuration());
+        $this->assertEquals($entityid, $ed->getEntityID()->getValue());
+        $this->assertEquals($id, $ed->getID()->getValue());
+        $this->assertEquals('2020-02-05T09:39:25Z', $ed->getValidUntil()->getValue());
+        $this->assertEquals($duration, $ed->getCacheDuration()->getValue());
         $this->assertEmpty($ed->getRoleDescriptor());
         $this->assertInstanceOf(AffiliationDescriptor::class, $ed->getAffiliationDescriptor());
         $this->assertEquals(
@@ -297,7 +382,9 @@ XML
         $this->expectExceptionMessage(
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.',
         );
-        new EntityDescriptor(C::ENTITY_SP);
+        new EntityDescriptor(
+            EntityIDValue::fromString(C::ENTITY_SP),
+        );
     }
 
 
@@ -307,7 +394,14 @@ XML
     public function testMarshallingWithAffiliationAndRoleDescriptors(): void
     {
         $xmlRepresentation = clone self::$xmlRepresentation;
-        $affiliationDescriptor = new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_SP)]);
+        $affiliationDescriptor = new AffiliationDescriptor(
+            EntityIDValue::fromString(C::ENTITY_IDP),
+            [
+                new AffiliateMember(
+                    EntityIDValue::fromString(C::ENTITY_SP),
+                ),
+            ],
+        );
         $affiliationDescriptor->toXML($xmlRepresentation->documentElement);
 
         $this->expectException(ProtocolViolationException::class);
@@ -316,36 +410,6 @@ XML
         );
 
         EntityDescriptor::fromXML($xmlRepresentation->documentElement);
-    }
-
-
-    /**
-     * Test that creating an EntityDescriptor from scratch fails if an empty entityID is provided.
-     */
-    public function testMarshallingWithEmptyEntityID(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        new EntityDescriptor(
-            entityId: '',
-            affiliationDescriptor: new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_SP)]),
-        );
-    }
-
-
-    /**
-     * Test that creating an EntityDescriptor from scratch with a very long entityID fails.
-     */
-    public function testMarshallingWithLongEntityID(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage(
-            sprintf('An entityID cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
-        );
-
-        new EntityDescriptor(
-            entityId: str_pad('urn:x-simplesamlphp:', C::ENTITYID_MAX_LENGTH + 1, 'a'),
-            affiliationDescriptor: new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_OTHER)]),
-        );
     }
 
 
@@ -367,7 +431,7 @@ XML
             'urn:x-simplesamlphp:namespace',
         );
 
-        $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', 'ssp:UnknownRoleDescriptor');
+        $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', StringValue::fromString('ssp:UnknownRoleDescriptor'));
         $type->toXML($customd);
 
         $newline = new DOMText("\n  ");
@@ -394,7 +458,7 @@ XML
         );
         $this->assertEquals(C::ENTITY_IDP, $entityDescriptor->getEntityID());
         $this->assertEquals('_5A3CHB081', $entityDescriptor->getID());
-        $this->assertEquals('2020-02-05T09:39:25Z', $entityDescriptor->getValidUntil()->format(C::DATETIME_FORMAT));
+        $this->assertEquals('2020-02-05T09:39:25Z', $entityDescriptor->getValidUntil()->getValue());
         $this->assertEquals('P2Y6M5DT12H35M30S', $entityDescriptor->getCacheDuration());
 
         $roleDescriptors = $entityDescriptor->getRoleDescriptor();
@@ -474,30 +538,6 @@ XML
         $this->expectExceptionMessage(
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.',
         );
-        EntityDescriptor::fromXML($document->documentElement);
-    }
-
-
-    /**
-     * Test that creating an EntityDescriptor from XML fails with an invalid validUntil attribute.
-     */
-    public function testUnmarshallingWithInvalidValidUntil(): void
-    {
-        $entity_idp = C::ENTITY_IDP;
-        $entity_sp = C::ENTITY_SP;
-
-        $document = DOMDocumentFactory::fromString(
-            <<<XML
-<EntityDescriptor validUntil="asdf" entityID="{$entity_idp}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
-    <AffiliationDescriptor affiliationOwnerID="{$entity_idp}">
-        <AffiliateMember>{$entity_sp}</AffiliateMember>
-    </AffiliationDescriptor>
-</EntityDescriptor>
-XML
-            ,
-        );
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('\'asdf\' is not a valid xs:dateTime');
         EntityDescriptor::fromXML($document->documentElement);
     }
 

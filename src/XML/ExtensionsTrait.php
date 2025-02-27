@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\ElementInterface;
@@ -72,11 +72,11 @@ trait ExtensionsTrait
      */
     public function isEmptyElement(): bool
     {
-        if (empty($this->extensions)) {
+        if (empty($this->getList())) {
             return true;
         }
 
-        foreach ($this->extensions as $extension) {
+        foreach ($this->getList() as $extension) {
             if ($extension->isEmptyElement() === false) {
                 return false;
             }
@@ -96,9 +96,11 @@ trait ExtensionsTrait
     {
         $e = $this->instantiateParentElement($parent);
 
-        foreach ($this->extensions as $extension) {
-            if (!$extension->isEmptyElement()) {
-                $extension->toXML($e);
+        if (!$this->isEmptyElement()) {
+            foreach ($this->getList() as $extension) {
+                if (!$extension->isEmptyElement()) {
+                    $extension->toXML($e);
+                }
             }
         }
 

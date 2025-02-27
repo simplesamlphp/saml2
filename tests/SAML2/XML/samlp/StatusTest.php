@@ -5,20 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
 use DOMDocument;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
-use SimpleSAML\SAML2\XML\samlp\Status;
-use SimpleSAML\SAML2\XML\samlp\StatusCode;
-use SimpleSAML\SAML2\XML\samlp\StatusDetail;
-use SimpleSAML\SAML2\XML\samlp\StatusMessage;
-use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\SAML2\XML\samlp\{AbstractSamlpElement, Status, StatusCode, StatusDetail, StatusMessage};
+use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
 
 use function dirname;
 use function strval;
@@ -63,14 +57,16 @@ final class StatusTest extends TestCase
     {
         $status = new Status(
             new StatusCode(
-                C::STATUS_RESPONDER,
+                SAMLAnyURIValue::fromString(C::STATUS_RESPONDER),
                 [
                     new StatusCode(
-                        C::STATUS_REQUEST_DENIED,
+                        SAMLAnyURIValue::fromString(C::STATUS_REQUEST_DENIED),
                     ),
                 ],
             ),
-            new StatusMessage('Something went wrong'),
+            new StatusMessage(
+                SAMLStringValue::fromString('Something went wrong'),
+            ),
             [
                 StatusDetail::fromXML(
                     DOMDocumentFactory::fromFile(
@@ -93,14 +89,16 @@ final class StatusTest extends TestCase
     {
         $status = new Status(
             new StatusCode(
-                C::STATUS_RESPONDER,
+                SAMLAnyURIValue::fromString(C::STATUS_RESPONDER),
                 [
                     new StatusCode(
-                        C::STATUS_REQUEST_DENIED,
+                        SAMLAnyURIValue::fromString(C::STATUS_REQUEST_DENIED),
                     ),
                 ],
             ),
-            new StatusMessage('Something went wrong'),
+            new StatusMessage(
+                SAMLStringValue::fromString('Something went wrong'),
+            ),
             [
                 new StatusDetail([new Chunk(self::$detail->documentElement)]),
             ],
