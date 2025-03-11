@@ -253,4 +253,37 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $hr->setDestination('gopher://myurl');
         $hr->send($response);
     }
+
+
+    /**
+     * Test that multiple query parameters with the same name are not allowed.
+     *
+     */
+    public function testDuplicateQueryParameters() : void
+    {
+        // SAMLRequest appears twice
+        $qs = 'SAMLRequest=first&RelayState=somestate&SAMLRequest=second&Signature=sig&&SigAlg=alg';
+        $_SERVER['QUERY_STRING'] = $qs;
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Duplicate parameter.');
+        $hr = new HTTPRedirect();
+        $hr->receive();
+    }
+
+    /**
+     * Test that providing both SAMLRequest and SAMLResponse is not allowed
+     */
+    public function testSAMLResponseAndSAMLRequestConfusion() : void
+    {
+        // Both SAMLRequest and SAML Response appear
+        $qs = 'SAMLRequest=first&RelayState=somestate&SAMLResponse=second&Signature=sig&&SigAlg=alg';
+        $_SERVER['QUERY_STRING'] = $qs;
+
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Both SAMLRequest and SAMLResponse provided.');
+        $hr = new HTTPRedirect();
+        $hr->receive();
+    }
+
 }
