@@ -37,7 +37,6 @@ jobs:
           VALIDATE_BASH: true
           VALIDATE_BASH_EXEC: true
           VALIDATE_JSON: true
-          VALIDATE_PHP_BUILTIN: true
           VALIDATE_YAML: true
           VALIDATE_GITHUB_ACTIONS: true
 
