@@ -224,7 +224,7 @@ class HTTPRedirect extends Binding
      * @return array The query data that is signed.
      * @throws \Exception
      */
-    private static function parseQuery() : array
+    private static function parseQuery(): array
     {
         /*
          * Parse the query string. We need to do this ourself, so that we get access
