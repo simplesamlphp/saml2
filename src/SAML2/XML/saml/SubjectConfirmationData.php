@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
@@ -168,7 +168,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
             // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
             $NotBefore = preg_replace('/([.][0-9]+Z)$/', 'Z', $NotBefore, 1);
 
-            Assert::validDateTimeZulu($NotBefore, ProtocolViolationException::class);
+            Assert::validDateTime($NotBefore, ProtocolViolationException::class);
             $NotBefore = new DateTimeImmutable($NotBefore);
         }
 
@@ -177,7 +177,7 @@ final class SubjectConfirmationData extends AbstractSamlElement
             // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
             $NotOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $NotOnOrAfter, 1);
 
-            Assert::validDateTimeZulu($NotOnOrAfter, ProtocolViolationException::class);
+            Assert::validDateTime($NotOnOrAfter, ProtocolViolationException::class);
             $NotOnOrAfter = new DateTimeImmutable($NotOnOrAfter);
         }
 

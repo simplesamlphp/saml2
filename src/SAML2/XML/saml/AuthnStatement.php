@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -135,7 +135,7 @@ final class AuthnStatement extends AbstractStatementType
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
         $authnInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $authnInstant, 1);
 
-        Assert::validDateTimeZulu($authnInstant, ProtocolViolationException::class);
+        Assert::validDateTime($authnInstant, ProtocolViolationException::class);
         $authnInstant = new DateTimeImmutable($authnInstant);
 
         $sessionNotOnOrAfter = self::getOptionalAttribute($xml, 'SessionNotOnOrAfter', null);
@@ -143,7 +143,7 @@ final class AuthnStatement extends AbstractStatementType
             // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
             $sessionNotOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $sessionNotOnOrAfter, 1);
 
-            Assert::validDateTimeZulu($sessionNotOnOrAfter, ProtocolViolationException::class);
+            Assert::validDateTime($sessionNotOnOrAfter, ProtocolViolationException::class);
             $sessionNotOnOrAfter = new DateTimeImmutable($sessionNotOnOrAfter);
         }
 

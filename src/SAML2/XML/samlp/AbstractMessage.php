@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DateTimeImmutable;
 use DOMDocument;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;

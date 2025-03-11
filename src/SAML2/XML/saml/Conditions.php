@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
@@ -148,7 +148,7 @@ final class Conditions extends AbstractSamlElement
             // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
             $notBefore = preg_replace('/([.][0-9]+Z)$/', 'Z', $notBefore, 1);
 
-            Assert::validDateTimeZulu($notBefore, ProtocolViolationException::class);
+            Assert::validDateTime($notBefore, ProtocolViolationException::class);
         }
 
         $notOnOrAfter = self::getOptionalAttribute($xml, 'NotOnOrAfter', null);
@@ -156,7 +156,7 @@ final class Conditions extends AbstractSamlElement
             // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
             $notOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $notOnOrAfter, 1);
 
-            Assert::validDateTimeZulu($notOnOrAfter, ProtocolViolationException::class);
+            Assert::validDateTime($notOnOrAfter, ProtocolViolationException::class);
         }
 
         $condition = AbstractCondition::getChildrenOfClass($xml);

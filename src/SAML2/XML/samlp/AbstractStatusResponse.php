@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 

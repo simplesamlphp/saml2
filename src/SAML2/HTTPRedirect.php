@@ -120,42 +120,27 @@ class HTTPRedirect extends Binding
      */
     public function receive(ServerRequestInterface $request): AbstractMessage
     {
-        $query = $this->parseQuery();
-        $signedQuery = $query['SignedQuery'];
-
-        /**
-         * Get the SAMLRequest/SAMLResponse from the exact same signed data that will be verified later in
-         * validateSignature into $res using the actual SignedQuery
-         */
-        $res = [];
-        foreach (explode('&', $signedQuery) as $e) {
-            $tmp = explode('=', $e, 2);
-            $name = $tmp[0];
-            if (count($tmp) === 2) {
-                $value = $tmp[1];
-            } else {
-                /* No value for this parameter. */
-                $value = '';
-            }
-            $name = urldecode($name);
-            $res[$name] = urldecode($value);
-        }
+        $query = $request->getQueryParams();
 
         /**
          * Put the SAMLRequest/SAMLResponse from the actual query string into $message,
          * and assert that the result from parseQuery() in $query and the parsing of the SignedQuery in $res agree
          */
-        if (array_key_exists('SAMLRequest', $res)) {
-            Assert::same($res['SAMLRequest'], $query['SAMLRequest'], 'Parse failure.');
-            $message = $res['SAMLRequest'];
-        } elseif (array_key_exists('SAMLResponse', $res)) {
-            Assert::same($res['SAMLResponse'], $query['SAMLResponse'], 'Parse failure.');
-            $message = $res['SAMLResponse'];
+        if (array_key_exists('SAMLRequest', $query)) {
+            $message = urldecode($query['SAMLRequest']);
+            $signedQuery = 'SAMLRequest=' . $query['SAMLRequest'];
+        } elseif (array_key_exists('SAMLResponse', $query)) {
+            $message = urldecode($query['SAMLResponse']);
+            $signedQuery = 'SAMLResponse=' . $query['SAMLResponse'];
         } else {
             throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
 
-        if (isset($query['SAMLEncoding']) && $query['SAMLEncoding'] !== C::BINDING_HTTP_REDIRECT_DEFLATE) {
+        if (array_key_exists('SAMLRequest', $query) && array_key_exists('SAMLResponse', $query)) {
+            throw new Exception('Both SAMLRequest and SAMLResponse provided.');
+        }
+
+        if (isset($query['SAMLEncoding']) && urldecode($query['SAMLEncoding']) !== C::BINDING_HTTP_REDIRECT_DEFLATE) {
             throw new Exception(sprintf('Unknown SAMLEncoding: %s', $query['SAMLEncoding']));
         }
 
@@ -174,7 +159,8 @@ class HTTPRedirect extends Binding
         $message = MessageFactory::fromXML($document->documentElement);
 
         if (array_key_exists('RelayState', $query)) {
-            $this->setRelayState($query['RelayState']);
+            $this->setRelayState(urldecode($query['RelayState']));
+            $signedQuery .= '&RelayState=' . $query['RelayState'];
         }
 
         if (!array_key_exists('Signature', $query)) {
@@ -192,83 +178,22 @@ class HTTPRedirect extends Binding
 
         if (!array_key_exists('SigAlg', $query)) {
             throw new Exception('Missing signature algorithm.');
+        } else {
+            $signedQuery .= '&SigAlg=' . $query['SigAlg'];
         }
 
         $container = ContainerSingleton::getInstance();
         $blacklist = $container->getBlacklistedEncryptionAlgorithms();
         $verifier = (new SignatureAlgorithmFactory($blacklist))->getAlgorithm(
-            $query['SigAlg'],
+            urldecode($query['SigAlg']),
             // TODO:  Need to use the key from the metadata
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
-        if ($verifier->verify($signedQuery, base64_decode($query['Signature'])) === false) {
+        if ($verifier->verify($signedQuery, base64_decode(urldecode($query['Signature']))) === false) {
             throw new SignatureVerificationFailedException('Failed to verify signature.');
         }
 
         return $message;
-    }
-
-
-    /**
-     * Helper function to parse query data.
-     *
-     * This function returns the query string split into key=>value pairs.
-     * It also adds a new parameter, SignedQuery, which contains the data that is
-     * signed.
-     *
-     * @return array The query data that is signed.
-     * @throws \Exception
-     */
-    private static function parseQuery(): array
-    {
-        /*
-         * Parse the query string. We need to do this ourself, so that we get access
-         * to the raw (urlencoded) values. This is required because different software
-         * can urlencode to different values.
-         */
-        $data = [];
-        $relayState = '';
-        $sigAlg = '';
-        $sigQuery = '';
-
-        foreach (explode('&', $_SERVER['QUERY_STRING']) as $e) {
-            $tmp = explode('=', $e, 2);
-            $name = $tmp[0];
-            if (count($tmp) === 2) {
-                $value = $tmp[1];
-            } else {
-                /* No value for this parameter. */
-                $value = '';
-            }
-
-            $name = urldecode($name);
-            // Prevent keys from being set more than once
-            if (array_key_exists($name, $data)) {
-                throw new Exception('Duplicate parameter.');
-            }
-            $data[$name] = urldecode($value);
-
-            switch ($name) {
-                case 'SAMLRequest':
-                case 'SAMLResponse':
-                    $sigQuery = $name . '=' . $value;
-                    break;
-                case 'RelayState':
-                    $relayState = '&RelayState=' . $value;
-                    break;
-                case 'SigAlg':
-                    $sigAlg = '&SigAlg=' . $value;
-                    break;
-            }
-        }
-
-        if (array_key_exists('SAMLRequest', $data) && array_key_exists('SAMLResponse', $data)) {
-                throw new Exception('Both SAMLRequest and SAMLResponse provided.');
-        }
-
-        $data['SignedQuery'] = $sigQuery . $relayState . $sigAlg;
-
-        return $data;
     }
 }

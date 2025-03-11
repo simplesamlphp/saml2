@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Assert\Assert;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -252,7 +252,7 @@ class AuthnRequest extends AbstractRequest
         // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
         $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
 
-        Assert::validDateTimeZulu($issueInstant, ProtocolViolationException::class);
+        Assert::validDateTime($issueInstant, ProtocolViolationException::class);
         $issueInstant = new DateTimeImmutable($issueInstant);
 
         $attributeConsumingServiceIndex = self::getOptionalIntegerAttribute(
