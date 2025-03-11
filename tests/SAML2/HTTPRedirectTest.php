@@ -382,6 +382,7 @@ final class HTTPRedirectTest extends TestCase
      */
     public function testDuplicateQueryParameters(): void
     {
+        /* @phpstan-ignore array.duplicateKey */
         $q = ['SAMLRequest' => 'noot', 'SAMLRequest' => 'jet&wim', 'RelayState' => 'etc'];
         $request = new ServerRequest('GET', 'http://tnyholm.se');
         $request = $request->withQueryParams($q);
