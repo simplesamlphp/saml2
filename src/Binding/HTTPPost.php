@@ -92,9 +92,11 @@ class HTTPPost extends Binding
         }
 
         $msgStr = base64_decode($msgStr, true);
-        $msgStr = DOMDocumentFactory::fromString($msgStr)->saveXML();
 
-        $document = DOMDocumentFactory::fromString($msgStr);
+        $document = DOMDocumentFactory::fromString(
+            xml: $msgStr,
+            schemaFile: $this->getSchemaValidation() ? self::$schemaFile : null,
+        );
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
 
         $msg = MessageFactory::fromXML($document->documentElement);
