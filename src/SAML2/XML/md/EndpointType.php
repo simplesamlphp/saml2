@@ -59,7 +59,7 @@ class EndpointType
         if (!$xml->hasAttribute('Binding')) {
             throw new \Exception('Missing Binding on '.$xml->tagName);
         }
-        $this->Binding = $xml->getAttribute('Binding');
+        $this->setBinding($xml->getAttribute('Binding'));
 
         if (!$xml->hasAttribute('Location')) {
             throw new \Exception('Missing Location on '.$xml->tagName);
@@ -230,11 +230,12 @@ class EndpointType
      *
      * @param \DOMElement $parent The element we should append this endpoint to.
      * @param string $name The name of the element we should create.
+     * @param string $namespace The namespace of the element we should create
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent, string $name) : DOMElement
+    protected function toXMLInternal(DOMElement $parent, string $namespace, string $name) : DOMElement
     {
-        $e = $parent->ownerDocument->createElementNS(Constants::NS_MD, $name);
+        $e = $parent->ownerDocument->createElementNS($namespace, $name);
         $parent->appendChild($e);
 
         if (empty($this->Binding)) {
@@ -256,5 +257,18 @@ class EndpointType
         }
 
         return $e;
+    }
+
+
+    /**
+     * Convert this Attribute to XML.
+     *
+     * @param \DOMElement $parent The element we should append this Attribute to.
+     * @param string $name
+     * @return \DOMElement
+     */
+    public function toXML(DOMElement $parent, string $name) : \DOMElement
+    {
+        return $this->toXMLInternal($parent, Constants::NS_MD, $name);
     }
 }

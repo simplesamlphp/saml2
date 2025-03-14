@@ -25,8 +25,8 @@ class EndpointTypeTest extends \PHPUnit\Framework\TestCase
 
         $document = DOMDocumentFactory::fromString('<root />');
         $endpointTypeElement = $endpointType->toXML($document->firstChild, 'md:Test');
-
         $endpointTypeElements = Utils::xpQuery($endpointTypeElement, '/root/saml_metadata:Test');
+
         $this->assertCount(1, $endpointTypeElements);
         $endpointTypeElement = $endpointTypeElements[0];
 

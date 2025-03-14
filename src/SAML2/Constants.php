@@ -232,6 +232,11 @@ class Constants
     const NS_ECP = 'urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp';
 
     /**
+     * The namespace for the IDP Discovery protocol.
+     */
+    const NS_IDPDISC = 'urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol';
+
+    /**
      * The namespace for the SOAP protocol.
      */
     const NS_SOAP = 'http://schemas.xmlsoap.org/soap/envelope/';

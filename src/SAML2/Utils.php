@@ -172,7 +172,7 @@ class Utils
 
         /** @var XMLSecurityDSig $objXMLSecDSig */
         $objXMLSecDSig = $info['Signature'];
-        
+
         /**
          * @var \DOMElement[] $sigMethod
          * @var \DOMElement $objXMLSecDSig->sigNode
@@ -221,6 +221,7 @@ class Utils
             $xpCache->registerNamespace('saml_protocol', Constants::NS_SAMLP);
             $xpCache->registerNamespace('saml_assertion', Constants::NS_SAML);
             $xpCache->registerNamespace('saml_metadata', Constants::NS_MD);
+            $xpCache->registerNamespace('saml_idpdisc', Constants::NS_IDPDISC);
             $xpCache->registerNamespace('ds', XMLSecurityDSig::XMLDSIGNS);
             $xpCache->registerNamespace('xenc', XMLSecEnc::XMLENCNS);
         }
