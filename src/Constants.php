@@ -463,6 +463,11 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const ENTITYID_MAX_LENGTH = 1024;
 
     /**
+     * The maximum size in bytes for any RelayState as per specification
+     */
+    public const MAX_RELAY_STATE_LENGTH = 80;
+
+    /**
      * The maximum size for any entityid as per SAML2INT-specification
      */
     public const SAML2INT_ENTITYID_MAX_LENGTH = 256;

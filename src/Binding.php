@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2;
 
-use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\{ResponseInterface, ServerRequestInterface};
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Binding\{HTTPArtifact, HTTPPost, HTTPRedirect, SOAP};
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
@@ -163,6 +163,7 @@ abstract class Binding
      */
     public function setRelayState(?string $relayState = null): void
     {
+        Assert::nullOrValidRelayState($relayState);
         $this->relayState = $relayState;
     }
 
