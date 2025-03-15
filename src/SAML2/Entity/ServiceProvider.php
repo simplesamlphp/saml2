@@ -9,6 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\{
     Binding,
+    Constants as C,
     Metadata,
     MetadataProviderInterface,
     StateProviderInterface,
@@ -16,7 +17,12 @@ use SimpleSAML\SAML2\{
     Utils,
 };
 use SimpleSAML\SAML2\Binding\HTTPArtifact;
-use SimpleSAML\SAML2\Exception\{MetadataNotFoundException, RemoteException, RuntimeException};
+use SimpleSAML\SAML2\Exception\{
+    MetadataNotFoundException,
+    ProtocolViolationException,
+    RemoteException,
+    RuntimeException,
+};
 use SimpleSAML\SAML2\Exception\Protocol\{RequestDeniedException, ResourceNotRecognizedException};
 use SimpleSAML\SAML2\Process\Validator\ResponseValidator;
 use SimpleSAML\SAML2\XML\saml\{
@@ -163,6 +169,18 @@ final class ServiceProvider
         $this->responseWasSigned = $rawResponse->isSigned();
         $verifiedResponse = $this->responseWasSigned ? $this->verifyElementSignature($rawResponse) : $rawResponse;
 
+        /**
+         * 4.1.4.1:  The <Issuer> element MAY be omitted, but if present it MUST contain the unique identifier
+         * of the issuing identity provider; the Format attribute MUST be omitted or have a value of
+         * urn:oasis:names:tc:SAML:2.0:nameid-format:entity.
+         */
+        Assert::nullOrSame(
+            $verifiedResponse->getIssuer()?->getFormat(),
+            C::NAMEID_ENTITY,
+            ProtocolViolationException::class,
+        );
+        $issuer = $verifiedResponse->getIssuer()?->getContent();
+
         $state = null;
         $stateId = $verifiedResponse->getInResponseTo();
 
@@ -185,7 +203,6 @@ final class ServiceProvider
             }
         }
 
-        $issuer = $verifiedResponse->getIssuer()->getContent();
         if ($state === null) {
             if ($this->enableUnsolicited === false) {
                 throw new RequestDeniedException('Unsolicited responses are denied by configuration.');
@@ -220,6 +237,17 @@ final class ServiceProvider
 
         // Decrypt and verify assertions, then rebuild the response.
         $verifiedAssertions = $this->decryptAndVerifyAssertions($verifiedResponse->getAssertions());
+
+        /**
+         * It MUST contain at least one <Assertion>. Each assertion's <Issuer> element MUST contain the
+         * unique identifier of the issuing identity provider; the Format attribute MUST be omitted or have a value
+         * of urn:oasis:names:tc:SAML:2.0:nameid-format:entity.
+         */
+        Assert::minCount($verifiedAssertions, 1, ProtocolViolationException::class);
+        foreach ($verifiedAssertions->getIssuer()->getFormat() as $format) {
+            Assert::nullOrSame($format, C::NAMEID_ENTITY, ProtocolViolationException::class);
+        }
+
         $decryptedResponse = new Response(
             $verifiedResponse->getStatus(),
             $verifiedResponse->getIssueInstant(),
