@@ -10,6 +10,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Binding;
+use SimpleSAML\SAML2\Binding\RelayStateTrait;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
@@ -28,6 +29,8 @@ use function base64_encode;
  */
 class HTTPPost extends Binding
 {
+    use RelayStateTrait;
+
     /**
      * Send a SAML 2 message using the HTTP-POST binding.
      *

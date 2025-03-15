@@ -14,6 +14,7 @@ use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
 use SimpleSAML\SAML2\Binding;
+use SimpleSAML\SAML2\Binding\RelayStateTrait;
 use SimpleSAML\SAML2\SOAPClient;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -43,6 +44,8 @@ use function var_export;
  */
 class HTTPArtifact extends Binding
 {
+    use RelayStateTrait;
+
     /**
      * @psalm-suppress UndefinedDocblockClass
      * @psalm-suppress UndefinedClass
