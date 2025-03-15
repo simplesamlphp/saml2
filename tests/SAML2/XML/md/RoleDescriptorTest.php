@@ -229,7 +229,8 @@ final class RoleDescriptorTest extends TestCase
         $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', 'ssp:UnknownRoleDescriptorType');
         $type->toXML($element);
 
-        $descriptor = UnknownRoleDescriptor::fromXML($element);
+        $descriptor = AbstractRoleDescriptor::fromXML($element);
+        $this->assertInstanceOf(UnknownRoleDescriptor::class, $descriptor);
 
         $this->assertCount(2, $descriptor->getKeyDescriptor());
         $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptor()[0]);
