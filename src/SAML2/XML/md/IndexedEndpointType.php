@@ -104,11 +104,12 @@ class IndexedEndpointType extends EndpointType
      *
      * @param \DOMElement $parent The element we should append this endpoint to.
      * @param string $name The name of the element we should create.
+     * @param string $namespace The namesapce of the element we should create.
      * @return \DOMElement
      */
-    public function toXML(DOMElement $parent, string $name) : DOMElement
+    protected function toXMLInternal(DOMElement $parent, string $namespace, string $name) : DOMElement
     {
-        $e = parent::toXML($parent, $name);
+        $e = parent::toXMLInternal($parent, $namespace, $name);
         $e->setAttribute('index', strval($this->index));
 
         if (is_bool($this->isDefault)) {
