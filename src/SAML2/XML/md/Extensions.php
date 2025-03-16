@@ -102,7 +102,11 @@ class Extensions
         $parent->appendChild($extElement);
 
         foreach ($extensions as $ext) {
-            $ext->toXML($extElement);
+            if ($ext instanceof DiscoveryResponse) {
+                $ext->toXML($extElement, 'idpdisc:DiscoveryResponse');
+            } else {
+                $ext->toXML($extElement);
+            }
         }
     }
 }
