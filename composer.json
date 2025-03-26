@@ -24,7 +24,6 @@
         "ext-filter": "*",
         "ext-openssl": "*",
         "ext-pcre": "*",
-        "ext-soap": "*",
         "ext-zlib": "*",
 
         "nyholm/psr7": "^1.8",
@@ -35,6 +34,9 @@
         "simplesamlphp/xml-common": "~1.24.0",
         "simplesamlphp/xml-security": "~1.13.0",
         "simplesamlphp/xml-soap": "~1.7.0"
+    },
+    "suggest": {
+        "ext-soap": "*"
     },
     "require-dev": {
         "ext-intl": "*",
