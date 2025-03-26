@@ -309,8 +309,8 @@ final class HTTPRedirectTest extends TestCase
      */
     public function testDuplicateQueryParameters(): void
     {
-        /* @phpstan-ignore array.duplicateKey */
         $q = [
+            /** @phpstan-ignore array.duplicateKey */
             'SAMLRequest' => 'nVLBauMwEP0Vo7sjW7FpKpJA2rBsoNuGOruHXhZFHm8EsuRqxtv27yvbWWgvYelFgjfvzbx5zBJVazu56enkHuG5B6TktbUO5VhYsT446RUalE61gJK0rDY/7qSYZbILnrz2ln2QXFYoRAhkvGPJbrtiv7VoygJEoTJ9LOusXDSFuJ4vdH6cxwoIEGUjsrqoFUt+QcCoXLHYKMoRe9g5JOUoQlleprlI8/yQz6W4ksXiiSXbuI1xikbViahDyfkRSM2wD40DmjnL0bSdhcE6Hx7BTd3xqnqoIPw1GmbdqWPJNx80jCGtGIUeWLL5t8mtd9i3EM78n493/zWr9XVvx+58mj39IlUaR/QmKOPq4Dtkyf4c9E1EjPtzOePjREL5/XDYp/uH6sDWy6G3HDML66+5ayO7VlHx2dySf2y9nM7pPprabffeGv02ZNcquux5QEydNiNVUlAODTiKMVvrX24DKIJz8nw9jfx8tOt3',
             'SAMLRequest' => 'hVLLbttADPwVYe+ylJXsyAvbgBujqIG0MWK3h1wCVkvFC+xDXVJp+/ddywmS9uCeCJAznOGACwJne7Ue+Ojv8ceAxNkvZz2pcbAUQ/QqABlSHhyS4lbt159vlZyUqo+BQxuseEe5zAAijGyCF9l2sxSPjZ41jW5npZxjpWvsrisoZ9ddV8NU6is5nTczXTfTeS2ybxgpMZciLUp0ogG3nhg8p1Ypq7y8ymV1kJUqa1XJB5Ft0jXGA4+sI3NPqiiM7icuhBxiezTPOPG2cEEPFif9sS9OJ5wgBRn/ZHFvnvyd32N8Ni2KbP1q/yZ4GhzGl8nX+9s3AY0u/E+BzlXm0NLY1djBYDmnXmS7l1g/GK+Ti8uJfj+DSH06HHb57m5/EKvFabcaE4qrV1v/OEoOHDJoYFgU7/GL80d8SUrbzS5Y0/7OPobogC8bOXWMzrsRqjiCJ4OeU2jWhp83EYFxKTgOKIrVWfLvv1v9AQ==',
             'RelayState' => 'https://demo.moo-archive.nl/module.php/admin/test/default-sp',
@@ -324,8 +324,8 @@ final class HTTPRedirectTest extends TestCase
         $hr = new HTTPRedirect();
         $hr->receive($request);
 
-        /* @phpstan-ignore array.duplicateKey */
         $q = [
+            /** @phpstan-ignore array.duplicateKey */
             'SAMLRequest' => 'hVLLbttADPwVYe+ylJXsyAvbgBujqIG0MWK3h1wCVkvFC+xDXVJp+/ddywmS9uCeCJAznOGACwJne7Ue+Ojv8ceAxNkvZz2pcbAUQ/QqABlSHhyS4lbt159vlZyUqo+BQxuseEe5zAAijGyCF9l2sxSPjZ41jW5npZxjpWvsrisoZ9ddV8NU6is5nTczXTfTeS2ybxgpMZciLUp0ogG3nhg8p1Ypq7y8ymV1kJUqa1XJB5Ft0jXGA4+sI3NPqiiM7icuhBxiezTPOPG2cEEPFif9sS9OJ5wgBRn/ZHFvnvyd32N8Ni2KbP1q/yZ4GhzGl8nX+9s3AY0u/E+BzlXm0NLY1djBYDmnXmS7l1g/GK+Ti8uJfj+DSH06HHb57m5/EKvFabcaE4qrV1v/OEoOHDJoYFgU7/GL80d8SUrbzS5Y0/7OPobogC8bOXWMzrsRqjiCJ4OeU2jWhp83EYFxKTgOKIrVWfLvv1v9AQ==',
             'SAMLRequest' => 'nVLBauMwEP0Vo7sjW7FpKpJA2rBsoNuGOruHXhZFHm8EsuRqxtv27yvbWWgvYelFgjfvzbx5zBJVazu56enkHuG5B6TktbUO5VhYsT446RUalE61gJK0rDY/7qSYZbILnrz2ln2QXFYoRAhkvGPJbrtiv7VoygJEoTJ9LOusXDSFuJ4vdH6cxwoIEGUjsrqoFUt+QcCoXLHYKMoRe9g5JOUoQlleprlI8/yQz6W4ksXiiSXbuI1xikbViahDyfkRSM2wD40DmjnL0bSdhcE6Hx7BTd3xqnqoIPw1GmbdqWPJNx80jCGtGIUeWLL5t8mtd9i3EM78n493/zWr9XVvx+58mj39IlUaR/QmKOPq4Dtkyf4c9E1EjPtzOePjREL5/XDYp/uH6sDWy6G3HDML66+5ayO7VlHx2dySf2y9nM7pPprabffeGv02ZNcquux5QEydNiNVUlAODTiKMVvrX24DKIJz8nw9jfx8tOt3',
             'RelayState' => 'https://demo.moo-archive.nl/module.php/admin/test/default-sp',
