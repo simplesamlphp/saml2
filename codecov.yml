@@ -1,0 +1,18 @@
+---
+
+coverage:
+  status:
+    project:
+      default:
+        target: 0%
+        threshold: 2%
+    patch: false
+comment:
+  layout: "diff"
+  behavior: once
+  require_changes: true
+  require_base: false
+  require_head: true
+  branches: null
+github_checks:
+  annotations: false

@@ -39,8 +39,6 @@ final class SubjectConfirmationDataTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = SubjectConfirmationData::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -71,7 +69,7 @@ final class SubjectConfirmationDataTest extends TestCase
                 new KeyInfo([new KeyName('SomeKey')]),
                 new Chunk($arbitrary->documentElement),
             ],
-            [$attr1, $attr2]
+            [$attr1, $attr2],
         );
 
         $this->assertEquals(
@@ -138,10 +136,12 @@ final class SubjectConfirmationDataTest extends TestCase
     public function testUnmarshallingEmpty(): void
     {
         $samlNamespace = C::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <saml:SubjectConfirmationData xmlns:saml="{$samlNamespace}">
 </saml:SubjectConfirmationData>
 XML
+            ,
         );
 
         $subjectConfirmationData = SubjectConfirmationData::fromXML($document->documentElement);

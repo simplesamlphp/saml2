@@ -51,8 +51,6 @@ final class ContactPersonTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = ContactPerson::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -223,9 +221,11 @@ final class ContactPersonTest extends TestCase
     public function testUnmarshallingWithoutOptionalArguments(): void
     {
         $mdNamespace = C::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:ContactPerson contactType="other" xmlns:md="{$mdNamespace}"/>
 XML
+            ,
         );
         $cp = ContactPerson::fromXML($document->documentElement);
         $this->assertEquals($document->saveXML($document->documentElement), strval($cp));

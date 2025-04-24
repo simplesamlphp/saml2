@@ -116,14 +116,14 @@ final class NameIdDecryptionTransformerTest extends TestCase
             self::$destination,
             self::$identityProviderConfiguration,
             self::$serviceProviderConfiguration,
-            self::$response
+            self::$response,
         );
 
         $encryptor = (new KeyTransportAlgorithmFactory([]))->getAlgorithm(
             C::KEY_TRANSPORT_RSA_1_5,
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY),
         );
-        $nameId = new NameID('value', 'name_qualifier');
+        $nameId = new NameID('value', 'urn:x-simplesamlphp:namequalifier');
         $encryptedId = new EncryptedID($nameId->encrypt($encryptor));
 
         $assertion = new Assertion(
@@ -163,7 +163,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
 
         $this->assertInstanceOf(NameID::class, $identifier);
         $this->assertEquals('value', $identifier->getContent());
-        $this->assertEquals('name_qualifier', $identifier->getNameQualifier());
+        $this->assertEquals('urn:x-simplesamlphp:namequalifier', $identifier->getNameQualifier());
     }
 
 
@@ -187,6 +187,6 @@ final class NameIdDecryptionTransformerTest extends TestCase
 
         $this->assertInstanceOf(NameID::class, $identifier);
         $this->assertEquals('value', $identifier->getContent());
-        $this->assertEquals('name_qualifier', $identifier->getNameQualifier());
+        $this->assertEquals('urn:x-simplesamlphp:namequalifier', $identifier->getNameQualifier());
     }
 }

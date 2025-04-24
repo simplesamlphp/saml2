@@ -43,8 +43,8 @@ final class UtilsTest extends TestCase
     {
         $nameId_before = new NameID(
             'NameIDValue',
-            'OurNameQualifier',
-            'TheSPNameQualifier',
+            'urn:x-simplesamlphp:namequalifier',
+            'urn:x-simplesamlphp:spnamequalifier',
             C::NAMEID_TRANSIENT,
         );
 
@@ -59,7 +59,7 @@ final class UtilsTest extends TestCase
         /** @var \DOMNode $nameId_after[0] */
         $this->assertEquals('NameIDValue', $nameId_after[0]->textContent);
         $this->assertEquals(C::NAMEID_TRANSIENT, $nameId_after[0]->getAttribute("Format"));
-        $this->assertEquals('OurNameQualifier', $nameId_after[0]->getAttribute("NameQualifier"));
-        $this->assertEquals('TheSPNameQualifier', $nameId_after[0]->getAttribute("SPNameQualifier"));
+        $this->assertEquals('urn:x-simplesamlphp:namequalifier', $nameId_after[0]->getAttribute("NameQualifier"));
+        $this->assertEquals('urn:x-simplesamlphp:spnamequalifier', $nameId_after[0]->getAttribute("SPNameQualifier"));
     }
 }

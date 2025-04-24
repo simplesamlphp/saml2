@@ -60,7 +60,7 @@ final class EncryptionMethodTest extends TestCase
     {
         $alg = C::KEY_TRANSPORT_OAEP_MGF1P;
         $chunkXml = DOMDocumentFactory::fromString(
-            '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>'
+            '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>',
         );
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 

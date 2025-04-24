@@ -11,9 +11,9 @@ Test with the PHPCS configuration in `tools/phpcs/ruleset.xml`
 Use PHPUnit for Unit Testing.
 Test with the 2 known users: [SimpleSAMLphp][1] and [OpenConext-engineblock][2].
 
-## Using Tests in Development
+### Using Tests in Development
 
-In order to run the unittests, use `vendor/bin/phpunit -c tools/phpunit`
+In order to run the unittests, use `vendor/bin/phpunit`
 
 ## Contributing
 
@@ -26,5 +26,5 @@ Also when introducing a BC breaking change, please update the [UPGRADING.md](UPG
 
 [1]: https://www.simplesamlphp.org
 [2]: https://www.openconext.org
-[3]: https://github.com/simplesamlphp/saml2/wiki/SAML2-v1.0-Technical-Design
-[4]: https://github.com/simplesamlphp/saml2/wiki/Background
+[3]: https://github.com/simplesamlphp/saml2/wiki/Background
+[4]: https://github.com/simplesamlphp/saml2/wiki/SAML2-v1.0-Technical-Design

@@ -9,6 +9,7 @@ use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
 use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
@@ -19,7 +20,6 @@ use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
@@ -50,8 +50,6 @@ final class AffiliationDescriptorTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = AffiliationDescriptor::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -99,7 +97,7 @@ final class AffiliationDescriptorTest extends TestCase
      */
     public function testMarhsallingWithEmptyOwnerID(): void
     {
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
         new AffiliationDescriptor(
             affiliationOwnerId: '',
             affiliateMember: [new AffiliateMember(C::ENTITY_SP), new AffiliateMember(C::ENTITY_OTHER)],
@@ -132,11 +130,13 @@ final class AffiliationDescriptorTest extends TestCase
         $mdNamespace = AffiliationDescriptor::NS;
         $entity_idp = C::ENTITY_IDP;
 
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" affiliationOwnerID="{$entity_idp}" ID="TheID"
     validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
 </md:AffiliationDescriptor>
 XML
+            ,
         );
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('List of affiliated members must not be empty.');
@@ -153,13 +153,15 @@ XML
         $entity_other = C::ENTITY_OTHER;
         $entity_sp = C::ENTITY_SP;
 
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:AffiliationDescriptor xmlns:md="{$mdNamespace}" ID="TheID"
     validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S">
   <md:AffiliateMember>{$entity_sp}</md:AffiliateMember>
   <md:AffiliateMember>{$entity_other}</md:AffiliateMember>
 </md:AffiliationDescriptor>
 XML
+            ,
         );
 
         $this->expectException(MissingAttributeException::class);

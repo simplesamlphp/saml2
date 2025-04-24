@@ -40,12 +40,10 @@ final class PublicationInfoTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
-
         self::$testedClass = PublicationInfo::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/mdrpi_PublicationInfo.xml'
+            dirname(__FILE__, 4) . '/resources/xml/mdrpi_PublicationInfo.xml',
         );
 
         self::$arrayRepresentation = [
@@ -86,7 +84,10 @@ final class PublicationInfoTest extends TestCase
         $document->setAttribute('creationInstant', '2011-01-01T00:00:00WT');
 
         $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage("'2011-01-01T00:00:00WT' is not a valid DateTime");
+        $this->expectExceptionMessage(
+            "\"2011-01-01T00:00:00WT\" is not a DateTime expressed in the UTC timezone"
+            . " using the 'Z' timezone identifier.",
+        );
         PublicationInfo::fromXML($document);
     }
 
@@ -95,12 +96,14 @@ final class PublicationInfoTest extends TestCase
      */
     public function testMissingPublisherThrowsException(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
                        creationInstant="2011-01-01T00:00:00Z"
                        publicationId="SomePublicationId">
 </mdrpi:PublicationInfo>
 XML
+            ,
         );
 
         $this->expectException(MissingAttributeException::class);
@@ -122,7 +125,7 @@ XML
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
             'There MUST NOT be more than one <mdrpi:UsagePolicy>,'
-            . ' within a given <mdrpi:PublicationInfo>, for a given language'
+            . ' within a given <mdrpi:PublicationInfo>, for a given language',
         );
         PublicationInfo::fromXML($document);
     }

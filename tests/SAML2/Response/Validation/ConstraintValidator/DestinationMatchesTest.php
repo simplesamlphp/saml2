@@ -55,7 +55,7 @@ final class DestinationMatchesTest extends MockeryTestCase
     {
         $this->response->shouldReceive('getDestination')->once()->andReturn('FOO');
         $validator = new DestinationMatches(
-            new Destination('BAR')
+            new Destination('BAR'),
         );
         $result = new Result();
 

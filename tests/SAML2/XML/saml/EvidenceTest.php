@@ -51,8 +51,6 @@ final class EvidenceTest extends TestCase
      */
     protected function setUp(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = Evidence::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -104,7 +102,7 @@ final class EvidenceTest extends TestCase
         $evidence = new Evidence();
         $this->assertEquals(
             '<saml:Evidence xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"/>',
-            strval($evidence)
+            strval($evidence),
         );
         $this->assertTrue($evidence->isEmptyElement());
     }

@@ -17,7 +17,7 @@ ContainerSingleton::setContainer($container);
 
 $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
     C::KEY_TRANSPORT_OAEP,
-    PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)
+    PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
 );
 $nid = new NameID('very secret');
 $eid = new EncryptedID($nid->encrypt($encryptor));

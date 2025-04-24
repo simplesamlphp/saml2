@@ -41,12 +41,10 @@ final class SubjectConfirmationTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-ecp-2.0.xsd';
-
         self::$testedClass = SubjectConfirmation::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/ecp_SubjectConfirmation.xml'
+            dirname(__FILE__, 4) . '/resources/xml/ecp_SubjectConfirmation.xml',
         );
     }
 
@@ -70,7 +68,7 @@ final class SubjectConfirmationTest extends TestCase
                 new KeyInfo([new KeyName('SomeKey')]),
                 new Chunk($arbitrary->documentElement),
             ],
-            [$attr1, $attr2]
+            [$attr1, $attr2],
         );
 
         $subjectConfirmation = new SubjectConfirmation(C::CM_BEARER, $subjectConfirmationData);

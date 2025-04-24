@@ -72,8 +72,6 @@ final class AuthnRequestTest extends TestCase
     {
         self::$clock = Utils::getContainer()->getClock();
 
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = AuthnRequest::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -122,13 +120,13 @@ final class AuthnRequestTest extends TestCase
 
         // Create Subject
         $subject = new Subject(
-            new Issuer('some issuer'),
+            new Issuer('urn:x-simplesamlphp:issuer'),
         );
 
         // Create NameIDPolicy
         $nameIdPolicy = new NameIDPolicy(
             'urn:the:format',
-            'TheSPNameQualifier',
+            'urn:x-simplesamlphp:spnamequalifier',
             true,
         );
 
@@ -167,7 +165,7 @@ final class AuthnRequestTest extends TestCase
             nameIdPolicy: $nameIdPolicy,
             conditions: $conditions,
             issuer: new Issuer('https://gateway.stepup.org/saml20/sp/metadata'),
-            scoping: $scoping
+            scoping: $scoping,
         );
 
         $authnRequestElement = $authnRequest->toXML();
@@ -450,7 +448,7 @@ AUTHNREQUEST;
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage(
             'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide '
-            . 'exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
+            . 'exactly one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>',
         );
         AuthnRequest::fromXML(DOMDocumentFactory::fromString($xml)->documentElement);
     }

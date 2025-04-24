@@ -38,8 +38,6 @@ final class KeyDescriptorTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = KeyDescriptor::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -131,13 +129,15 @@ XML
      */
     public function testUnmarshallingWithoutOptionalParameters(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:KeyDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
   <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
     <ds:KeyName>IdentityProvider.com SSO Key</ds:KeyName>
   </ds:KeyInfo>
 </md:KeyDescriptor>
 XML
+            ,
         );
 
         $kd = KeyDescriptor::fromXML($document->documentElement);

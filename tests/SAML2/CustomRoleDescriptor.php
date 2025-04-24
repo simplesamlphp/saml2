@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
 use SimpleSAML\SAML2\XML\md\ContactPerson;
 use SimpleSAML\SAML2\XML\md\Extensions;
@@ -64,7 +65,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
         array $keyDescriptor = [],
         ?Organization $organization = null,
         array $contact = [],
-        array $namespacedAttributes = []
+        array $namespacedAttributes = [],
     ) {
         Assert::allIsInstanceOf($chunk, Chunk::class);
 
@@ -112,7 +113,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
         Assert::true(
             $xml->hasAttributeNS(C::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:RoleDescriptor> element.',
-            InvalidDOMElementException::class
+            InvalidDOMElementException::class,
         );
 
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');
@@ -121,7 +122,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
         $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
 
         $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
-        Assert::nullOrValidDateTimeZulu($validUntil);
+        SAMLAssert::nullOrValidDateTime($validUntil);
 
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
@@ -173,7 +174,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this RoleDescriptor.
      */
-    public function toUnsignedXML(DOMElement $parent = null): DOMElement
+    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toUnsignedXML($parent);
 

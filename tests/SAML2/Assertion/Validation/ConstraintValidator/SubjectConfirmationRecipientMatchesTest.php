@@ -29,7 +29,7 @@ final class SubjectConfirmationRecipientMatchesTest extends TestCase
         $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationRecipientMatches(
-            new Destination('anotherDestination')
+            new Destination('anotherDestination'),
         );
         $result = new Result();
 
@@ -49,7 +49,7 @@ final class SubjectConfirmationRecipientMatchesTest extends TestCase
         $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
 
         $validator = new SubjectConfirmationRecipientMatches(
-            new Destination('theSameDestination')
+            new Destination('theSameDestination'),
         );
         $result = new Result();
 

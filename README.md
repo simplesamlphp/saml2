@@ -1,10 +1,14 @@
 # SimpleSAMLphp SAML2 library
 
-[![Build Status](https://travis-ci.org/simplesamlphp/saml2.png?branch=feature/fix-build)](https://travis-ci.org/simplesamlphp/saml2) [![Coverage Status](https://img.shields.io/coveralls/simplesamlphp/saml2.svg)](https://coveralls.io/r/simplesamlphp/saml2)
+![CI](https://github.com/simplesamlphp/saml2/actions/workflows/php.yml/badge.svg)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/simplesamlphp/saml2/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/simplesamlphp/saml2/?branch=master)
+[![Coverage Status](https://codecov.io/gh/simplesamlphp/saml2/branch/master/graph/badge.svg)](https://codecov.io/gh/simplesamlphp/saml2)
+[![Type coverage](https://shepherd.dev/github/simplesamlphp/saml2/coverage.svg)](https://shepherd.dev/github/simplesamlphp/saml2)
+[![Psalm Level](https://shepherd.dev/github/simplesamlphp/saml2/level.svg)](https://shepherd.dev/github/simplesamlphp/saml2)
 
-A PHP library for SAML2 related functionality. Extracted from [SimpleSAMLphp](https://www.simplesamlphp.org),
-used by [OpenConext](https://www.openconext.org).
-This library started as a collaboration between [UNINETT](https://www.uninett.no) and [SURFnet](https://www.surfnet.nl) but everyone is invited to contribute.
+A PHP library for SAML2 related functionality.
+
+It is used by several products, most notably [SimpleSAMLphp](https://www.simplesamlphp.org) and [OpenConext](https://www.openconext.org).
 
 ## Before you use it
 
@@ -17,12 +21,14 @@ Note that the **HTTP Artifact Binding and SOAP client do not work** outside of S
 
 ## Which version to pick?
 
-The latest released version (`5.x` range) is the _only supported version_.
+The latest released version (`4.x` range) is the _preferred version_.
+The `3.x branch` is our LTS branch and will be supported as long as supported releases of [SimpleSAMLphp](https://www.simplesamlphp.org) are using this branch.
 
-All other branches (`4.x` and earlier) are no longer supported and will not receive any maintenance or
+All other branches (`3.x` and earlier) are no longer supported and will not receive any maintenance or
 (security) fixes. Do not use these versions.
 
-Also be sure to check the [UPGRADING.md](UPGRADING.md) file if you are upgrading from an older version to `>= 5.x`. Here
+We conform to [Semantic Versioning](https://semver.org/).
+Be sure to check the [UPGRADING.md](UPGRADING.md) file if you are upgrading from an older version. Here
 you will find instructions on how to deal with BC breaking changes between versions.
 
 ## Usage
@@ -30,10 +36,10 @@ you will find instructions on how to deal with BC breaking changes between versi
 * Install with [Composer](https://getcomposer.org/doc/00-intro.md), run the following command in your project:
 
 ```bash
-composer require simplesamlphp/saml2:^5.0
+composer require simplesamlphp/saml2:^4.0
 ```
 
-* Provide the required external dependencies by extending and implementing the ```SAML2\Compat\AbstractContainer```
+* Provide the required external dependencies by extending and implementing the ```\SimpleSAML\SAML2\Compat\AbstractContainer```
   then injecting it in the ContainerSingleton (see example below).
 
 * **Make sure you've read the security section below**.
@@ -43,36 +49,31 @@ composer require simplesamlphp/saml2:^5.0
 Example:
 
 ```php
-// Use Composers autoloading
-require 'vendor/autoload.php';
+    // Use Composers autoloading
+    require 'vendor/autoload.php';
 
-// Implement the Container interface (out of scope for example)
-require 'container.php';
-SimpleSAML\SAML2\Compat\ContainerSingleton::setContainer($container);
+    // Implement the Container interface (out of scope for example)
+    require 'container.php';
+    \SimpleSAML\SAML2\Compat\ContainerSingleton::setContainer($container);
 
-// Set up an AuthnRequest
-$id = $container->generateId();
-$issuer = new SimpleSAML\SAML2\XML\saml\Issuer('https://sp.example.edu');
-$destination = 'https://idp.example.edu';
-$request = new SimpleSAML\SAML2\XML\samlp\AuthnRequest(
-    id: $id,
-    issuer: $issuer,
-    destination: $destination,
-);
+    // Create Issuer
+    $issuer = new \SimpleSAML\SAML2\XML\saml\Issuer('https://sp.example.edu');
 
+    // Instantiate XML Random utils
+    $randomUtils = new \SimpleSAML\XML\Utils\Random();
 
-// Send it off using the HTTP-Redirect binding
-$binding = new SimpleSAML\SAML2\HTTPRedirect();
-$binding->send($request);
+    // Set up an AuthnRequest
+    $request = new \SimpleSAML\SAML2\XML\samlp\AuthnRequest(
+        $issuer,
+        $randomUtils->generateId(),
+        null,
+        'https://idp.example.edu'
+    );
+
+    // Send it off using the HTTP-Redirect binding
+    $binding = new \SimpleSAML\SAML2\HTTPRedirect();
+    $binding->send($request);
 ```
-
-## Security
-
-* Should you need to create a DOMDocument instance, use the `SimpleSAML\XML\DOMDocumentFactory` to create DOMDocuments from
-  either a string (`SimpleSAML\XML\DOMDocumentFactory::fromString($theXmlAsString)`), a file (`SimpleSAML\XML\DOMDocumentFactory::fromFile($pathToTheFile)`)
-  or just a new instance (`SimpleSAML\XML\DOMDocumentFactory::create()`). This in order to protect yourself against the
-  [XXE Processing Vulnerability](https://www.owasp.org/index.php/XML_External_Entity_(XXE)_Processing), as well as
-  [XML Entity Expansion](https://phpsecurity.readthedocs.org/en/latest/Injection-Attacks.html#defenses-against-xml-entity-expansion) attacks
 
 ## License
 

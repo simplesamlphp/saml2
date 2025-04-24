@@ -18,7 +18,7 @@ ContainerSingleton::setContainer($container);
 
 $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
     C::KEY_TRANSPORT_OAEP_MGF1P,
-    PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)
+    PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
 );
 
 $document = DOMDocumentFactory::fromFile(dirname(__FILE__, 2) . '/resources/xml/saml_Assertion.xml');

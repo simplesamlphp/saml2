@@ -1,4 +1,7 @@
-<saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="TheName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" FriendlyName="TheFriendlyName" test:attr1="testval1" test:attr2="testval2" xmlns:test="urn:test:something">
+<saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="TheName" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic" FriendlyName="TheFriendlyName" test:attr1="testval1" test:attr2="testval2" xmlns:test="urn:test:something">
   <saml:AttributeValue>FirstValue</saml:AttributeValue>
   <saml:AttributeValue>SecondValue</saml:AttributeValue>
+  <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:integer">3</saml:AttributeValue>
+  <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:dateTime">2024-04-04T04:44:44Z</saml:AttributeValue>
+  <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:nil="1"/>
 </saml:Attribute>

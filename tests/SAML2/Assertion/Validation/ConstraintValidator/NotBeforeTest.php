@@ -43,14 +43,14 @@ final class NotBeforeTest extends TestCase
         self::$clock = Utils::getContainer()->getClock();
 
         // Create an Issuer
-        self::$issuer = new Issuer('testIssuer');
+        self::$issuer = new Issuer('urn:x-simplesamlphp:issuer');
 
         // Create the statements
         self::$authnStatement = new AuthnStatement(
             new AuthnContext(
                 new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                 null,
-                null
+                null,
             ),
             self::$clock->now(),
         );

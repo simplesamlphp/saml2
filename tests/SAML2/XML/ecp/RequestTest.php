@@ -38,12 +38,10 @@ final class RequestTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-ecp-2.0.xsd';
-
         self::$testedClass = Request::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/ecp_Request.xml'
+            dirname(__FILE__, 4) . '/resources/xml/ecp_Request.xml',
         );
     }
 
@@ -53,9 +51,9 @@ final class RequestTest extends TestCase
     public function testMarshalling(): void
     {
         $issuer = new Issuer(
-            'TheIssuerValue',
-            'TheNameQualifier',
-            'TheSPNameQualifier',
+            'urn:x-simplesamlphp:issuer',
+            'urn:x-simplesamlphp:namequalifier',
+            'urn:x-simplesamlphp:spnamequalifier',
             'urn:the:format',
             'TheSPProvidedID',
         );

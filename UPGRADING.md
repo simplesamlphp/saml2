@@ -2,13 +2,19 @@
 
 ## 4.x to 5.0
 
-### Namespaces have changed
+### Namespace migration
 
-All classes have been renamed from `SAML2\MyClass` to `SimpleSAML\SAML2\MyClass`.
+All the classes had their namespace changed from SAML2 to SimpleSAML\SAML2.
 
-### Bindings now implement PSR-7
+### NameIDPolicy BC breaking change
 
-The bindings now take a PSR-7 request and will respond with a PSR-7 response.
+The NameIDPolicy can no longer be represented as an array, but has to be handled using
+the newly added NameIDPolicy-class.
+
+### StatusResponse BC breaking change
+
+The API of the StatusResponse-class has been slightly changed; getStatus/setStatus will now handle Status-objects
+instead of the previous array
 
 ## 4.0 to 4.1
 
@@ -30,9 +36,9 @@ This problem was fixed in [#120](https://github.com/simplesamlphp/saml2/pull/120
 If you are using the assertion processor as a stand-alone component, then you will have to update your code to reflect this
 change, see: [e6c01fa](https://github.com/simplesamlphp/saml2/commit/e6c01fa9b0e815682e24916f03a84d245480c4a0).
 
-### NameID's and Issuers
+### NameIDs and Issuers
 
-In pre 4.0 releases we allowed both objects and arrays to be used for Issuers and nameID's. We know only support objects.
+In pre 4.0 releases we allowed both objects and arrays to be used for Issuers and nameIDs. We know only support objects.
 If in your code you use something like this:
 
 ```php

@@ -37,13 +37,10 @@ final class SigningMethodTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5)
-            . '/resources/schemas/sstc-saml-metadata-algsupport-v1.0.xsd';
-
         self::$testedClass = SigningMethod::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/alg_SigningMethod.xml'
+            dirname(__FILE__, 4) . '/resources/xml/alg_SigningMethod.xml',
         );
     }
 
@@ -58,7 +55,7 @@ final class SigningMethodTest extends TestCase
             4096,
             [
                 new Chunk(DOMDocumentFactory::fromString(
-                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>'
+                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
                 )->documentElement),
             ],
         );

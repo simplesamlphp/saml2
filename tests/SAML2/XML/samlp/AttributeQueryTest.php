@@ -61,8 +61,6 @@ final class AttributeQueryTest extends TestCase
     {
         self::$clock = Utils::getContainer()->getClock();
 
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = AttributeQuery::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -130,7 +128,7 @@ final class AttributeQueryTest extends TestCase
             attributes: [
                 new Attribute(
                     name: 'test1',
-                    nameFormat: C::NAMEFORMAT_URI,
+                    nameFormat: C::NAMEFORMAT_BASIC,
                     attributeValue: [
                         new AttributeValue('test1_attrv1'),
                         new AttributeValue('test1_attrv2'),
@@ -138,7 +136,7 @@ final class AttributeQueryTest extends TestCase
                 ),
                 new Attribute(
                     name: 'test2',
-                    nameFormat: C::NAMEFORMAT_URI,
+                    nameFormat: C::NAMEFORMAT_BASIC,
                     attributeValue: [
                         new AttributeValue('test2_attrv1'),
                         new AttributeValue('test2_attrv2'),
@@ -147,7 +145,7 @@ final class AttributeQueryTest extends TestCase
                 ),
                 new Attribute(
                     name: 'test3',
-                    nameFormat: C::NAMEFORMAT_URI,
+                    nameFormat: C::NAMEFORMAT_BASIC,
                 ),
             ],
         );
@@ -159,11 +157,11 @@ final class AttributeQueryTest extends TestCase
         $attributes = XPath::xpQuery($attributeQueryElement, './saml_assertion:Attribute', $xpCache);
         $this->assertCount(3, $attributes);
         $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));
-        $this->assertEquals(C::NAMEFORMAT_URI, $attributes[0]->getAttribute('NameFormat'));
+        $this->assertEquals(C::NAMEFORMAT_BASIC, $attributes[0]->getAttribute('NameFormat'));
         $this->assertEquals('test2', $attributes[1]->getAttribute('Name'));
-        $this->assertEquals(C::NAMEFORMAT_URI, $attributes[1]->getAttribute('NameFormat'));
+        $this->assertEquals(C::NAMEFORMAT_BASIC, $attributes[1]->getAttribute('NameFormat'));
         $this->assertEquals('test3', $attributes[2]->getAttribute('Name'));
-        $this->assertEquals(C::NAMEFORMAT_URI, $attributes[2]->getAttribute('NameFormat'));
+        $this->assertEquals(C::NAMEFORMAT_BASIC, $attributes[2]->getAttribute('NameFormat'));
 
         // Sanity check: test if values are still ok
         $av1 = XPath::xpQuery($attributes[0], './saml_assertion:AttributeValue', $xpCache);
@@ -358,7 +356,7 @@ XML;
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage(
             'A <saml:Subject> not containing <saml:SubjectConfirmation> should provide exactly '
-            . 'one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>'
+            . 'one of <saml:BaseID>, <saml:NameID> or <saml:EncryptedID>',
         );
 
         AttributeQuery::fromXML($document->documentElement);

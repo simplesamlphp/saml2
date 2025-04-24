@@ -38,15 +38,13 @@ final class NameIDTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = NameID::class;
 
         self::$arrayRepresentation = [
             'value' => 'TheNameIDValue',
             'Format' => 'urn:the:format',
-            'NameQualifier' => 'TheNameQualifier',
-            'SPNameQualifier' => 'TheSPNameQualifier',
+            'NameQualifier' => 'urn:x-simplesamlphp:namequalifier',
+            'SPNameQualifier' => 'urn:x-simplesamlphp:spnamequalifier',
             'SPProvidedID' => 'TheSPProvidedID',
         ];
 
@@ -65,8 +63,8 @@ final class NameIDTest extends TestCase
     {
         $nameId = new NameID(
             'TheNameIDValue',
-            'TheNameQualifier',
-            'TheSPNameQualifier',
+            'urn:x-simplesamlphp:namequalifier',
+            'urn:x-simplesamlphp:spnamequalifier',
             'urn:the:format',
             'TheSPProvidedID',
         );

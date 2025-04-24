@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\ServiceName;
@@ -40,8 +41,6 @@ final class ServiceNameTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = ServiceName::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -74,8 +73,8 @@ final class ServiceNameTest extends TestCase
      */
     public function testMarshallingWithEmptyLang(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('xml:lang cannot be empty.');
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
 
         new ServiceName('', 'Academic Journals R US');
     }
@@ -107,8 +106,8 @@ final class ServiceNameTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $xmlRepresentation->documentElement->setAttributeNS(C::NS_XML, 'lang', '');
 
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('xml:lang cannot be empty.');
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
 
         ServiceName::fromXML($xmlRepresentation->documentElement);
     }

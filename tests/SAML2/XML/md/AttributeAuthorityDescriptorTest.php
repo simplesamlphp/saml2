@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
 use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
@@ -23,7 +24,6 @@ use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
@@ -61,8 +61,6 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = AttributeAuthorityDescriptor::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -121,6 +119,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
                 new AttributeProfile(C::PROFILE_2),
             ],
             [$attr1, $attr2],
+            'phpunit',
         );
 
         $this->assertEquals(
@@ -207,7 +206,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithEmptyNameIDFormat(): void
     {
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
         new AttributeAuthorityDescriptor([self::$as], [C::NS_SAMLP], [self::$aidrs], [new NameIDFormat('')]);
     }
 
@@ -217,7 +216,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithEmptyAttributeProfile(): void
     {
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
         new AttributeAuthorityDescriptor(
             [self::$as],
             [C::NS_SAMLP],
@@ -237,12 +236,14 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     public function testUnmarshallingWithoutOptionalElements(): void
     {
         $mdns = C::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
   <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
       Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
 </md:AttributeAuthorityDescriptor>
 XML
+            ,
         );
 
         $aad = AttributeAuthorityDescriptor::fromXML($document->documentElement);
@@ -265,15 +266,17 @@ XML
     public function testUnmarshallingWithEmptyNameIDFormat(): void
     {
         $mdns = C::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
   <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
       Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
   <md:NameIDFormat></md:NameIDFormat>
 </md:AttributeAuthorityDescriptor>
 XML
+            ,
         );
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
         AttributeAuthorityDescriptor::fromXML($document->documentElement);
     }
 
@@ -284,15 +287,17 @@ XML
     public function testUnmarshallingWithEmptyAttributeProfile(): void
     {
         $mdns = C::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:md="{$mdns}">
   <md:AttributeService Binding="urn:oasis:names:tc:SAML:2.0:bindings:SOAP"
       Location="https://IdentityProvider.com/SAML/AA/SOAP"/>
   <md:AttributeProfile></md:AttributeProfile>
 </md:AttributeAuthorityDescriptor>
 XML
+            ,
         );
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
         AttributeAuthorityDescriptor::fromXML($document->documentElement);
     }
 }

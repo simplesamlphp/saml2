@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
 use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
@@ -35,7 +36,6 @@ use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
@@ -86,6 +86,13 @@ final class RoleDescriptorTest extends TestCase
     }
 
 
+    public function setUp(): void
+    {
+        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
+            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_RoleDescriptor.xml',
+        );
+    }
+
     /**
      */
     public static function tearDownAfterClass(): void
@@ -108,8 +115,8 @@ final class RoleDescriptorTest extends TestCase
         $roleDescriptor = new CustomRoleDescriptor(
             [
                 new Chunk(DOMDocumentFactory::fromString(
-                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>'
-                )->documentElement)
+                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
+                )->documentElement),
             ],
             [C::NS_SAMLP, C::PROTOCOL],
             'TheID',
@@ -117,8 +124,8 @@ final class RoleDescriptorTest extends TestCase
             'PT5000S',
             new Extensions([new Chunk(
                 DOMDocumentFactory::fromString(
-                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>'
-                )->documentElement
+                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
+                )->documentElement,
             )]),
             'https://error.reporting/',
             [
@@ -212,7 +219,7 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingUnregistered(): void
     {
-        $element = clone self::$xmlRepresentation->documentElement;
+        $element = self::$xmlRepresentation->documentElement;
         $element->setAttributeNS(
             'http://www.w3.org/2000/xmlns/',
             'xmlns:ssp',
@@ -222,7 +229,8 @@ final class RoleDescriptorTest extends TestCase
         $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', 'ssp:UnknownRoleDescriptorType');
         $type->toXML($element);
 
-        $descriptor = UnknownRoleDescriptor::fromXML($element);
+        $descriptor = AbstractRoleDescriptor::fromXML($element);
+        $this->assertInstanceOf(UnknownRoleDescriptor::class, $descriptor);
 
         $this->assertCount(2, $descriptor->getKeyDescriptor());
         $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptor()[0]);
@@ -263,15 +271,14 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutSupportedProtocols(): void
     {
-        $xmlRepresentation = clone self::$xmlRepresentation;
-        $xmlRepresentation->documentElement->removeAttribute('protocolSupportEnumeration');
+        self::$xmlRepresentation->documentElement->removeAttribute('protocolSupportEnumeration');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage(
             'Missing \'protocolSupportEnumeration\' attribute on md:RoleDescriptor.',
         );
 
-        UnknownRoleDescriptor::fromXML($xmlRepresentation->documentElement);
+        UnknownRoleDescriptor::fromXML(self::$xmlRepresentation->documentElement);
     }
 
 
@@ -280,12 +287,11 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithEmptySupportedProtocols(): void
     {
-        $xmlRepresentation = clone self::$xmlRepresentation;
-        $xmlRepresentation->documentElement->setAttribute('protocolSupportEnumeration', '');
+        self::$xmlRepresentation->documentElement->setAttribute('protocolSupportEnumeration', '');
 
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
 
-        UnknownRoleDescriptor::fromXML($xmlRepresentation->documentElement);
+        UnknownRoleDescriptor::fromXML(self::$xmlRepresentation->documentElement);
     }
 
 
@@ -294,11 +300,10 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithInvalidErrorURL(): void
     {
-        $xmlRepresentation = clone self::$xmlRepresentation;
-        $xmlRepresentation->documentElement->setAttribute('errorURL', 'not a URL');
+        self::$xmlRepresentation->documentElement->setAttribute('errorURL', 'not a URL');
 
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
 
-        UnknownRoleDescriptor::fromXML($xmlRepresentation->documentElement);
+        UnknownRoleDescriptor::fromXML(self::$xmlRepresentation->documentElement);
     }
 }

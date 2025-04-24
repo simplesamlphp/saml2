@@ -7,7 +7,7 @@
     ID="invalidReferencedId"
     Version="2.0"
     IssueInstant="2007-12-10T11:39:48Z">
-    <saml:Issuer>max.feide.no</saml:Issuer>
+    <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
     <ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
         <ds:SignedInfo>
             <ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>
@@ -29,7 +29,7 @@
         </ds:KeyInfo>
     </ds:Signature>
     <saml:Subject>
-        <saml:NameID NameQualifier="max.feide.no" SPNameQualifier="urn:mace:feide.no:services:no.feide.moodle" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">
+        <saml:NameID NameQualifier="urn:x-simplesamlphp:namequalifier" SPNameQualifier="urn:mace:feide.no:services:no.feide.moodle" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">
             UB/WJAaKAPrSHbqlbcKWu7JktcKY
         </saml:NameID>
         <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">

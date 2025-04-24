@@ -43,8 +43,6 @@ final class AuthnStatementTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = AuthnStatement::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -125,13 +123,15 @@ final class AuthnStatementTest extends TestCase
     public function testUnmarshallingWithoutAuthnContextThrowsException(): void
     {
         $samlNamespace = C::NS_SAML;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <saml:AuthnStatement xmlns:saml="{$samlNamespace}"
     AuthnInstant="2020-03-23T23:37:24Z"
     SessionIndex="123"
     SessionNotOnOrAfter="2020-03-23T23:37:24Z">
 </saml:AuthnStatement>
 XML
+            ,
         );
 
         $this->expectException(MissingElementException::class);

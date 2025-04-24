@@ -10,10 +10,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Binding;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
-use SimpleSAML\SAML2\HTTPArtifact;
-use SimpleSAML\SAML2\HTTPPost;
-use SimpleSAML\SAML2\HTTPRedirect;
-use SimpleSAML\SAML2\SOAP;
+use SimpleSAML\SAML2\Binding\{HTTPArtifact, HTTPPost, HTTPRedirect, SOAP};
 
 /**
  * @package simplesamlphp\saml2

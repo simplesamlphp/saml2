@@ -60,8 +60,6 @@ final class EncryptedIDTest extends TestCase
     {
         self::$containerBackup = ContainerSingleton::getInstance();
 
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = EncryptedID::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -102,7 +100,7 @@ final class EncryptedIDTest extends TestCase
                         new CipherValue('he5ZBjtfp/1/Y3PgE/CWspDPADig9vuZ7yZyYXDQ1wA/HBTPCldtL/p6UT5RCAFYUwN6kp3jnHkhK1yMjrI1SMw0n5NEc2wO9N5inQIeQOZ8XD9yD9M5fHvWz2ByNMGlB35RWMnBRHzDi1PRV7Irwcs9WoiODh3i6j2vYXP7cAo='),
                     ),
                     encryptionMethod: new EncryptionMethod('http://www.w3.org/2009/xmlenc11#rsa-oaep'),
-                )
+                ),
             ]),
         );
         $ek = new EncryptedKey(
@@ -188,7 +186,7 @@ final class EncryptedIDTest extends TestCase
         );
 
         // test with a NameID
-        $nameid = new NameID('value', 'name_qualifier');
+        $nameid = new NameID('value', 'urn:x-simplesamlphp:namequalifier');
         $encid = new EncryptedID($nameid->encrypt($encryptor));
         /** @psalm-suppress ArgumentTypeCoercion */
         $doc = DOMDocumentFactory::fromString(strval($encid));
@@ -206,8 +204,8 @@ final class EncryptedIDTest extends TestCase
         // test a custom BaseID that's registered
         $customId = new CustomBaseID(
             [new Audience('urn:some:audience')],
-            'TheNameQualifier',
-            'TheSPNameQualifier',
+            'urn:x-simplesamlphp:namequalifier',
+            'urn:x-simplesamlphp:spnamequalifier',
         );
 
         $encid = new EncryptedID($customId->encrypt($encryptor));

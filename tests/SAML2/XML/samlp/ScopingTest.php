@@ -40,8 +40,6 @@ final class ScopingTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = Scoping::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(

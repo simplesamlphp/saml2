@@ -39,8 +39,6 @@ final class PublicationTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
-
         self::$testedClass = Publication::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -80,7 +78,10 @@ final class PublicationTest extends TestCase
         $document->setAttribute('creationInstant', '2011-01-01T00:00:00WT');
 
         $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage("'2011-01-01T00:00:00WT' is not a valid DateTime");
+        $this->expectExceptionMessage(
+            "\"2011-01-01T00:00:00WT\" is not a DateTime expressed in the UTC timezone "
+            . "using the 'Z' timezone identifier.",
+        );
         Publication::fromXML($document);
     }
 
@@ -89,12 +90,14 @@ final class PublicationTest extends TestCase
      */
     public function testMissingPublisherThrowsException(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <mdrpi:Publication xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
                        creationInstant="2011-01-01T00:00:00Z"
                        publicationId="SomePublicationId">
 </mdrpi:Publication>
 XML
+            ,
         );
 
         $this->expectException(MissingAttributeException::class);

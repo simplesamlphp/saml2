@@ -68,8 +68,6 @@ final class SPSSODescriptorTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = SPSSODescriptor::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -247,7 +245,7 @@ final class SPSSODescriptorTest extends TestCase
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
-            'The \'WantAssertionsSigned\' attribute of md:SPSSODescriptor must be a boolean.'
+            'The \'WantAssertionsSigned\' attribute of md:SPSSODescriptor must be a boolean.',
         );
 
         SPSSODescriptor::fromXML($xmlRepresentation->documentElement);
@@ -260,12 +258,14 @@ final class SPSSODescriptorTest extends TestCase
     public function testUnmarshallingWithoutOptionalArguments(): void
     {
         $mdns = C::NS_MD;
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:SPSSODescriptor xmlns:md="{$mdns}" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
   <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
     Location="https://ServiceProvider.com/SAML/SSO/Artifact" index="0" isDefault="true"/>
 </md:SPSSODescriptor>
 XML
+            ,
         );
 
         $spssod = SPSSODescriptor::fromXML($document->documentElement);

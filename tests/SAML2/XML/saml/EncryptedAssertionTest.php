@@ -62,8 +62,6 @@ final class EncryptedAssertionTest extends TestCase
     {
         self::$containerBackup = ContainerSingleton::getInstance();
 
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = EncryptedAssertion::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -94,7 +92,7 @@ final class EncryptedAssertionTest extends TestCase
     public function testMarshalling(): void
     {
         $transforms = new Transforms(
-            [new Transform(C::XPATH_URI, new XPath('self::xenc:CipherValue[@Id="example1"]', ['xenc' => C::NS_XENC]))],
+            [new Transform(C::XPATH10_URI, new XPath('self::xenc:CipherValue[@Id="example1"]'))],
         );
 
         $retrievalMethod = new RetrievalMethod($transforms, '#Encrypted_KEY_ID', C::XMLENC_ENCRYPTEDKEY);
@@ -112,8 +110,8 @@ final class EncryptedAssertionTest extends TestCase
             type: C::XMLENC_ELEMENT,
             encryptionMethod: new EncryptionMethod(C::BLOCK_ENC_AES256_GCM),
             keyInfo: new KeyInfo([
-                $ek,
                 $retrievalMethod,
+                $ek,
             ]),
         );
         $encryptedAssertion = new EncryptedAssertion($ed, [$ek]);
@@ -133,7 +131,7 @@ final class EncryptedAssertionTest extends TestCase
         $assertion = new Assertion(
             id: C::MSGID,
             issueInstant: self::$clock->now(),
-            issuer: new Issuer('Test'),
+            issuer: new Issuer('urn:x-simplesamlphp:issuer'),
             subject: new Subject(new NameID('Someone')),
         );
 

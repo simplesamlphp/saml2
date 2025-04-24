@@ -42,8 +42,6 @@ final class DiscoHintsTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
-
         self::$testedClass = DiscoHints::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -127,12 +125,14 @@ final class DiscoHintsTest extends TestCase
      */
     public function testUnmarshallingChildren(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <mdui:DiscoHints xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
   <mdui:GeolocationHint>geo:47.37328,8.531126</mdui:GeolocationHint>
   <ssp:child1 xmlns:ssp="urn:custom:ssp">content of tag</ssp:child1>
 </mdui:DiscoHints>
 XML
+            ,
         );
 
         $disco = DiscoHints::fromXML($document->documentElement);

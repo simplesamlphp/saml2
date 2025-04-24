@@ -47,12 +47,10 @@ final class OrganizationTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = Organization::class;
 
         self::$ext = DOMDocumentFactory::fromString(
-            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>'
+            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>',
         );
 
         self::$arrayRepresentation = [
@@ -95,8 +93,6 @@ final class OrganizationTest extends TestCase
             ),
             [new XMLAttribute(C::NAMESPACE, 'ssp', 'attr1', 'value1')],
         );
-        $root = DOMDocumentFactory::fromString('<root/>');
-        $root->formatOutput = true;
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

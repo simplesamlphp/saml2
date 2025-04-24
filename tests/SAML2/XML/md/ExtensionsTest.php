@@ -55,8 +55,6 @@ final class ExtensionsTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = Extensions::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -155,7 +153,8 @@ final class ExtensionsTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"
                xmlns:shibmd="urn:mace:shibboleth:metadata:1.0"
                xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute"
@@ -188,6 +187,7 @@ final class ExtensionsTest extends TestCase
   <ns:SomeChunk foo="bar">SomeText</ns:SomeChunk>
 </md:Extensions>
 XML
+            ,
         );
         $extensions = Extensions::fromXML($document->documentElement);
         $list = $extensions->getList();

@@ -35,8 +35,6 @@ final class AuthnContextWithDeclTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = AuthnContext::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -52,7 +50,8 @@ final class AuthnContextWithDeclTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $chunk = new Chunk(DOMDocumentFactory::fromString(<<<XML
+        $chunk = new Chunk(DOMDocumentFactory::fromString(
+            <<<XML
     <ssp:AuthenticationContextDeclaration xmlns:ssp="urn:x-simplesamlphp:namespace">
       <ssp:Identification nym="verinymity">
         <ssp:Extension>
@@ -61,6 +60,7 @@ final class AuthnContextWithDeclTest extends TestCase
       </ssp:Identification>
     </ssp:AuthenticationContextDeclaration>
 XML
+            ,
         )->documentElement);
 
         $authnContextDecl = new AuthnContextDecl(

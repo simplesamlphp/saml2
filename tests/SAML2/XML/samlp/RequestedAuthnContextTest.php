@@ -39,8 +39,6 @@ final class RequestedAuthnContextTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = RequestedAuthnContext::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -87,7 +85,7 @@ final class RequestedAuthnContextTest extends TestCase
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
             'Expected an instance of any of "' . AuthnContextClassRef::class . '", "' . AuthnContextDeclRef::class .
-            '". Got: DOMDocument'
+            '". Got: DOMDocument',
         );
 
         /** @psalm-suppress InvalidArgument */
@@ -108,12 +106,14 @@ final class RequestedAuthnContextTest extends TestCase
         $samlNamespace = C::NS_SAML;
         $samlpNamespace = C::NS_SAMLP;
 
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <samlp:RequestedAuthnContext xmlns:samlp="{$samlpNamespace}" Comparison="minimum">
   <saml:AuthnContextClassRef xmlns:saml="{$samlNamespace}">urn:oasis:names:tc:SAML:2.0:ac:classes:PasswordProtectedTransport</saml:AuthnContextClassRef>
   <saml:AuthnContextDeclRef xmlns:saml="{$samlNamespace}">https://example.org/relative/path/to/document.xml</saml:AuthnContextDeclRef>
 </samlp:RequestedAuthnContext>
 XML
+            ,
         );
 
         $this->expectException(AssertionFailedException::class);

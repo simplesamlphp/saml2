@@ -40,7 +40,6 @@ use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
@@ -71,8 +70,6 @@ final class EntityDescriptorTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = EntityDescriptor::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -158,8 +155,8 @@ final class EntityDescriptorTest extends TestCase
             new PublicationInfo(
                 publisher: 'http://publisher.ra/',
                 creationInstant: new DateTimeImmutable('2020-02-03T13:46:24Z'),
-                usagePolicy: [new UsagePolicy('en', 'http://publisher.ra/policy.txt')]
-            )
+                usagePolicy: [new UsagePolicy('en', 'http://publisher.ra/policy.txt')],
+            ),
         ]);
 
         $ed = new EntityDescriptor(
@@ -196,7 +193,8 @@ final class EntityDescriptorTest extends TestCase
         $entity_idp = C::ENTITY_IDP;
         $entity_other = C::ENTITY_OTHER;
 
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <md:EntityDescriptor xmlns:md="{$ns_md}" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z"
     cacheDuration="P2Y6M5DT12H35M30S" entityID="{$entity_idp}">
   <md:Extensions>
@@ -228,6 +226,7 @@ final class EntityDescriptorTest extends TestCase
       namespace="urn:x-simplesamlphp:namespace">https://example.edu/more/metadata.xml</md:AdditionalMetadataLocation>
 </md:EntityDescriptor>
 XML
+            ,
         );
 
         $entityid = C::ENTITY_IDP;
@@ -325,7 +324,7 @@ XML
      */
     public function testMarshallingWithEmptyEntityID(): void
     {
-        $this->expectException(SchemaViolationException::class);
+        $this->expectException(ProtocolViolationException::class);
         new EntityDescriptor(
             entityId: '',
             affiliationDescriptor: new AffiliationDescriptor(C::ENTITY_IDP, [new AffiliateMember(C::ENTITY_SP)]),
@@ -340,7 +339,7 @@ XML
     {
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
-            sprintf('The entityID attribute cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
+            sprintf('An entityID cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
         );
 
         new EntityDescriptor(
@@ -440,13 +439,15 @@ XML
         $entity_idp = C::ENTITY_IDP;
         $entity_sp = C::ENTITY_SP;
 
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="{$entity_idp}">
         <AffiliateMember>{$entity_sp}</AffiliateMember>
     </AffiliationDescriptor>
 </EntityDescriptor>
 XML
+            ,
         );
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing \'entityID\' attribute on md:EntityDescriptor.');
@@ -462,9 +463,11 @@ XML
         $entity_idp = C::ENTITY_IDP;
         $saml_md = C::NS_MD;
 
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <EntityDescriptor entityID="{$entity_idp}" xmlns="{$saml_md}"></EntityDescriptor>
 XML
+            ,
         );
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(
@@ -482,16 +485,18 @@ XML
         $entity_idp = C::ENTITY_IDP;
         $entity_sp = C::ENTITY_SP;
 
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <EntityDescriptor validUntil="asdf" entityID="{$entity_idp}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="{$entity_idp}">
         <AffiliateMember>{$entity_sp}</AffiliateMember>
     </AffiliationDescriptor>
 </EntityDescriptor>
 XML
+            ,
         );
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('\'asdf\' is not a valid DateTime');
+        $this->expectExceptionMessage('\'asdf\' is not a valid xs:dateTime');
         EntityDescriptor::fromXML($document->documentElement);
     }
 
@@ -505,7 +510,8 @@ XML
         $entity_sp = C::ENTITY_SP;
         $entity_other = C::ENTITY_OTHER;
 
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <EntityDescriptor entityID="{$entity_idp}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
     validUntil="2010-02-01T12:34:56Z">
   <AffiliationDescriptor affiliationOwnerID="{$entity_idp}" ID="theAffiliationDescriptorID"
@@ -515,6 +521,7 @@ XML
   </AffiliationDescriptor>
 </EntityDescriptor>
 XML
+            ,
         );
         $entityDescriptor = EntityDescriptor::fromXML($document->documentElement);
         $this->assertEquals([], $entityDescriptor->getRoleDescriptor());
@@ -531,7 +538,8 @@ XML
         $entity_sp = C::ENTITY_SP;
         $entity_other = C::ENTITY_OTHER;
 
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <EntityDescriptor entityID="{$entity_idp}" xmlns="urn:oasis:names:tc:SAML:2.0:metadata"
     validUntil="2010-02-01T12:34:56Z">
   <AffiliationDescriptor affiliationOwnerID="{$entity_idp}" ID="theAffiliationDescriptorID1"
@@ -544,6 +552,7 @@ XML
   </AffiliationDescriptor>
 </EntityDescriptor>
 XML
+            ,
         );
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('More than one AffiliationDescriptor in the entity.');
@@ -558,7 +567,8 @@ XML
     {
         $entity_idp = C::ENTITY_IDP;
 
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <EntityDescriptor entityID="{$entity_idp}" ID="theID" validUntil="2010-01-01T12:34:56Z"
     cacheDuration="PT5000S" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
   <AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
@@ -577,6 +587,7 @@ XML
   </Organization>
 </EntityDescriptor>
 XML
+            ,
         );
         $this->expectException(TooManyElementsException::class);
         $this->expectExceptionMessage('More than one Organization in the entity.');
@@ -593,7 +604,8 @@ XML
         $entity_idp = C::ENTITY_IDP;
         $entity_other = C::ENTITY_OTHER;
 
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <EntityDescriptor entityID="{$entity_idp}" ID="theID" validUntil="2010-01-01T12:34:56Z"
     cacheDuration="PT5000S" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
   <AttributeAuthorityDescriptor protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
@@ -611,6 +623,7 @@ XML
   </Organization>
 </EntityDescriptor>
 XML
+            ,
         );
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage(

@@ -56,7 +56,8 @@ final class AbstractMessageTest extends TestCase
     #[Group('Message')]
     public function testCorrectSignatureMethodCanBeExtractedFromAuthnRequest(): void
     {
-        $authnRequest = DOMDocumentFactory::fromString(<<<AUTHNREQUEST
+        $authnRequest = DOMDocumentFactory::fromString(
+            <<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -71,11 +72,12 @@ final class AbstractMessageTest extends TestCase
   </saml:Subject>
 </samlp:AuthnRequest>
 AUTHNREQUEST
+            ,
         );
 
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
             C::SIG_RSA_SHA256,
-            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY)
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),
         );
 
         $unsignedMessage = MessageFactory::fromXML($authnRequest->documentElement);
@@ -99,7 +101,8 @@ AUTHNREQUEST
     #[Group('Message')]
     public function testIssuerParsedAsNameID(): void
     {
-        $authnRequest = DOMDocumentFactory::fromString(<<<AUTHNREQUEST
+        $authnRequest = DOMDocumentFactory::fromString(
+            <<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -118,6 +121,7 @@ AUTHNREQUEST
   </saml:Subject>
 </samlp:AuthnRequest>
 AUTHNREQUEST
+            ,
         );
 
         $message = MessageFactory::fromXML($authnRequest->documentElement);
@@ -153,8 +157,8 @@ AUTHNREQUEST
         // now, try an Issuer with another format and attributes
         $issuer = new Issuer(
             'https://gateway.stepup.org/saml20/sp/metadata',
-            'SomeNameQualifier',
-            'SomeSPNameQualifier',
+            'urn:x-simplesamlphp:namequalifier',
+            'urn:x-simplesamlphp:spnamequalifier',
             C::NAMEID_UNSPECIFIED,
             'SomeSPProvidedID',
         );
@@ -213,7 +217,8 @@ AUTHNREQUEST
     #[Group('Message')]
     public function testGetExtensions(): void
     {
-        $authnRequest = DOMDocumentFactory::fromString(<<<AUTHNREQUEST
+        $authnRequest = DOMDocumentFactory::fromString(
+            <<<AUTHNREQUEST
 <samlp:AuthnRequest
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -237,6 +242,7 @@ AUTHNREQUEST
   </saml:Subject>
 </samlp:AuthnRequest>
 AUTHNREQUEST
+            ,
         );
 
         $message = MessageFactory::fromXML($authnRequest->documentElement);
@@ -264,7 +270,7 @@ AUTHNREQUEST
                 Version="2.0"
                 IssueInstant="2010-03-05T13:34:28Z"
 >
-  <saml:Issuer>testIssuer</saml:Issuer>
+  <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
 </saml:Assertion>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);
@@ -287,7 +293,7 @@ XML;
                 Version="2.1"
                 IssueInstant="2007-12-10T11:39:48Z"
                 Destination="http://somewhere.example.org/simplesaml/saml2/sp/AssertionConsumerService.php">
-    <saml:Issuer>max.example.org</saml:Issuer>
+    <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
     <samlp:Status>
         <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Responder" />
         <samlp:StatusMessage>Something is wrong...</samlp:StatusMessage>
@@ -313,7 +319,7 @@ XML;
                 ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b"
                 Version="2.0" IssueInstant="2010-07-22T11:30:19Z"
                 >
-  <saml:Issuer>TheIssuer</saml:Issuer>
+  <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
 </samlp:LogoutRequest>
 XML;
         $document  = DOMDocumentFactory::fromString($xml);

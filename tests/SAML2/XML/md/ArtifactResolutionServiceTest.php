@@ -50,12 +50,10 @@ final class ArtifactResolutionServiceTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         self::$ext = new Chunk(DOMDocumentFactory::fromString(
-            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>'
+            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>',
         )->documentElement);
 
         self::$attr = new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'attr1', 'testval1');
-
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
 
         self::$testedClass = ArtifactResolutionService::class;
 

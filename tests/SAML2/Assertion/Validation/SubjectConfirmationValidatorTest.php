@@ -93,7 +93,8 @@ final class SubjectConfirmationValidatorTest extends TestCase
         $entity_other = C::ENTITY_OTHER;
         $accr = C::AUTHNCONTEXT_CLASS_REF_LOA2;
 
-        self::$document = DOMDocumentFactory::fromString(<<<XML
+        self::$document = DOMDocumentFactory::fromString(
+            <<<XML
     <saml:Assertion xmlns:xsi="{$ns_xsi}"
                     xmlns:xs="{$ns_xs}"
                     xmlns:saml="{$ns_saml}"
@@ -121,6 +122,7 @@ final class SubjectConfirmationValidatorTest extends TestCase
         </saml:AuthnStatement>
     </saml:Assertion>
 XML
+            ,
         );
     }
 

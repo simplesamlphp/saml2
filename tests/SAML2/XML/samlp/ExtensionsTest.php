@@ -38,8 +38,6 @@ final class ExtensionsTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = Extensions::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -52,11 +50,13 @@ final class ExtensionsTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $ext1 = DOMDocumentFactory::fromString(<<<XML
+        $ext1 = DOMDocumentFactory::fromString(
+            <<<XML
   <myns:AttributeList xmlns:myns="urn:test:mynamespace">
     <myns:Attribute name="UserName" value=""/>
   </myns:AttributeList>
 XML
+            ,
         );
 
         $ext2 = DOMDocumentFactory::fromString(
@@ -69,7 +69,7 @@ XML
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($extensions)
+            strval($extensions),
         );
     }
 

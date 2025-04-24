@@ -40,8 +40,6 @@ final class IDPListTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = IDPList::class;
 
         self::$arrayRepresentation = [
@@ -133,11 +131,13 @@ XML
     {
         $ns = IDPList::NS;
 
-        $xmlRepresentation = DOMDocumentFactory::fromString(<<<XML
+        $xmlRepresentation = DOMDocumentFactory::fromString(
+            <<<XML
 <samlp:IDPList xmlns:samlp="{$ns}">
   <samlp:GetComplete>https://some/location</samlp:GetComplete>
 </samlp:IDPList>
 XML
+            ,
         );
 
         $this->expectException(MissingElementException::class);

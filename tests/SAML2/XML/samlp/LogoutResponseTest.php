@@ -45,8 +45,6 @@ final class LogoutResponseTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = LogoutResponse::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -59,7 +57,7 @@ final class LogoutResponseTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $issuer = new Issuer('max.example.org');
+        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
         $status = new Status(new StatusCode(C::STATUS_SUCCESS));
 
         $logoutResponse = new LogoutResponse(
@@ -73,7 +71,7 @@ final class LogoutResponseTest extends TestCase
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($logoutResponse)
+            strval($logoutResponse),
         );
     }
 }

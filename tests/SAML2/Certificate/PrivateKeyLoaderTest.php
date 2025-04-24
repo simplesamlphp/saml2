@@ -37,7 +37,7 @@ final class PrivateKeyLoaderTest extends TestCase
     #[Group('certificate')]
     #[DataProvider('privateKeyTestProvider')]
     public function testLoadingAConfiguredPrivateKeyReturnsACertificatePrivateKey(
-        ConfPrivateKey $configuredKey
+        ConfPrivateKey $configuredKey,
     ): void {
         $resultingKey = self::$privateKeyLoader->loadPrivateKey($configuredKey);
 

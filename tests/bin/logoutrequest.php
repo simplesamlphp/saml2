@@ -22,7 +22,7 @@ ContainerSingleton::setContainer($container);
 
 $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
     C::KEY_TRANSPORT_OAEP,
-    PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY)
+    PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
 );
 $nid = new NameID('very secret');
 $eid = new EncryptedID($nid->encrypt($encryptor));
@@ -31,7 +31,7 @@ $logoutRequest = new LogoutRequest(
     identifier: $eid,
     issueInstant: new DateTimeImmutable('now', new DateTimeZone('Z')),
     sessionIndexes: [new SessionIndex('SomeSessionIndex1'), new SessionIndex('SomeSessionIndex2')],
-    issuer: new Issuer('urn:test:TheIssuer')
+    issuer: new Issuer('urn:test:TheIssuer'),
 );
 
 $logoutRequest = $logoutRequest->toXML();

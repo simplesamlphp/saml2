@@ -36,8 +36,6 @@ final class AttributeStatementTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = AttributeStatement::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -67,7 +65,7 @@ final class AttributeStatementTest extends TestCase
                     name: 'urn:EntityConcernedSubID',
                     attributeValue: [new AttributeValue(1)],
                 ),
-            ]
+            ],
         );
 
         $this->assertEquals(
@@ -94,10 +92,12 @@ final class AttributeStatementTest extends TestCase
      */
     public function testUnmarshallingMissingAttributesThrowsException(): void
     {
-        $document = DOMDocumentFactory::fromString(<<<XML
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
 <saml:AttributeStatement xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
 </saml:AttributeStatement>
 XML
+            ,
         );
 
         $this->expectException(AssertionFailedException::class);

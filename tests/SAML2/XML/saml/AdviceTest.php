@@ -52,8 +52,6 @@ final class AdviceTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = Advice::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -83,7 +81,7 @@ final class AdviceTest extends TestCase
     public function testMarshalling(): void
     {
         $chunkXml = DOMDocumentFactory::fromString(
-            '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>'
+            '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>',
         );
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 
@@ -111,7 +109,7 @@ final class AdviceTest extends TestCase
         $advice = new Advice();
         $this->assertEquals(
             '<saml:Advice xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"/>',
-            strval($advice)
+            strval($advice),
         );
         $this->assertTrue($advice->isEmptyElement());
     }

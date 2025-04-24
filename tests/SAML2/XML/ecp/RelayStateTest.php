@@ -34,12 +34,10 @@ final class RelayStateTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-ecp-2.0.xsd';
-
         self::$testedClass = RelayState::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/ecp_RelayState.xml'
+            dirname(__FILE__, 4) . '/resources/xml/ecp_RelayState.xml',
         );
     }
 

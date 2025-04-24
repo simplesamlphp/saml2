@@ -38,8 +38,6 @@ final class PublicationPathTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
-
         self::$testedClass = PublicationPath::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(

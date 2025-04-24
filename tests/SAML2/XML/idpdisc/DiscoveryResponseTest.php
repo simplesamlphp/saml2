@@ -48,14 +48,12 @@ final class DiscoveryResponseTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-idp-discovery.xsd';
-
         self::$testedClass = DiscoveryResponse::class;
 
         self::$attr = new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'attr1', 'testval1');
 
         self::$ext = new Chunk(DOMDocumentFactory::fromString(
-            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>'
+            '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>',
         )->documentElement);
 
         self::$arrayRepresentation = [

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
+use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -32,6 +33,7 @@ use function strval;
  */
 #[Group('saml')]
 #[CoversClass(Attribute::class)]
+#[CoversClass(AttributeValue::class)]
 #[CoversClass(AbstractSamlElement::class)]
 final class AttributeTest extends TestCase
 {
@@ -47,8 +49,6 @@ final class AttributeTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         self::$containerBackup = ContainerSingleton::getInstance();
-
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
         self::$testedClass = Attribute::class;
 
@@ -83,11 +83,14 @@ final class AttributeTest extends TestCase
 
         $attribute = new Attribute(
             'TheName',
-            C::NAMEFORMAT_URI,
+            C::NAMEFORMAT_BASIC,
             'TheFriendlyName',
             [
                 new AttributeValue('FirstValue'),
                 new AttributeValue('SecondValue'),
+                new AttributeValue(3),
+                new AttributeValue(new DateTimeImmutable('2024-04-04T04:44:44Z')),
+                new AttributeValue(null),
             ],
             [$attr1, $attr2],
         );

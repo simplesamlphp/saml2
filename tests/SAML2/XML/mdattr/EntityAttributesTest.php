@@ -48,8 +48,6 @@ final class EntityAttributesTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-metadata-attr.xsd';
-
         self::$testedClass = EntityAttributes::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -64,7 +62,7 @@ final class EntityAttributesTest extends TestCase
     {
         $attribute1 = new Attribute(
             name: 'attrib1',
-            nameFormat: C::NAMEFORMAT_URI,
+            nameFormat: C::NAMEFORMAT_BASIC,
             attributeValue: [
                 new AttributeValue('is'),
                 new AttributeValue('really'),
@@ -73,7 +71,7 @@ final class EntityAttributesTest extends TestCase
         );
 
         // Create an Issuer
-        $issuer = new Issuer('testIssuer');
+        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
 
         // Create the conditions
         $conditions = new Conditions(
@@ -129,17 +127,17 @@ final class EntityAttributesTest extends TestCase
         // Create an assertion
         $unsignedAssertion = new Assertion(
             $issuer,
-            new DateTimeImmutable('2022-10-16T22:51:18Z'),
+            new DateTimeImmutable('2024-07-23T20:35:34Z'),
             '_93af655219464fb403b34436cfb0c5cb1d9a5502',
             $subject,
             $conditions,
-            [$attrStatement]
+            [$attrStatement],
         );
 
         // Sign the assertion
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
             C::SIG_RSA_SHA256,
-            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY)
+            PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
         $unsignedAssertion->sign($signer);
         $signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
