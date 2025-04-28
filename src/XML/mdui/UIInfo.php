@@ -231,7 +231,7 @@ final class UIInfo extends AbstractMduiElement implements
     /**
      * Test localized elements for multiple items with the same language
      *
-     * @param (\SimpleSAML\SAML2\XML\md\AbstractLocalizedURL|
+     * @param (\SimpleSAML\SAML2\XML\md\AbstractLocalizedURI|
      *         \SimpleSAML\SAML2\XML\md\AbstractLocalizedName|
      *         \SimpleSAML\SAML2\XML\mdui\Keywords)[] $elements
      * @return void

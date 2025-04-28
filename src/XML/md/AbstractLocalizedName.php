@@ -33,7 +33,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
      * LocalizedNameType constructor.
      *
      * @param \SimpleSAML\XML\Type\LanguageValue $language The language this string is localized in.
-     * @param \SimpleSAML\SAML2\Type\SAMLStringValue $value The localized string.
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue $content The localized string.
      */
     public function __construct(
         protected LanguageValue $language,

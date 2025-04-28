@@ -22,10 +22,10 @@ class KeyTypesValue extends SAMLStringValue
      * @throws \Exception on failure
      * @return void
      */
-    protected function validateValue(string $value): void
+    protected function validateValue(string $content): void
     {
         Assert::oneOf(
-            $this->sanitizeValue($value),
+            $this->sanitizeValue($content),
             array_column(KeyTypesEnum::cases(), 'value'),
             SchemaViolationException::class,
         );

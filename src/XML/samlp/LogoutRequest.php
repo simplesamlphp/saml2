@@ -79,7 +79,7 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
     /**
      * Retrieve the reason for this request.
      *
-     * @return \SimpleSAML\SAML2\Type\StringValue|null The reason for this request.
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue|null The reason for this request.
      */
     public function getReason(): ?SAMLStringValue
     {

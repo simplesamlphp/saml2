@@ -28,7 +28,7 @@ final class KeyDescriptor extends AbstractMdElement implements SchemaValidatable
      * KeyDescriptor constructor.
      *
      * @param \SimpleSAML\XMLSecurity\XML\ds\KeyInfo $keyInfo
-     * @param \SimpleSAML\SAML2\XML\md\KeyTypesValue|null $use
+     * @param \SimpleSAML\SAML2\Type\KeyTypesValue|null $use
      * @param \SimpleSAML\SAML2\XML\md\EncryptionMethod[] $encryptionMethod
      */
     public function __construct(
@@ -44,7 +44,7 @@ final class KeyDescriptor extends AbstractMdElement implements SchemaValidatable
     /**
      * Collect the value of the use property.
      *
-     * @return \SimpleSAML\SAML2\XML\saml\KeyTypesValue|null
+     * @return \SimpleSAML\SAML2\Type\KeyTypesValue|null
      */
     public function getUse(): ?KeyTypesValue
     {

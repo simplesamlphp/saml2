@@ -14,7 +14,7 @@ class CIDRValue extends SAMLStringValue
     /**
      * Validate the content of the element.
      *
-     * @param string $content  The value to go in the XML textContent
+     * @param string $value  The value to go in the XML textContent
      * @throws \Exception on failure
      * @return void
      */

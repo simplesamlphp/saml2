@@ -33,10 +33,10 @@ class ArtifactResolve extends AbstractRequest implements SchemaValidatableElemen
      *
      * @param \SimpleSAML\XML\Type\IDValue $id
      * @param \SimpleSAML\SAML2\XML\samlp\Artifact $artifact
-     * @param \SimpleSAML\SAML2\Type\DateTimeValue $issueInstant
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
-     * @param \SimpleSAML\SAML2\Type\AnyURIValue|null $destination
-     * @param \SimpleSAML\SAML2\Type\AnyURIValue|null $consent
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      *
      * @throws \Exception

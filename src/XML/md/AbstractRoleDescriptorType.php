@@ -91,7 +91,7 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
     /**
      * Collect the value of the errorURL property.
      *
-     * @return \SimpleSAML\SAML2\XML\SAMLAnyURIValue|null
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null
      */
     public function getErrorURL(): ?SAMLAnyURIValue
     {

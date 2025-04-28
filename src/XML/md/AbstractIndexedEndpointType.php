@@ -40,7 +40,7 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $binding
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $location
      * @param \SimpleSAML\XML\Type\BooleanValue|null $isDefault
-     * @param \SimpleSAML\SAML2\Type\AnyURIValue|null $responseLocation
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $responseLocation
      * @param array $children
      * @param list<\SimpleSAML\XML\Attribute> $attributes
      */

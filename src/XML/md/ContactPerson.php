@@ -56,7 +56,7 @@ final class ContactPerson extends AbstractMdElement implements
     /**
      * ContactPerson constructor.
      *
-     * @param \SimpleSAML\SAML2\SAMLStringValue $contactType
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue $contactType
      * @param \SimpleSAML\SAML2\XML\md\Company|null $company
      * @param \SimpleSAML\SAML2\XML\md\GivenName|null $givenName
      * @param \SimpleSAML\SAML2\XML\md\SurName|null $surName

@@ -32,9 +32,9 @@ final class AssertionIDRequest extends AbstractRequest implements SchemaValidata
      * @param \SimpleSAML\XML\Type\IDValue $id
      * @param \SimpleSAML\SAML2\XML\saml\AssertionIDRef[] $assertionIDRef
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
-     * @param \SimpleSAML\SAML2\Type\DateTimeValue|null $issueInstant
-     * @param \SimpleSAML\SAML2\Type\AnyURIValue|null $destination
-     * @param \SimpleSAML\SAML2\Type\AnyURIValue|null $consent
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $issueInstant
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      *
      * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException

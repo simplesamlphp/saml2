@@ -52,9 +52,9 @@ final class KeyAuthority extends AbstractShibmdElement implements SchemaValidata
     /**
      * Collect the value of the VerifyDepth-property
      *
-     * @return \SimpleSAML\XML\Type\UnsigedByteValue|null
+     * @return \SimpleSAML\XML\Type\UnsignedByteValue|null
      */
-    public function getVerifyDepth(): ?UnsignedByteValue
+    public function getVerifyDepth(): UnsignedByteValue|null
     {
         return $this->VerifyDepth;
     }

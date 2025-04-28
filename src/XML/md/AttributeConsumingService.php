@@ -27,7 +27,7 @@ final class AttributeConsumingService extends AbstractMdElement implements Schem
     /**
      * AttributeConsumingService constructor.
      *
-     * @param \SimpleSAML\XML\Type\UnsignedShort $index
+     * @param \SimpleSAML\XML\Type\UnsignedShortValue $index
      * @param \SimpleSAML\SAML2\XML\md\ServiceName[] $serviceName
      * @param \SimpleSAML\SAML2\XML\md\RequestedAttribute[] $requestedAttribute
      * @param \SimpleSAML\XML\Type\BooleanValue|null $isDefault

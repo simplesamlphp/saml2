@@ -26,7 +26,7 @@ final class StatusCode extends AbstractSamlpElement implements SchemaValidatable
     /**
      * Initialize a samlp:StatusCode
      *
-     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValueValue $Value
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $Value
      * @param \SimpleSAML\SAML2\XML\samlp\StatusCode[] $subCodes
      */
     public function __construct(

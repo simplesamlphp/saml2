@@ -54,13 +54,13 @@ final class DiscoveryResponse extends AbstractIndexedEndpointType implements Sch
         SAMLAnyURIValue $binding,
         SAMLAnyURIValue $location,
         ?BooleanValue $isDefault = null,
-        ?SAMLAnyURIValue $unused = null,
+        ?SAMLAnyURIValue $responseLocation = null, // unused
         array $children = [],
         array $attributes = [],
     ) {
         Assert::same($binding->getValue(), C::BINDING_IDPDISC, ProtocolViolationException::class);
         Assert::null(
-            $unused,
+            $responseLocation,
             'The \'ResponseLocation\' attribute must be omitted for idpdisc:DiscoveryResponse.',
         );
         parent::__construct($index, $binding, $location, $isDefault, null, $children, $attributes);

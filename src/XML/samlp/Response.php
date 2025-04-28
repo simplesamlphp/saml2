@@ -32,7 +32,7 @@ class Response extends AbstractStatusResponse implements SchemaValidatableElemen
     /**
      * Constructor for SAML 2 response messages.
      *
-     * @param \SimpleSAML\SAML2\IDValue $id
+     * @param \SimpleSAML\XML\Type\IDValue $id
      * @param \SimpleSAML\SAML2\XML\samlp\Status $status
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
