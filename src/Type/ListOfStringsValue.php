@@ -48,7 +48,7 @@ class ListOfStringsValue extends SAMLStringValue implements ListTypeInterface
     /**
      * Convert an array of xs:string items into a mdui:ListOfStrings
      *
-     * @param array<\SimpleSAML\SAML2\Type\SAMLStringValue> $keywords
+     * @param string[] $keywords
      * @return static
      */
     public static function fromArray(array $keywords): static
