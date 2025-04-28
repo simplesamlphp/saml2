@@ -45,7 +45,8 @@ final class DomainTest extends TestCase
             'ipv4' => [false, '192.168.0.1'],
             'ipv6' => [false, '2001:0000:130F:0000:0000:09C0:876A:130B'],
             'with scheme' => [false, 'https://simplesamlphp.org'],
-            'tld' => [false, '.org'],
+            'start with dot' => [false, '.org'],
+            'tld' => [true, 'nl'],
         ];
     }
 }

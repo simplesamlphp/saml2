@@ -14,7 +14,7 @@ trait DomainTrait
 {
     private static string $domain_regex = '/^
       (?!\-)
-      (?:(?:[a-zA-Z\d][a-zA-Z\d\-]{0,61})?[a-zA-Z\d]\.){1,126}
+      (?:(?:[a-zA-Z\d][a-zA-Z\d\-]{0,61})?[a-zA-Z\d]\.){0,126}
       (?!\d+)[a-zA-Z\d]{1,63}
       $/Dxi';
 
