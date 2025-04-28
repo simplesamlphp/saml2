@@ -51,7 +51,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param \SimpleSAML\XML\Type\IDValue $id
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $issueInstant
-     * @param \SipmleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      *
@@ -94,7 +94,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     /**
      * Retrieve the destination of this message.
      *
-     * @return \SimpleSAML\SAML\Type\SAMLAnyURIValue|null The destination of this message,
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null The destination of this message,
      *   or NULL if no destination is given
      */
     public function getDestination(): ?SAMLAnyURIValue

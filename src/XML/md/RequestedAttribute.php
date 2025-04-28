@@ -52,7 +52,7 @@ final class RequestedAttribute extends Attribute
     /**
      * Collect the value of the isRequired-property
      *
-     * @return \SimpleSAML\SAML2\Type\BooleanValue|null
+     * @return \SimpleSAML\XML\Type\BooleanValue|null
      */
     public function getIsRequired(): ?BooleanValue
     {

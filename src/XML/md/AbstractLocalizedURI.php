@@ -28,7 +28,7 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
      * LocalizedNameType constructor.
      *
      * @param \SimpleSAML\XML\Type\LanguageValue $language The language this string is localized in.
-     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $value The localized string.
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $content The localized string.
      */
     final public function __construct(
         protected LanguageValue $language,

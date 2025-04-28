@@ -30,7 +30,7 @@ class GeolocationValue extends SAMLAnyURIValue
     /**
      * Validate the content of the element.
      *
-     * @param string $content  The value to go in the XML textContent
+     * @param string $value  The value to go in the XML textContent
      * @return void
      */
     protected function validateValue(string $value): void
