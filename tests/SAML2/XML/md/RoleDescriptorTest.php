@@ -267,7 +267,7 @@ final class RoleDescriptorTest extends TestCase
         $element = clone self::$xmlRepresentation->documentElement;
         $element->setAttributeNS(C::NS_XSI, 'xsi:type', 'ssp:UnknownRoleDescriptorType');
 
-        $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', 'ssp:UnknownRoleDescriptorType');
+        $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', StringValue::fromString('ssp:UnknownRoleDescriptorType'));
         $type->toXML($element);
 
         $descriptor = AbstractRoleDescriptor::fromXML($element);

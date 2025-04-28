@@ -46,7 +46,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
     /**
      * CustomRoleDescriptor constructor.
      *
-     * @param \SimpleSAML\XML\Chunk[] $chunk
+     * @param \SimpleSAML\XML\SerializableElementInterface[] $chunk
      * @param string[] $protocolSupportEnumeration A set of URI specifying the protocols supported.
      * @param \SimpleSAML\XML\Type\IDValue|null $ID The ID for this document. Defaults to null.
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
@@ -101,7 +101,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
     /**
      * Get the value of the chunk-attribute.
      *
-     * @return \SimpleSAML\XML\Chunk[]
+     * @return \SimpleSAML\XML\SerializableElementInterface[]
      */
     public function getChunk(): array
     {
