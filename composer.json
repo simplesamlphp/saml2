@@ -31,11 +31,12 @@
     "require-dev": {
         "beste/clock": "^3.0",
         "mockery/mockery": "^1.6",
-        "simplesamlphp/simplesamlphp-test-framework": "^1.5"
+        "simplesamlphp/simplesamlphp-test-framework": "^1.5",
+        "icanhazstring/composer-unused": "^0.9.3"
     },
     "autoload": {
         "psr-4": {
-            "SimpleSAML\\SAML2\\": "src/SAML2"
+            "SimpleSAML\\SAML2\\": "src/"
         }
     },
     "autoload-dev": {
