@@ -16,7 +16,6 @@
         "ext-libxml": "*",
         "ext-openssl": "*",
         "ext-pcre": "*",
-        "ext-soap": "*",
         "ext-zlib": "*",
 
         "nyholm/psr7": "^1.8",
@@ -33,6 +32,9 @@
         "mockery/mockery": "^1.6",
         "simplesamlphp/simplesamlphp-test-framework": "^1.5",
         "icanhazstring/composer-unused": "^0.9.3"
+    },
+    "suggest": {
+        "ext-soap": "*"
     },
     "autoload": {
         "psr-4": {
