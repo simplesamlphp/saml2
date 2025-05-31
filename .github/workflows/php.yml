@@ -14,31 +14,140 @@ on:  # yamllint disable-line rule:truthy
   workflow_dispatch:
 
 jobs:
+  phplinter:
+    name: 'PHP-Linter'
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.1', '8.2', '8.3', '8.4']
+
+    uses: simplesamlphp/simplesamlphp-test-framework/.github/workflows/reusable_phplinter.yml@v1.9.2
+    with:
+      php-version: ${{ matrix.php-version }}
+
   linter:
-    name: Linter
-    runs-on: ['ubuntu-latest']
+    name: 'Linter'
+    strategy:
+      fail-fast: false
+
+    uses: simplesamlphp/simplesamlphp-test-framework/.github/workflows/reusable_linter.yml@v1.9.2
+    with:
+      enable_eslinter: false
+      enable_jsonlinter: true
+      enable_stylelinter: false
+      enable_yamllinter: true
+
+  unit-tests-linux:
+    name: "Unit tests, PHP ${{ matrix.php-versions }}, ${{ matrix.operating-system }}"
+    runs-on: ${{ matrix.operating-system }}
+    needs: [phplinter, linter]
+    strategy:
+      fail-fast: false
+      matrix:
+        operating-system: [ubuntu-latest]
+        php-versions: ['8.1', '8.2', '8.3', '8.4']
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Setup PHP, with composer and extensions
+        # https://github.com/shivammathur/setup-php
+        uses: shivammathur/setup-php@v2
         with:
-          # super-linter needs the full git history to get the
-          # list of files that changed across commits
-          fetch-depth: 0
+          php-version: ${{ matrix.php-versions }}
+          extensions: ctype, date, dom, filter, hash, intl, mbstring, openssl, pcre, soap, spl, xml
+          tools: composer
+          ini-values: error_reporting=E_ALL
+          coverage: pcov
 
-      - name: Lint Code Base
-        uses: super-linter/super-linter/slim@v7
-        env:
-          SAVE_SUPER_LINTER_OUTPUT: false
-          # To report GitHub Actions status checks
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          LINTER_RULES_PATH: 'tools/linters'
-          LOG_LEVEL: NOTICE
-          VALIDATE_ALL_CODEBASE: true
-          VALIDATE_BASH: true
-          VALIDATE_BASH_EXEC: true
-          VALIDATE_JSON: true
-          VALIDATE_YAML: true
-          VALIDATE_GITHUB_ACTIONS: true
+      - name: Setup problem matchers for PHP
+        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+
+      - name: Setup problem matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
+      - uses: actions/checkout@v4
+
+      - name: Get composer cache directory
+        run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$GITHUB_ENV"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: $COMPOSER_CACHE
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Run unit tests with coverage
+        if: ${{ matrix.php-versions == '8.4' }}
+        run: vendor/bin/phpunit
+
+      - name: Run unit tests (no coverage)
+        if: ${{ matrix.php-versions != '8.4' }}
+        run: vendor/bin/phpunit --no-coverage
+
+      - name: Save coverage data
+        if: ${{ matrix.php-versions == '8.4' }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-data
+          path: ${{ github.workspace }}/build
+
+  unit-tests-windows:
+    name: "Unit tests, PHP ${{ matrix.php-versions }}, ${{ matrix.operating-system }}"
+    runs-on: ${{ matrix.operating-system }}
+    needs: [phplinter, linter]
+    strategy:
+      fail-fast: true
+      matrix:
+        operating-system: [windows-latest]
+        php-versions: ['8.1', '8.2', '8.3', '8.4']
+
+    steps:
+      - name: Setup PHP, with composer and extensions
+        # https://github.com/shivammathur/setup-php
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: ctype, date, dom, filter, hash, intl, mbstring, openssl, pcre, soap, spl, xml
+          tools: composer
+          ini-values: error_reporting=E_ALL
+          coverage: none
+
+      - name: Setup problem matchers for PHP
+        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+
+      - name: Setup problem matchers for PHPUnit
+        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
+
+      - name: Set git to use LF
+        run: |
+          git config --global core.autocrlf false
+          git config --global core.eol lf
+
+      - uses: actions/checkout@v4
+
+      - name: Get composer cache directory
+        run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$env:GITHUB_ENV"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          path: $COMPOSER_CACHE
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      - name: Run unit tests
+        run: vendor/bin/phpunit --no-coverage
 
   quality:
     name: Quality control
@@ -134,118 +243,6 @@ jobs:
 
       - name: Security check for updated dependencies
         run: composer audit
-
-  unit-tests-linux:
-    name: "Unit tests, PHP ${{ matrix.php-versions }}, ${{ matrix.operating-system }}"
-    runs-on: ${{ matrix.operating-system }}
-    needs: [linter, quality, security]
-    strategy:
-      fail-fast: false
-      matrix:
-        operating-system: [ubuntu-latest]
-        php-versions: ['8.1', '8.2', '8.3', '8.4']
-
-    steps:
-      - name: Setup PHP, with composer and extensions
-        # https://github.com/shivammathur/setup-php
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-versions }}
-          extensions: ctype, date, dom, filter, hash, intl, mbstring, openssl, pcre, soap, spl, xml
-          tools: composer
-          ini-values: error_reporting=E_ALL
-          coverage: pcov
-
-      - name: Setup problem matchers for PHP
-        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
-
-      - name: Setup problem matchers for PHPUnit
-        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
-
-      - name: Set git to use LF
-        run: |
-          git config --global core.autocrlf false
-          git config --global core.eol lf
-
-      - uses: actions/checkout@v4
-
-      - name: Get composer cache directory
-        run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$GITHUB_ENV"
-
-      - name: Cache composer dependencies
-        uses: actions/cache@v4
-        with:
-          path: $COMPOSER_CACHE
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install Composer dependencies
-        run: composer install --no-progress --prefer-dist --optimize-autoloader
-
-      - name: Run unit tests with coverage
-        if: ${{ matrix.php-versions == '8.4' }}
-        run: vendor/bin/phpunit
-
-      - name: Run unit tests (no coverage)
-        if: ${{ matrix.php-versions != '8.4' }}
-        run: vendor/bin/phpunit --no-coverage
-
-      - name: Save coverage data
-        if: ${{ matrix.php-versions == '8.4' }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: coverage-data
-          path: ${{ github.workspace }}/build
-
-  unit-tests-windows:
-    name: "Unit tests, PHP ${{ matrix.php-versions }}, ${{ matrix.operating-system }}"
-    runs-on: ${{ matrix.operating-system }}
-    needs: [linter, quality, security]
-    strategy:
-      fail-fast: true
-      matrix:
-        operating-system: [windows-latest]
-        php-versions: ['8.1', '8.2', '8.3', '8.4']
-
-    steps:
-      - name: Setup PHP, with composer and extensions
-        # https://github.com/shivammathur/setup-php
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: ${{ matrix.php-versions }}
-          extensions: ctype, date, dom, filter, hash, intl, mbstring, openssl, pcre, soap, spl, xml
-          tools: composer
-          ini-values: error_reporting=E_ALL
-          coverage: none
-
-      - name: Setup problem matchers for PHP
-        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
-
-      - name: Setup problem matchers for PHPUnit
-        run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
-
-      - name: Set git to use LF
-        run: |
-          git config --global core.autocrlf false
-          git config --global core.eol lf
-
-      - uses: actions/checkout@v4
-
-      - name: Get composer cache directory
-        run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$env:GITHUB_ENV"
-
-      - name: Cache composer dependencies
-        uses: actions/cache@v4
-        with:
-          path: $COMPOSER_CACHE
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install Composer dependencies
-        run: composer install --no-progress --prefer-dist --optimize-autoloader
-
-      - name: Run unit tests
-        run: vendor/bin/phpunit --no-coverage
 
   coverage:
     name: Code coverage
