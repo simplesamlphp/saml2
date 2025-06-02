@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+
 /**
  * Interface for BaseID objects.
  *
@@ -14,15 +16,15 @@ interface BaseIdentifierInterface extends IdentifierInterface
     /**
      * Get the value of the NameQualifier attribute of an identifier.
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue|null
      */
-    public function getNameQualifier(): ?string;
+    public function getNameQualifier(): ?SAMLStringValue;
 
 
     /**
      * Get the value of the SPNameQualifier attribute of an identifier.
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue|null
      */
-    public function getSPNameQualifier(): ?string;
+    public function getSPNameQualifier(): ?SAMLStringValue;
 }

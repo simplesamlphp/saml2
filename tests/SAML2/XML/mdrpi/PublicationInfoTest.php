@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
-use DateTimeImmutable;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use DOMDocument;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement;
-use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
-use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, EntityIDValue, SAMLStringValue};
+use SimpleSAML\SAML2\XML\md\{AffiliationDescriptor, EntitiesDescriptor, EntityDescriptor, Extensions};
+use SimpleSAML\SAML2\XML\mdrpi\{AbstractMdrpiElement, PublicationInfo, UsagePolicy};
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\LanguageValue;
 
 use function dirname;
 use function strval;
@@ -35,6 +33,9 @@ final class PublicationInfoTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+    /** @var \DOMDocument */
+    private static DOMDocument $affiliationDescriptor;
+
 
     /**
      */
@@ -44,6 +45,10 @@ final class PublicationInfoTest extends TestCase
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/mdrpi_PublicationInfo.xml',
+        );
+
+        self::$affiliationDescriptor = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/md_AffiliationDescriptor.xml',
         );
 
         self::$arrayRepresentation = [
@@ -60,12 +65,18 @@ final class PublicationInfoTest extends TestCase
     public function testMarshalling(): void
     {
         $publicationInfo = new PublicationInfo(
-            'SomePublisher',
-            new DateTimeImmutable('2011-01-01T00:00:00Z'),
-            'SomePublicationId',
+            SAMLStringValue::fromString('SomePublisher'),
+            SAMLDateTimeValue::fromString('2011-01-01T00:00:00Z'),
+            SAMLStringValue::fromString('SomePublicationId'),
             [
-                new UsagePolicy('en', 'http://TheEnglishUsagePolicy'),
-                new UsagePolicy('no', 'http://TheNorwegianUsagePolicy'),
+                new UsagePolicy(
+                    LanguageValue::fromString('en'),
+                    SAMLAnyURIValue::fromString('http://TheEnglishUsagePolicy'),
+                ),
+                new UsagePolicy(
+                    LanguageValue::fromString('no'),
+                    SAMLAnyURIValue::fromString('http://TheNorwegianUsagePolicy'),
+                ),
             ],
         );
 
@@ -84,10 +95,6 @@ final class PublicationInfoTest extends TestCase
         $document->setAttribute('creationInstant', '2011-01-01T00:00:00WT');
 
         $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage(
-            "\"2011-01-01T00:00:00WT\" is not a DateTime expressed in the UTC timezone"
-            . " using the 'Z' timezone identifier.",
-        );
         PublicationInfo::fromXML($document);
     }
 
@@ -119,7 +126,10 @@ XML
         $document = clone self::$xmlRepresentation->documentElement;
 
         // Append another 'en' UsagePolicy to the document
-        $x = new UsagePolicy('en', 'https://example.org');
+        $x = new UsagePolicy(
+            LanguageValue::fromString('en'),
+            SAMLAnyURIValue::fromString('https://example.org'),
+        );
         $x->toXML($document);
 
         $this->expectException(ProtocolViolationException::class);
@@ -128,5 +138,30 @@ XML
             . ' within a given <mdrpi:PublicationInfo>, for a given language',
         );
         PublicationInfo::fromXML($document);
+    }
+
+
+    /**
+     */
+    public function testNestedPublicationInfoThrowsException(): void
+    {
+        $publicationInfo = PublicationInfo::fromXML(self::$xmlRepresentation->documentElement);
+        $extensions = new Extensions([$publicationInfo]);
+
+        $ed = new EntityDescriptor(
+            entityId: EntityIDValue::fromString('urn:x-simplesamlphp:entity'),
+            affiliationDescriptor: AffiliationDescriptor::fromXML(self::$affiliationDescriptor->documentElement),
+        );
+
+        $this->expectException(ProtocolViolationException::class);
+        new EntitiesDescriptor(
+            extensions: $extensions,
+            entitiesDescriptors: [
+                new EntitiesDescriptor(
+                    extensions: $extensions,
+                    entityDescriptors: [$ed],
+                ),
+            ],
+        );
     }
 }

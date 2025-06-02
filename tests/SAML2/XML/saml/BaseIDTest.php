@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Compat\AbstractContainer;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
-use SimpleSAML\SAML2\XML\saml\AbstractBaseIDType;
-use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
-use SimpleSAML\SAML2\XML\saml\Audience;
-use SimpleSAML\SAML2\XML\saml\UnknownID;
-use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\Test\SAML2\CustomBaseID;
+use SimpleSAML\SAML2\Compat\{AbstractContainer, ContainerSingleton};
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
+use SimpleSAML\SAML2\XML\saml\{
+    AbstractBaseID,
+    AbstractBaseIDType,
+    AbstractSamlElement,
+    Audience,
+    UnknownID,
+};
+use SimpleSAML\Test\SAML2\{Constants as C, CustomBaseID};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
 
 use function dirname;
 use function strval;
@@ -79,9 +78,13 @@ final class BaseIDTest extends TestCase
     public function testMarshalling(): void
     {
         $baseId = new CustomBaseID(
-            [new Audience('urn:some:audience')],
-            'urn:x-simplesamlphp:namequalifier',
-            'urn:x-simplesamlphp:spnamequalifier',
+            [
+                new Audience(
+                    SAMLAnyURIValue::fromString('urn:some:audience'),
+                ),
+            ],
+            SAMLStringValue::fromString('urn:x-simplesamlphp:namequalifier'),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),
         );
 
         $this->assertEquals(
@@ -129,7 +132,10 @@ final class BaseIDTest extends TestCase
         $this->assertInstanceOf(UnknownID::class, $baseId);
         $this->assertEquals('urn:x-simplesamlphp:namequalifier', $baseId->getNameQualifier());
         $this->assertEquals('urn:x-simplesamlphp:spnamequalifier', $baseId->getSPNameQualifier());
-        $this->assertEquals('urn:x-simplesamlphp:namespace:UnknownBaseIDType', $baseId->getXsiType());
+        $this->assertEquals(
+            '{urn:x-simplesamlphp:namespace}ssp:UnknownBaseIDType',
+            $baseId->getXsiType()->getRawValue(),
+        );
 
         $chunk = $baseId->getRawIdentifier();
         $this->assertEquals('saml', $chunk->getPrefix());

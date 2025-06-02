@@ -44,16 +44,16 @@ class IsSuccessful implements ConstraintValidator
         $codes = $statusCode->getSubCodes();
         if (!empty($codes)) {
             foreach ($codes as $code) {
-                $subCodes[] = $this->truncateStatus($code->getValue());
+                $subCodes[] = $this->truncateStatus($code->getValue()->getValue());
             }
         }
         $statusMessage = $responseStatus->getStatusMessage();
 
         return sprintf(
             '%s%s%s',
-            $this->truncateStatus($statusCode->getValue()),
+            $this->truncateStatus($statusCode->getValue()->getValue()),
             $subCodes ? '/' . implode('/', $subCodes) : '',
-            $statusMessage ? ' ' . $statusMessage->getContent() : '',
+            $statusMessage ? ' ' . $statusMessage->getContent()->getValue() : '',
         );
     }
 

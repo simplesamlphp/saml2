@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, EntityIDValue, SAMLStringValue};
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 
 use function array_change_key_case;
 use function array_filter;
@@ -29,43 +28,40 @@ final class IDPEntry extends AbstractSamlpElement implements SchemaValidatableEl
     /**
      * Initialize an IDPEntry element.
      *
-     * @param string $providerId
-     * @param string|null $name
-     * @param string|null $loc
+     * @param \SimpleSAML\SAML2\Type\EntityIDValue $providerId
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $name
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $loc
      */
     public function __construct(
-        protected string $providerId,
-        protected ?string $name = null,
-        protected ?string $loc = null,
+        protected EntityIDValue $providerId,
+        protected ?SAMLStringValue $name = null,
+        protected ?SAMLAnyURIValue $loc = null,
     ) {
-        SAMLAssert::validEntityID($providerId);
-        Assert::nullOrNotWhitespaceOnly($name);
-        SAMLAssert::nullOrValidURI($loc);
     }
 
 
     /**
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\EntityIDValue
      */
-    public function getProviderId(): string
+    public function getProviderId(): EntityIDValue
     {
         return $this->providerId;
     }
 
 
     /**
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue|null
      */
-    public function getName(): ?string
+    public function getName(): ?SAMLStringValue
     {
         return $this->name;
     }
 
 
     /**
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null
      */
-    public function getLoc(): ?string
+    public function getLoc(): ?SAMLAnyURIValue
     {
         return $this->loc;
     }
@@ -87,11 +83,11 @@ final class IDPEntry extends AbstractSamlpElement implements SchemaValidatableEl
         Assert::same($xml->localName, 'IDPEntry', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, IDPEntry::NS, InvalidDOMElementException::class);
 
-        $providerId = self::getAttribute($xml, 'ProviderID');
-        $name = self::getOptionalAttribute($xml, 'Name', null);
-        $loc = self::getOptionalAttribute($xml, 'Loc', null);
-
-        return new static($providerId, $name, $loc);
+        return new static(
+            self::getAttribute($xml, 'ProviderID', EntityIDValue::class),
+            self::getOptionalAttribute($xml, 'Name', SAMLStringValue::class, null),
+            self::getOptionalAttribute($xml, 'Loc', SAMLAnyURIValue::class, null),
+        );
     }
 
 
@@ -104,14 +100,14 @@ final class IDPEntry extends AbstractSamlpElement implements SchemaValidatableEl
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('ProviderID', $this->getProviderId());
+        $e->setAttribute('ProviderID', $this->getProviderId()->getValue());
 
         if ($this->getName() !== null) {
-            $e->setAttribute('Name', $this->getName());
+            $e->setAttribute('Name', $this->getName()->getValue());
         }
 
         if ($this->getLoc() !== null) {
-            $e->setAttribute('Loc', $this->getLoc());
+            $e->setAttribute('Loc', $this->getLoc()->getValue());
         }
 
         return $e;
@@ -129,9 +125,9 @@ final class IDPEntry extends AbstractSamlpElement implements SchemaValidatableEl
         $data = self::processArrayContents($data);
 
         return new static(
-            $data['ProviderID'],
-            $data['Name'] ?? null,
-            $data['Loc'] ?? null,
+            EntityIDValue::fromString($data['ProviderID']),
+            $data['Name'] !== null ? SAMLStringValue::fromString($data['Name']) : null,
+            $data['Loc'] !== null ? SAMLAnyURIValue::fromString($data['Loc']) : null,
         );
     }
 
@@ -185,9 +181,9 @@ final class IDPEntry extends AbstractSamlpElement implements SchemaValidatableEl
     public function toArray(): array
     {
         $data = [
-            'ProviderID' => $this->getProviderID(),
-            'Name' => $this->getName(),
-            'Loc' => $this->getLoc(),
+            'ProviderID' => $this->getProviderID()->getValue(),
+            'Name' => $this->getName()?->getValue(),
+            'Loc' => $this->getLoc()?->getValue(),
         ];
 
         return array_filter($data);

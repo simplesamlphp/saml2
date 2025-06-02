@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
-use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
-use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\XML\md\{AbstractLocalizedName, AbstractLocalizedURI, AbstractMdElement};
 use SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\LanguageValue;
 
 use function dirname;
 use function strval;
@@ -56,7 +54,10 @@ final class PrivacyStatementURLTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = new PrivacyStatementURL('en', 'https://example.org/privacy');
+        $name = new PrivacyStatementURL(
+            LanguageValue::fromString('en'),
+            SAMLAnyURIValue::fromString('https://example.org/privacy'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

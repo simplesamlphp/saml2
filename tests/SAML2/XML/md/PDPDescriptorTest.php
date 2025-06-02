@@ -4,23 +4,25 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\XML\md\AbstractMdElement;
-use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
-use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
-use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType;
-use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
-use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
-use SimpleSAML\SAML2\XML\md\AuthzService;
-use SimpleSAML\SAML2\XML\md\NameIDFormat;
-use SimpleSAML\SAML2\XML\md\PDPDescriptor;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\XML\md\{
+    AbstractMdElement,
+    AbstractMetadataDocument,
+    AbstractRoleDescriptor,
+    AbstractRoleDescriptorType,
+    AbstractSignedMdElement,
+    AssertionIDRequestService,
+    AuthzService,
+    NameIDFormat,
+    PDPDescriptor,
+};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\IDValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -63,13 +65,13 @@ final class PDPDescriptorTest extends TestCase
         );
 
         self::$authzService = new AuthzService(
-            C::BINDING_SOAP,
-            'https://IdentityProvider.com/SAML/AA/SOAP',
+            SAMLAnyURIValue::fromString(C::BINDING_SOAP),
+            SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/AA/SOAP'),
         );
 
         self::$assertionIDRequestService = new AssertionIDRequestService(
-            C::BINDING_URI,
-            'https://IdentityProvider.com/SAML/AA/URI',
+            SAMLAnyURIValue::fromString(C::BINDING_URI),
+            SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/AA/URI'),
         );
     }
 
@@ -87,11 +89,17 @@ final class PDPDescriptorTest extends TestCase
             ["urn:oasis:names:tc:SAML:2.0:protocol"],
             [self::$assertionIDRequestService],
             [
-                new NameIDFormat(C::NAMEID_X509_SUBJECT_NAME),
-                new NameIDFormat(C::NAMEID_PERSISTENT),
-                new NameIDFormat(C::NAMEID_TRANSIENT),
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_X509_SUBJECT_NAME),
+                ),
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
+                ),
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
+                ),
             ],
-            'phpunit',
+            IDValue::fromString('phpunit'),
         );
 
         $this->assertEquals(
