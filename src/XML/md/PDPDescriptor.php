@@ -6,14 +6,12 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue};
+use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\{InvalidDOMElementException, TooManyElementsException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 use SimpleSAML\XML\Type\{DurationValue, IDValue};
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
-
-use function preg_split;
 
 /**
  * Class representing SAML 2 metadata PDPDescriptor.
@@ -29,7 +27,7 @@ final class PDPDescriptor extends AbstractRoleDescriptorType implements SchemaVa
      * PDPDescriptor constructor.
      *
      * @param \SimpleSAML\SAML2\XML\md\AuthzService[] $authzService
-     * @param string[] $protocolSupportEnumeration
+     * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
      * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
      * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
      * @param \SimpleSAML\XML\Type\IDValue|null $ID
@@ -44,7 +42,7 @@ final class PDPDescriptor extends AbstractRoleDescriptorType implements SchemaVa
      */
     public function __construct(
         protected array $authzService,
-        array $protocolSupportEnumeration,
+        AnyURIListValue $protocolSupportEnumeration,
         protected array $assertionIDRequestService = [],
         protected array $nameIDFormat = [],
         ?IDValue $ID = null,
@@ -139,8 +137,6 @@ final class PDPDescriptor extends AbstractRoleDescriptorType implements SchemaVa
         Assert::same($xml->localName, 'PDPDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, PDPDescriptor::NS, InvalidDOMElementException::class);
 
-        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
             $orgs,
@@ -162,7 +158,7 @@ final class PDPDescriptor extends AbstractRoleDescriptorType implements SchemaVa
 
         $pdp = new static(
             AuthzService::getChildrenOfClass($xml),
-            preg_split('/[\s]+/', trim($protocols->getValue())),
+            self::getAttribute($xml, 'protocolSupportEnumeration', AnyURIListValue::class),
             AssertionIDRequestService::getChildrenOfClass($xml),
             NameIDFormat::getChildrenOfClass($xml),
             self::getOptionalAttribute($xml, 'ID', IDValue::class, null),

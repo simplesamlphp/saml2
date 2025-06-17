@@ -6,14 +6,12 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue};
+use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\{InvalidDOMElementException, TooManyElementsException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 use SimpleSAML\XML\Type\{DurationValue, IDValue};
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
-
-use function preg_split;
 
 /**
  * Class representing SAML 2 metadata AuthnAuthorityDescriptor.
@@ -29,7 +27,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType implemen
      * AuthnAuthorityDescriptor constructor.
      *
      * @param array $authnQueryService
-     * @param array $protocolSupportEnumeration
+     * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
      * @param array $assertionIDRequestService
      * @param array $nameIDFormat
      * @param \SimpleSAML\XML\Type\IDValue|null $ID
@@ -44,7 +42,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType implemen
      */
     public function __construct(
         protected array $authnQueryService,
-        array $protocolSupportEnumeration,
+        AnyURIListValue $protocolSupportEnumeration,
         protected array $assertionIDRequestService = [],
         protected array $nameIDFormat = [],
         ?IDValue $ID = null,
@@ -139,8 +137,6 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType implemen
         Assert::same($xml->localName, 'AuthnAuthorityDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AuthnAuthorityDescriptor::NS, InvalidDOMElementException::class);
 
-        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-
         $authnQueryServices = AuthnQueryService::getChildrenOfClass($xml);
         $assertionIDRequestServices = AssertionIDRequestService::getChildrenOfClass($xml);
         $nameIDFormats = NameIDFormat::getChildrenOfClass($xml);
@@ -171,7 +167,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType implemen
 
         $authority = new static(
             $authnQueryServices,
-            preg_split('/[\s]+/', trim($protocols->getValue())),
+            self::getAttribute($xml, 'protocolSupportEnumeration', AnyURIListValue::class),
             $assertionIDRequestServices,
             $nameIDFormats,
             self::getOptionalAttribute($xml, 'ID', IDValue::class, null),

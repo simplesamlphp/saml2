@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
+use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\SAML2\XML\md\{
     AbstractRoleDescriptor,
     ContactPerson,
@@ -47,7 +47,8 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
      * CustomRoleDescriptor constructor.
      *
      * @param \SimpleSAML\XML\SerializableElementInterface[] $chunk
-     * @param string[] $protocolSupportEnumeration A set of URI specifying the protocols supported.
+     * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
+     *   A set of URI specifying the protocols supported.
      * @param \SimpleSAML\XML\Type\IDValue|null $ID The ID for this document. Defaults to null.
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
      *   Defaults to null.
@@ -66,7 +67,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
      */
     public function __construct(
         protected array $chunk,
-        array $protocolSupportEnumeration,
+        AnyURIListValue $protocolSupportEnumeration,
         ?IDValue $ID = null,
         ?SAMLDateTimeValue $validUntil = null,
         ?DurationValue $cacheDuration = null,
@@ -132,8 +133,6 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
         $type = $xml->getAttributeNS(C::NS_XSI, 'type');
         Assert::same($type, self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME);
 
-        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration', SAMLStringValue::class);
-
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
             $orgs,
@@ -152,7 +151,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
 
         return new static(
             self::getChildElementsFromXML($xml),
-            preg_split('/[\s]+/', trim($protocols->getValue())),
+            self::getAttribute($xml, 'protocolSupportEnumeration', AnyURIListValue::class),
             self::getOptionalAttribute($xml, 'ID', IDValue::class, null),
             self::getOptionalAttribute($xml, 'validUntil', SAMLDateTimeValue::class, null),
             self::getOptionalAttribute($xml, 'cacheDuration', DurationValue::class, null),

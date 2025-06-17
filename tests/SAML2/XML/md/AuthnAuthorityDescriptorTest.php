@@ -10,7 +10,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue};
 use SimpleSAML\SAML2\XML\md\{
     AbstractMdElement,
     AbstractMetadataDocument,
@@ -87,7 +87,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     {
         $aad = new AuthnAuthorityDescriptor(
             [self::$aqs],
-            [C::NS_SAMLP, C::PROTOCOL],
+            AnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
             [self::$aidrs],
             [
                 new NameIDFormat(
@@ -116,7 +116,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->expectExceptionMessage('Missing at least one AuthnQueryService in AuthnAuthorityDescriptor.');
         new AuthnAuthorityDescriptor(
             [],
-            [C::NS_SAMLP, C::PROTOCOL],
+            AnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
             [self::$aidrs],
             [
                 new NameIDFormat(
@@ -138,7 +138,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     {
         new AuthnAuthorityDescriptor(
             [self::$aqs],
-            [C::NS_SAMLP, C::PROTOCOL],
+            AnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
         );
     }
 
@@ -152,7 +152,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->expectExceptionMessage('AuthnQueryService must be an instance of EndpointType');
         new AuthnAuthorityDescriptor(
             [self::$aqs, ''],
-            [C::NS_SAMLP, C::PROTOCOL],
+            AnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
             [self::$aidrs],
             [
                 new NameIDFormat(
@@ -175,7 +175,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         $this->expectExceptionMessage('AssertionIDRequestServices must be an instance of EndpointType');
         new AuthnAuthorityDescriptor(
             [self::$aqs],
-            [C::NS_SAMLP, C::PROTOCOL],
+            AnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
             [self::$aidrs, ''],
             [
                 new NameIDFormat(

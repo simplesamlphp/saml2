@@ -6,15 +6,14 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue};
-use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\Type\{DurationValue, IDValue};
 use SimpleSAML\XML\XsNamespace as NS;
 
-use function implode;
+use function strval;
 
 /**
  * Class representing SAML2 RoleDescriptorType.
@@ -33,7 +32,8 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
     /**
      * Initialize a RoleDescriptor.
      *
-     * @param string[] $protocolSupportEnumeration A set of URI specifying the protocols supported.
+     * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
+     *   A set of URI specifying the protocols supported.
      * @param \SimpleSAML\XML\Type\IDValue|null $ID The ID for this document. Defaults to null.
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
      *   Defaults to null.
@@ -51,7 +51,7 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
-        protected array $protocolSupportEnumeration,
+        protected AnyURIListValue $protocolSupportEnumeration,
         ?IDValue $ID = null,
         ?SAMLDateTimeValue $validUntil = null,
         ?DurationValue $cacheDuration = null,
@@ -62,13 +62,18 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
         protected array $contact = [],
         array $namespacedAttributes = [],
     ) {
-        Assert::maxCount($protocolSupportEnumeration, C::UNBOUNDED_LIMIT);
-        Assert::minCount(
-            $protocolSupportEnumeration,
-            1,
-            'At least one protocol must be supported by this ' . static::NS_PREFIX . ':' . static::getLocalName() . '.',
+        /**
+         * A whitespace-delimited set of URIs that identify the set of protocol specifications supported by the
+         * role element. For SAML V2.0 entities, this set MUST include the SAML protocol namespace URI,
+         * urn:oasis:names:tc:SAML:2.0:protocol.
+         */
+        Assert::contains(
+            strval($protocolSupportEnumeration),
+            C::NS_SAMLP,
+            'SAML v2.0 entities MUST include the SAML protocol namespace URI in their'
+            . ' protocolSupportEnumeration attribute',
+            ProtocolViolationException::class,
         );
-        SAMLAssert::allValidURI($protocolSupportEnumeration, SchemaViolationException::class);
         Assert::maxCount($contact, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $contact,
@@ -102,9 +107,9 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
     /**
      * Collect the value of the protocolSupportEnumeration property.
      *
-     * @return string[]
+     * @return \SimpleSAML\SAML2\Type\AnyURIListValue
      */
-    public function getProtocolSupportEnumeration(): array
+    public function getProtocolSupportEnumeration(): AnyURIListValue
     {
         return $this->protocolSupportEnumeration;
     }
@@ -152,10 +157,10 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toUnsignedXML($parent);
-        $e->setAttribute('protocolSupportEnumeration', implode(' ', $this->getProtocolSupportEnumeration()));
+        $e->setAttribute('protocolSupportEnumeration', strval($this->getProtocolSupportEnumeration()));
 
         if ($this->getErrorURL() !== null) {
-            $e->setAttribute('errorURL', $this->getErrorURL()->getValue());
+            $e->setAttribute('errorURL', strval($this->getErrorURL()));
         }
 
         foreach ($this->getKeyDescriptor() as $kd) {

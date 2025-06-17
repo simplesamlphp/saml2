@@ -7,7 +7,14 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, EmailAddressValue, KeyTypesValue, SAMLStringValue};
+use SimpleSAML\SAML2\Type\{
+    AnyURIListValue,
+    SAMLAnyURIValue,
+    SAMLDateTimeValue,
+    EmailAddressValue,
+    KeyTypesValue,
+    SAMLStringValue,
+};
 use SimpleSAML\SAML2\XML\md\{
     AbstractMdElement,
     AbstractMetadataDocument,
@@ -196,7 +203,7 @@ final class SPSSODescriptorTest extends TestCase
 
         $spssod = new SPSSODescriptor(
             [$acs1, $acs2],
-            [C::NS_SAMLP],
+            AnyURIListValue::fromString(C::NS_SAMLP),
             BooleanValue::fromBoolean(true),
             BooleanValue::fromBoolean(false),
             [$attrcs1, $attrcs2],
@@ -235,7 +242,7 @@ final class SPSSODescriptorTest extends TestCase
 
         new SPSSODescriptor(
             [],
-            [C::NS_SAMLP],
+            AnyURIListValue::fromString(C::NS_SAMLP),
         );
     }
 
@@ -253,7 +260,7 @@ final class SPSSODescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString(C::LOCATION_A),
                 ),
             ],
-            [C::NS_SAMLP],
+            AnyURIListValue::fromString(C::NS_SAMLP),
         );
 
         $this->assertNull($spssod->getAuthnRequestsSigned());

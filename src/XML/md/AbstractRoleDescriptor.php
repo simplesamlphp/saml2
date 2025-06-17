@@ -7,13 +7,13 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
+use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\{ExtensionPointInterface, ExtensionPointTrait};
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Exception\{InvalidDOMElementException, SchemaViolationException, TooManyElementsException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\{DurationValue, IDValue, QNameValue, StringValue};
+use SimpleSAML\XML\Type\{DurationValue, IDValue, QNameValue};
 
 use function array_pop;
 
@@ -38,7 +38,8 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
      * Initialize a md:RoleDescriptor from scratch.
      *
      * @param \SimpleSAML\XML\Type\QNameValue $type
-     * @param string[] $protocolSupportEnumeration A set of URI specifying the protocols supported.
+     * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
+     *   A set of URI specifying the protocols supported.
      * @param \SimpleSAML\XML\Type\IDValue|null $ID The ID for this document. Defaults to null.
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
      *   Defaults to null.
@@ -57,7 +58,7 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
      */
     public function __construct(
         protected QNameValue $type,
-        array $protocolSupportEnumeration,
+        AnyURIListValue $protocolSupportEnumeration,
         ?IDValue $ID = null,
         ?SAMLDateTimeValue $validUntil = null,
         ?DurationValue $cacheDuration = null,
@@ -118,8 +119,6 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
         $handler = Utils::getContainer()->getExtensionHandler($type);
         if ($handler === null) {
             // we don't have a handler, proceed with unknown RoleDescriptor
-            $protocols = self::getAttribute($xml, 'protocolSupportEnumeration', SAMLStringValue::class);
-
             $orgs = Organization::getChildrenOfClass($xml);
             Assert::maxCount(
                 $orgs,
@@ -139,7 +138,7 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
             return new UnknownRoleDescriptor(
                 new Chunk($xml),
                 $type,
-                preg_split('/[\s]+/', trim($protocols->getValue())),
+                self::getAttribute($xml, 'protocolSupportEnumeration', AnyURIListValue::class),
                 self::getOptionalAttribute($xml, 'ID', IDValue::class, null),
                 self::getOptionalAttribute($xml, 'validUntil', SAMLDateTimeValue::class, null),
                 self::getOptionalAttribute($xml, 'cacheDuration', DurationValue::class, null),

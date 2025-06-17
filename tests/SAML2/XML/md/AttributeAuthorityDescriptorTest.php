@@ -4,12 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use Exception;
 use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
+use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\md\{
     AbstractMdElement,
     AbstractMetadataDocument,
@@ -109,7 +107,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         );
         $aad = new AttributeAuthorityDescriptor(
             [self::$as],
-            [C::NS_SAMLP],
+            AnyURIListValue::fromString(C::NS_SAMLP),
             [self::$aidrs],
             [
                 new NameIDFormat(
@@ -142,25 +140,12 @@ final class AttributeAuthorityDescriptorTest extends TestCase
 
 
     /**
-     * Test that creating an AttributeAuthorityDescriptor with no supported protocols fails.
-     */
-    public function testMarshallingWithoutSupportedProtocols(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage(
-            'At least one protocol must be supported by this md:AttributeAuthorityDescriptor.',
-        );
-        new AttributeAuthorityDescriptor([self::$as], []);
-    }
-
-
-    /**
      * Test that creating an AttributeAuthorityDescriptor with an empty supported protocol fails.
      */
     public function testMarshallingWithEmptySupportedProtocols(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        new AttributeAuthorityDescriptor([self::$as], []);
+        $this->expectException(ProtocolViolationException::class);
+        new AttributeAuthorityDescriptor([self::$as], AnyURIListValue::fromString(''));
     }
 
 
@@ -171,7 +156,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     {
         $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage('AttributeAuthorityDescriptor must contain at least one AttributeService.');
-        new AttributeAuthorityDescriptor([], [C::NS_SAMLP]);
+        new AttributeAuthorityDescriptor([], AnyURIListValue::fromString(C::NS_SAMLP));
     }
 
 
@@ -180,7 +165,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithoutOptionalParameters(): void
     {
-        $aad = new AttributeAuthorityDescriptor([self::$as], [C::NS_SAMLP]);
+        $aad = new AttributeAuthorityDescriptor([self::$as], AnyURIListValue::fromString(C::NS_SAMLP));
         $this->assertEmpty($aad->getAssertionIDRequestService());
         $this->assertEmpty($aad->getNameIDFormat());
         $this->assertEmpty($aad->getID());
@@ -199,7 +184,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithEmptyAssertionIDRequestService(): void
     {
-        $aad = new AttributeAuthorityDescriptor([self::$as], [C::NS_SAMLP], []);
+        $aad = new AttributeAuthorityDescriptor([self::$as], AnyURIListValue::fromString(C::NS_SAMLP), []);
         $this->assertEmpty($aad->getAssertionIDRequestService());
         $this->assertEmpty($aad->getNameIDFormat());
         $this->assertEmpty($aad->getID());

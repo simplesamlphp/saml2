@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
+use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\{InvalidDOMElementException, TooManyElementsException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
@@ -14,7 +14,6 @@ use SimpleSAML\XML\Type\{BooleanValue, DurationValue, IDValue};
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_filter;
-use function preg_split;
 use function var_export;
 
 /**
@@ -31,7 +30,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
      * SPSSODescriptor constructor.
      *
      * @param array<\SimpleSAML\SAML2\XML\md\AssertionConsumerService> $assertionConsumerService
-     * @param string[] $protocolSupportEnumeration
+     * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
      * @param \SimpleSAML\XML\Type\BooleanValue|null $authnRequestsSigned
      * @param \SimpleSAML\XML\Type\BooleanValue|null $wantAssertionsSigned
      * @param array<\SimpleSAML\SAML2\XML\md\AttributeConsumingService> $attributeConsumingService
@@ -50,7 +49,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
      */
     public function __construct(
         protected array $assertionConsumerService,
-        array $protocolSupportEnumeration,
+        AnyURIListValue $protocolSupportEnumeration,
         protected ?BooleanValue $authnRequestsSigned = null,
         protected ?BooleanValue $wantAssertionsSigned = null,
         protected array $attributeConsumingService = [],
@@ -175,8 +174,6 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
         Assert::same($xml->localName, 'SPSSODescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SPSSODescriptor::NS, InvalidDOMElementException::class);
 
-        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration', SAMLStringValue::class);
-
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
             $orgs,
@@ -203,7 +200,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
 
         $spssod = new static(
             AssertionConsumerService::getChildrenOfClass($xml),
-            preg_split('/[\s]+/', trim($protocols->getValue())),
+            self::getAttribute($xml, 'protocolSupportEnumeration', AnyURIListValue::class),
             self::getOptionalAttribute($xml, 'AuthnRequestsSigned', BooleanValue::class, null),
             self::getOptionalAttribute($xml, 'WantAssertionsSigned', BooleanValue::class, null),
             AttributeConsumingService::getChildrenOfClass($xml),

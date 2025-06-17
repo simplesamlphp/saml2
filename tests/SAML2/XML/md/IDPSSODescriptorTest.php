@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, KeyTypesValue, SAMLStringValue};
+use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, KeyTypesValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\md\{
     AbstractMdElement,
     AbstractMetadataDocument,
@@ -89,7 +89,7 @@ final class IDPSSODescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/SSO/Browser'),
                 ),
             ],
-            protocolSupportEnumeration: [C::NS_SAMLP],
+            protocolSupportEnumeration: AnyURIListValue::fromString(C::NS_SAMLP),
             wantAuthnRequestsSigned: BooleanValue::fromBoolean(true),
             nameIDMappingService: [
                 new NameIDMappingService(
@@ -200,7 +200,7 @@ final class IDPSSODescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('At least one SingleSignOnService must be specified.');
-        new IDPSSODescriptor([], [C::NS_SAMLP]);
+        new IDPSSODescriptor([], AnyURIListValue::fromString(C::NS_SAMLP));
     }
 
 
@@ -209,8 +209,11 @@ final class IDPSSODescriptorTest extends TestCase
      */
     public function testMarshallingWithoutProtocolSupportThrowsException(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('At least one protocol must be supported by this md:IDPSSODescriptor.');
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage(
+            'SAML v2.0 entities MUST include the SAML protocol namespace URI '
+            . 'in their protocolSupportEnumeration attribute',
+        );
 
         new IDPSSODescriptor(
             [
@@ -219,7 +222,7 @@ final class IDPSSODescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString(C::LOCATION_A),
                 ),
             ],
-            [],
+            AnyURIListValue::fromString(''),
         );
     }
 
@@ -240,7 +243,7 @@ final class IDPSSODescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString(C::LOCATION_B),
                 ),
             ],
-            [C::NS_SAMLP, C::PROTOCOL],
+            AnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
         );
         $this->assertNull($idpssod->wantAuthnRequestsSigned());
         $this->assertEquals([], $idpssod->getNameIDMappingService());

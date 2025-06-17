@@ -12,7 +12,7 @@ use SimpleSAML\SAML2\Type\ListOfStringsValue;
 /**
  * Class \SimpleSAML\Test\SAML2\Type\ListOfStringsTest
  *
- * @package simplesamlphp/xml-common
+ * @package simplesamlphp/saml2
  */
 #[Group('type')]
 #[CoversClass(ListOfStringsValue::class)]
@@ -23,7 +23,7 @@ final class ListOfStringsValueTest extends TestCase
      * @param string $listOfStrings
      */
     #[DataProvider('provideListOfStrings')]
-    public function testNMtokens(bool $shouldPass, string $listOfStrings): void
+    public function testListOfStrings(bool $shouldPass, string $listOfStrings): void
     {
         try {
             ListOfStringsValue::fromString($listOfStrings);
