@@ -9,10 +9,15 @@ use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, EntityIDValue, SAMLStringValue};
+use SimpleSAML\SAML2\Type\{
+    AuthnContextComparisonTypeValue,
+    SAMLAnyURIValue,
+    SAMLDateTimeValue,
+    EntityIDValue,
+    SAMLStringValue,
+};
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\Comparison;
 use SimpleSAML\SAML2\XML\saml\{
     Audience,
     AudienceRestriction,
@@ -28,6 +33,7 @@ use SimpleSAML\SAML2\XML\saml\{
 use SimpleSAML\SAML2\XML\samlp\{
     AbstractMessage,
     AbstractSamlpElement,
+    AuthnContextComparisonTypeEnum,
     AuthnRequest,
     GetComplete,
     IDPEntry,
@@ -123,7 +129,7 @@ final class AuthnRequestTest extends TestCase
                     SAMLAnyURIValue::fromString('urn:test:accr2'),
                 ),
             ],
-            Comparison::BETTER,
+            AuthnContextComparisonTypeValue::fromEnum(AuthnContextComparisonTypeEnum::Better),
         );
 
         // Create Subject

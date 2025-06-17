@@ -8,10 +8,9 @@ use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
-use SimpleSAML\SAML2\XML\Comparison;
+use SimpleSAML\SAML2\Type\{AuthnContextComparisonTypeValue, SAMLAnyURIValue};
 use SimpleSAML\SAML2\XML\saml\{AuthnContextClassRef, AuthnContextDeclRef};
-use SimpleSAML\SAML2\XML\samlp\{AbstractSamlpElement, RequestedAuthnContext};
+use SimpleSAML\SAML2\XML\samlp\{AbstractSamlpElement, AuthnContextComparisonTypeEnum, RequestedAuthnContext};
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
@@ -55,7 +54,7 @@ final class RequestedAuthnContextTest extends TestCase
 
         $requestedAuthnContext = new RequestedAuthnContext(
             [$authnContextDeclRef],
-            Comparison::EXACT,
+            AuthnContextComparisonTypeValue::fromEnum(AuthnContextComparisonTypeEnum::Exact),
         );
 
         $this->assertEquals(
@@ -81,7 +80,7 @@ final class RequestedAuthnContextTest extends TestCase
 
         new RequestedAuthnContext(
             [$authnContextClassRef, $authnContextDeclRef],
-            Comparison::EXACT,
+            AuthnContextComparisonTypeValue::fromEnum(AuthnContextComparisonTypeEnum::Exact),
         );
     }
 
@@ -105,7 +104,7 @@ final class RequestedAuthnContextTest extends TestCase
                 DOMDocumentFactory::fromString('<root />'),
                 $authnContextDeclRef,
             ],
-            Comparison::EXACT,
+            AuthnContextComparisonTypeValue::fromEnum(AuthnContextComparisonTypeEnum::Exact),
         );
     }
 

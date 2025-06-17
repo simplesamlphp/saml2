@@ -7,14 +7,14 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
-use SimpleSAML\SAML2\XML\Comparison;
+use SimpleSAML\SAML2\Type\{AuthnContextComparisonTypeValue, SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\saml\{AuthnContextDeclRef, Issuer, NameID, Subject};
 use SimpleSAML\SAML2\XML\samlp\{
     AbstractMessage,
     AbstractRequest,
     AbstractSamlpElement,
     AbstractSubjectQuery,
+    AuthnContextComparisonTypeEnum,
     AuthnQuery,
     RequestedAuthnContext,
 };
@@ -67,7 +67,10 @@ final class AuthnQueryTest extends TestCase
         $authnContextDeclRef = new AuthnContextDeclRef(
             SAMLAnyURIValue::fromString('https://example.org/relative/path/to/document.xml'),
         );
-        $requestedAuthnContext = new RequestedAuthnContext([$authnContextDeclRef], Comparison::EXACT);
+        $requestedAuthnContext = new RequestedAuthnContext(
+            [$authnContextDeclRef],
+            AuthnContextComparisonTypeValue::fromEnum(AuthnContextComparisonTypeEnum::Exact),
+        );
 
         $authnQuery = new AuthnQuery(
             id: IDValue::fromString('aaf23196-1773-2113-474a-fe114412ab72'),

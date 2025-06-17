@@ -7,14 +7,14 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\SAMLStringValue;
-use SimpleSAML\SAML2\XML\Comparison;
+use SimpleSAML\SAML2\Type\{AuthnContextComparisonTypeValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\saml\{AuthnContextClassRef, AuthnContextDeclRef};
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\{InvalidDOMElementException, SchemaViolationException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 
 use function array_merge;
+use function strval;
 
 /**
  * Class representing SAML2 RequestedAuthnContext
@@ -33,11 +33,11 @@ final class RequestedAuthnContext extends AbstractSamlpElement implements Schema
      *    \SimpleSAML\SAML2\XML\saml\AuthnContextClassRef|
      *    \SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef
      * )[] $requestedAuthnContexts
-     * @param \SimpleSAML\SAML2\XML\Comparison $Comparison
+     * @param \SimpleSAML\SAML2\Type\AuthnContextComparisonTypeValue $Comparison
      */
     public function __construct(
         protected array $requestedAuthnContexts = [],
-        protected ?Comparison $Comparison = null,
+        protected ?AuthnContextComparisonTypeValue $Comparison = null,
     ) {
         Assert::maxCount($requestedAuthnContexts, C::UNBOUNDED_LIMIT);
         Assert::minCount($requestedAuthnContexts, 1, SchemaViolationException::class);
@@ -79,9 +79,9 @@ final class RequestedAuthnContext extends AbstractSamlpElement implements Schema
     /**
      * Collect the value of the Comparison-property
      *
-     * @return \SimpleSAML\SAML2\XML\Comparison|null
+     * @return \SimpleSAML\SAML2\Type\AuthnContextComparisonTypeValue|null
      */
-    public function getComparison(): ?Comparison
+    public function getComparison(): ?AuthnContextComparisonTypeValue
     {
         return $this->Comparison;
     }
@@ -101,19 +101,12 @@ final class RequestedAuthnContext extends AbstractSamlpElement implements Schema
         Assert::same($xml->localName, 'RequestedAuthnContext', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, RequestedAuthnContext::NS, InvalidDOMElementException::class);
 
-        $Comparison = self::getOptionalAttribute(
-            $xml,
-            'Comparison',
-            SAMLStringValue::class,
-            SAMLStringValue::fromString('unknown'),
-        );
-
         return new static(
             array_merge(
                 AuthnContextClassRef::getChildrenOfClass($xml),
                 AuthnContextDeclRef::getChildrenOfClass($xml),
             ),
-            Comparison::tryFrom($Comparison->getValue()),
+            self::getOptionalAttribute($xml, 'Comparison', AuthnContextComparisonTypeValue::class, null),
         );
     }
 
@@ -133,7 +126,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement implements Schema
         }
 
         if ($this->getComparison() !== null) {
-            $e->setAttribute('Comparison', $this->getComparison()->value);
+            $e->setAttribute('Comparison', strval($this->getComparison()));
         }
 
         return $e;
