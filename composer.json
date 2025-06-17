@@ -31,7 +31,7 @@
         "psr/http-message": "~2.0",
         "psr/log": "~2.3.1 || ~3.0.0",
         "simplesamlphp/assert": "~1.8.1",
-        "simplesamlphp/xml-common": "dev-feature/xsd-types",
+        "simplesamlphp/xml-common": "dev-master",
         "simplesamlphp/xml-security": "dev-feature/xsd-types",
         "simplesamlphp/xml-soap": "dev-feature/xsd-types"
     },
