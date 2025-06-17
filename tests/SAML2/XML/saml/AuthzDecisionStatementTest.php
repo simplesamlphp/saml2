@@ -7,13 +7,13 @@ namespace SimpleSAML\SAML2\Test\SAML2\XML\saml;
 use DOMDocument;
 use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
-use SimpleSAML\SAML2\XML\Decision;
+use SimpleSAML\SAML2\Type\{DecisionTypeValue, SAMLAnyURIValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\saml\{
     AbstractSamlElement,
     AbstractStatement,
     Action,
     AuthzDecisionStatement,
+    DecisionTypeEnum,
     Evidence,
 };
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -63,7 +63,7 @@ final class AuthzDecisionStatementTest extends TestCase
     {
         $authzDecisionStatement = new AuthzDecisionStatement(
             SAMLAnyURIValue::fromString('urn:x-simplesamlphp:resource'),
-            Decision::PERMIT,
+            DecisionTypeValue::fromEnum(DecisionTypeEnum::Permit),
             [
                 new Action(
                     SAMLAnyURIValue::fromString('urn:x-simplesamlphp:namespace'),
