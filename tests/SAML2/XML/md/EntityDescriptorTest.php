@@ -9,10 +9,11 @@ use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\{
-    SAMLAnyURIValue,
-    SAMLDateTimeValue,
+    AnyURIListValue,
     EmailAddressValue,
     EntityIDValue,
+    SAMLAnyURIValue,
+    SAMLDateTimeValue,
     SAMLStringValue,
 };
 use SimpleSAML\SAML2\XML\md\{
@@ -101,7 +102,7 @@ final class EntityDescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString('https://engine.test.example.edu/authentication/idp/single-sign-on'),
                 ),
             ],
-            [C::NS_SAMLP],
+            AnyURIListValue::fromString(C::NS_SAMLP),
         );
         $attrad = new AttributeAuthorityDescriptor(
             [
@@ -110,7 +111,7 @@ final class EntityDescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString('https://idp.example.org/AttributeService'),
                 ),
             ],
-            [C::NS_SAMLP],
+            AnyURIListValue::fromString(C::NS_SAMLP),
         );
         $authnad = new AuthnAuthorityDescriptor(
             [
@@ -119,7 +120,7 @@ final class EntityDescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString('http://www.example.com/aqs'),
                 ),
             ],
-            [C::NS_SAMLP],
+            AnyURIListValue::fromString(C::NS_SAMLP),
         );
         $pdpd = new PDPDescriptor(
             [
@@ -128,7 +129,7 @@ final class EntityDescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/AA/SOAP'),
                 ),
             ],
-            [C::NS_SAMLP],
+            AnyURIListValue::fromString(C::NS_SAMLP),
         );
         $org = new Organization(
             [

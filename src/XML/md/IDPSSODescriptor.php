@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue};
+use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\{InvalidDOMElementException, TooManyElementsException};
@@ -14,7 +14,6 @@ use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementT
 use SimpleSAML\XML\Type\{BooleanValue, DurationValue, IDValue};
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
-use function preg_split;
 use function var_export;
 
 /**
@@ -30,7 +29,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor implements SchemaVali
      * IDPSSODescriptor constructor.
      *
      * @param \SimpleSAML\SAML2\XML\md\SingleSignOnService[] $singleSignOnService
-     * @param string[] $protocolSupportEnumeration
+     * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
      * @param \SimpleSAML\XML\Type\BooleanValue|null $wantAuthnRequestsSigned
      * @param \SimpleSAML\SAML2\XML\md\NameIDMappingService[] $nameIDMappingService
      * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
@@ -51,7 +50,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor implements SchemaVali
      */
     public function __construct(
         protected array $singleSignOnService,
-        array $protocolSupportEnumeration,
+        AnyURIListValue $protocolSupportEnumeration,
         protected ?BooleanValue $wantAuthnRequestsSigned = null,
         protected array $nameIDMappingService = [],
         protected array $assertionIDRequestService = [],
@@ -200,8 +199,6 @@ final class IDPSSODescriptor extends AbstractSSODescriptor implements SchemaVali
         Assert::same($xml->localName, 'IDPSSODescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, IDPSSODescriptor::NS, InvalidDOMElementException::class);
 
-        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
             $orgs,
@@ -228,7 +225,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor implements SchemaVali
 
         $idpssod = new static(
             SingleSignOnService::getChildrenOfClass($xml),
-            preg_split('/[\s]+/', trim($protocols->getValue())),
+            self::getAttribute($xml, 'protocolSupportEnumeration', AnyURIListValue::class),
             self::getOptionalAttribute($xml, 'WantAuthnRequestsSigned', BooleanValue::class, null),
             NameIDMappingService::getChildrenOfClass($xml),
             AssertionIDRequestService::getChildrenOfClass($xml),

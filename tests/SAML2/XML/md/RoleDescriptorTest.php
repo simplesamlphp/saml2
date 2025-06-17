@@ -9,10 +9,11 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\{AbstractContainer, ContainerSingleton};
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\{
-    SAMLAnyURIValue,
-    SAMLDateTimeValue,
+    AnyURIListValue,
     EmailAddressValue,
     KeyTypesValue,
+    SAMLAnyURIValue,
+    SAMLDateTimeValue,
     SAMLStringValue,
 };
 use SimpleSAML\SAML2\XML\md\{
@@ -116,7 +117,7 @@ final class RoleDescriptorTest extends TestCase
                     '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
                 )->documentElement),
             ],
-            [C::NS_SAMLP, C::PROTOCOL],
+            AnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
             IDValue::fromString('TheID'),
             SAMLDateTimeValue::fromString('2009-02-13T23:31:30Z'),
             DurationValue::fromString('PT5000S'),
@@ -233,7 +234,7 @@ final class RoleDescriptorTest extends TestCase
         $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptor()[1]);
         $this->assertEquals(
             [C::NS_SAMLP, C::PROTOCOL],
-            $descriptor->getProtocolSupportEnumeration(),
+            $descriptor->getProtocolSupportEnumeration()->toArray(),
         );
         $this->assertInstanceOf(Organization::class, $descriptor->getOrganization());
         $this->assertCount(2, $descriptor->getContactPerson());
@@ -278,7 +279,7 @@ final class RoleDescriptorTest extends TestCase
         $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptor()[1]);
         $this->assertEquals(
             [C::NS_SAMLP, C::PROTOCOL],
-            $descriptor->getProtocolSupportEnumeration(),
+            $descriptor->getProtocolSupportEnumeration()->toArray(),
         );
         $this->assertInstanceOf(Organization::class, $descriptor->getOrganization());
         $this->assertCount(2, $descriptor->getContactPerson());
