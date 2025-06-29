@@ -5,10 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\SAML2\XML\StringElementTrait;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\TypedTextContentTrait;
+
+use function strval;
 
 /**
  * SAML NameIDType abstract data type.
@@ -19,30 +21,28 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
 abstract class NameIDType extends AbstractSamlElement implements IdentifierInterface
 {
     use IDNameQualifiersTrait;
-    use StringElementTrait;
+    use TypedTextContentTrait;
+
+    /** @var string */
+    public const TEXTCONTENT_TYPE = SAMLStringValue::class;
 
 
     /**
      * Initialize a saml:NameIDType from scratch
      *
-     * @param string $value
-     * @param string|null $Format
-     * @param string|null $SPProvidedID
-     * @param string|null $NameQualifier
-     * @param string|null $SPNameQualifier
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue $value
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $Format
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $SPProvidedID
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $NameQualifier
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $SPNameQualifier
      */
     protected function __construct(
-        string $value,
-        protected ?string $NameQualifier = null,
-        protected ?string $SPNameQualifier = null,
-        protected ?string $Format = null,
-        protected ?string $SPProvidedID = null,
+        SAMLStringValue|SAMLAnyURIValue $value,
+        protected ?SAMLStringValue $NameQualifier = null,
+        protected ?SAMLStringValue $SPNameQualifier = null,
+        protected ?SAMLAnyURIValue $Format = null,
+        protected ?SAMLStringValue $SPProvidedID = null,
     ) {
-        SAMLAssert::nullOrValidEntityID($NameQualifier);
-        SAMLAssert::nullOrValidEntityID($SPNameQualifier);
-        SAMLAssert::nullOrValidURI($Format);
-        Assert::nullOrNotWhitespaceOnly($SPProvidedID);
-
         $this->setContent($value);
     }
 
@@ -50,9 +50,9 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
     /**
      * Collect the value of the Format-property
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null
      */
-    public function getFormat(): ?string
+    public function getFormat(): ?SAMLAnyURIValue
     {
         return $this->Format;
     }
@@ -61,24 +61,11 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
     /**
      * Collect the value of the SPProvidedID-property
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue|null
      */
-    public function getSPProvidedID(): ?string
+    public function getSPProvidedID(): ?SAMLStringValue
     {
         return $this->SPProvidedID;
-    }
-
-
-    /**
-     * Validate the content of the element.
-     *
-     * @param string $content  The value to go in the XML textContent
-     * @throws \Exception on failure
-     * @return void
-     */
-    protected function validateContent(string $content): void
-    {
-        Assert::notWhitespaceOnly($content);
     }
 
 
@@ -96,12 +83,13 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
         Assert::same($xml->localName, static::getLocalName(), InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, static::NS, InvalidDOMElementException::class);
 
-        $NameQualifier = self::getOptionalAttribute($xml, 'NameQualifier', null);
-        $SPNameQualifier = self::getOptionalAttribute($xml, 'SPNameQualifier', null);
-        $Format = self::getOptionalAttribute($xml, 'Format', null);
-        $SPProvidedID = self::getOptionalAttribute($xml, 'SPProvidedID', null);
-
-        return new static($xml->textContent, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
+        return new static(
+            SAMLStringValue::fromString($xml->textContent),
+            self::getOptionalAttribute($xml, 'NameQualifier', SAMLStringValue::class, null),
+            self::getOptionalAttribute($xml, 'SPNameQualifier', SAMLStringValue::class, null),
+            self::getOptionalAttribute($xml, 'Format', SAMLAnyURIValue::class, null),
+            self::getOptionalAttribute($xml, 'SPProvidedID', SAMLStringValue::class, null),
+        );
     }
 
 
@@ -114,24 +102,24 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
+        $e->textContent = strval($this->getContent());
 
         if ($this->getNameQualifier() !== null) {
-            $e->setAttribute('NameQualifier', $this->getNameQualifier());
+            $e->setAttribute('NameQualifier', $this->getNameQualifier()->getValue());
         }
 
         if ($this->getSPNameQualifier() !== null) {
-            $e->setAttribute('SPNameQualifier', $this->getSPNameQualifier());
+            $e->setAttribute('SPNameQualifier', $this->getSPNameQualifier()->getValue());
         }
 
         if ($this->getFormat() !== null) {
-            $e->setAttribute('Format', $this->getFormat());
+            $e->setAttribute('Format', $this->getFormat()->getValue());
         }
 
         if ($this->getSPProvidedID() !== null) {
-            $e->setAttribute('SPProvidedID', $this->getSPProvidedID());
+            $e->setAttribute('SPProvidedID', $this->getSPProvidedID()->getValue());
         }
 
-        $e->textContent = $this->getContent();
         return $e;
     }
 }

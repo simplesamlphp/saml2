@@ -1,5 +1,5 @@
 <md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
-  <shibmd:Scope xmlns:shibmd="urn:mace:shibboleth:metadata:1.0" regexp="false">SomeScope</shibmd:Scope>
+  <shibmd:Scope xmlns:shibmd="urn:mace:shibboleth:metadata:1.0">SomeScope</shibmd:Scope>
   <mdrpi:RegistrationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" registrationAuthority="SomeAuthority"></mdrpi:RegistrationInfo>
   <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi" publisher="SomePublisher"></mdrpi:PublicationInfo>
   <mdrpi:PublicationPath xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi">
@@ -9,7 +9,7 @@
     <mdui:DisplayName xml:lang="en">Example</mdui:DisplayName>
   </mdui:UIInfo>
   <mdui:DiscoHints xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
-    <mdui:IPHint>127.0.0.1</mdui:IPHint>
+    <mdui:IPHint>127.0.0.0/8</mdui:IPHint>
   </mdui:DiscoHints>
   <idpdisc:DiscoveryResponse xmlns:idpdisc="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol" Location="https://example.org/authenticate/sp" index="1"/>
   <alg:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256" xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport"></alg:DigestMethod>

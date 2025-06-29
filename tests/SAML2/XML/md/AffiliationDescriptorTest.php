@@ -4,27 +4,27 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DateTimeImmutable;
 use Exception;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\md\AbstractMdElement;
-use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
-use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
-use SimpleSAML\SAML2\XML\md\AffiliateMember;
-use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
-use SimpleSAML\SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\SAML2\Type\{SAMLDateTimeValue, EntityIDValue, KeyTypesValue, SAMLStringValue};
+use SimpleSAML\SAML2\XML\md\{
+    AbstractMdElement,
+    AbstractMetadataDocument,
+    AbstractSignedMdElement,
+    AffiliateMember,
+    AffiliationDescriptor,
+    KeyDescriptor,
+    KeyTypesEnum,
+};
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\{DurationValue, IDValue};
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
-use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
-use SimpleSAML\XMLSecurity\XML\ds\KeyName;
+use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
 
 use function dirname;
 use function strval;
@@ -67,40 +67,38 @@ final class AffiliationDescriptorTest extends TestCase
     public function testMarshalling(): void
     {
         $affiliationDescriptor = new AffiliationDescriptor(
-            affiliationOwnerId: C::ENTITY_IDP,
-            affiliateMember: [new AffiliateMember(C::ENTITY_SP), new AffiliateMember(C::ENTITY_OTHER)],
-            ID: 'TheID',
-            validUntil: new DateTimeImmutable('2009-02-13T23:31:30Z'),
-            cacheDuration: 'PT5000S',
+            affiliationOwnerId: EntityIDValue::fromString(C::ENTITY_IDP),
+            affiliateMember: [
+                new AffiliateMember(
+                    EntityIDValue::fromString(C::ENTITY_SP),
+                ),
+                new AffiliateMember(
+                    EntityIDValue::fromString(C::ENTITY_OTHER),
+                ),
+            ],
+            ID: IDValue::fromString('TheID'),
+            validUntil: SAMLDateTimeValue::fromString('2009-02-13T23:31:30Z'),
+            cacheDuration: DurationValue::fromString('PT5000S'),
             keyDescriptor: [
                 new KeyDescriptor(
                     new KeyInfo(
                         [
-                            new KeyName('IdentityProvider.com SSO Key'),
+                            new KeyName(
+                                SAMLStringValue::fromString('IdentityProvider.com SSO Key'),
+                            ),
                         ],
                     ),
-                    'signing',
+                    KeyTypesValue::fromEnum(KeyTypesEnum::SIGNING),
                 ),
             ],
-            namespacedAttribute: [new XMLAttribute(C::NAMESPACE, 'ssp', 'attr1', 'value1')],
+            namespacedAttribute: [
+                new XMLAttribute(C::NAMESPACE, 'ssp', 'attr1', SAMLStringValue::fromString('value1')),
+            ],
         );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($affiliationDescriptor),
-        );
-    }
-
-
-    /**
-     * Test that creating an AffiliationDescriptor with an empty owner ID fails.
-     */
-    public function testMarhsallingWithEmptyOwnerID(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        new AffiliationDescriptor(
-            affiliationOwnerId: '',
-            affiliateMember: [new AffiliateMember(C::ENTITY_SP), new AffiliateMember(C::ENTITY_OTHER)],
         );
     }
 
@@ -113,7 +111,7 @@ final class AffiliationDescriptorTest extends TestCase
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('List of affiliated members must not be empty.');
         new AffiliationDescriptor(
-            affiliationOwnerId: C::ENTITY_IDP,
+            affiliationOwnerId: EntityIDValue::fromString(C::ENTITY_IDP),
             affiliateMember: [],
         );
     }

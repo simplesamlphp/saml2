@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Dead catch \\- SimpleSAML\\\\Assert\\\\AssertionFailedException is never thrown in the try block\\.$#"
+			count: 1
+			path: tests/InterOperability/EntityDescriptorTest.php
+
+		-
 			message: "#^PHPDoc tag @var for property SimpleSAML\\\\Test\\\\SAML2\\\\Assertion\\\\Transformer\\\\NameIdDecryptionTransformerTest\\:\\:\\$validator with type SimpleSAML\\\\SAML2\\\\Response\\\\Validation\\\\Validator is incompatible with native type SimpleSAML\\\\SAML2\\\\Signature\\\\Validator\\.$#"
 			count: 1
 			path: tests/SAML2/Assertion/Transformer/NameIdDecryptionTransformerTest.php

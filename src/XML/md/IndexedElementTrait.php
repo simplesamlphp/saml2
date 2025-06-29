@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\XML\Type\{BooleanValue, UnsignedShortValue};
 
 /**
  * Trait adding methods to handle elements that can be indexed.
@@ -16,24 +16,24 @@ trait IndexedElementTrait
     /**
      * The index for this endpoint.
      *
-     * @var int
+     * @var \SimpleSAML\XML\Type\UnsignedShortValue
      */
-    protected int $index;
+    protected UnsignedShortValue $index;
 
     /**
      * Whether this endpoint is the default.
      *
-     * @var bool|null
+     * @var \SimpleSAML\XML\Type\BooleanValue|null
      */
-    protected ?bool $isDefault = null;
+    protected ?BooleanValue $isDefault = null;
 
 
     /**
      * Collect the value of the index property.
      *
-     * @return int
+     * @return \SimpleSAML\XML\Type\UnsignedShortValue
      */
-    public function getIndex(): int
+    public function getIndex(): UnsignedShortValue
     {
         return $this->index;
     }
@@ -42,12 +42,10 @@ trait IndexedElementTrait
     /**
      * Set the value of the index property.
      *
-     * @param int $index
-     * @throws \SimpleSAML\Assert\AssertionFailedException
+     * @param \SimpleSAML\XML\Type\UnsignedShortValue $index
      */
-    protected function setIndex(int $index): void
+    protected function setIndex(UnsignedShortValue $index): void
     {
-        Assert::range($index, 0, 65535);
         $this->index = $index;
     }
 
@@ -55,9 +53,9 @@ trait IndexedElementTrait
     /**
      * Collect the value of the isDefault property.
      *
-     * @return bool|null
+     * @return \SimpleSAML\XML\Type\BooleanValue|null
      */
-    public function getIsDefault(): ?bool
+    public function getIsDefault(): ?BooleanValue
     {
         return $this->isDefault;
     }
@@ -66,9 +64,9 @@ trait IndexedElementTrait
     /**
      * Set the value of the isDefault property.
      *
-     * @param bool|null $flag
+     * @param  \SimpleSAML\XML\Type\BooleanValue|null $flag
      */
-    protected function setIsDefault(?bool $flag): void
+    protected function setIsDefault(?BooleanValue $flag): void
     {
         $this->isDefault = $flag;
     }

@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
-use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
+use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
+use SimpleSAML\SAML2\XML\samlp\{AbstractSamlpElement, NameIDPolicy};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Type\BooleanValue;
 
 use function dirname;
 use function strval;
@@ -56,9 +54,9 @@ final class NameIDPolicyTest extends TestCase
     public function testMarshalling(): void
     {
         $nameIdPolicy = new NameIDPolicy(
-            'urn:the:format',
-            'urn:x-simplesamlphp:spnamequalifier',
-            true,
+            SAMLAnyURIValue::fromString('urn:the:format'),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),
+            BooleanValue::fromBoolean(true),
         );
 
         $this->assertEquals(
@@ -77,7 +75,7 @@ final class NameIDPolicyTest extends TestCase
         );
 
         $nameIdPolicy = new NameIDPolicy(
-            'urn:the:format',
+            SAMLAnyURIValue::fromString('urn:the:format'),
         );
 
         $this->assertEquals(

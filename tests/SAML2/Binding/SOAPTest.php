@@ -6,21 +6,22 @@ namespace SimpleSAML\Test\SAML2\Binding;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Nyholm\Psr7\ServerRequest;
-use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use SimpleSAML\SAML2\Binding\SOAP;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
-use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
-use SimpleSAML\SAML2\XML\ecp\Response;
-use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
-use SimpleSAML\SAML2\XML\samlp\MessageFactory;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\XML\ecp\{RequestAuthenticated, Response};
+use SimpleSAML\SAML2\XML\samlp\{ArtifactResolve, MessageFactory};
 use SimpleSAML\SOAP\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Type\BooleanValue;
 
 use function dirname;
 
 /**
  * @package simplesamlphp\saml2
  */
+#[Group('bindings')]
 #[CoversClass(SOAP::class)]
 final class SOAPTest extends MockeryTestCase
 {
@@ -109,8 +110,12 @@ SOAP);
 <?xml version="1.0" encoding="UTF-8"?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Header /><SOAP-ENV:Body /></SOAP-ENV:Envelope>
 SOAP);
-        $requestAuthenticated = new RequestAuthenticated(true);
-        $ecpResponse = new Response('https://example.org/metadata');
+        $requestAuthenticated = new RequestAuthenticated(
+            BooleanValue::fromBoolean(true),
+        );
+        $ecpResponse = new Response(
+            SAMLAnyURIValue::fromString('https://example.org/metadata'),
+        );
 
 
         /** @var \DOMElement $header */

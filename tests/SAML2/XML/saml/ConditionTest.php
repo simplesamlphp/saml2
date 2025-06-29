@@ -4,21 +4,20 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Compat\AbstractContainer;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\XML\saml\AbstractCondition;
-use SimpleSAML\SAML2\XML\saml\AbstractConditionType;
-use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
-use SimpleSAML\SAML2\XML\saml\Audience;
-use SimpleSAML\SAML2\XML\saml\UnknownCondition;
-use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\Test\SAML2\CustomCondition;
+use SimpleSAML\SAML2\Compat\{AbstractContainer, ContainerSingleton};
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\XML\saml\{
+    AbstractCondition,
+    AbstractConditionType,
+    AbstractSamlElement,
+    Audience,
+    UnknownCondition,
+};
+use SimpleSAML\Test\SAML2\{Constants as C, CustomCondition};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
 
 use function dirname;
 use function strval;
@@ -78,9 +77,11 @@ final class ConditionTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $condition = new CustomCondition(
-            [new Audience('urn:some:audience')],
-        );
+        $condition = new CustomCondition([
+            new Audience(
+                SAMLAnyURIValue::fromString('urn:some:audience'),
+            ),
+        ]);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -102,7 +103,10 @@ final class ConditionTest extends TestCase
         $condition = AbstractCondition::fromXML($element);
 
         $this->assertInstanceOf(UnknownCondition::class, $condition);
-        $this->assertEquals('urn:x-simplesamlphp:namespace:UnknownConditionType', $condition->getXsiType());
+        $this->assertEquals(
+            '{urn:x-simplesamlphp:namespace}ssp:UnknownConditionType',
+            $condition->getXsiType()->getRawValue(),
+        );
 
         $chunk = $condition->getRawCondition();
         $this->assertEquals('saml', $chunk->getPrefix());

@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\Certificate;
 use SimpleSAML\SAML2\Certificate\PrivateKey;
 use SimpleSAML\SAML2\Configuration\DecryptionProvider;
 use SimpleSAML\SAML2\Configuration\PrivateKey as PrivateKeyConfiguration;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\Utilities\File;
 use SimpleSAML\XMLSecurity\XMLSecurityKey;
@@ -45,7 +46,7 @@ class PrivateKeyLoader
 
         $senderSharedKey = $identityProvider->getSharedKey();
         if ($senderSharedKey !== null) {
-            $key = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
+            $key = new XMLSecurityKey(C::BLOCK_ENC_AES128);
             $key->loadKey($senderSharedKey);
             $decryptionKeys->add($key);
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML;
 
+use SimpleSAML\XML\Type\{AnyURIValue, NCNameValue, QNameValue};
+
 /**
  * Interface for several extension points objects.
  *
@@ -14,31 +16,31 @@ interface ExtensionPointInterface
     /**
      * Get the local name for the element's xsi:type.
      *
-     * @return string
+     * @return \SimpleSAML\XML\Type\NCNameValue
      */
-    public static function getXsiTypeName(): string;
+    public static function getXsiTypeName(): NCNameValue;
 
 
     /**
      * Get the namespace for the element's xsi:type.
      *
-     * @return string
+     * @return \SimpleSAML\XML\Type\AnyURIValue
      */
-    public static function getXsiTypeNamespaceURI(): string;
+    public static function getXsiTypeNamespaceURI(): AnyURIValue;
 
 
     /**
      * Get the namespace-prefix for the element's xsi:type.
      *
-     * @return string
+     * @return \SimpleSAML\XML\Type\NCNameValue
      */
-    public static function getXsiTypePrefix(): string;
+    public static function getXsiTypePrefix(): NCNameValue;
 
 
     /**
      * Return the xsi:type value corresponding this element.
      *
-     * @return string
+     * @return \SimpleSAML\XML\Type\QNameValue
      */
-    public function getXsiType(): string;
+    public function getXsiType(): QNameValue;
 }
