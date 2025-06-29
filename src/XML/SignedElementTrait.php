@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML;
 
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XMLSecurity\Exception\ReferenceValidationFailedException;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XML\SignedElementTrait as BaseSignedElementTrait;
@@ -44,6 +45,18 @@ trait SignedElementTrait
             '#',
             "Reference must contain a same-document reference to the ID-attribute of the root element.",
             ReferenceValidationFailedException::class,
+        );
+
+        /**
+         * E91: Disallow <ds:Object> element in signatures
+         *
+         * The <ds:Object> element is not defined for use with SAML signatures, and SHOULD NOT be present.
+         */
+
+        Assert::isEmpty(
+            $signature->getObjects(),
+            ProtocolViolationException::class,
+            'The <ds:Object> element is not defined for use with SAML signatures, and SHOULD NOT be present.',
         );
 
         $this->signature = $signature;
