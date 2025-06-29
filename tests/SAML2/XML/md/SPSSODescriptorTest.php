@@ -286,7 +286,9 @@ XML
         $acs->item(1)->setAttribute('isDefault', 'true');
 
         $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Only one md:AttributeConsumingService can be set as default.');
+        $this->expectExceptionMessage(
+            'At most one <AttributeConsumingService> element can have the attribute isDefault set to true.',
+        );
 
         SPSSODescriptor::fromXML($xmlRepresentation->documentElement);
     }
