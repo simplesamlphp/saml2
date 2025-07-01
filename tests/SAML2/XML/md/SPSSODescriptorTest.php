@@ -287,7 +287,7 @@ XML
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage(
-            'At most one <AttributeConsumingService> element can have the attribute isDefault set to true.'
+            'At most one <AttributeConsumingService> element can have the attribute isDefault set to true.',
         );
 
         SPSSODescriptor::fromXML($xmlRepresentation->documentElement);

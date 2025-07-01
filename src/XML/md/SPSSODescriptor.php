@@ -107,7 +107,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
                 },
             ),
             1,
-            'Only one md:AttributeConsumingService can be set as default.',
+            'At most one <AttributeConsumingService> element can have the attribute isDefault set to true.',
         );
     }
 
