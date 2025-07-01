@@ -37,6 +37,11 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const ATTR_SUBJECT_ID = 'urn:oasis:names:tc:SAML:attribute:subject-id';
 
     /**
+     * Subject signal attribute
+     */
+    public const PROFILE_SUBJECT_ID_REQ = 'urn:oasis:names:tc:SAML:profiles:subject-id:req';
+
+    /**
      * The URN for the Holder-of-Key Web Browser SSO Profile binding
      */
     public const BINDING_HOK_SSO = 'urn:oasis:names:tc:SAML:2.0:profiles:holder-of-key:SSO:browser';
