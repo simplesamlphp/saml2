@@ -37,6 +37,11 @@ class Constants
     const ATTR_PAIRWISE_ID = 'urn:oasis:names:tc:SAML:attribute:pairwise-id';
 
     /**
+     * Subject signal attribute
+     */
+    const PROFILE_SUBJECT_ID_REQ = 'urn:oasis:names:tc:SAML:profiles:subject-id:req';
+
+    /**
      * The URN for the HTTP-POST binding.
      */
     const BINDING_HTTP_POST = 'urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST';
