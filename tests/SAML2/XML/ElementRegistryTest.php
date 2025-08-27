@@ -23,7 +23,7 @@ final class ElementRegistryTest extends TestCase
      */
     public function testElementRegistry(): void
     {
-        $elementRegistry = dirname(__FILE__, 4) . '/src/XML/element.registry.php';
+        $elementRegistry = dirname(__FILE__, 4) . '/classes/element.registry.php';
         $namespaces = include($elementRegistry);
 
         foreach ($namespaces as $namespaceURI => $elements) {

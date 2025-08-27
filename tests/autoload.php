@@ -19,4 +19,4 @@ $container->setClock($systemClock);
 ContainerSingleton::setContainer($container);
 
 $registry = ElementRegistry::getInstance();
-$registry->importFromFile(dirname(__FILE__, 2) . '/src/XML/element.registry.php');
+$registry->importFromFile(dirname(__FILE__, 2) . '/classes/element.registry.php');

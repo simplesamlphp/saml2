@@ -95,7 +95,9 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
             'All md:AttributeConsumingService endpoints must be an instance of AttributeConsumingService.',
         );
 
-        // test that only one ACS is marked as default
+        /**
+         * E87:  test that only one ACS is marked as default
+         */
         Assert::maxCount(
             array_filter(
                 $attributeConsumingService,
@@ -104,7 +106,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
                 },
             ),
             1,
-            'Only one md:AttributeConsumingService can be set as default.',
+            'At most one <AttributeConsumingService> element can have the attribute isDefault set to true.',
         );
     }
 
