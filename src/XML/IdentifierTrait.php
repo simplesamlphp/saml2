@@ -53,7 +53,8 @@ trait IdentifierTrait
      *
      * @param \DOMElement $xml
      * @return \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null
-     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
+     *   if too many child-elements of a type are specified
      */
     protected static function getIdentifierFromXML(DOMElement $xml): ?IdentifierInterface
     {

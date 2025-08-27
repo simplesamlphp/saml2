@@ -12,9 +12,6 @@ use SimpleSAML\SOAP11\Type\MustUnderstandValue;
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingAttributeException};
 
-use function intval;
-use function strval;
-
 /**
  * Class representing the ECP RequestAuthenticated element.
  *
