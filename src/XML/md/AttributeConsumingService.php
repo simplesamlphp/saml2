@@ -7,9 +7,9 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingElementException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\{BooleanValue, UnsignedShortValue};
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingElementException};
+use SimpleSAML\XMLSchema\Type\{BooleanValue, UnsignedShortValue};
 
 use function var_export;
 
@@ -27,10 +27,10 @@ final class AttributeConsumingService extends AbstractMdElement implements Schem
     /**
      * AttributeConsumingService constructor.
      *
-     * @param \SimpleSAML\XML\Type\UnsignedShortValue $index
+     * @param \SimpleSAML\XMLSchema\Type\UnsignedShortValue $index
      * @param \SimpleSAML\SAML2\XML\md\ServiceName[] $serviceName
      * @param \SimpleSAML\SAML2\XML\md\RequestedAttribute[] $requestedAttribute
-     * @param \SimpleSAML\XML\Type\BooleanValue|null $isDefault
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $isDefault
      * @param \SimpleSAML\SAML2\XML\md\ServiceDescription[] $serviceDescription
      */
     public function __construct(
@@ -82,9 +82,9 @@ final class AttributeConsumingService extends AbstractMdElement implements Schem
      * @param \DOMElement $xml The XML element we should load.
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
      *   if one of the mandatory child-elements is missing
      */
     public static function fromXML(DOMElement $xml): static

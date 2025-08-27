@@ -11,9 +11,10 @@ use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\{ExtensionPointInterface, ExtensionPointTrait};
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, SchemaViolationException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\QNameValue;
+use SimpleSAML\XMLSchema\Constants as C_XSI;
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, SchemaViolationException};
+use SimpleSAML\XMLSchema\Type\QNameValue;
 
 /**
  * Class implementing the <saml:Statement> extension point.
@@ -35,7 +36,7 @@ abstract class AbstractStatement extends AbstractStatementType implements
     /**
      * Initialize a custom saml:Statement element.
      *
-     * @param \SimpleSAML\XML\Type\QNameValue $type
+     * @param \SimpleSAML\XMLSchema\Type\QNameValue $type
      */
     protected function __construct(
         protected QNameValue $type,
@@ -44,7 +45,7 @@ abstract class AbstractStatement extends AbstractStatementType implements
 
 
     /**
-     * @return \SimpleSAML\XML\Type\QNameValue
+     * @return \SimpleSAML\XMLSchema\Type\QNameValue
      */
     public function getXsiType(): QNameValue
     {
@@ -58,7 +59,7 @@ abstract class AbstractStatement extends AbstractStatementType implements
      * @param \DOMElement $xml The root XML element
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
@@ -66,12 +67,12 @@ abstract class AbstractStatement extends AbstractStatementType implements
         Assert::same($xml->localName, 'Statement', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, C::NS_SAML, InvalidDOMElementException::class);
         Assert::true(
-            $xml->hasAttributeNS(C::NS_XSI, 'type'),
+            $xml->hasAttributeNS(C_XSI::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:Statement> element.',
             SchemaViolationException::class,
         );
 
-        $type = QNameValue::fromDocument($xml->getAttributeNS(C::NS_XSI, 'type'), $xml);
+        $type = QNameValue::fromDocument($xml->getAttributeNS(C_XSI::NS_XSI, 'type'), $xml);
 
         // now check if we have a handler registered for it
         $handler = Utils::getContainer()->getExtensionHandler($type);
@@ -104,7 +105,7 @@ abstract class AbstractStatement extends AbstractStatementType implements
             static::getXsiTypeNamespaceURI()->getValue(),
         );
 
-        $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', $this->getXsiType());
+        $type = new XMLAttribute(C_XSI::NS_XSI, 'xsi', 'type', $this->getXsiType());
         $type->toXML($e);
 
         return $e;

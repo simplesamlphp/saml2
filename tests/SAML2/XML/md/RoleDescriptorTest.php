@@ -42,9 +42,10 @@ use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\CustomRoleDescriptor;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{AnyURIValue, DurationValue, IDValue, LanguageValue, StringValue};
+use SimpleSAML\XMLSchema\Constants as C_XSI;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Type\{AnyURIValue, DurationValue, IDValue, LanguageValue, StringValue};
 use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
 
 use function dirname;
@@ -266,9 +267,9 @@ final class RoleDescriptorTest extends TestCase
     public function testUnmarshallingUnregistered(): void
     {
         $element = clone self::$xmlRepresentation->documentElement;
-        $element->setAttributeNS(C::NS_XSI, 'xsi:type', 'ssp:UnknownRoleDescriptorType');
+        $element->setAttributeNS(C_XSI::NS_XSI, 'xsi:type', 'ssp:UnknownRoleDescriptorType');
 
-        $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', StringValue::fromString('ssp:UnknownRoleDescriptorType'));
+        $type = new XMLAttribute(C_XSI::NS_XSI, 'xsi', 'type', StringValue::fromString('ssp:UnknownRoleDescriptorType'));
         $type->toXML($element);
 
         $descriptor = AbstractRoleDescriptor::fromXML($element);

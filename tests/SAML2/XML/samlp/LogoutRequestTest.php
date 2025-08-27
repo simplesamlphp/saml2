@@ -21,9 +21,9 @@ use SimpleSAML\SAML2\XML\samlp\{
     SessionIndex,
 };
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\{MissingElementException, TooManyElementsException};
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\IDValue;
+use SimpleSAML\XMLSchema\Exception\{MissingElementException, TooManyElementsException};
+use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\{PEMCertificatesMock, SignedElementTestTrait};
 
@@ -178,7 +178,7 @@ final class LogoutRequestTest extends TestCase
 
         /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm()->getValue(),
+            $encid->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),
         );
         $identifier = $encid->decrypt($decryptor);

@@ -9,7 +9,7 @@ use Psr\Log\LoggerInterface;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 use SimpleSAML\XML\{AbstractElement, ElementInterface};
-use SimpleSAML\XML\Type\QNameValue;
+use SimpleSAML\XMLSchema\Type\QNameValue;
 use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
@@ -79,7 +79,7 @@ abstract class AbstractContainer
      * Such classes must have been registered previously by calling registerExtensionHandler(), and they must
      * extend \SimpleSAML\XML\AbstractElement.
      *
-     * @param \SimpleSAML\XML\Type\QNameValue|null $qName The qualified name of the element.
+     * @param \SimpleSAML\XMLSchema\Type\QNameValue $qName The qualified name of the element.
      *
      * @return string|null The fully-qualified name of a class extending \SimpleSAML\XML\AbstractElement and
      * implementing support for the given element, or null if no such class has been registered before.
@@ -103,7 +103,7 @@ abstract class AbstractContainer
      * Such classes must have been registered previously by calling registerExtensionHandler(), and they must
      * implement \SimpleSAML\SAML11\XML\saml\ExtensionPointInterface.
      *
-     * @param \SimpleSAML\XML\Type\QNameValue $qName The qualified name of the extension.
+     * @param \SimpleSAML\XMLSchema\Type\QNameValue $qName The qualified name of the extension.
      * @return string|null The fully-qualified name of a class implementing
      *  \SimpleSAML\SAML11\XML\saml\ExtensionPointInterface or null if no such class has been registered before.
      * @psalm-return class-string|null

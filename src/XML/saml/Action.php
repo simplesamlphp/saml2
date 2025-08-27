@@ -7,8 +7,8 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\TypedTextContentTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 
 use function strval;
 
@@ -29,7 +29,7 @@ final class Action extends AbstractSamlElement
      * Initialize an Action.
      *
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $namespace
-     *   NOTE: This attribute was marked REQUIRED in the 2012 SAML errata (E36)
+     *   NOTE: The namespace-attribute was marked REQUIRED in the 2012 SAML errata (E36)
      * @param \SimpleSAML\SAML2\Type\SAMLStringValue $content
      */
     public function __construct(
@@ -57,7 +57,7 @@ final class Action extends AbstractSamlElement
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static

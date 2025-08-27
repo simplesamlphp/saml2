@@ -19,7 +19,7 @@ use SimpleSAML\SAML2\XML\saml\{
     AuthnContextDeclRef,
 };
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
 use function dirname;
 

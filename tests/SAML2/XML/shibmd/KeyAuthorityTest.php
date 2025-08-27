@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\XML\shibmd\{AbstractShibmdElement, KeyAuthority};
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{Base64BinaryValue, IDValue, UnsignedByteValue};
+use SimpleSAML\XMLSchema\Type\{Base64BinaryValue, IDValue, UnsignedByteValue};
 use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, X509Certificate, X509Data};
 
 use function dirname;

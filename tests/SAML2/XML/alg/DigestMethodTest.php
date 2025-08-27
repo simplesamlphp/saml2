@@ -10,7 +10,7 @@ use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\alg\{AbstractAlgElement, DigestMethod};
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
-use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
 
 use function dirname;

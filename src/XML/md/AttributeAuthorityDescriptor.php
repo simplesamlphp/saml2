@@ -9,9 +9,9 @@ use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingElementException, TooManyElementsException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\{DurationValue, IDValue};
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingElementException, TooManyElementsException};
+use SimpleSAML\XMLSchema\Type\{DurationValue, IDValue};
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 /**
@@ -34,9 +34,9 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType impl
      * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
      * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfile
      * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attribute
-     * @param \SimpleSAML\XML\Type\IDValue|null $ID
+     * @param \SimpleSAML\XMLSchema\Type\IDValue|null $ID
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil
-     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration
+     * @param \SimpleSAML\XMLSchema\Type\DurationValue|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $errorURL
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
@@ -159,13 +159,13 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType impl
      * @param \DOMElement $xml The XML element we should load.
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
      *   if one of the mandatory child-elements is missing
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static

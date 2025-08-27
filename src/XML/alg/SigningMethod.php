@@ -7,11 +7,11 @@ namespace SimpleSAML\SAML2\XML\alg;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\PositiveIntegerValue;
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Type\PositiveIntegerValue;
+use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
 
 /**
  * Class for handling the alg:SigningMethod element.
@@ -26,15 +26,15 @@ final class SigningMethod extends AbstractAlgElement implements SchemaValidatabl
 
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::ANY;
+    public const XS_ANY_ELT_NAMESPACE = NamespaceEnum::Any;
 
 
     /**
      * Create/parse an alg:SigningMethod element.
      *
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $algorithm
-     * @param \SimpleSAML\XML\Type\PositiveIntegerValue|null $minKeySize
-     * @param \SimpleSAML\XML\Type\PositiveIntegerValue|null $maxKeySize
+     * @param \SimpleSAML\XMLSchema\Type\PositiveIntegerValue|null $minKeySize
+     * @param \SimpleSAML\XMLSchema\Type\PositiveIntegerValue|null $maxKeySize
      * @param \SimpleSAML\XML\Chunk[] $elements
      */
     public function __construct(
@@ -61,7 +61,7 @@ final class SigningMethod extends AbstractAlgElement implements SchemaValidatabl
     /**
      * Collect the value of the MinKeySize-property
      *
-     * @return \SimpleSAML\XML\Type\PositiveIntegerValue|null
+     * @return \SimpleSAML\XMLSchema\Type\PositiveIntegerValue|null
      */
     public function getMinKeySize(): ?PositiveIntegerValue
     {
@@ -72,7 +72,7 @@ final class SigningMethod extends AbstractAlgElement implements SchemaValidatabl
     /**
      * Collect the value of the MaxKeySize-property
      *
-     * @return \SimpleSAML\XML\Type\PositiveIntegerValue|null
+     * @return \SimpleSAML\XMLSchema\Type\PositiveIntegerValue|null
      */
     public function getMaxKeySize(): ?PositiveIntegerValue
     {
@@ -86,9 +86,9 @@ final class SigningMethod extends AbstractAlgElement implements SchemaValidatabl
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied argument is missing the Algorithm attribute
      */
     public static function fromXML(DOMElement $xml): static

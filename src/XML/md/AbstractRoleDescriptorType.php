@@ -10,8 +10,8 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\XML\ExtendableAttributesTrait;
-use SimpleSAML\XML\Type\{DurationValue, IDValue};
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XMLSchema\Type\{DurationValue, IDValue};
+use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
 
 use function strval;
 
@@ -26,7 +26,7 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
 
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
+    public const XS_ANY_ATTR_NAMESPACE = NamespaceEnum::Other;
 
 
     /**
@@ -34,10 +34,10 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
      *
      * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
      *   A set of URI specifying the protocols supported.
-     * @param \SimpleSAML\XML\Type\IDValue|null $ID The ID for this document. Defaults to null.
+     * @param \SimpleSAML\XMLSchema\Type\IDValue|null $ID The ID for this document. Defaults to null.
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
      *   Defaults to null.
-     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration Maximum time this document can be cached.
+     * @param \SimpleSAML\XMLSchema\Type\DurationValue|null $cacheDuration Maximum time this document can be cached.
      *   Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An Extensions object. Defaults to null.
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $errorURL An URI where to redirect users for support.

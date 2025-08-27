@@ -7,9 +7,9 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\NonNegativeIntegerValue;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Type\NonNegativeIntegerValue;
 
 use function array_pop;
 use function strval;
@@ -27,7 +27,7 @@ final class Scoping extends AbstractSamlpElement implements SchemaValidatableEle
     /**
      * Initialize a Scoping element.
      *
-     * @param \SimpleSAML\XML\Type\NonNegativeIntegerValue|null $proxyCount
+     * @param \SimpleSAML\XMLSchema\Type\NonNegativeIntegerValue|null $proxyCount
      * @param \SimpleSAML\SAML2\XML\samlp\IDPList|null $IDPList
      * @param \SimpleSAML\SAML2\XML\samlp\RequesterID[] $requesterId
      */
@@ -60,7 +60,7 @@ final class Scoping extends AbstractSamlpElement implements SchemaValidatableEle
 
 
     /**
-     * @return \SimpleSAML\XML\Type\NonNegativeIntegerValue|null
+     * @return \SimpleSAML\XMLSchema\Type\NonNegativeIntegerValue|null
      */
     public function getProxyCount(): ?NonNegativeIntegerValue
     {
@@ -87,7 +87,7 @@ final class Scoping extends AbstractSamlpElement implements SchemaValidatableEle
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static

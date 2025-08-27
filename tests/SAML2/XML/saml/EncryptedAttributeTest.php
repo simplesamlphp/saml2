@@ -98,7 +98,7 @@ final class EncryptedAttributeTest extends TestCase
 
         /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encryptedAttribute->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm()->getValue(),
+            $encryptedAttribute->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
 

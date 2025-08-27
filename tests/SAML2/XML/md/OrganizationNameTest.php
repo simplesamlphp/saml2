@@ -10,7 +10,7 @@ use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\md\{AbstractLocalizedName, AbstractMdElement, OrganizationName};
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\LanguageValue;
+use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function dirname;
 use function strval;

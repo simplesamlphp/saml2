@@ -18,7 +18,7 @@ use SimpleSAML\SAML2\XML\mdui\{
 };
 use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
 use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\LanguageValue;
+use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function dirname;
 use function strval;

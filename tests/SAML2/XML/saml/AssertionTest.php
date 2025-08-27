@@ -38,9 +38,9 @@ use SimpleSAML\SAML2\XML\saml\{
 };
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{Base64BinaryValue, IDValue, NCNameValue};
+use SimpleSAML\XMLSchema\Exception\MissingElementException;
+use SimpleSAML\XMLSchema\Type\{Base64BinaryValue, IDValue, NCNameValue};
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
@@ -1175,7 +1175,7 @@ XML;
         $this->assertInstanceOf(EncryptedID::class, $identifier);
 
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $identifier->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm()->getValue(),
+            $identifier->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
         $nameID = $identifier->decrypt($decryptor);
@@ -1331,7 +1331,7 @@ XML;
         $doc = DOMDocumentFactory::fromString(strval($encass));
 
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encass->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm()->getValue(),
+            $encass->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::OTHER_PRIVATE_KEY),
         );
 

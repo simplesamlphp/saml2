@@ -17,9 +17,9 @@ use SimpleSAML\SAML2\XML\md\{
 };
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\{MissingAttributeException, MissingElementException};
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{BooleanValue, LanguageValue, UnsignedShortValue};
+use SimpleSAML\XMLSchema\Exception\{MissingAttributeException, MissingElementException};
+use SimpleSAML\XMLSchema\Type\{BooleanValue, LanguageValue, UnsignedShortValue};
 
 use function dirname;
 use function strval;

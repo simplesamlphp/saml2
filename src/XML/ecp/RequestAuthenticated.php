@@ -7,10 +7,10 @@ namespace SimpleSAML\SAML2\XML\ecp;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SOAP\Constants as C;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingAttributeException};
+use SimpleSAML\SOAP11\Constants as C;
+use SimpleSAML\SOAP11\Type\MustUnderstandValue;
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\BooleanValue;
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingAttributeException};
 
 use function intval;
 use function strval;
@@ -28,10 +28,10 @@ final class RequestAuthenticated extends AbstractEcpElement implements SchemaVal
     /**
      * Create a ECP RequestAuthenticated element.
      *
-     * @param \SimpleSAML\XML\Type\BooleanValue|null $mustUnderstand
+     * @param \SimpleSAML\SOAP11\Type\MustUnderstandValue|null $mustUnderstand
      */
     public function __construct(
-        protected ?BooleanValue $mustUnderstand,
+        protected ?MustUnderstandValue $mustUnderstand,
     ) {
     }
 
@@ -39,9 +39,9 @@ final class RequestAuthenticated extends AbstractEcpElement implements SchemaVal
     /**
      * Collect the value of the mustUnderstand-property
      *
-     * @return \SimpleSAML\XML\Type\BooleanValue|null
+     * @return \SimpleSAML\SOAP11\Type\MustUnderstandValue|null
      */
-    public function getMustUnderstand(): ?BooleanValue
+    public function getMustUnderstand(): ?MustUnderstandValue
     {
         return $this->mustUnderstand;
     }
@@ -53,9 +53,9 @@ final class RequestAuthenticated extends AbstractEcpElement implements SchemaVal
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing any of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static
@@ -65,18 +65,18 @@ final class RequestAuthenticated extends AbstractEcpElement implements SchemaVal
 
         // Assert required attributes
         Assert::true(
-            $xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'actor'),
+            $xml->hasAttributeNS(C::NS_SOAP_ENV, 'actor'),
             'Missing env:actor attribute in <ecp:RequestAuthenticated>.',
             MissingAttributeException::class,
         );
 
         $mustUnderstand = null;
-        if ($xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand')) {
-            $mustUnderstand = BooleanValue::fromString($xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand'));
+        if ($xml->hasAttributeNS(C::NS_SOAP_ENV, 'mustUnderstand')) {
+            $mustUnderstand = MustUnderstandValue::fromString($xml->getAttributeNS(C::NS_SOAP_ENV, 'mustUnderstand'));
         }
 
         Assert::same(
-            $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'actor'),
+            $xml->getAttributeNS(C::NS_SOAP_ENV, 'actor'),
             C::SOAP_ACTOR_NEXT,
             'Invalid value of env:actor attribute in <ecp:RequestAuthenticated>.',
             ProtocolViolationException::class,
@@ -97,14 +97,10 @@ final class RequestAuthenticated extends AbstractEcpElement implements SchemaVal
         $e = $this->instantiateParentElement($parent);
 
         if ($this->getMustUnderstand() !== null) {
-            $e->setAttributeNS(
-                C::NS_SOAP_ENV_11,
-                'env:mustUnderstand',
-                strval(intval($this->getMustUnderstand()->getValue())),
-            );
+            $this->getMustUnderstand()->toAttribute()->toXML($e);
         }
 
-        $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', C::SOAP_ACTOR_NEXT);
+        $e->setAttributeNS(C::NS_SOAP_ENV, 'SOAP-ENV:actor', C::SOAP_ACTOR_NEXT);
 
         return $e;
     }

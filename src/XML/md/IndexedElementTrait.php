@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use SimpleSAML\XML\Type\{BooleanValue, UnsignedShortValue};
+use SimpleSAML\XMLSchema\Type\{BooleanValue, UnsignedShortValue};
 
 /**
  * Trait adding methods to handle elements that can be indexed.
@@ -16,14 +16,14 @@ trait IndexedElementTrait
     /**
      * The index for this endpoint.
      *
-     * @var \SimpleSAML\XML\Type\UnsignedShortValue
+     * @var \SimpleSAML\XMLSchema\Type\UnsignedShortValue
      */
     protected UnsignedShortValue $index;
 
     /**
      * Whether this endpoint is the default.
      *
-     * @var \SimpleSAML\XML\Type\BooleanValue|null
+     * @var \SimpleSAML\XMLSchema\Type\BooleanValue|null
      */
     protected ?BooleanValue $isDefault = null;
 
@@ -31,7 +31,7 @@ trait IndexedElementTrait
     /**
      * Collect the value of the index property.
      *
-     * @return \SimpleSAML\XML\Type\UnsignedShortValue
+     * @return \SimpleSAML\XMLSchema\Type\UnsignedShortValue
      */
     public function getIndex(): UnsignedShortValue
     {
@@ -42,7 +42,7 @@ trait IndexedElementTrait
     /**
      * Set the value of the index property.
      *
-     * @param \SimpleSAML\XML\Type\UnsignedShortValue $index
+     * @param \SimpleSAML\XMLSchema\Type\UnsignedShortValue $index
      */
     protected function setIndex(UnsignedShortValue $index): void
     {
@@ -53,7 +53,7 @@ trait IndexedElementTrait
     /**
      * Collect the value of the isDefault property.
      *
-     * @return \SimpleSAML\XML\Type\BooleanValue|null
+     * @return \SimpleSAML\XMLSchema\Type\BooleanValue|null
      */
     public function getIsDefault(): ?BooleanValue
     {
@@ -64,7 +64,7 @@ trait IndexedElementTrait
     /**
      * Set the value of the isDefault property.
      *
-     * @param  \SimpleSAML\XML\Type\BooleanValue|null $flag
+     * @param  \SimpleSAML\XMLSchema\Type\BooleanValue|null $flag
      */
     protected function setIsDefault(?BooleanValue $flag): void
     {

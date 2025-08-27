@@ -10,7 +10,7 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType;
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\{BooleanValue, UnsignedShortValue};
+use SimpleSAML\XMLSchema\Type\{BooleanValue, UnsignedShortValue};
 
 /**
  * Abstract class to be implemented by all the classes in this namespace
@@ -39,10 +39,10 @@ final class DiscoveryResponse extends AbstractIndexedEndpointType implements Sch
      *
      * This is an endpoint with one restriction: it cannot contain a ResponseLocation.
      *
-     * @param \SimpleSAML\XML\Type\UnsignedShortValue $index
+     * @param \SimpleSAML\XMLSchema\Type\UnsignedShortValue $index
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $binding
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $location
-     * @param \SimpleSAML\XML\Type\BooleanValue|null $isDefault
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $isDefault
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $responseLocation
      * @param array<\SimpleSAML\XML\SerializableElementInterface> $children
      * @param array<\SimpleSAML\XML\Attribute> $attributes

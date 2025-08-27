@@ -15,10 +15,10 @@ use SimpleSAML\SAML2\XML\ecp\{RequestAuthenticated, Response as ECPResponse};
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SAML2\XML\samlp\Response as SAML2_Response;
-use SimpleSAML\SOAP\Utils\XPath;
-use SimpleSAML\SOAP\XML\env_200106\{Body, Envelope, Header};
+use SimpleSAML\SOAP11\Type\MustUnderstandValue;
+use SimpleSAML\SOAP11\Utils\XPath;
+use SimpleSAML\SOAP11\XML\{Body, Envelope, Header};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Type\BooleanValue;
 
 use function file_get_contents;
 
@@ -43,7 +43,7 @@ class SOAP extends Binding implements SynchronousBindingInterface
         // profile, this is the Response itself.
         if ($message instanceof SAML2_Response) {
             $requestAuthenticated = new RequestAuthenticated(
-                BooleanValue::fromBoolean(true),
+                MustUnderstandValue::fromBoolean(true),
             );
 
             $destination = $this->destination ?: $message->getDestination()?->getValue();

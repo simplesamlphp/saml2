@@ -14,7 +14,7 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, EntityIDValue};
 use SimpleSAML\SAML2\XML\saml\{SubjectConfirmation, SubjectConfirmationData};
 use SimpleSAML\SAML2\XML\samlp\Response;
-use SimpleSAML\XML\Type\NCNameValue;
+use SimpleSAML\XMLSchema\Type\NCNameValue;
 
 /**
  * @package simplesamlphp/saml2

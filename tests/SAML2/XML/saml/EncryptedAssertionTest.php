@@ -20,7 +20,8 @@ use SimpleSAML\SAML2\XML\saml\{
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{AnyURIValue, Base64BinaryValue, IDValue, StringValue};
+use SimpleSAML\XPath\Constants as C_XPATH;
+use SimpleSAML\XMLSchema\Type\{AnyURIValue, Base64BinaryValue, IDValue, StringValue};
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\{
@@ -99,7 +100,7 @@ final class EncryptedAssertionTest extends TestCase
     {
         $transforms = new Transforms([
             new Transform(
-                SAMLAnyURIValue::fromString(C::XPATH10_URI),
+                SAMLAnyURIValue::fromString(C_XPATH::XPATH10_URI),
                 new XPath(
                     StringValue::fromString('self::xenc:CipherValue[@Id="example1"]'),
                 ),
@@ -177,7 +178,7 @@ final class EncryptedAssertionTest extends TestCase
         $encAssertion = EncryptedAssertion::fromXML($doc->documentElement);
         /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encAssertion->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm()->getValue(),
+            $encAssertion->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),
         );
 

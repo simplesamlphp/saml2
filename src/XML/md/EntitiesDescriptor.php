@@ -10,9 +10,9 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\{SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\mdrpi\{PublicationInfo, PublicationPath, RegistrationInfo};
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, TooManyElementsException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\{DurationValue, IDValue};
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, TooManyElementsException};
+use SimpleSAML\XMLSchema\Type\{DurationValue, IDValue};
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function count;
@@ -36,9 +36,9 @@ final class EntitiesDescriptor extends AbstractMetadataDocument implements Schem
      * @param \SimpleSAML\SAML2\XML\md\EntityDescriptor[] $entityDescriptors
      * @param \SimpleSAML\SAML2\XML\md\EntitiesDescriptor[] $entitiesDescriptors
      * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $Name
-     * @param \SimpleSAML\XML\Type\IDValue|null $ID
+     * @param \SimpleSAML\XMLSchema\Type\IDValue|null $ID
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil
-     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration
+     * @param \SimpleSAML\XMLSchema\Type\DurationValue|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      */
     public function __construct(
@@ -203,9 +203,9 @@ final class EntitiesDescriptor extends AbstractMetadataDocument implements Schem
      * @param \DOMElement $xml The XML element we should load.
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static

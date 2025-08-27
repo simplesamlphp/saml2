@@ -10,10 +10,10 @@ use SimpleSAML\SAML2\Exception\{ArrayValidationException, ProtocolViolationExcep
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait, SerializableElementInterface};
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
 
 use function array_filter;
 use function array_key_exists;
@@ -37,7 +37,7 @@ final class UIInfo extends AbstractMduiElement implements
 
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::OTHER;
+    public const XS_ANY_ELT_NAMESPACE = NamespaceEnum::Other;
 
 
     /**
@@ -264,7 +264,7 @@ final class UIInfo extends AbstractMduiElement implements
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static

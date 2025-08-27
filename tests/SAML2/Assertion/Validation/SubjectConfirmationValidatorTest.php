@@ -21,7 +21,8 @@ use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\samlp\{Response, Status, StatusCode};
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Type\IDValue;
+use SimpleSAML\XMLSchema\Constants as C_XSI;
+use SimpleSAML\XMLSchema\Type\IDValue;
 
 /**
  * Tests for the SubjectConfirmation validators
@@ -89,8 +90,8 @@ final class SubjectConfirmationValidatorTest extends TestCase
             self::$response,
         );
 
-        $ns_xsi = C::NS_XSI;
-        $ns_xs = C::NS_XS;
+        $ns_xsi = C_XSI::NS_XSI;
+        $ns_xs = C_XSI::NS_XS;
         $ns_saml = C::NS_SAML;
         $nameid_persistent = C::NAMEID_PERSISTENT;
         $entity_idp = C::ENTITY_IDP;

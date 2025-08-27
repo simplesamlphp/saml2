@@ -11,9 +11,10 @@ use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\{ExtensionPointInterface, ExtensionPointTrait};
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, SchemaViolationException, TooManyElementsException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\{DurationValue, IDValue, QNameValue};
+use SimpleSAML\XMLSchema\Constants as C_XSI;
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, SchemaViolationException, TooManyElementsException};
+use SimpleSAML\XMLSchema\Type\{DurationValue, IDValue, QNameValue};
 
 use function array_pop;
 
@@ -37,13 +38,13 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
     /**
      * Initialize a md:RoleDescriptor from scratch.
      *
-     * @param \SimpleSAML\XML\Type\QNameValue $type
+     * @param \SimpleSAML\XMLSchema\Type\QNameValue $type
      * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
      *   A set of URI specifying the protocols supported.
-     * @param \SimpleSAML\XML\Type\IDValue|null $ID The ID for this document. Defaults to null.
+     * @param \SimpleSAML\XMLSchema\Type\IDValue|null $ID The ID for this document. Defaults to null.
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
      *   Defaults to null.
-     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration Maximum time this document can be cached.
+     * @param \SimpleSAML\XMLSchema\Type\DurationValue|null $cacheDuration Maximum time this document can be cached.
      *   Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An Extensions object. Defaults to null.
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $errorURL An URI where to redirect users for support.
@@ -87,7 +88,7 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
     /**
      * Return the xsi:type value corresponding this element.
      *
-     * @return \SimpleSAML\XML\Type\QNameValue
+     * @return \SimpleSAML\XMLSchema\Type\QNameValue
      */
     public function getXsiType(): QNameValue
     {
@@ -100,7 +101,7 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
@@ -108,12 +109,12 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
         Assert::same($xml->localName, 'RoleDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, C::NS_MD, InvalidDOMElementException::class);
         Assert::true(
-            $xml->hasAttributeNS(C::NS_XSI, 'type'),
+            $xml->hasAttributeNS(C_XSI::NS_XSI, 'type'),
             'Missing required xsi:type in <md:RoleDescriptor> element.',
             SchemaViolationException::class,
         );
 
-        $type = QNameValue::fromDocument($xml->getAttributeNS(C::NS_XSI, 'type'), $xml);
+        $type = QNameValue::fromDocument($xml->getAttributeNS(C_XSI::NS_XSI, 'type'), $xml);
 
         // now check if we have a handler registered for it
         $handler = Utils::getContainer()->getExtensionHandler($type);

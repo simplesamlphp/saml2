@@ -10,9 +10,9 @@ use SimpleSAML\SAML2\Exception\Protocol\{RequestVersionTooHighException, Request
 use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, TooManyElementsException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\{IDValue, NCNameValue};
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, TooManyElementsException};
+use SimpleSAML\XMLSchema\Type\{IDValue, NCNameValue};
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
@@ -32,11 +32,11 @@ class ArtifactResponse extends AbstractStatusResponse implements SchemaValidatab
     /**
      * Constructor for SAML 2 ArtifactResponse.
      *
-     * @param \SimpleSAML\XML\Type\IDValue $id
+     * @param \SimpleSAML\XMLSchema\Type\IDValue $id
      * @param \SimpleSAML\SAML2\XML\samlp\Status $status
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
-     * @param \SimpleSAML\XML\Type\NCNameValue|null $inResponseTo
+     * @param \SimpleSAML\XMLSchema\Type\NCNameValue|null $inResponseTo
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions|null $extensions
@@ -83,9 +83,9 @@ class ArtifactResponse extends AbstractStatusResponse implements SchemaValidatab
      * @param \DOMElement $xml
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static

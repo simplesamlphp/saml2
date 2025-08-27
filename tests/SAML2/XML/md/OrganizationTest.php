@@ -20,7 +20,7 @@ use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
 use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{LanguageValue, StringValue};
+use SimpleSAML\XMLSchema\Type\{LanguageValue, StringValue};
 
 use function dirname;
 use function strval;

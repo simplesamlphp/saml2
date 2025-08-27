@@ -10,10 +10,11 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
-use SimpleSAML\SOAP\Constants as C;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingAttributeException, TooManyElementsException};
+use SimpleSAML\SOAP11\Constants as C;
+use SimpleSAML\SOAP11\Type\MustUnderstandValue;
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\BooleanValue;
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingAttributeException, TooManyElementsException};
+use SimpleSAML\XMLSchema\Type\BooleanValue;
 
 use function intval;
 use function strval;
@@ -34,7 +35,7 @@ final class Request extends AbstractEcpElement implements SchemaValidatableEleme
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
      * @param \SimpleSAML\SAML2\XML\samlp\IDPList|null $idpList
      * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $providerName
-     * @param \SimpleSAML\XML\Type\BooleanValue|null $isPassive
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $isPassive
      */
     public function __construct(
         protected Issuer $issuer,
@@ -48,7 +49,7 @@ final class Request extends AbstractEcpElement implements SchemaValidatableEleme
     /**
      * Collect the value of the isPassive-property
      *
-     * @return \SimpleSAML\XML\Type\BooleanValue|null
+     * @return \SimpleSAML\XMLSchema\Type\BooleanValue|null
      */
     public function getIsPassive(): ?BooleanValue
     {
@@ -95,9 +96,9 @@ final class Request extends AbstractEcpElement implements SchemaValidatableEleme
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing any of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static
@@ -107,25 +108,20 @@ final class Request extends AbstractEcpElement implements SchemaValidatableEleme
 
         // Assert required attributes
         Assert::true(
-            $xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'actor'),
+            $xml->hasAttributeNS(C::NS_SOAP_ENV, 'actor'),
             'Missing env:actor attribute in <ecp:Request>.',
             MissingAttributeException::class,
         );
         Assert::true(
-            $xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand'),
+            $xml->hasAttributeNS(C::NS_SOAP_ENV, 'mustUnderstand'),
             'Missing env:mustUnderstand attribute in <ecp:Request>.',
             MissingAttributeException::class,
         );
 
-        Assert::same(
-            $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand'),
-            '1',
-            'Invalid value of env:mustUnderstand attribute in <ecp:Request>.',
-            ProtocolViolationException::class,
-        );
+        MustUnderstandValue::fromString($xml->getAttributeNS(C::NS_SOAP_ENV, 'mustUnderstand'));
 
         Assert::same(
-            $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'actor'),
+            $xml->getAttributeNS(C::NS_SOAP_ENV, 'actor'),
             C::SOAP_ACTOR_NEXT,
             'Invalid value of env:actor attribute in <ecp:Request>.',
             ProtocolViolationException::class,
@@ -159,8 +155,8 @@ final class Request extends AbstractEcpElement implements SchemaValidatableEleme
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', '1');
-        $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', C::SOAP_ACTOR_NEXT);
+        $e->setAttributeNS(C::NS_SOAP_ENV, 'SOAP-ENV:mustUnderstand', '1');
+        $e->setAttributeNS(C::NS_SOAP_ENV, 'SOAP-ENV:actor', C::SOAP_ACTOR_NEXT);
 
         if ($this->getProviderName() !== null) {
             $e->setAttribute('ProviderName', $this->getProviderName()->getValue());

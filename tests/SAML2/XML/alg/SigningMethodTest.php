@@ -10,9 +10,9 @@ use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\alg\{AbstractAlgElement, SigningMethod};
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\PositiveIntegerValue;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Type\PositiveIntegerValue;
 
 use function dirname;
 use function strval;

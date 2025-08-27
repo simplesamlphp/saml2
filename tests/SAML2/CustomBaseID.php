@@ -9,8 +9,9 @@ use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\{AbstractBaseID, Audience};
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, SchemaViolationException};
-use SimpleSAML\XML\Type\QNameValue;
+use SimpleSAML\XMLSchema\Constants as C_XSI;
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, SchemaViolationException};
+use SimpleSAML\XMLSchema\Type\QNameValue;
 
 /**
  * Example class to demonstrate how BaseID can be extended.
@@ -73,12 +74,12 @@ final class CustomBaseID extends AbstractBaseID
         Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AbstractBaseID::NS, InvalidDOMElementException::class);
         Assert::true(
-            $xml->hasAttributeNS(C::NS_XSI, 'type'),
+            $xml->hasAttributeNS(C_XSI::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:BaseID> element.',
             SchemaViolationException::class,
         );
 
-        $type = $xml->getAttributeNS(C::NS_XSI, 'type');
+        $type = $xml->getAttributeNS(C_XSI::NS_XSI, 'type');
         Assert::same($type, self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME);
 
         return new static(

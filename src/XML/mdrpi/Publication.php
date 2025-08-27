@@ -9,8 +9,8 @@ use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\{ArrayValidationException, ProtocolViolationException};
 use SimpleSAML\SAML2\Type\{SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\XML\ArrayizableElementInterface;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 
 /**
  * Class for handling the mdrpi:Publication element.
@@ -79,9 +79,9 @@ final class Publication extends AbstractMdrpiElement implements
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static

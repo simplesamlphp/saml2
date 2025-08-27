@@ -7,10 +7,10 @@ namespace SimpleSAML\SAML2\XML\shibmd;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\BooleanValue;
 use SimpleSAML\XML\TypedTextContentTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
 
 /**
  * Class which represents the Scope element found in Shibboleth metadata.
@@ -31,7 +31,7 @@ final class Scope extends AbstractShibmdElement implements SchemaValidatableElem
      * Create a Scope.
      *
      * @param \SimpleSAML\SAML2\Type\SAMLStringValue $scope
-     * @param \SimpleSAML\XML\Type\BooleanValue|null $regexp
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $regexp
      */
     public function __construct(
         SAMLStringValue $scope,
@@ -44,7 +44,7 @@ final class Scope extends AbstractShibmdElement implements SchemaValidatableElem
     /**
      * Collect the value of the regexp-property
      *
-     * @return \SimpleSAML\XML\Type\BooleanValue|null
+     * @return \SimpleSAML\XMLSchema\Type\BooleanValue|null
      */
     public function isRegexpScope(): ?BooleanValue
     {
@@ -58,7 +58,7 @@ final class Scope extends AbstractShibmdElement implements SchemaValidatableElem
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static

@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\XML\saml\{AssertionIDRef, Issuer};
 use SimpleSAML\SAML2\XML\samlp\{AbstractMessage, AbstractRequest, AbstractSamlpElement, AssertionIDRequest};
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{IDValue, NCNameValue};
+use SimpleSAML\XMLSchema\Type\{IDValue, NCNameValue};
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;

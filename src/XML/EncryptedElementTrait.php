@@ -9,8 +9,7 @@ use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\AbstractElement;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, TooManyElementsException};
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementTrait as ParentEncryptedElementTrait;
@@ -52,7 +51,7 @@ trait EncryptedElementTrait
 
         foreach ($keyInfo->getInfo() as $info) {
             if ($info instanceof EncryptedKey) {
-                $this->encryptedKey = $info;
+                $this->encryptedKey = [$info];
                 break;
             }
         }
@@ -83,7 +82,7 @@ trait EncryptedElementTrait
     /**
      * @inheritDoc
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   If the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static

@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\md\{AbstractLocalizedName, AbstractMdElement, ServiceDescription};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\{MissingAttributeException, SchemaViolationException};
+use SimpleSAML\XMLSchema\Exception\{MissingAttributeException, SchemaViolationException};
 
 use function dirname;
 

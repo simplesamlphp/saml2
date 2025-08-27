@@ -9,10 +9,10 @@ use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\{ArrayValidationException, ProtocolViolationException};
 use SimpleSAML\SAML2\Type\ListOfStringsValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\LanguageValue;
 use SimpleSAML\XML\TypedTextContentTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function array_key_first;
 
@@ -37,7 +37,7 @@ final class Keywords extends AbstractMduiElement implements
     /**
      * Initialize a Keywords.
      *
-     * @param \SimpleSAML\XML\Type\LanguageValue $lang
+     * @param \SimpleSAML\XMLSchema\Type\LanguageValue $lang
      * @param \SimpleSAML\SAML2\Type\ListOfStringsValue $keywords
      */
     public function __construct(
@@ -51,7 +51,7 @@ final class Keywords extends AbstractMduiElement implements
     /**
      * Collect the value of the lang-property
      *
-     * @return \SimpleSAML\XML\Type\LanguageValue
+     * @return \SimpleSAML\XMLSchema\Type\LanguageValue
      */
     public function getLanguage(): LanguageValue
     {
@@ -65,9 +65,9 @@ final class Keywords extends AbstractMduiElement implements
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static

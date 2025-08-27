@@ -9,9 +9,9 @@ use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, TooManyElementsException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\{BooleanValue, DurationValue, IDValue};
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, TooManyElementsException};
+use SimpleSAML\XMLSchema\Type\{BooleanValue, DurationValue, IDValue};
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function var_export;
@@ -31,14 +31,14 @@ final class IDPSSODescriptor extends AbstractSSODescriptor implements SchemaVali
      *
      * @param \SimpleSAML\SAML2\XML\md\SingleSignOnService[] $singleSignOnService
      * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
-     * @param \SimpleSAML\XML\Type\BooleanValue|null $wantAuthnRequestsSigned
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $wantAuthnRequestsSigned
      * @param \SimpleSAML\SAML2\XML\md\NameIDMappingService[] $nameIDMappingService
      * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
      * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfile
      * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attribute
-     * @param \SimpleSAML\XML\Type\IDValue|null $ID
+     * @param \SimpleSAML\XMLSchema\Type\IDValue|null $ID
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil
-     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration
+     * @param \SimpleSAML\XMLSchema\Type\DurationValue|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $errorURL
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor
@@ -119,7 +119,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor implements SchemaVali
     /**
      * Collect the value of the WantAuthnRequestsSigned-property
      *
-     * @return \SimpleSAML\XML\Type\BooleanValue|null
+     * @return \SimpleSAML\XMLSchema\Type\BooleanValue|null
      */
     public function wantAuthnRequestsSigned(): ?BooleanValue
     {
@@ -188,11 +188,11 @@ final class IDPSSODescriptor extends AbstractSSODescriptor implements SchemaVali
      * @param \DOMElement $xml The XML element we should load.
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
      *   if one of the mandatory child-elements is missing
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static

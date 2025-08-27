@@ -8,14 +8,14 @@ use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\DecisionTypeValue;
-use SimpleSAML\XML\Exception\{
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XMLSchema\Exception\{
     InvalidDOMElementException,
     MissingElementException,
     SchemaViolationException,
     TooManyElementsException,
 };
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\AnyURIValue;
+use SimpleSAML\XMLSchema\Type\AnyURIValue;
 
 use function array_pop;
 use function strval;
@@ -33,7 +33,7 @@ final class AuthzDecisionStatement extends AbstractStatementType implements Sche
     /**
      * Initialize an AuthzDecisionStatement.
      *
-     * @param \SimpleSAML\XML\Type\AnyURIValue $resource
+     * @param \SimpleSAML\XMLSchema\Type\AnyURIValue $resource
      * @param \SimpleSAML\SAML2\Type\DecisionTypeValue $decision
      * @param \SimpleSAML\SAML2\XML\saml\Action[] $action
      * @param \SimpleSAML\SAML2\XML\saml\Evidence|null $evidence
@@ -53,7 +53,7 @@ final class AuthzDecisionStatement extends AbstractStatementType implements Sche
     /**
      * Collect the value of the resource-property
      *
-     * @return \SimpleSAML\XML\Type\AnyURIValue
+     * @return \SimpleSAML\XMLSchema\Type\AnyURIValue
      */
     public function getResource(): AnyURIValue
     {
@@ -75,7 +75,7 @@ final class AuthzDecisionStatement extends AbstractStatementType implements Sche
     /**
      * Collect the value of the action-property
      *
-     * @return array
+     * @return \SimpleSAML\SAML2\XML\saml\Action[]
      */
     public function getAction(): array
     {
@@ -100,9 +100,9 @@ final class AuthzDecisionStatement extends AbstractStatementType implements Sche
      * @param \DOMElement $xml The XML element we should load
      *
      * @return static
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
      *   if one of the mandatory child-elements is missing
      * @throws \Exception if the authentication instant is not a valid timestamp.
      */

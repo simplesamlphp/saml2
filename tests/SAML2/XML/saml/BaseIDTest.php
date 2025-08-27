@@ -18,6 +18,7 @@ use SimpleSAML\SAML2\XML\saml\{
 use SimpleSAML\Test\SAML2\{Constants as C, CustomBaseID};
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XMLSchema\Constants as C_XSI;
 
 use function dirname;
 use function strval;
@@ -125,7 +126,7 @@ final class BaseIDTest extends TestCase
     public function testUnmarshallingUnregistered(): void
     {
         $element = clone self::$xmlRepresentation->documentElement;
-        $element->setAttributeNS(C::NS_XSI, 'xsi:type', 'ssp:UnknownBaseIDType');
+        $element->setAttributeNS(C_XSI::NS_XSI, 'xsi:type', 'ssp:UnknownBaseIDType');
 
         $baseId = AbstractBaseID::fromXML($element);
 

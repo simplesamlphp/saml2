@@ -10,9 +10,9 @@ use SimpleSAML\SAML2\Exception\Protocol\{RequestVersionTooHighException, Request
 use SimpleSAML\SAML2\XML\saml\{AssertionIDRef, Issuer};
 use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, TooManyElementsException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\IDValue;
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, TooManyElementsException};
+use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
@@ -29,7 +29,7 @@ final class AssertionIDRequest extends AbstractRequest implements SchemaValidata
     /**
      * Initialize an AssertionIDRequest.
      *
-     * @param \SimpleSAML\XML\Type\IDValue $id
+     * @param \SimpleSAML\XMLSchema\Type\IDValue $id
      * @param \SimpleSAML\SAML2\XML\saml\AssertionIDRef[] $assertionIDRef
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $issueInstant
@@ -37,7 +37,7 @@ final class AssertionIDRequest extends AbstractRequest implements SchemaValidata
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      */
     public function __construct(
         IDValue $id,
@@ -77,7 +77,7 @@ final class AssertionIDRequest extends AbstractRequest implements SchemaValidata
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   If the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static

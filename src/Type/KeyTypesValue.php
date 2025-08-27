@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\Type;
 
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\XML\md\KeyTypesEnum;
-use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
 use function array_column;
 

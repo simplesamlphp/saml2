@@ -10,11 +10,11 @@ use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, EntityIDValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\ecp\{AbstractEcpElement, Request};
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\{GetComplete, IDPEntry, IDPList};
-use SimpleSAML\SOAP\Constants as SOAP;
+use SimpleSAML\SOAP11\Constants as SOAP;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\BooleanValue;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
 
 use function dirname;
 use function strval;
@@ -88,7 +88,7 @@ final class RequestTest extends TestCase
     public function testUnmarshallingWithMissingMustUnderstandThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;
-        $document->removeAttributeNS(SOAP::NS_SOAP_ENV_11, 'mustUnderstand');
+        $document->removeAttributeNS(SOAP::NS_SOAP_ENV, 'mustUnderstand');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing env:mustUnderstand attribute in <ecp:Request>.');
@@ -102,7 +102,7 @@ final class RequestTest extends TestCase
     public function testUnmarshallingWithMissingActorThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;
-        $document->removeAttributeNS(SOAP::NS_SOAP_ENV_11, 'actor');
+        $document->removeAttributeNS(SOAP::NS_SOAP_ENV, 'actor');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing env:actor attribute in <ecp:Request>.');

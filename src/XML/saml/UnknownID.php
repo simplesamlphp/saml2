@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Type\QNameValue;
+use SimpleSAML\XMLSchema\Type\QNameValue;
 
 /**
  * Class for unknown identifiers.
@@ -18,7 +18,7 @@ final class UnknownID extends AbstractBaseID
 {
     /**
      * @param \SimpleSAML\XML\Chunk $chunk The whole BaseID element as a chunk object.
-     * @param \SimpleSAML\XML\Type\QNameValue $type The xsi:type of this identifier.
+     * @param \SimpleSAML\XMLSchema\Type\QNameValue $type The xsi:type of this identifier.
      * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $NameQualifier
      * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $SPNameQualifier
      */

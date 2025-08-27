@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Type;
 
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\XML\Type\StringValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 
 /**
  * @package simplesaml/saml2

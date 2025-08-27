@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\XML\saml\{AbstractSamlElement, SubjectConfirmationData};
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\{Attribute as XMLAttribute, Chunk, DOMDocumentFactory};
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{NCNameValue, StringValue};
+use SimpleSAML\XMLSchema\Type\{NCNameValue, StringValue};
 use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
 
 use function dirname;

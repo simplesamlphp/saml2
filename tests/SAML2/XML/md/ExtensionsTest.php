@@ -20,7 +20,7 @@ use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{LanguageValue, PositiveIntegerValue, UnsignedShortValue};
+use SimpleSAML\XMLSchema\Type\{LanguageValue, PositiveIntegerValue, UnsignedShortValue};
 
 use function dirname;
 use function strval;

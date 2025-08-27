@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\XML\saml\{AbstractBaseID, EncryptedID, IdentifierInterface, NameID};
-use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
 use function array_pop;
 
@@ -53,7 +53,7 @@ trait IdentifierTrait
      *
      * @param \DOMElement $xml
      * @return \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException if too many child-elements of a type are specified
      */
     protected static function getIdentifierFromXML(DOMElement $xml): ?IdentifierInterface
     {

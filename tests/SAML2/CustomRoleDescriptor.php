@@ -18,9 +18,10 @@ use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\ExtendableElementTrait;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingElementException, TooManyElementsException};
-use SimpleSAML\XML\Type\{DurationValue, IDValue, QNameValue};
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XMLSchema\Constants as C_XSI;
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingElementException, TooManyElementsException};
+use SimpleSAML\XMLSchema\Type\{DurationValue, IDValue, QNameValue};
+use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
 
 /**
  * Example class to demonstrate how RoleDescriptor can be extended.
@@ -41,7 +42,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
     protected const XSI_TYPE_PREFIX = 'ssp';
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::OTHER;
+    public const XS_ANY_ELT_NAMESPACE = NamespaceEnum::Other;
 
     /**
      * CustomRoleDescriptor constructor.
@@ -49,10 +50,10 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
      * @param \SimpleSAML\XML\SerializableElementInterface[] $chunk
      * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
      *   A set of URI specifying the protocols supported.
-     * @param \SimpleSAML\XML\Type\IDValue|null $ID The ID for this document. Defaults to null.
+     * @param \SimpleSAML\XMLSchema\Type\IDValue|null $ID The ID for this document. Defaults to null.
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
      *   Defaults to null.
-     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration Maximum time this document can be cached.
+     * @param \SimpleSAML\XMLSchema\Type\DurationValue|null $cacheDuration Maximum time this document can be cached.
      *   Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An Extensions object. Defaults to null.
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $errorURL An URI where to redirect users for support.
@@ -116,7 +117,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
@@ -125,12 +126,12 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
         Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AbstractRoleDescriptor::NS, InvalidDOMElementException::class);
         Assert::true(
-            $xml->hasAttributeNS(C::NS_XSI, 'type'),
+            $xml->hasAttributeNS(C_XSI::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:RoleDescriptor> element.',
             InvalidDOMElementException::class,
         );
 
-        $type = $xml->getAttributeNS(C::NS_XSI, 'type');
+        $type = $xml->getAttributeNS(C_XSI::NS_XSI, 'type');
         Assert::same($type, self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME);
 
         $orgs = Organization::getChildrenOfClass($xml);
@@ -186,7 +187,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
         }
 
         if (!$e->lookupPrefix('xsi')) {
-            $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', $this->getXsiType());
+            $type = new XMLAttribute(C_XSI::NS_XSI, 'xsi', 'type', $this->getXsiType());
             $type->toXML($e);
         }
 

@@ -7,10 +7,10 @@ namespace SimpleSAML\SAML2\XML\shibmd;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\{ExtendableAttributesTrait, SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\UnsignedByteValue;
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Type\UnsignedByteValue;
+use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 
 use function strval;
@@ -28,14 +28,14 @@ final class KeyAuthority extends AbstractShibmdElement implements SchemaValidata
 
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
+    public const XS_ANY_ATTR_NAMESPACE = NamespaceEnum::Other;
 
 
     /**
      * Create a KeyAuthority.
      *
      * @param \SimpleSAML\XMLSecurity\XML\ds\KeyInfo[] $keys
-     * @param \SimpleSAML\XML\Type\UnsignedByteValue|null $VerifyDepth
+     * @param \SimpleSAML\XMLSchema\Type\UnsignedByteValue|null $VerifyDepth
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
@@ -52,7 +52,7 @@ final class KeyAuthority extends AbstractShibmdElement implements SchemaValidata
     /**
      * Collect the value of the VerifyDepth-property
      *
-     * @return \SimpleSAML\XML\Type\UnsignedByteValue|null
+     * @return \SimpleSAML\XMLSchema\Type\UnsignedByteValue|null
      */
     public function getVerifyDepth(): UnsignedByteValue|null
     {
@@ -77,7 +77,7 @@ final class KeyAuthority extends AbstractShibmdElement implements SchemaValidata
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static

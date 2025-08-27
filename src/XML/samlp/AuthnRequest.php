@@ -10,9 +10,9 @@ use SimpleSAML\SAML2\Exception\Protocol\{RequestVersionTooHighException, Request
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\saml\{Conditions, Issuer, Subject};
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, TooManyElementsException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\{BooleanValue, IDValue, UnsignedShortValue};
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, TooManyElementsException};
+use SimpleSAML\XMLSchema\Type\{BooleanValue, IDValue, UnsignedShortValue};
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
@@ -31,18 +31,18 @@ class AuthnRequest extends AbstractRequest implements SchemaValidatableElementIn
     /**
      * Constructor for SAML 2 AuthnRequest
      *
-     * @param \SimpleSAML\XML\Type\IDValue $id
+     * @param \SimpleSAML\XMLSchema\Type\IDValue $id
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $issueInstant
      * @param \SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext|null $requestedAuthnContext
      * @param \SimpleSAML\SAML2\XML\saml\Subject|null $subject
      * @param \SimpleSAML\SAML2\XML\samlp\NameIDPolicy|null $nameIdPolicy
      * @param \SimpleSAML\SAML2\XML\saml\Conditions|null $conditions
-     * @param \SimpleSAML\XML\Type\BooleanValue|null $forceAuthn
-     * @param \SimpleSAML\XML\Type\BooleanValue|null $isPassive
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $forceAuthn
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $isPassive
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $assertionConsumerServiceURL
-     * @param \SimpleSAML\XML\Type\UnsignedShortValue|null $assertionConsumerServiceIndex
+     * @param \SimpleSAML\XMLSchema\Type\UnsignedShortValue|null $assertionConsumerServiceIndex
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $protocolBinding
-     * @param \SimpleSAML\XML\Type\UnsignedShortValue|null $attributeConsumingServiceIndex
+     * @param \SimpleSAML\XMLSchema\Type\UnsignedShortValue|null $attributeConsumingServiceIndex
      * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $providerName
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
@@ -120,7 +120,6 @@ class AuthnRequest extends AbstractRequest implements SchemaValidatableElementIn
     /**
      * Retrieve the NameIdPolicy.
      *
-     * @see \SimpleSAML\SAML2\AuthnRequest::setNameIdPolicy()
      * @return \SimpleSAML\SAML2\XML\samlp\NameIDPolicy|null The NameIdPolicy.
      */
     public function getNameIdPolicy(): ?NameIDPolicy
@@ -132,7 +131,7 @@ class AuthnRequest extends AbstractRequest implements SchemaValidatableElementIn
     /**
      * Retrieve the value of the ForceAuthn attribute.
      *
-     * @return \SimpleSAML\XML\Type\BooleanValue|null The ForceAuthn attribute.
+     * @return \SimpleSAML\XMLSchema\Type\BooleanValue|null The ForceAuthn attribute.
      */
     public function getForceAuthn(): ?BooleanValue
     {
@@ -154,7 +153,7 @@ class AuthnRequest extends AbstractRequest implements SchemaValidatableElementIn
     /**
      * Retrieve the value of the IsPassive attribute.
      *
-     * @return \SimpleSAML\XML\Type\BooleanValue|null The IsPassive attribute.
+     * @return \SimpleSAML\XMLSchema\Type\BooleanValue|null The IsPassive attribute.
      */
     public function getIsPassive(): ?BooleanValue
     {
@@ -187,7 +186,7 @@ class AuthnRequest extends AbstractRequest implements SchemaValidatableElementIn
     /**
      * Retrieve the value of the AttributeConsumingServiceIndex attribute.
      *
-     * @return \SimpleSAML\XML\Type\UnsignedShortValue|null The AttributeConsumingServiceIndex attribute.
+     * @return \SimpleSAML\XMLSchema\Type\UnsignedShortValue|null The AttributeConsumingServiceIndex attribute.
      */
     public function getAttributeConsumingServiceIndex(): ?UnsignedShortValue
     {
@@ -198,7 +197,7 @@ class AuthnRequest extends AbstractRequest implements SchemaValidatableElementIn
     /**
      * Retrieve the value of the AssertionConsumerServiceIndex attribute.
      *
-     * @return \SimpleSAML\XML\Type\UnsignedShortValue|null The AssertionConsumerServiceIndex attribute.
+     * @return \SimpleSAML\XMLSchema\Type\UnsignedShortValue|null The AssertionConsumerServiceIndex attribute.
      */
     public function getAssertionConsumerServiceIndex(): ?UnsignedShortValue
     {
@@ -223,11 +222,11 @@ class AuthnRequest extends AbstractRequest implements SchemaValidatableElementIn
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static

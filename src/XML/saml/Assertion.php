@@ -11,9 +11,9 @@ use SimpleSAML\SAML2\Exception\Protocol\{RequestVersionTooHighException, Request
 use SimpleSAML\SAML2\Type\{SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\{EncryptableElementTrait, SignableElementTrait, SignedElementTrait};
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingElementException, TooManyElementsException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingElementException, TooManyElementsException};
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
@@ -62,7 +62,7 @@ final class Assertion extends AbstractSamlElement implements
      * Assertion constructor.
      *
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
-     * @param \SimpleSAML\XML\Type\IDValue $id
+     * @param \SimpleSAML\XMLSchema\Type\IDValue $id
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Subject|null $subject
      * @param \SimpleSAML\SAML2\XML\saml\Conditions|null $conditions
@@ -143,7 +143,7 @@ final class Assertion extends AbstractSamlElement implements
     /**
      * Retrieve the identifier of this assertion.
      *
-     * @return \SimpleSAML\XML\Type\IDValue The identifier of this assertion.
+     * @return \SimpleSAML\XMLSchema\Type\IDValue The identifier of this assertion.
      */
     public function getId(): IDValue
     {
@@ -228,12 +228,14 @@ final class Assertion extends AbstractSamlElement implements
      * @return static
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
+     *   if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
+     *   if too many child-elements of a type are specified
      * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): static

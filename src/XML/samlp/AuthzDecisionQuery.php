@@ -10,14 +10,14 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\{RequestVersionTooHighException, RequestVersionTooLowException};
 use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\saml\{Action, Evidence, Issuer, Subject};
-use SimpleSAML\XML\Exception\{
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XMLSchema\Exception\{
     InvalidDOMElementException,
     MissingElementException,
     SchemaViolationException,
     TooManyElementsException,
 };
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function version_compare;
@@ -35,7 +35,7 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery implements SchemaVal
     /**
      * Constructor for SAML 2 AuthzDecisionQuery.
      *
-     * @param \SimpleSAML\XML\Type\IDValue $id
+     * @param \SimpleSAML\XMLSchema\Type\IDValue $id
      * @param \SimpleSAML\SAML2\XML\saml\Subject $subject
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $resource
      * @param \SimpleSAML\SAML2\XML\saml\Action[] $action
@@ -104,9 +104,9 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery implements SchemaVal
      * @param \DOMElement $xml The XML element we should load
      *
      * @return static
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
      *   if one of the mandatory child-elements is missing
      * @throws \Exception if the authentication instant is not a valid timestamp.
      */

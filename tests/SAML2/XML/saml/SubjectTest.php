@@ -20,9 +20,10 @@ use SimpleSAML\SAML2\XML\saml\{
 };
 use SimpleSAML\Test\SAML2\{Constants as C, CustomBaseID};
 use SimpleSAML\XML\{Attribute as XMLAttribute, Chunk, DOMDocumentFactory};
-use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{NCNameValue, StringValue};
+use SimpleSAML\XMLSchema\Constants as C_XSI;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Type\{NCNameValue, StringValue};
 use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
 
 use function dirname;
@@ -322,7 +323,7 @@ XML
     public function testMultipleIdentifiers(): void
     {
         $samlNamespace = Subject::NS;
-        $xsiNamespace = C::NS_XSI;
+        $xsiNamespace = C_XSI::NS_XSI;
 
         $document = DOMDocumentFactory::fromString(
             <<<XML

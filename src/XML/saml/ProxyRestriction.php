@@ -7,9 +7,9 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\NonNegativeIntegerValue;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Type\NonNegativeIntegerValue;
 
 /**
  * @package simplesamlphp/saml2
@@ -23,7 +23,7 @@ final class ProxyRestriction extends AbstractConditionType implements SchemaVali
      * ProxyRestriction constructor.
      *
      * @param \SimpleSAML\SAML2\XML\saml\Audience[] $audience
-     * @param \SimpleSAML\XML\Type\NonNegativeIntegerValue|null $count
+     * @param \SimpleSAML\XMLSchema\Type\NonNegativeIntegerValue|null $count
      */
     public function __construct(
         protected array $audience = [],
@@ -37,7 +37,7 @@ final class ProxyRestriction extends AbstractConditionType implements SchemaVali
     /**
      * Get the value of the count-attribute.
      *
-     * @return \SimpleSAML\XML\Type\NonNegativeIntegerValue|null
+     * @return \SimpleSAML\XMLSchema\Type\NonNegativeIntegerValue|null
      */
     public function getCount(): ?NonNegativeIntegerValue
     {
@@ -60,7 +60,7 @@ final class ProxyRestriction extends AbstractConditionType implements SchemaVali
      * @param \DOMElement $xml
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static

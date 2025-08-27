@@ -9,8 +9,8 @@ use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Type\BooleanValue;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
 
 /**
  * Class representing SAML 2 metadata RequestedAttribute.
@@ -33,7 +33,7 @@ final class RequestedAttribute extends Attribute
      * RequestedAttribute constructor.
      *
      * @param \SimpleSAML\SAML2\Type\SAMLStringValue $Name
-     * @param \SimpleSAML\XML\Type\BooleanValue|null $isRequired
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $isRequired
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $NameFormat
      * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $FriendlyName
      * @param \SimpleSAML\SAML2\XML\saml\AttributeValue[] $AttributeValues
@@ -52,7 +52,7 @@ final class RequestedAttribute extends Attribute
     /**
      * Collect the value of the isRequired-property
      *
-     * @return \SimpleSAML\XML\Type\BooleanValue|null
+     * @return \SimpleSAML\XMLSchema\Type\BooleanValue|null
      */
     public function getIsRequired(): ?BooleanValue
     {
@@ -66,9 +66,9 @@ final class RequestedAttribute extends Attribute
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static

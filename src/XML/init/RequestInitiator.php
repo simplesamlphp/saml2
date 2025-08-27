@@ -9,8 +9,8 @@ use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\md\AbstractEndpointType;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 
 /**
  * Class for handling the init:RequestInitiator element.
@@ -39,7 +39,7 @@ final class RequestInitiator extends AbstractEndpointType implements SchemaValid
      *
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $location
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $responseLocation
-     * @param array $children
+     * @param array<\SimpleSAML\XML\SerializableElementInterface> $children
      * @param array<\SimpleSAML\XML\Attribute> $attributes
      *
      * @throws \InvalidArgumentException

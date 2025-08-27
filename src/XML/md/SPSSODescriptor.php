@@ -8,9 +8,9 @@ use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, TooManyElementsException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\{BooleanValue, DurationValue, IDValue};
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, TooManyElementsException};
+use SimpleSAML\XMLSchema\Type\{BooleanValue, DurationValue, IDValue};
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_filter;
@@ -31,12 +31,12 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
      *
      * @param array<\SimpleSAML\SAML2\XML\md\AssertionConsumerService> $assertionConsumerService
      * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
-     * @param \SimpleSAML\XML\Type\BooleanValue|null $authnRequestsSigned
-     * @param \SimpleSAML\XML\Type\BooleanValue|null $wantAssertionsSigned
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $authnRequestsSigned
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $wantAssertionsSigned
      * @param array<\SimpleSAML\SAML2\XML\md\AttributeConsumingService> $attributeConsumingService
-     * @param \SimpleSAML\XML\Type\IDValue|null $ID
+     * @param \SimpleSAML\XMLSchema\Type\IDValue|null $ID
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil
-     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration
+     * @param \SimpleSAML\XMLSchema\Type\DurationValue|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $errorURL
      * @param array<\SimpleSAML\SAML2\XML\md\KeyDescriptor> $keyDescriptors
@@ -115,7 +115,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
     /**
      * Collect the value of the AuthnRequestsSigned-property
      *
-     * @return \SimpleSAML\XML\Type\BooleanValue|null
+     * @return \SimpleSAML\XMLSchema\Type\BooleanValue|null
      */
     public function getAuthnRequestsSigned(): ?BooleanValue
     {
@@ -126,7 +126,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
     /**
      * Collect the value of the WantAssertionsSigned-property
      *
-     * @return \SimpleSAML\XML\Type\BooleanValue|null
+     * @return \SimpleSAML\XMLSchema\Type\BooleanValue|null
      */
     public function getWantAssertionsSigned(): ?BooleanValue
     {
@@ -162,11 +162,11 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static

@@ -13,9 +13,9 @@ use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\saml\{AbstractSamlElement, Attribute, AttributeValue, EncryptedAttribute};
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\StringValue;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
@@ -134,7 +134,7 @@ final class AttributeTest extends TestCase
         $encattr = EncryptedAttribute::fromXML($doc->documentElement);
 
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encattr->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm()->getValue(),
+            $encattr->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
 

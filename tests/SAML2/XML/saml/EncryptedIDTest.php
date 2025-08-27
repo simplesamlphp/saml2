@@ -22,7 +22,7 @@ use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{AnyURIValue, Base64BinaryValue, IDValue, StringValue};
+use SimpleSAML\XMLSchema\Type\{AnyURIValue, Base64BinaryValue, IDValue, StringValue};
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
@@ -235,7 +235,7 @@ final class EncryptedIDTest extends TestCase
         $encid = EncryptedID::fromXML($doc->documentElement);
         /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm()->getValue(),
+            $encid->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             $privKey,
         );
         $id = $encid->decrypt($decryptor);
@@ -260,7 +260,7 @@ final class EncryptedIDTest extends TestCase
         $encid = EncryptedID::fromXML($doc->documentElement);
         /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm()->getValue(),
+            $encid->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             $privKey,
         );
         $id = $encid->decrypt($decryptor);
@@ -283,7 +283,7 @@ final class EncryptedIDTest extends TestCase
         $encid = EncryptedID::fromXML($doc->documentElement);
         /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm()->getValue(),
+            $encid->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             $privKey,
         );
         $id = $encid->decrypt($decryptor);

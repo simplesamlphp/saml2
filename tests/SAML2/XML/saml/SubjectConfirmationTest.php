@@ -14,9 +14,9 @@ use SimpleSAML\SAML2\XML\saml\{AbstractSamlElement, NameID, SubjectConfirmation,
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
-use SimpleSAML\XML\Exception\{MissingAttributeException, TooManyElementsException};
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{NCNameValue, StringValue};
+use SimpleSAML\XMLSchema\Exception\{MissingAttributeException, TooManyElementsException};
+use SimpleSAML\XMLSchema\Type\{NCNameValue, StringValue};
 use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
 
 use function dirname;

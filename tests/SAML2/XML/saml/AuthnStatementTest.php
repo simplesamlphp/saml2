@@ -18,8 +18,8 @@ use SimpleSAML\SAML2\XML\saml\{
     SubjectLocality,
 };
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\{MissingAttributeException, MissingElementException, TooManyElementsException};
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XMLSchema\Exception\{MissingAttributeException, MissingElementException, TooManyElementsException};
 
 use function dirname;
 use function strval;

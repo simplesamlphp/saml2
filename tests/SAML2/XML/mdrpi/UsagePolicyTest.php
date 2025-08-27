@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\XML\md\{AbstractLocalizedName, AbstractLocalizedURI};
 use SimpleSAML\SAML2\XML\mdrpi\{AbstractMdrpiElement, UsagePolicy};
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\LanguageValue;
+use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function dirname;
 use function strval;

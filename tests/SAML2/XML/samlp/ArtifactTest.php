@@ -9,7 +9,7 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\samlp\{AbstractSamlpElement, Artifact};
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\Base64BinaryValue;
+use SimpleSAML\XMLSchema\Type\Base64BinaryValue;
 
 use function dirname;
 use function strval;
