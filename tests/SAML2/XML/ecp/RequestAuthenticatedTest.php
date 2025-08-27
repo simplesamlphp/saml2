@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\ecp;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\ecp\AbstractEcpElement;
-use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
-use SimpleSAML\SOAP\Constants as C;
+use SimpleSAML\SAML2\XML\ecp\{AbstractEcpElement, RequestAuthenticated};
+use SimpleSAML\SOAP11\Constants as C;
+use SimpleSAML\SOAP11\Type\MustUnderstandValue;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 
 use function dirname;
 use function strval;
@@ -46,7 +44,9 @@ final class RequestAuthenticatedTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $ra = new RequestAuthenticated(false);
+        $ra = new RequestAuthenticated(
+            MustUnderstandValue::fromBoolean(false),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -60,7 +60,7 @@ final class RequestAuthenticatedTest extends TestCase
     public function testUnmarshallingWithMissingActorThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;
-        $document->removeAttributeNS(C::NS_SOAP_ENV_11, 'actor');
+        $document->removeAttributeNS(C::NS_SOAP_ENV, 'actor');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing env:actor attribute in <ecp:RequestAuthenticated>.');

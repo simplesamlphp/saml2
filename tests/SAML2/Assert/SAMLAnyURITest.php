@@ -4,30 +4,30 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Assert;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\{CoversClass, DataProvider, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Assert\Assert as SAML2Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
 /**
- * Class \SimpleSAML\SAML2\Assert\URITest
+ * Class \SimpleSAML\SAML2\Assert\SAMLAnyURITest
  *
  * @package simplesamlphp/saml2
  */
-#[CoversClass(SAML2Assert::class)]
-final class URITest extends TestCase
+#[Group('assert')]
+#[CoversClass(Assert::class)]
+final class SAMLAnyURITest extends TestCase
 {
     /**
      * @param boolean $shouldPass
      * @param string $uri
      */
     #[DataProvider('provideURI')]
-    public function testValidURI(bool $shouldPass, string $uri): void
+    public function testValidSAMLAnyURI(bool $shouldPass, string $uri): void
     {
         try {
-            SAML2Assert::validURI($uri);
+            Assert::validSAMLAnyURI($uri);
             $this->assertTrue($shouldPass);
         } catch (ProtocolViolationException | SchemaViolationException $e) {
             $this->assertFalse($shouldPass);

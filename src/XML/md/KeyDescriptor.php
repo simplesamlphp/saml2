@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\KeyTypesValue;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingElementException, TooManyElementsException};
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+
+use function array_pop;
 
 /**
  * Class representing a KeyDescriptor element.
@@ -27,19 +27,14 @@ final class KeyDescriptor extends AbstractMdElement implements SchemaValidatable
      * KeyDescriptor constructor.
      *
      * @param \SimpleSAML\XMLSecurity\XML\ds\KeyInfo $keyInfo
-     * @param string|null $use
+     * @param \SimpleSAML\SAML2\Type\KeyTypesValue|null $use
      * @param \SimpleSAML\SAML2\XML\md\EncryptionMethod[] $encryptionMethod
      */
     public function __construct(
         protected KeyInfo $keyInfo,
-        protected ?string $use = null,
+        protected ?KeyTypesValue $use = null,
         protected array $encryptionMethod = [],
     ) {
-        Assert::nullOrOneOf(
-            $use,
-            ['encryption', 'signing'],
-            'The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".',
-        );
         Assert::maxCount($encryptionMethod, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($encryptionMethod, EncryptionMethod::class);
     }
@@ -48,9 +43,9 @@ final class KeyDescriptor extends AbstractMdElement implements SchemaValidatable
     /**
      * Collect the value of the use property.
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\KeyTypesValue|null
      */
-    public function getUse(): ?string
+    public function getUse(): ?KeyTypesValue
     {
         return $this->use;
     }
@@ -84,11 +79,11 @@ final class KeyDescriptor extends AbstractMdElement implements SchemaValidatable
      * @param \DOMElement $xml The XML element we should load.
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
      *   if one of the mandatory child-elements is missing
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static
@@ -96,23 +91,13 @@ final class KeyDescriptor extends AbstractMdElement implements SchemaValidatable
         Assert::same($xml->localName, 'KeyDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, KeyDescriptor::NS, InvalidDOMElementException::class);
 
-        $keyInfoElements = KeyInfo::getChildrenOfClass($xml);
-        Assert::minCount(
-            $keyInfoElements,
-            1,
-            'No ds:KeyInfo in the KeyDescriptor.',
-            MissingElementException::class,
-        );
-        Assert::maxCount(
-            $keyInfoElements,
-            1,
-            'More than one ds:KeyInfo in the KeyDescriptor.',
-            TooManyElementsException::class,
-        );
+        $keyInfo = KeyInfo::getChildrenOfClass($xml);
+        Assert::minCount($keyInfo, 1, 'No ds:KeyInfo in the KeyDescriptor.', MissingElementException::class);
+        Assert::maxCount($keyInfo, 1, 'Too many ds:KeyInfo in the KeyDescriptor.', TooManyElementsException::class);
 
         return new static(
-            $keyInfoElements[0],
-            self::getOptionalAttribute($xml, 'use', null),
+            array_pop($keyInfo),
+            self::getOptionalAttribute($xml, 'use', KeyTypesValue::class, null),
             EncryptionMethod::getChildrenOfClass($xml),
         );
     }
@@ -129,7 +114,7 @@ final class KeyDescriptor extends AbstractMdElement implements SchemaValidatable
         $e = $this->instantiateParentElement($parent);
 
         if ($this->getUse() !== null) {
-            $e->setAttribute('use', $this->getUse());
+            $e->setAttribute('use', $this->getUse()->getValue());
         }
 
         $this->getKeyInfo()->toXML($e);

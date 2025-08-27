@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\Attributes\{CoversClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Compat\AbstractContainer;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
-use SimpleSAML\SAML2\XML\saml\AbstractStatement;
-use SimpleSAML\SAML2\XML\saml\AbstractStatementType;
-use SimpleSAML\SAML2\XML\saml\Audience;
-use SimpleSAML\SAML2\XML\saml\UnknownStatement;
-use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\Test\SAML2\CustomStatement;
+use SimpleSAML\SAML2\Compat\{AbstractContainer, ContainerSingleton};
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\XML\saml\{
+    AbstractSamlElement,
+    AbstractStatement,
+    AbstractStatementType,
+    Audience,
+    UnknownStatement,
+};
+use SimpleSAML\Test\SAML2\{Constants as C, CustomStatement};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
-use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XMLSchema\Constants as C_XSI;
 
 use function dirname;
 use function strval;
@@ -78,9 +78,11 @@ final class StatementTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $statement = new CustomStatement(
-            [new Audience('urn:some:audience')],
-        );
+        $statement = new CustomStatement([
+            new Audience(
+                SAMLAnyURIValue::fromString('urn:some:audience'),
+            ),
+        ]);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -117,12 +119,15 @@ final class StatementTest extends TestCase
     public function testUnmarshallingUnregistered(): void
     {
         $element = clone self::$xmlRepresentation->documentElement;
-        $element->setAttributeNS(C::NS_XSI, 'xsi:type', 'ssp:UnknownStatementType');
+        $element->setAttributeNS(C_XSI::NS_XSI, 'xsi:type', 'ssp:UnknownStatementType');
 
         $statement = AbstractStatement::fromXML($element);
 
         $this->assertInstanceOf(UnknownStatement::class, $statement);
-        $this->assertEquals('urn:x-simplesamlphp:namespace:UnknownStatementType', $statement->getXsiType());
+        $this->assertEquals(
+            '{urn:x-simplesamlphp:namespace}ssp:UnknownStatementType',
+            $statement->getXsiType()->getRawValue(),
+        );
 
         $chunk = $statement->getRawStatement();
         $this->assertEquals('saml', $chunk->getPrefix());

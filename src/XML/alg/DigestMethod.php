@@ -5,13 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\alg;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\ExtendableElementTrait;
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
 
 /**
  * Class for handling the alg:DigestMethod element.
@@ -24,21 +23,21 @@ final class DigestMethod extends AbstractAlgElement implements SchemaValidatable
     use ExtendableElementTrait;
     use SchemaValidatableElementTrait;
 
+
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::ANY;
+    public const XS_ANY_ELT_NAMESPACE = NamespaceEnum::Any;
 
 
     /**
      * Create/parse an alg:DigestMethod element.
      *
-     * @param string $algorithm
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $algorithm
      * @param \SimpleSAML\XML\Chunk[] $elements
      */
     public function __construct(
-        protected string $algorithm,
+        protected SAMLAnyURIValue $algorithm,
         array $elements = [],
     ) {
-        SAMLAssert::validURI($algorithm);
         $this->setElements($elements);
     }
 
@@ -46,9 +45,9 @@ final class DigestMethod extends AbstractAlgElement implements SchemaValidatable
     /**
      * Collect the value of the algorithm-property
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue
      */
-    public function getAlgorithm(): string
+    public function getAlgorithm(): SAMLAnyURIValue
     {
         return $this->algorithm;
     }
@@ -60,9 +59,9 @@ final class DigestMethod extends AbstractAlgElement implements SchemaValidatable
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the mandatory Algorithm-attribute is missing
      */
     public static function fromXML(DOMElement $xml): static
@@ -71,7 +70,7 @@ final class DigestMethod extends AbstractAlgElement implements SchemaValidatable
         Assert::same($xml->namespaceURI, DigestMethod::NS, InvalidDOMElementException::class);
 
         return new static(
-            self::getAttribute($xml, 'Algorithm'),
+            self::getAttribute($xml, 'Algorithm', SAMLAnyURIValue::class),
             self::getChildElementsFromXML($xml),
         );
     }
@@ -86,7 +85,7 @@ final class DigestMethod extends AbstractAlgElement implements SchemaValidatable
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('Algorithm', $this->getAlgorithm());
+        $e->setAttribute('Algorithm', $this->getAlgorithm()->getValue());
 
         foreach ($this->getElements() as $element) {
             /** @var \SimpleSAML\XML\SerializableElementInterface $element */
