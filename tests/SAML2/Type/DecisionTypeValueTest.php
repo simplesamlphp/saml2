@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\{CoversClass, DataProvider, DependsOnClass};
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Type\DecisionTypeValue;
 use SimpleSAML\SAML2\XML\saml\DecisionTypeEnum;
-use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
 /**
  * Class \SimpleSAML\Test\SAML2\Type\DecisionTypeValueTest

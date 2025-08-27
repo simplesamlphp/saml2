@@ -8,7 +8,7 @@ use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\SAML2\XML\saml\{Issuer, Subject};
-use SimpleSAML\XML\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
 
 /**
  * Base class for SAML 2 subject query messages.
@@ -26,7 +26,7 @@ abstract class AbstractSubjectQuery extends AbstractRequest
     /**
      * Constructor for SAML 2 response messages.
      *
-     * @param \SimpleSAML\XML\Type\IDValue $id
+     * @param \SimpleSAML\XMLSchema\Type\IDValue $id
      * @param \SimpleSAML\SAML2\XML\saml\Subject $subject
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $issueInstant

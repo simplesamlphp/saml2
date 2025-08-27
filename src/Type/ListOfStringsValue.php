@@ -7,8 +7,8 @@ namespace SimpleSAML\SAML2\Type;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\Type\ListTypeInterface;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
+use SimpleSAML\XMLSchema\Type\Interface\ListTypeInterface;
 
 use function array_map;
 use function preg_split;
@@ -34,7 +34,7 @@ class ListOfStringsValue extends SAMLStringValue implements ListTypeInterface
      * Validate the value.
      *
      * @param string $value
-     * @throws \SimpleSAML\XML\Exception\SchemaViolationException on failure
+     * @throws \SimpleSAML\XMLSchema\Exception\SchemaViolationException on failure
      * @return void
      */
     protected function validateValue(string $value): void

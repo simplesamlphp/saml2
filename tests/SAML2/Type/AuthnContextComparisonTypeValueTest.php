@@ -6,27 +6,27 @@ namespace SimpleSAML\Test\SAML2\Type;
 
 use PHPUnit\Framework\Attributes\{CoversClass, DataProvider, DependsOnClass};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\AuthnContextComparisonValue;
-use SimpleSAML\SAML2\XML\saml\AuthnContextComparisonEnum;
-use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\SAML2\Type\AuthnContextComparisonTypeValue;
+use SimpleSAML\SAML2\XML\samlp\AuthnContextComparisonTypeEnum;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
 /**
  * Class \SimpleSAML\Test\SAML2\Type\AuthnContextComparisonValueTest
  *
  * @package simplesamlphp/saml2
  */
-#[CoversClass(AuthnContextComparisonValue::class)]
-final class AuthnContextComparisonValueTest extends TestCase
+#[CoversClass(AuthnContextComparisonTypeValue::class)]
+final class AuthnContextComparisonTypeValueTest extends TestCase
 {
     /**
-     * @param string $AuthnContextComparison
+     * @param string $authnContextComparison
      * @param bool $shouldPass
      */
     #[DataProvider('provideAuthnContextComparison')]
-    public function testAuthnContextComparisonValue(string $authnContextComparison, bool $shouldPass): void
+    public function testAuthnContextComparisonTypeValue(string $authnContextComparison, bool $shouldPass): void
     {
         try {
-            AuthnContextComparisonValue::fromString($authnContextComparison);
+            AuthnContextComparisonTypeValue::fromString($authnContextComparison);
             $this->assertTrue($shouldPass);
         } catch (SchemaViolationException $e) {
             $this->assertFalse($shouldPass);
@@ -39,11 +39,11 @@ final class AuthnContextComparisonValueTest extends TestCase
      */
     public function testHelpers(): void
     {
-        $x = AuthnContextComparisonValue::fromEnum(AuthnContextComparisonEnum::Exact);
-        $this->assertEquals(AuthnContextComparisonEnum::Exact, $x->toEnum());
+        $x = AuthnContextComparisonTypeValue::fromEnum(AuthnContextComparisonTypeEnum::Exact);
+        $this->assertEquals(AuthnContextComparisonTypeEnum::Exact, $x->toEnum());
 
-        $y = AuthnContextComparisonValue::fromString('exact');
-        $this->assertEquals(AuthnContextComparisonEnum::Exact, $y->toEnum());
+        $y = AuthnContextComparisonTypeValue::fromString('exact');
+        $this->assertEquals(AuthnContextComparisonTypeEnum::Exact, $y->toEnum());
     }
 
 

@@ -12,8 +12,8 @@ use SimpleSAML\SAML2\Type\{AuthnContextComparisonTypeValue, SAMLAnyURIValue};
 use SimpleSAML\SAML2\XML\saml\{AuthnContextClassRef, AuthnContextDeclRef};
 use SimpleSAML\SAML2\XML\samlp\{AbstractSamlpElement, AuthnContextComparisonTypeEnum, RequestedAuthnContext};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
 use function dirname;
 use function strval;

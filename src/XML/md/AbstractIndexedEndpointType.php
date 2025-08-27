@@ -10,9 +10,9 @@ use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Attribute as XMLAttribute;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\SerializableElementInterface;
-use SimpleSAML\XML\Type\{BooleanValue, UnsignedShortValue};
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Type\{BooleanValue, UnsignedShortValue};
 
 use function array_filter;
 use function array_key_exists;
@@ -36,10 +36,10 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
      * static methods to get its properties from a given \DOMElement for your convenience. Look at the implementation
      * of fromXML() to know how to use them.
      *
-     * @param \SimpleSAML\XML\Type\UnsignedShortValue $index
+     * @param \SimpleSAML\XMLSchema\Type\UnsignedShortValue $index
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $binding
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $location
-     * @param \SimpleSAML\XML\Type\BooleanValue|null $isDefault
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $isDefault
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $responseLocation
      * @param array $children
      * @param list<\SimpleSAML\XML\Attribute> $attributes
@@ -66,9 +66,9 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
      * @param \DOMElement $xml The XML element we should load.
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing any of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static

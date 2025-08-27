@@ -23,7 +23,7 @@ use SimpleSAML\SAML2\XML\mdui\{
 };
 use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
 use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{LanguageValue, PositiveIntegerValue};
+use SimpleSAML\XMLSchema\Type\{LanguageValue, PositiveIntegerValue};
 
 use function dirname;
 use function strval;

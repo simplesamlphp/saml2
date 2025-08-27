@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\SAML2\XML\mdrpi\{PublicationInfo, PublicationPath, RegistrationInfo};
 use SimpleSAML\SAML2\XML\mdui\{DiscoHints, UIInfo};
-use SimpleSAML\XML\Type\{DurationValue, IDValue};
+use SimpleSAML\XMLSchema\Type\{DurationValue, IDValue};
 
 /**
  * Class to represent a metadata document
@@ -26,10 +26,10 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     /**
      * Generic constructor for SAML metadata documents.
      *
-     * @param \SimpleSAML\XML\Type\IDValue|null $id The ID for this document. Defaults to null.
+     * @param \SimpleSAML\XMLSchema\Type\IDValue|null $id The ID for this document. Defaults to null.
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
      *   Defaults to null.
-     * @param \SimpleSAML\XML\Type\DurationValue|null $cacheDuration Maximum time this document can be cached.
+     * @param \SimpleSAML\XMLSchema\Type\DurationValue|null $cacheDuration Maximum time this document can be cached.
      *   Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions. Defaults to null.
      */
@@ -91,7 +91,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     /**
      * Collect the value of the id property.
      *
-     * @return \SimpleSAML\XML\Type\IDValue|null
+     * @return \SimpleSAML\XMLSchema\Type\IDValue|null
      */
     public function getId(): ?IDValue
     {
@@ -113,7 +113,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
     /**
      * Collect the value of the cacheDuration property.
      *
-     * @return \SimpleSAML\XML\Type\DurationValue|null
+     * @return \SimpleSAML\XMLSchema\Type\DurationValue|null
      */
     public function getCacheDuration(): ?DurationValue
     {

@@ -8,8 +8,8 @@ use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingAttributeException};
-use SimpleSAML\XML\Type\LanguageValue;
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingAttributeException};
+use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function array_key_first;
 
@@ -27,7 +27,7 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
     /**
      * LocalizedNameType constructor.
      *
-     * @param \SimpleSAML\XML\Type\LanguageValue $language The language this string is localized in.
+     * @param \SimpleSAML\XMLSchema\Type\LanguageValue $language The language this string is localized in.
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $content The localized string.
      */
     final public function __construct(
@@ -46,7 +46,7 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
      * @param \DOMElement $xml
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static

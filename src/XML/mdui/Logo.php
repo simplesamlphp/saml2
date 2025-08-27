@@ -9,10 +9,10 @@ use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\{ArrayValidationException, ProtocolViolationException};
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, SchemaViolationException};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\{LanguageValue, PositiveIntegerValue};
 use SimpleSAML\XML\TypedTextContentTrait;
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, SchemaViolationException};
+use SimpleSAML\XMLSchema\Type\{LanguageValue, PositiveIntegerValue};
 
 /**
  * Class for handling the Logo metadata extensions for login and discovery user interface
@@ -38,9 +38,9 @@ final class Logo extends AbstractMduiElement implements
      * Initialize a Logo.
      *
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $url
-     * @param \SimpleSAML\XML\Type\PositiveIntegerValue $height
-     * @param \SimpleSAML\XML\Type\PositiveIntegerValue $width
-     * @param \SimpleSAML\XML\Type\LanguageValue|null $lang
+     * @param \SimpleSAML\XMLSchema\Type\PositiveIntegerValue $height
+     * @param \SimpleSAML\XMLSchema\Type\PositiveIntegerValue $width
+     * @param \SimpleSAML\XMLSchema\Type\LanguageValue|null $lang
      */
     public function __construct(
         SAMLAnyURIValue $url,
@@ -69,7 +69,7 @@ final class Logo extends AbstractMduiElement implements
     /**
      * Collect the value of the lang-property
      *
-     * @return \SimpleSAML\XML\Type\LanguageValue|null
+     * @return \SimpleSAML\XMLSchema\Type\LanguageValue|null
      */
     public function getLanguage(): ?LanguageValue
     {
@@ -80,7 +80,7 @@ final class Logo extends AbstractMduiElement implements
     /**
      * Collect the value of the height-property
      *
-     * @return \SimpleSAML\XML\Type\PositiveIntegerValue
+     * @return \SimpleSAML\XMLSchema\Type\PositiveIntegerValue
      */
     public function getHeight(): PositiveIntegerValue
     {
@@ -91,7 +91,7 @@ final class Logo extends AbstractMduiElement implements
     /**
      * Collect the value of the width-property
      *
-     * @return \SimpleSAML\XML\Type\PositiveIntegerValue
+     * @return \SimpleSAML\XMLSchema\Type\PositiveIntegerValue
      */
     public function getWidth(): PositiveIntegerValue
     {
@@ -105,9 +105,9 @@ final class Logo extends AbstractMduiElement implements
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static

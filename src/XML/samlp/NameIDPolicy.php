@@ -9,9 +9,9 @@ use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
 use SimpleSAML\XML\ArrayizableElementInterface;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\BooleanValue;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
 
 use function array_change_key_case;
 use function array_filter;
@@ -35,7 +35,7 @@ final class NameIDPolicy extends AbstractSamlpElement implements
      *
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $Format
      * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $SPNameQualifier
-     * @param \SimpleSAML\XML\Type\BooleanValue|null $AllowCreate
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $AllowCreate
      */
     public function __construct(
         protected ?SAMLAnyURIValue $Format = null,
@@ -64,7 +64,7 @@ final class NameIDPolicy extends AbstractSamlpElement implements
 
 
     /**
-     * @return \SimpleSAML\XML\Type\BooleanValue|null
+     * @return \SimpleSAML\XMLSchema\Type\BooleanValue|null
      */
     public function getAllowCreate(): ?BooleanValue
     {
@@ -91,7 +91,7 @@ final class NameIDPolicy extends AbstractSamlpElement implements
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static

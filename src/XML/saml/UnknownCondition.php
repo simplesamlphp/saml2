@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Type\QNameValue;
+use SimpleSAML\XMLSchema\Type\QNameValue;
 
 /**
  * Class for unknown conditions.
@@ -17,7 +17,7 @@ final class UnknownCondition extends AbstractCondition
 {
     /**
      * @param \SimpleSAML\XML\Chunk $chunk The whole Condition element as a chunk object.
-     * @param \SimpleSAML\XML\Type\QNameValue $type The xsi:type of this condition.
+     * @param \SimpleSAML\XMLSchema\Type\QNameValue $type The xsi:type of this condition.
      */
     public function __construct(
         protected Chunk $chunk,

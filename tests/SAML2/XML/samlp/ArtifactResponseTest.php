@@ -21,7 +21,7 @@ use SimpleSAML\SAML2\XML\samlp\{
 };
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{BooleanValue, IDValue, NCNameValue};
+use SimpleSAML\XMLSchema\Type\{BooleanValue, IDValue, NCNameValue};
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;

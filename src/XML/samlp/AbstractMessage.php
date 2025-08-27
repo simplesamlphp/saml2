@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\{SignableElementTrait, SignedElementTrait};
-use SimpleSAML\XML\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\XML\{SignableElementInterface, SignedElementInterface};
 
 use function array_pop;
@@ -49,7 +49,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
      * Initialize a message.
      *
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
-     * @param \SimpleSAML\XML\Type\IDValue $id
+     * @param \SimpleSAML\XMLSchema\Type\IDValue $id
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $issueInstant
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
@@ -72,7 +72,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     /**
      * Retrieve the identifier of this message.
      *
-     * @return \SimpleSAML\XML\Type\IDValue The identifier of this message
+     * @return \SimpleSAML\XMLSchema\Type\IDValue The identifier of this message
      */
     public function getId(): IDValue
     {

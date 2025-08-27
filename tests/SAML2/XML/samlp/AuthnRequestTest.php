@@ -45,9 +45,9 @@ use SimpleSAML\SAML2\XML\samlp\{
 };
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\{MissingAttributeException, TooManyElementsException};
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{BooleanValue, IDValue, NonNegativeIntegerValue, UnsignedShortValue};
+use SimpleSAML\XMLSchema\Exception\{MissingAttributeException, TooManyElementsException};
+use SimpleSAML\XMLSchema\Type\{BooleanValue, IDValue, NonNegativeIntegerValue, UnsignedShortValue};
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\{PEMCertificatesMock, SignedElementTestTrait};
 
@@ -312,7 +312,7 @@ AUTHNREQUEST;
 
         /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $identifier->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm()->getValue(),
+            $identifier->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),
         );
 

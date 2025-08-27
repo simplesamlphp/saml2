@@ -31,7 +31,7 @@ use SimpleSAML\SAML2\XML\saml\{Attribute, AttributeValue};
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{BooleanValue, IDValue, UnsignedShortValue};
+use SimpleSAML\XMLSchema\Type\{BooleanValue, IDValue, UnsignedShortValue};
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
 

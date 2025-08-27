@@ -9,13 +9,13 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, EntityIDValue, SAMLStringValue};
 use SimpleSAML\SAML2\XML\ecp\{AbstractEcpElement, SubjectConfirmation};
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
-use SimpleSAML\SOAP\Constants as SOAP;
+use SimpleSAML\SOAP11\Constants as SOAP;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{IDValue, NCNameValue, StringValue};
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Type\{IDValue, NCNameValue, StringValue};
 use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
 
 use function dirname;
@@ -96,7 +96,7 @@ final class SubjectConfirmationTest extends TestCase
     public function testUnmarshallingWithMissingMustUnderstandThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;
-        $document->removeAttributeNS(SOAP::NS_SOAP_ENV_11, 'mustUnderstand');
+        $document->removeAttributeNS(SOAP::NS_SOAP_ENV, 'mustUnderstand');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing env:mustUnderstand attribute in <ecp:SubjectConfirmation>.');
@@ -110,7 +110,7 @@ final class SubjectConfirmationTest extends TestCase
     public function testUnmarshallingWithMissingActorThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;
-        $document->removeAttributeNS(SOAP::NS_SOAP_ENV_11, 'actor');
+        $document->removeAttributeNS(SOAP::NS_SOAP_ENV, 'actor');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing env:actor attribute in <ecp:SubjectConfirmation>.');

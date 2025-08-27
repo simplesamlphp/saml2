@@ -8,10 +8,11 @@ use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
-use SimpleSAML\SOAP\Constants as C;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingAttributeException};
+use SimpleSAML\SOAP11\Constants as C;
+use SimpleSAML\SOAP11\Type\MustUnderstandValue;
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
 use SimpleSAML\XML\TypedTextContentTrait;
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingAttributeException};
 
 /**
  * Class representing the ECP RelayState element.
@@ -33,9 +34,9 @@ final class RelayState extends AbstractEcpElement implements SchemaValidatableEl
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing any of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static
@@ -45,25 +46,20 @@ final class RelayState extends AbstractEcpElement implements SchemaValidatableEl
 
         // Assert required attributes
         Assert::true(
-            $xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'actor'),
+            $xml->hasAttributeNS(C::NS_SOAP_ENV, 'actor'),
             'Missing env:actor attribute in <ecp:RelayState>.',
             MissingAttributeException::class,
         );
         Assert::true(
-            $xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand'),
+            $xml->hasAttributeNS(C::NS_SOAP_ENV, 'mustUnderstand'),
             'Missing env:mustUnderstand attribute in <ecp:RelayState>.',
             MissingAttributeException::class,
         );
 
-        Assert::same(
-            $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand'),
-            '1',
-            'Invalid value of env:mustUnderstand attribute in <ecp:RelayState>.',
-            ProtocolViolationException::class,
-        );
+        MustUnderstandValue::fromString($xml->getAttributeNS(C::NS_SOAP_ENV, 'mustUnderstand'));
 
         Assert::same(
-            $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'actor'),
+            $xml->getAttributeNS(C::NS_SOAP_ENV, 'actor'),
             C::SOAP_ACTOR_NEXT,
             'Invalid value of env:actor attribute in <ecp:RelayState>.',
             ProtocolViolationException::class,
@@ -85,8 +81,8 @@ final class RelayState extends AbstractEcpElement implements SchemaValidatableEl
     {
         $e = $this->instantiateParentElement($parent);
 
-        $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', '1');
-        $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', C::SOAP_ACTOR_NEXT);
+        $e->setAttributeNS(C::NS_SOAP_ENV, 'SOAP-ENV:mustUnderstand', '1');
+        $e->setAttributeNS(C::NS_SOAP_ENV, 'SOAP-ENV:actor', C::SOAP_ACTOR_NEXT);
         $e->textContent = $this->getContent()->getValue();
 
         return $e;

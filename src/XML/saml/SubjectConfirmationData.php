@@ -9,11 +9,11 @@ use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\{SAMLDateTimeValue, EntityIDValue, SAMLStringValue};
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\{ExtendableAttributesTrait, ExtendableElementTrait};
 use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XML\Type\NCNameValue;
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Type\NCNameValue;
+use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
 
 use function strval;
 
@@ -29,10 +29,10 @@ final class SubjectConfirmationData extends AbstractSamlElement implements Schem
     use SchemaValidatableElementTrait;
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::ANY;
+    public const XS_ANY_ELT_NAMESPACE = NamespaceEnum::Any;
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
+    public const XS_ANY_ATTR_NAMESPACE = NamespaceEnum::Other;
 
 
     /**
@@ -41,7 +41,7 @@ final class SubjectConfirmationData extends AbstractSamlElement implements Schem
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $notBefore
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $notOnOrAfter
      * @param \SimpleSAML\SAML2\Type\EntityIDValue|null $recipient
-     * @param \SimpleSAML\XML\Type\NCNameValue|null $inResponseTo
+     * @param \SimpleSAML\XMLSchema\Type\NCNameValue|null $inResponseTo
      * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $address
      * @param \SimpleSAML\XML\SerializableElementInterface[] $children
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
@@ -111,7 +111,7 @@ final class SubjectConfirmationData extends AbstractSamlElement implements Schem
     /**
      * Collect the value of the InResponseTo-property
      *
-     * @return \SimpleSAML\XML\Type\NCNameValue|null
+     * @return \SimpleSAML\XMLSchema\Type\NCNameValue|null
      */
     public function getInResponseTo(): ?NCNameValue
     {
@@ -153,9 +153,9 @@ final class SubjectConfirmationData extends AbstractSamlElement implements Schem
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing any of the mandatory attributes
      * @throws \SimpleSAML\Assert\AssertionFailedException
      *   if NotBefore or NotOnOrAfter contain an invalid date.

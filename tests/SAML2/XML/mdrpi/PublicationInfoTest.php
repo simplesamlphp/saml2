@@ -12,9 +12,9 @@ use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, EntityIDValue, SA
 use SimpleSAML\SAML2\XML\md\{AffiliationDescriptor, EntitiesDescriptor, EntityDescriptor, Extensions};
 use SimpleSAML\SAML2\XML\mdrpi\{AbstractMdrpiElement, PublicationInfo, UsagePolicy};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\LanguageValue;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function dirname;
 use function strval;

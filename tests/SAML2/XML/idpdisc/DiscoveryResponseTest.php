@@ -14,7 +14,7 @@ use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
 use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{BooleanValue, UnsignedShortValue};
+use SimpleSAML\XMLSchema\Type\{BooleanValue, UnsignedShortValue};
 
 use function dirname;
 use function strval;

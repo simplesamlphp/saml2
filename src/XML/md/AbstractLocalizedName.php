@@ -10,9 +10,9 @@ use SimpleSAML\SAML2\Exception\{ArrayValidationException, ProtocolViolationExcep
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingAttributeException};
-use SimpleSAML\XML\Type\LanguageValue;
 use SimpleSAML\XML\TypedTextContentTrait;
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingAttributeException};
+use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function array_key_first;
 
@@ -32,7 +32,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
     /**
      * LocalizedNameType constructor.
      *
-     * @param \SimpleSAML\XML\Type\LanguageValue $language The language this string is localized in.
+     * @param \SimpleSAML\XMLSchema\Type\LanguageValue $language The language this string is localized in.
      * @param \SimpleSAML\SAML2\Type\SAMLStringValue $content The localized string.
      */
     public function __construct(
@@ -46,7 +46,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
     /**
      * Get the language this string is localized in.
      *
-     * @return \SimpleSAML\XML\Type\LanguageValue
+     * @return \SimpleSAML\XMLSchema\Type\LanguageValue
      */
     public function getLanguage(): LanguageValue
     {
@@ -60,7 +60,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
      * @param \DOMElement $xml
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static

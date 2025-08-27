@@ -12,9 +12,9 @@ use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\ecp\{RequestAuthenticated, Response};
 use SimpleSAML\SAML2\XML\samlp\{ArtifactResolve, MessageFactory};
-use SimpleSAML\SOAP\Constants as C;
+use SimpleSAML\SOAP11\Constants as C;
+use SimpleSAML\SOAP11\Type\MustUnderstandValue;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Type\BooleanValue;
 
 use function dirname;
 
@@ -87,7 +87,7 @@ SOAP);
 SOAP);
 
         /** @var \DOMElement $body */
-        $body = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV_11, 'Body')->item(0);
+        $body = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV, 'Body')->item(0);
         $message->toXML($body);
 
         $soap = new SOAP();
@@ -111,7 +111,7 @@ SOAP);
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Header /><SOAP-ENV:Body /></SOAP-ENV:Envelope>
 SOAP);
         $requestAuthenticated = new RequestAuthenticated(
-            BooleanValue::fromBoolean(true),
+            MustUnderstandValue::fromBoolean(true),
         );
         $ecpResponse = new Response(
             SAMLAnyURIValue::fromString('https://example.org/metadata'),
@@ -119,12 +119,12 @@ SOAP);
 
 
         /** @var \DOMElement $header */
-        $header = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV_11, 'Header')->item(0);
+        $header = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV, 'Header')->item(0);
         $requestAuthenticated->toXML($header);
         $ecpResponse->toXML($header);
 
         /** @var \DOMElement $body */
-        $body = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV_11, 'Body')->item(0);
+        $body = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV, 'Body')->item(0);
         $message->toXML($body);
 
         $soap = new SOAP();

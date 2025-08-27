@@ -6,8 +6,8 @@ namespace SimpleSAML\Test\XML\Type;
 
 use PHPUnit\Framework\Attributes\{CoversClass, DataProvider, DataProviderExternal, DependsOnClass, Group};
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\SAML2\Type\ListOfStringsValue;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
 /**
  * Class \SimpleSAML\Test\SAML2\Type\ListOfStringsTest

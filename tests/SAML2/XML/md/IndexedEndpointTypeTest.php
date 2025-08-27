@@ -16,8 +16,8 @@ use SimpleSAML\SAML2\XML\md\{
 };
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\{InvalidDOMElementException, MissingAttributeException};
-use SimpleSAML\XML\Type\UnsignedShortValue;
+use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingAttributeException};
+use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 
 use function dirname;
 use function sprintf;

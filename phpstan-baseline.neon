@@ -91,11 +91,6 @@ parameters:
 			path: src/Certificate/PrivateKeyLoader.php
 
 		-
-			message: "#^PHPDoc tag @param for parameter \\$qName with type SimpleSAML\\\\XML\\\\Type\\\\QNameValue\\|null is not subtype of native type SimpleSAML\\\\XML\\\\Type\\\\QNameValue\\.$#"
-			count: 1
-			path: src/Compat/AbstractContainer.php
-
-		-
 			message: "#^Call to method getArray\\(\\) on an unknown class SimpleSAML\\\\Configuration\\.$#"
 			count: 1
 			path: src/Configuration/SimpleSAMLConverter.php
@@ -261,7 +256,7 @@ parameters:
 			path: src/XML/mdui/Keywords.php
 
 		-
-			message: "#^Call to an undefined method SimpleSAML\\\\XML\\\\Type\\\\ValueTypeInterface\\:\\:toArray\\(\\)\\.$#"
+			message: "#^Call to an undefined method SimpleSAML\\\\XMLSchema\\\\Type\\\\Interface\\\\ValueTypeInterface\\:\\:toArray\\(\\)\\.$#"
 			count: 1
 			path: src/XML/mdui/Keywords.php
 

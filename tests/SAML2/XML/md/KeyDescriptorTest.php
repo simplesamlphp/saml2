@@ -9,9 +9,9 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, KeyTypesValue};
 use SimpleSAML\SAML2\XML\md\{AbstractMdElement, EncryptionMethod, KeyDescriptor, KeyTypesEnum};
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\StringValue;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
 
 use function dirname;

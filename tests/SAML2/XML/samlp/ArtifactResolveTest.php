@@ -17,7 +17,7 @@ use SimpleSAML\SAML2\XML\samlp\{
 };
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{Base64BinaryValue, IDValue};
+use SimpleSAML\XMLSchema\Type\{Base64BinaryValue, IDValue};
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;

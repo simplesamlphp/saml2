@@ -45,9 +45,10 @@ use SimpleSAML\SAML2\XML\mdrpi\{PublicationInfo, UsagePolicy};
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\{MissingAttributeException, TooManyElementsException};
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{DurationValue, IDValue, LanguageValue, StringValue};
+use SimpleSAML\XMLSchema\Constants as C_XSI;
+use SimpleSAML\XMLSchema\Exception\{MissingAttributeException, TooManyElementsException};
+use SimpleSAML\XMLSchema\Type\{DurationValue, IDValue, LanguageValue, StringValue};
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -432,7 +433,7 @@ XML
             'urn:x-simplesamlphp:namespace',
         );
 
-        $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', StringValue::fromString('ssp:UnknownRoleDescriptor'));
+        $type = new XMLAttribute(C_XSI::NS_XSI, 'xsi', 'type', StringValue::fromString('ssp:UnknownRoleDescriptor'));
         $type->toXML($customd);
 
         $newline = new DOMText("\n  ");

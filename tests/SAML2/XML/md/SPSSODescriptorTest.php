@@ -44,9 +44,9 @@ use SimpleSAML\SAML2\XML\mdrpi\{PublicationInfo, UsagePolicy};
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{BooleanValue, DurationValue, IDValue, LanguageValue, StringValue, UnsignedShortValue};
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
+use SimpleSAML\XMLSchema\Type\{BooleanValue, DurationValue, IDValue, LanguageValue, StringValue, UnsignedShortValue};
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
 

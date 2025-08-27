@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\Type\ListOfStringsValue;
 use SimpleSAML\SAML2\XML\mdui\{AbstractMduiElement, Keywords};
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\LanguageValue;
+use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function dirname;
 use function strval;

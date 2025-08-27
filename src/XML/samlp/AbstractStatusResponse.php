@@ -8,7 +8,7 @@ use DOMElement;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue};
 use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\XML\Type\{IDValue, NCNameValue};
+use SimpleSAML\XMLSchema\Type\{IDValue, NCNameValue};
 
 /**
  * Base class for all SAML 2 response messages.
@@ -25,11 +25,11 @@ abstract class AbstractStatusResponse extends AbstractMessage
     /**
      * Constructor for SAML 2 response messages.
      *
-     * @param \SimpleSAML\XML\Type\IDValue $id
+     * @param \SimpleSAML\XMLSchema\Type\IDValue $id
      * @param \SimpleSAML\SAML2\XML\samlp\Status $status
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
-     * @param \SimpleSAML\XML\Type\NCNameValue|null $inResponseTo
+     * @param \SimpleSAML\XMLSchema\Type\NCNameValue|null $inResponseTo
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions|null $extensions
@@ -64,7 +64,7 @@ abstract class AbstractStatusResponse extends AbstractMessage
     /**
      * Retrieve the ID of the request this is a response to.
      *
-     * @return \SimpleSAML\XML\Type\NCNameValue|null The ID of the request.
+     * @return \SimpleSAML\XMLSchema\Type\NCNameValue|null The ID of the request.
      */
     public function getInResponseTo(): ?NCNameValue
     {

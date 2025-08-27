@@ -6,8 +6,8 @@ namespace SimpleSAML\SAML2\Type;
 
 use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\XML\samlp\AuthnContextComparisonTypeEnum;
-use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\Type\StringValue;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
+use SimpleSAML\XMLSchema\Type\StringValue;
 
 use function array_column;
 

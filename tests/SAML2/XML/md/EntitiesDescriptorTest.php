@@ -20,7 +20,7 @@ use SimpleSAML\SAML2\XML\md\{
 use SimpleSAML\SAML2\XML\mdrpi\{PublicationInfo, UsagePolicy};
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XML\Type\{IDValue, LanguageValue};
+use SimpleSAML\XMLSchema\Type\{IDValue, LanguageValue};
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;

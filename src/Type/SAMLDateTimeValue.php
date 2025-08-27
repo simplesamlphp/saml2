@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\Type;
 
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\XML\Type\DateTimeValue;
+use SimpleSAML\XMLSchema\Type\DateTimeValue;
 
 /**
  * @package simplesaml/saml2
