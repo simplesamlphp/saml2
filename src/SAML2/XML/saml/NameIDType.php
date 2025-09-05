@@ -14,8 +14,9 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use Serializable;
+use JsonSerializable;
 
-abstract class NameIDType implements Serializable
+abstract class NameIDType implements Serializable, \JsonSerializable
 {
     use IDNameQualifiersTrait;
 
@@ -266,5 +267,27 @@ abstract class NameIDType implements Serializable
         $ele = $this->toXML($root);
 
         return $doc->saveXML($ele);
+    }
+
+
+    /**
+     * Because we have mostly protected attributes we do not look
+     * interesting when converted into JSON. This allows for good
+     * visibility from JSON which is used on the admin/test login page
+     * when showing the attributes for the user.
+     *
+     * @return array associative array of defined object accessible
+     * non-static properties for the specified object in scope.
+     */
+    public function jsonSerialize(): array
+    {
+        return [
+            'NameQualifier' => $this->getNameQualifier(),
+            'SPNameQualifier' => $this->getSPNameQualifier(),
+            'nodeName' => $this->nodeName,
+            'Format' => $this->Format,
+            'SPProvidedID' => $this->SPProvidedID,
+            'value' => $this->value
+        ];
     }
 }
