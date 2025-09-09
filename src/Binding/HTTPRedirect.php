@@ -38,7 +38,7 @@ use function urlencode;
  *
  * @package simplesamlphp/saml2
  */
-class HTTPRedirect extends Binding
+class HTTPRedirect extends Binding implements RelayStateInterface
 {
     use RelayStateTrait;
 
