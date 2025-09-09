@@ -48,6 +48,7 @@ final class URITest extends TestCase
             'intl' => [true, 'https://niño.com'],
             'spn' => [true, 'spn:a4cf592f-a64c-46ff-a788-b260f474525b'],
             'typos' => [false, 'https//www.uni.l/en/'],
+            'email' => [false, 'scoobydoo@whereareyou.org'],
             'spaces' => [false, 'this is silly'],
             'empty' => [false, ''],
         ];
