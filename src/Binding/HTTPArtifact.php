@@ -42,7 +42,7 @@ use function var_export;
  *
  * @package simplesamlphp/saml2
  */
-class HTTPArtifact extends Binding implements RelayStateInterface
+class HTTPArtifact extends Binding implements AsynchronousBindingInterface, RelayStateInterface
 {
     use RelayStateTrait;
 

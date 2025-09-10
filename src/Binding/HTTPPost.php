@@ -27,7 +27,7 @@ use function base64_encode;
  *
  * @package simplesamlphp/saml2
  */
-class HTTPPost extends Binding implements RelayStateInterface
+class HTTPPost extends Binding implements AsynchronousBindingInterface, RelayStateInterface
 {
     use RelayStateTrait;
 
