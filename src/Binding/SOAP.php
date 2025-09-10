@@ -29,7 +29,7 @@ use function file_get_contents;
  *
  * @package simplesamlphp/saml2
  */
-class SOAP extends Binding
+class SOAP extends Binding implements SynchronousBindingInterface
 {
     /**
      * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message
