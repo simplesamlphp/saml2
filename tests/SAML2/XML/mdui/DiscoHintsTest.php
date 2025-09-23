@@ -4,20 +4,25 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\{CIDRValue, DomainValue, GeolocationValue, ListOfStringsValue};
+use SimpleSAML\SAML2\Type\CIDRValue;
+use SimpleSAML\SAML2\Type\DomainValue;
+use SimpleSAML\SAML2\Type\GeolocationValue;
+use SimpleSAML\SAML2\Type\ListOfStringsValue;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\mdui\{
-    AbstractMduiElement,
-    DiscoHints,
-    DomainHint,
-    GeolocationHint,
-    IPHint,
-    Keywords,
-};
-use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
-use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
+use SimpleSAML\SAML2\XML\mdui\DiscoHints;
+use SimpleSAML\SAML2\XML\mdui\DomainHint;
+use SimpleSAML\SAML2\XML\mdui\GeolocationHint;
+use SimpleSAML\SAML2\XML\mdui\IPHint;
+use SimpleSAML\SAML2\XML\mdui\Keywords;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function dirname;

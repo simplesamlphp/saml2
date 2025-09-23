@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Test\SAML2\XML\samlp;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\samlp\{AbstractSamlpElement, Artifact};
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
+use SimpleSAML\SAML2\XML\samlp\Artifact;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Type\Base64BinaryValue;
 
 use function dirname;

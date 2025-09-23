@@ -4,17 +4,24 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\idpdisc;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponse;
-use SimpleSAML\SAML2\XML\md\{AbstractIndexedEndpointType, AbstractMdElement};
+use SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
-use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
-use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XMLSchema\Type\{BooleanValue, UnsignedShortValue};
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
+use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 
 use function dirname;
 use function strval;

@@ -6,7 +6,8 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;

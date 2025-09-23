@@ -7,14 +7,22 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLDateTimeValue};
+use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\{ExtensionPointInterface, ExtensionPointTrait};
+use SimpleSAML\SAML2\XML\ExtensionPointInterface;
+use SimpleSAML\SAML2\XML\ExtensionPointTrait;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Constants as C_XSI;
-use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, SchemaViolationException, TooManyElementsException};
-use SimpleSAML\XMLSchema\Type\{DurationValue, IDValue, QNameValue};
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Type\DurationValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\QNameValue;
 
 use function array_pop;
 

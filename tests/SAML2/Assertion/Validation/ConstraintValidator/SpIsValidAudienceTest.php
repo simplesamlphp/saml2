@@ -7,23 +7,24 @@ namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\saml\{
-    Assertion,
-    Audience,
-    AudienceRestriction,
-    AuthnContext,
-    AuthnContextClassRef,
-    AuthnStatement,
-    Conditions,
-    Issuer,
-};
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\Audience;
+use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
+use SimpleSAML\SAML2\XML\saml\AuthnContext;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\XML\saml\AuthnStatement;
+use SimpleSAML\SAML2\XML\saml\Conditions;
+use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Type\IDValue;
 

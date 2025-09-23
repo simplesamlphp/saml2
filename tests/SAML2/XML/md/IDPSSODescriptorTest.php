@@ -4,36 +4,43 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, KeyTypesValue, SAMLStringValue};
-use SimpleSAML\SAML2\XML\md\{
-    AbstractMdElement,
-    AbstractMetadataDocument,
-    AbstractRoleDescriptor,
-    AbstractRoleDescriptorType,
-    AbstractSignedMdElement,
-    ArtifactResolutionService,
-    AssertionIDRequestService,
-    AttributeProfile,
-    IDPSSODescriptor,
-    KeyDescriptor,
-    KeyTypesEnum,
-    ManageNameIDService,
-    NameIDFormat,
-    NameIDMappingService,
-    SingleLogoutService,
-    SingleSignOnService,
-};
-use SimpleSAML\SAML2\XML\saml\{Attribute, AttributeValue};
+use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\KeyTypesValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType;
+use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
+use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
+use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
+use SimpleSAML\SAML2\XML\md\AttributeProfile;
+use SimpleSAML\SAML2\XML\md\IDPSSODescriptor;
+use SimpleSAML\SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\SAML2\XML\md\KeyTypesEnum;
+use SimpleSAML\SAML2\XML\md\ManageNameIDService;
+use SimpleSAML\SAML2\XML\md\NameIDFormat;
+use SimpleSAML\SAML2\XML\md\NameIDMappingService;
+use SimpleSAML\SAML2\XML\md\SingleLogoutService;
+use SimpleSAML\SAML2\XML\md\SingleSignOnService;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XMLSchema\Type\{BooleanValue, IDValue, UnsignedShortValue};
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
-use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
 use function dirname;
 use function strval;

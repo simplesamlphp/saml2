@@ -4,26 +4,29 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLStringValue};
-use SimpleSAML\SAML2\XML\md\{
-    AbstractMdElement,
-    AbstractMetadataDocument,
-    AbstractRoleDescriptor,
-    AbstractRoleDescriptorType,
-    AbstractSignedMdElement,
-    AssertionIDRequestService,
-    AttributeAuthorityDescriptor,
-    AttributeProfile,
-    AttributeService,
-    NameIDFormat,
-};
-use SimpleSAML\SAML2\XML\saml\{Attribute, AttributeValue};
+use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType;
+use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
+use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
+use SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor;
+use SimpleSAML\SAML2\XML\md\AttributeProfile;
+use SimpleSAML\SAML2\XML\md\AttributeService;
+use SimpleSAML\SAML2\XML\md\NameIDFormat;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Exception\MissingElementException;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;

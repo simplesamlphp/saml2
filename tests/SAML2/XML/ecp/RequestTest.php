@@ -4,15 +4,22 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\ecp;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, EntityIDValue, SAMLStringValue};
-use SimpleSAML\SAML2\XML\ecp\{AbstractEcpElement, Request};
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\ecp\AbstractEcpElement;
+use SimpleSAML\SAML2\XML\ecp\Request;
 use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\XML\samlp\{GetComplete, IDPEntry, IDPList};
+use SimpleSAML\SAML2\XML\samlp\GetComplete;
+use SimpleSAML\SAML2\XML\samlp\IDPEntry;
+use SimpleSAML\SAML2\XML\samlp\IDPList;
 use SimpleSAML\SOAP11\Constants as SOAP;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 use SimpleSAML\XMLSchema\Type\BooleanValue;
 

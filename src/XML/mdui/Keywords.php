@@ -6,10 +6,12 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Exception\{ArrayValidationException, ProtocolViolationException};
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\ListOfStringsValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\TypedTextContentTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Type\LanguageValue;
@@ -28,6 +30,7 @@ final class Keywords extends AbstractMduiElement implements
 {
     use SchemaValidatableElementTrait;
     use TypedTextContentTrait;
+
 
     /** @var string */
     public const TEXTCONTENT_TYPE = ListOfStringsValue::class;
@@ -92,7 +95,6 @@ final class Keywords extends AbstractMduiElement implements
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('xml:lang', $this->getLanguage()->getValue());
         $e->textContent = $this->getContent()->getValue();

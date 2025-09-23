@@ -4,19 +4,28 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\ecp;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, EntityIDValue, SAMLStringValue};
-use SimpleSAML\SAML2\XML\ecp\{AbstractEcpElement, SubjectConfirmation};
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\ecp\AbstractEcpElement;
+use SimpleSAML\SAML2\XML\ecp\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\SOAP11\Constants as SOAP;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
-use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
-use SimpleSAML\XMLSchema\Type\{IDValue, NCNameValue, StringValue};
-use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
+use SimpleSAML\XMLSchema\Type\NCNameValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
 use function dirname;
 use function strval;

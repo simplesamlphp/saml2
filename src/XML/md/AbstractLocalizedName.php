@@ -6,12 +6,13 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Exception\{ArrayValidationException, ProtocolViolationException};
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\TypedTextContentTrait;
-use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingAttributeException};
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function array_key_first;
@@ -24,6 +25,7 @@ use function array_key_first;
 abstract class AbstractLocalizedName extends AbstractMdElement implements ArrayizableElementInterface
 {
     use TypedTextContentTrait;
+
 
     /** @var string */
     public const TEXTCONTENT_TYPE = SAMLStringValue::class;

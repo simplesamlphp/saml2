@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Test\Assert;
 
-use PHPUnit\Framework\Attributes\{CoversClass, DataProvider, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Assert\Assert;

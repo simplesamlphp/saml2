@@ -5,22 +5,26 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
-use SimpleSAML\SAML2\XML\md\{
-    AbstractMdElement,
-    Extensions,
-    Organization,
-    OrganizationDisplayName,
-    OrganizationName,
-    OrganizationURL,
-};
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\Extensions;
+use SimpleSAML\SAML2\XML\md\Organization;
+use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
+use SimpleSAML\SAML2\XML\md\OrganizationName;
+use SimpleSAML\SAML2\XML\md\OrganizationURL;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
-use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
-use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XMLSchema\Type\{LanguageValue, StringValue};
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\LanguageValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 
 use function dirname;
 use function strval;

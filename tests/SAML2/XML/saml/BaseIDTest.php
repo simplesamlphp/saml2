@@ -4,20 +4,23 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Compat\{AbstractContainer, ContainerSingleton};
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
-use SimpleSAML\SAML2\XML\saml\{
-    AbstractBaseID,
-    AbstractBaseIDType,
-    AbstractSamlElement,
-    Audience,
-    UnknownID,
-};
-use SimpleSAML\Test\SAML2\{Constants as C, CustomBaseID};
+use SimpleSAML\SAML2\Compat\AbstractContainer;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
+use SimpleSAML\SAML2\XML\saml\AbstractBaseIDType;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
+use SimpleSAML\SAML2\XML\saml\Audience;
+use SimpleSAML\SAML2\XML\saml\UnknownID;
+use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Constants as C_XSI;
 
 use function dirname;

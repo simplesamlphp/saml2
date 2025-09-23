@@ -5,19 +5,21 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Test\SAML2\XML\saml;
 
 use DOMDocument;
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\{DecisionTypeValue, SAMLAnyURIValue, SAMLStringValue};
-use SimpleSAML\SAML2\XML\saml\{
-    AbstractSamlElement,
-    AbstractStatement,
-    Action,
-    AuthzDecisionStatement,
-    DecisionTypeEnum,
-    Evidence,
-};
+use SimpleSAML\SAML2\Type\DecisionTypeValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
+use SimpleSAML\SAML2\XML\saml\AbstractStatement;
+use SimpleSAML\SAML2\XML\saml\Action;
+use SimpleSAML\SAML2\XML\saml\AuthzDecisionStatement;
+use SimpleSAML\SAML2\XML\saml\DecisionTypeEnum;
+use SimpleSAML\SAML2\XML\saml\Evidence;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;

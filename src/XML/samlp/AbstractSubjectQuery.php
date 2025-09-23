@@ -6,8 +6,10 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue};
-use SimpleSAML\SAML2\XML\saml\{Issuer, Subject};
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\XMLSchema\Type\IDValue;
 
 /**

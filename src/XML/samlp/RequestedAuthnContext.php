@@ -7,11 +7,14 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\{AuthnContextComparisonTypeValue, SAMLStringValue};
-use SimpleSAML\SAML2\XML\saml\{AuthnContextClassRef, AuthnContextDeclRef};
+use SimpleSAML\SAML2\Type\AuthnContextComparisonTypeValue;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, SchemaViolationException};
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
 use function array_merge;
 use function strval;

@@ -6,9 +6,11 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue};
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\XMLSchema\Type\{IDValue, NCNameValue};
+use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\NCNameValue;
 
 /**
  * Base class for all SAML 2 response messages.

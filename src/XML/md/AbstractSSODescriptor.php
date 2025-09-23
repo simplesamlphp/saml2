@@ -7,9 +7,12 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLDateTimeValue};
+use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XMLSchema\Type\{IDValue, DurationValue};
+use SimpleSAML\XMLSchema\Type\DurationValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
 
 /**
  * Class representing SAML 2 SSODescriptorType.

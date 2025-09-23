@@ -7,17 +7,25 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\Protocol\{RequestVersionTooHighException, RequestVersionTooLowException};
-use SimpleSAML\SAML2\Type\{SAMLDateTimeValue, SAMLStringValue};
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\{EncryptableElementTrait, SignableElementTrait, SignedElementTrait};
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\SAML2\XML\EncryptableElementTrait;
+use SimpleSAML\SAML2\XML\SignableElementTrait;
+use SimpleSAML\SAML2\XML\SignedElementTrait;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\MissingElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSchema\Type\IDValue;
-use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingElementException, TooManyElementsException};
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
-use SimpleSAML\XMLSecurity\XML\{SignableElementInterface, SignedElementInterface};
+use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
+use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
 use function array_filter;
 use function array_merge;
@@ -40,6 +48,8 @@ final class Assertion extends AbstractSamlElement implements
         EncryptableElementTrait::getBlacklistedAlgorithms insteadof SignedElementTrait;
         EncryptableElementTrait::getBlacklistedAlgorithms insteadof SignableElementTrait;
     }
+
+
     use SchemaValidatableElementTrait;
     use SignableElementTrait;
     use SignedElementTrait;

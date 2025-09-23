@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\TypedTextContentTrait;
 
 /**
@@ -17,6 +18,7 @@ final class Audience extends AbstractSamlElement implements SchemaValidatableEle
 {
     use SchemaValidatableElementTrait;
     use TypedTextContentTrait;
+
 
     /** @var string */
     public const TEXTCONTENT_TYPE = SAMLAnyURIValue::class;

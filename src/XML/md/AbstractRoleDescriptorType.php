@@ -8,9 +8,12 @@ use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLDateTimeValue};
+use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\XML\ExtendableAttributesTrait;
-use SimpleSAML\XMLSchema\Type\{DurationValue, IDValue};
+use SimpleSAML\XMLSchema\Type\DurationValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
 
 use function strval;

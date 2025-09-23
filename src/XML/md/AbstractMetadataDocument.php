@@ -6,12 +6,16 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
-use SimpleSAML\SAML2\XML\mdrpi\{PublicationInfo, PublicationPath, RegistrationInfo};
-use SimpleSAML\SAML2\XML\mdui\{DiscoHints, UIInfo};
-use SimpleSAML\XMLSchema\Type\{DurationValue, IDValue};
+use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationPath;
+use SimpleSAML\SAML2\XML\mdrpi\RegistrationInfo;
+use SimpleSAML\SAML2\XML\mdui\DiscoHints;
+use SimpleSAML\SAML2\XML\mdui\UIInfo;
+use SimpleSAML\XMLSchema\Type\DurationValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
 
 /**
  * Class to represent a metadata document

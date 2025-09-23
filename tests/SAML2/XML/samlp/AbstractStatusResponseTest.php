@@ -4,26 +4,28 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, DomainValue, SAMLStringValue};
+use SimpleSAML\SAML2\Type\DomainValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\XML\samlp\{
-    AbstractMessage,
-    AbstractSamlpElement,
-    AbstractStatusResponse,
-    Extensions,
-    Response,
-    Status,
-    StatusCode,
-    StatusMessage,
-};
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
+use SimpleSAML\SAML2\XML\samlp\AbstractStatusResponse;
+use SimpleSAML\SAML2\XML\samlp\Extensions;
+use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\XML\samlp\StatusMessage;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
-use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSchema\Exception\MissingElementException;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;

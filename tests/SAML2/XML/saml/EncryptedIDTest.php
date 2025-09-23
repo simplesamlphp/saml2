@@ -5,37 +5,40 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use InvalidArgumentException;
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Compat\{AbstractContainer, ContainerSingleton};
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
+use SimpleSAML\SAML2\Compat\AbstractContainer;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\saml\{
-    AbstractSamlElement,
-    Attribute,
-    Audience,
-    EncryptedID,
-    NameID,
-    UnknownID,
-};
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\Audience;
+use SimpleSAML\SAML2\XML\saml\EncryptedID;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\UnknownID;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\CustomBaseID;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XMLSchema\Type\{AnyURIValue, Base64BinaryValue, IDValue, StringValue};
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\AnyURIValue;
+use SimpleSAML\XMLSchema\Type\Base64BinaryValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
-use SimpleSAML\XMLSecurity\XML\xenc\{
-    CarriedKeyName,
-    CipherData,
-    CipherValue,
-    DataReference,
-    EncryptedData,
-    EncryptedKey,
-    EncryptionMethod,
-    ReferenceList,
-};
+use SimpleSAML\XMLSecurity\XML\xenc\CarriedKeyName;
+use SimpleSAML\XMLSecurity\XML\xenc\CipherData;
+use SimpleSAML\XMLSecurity\XML\xenc\CipherValue;
+use SimpleSAML\XMLSecurity\XML\xenc\DataReference;
+use SimpleSAML\XMLSecurity\XML\xenc\EncryptedData;
+use SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey;
+use SimpleSAML\XMLSecurity\XML\xenc\EncryptionMethod;
+use SimpleSAML\XMLSecurity\XML\xenc\ReferenceList;
 
 use function dirname;
 use function strval;

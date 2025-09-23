@@ -8,8 +8,10 @@ use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\XML\IdentifierTrait;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, TooManyElementsException};
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
 /**
  * Class representing SAML 2 Subject element.
@@ -100,7 +102,7 @@ final class Subject extends AbstractSamlElement implements SchemaValidatableElem
     {
         $e = $this->instantiateParentElement($parent);
 
-        /** @var \SimpleSAML\XML\SerializableElementInterface|null $identifier */
+        /** @var \SimpleSAML\XML\SerializableElementInterface&\SimpleSAML\SAML2\XML\saml\IdentifierInterface $identifier */
         $identifier = $this->getIdentifier();
         $identifier?->toXML($e);
 

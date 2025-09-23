@@ -10,8 +10,10 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SOAP11\Constants as C;
 use SimpleSAML\SOAP11\Type\MustUnderstandValue;
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingAttributeException};
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 
 /**
  * Class representing the ECP Response element.

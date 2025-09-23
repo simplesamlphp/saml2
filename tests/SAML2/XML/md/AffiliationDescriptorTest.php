@@ -5,26 +5,31 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use Exception;
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\{SAMLDateTimeValue, EntityIDValue, KeyTypesValue, SAMLStringValue};
-use SimpleSAML\SAML2\XML\md\{
-    AbstractMdElement,
-    AbstractMetadataDocument,
-    AbstractSignedMdElement,
-    AffiliateMember,
-    AffiliationDescriptor,
-    KeyDescriptor,
-    KeyTypesEnum,
-};
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\KeyTypesValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
+use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
+use SimpleSAML\SAML2\XML\md\AffiliateMember;
+use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
+use SimpleSAML\SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\SAML2\XML\md\KeyTypesEnum;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
-use SimpleSAML\XMLSchema\Type\{DurationValue, IDValue};
+use SimpleSAML\XMLSchema\Type\DurationValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
-use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
 use function dirname;
 use function strval;

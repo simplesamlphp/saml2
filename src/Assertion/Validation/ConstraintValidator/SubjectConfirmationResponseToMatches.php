@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
 
-use SimpleSAML\SAML2\Assertion\Validation\{Result, SubjectConfirmationConstraintValidator};
+use SimpleSAML\SAML2\Assertion\Validation\Result;
+use SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\samlp\Response;
 

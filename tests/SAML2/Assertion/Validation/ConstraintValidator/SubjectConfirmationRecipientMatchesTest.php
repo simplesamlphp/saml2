@@ -4,14 +4,17 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, EntityIDValue};
-use SimpleSAML\SAML2\XML\saml\{SubjectConfirmation, SubjectConfirmationData};
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 
 /**
  * @package simplesamlphp/saml2

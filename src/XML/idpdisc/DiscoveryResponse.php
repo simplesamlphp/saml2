@@ -9,8 +9,10 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType;
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XMLSchema\Type\{BooleanValue, UnsignedShortValue};
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
+use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 
 /**
  * Abstract class to be implemented by all the classes in this namespace

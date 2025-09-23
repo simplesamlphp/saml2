@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SimpleSAML\SAML2\XML\{SignableElementTrait, SignedElementTrait};
-use SimpleSAML\XMLSecurity\XML\{SignableElementInterface, SignedElementInterface};
+use SimpleSAML\SAML2\XML\SignableElementTrait;
+use SimpleSAML\SAML2\XML\SignedElementTrait;
+use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
+use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
 use function method_exists;
 

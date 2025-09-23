@@ -6,18 +6,22 @@ namespace SimpleSAML\SAML2\Binding;
 
 use Exception;
 use Nyholm\Psr7\Response;
-use Psr\Http\Message\{ResponseInterface, ServerRequestInterface};
+use Psr\Http\Message\ResponseInterface;
+use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\SAML2\Binding;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\ecp\{RequestAuthenticated, Response as ECPResponse};
+use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
+use SimpleSAML\SAML2\XML\ecp\Response as ECPResponse;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SAML2\XML\samlp\Response as SAML2_Response;
 use SimpleSAML\SOAP11\Type\MustUnderstandValue;
 use SimpleSAML\SOAP11\Utils\XPath;
-use SimpleSAML\SOAP11\XML\{Body, Envelope, Header};
+use SimpleSAML\SOAP11\XML\Body;
+use SimpleSAML\SOAP11\XML\Envelope;
+use SimpleSAML\SOAP11\XML\Header;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function file_get_contents;

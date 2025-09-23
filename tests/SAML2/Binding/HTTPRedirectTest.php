@@ -6,15 +6,24 @@ namespace SimpleSAML\Test\SAML2\Binding;
 
 use Exception;
 use Nyholm\Psr7\ServerRequest;
-use PHPUnit\Framework\Attributes\{CoversClass, DoesNotPerformAssertions, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Binding\HTTPRedirect;
-use SimpleSAML\SAML2\Compat\{AbstractContainer, ContainerSingleton};
+use SimpleSAML\SAML2\Compat\AbstractContainer;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\XML\samlp\{AbstractRequest, AuthnRequest, Response, Status, StatusCode};
+use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
+use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
+use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\XML\Type\IDValue;
 
 /**

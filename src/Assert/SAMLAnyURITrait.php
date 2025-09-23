@@ -14,6 +14,7 @@ trait SAMLAnyURITrait
 {
     private static string $scheme_regex = '/^([a-z][a-z0-9\+\-\.]+[:])/i';
 
+
     /**
      * @param string $value
      * @param string $message

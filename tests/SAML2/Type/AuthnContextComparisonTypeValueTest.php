@@ -4,7 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Type;
 
-use PHPUnit\Framework\Attributes\{CoversClass, DataProvider, DependsOnClass};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Type\AuthnContextComparisonTypeValue;
 use SimpleSAML\SAML2\XML\samlp\AuthnContextComparisonTypeEnum;

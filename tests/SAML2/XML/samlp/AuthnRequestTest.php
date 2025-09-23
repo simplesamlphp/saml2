@@ -4,52 +4,53 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\{
-    AuthnContextComparisonTypeValue,
-    SAMLAnyURIValue,
-    SAMLDateTimeValue,
-    EntityIDValue,
-    SAMLStringValue,
-};
+use SimpleSAML\SAML2\Type\AuthnContextComparisonTypeValue;
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\saml\{
-    Audience,
-    AudienceRestriction,
-    AuthnContextClassRef,
-    Conditions,
-    EncryptedID,
-    Issuer,
-    NameID,
-    OneTimeUse,
-    ProxyRestriction,
-    Subject,
-};
-use SimpleSAML\SAML2\XML\samlp\{
-    AbstractMessage,
-    AbstractSamlpElement,
-    AuthnContextComparisonTypeEnum,
-    AuthnRequest,
-    GetComplete,
-    IDPEntry,
-    IDPList,
-    NameIDPolicy,
-    RequestedAuthnContext,
-    RequesterID,
-    Scoping,
-};
+use SimpleSAML\SAML2\XML\saml\Audience;
+use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\XML\saml\Conditions;
+use SimpleSAML\SAML2\XML\saml\EncryptedID;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\OneTimeUse;
+use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
+use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
+use SimpleSAML\SAML2\XML\samlp\AuthnContextComparisonTypeEnum;
+use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
+use SimpleSAML\SAML2\XML\samlp\GetComplete;
+use SimpleSAML\SAML2\XML\samlp\IDPEntry;
+use SimpleSAML\SAML2\XML\samlp\IDPList;
+use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
+use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
+use SimpleSAML\SAML2\XML\samlp\RequesterID;
+use SimpleSAML\SAML2\XML\samlp\Scoping;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
-use SimpleSAML\XMLSchema\Exception\{MissingAttributeException, TooManyElementsException};
-use SimpleSAML\XMLSchema\Type\{BooleanValue, IDValue, NonNegativeIntegerValue, UnsignedShortValue};
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\NonNegativeIntegerValue;
+use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
-use SimpleSAML\XMLSecurity\TestUtils\{PEMCertificatesMock, SignedElementTestTrait};
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
 use function strval;

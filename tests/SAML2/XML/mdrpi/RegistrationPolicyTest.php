@@ -4,13 +4,17 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
-use SimpleSAML\SAML2\XML\md\{AbstractLocalizedName, AbstractLocalizedURI};
-use SimpleSAML\SAML2\XML\mdrpi\{AbstractMdrpiElement, RegistrationPolicy};
+use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
+use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
+use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement;
+use SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function dirname;

@@ -6,7 +6,8 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\XML\TypedTextContentTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 
@@ -20,6 +21,7 @@ use function strval;
 final class Action extends AbstractSamlElement
 {
     use TypedTextContentTrait;
+
 
     /** @var string */
     public const TEXTCONTENT_TYPE = SAMLStringValue::class;

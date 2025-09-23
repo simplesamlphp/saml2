@@ -6,13 +6,17 @@ namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Exception\{ArrayValidationException, ProtocolViolationException};
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\TypedTextContentTrait;
-use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, SchemaViolationException};
-use SimpleSAML\XMLSchema\Type\{LanguageValue, PositiveIntegerValue};
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
+use SimpleSAML\XMLSchema\Type\LanguageValue;
+use SimpleSAML\XMLSchema\Type\PositiveIntegerValue;
 
 /**
  * Class for handling the Logo metadata extensions for login and discovery user interface
@@ -27,8 +31,10 @@ final class Logo extends AbstractMduiElement implements
     use SchemaValidatableElementTrait;
     use TypedTextContentTrait;
 
+
     /** @var string */
     public const TEXTCONTENT_TYPE = SAMLAnyURIValue::class;
+
 
     /** @var string */
     private static string $scheme_regex = '/^(data|http[s]?[:])/i';

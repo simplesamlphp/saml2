@@ -6,12 +6,15 @@ namespace SimpleSAML\Test\SAML2\Binding;
 
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Nyholm\Psr7\ServerRequest;
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use SimpleSAML\SAML2\Binding\SOAP;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
-use SimpleSAML\SAML2\XML\ecp\{RequestAuthenticated, Response};
-use SimpleSAML\SAML2\XML\samlp\{ArtifactResolve, MessageFactory};
+use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
+use SimpleSAML\SAML2\XML\ecp\Response;
+use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
+use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SOAP11\Constants as C;
 use SimpleSAML\SOAP11\Type\MustUnderstandValue;
 use SimpleSAML\XML\DOMDocumentFactory;

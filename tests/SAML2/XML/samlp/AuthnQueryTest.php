@@ -4,22 +4,28 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\{AuthnContextComparisonTypeValue, SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
-use SimpleSAML\SAML2\XML\saml\{AuthnContextDeclRef, Issuer, NameID, Subject};
-use SimpleSAML\SAML2\XML\samlp\{
-    AbstractMessage,
-    AbstractRequest,
-    AbstractSamlpElement,
-    AbstractSubjectQuery,
-    AuthnContextComparisonTypeEnum,
-    AuthnQuery,
-    RequestedAuthnContext,
-};
+use SimpleSAML\SAML2\Type\AuthnContextComparisonTypeValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
+use SimpleSAML\SAML2\XML\samlp\AbstractSubjectQuery;
+use SimpleSAML\SAML2\XML\samlp\AuthnContextComparisonTypeEnum;
+use SimpleSAML\SAML2\XML\samlp\AuthnQuery;
+use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 

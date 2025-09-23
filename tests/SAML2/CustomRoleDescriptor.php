@@ -6,21 +6,25 @@ namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue, SAMLDateTimeValue};
-use SimpleSAML\SAML2\XML\md\{
-    AbstractRoleDescriptor,
-    ContactPerson,
-    Extensions,
-    KeyDescriptor,
-    Organization,
-};
+use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
+use SimpleSAML\SAML2\XML\md\ContactPerson;
+use SimpleSAML\SAML2\XML\md\Extensions;
+use SimpleSAML\SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\SAML2\XML\md\Organization;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XMLSchema\Constants as C_XSI;
-use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingElementException, TooManyElementsException};
-use SimpleSAML\XMLSchema\Type\{DurationValue, IDValue, QNameValue};
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\MissingElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Type\DurationValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\QNameValue;
 use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
 
 /**
@@ -31,6 +35,7 @@ use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
 final class CustomRoleDescriptor extends AbstractRoleDescriptor
 {
     use ExtendableElementTrait;
+
 
     /** @var string */
     protected const XSI_TYPE_NAME = 'CustomRoleDescriptorType';
@@ -43,6 +48,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
 
     /** The namespace-attribute for the xs:any element */
     public const XS_ANY_ELT_NAMESPACE = NamespaceEnum::Other;
+
 
     /**
      * CustomRoleDescriptor constructor.

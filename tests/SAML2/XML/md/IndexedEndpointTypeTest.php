@@ -4,19 +4,20 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use PHPUnit\Framework\Attributes\{CoversClass, DataProvider, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponse;
-use SimpleSAML\SAML2\XML\md\{
-    AbstractIndexedEndpointType,
-    AbstractMdElement,
-    ArtifactResolutionService,
-    AssertionConsumerService,
-};
+use SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\ArtifactResolutionService;
+use SimpleSAML\SAML2\XML\md\AssertionConsumerService;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingAttributeException};
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 
 use function dirname;

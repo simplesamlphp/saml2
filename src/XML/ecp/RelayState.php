@@ -10,9 +10,11 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SOAP11\Constants as C;
 use SimpleSAML\SOAP11\Type\MustUnderstandValue;
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\TypedTextContentTrait;
-use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, MissingAttributeException};
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 
 /**
  * Class representing the ECP RelayState element.
@@ -23,6 +25,7 @@ final class RelayState extends AbstractEcpElement implements SchemaValidatableEl
 {
     use SchemaValidatableElementTrait;
     use TypedTextContentTrait;
+
 
     /** @var string */
     public const TEXTCONTENT_TYPE = SAMLStringValue::class;

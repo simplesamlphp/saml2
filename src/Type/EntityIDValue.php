@@ -23,6 +23,7 @@ class EntityIDValue extends SAMLAnyURIValue
     /** @var string */
     public const SCHEMA_NAMESPACE_PREFIX = AbstractMdElement::NS_PREFIX;
 
+
     /**
      * Validate the value.
      *

@@ -4,24 +4,25 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue};
-use SimpleSAML\SAML2\XML\md\{
-    AbstractMdElement,
-    AbstractMetadataDocument,
-    AbstractRoleDescriptor,
-    AbstractRoleDescriptorType,
-    AbstractSignedMdElement,
-    AssertionIDRequestService,
-    AuthzService,
-    NameIDFormat,
-    PDPDescriptor,
-};
+use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType;
+use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
+use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
+use SimpleSAML\SAML2\XML\md\AuthzService;
+use SimpleSAML\SAML2\XML\md\NameIDFormat;
+use SimpleSAML\SAML2\XML\md\PDPDescriptor;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 

@@ -5,14 +5,21 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 
 use DateInterval;
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\saml\{Assertion, AuthnContext, AuthnContextClassRef, AuthnStatement, Issuer};
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\AuthnContext;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\XML\saml\AuthnStatement;
+use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Type\IDValue;
 

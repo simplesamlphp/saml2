@@ -5,7 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use SimpleSAML\SAML2\Type\SAMLStringValue;
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\TypedTextContentTrait;
 
 /**

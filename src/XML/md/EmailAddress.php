@@ -7,12 +7,10 @@ namespace SimpleSAML\SAML2\XML\md;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Type\EmailAddressValue;
-use SimpleSAML\XML\{
-    ArrayizableElementInterface,
-    SchemaValidatableElementInterface,
-    SchemaValidatableElementTrait,
-    TypedTextContentTrait,
-};
+use SimpleSAML\XML\ArrayizableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\TypedTextContentTrait;
 
 use function array_key_first;
 use function preg_filter;
@@ -28,6 +26,7 @@ final class EmailAddress extends AbstractMdElement implements
 {
     use SchemaValidatableElementTrait;
     use TypedTextContentTrait;
+
 
     /** @var string */
     public const TEXTCONTENT_TYPE = EmailAddressValue::class;

@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Type\DomainValue;
 use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
 use SimpleSAML\SAML2\XML\mdui\DomainHint;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
 use function strval;

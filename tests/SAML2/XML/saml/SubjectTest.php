@@ -5,26 +5,34 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, EntityIDValue, SAMLStringValue};
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\saml\{
-    AbstractBaseID,
-    AbstractSamlElement,
-    Audience,
-    NameID,
-    Subject,
-    SubjectConfirmation,
-    SubjectConfirmationData,
-};
-use SimpleSAML\Test\SAML2\{Constants as C, CustomBaseID};
-use SimpleSAML\XML\{Attribute as XMLAttribute, Chunk, DOMDocumentFactory};
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
+use SimpleSAML\SAML2\XML\saml\Audience;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
+use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\Test\SAML2\CustomBaseID;
+use SimpleSAML\XML\Attribute as XMLAttribute;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Constants as C_XSI;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
-use SimpleSAML\XMLSchema\Type\{NCNameValue, StringValue};
-use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
+use SimpleSAML\XMLSchema\Type\NCNameValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
 use function dirname;
 use function strval;

@@ -6,12 +6,10 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use InvalidArgumentException;
 use SimpleSAML\SAML2\XML\EncryptedElementTrait;
-use SimpleSAML\XML\{
-    DOMDocumentFactory,
-    SchemaValidatableElementInterface,
-    SchemaValidatableElementTrait,
-    SerializableElementInterface,
-};
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\SerializableElementInterface;
 use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementInterface;
 

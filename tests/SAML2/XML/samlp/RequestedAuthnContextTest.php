@@ -4,15 +4,21 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\{AuthnContextComparisonTypeValue, SAMLAnyURIValue};
-use SimpleSAML\SAML2\XML\saml\{AuthnContextClassRef, AuthnContextDeclRef};
-use SimpleSAML\SAML2\XML\samlp\{AbstractSamlpElement, AuthnContextComparisonTypeEnum, RequestedAuthnContext};
+use SimpleSAML\SAML2\Type\AuthnContextComparisonTypeValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
+use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
+use SimpleSAML\SAML2\XML\samlp\AuthnContextComparisonTypeEnum;
+use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
 use function dirname;
@@ -100,6 +106,7 @@ final class RequestedAuthnContextTest extends TestCase
         );
 
         new RequestedAuthnContext(
+            /** @phpstan-ignore argument.type */
             [
                 DOMDocumentFactory::fromString('<root />'),
                 $authnContextDeclRef,

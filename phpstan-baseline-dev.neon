@@ -1,6 +1,30 @@
 parameters:
 	ignoreErrors:
 		-
+			message: '#^Caught class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/Assert/EntityIDTest.php
+
+		-
+			message: '#^Caught class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/Assert/SAMLAnyURITest.php
+
+		-
+			message: '#^Caught class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/Assert/SAMLDateTimeTest.php
+
+		-
+			message: '#^Caught class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/Assert/SAMLStringTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 2
@@ -265,7 +289,7 @@ parameters:
 			path: tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationResponseToMatchesTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\NCNameValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NCNameValue\.$#'
 			identifier: class.notFound
 			count: 6
 			path: tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationResponseToMatchesTest.php
@@ -275,6 +299,18 @@ parameters:
 			identifier: argument.type
 			count: 5
 			path: tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationResponseToMatchesTest.php
+
+		-
+			message: '#^Access to constant NS_XS on an unknown class SimpleSAML\\XMLSchema\\Constants\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/Assertion/Validation/SubjectConfirmationValidatorTest.php
+
+		-
+			message: '#^Access to constant NS_XSI on an unknown class SimpleSAML\\XMLSchema\\Constants\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/Assertion/Validation/SubjectConfirmationValidatorTest.php
 
 		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
@@ -289,7 +325,7 @@ parameters:
 			path: tests/SAML2/Assertion/Validation/SubjectConfirmationValidatorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/Assertion/Validation/SubjectConfirmationValidatorTest.php
@@ -361,6 +397,12 @@ parameters:
 			path: tests/SAML2/Binding/HTTPRedirectTest.php
 
 		-
+			message: '#^Access to constant NS_SOAP_ENV on an unknown class SimpleSAML\\SOAP11\\Constants\.$#'
+			identifier: class.notFound
+			count: 3
+			path: tests/SAML2/Binding/SOAPTest.php
+
+		-
 			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\saml\\Issuer\:\:getContent\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -379,7 +421,7 @@ parameters:
 			path: tests/SAML2/Binding/SOAPTest.php
 
 		-
-			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XML\\Type\\BooleanValue\.$#'
+			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\SOAP11\\Type\\MustUnderstandValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/Binding/SOAPTest.php
@@ -403,7 +445,25 @@ parameters:
 			path: tests/SAML2/Certificate/KeyLoaderTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\QNameValue\.$#'
+			message: '#^Access to constant NS_XSI on an unknown class SimpleSAML\\XMLSchema\\Constants\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/CustomBaseID.php
+
+		-
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\QNameValue\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/CustomBaseID.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\InvalidDOMElementException not found\.$#'
+			identifier: class.notFound
+			count: 3
+			path: tests/SAML2/CustomBaseID.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/CustomBaseID.php
@@ -427,55 +487,109 @@ parameters:
 			path: tests/SAML2/CustomBaseID.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\QNameValue\.$#'
+			message: '#^Access to constant NS_XSI on an unknown class SimpleSAML\\XMLSchema\\Constants\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/CustomCondition.php
+
+		-
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\QNameValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/CustomCondition.php
 
 		-
-			message: '#^Call to method getNamespacePrefix\(\) on an unknown class SimpleSAML\\XML\\Type\\QNameValue\.$#'
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\InvalidDOMElementException not found\.$#'
+			identifier: class.notFound
+			count: 4
+			path: tests/SAML2/CustomCondition.php
+
+		-
+			message: '#^PHPDoc tag @throws with type SimpleSAML\\XMLSchema\\Exception\\InvalidDOMElementException is not subtype of Throwable$#'
+			identifier: throws.notThrowable
+			count: 1
+			path: tests/SAML2/CustomCondition.php
+
+		-
+			message: '#^Access to constant NS_XSI on an unknown class SimpleSAML\\XMLSchema\\Constants\.$#'
+			identifier: class.notFound
+			count: 3
+			path: tests/SAML2/CustomRoleDescriptor.php
+
+		-
+			message: '#^Access to constant Other on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/CustomRoleDescriptor.php
 
 		-
-			message: '#^Call to method getNamespaceURI\(\) on an unknown class SimpleSAML\\XML\\Type\\QNameValue\.$#'
+			message: '#^Call to method getNamespacePrefix\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\QNameValue\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/CustomRoleDescriptor.php
+
+		-
+			message: '#^Call to method getNamespaceURI\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\QNameValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/CustomRoleDescriptor.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\QNameValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\QNameValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/CustomRoleDescriptor.php
 
 		-
-			message: '#^Cannot call method getValue\(\) on string\.$#'
-			identifier: method.nonObject
-			count: 1
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\InvalidDOMElementException not found\.$#'
+			identifier: class.notFound
+			count: 4
 			path: tests/SAML2/CustomRoleDescriptor.php
 
 		-
-			message: '#^Class SimpleSAML\\XML\\Type\\DurationValue not found\.$#'
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingElementException not found\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/CustomRoleDescriptor.php
 
 		-
-			message: '#^Class SimpleSAML\\XML\\Type\\IDValue not found\.$#'
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\TooManyElementsException not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/CustomRoleDescriptor.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Type\\DurationValue not found\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/CustomRoleDescriptor.php
 
 		-
-			message: '#^Parameter \#3 \$ID of class SimpleSAML\\Test\\SAML2\\CustomRoleDescriptor constructor expects SimpleSAML\\XML\\Type\\IDValue\|null, string given\.$#'
+			message: '#^Class SimpleSAML\\XMLSchema\\Type\\IDValue not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/CustomRoleDescriptor.php
+
+		-
+			message: '#^PHPDoc tag @throws with type SimpleSAML\\XMLSchema\\Exception\\InvalidDOMElementException is not subtype of Throwable$#'
+			identifier: throws.notThrowable
+			count: 1
+			path: tests/SAML2/CustomRoleDescriptor.php
+
+		-
+			message: '#^Parameter \#2 \$protocolSupportEnumeration of class SimpleSAML\\Test\\SAML2\\CustomRoleDescriptor constructor expects SimpleSAML\\SAML2\\Type\\AnyURIListValue, string given\.$#'
 			identifier: argument.type
 			count: 1
 			path: tests/SAML2/CustomRoleDescriptor.php
 
 		-
-			message: '#^Parameter \#4 \$attrValue of class SimpleSAML\\XML\\Attribute constructor expects string, SimpleSAML\\XML\\Type\\QNameValue given\.$#'
+			message: '#^Parameter \#3 \$ID of class SimpleSAML\\Test\\SAML2\\CustomRoleDescriptor constructor expects SimpleSAML\\XMLSchema\\Type\\IDValue\|null, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/SAML2/CustomRoleDescriptor.php
+
+		-
+			message: '#^Parameter \#4 \$attrValue of class SimpleSAML\\XML\\Attribute constructor expects string, SimpleSAML\\XMLSchema\\Type\\QNameValue given\.$#'
 			identifier: argument.type
 			count: 1
 			path: tests/SAML2/CustomRoleDescriptor.php
@@ -487,7 +601,7 @@ parameters:
 			path: tests/SAML2/CustomRoleDescriptor.php
 
 		-
-			message: '#^Parameter \#5 \$cacheDuration of class SimpleSAML\\Test\\SAML2\\CustomRoleDescriptor constructor expects SimpleSAML\\XML\\Type\\DurationValue\|null, string given\.$#'
+			message: '#^Parameter \#5 \$cacheDuration of class SimpleSAML\\Test\\SAML2\\CustomRoleDescriptor constructor expects SimpleSAML\\XMLSchema\\Type\\DurationValue\|null, string given\.$#'
 			identifier: argument.type
 			count: 1
 			path: tests/SAML2/CustomRoleDescriptor.php
@@ -499,13 +613,13 @@ parameters:
 			path: tests/SAML2/CustomRoleDescriptor.php
 
 		-
-			message: '#^Parameter \$ID of method SimpleSAML\\Test\\SAML2\\CustomRoleDescriptor\:\:__construct\(\) has invalid type SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Parameter \$ID of method SimpleSAML\\Test\\SAML2\\CustomRoleDescriptor\:\:__construct\(\) has invalid type SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/CustomRoleDescriptor.php
 
 		-
-			message: '#^Parameter \$cacheDuration of method SimpleSAML\\Test\\SAML2\\CustomRoleDescriptor\:\:__construct\(\) has invalid type SimpleSAML\\XML\\Type\\DurationValue\.$#'
+			message: '#^Parameter \$cacheDuration of method SimpleSAML\\Test\\SAML2\\CustomRoleDescriptor\:\:__construct\(\) has invalid type SimpleSAML\\XMLSchema\\Type\\DurationValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/CustomRoleDescriptor.php
@@ -517,8 +631,26 @@ parameters:
 			path: tests/SAML2/CustomRoleDescriptor.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\QNameValue\.$#'
+			message: '#^Access to constant NS_XSI on an unknown class SimpleSAML\\XMLSchema\\Constants\.$#'
 			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/CustomStatement.php
+
+		-
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\QNameValue\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/CustomStatement.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\InvalidDOMElementException not found\.$#'
+			identifier: class.notFound
+			count: 4
+			path: tests/SAML2/CustomStatement.php
+
+		-
+			message: '#^PHPDoc tag @throws with type SimpleSAML\\XMLSchema\\Exception\\InvalidDOMElementException is not subtype of Throwable$#'
+			identifier: throws.notThrowable
 			count: 1
 			path: tests/SAML2/CustomStatement.php
 
@@ -583,8 +715,50 @@ parameters:
 			path: tests/SAML2/Signature/ValidatorChainTest.php
 
 		-
+			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\AnyURIListValue\:\:fromString\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: tests/SAML2/Type/AnyURIListValueTest.php
+
+		-
+			message: '#^Caught class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/Type/AnyURIListValueTest.php
+
+		-
+			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\AuthnContextComparisonTypeValue\:\:fromString\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: tests/SAML2/Type/AuthnContextComparisonTypeValueTest.php
+
+		-
+			message: '#^Caught class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/Type/AuthnContextComparisonTypeValueTest.php
+
+		-
+			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\DecisionTypeValue\:\:fromString\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 2
+			path: tests/SAML2/Type/DecisionTypeValueTest.php
+
+		-
+			message: '#^Caught class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/Type/DecisionTypeValueTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\EntityIDValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
+			count: 1
+			path: tests/SAML2/Type/EntityIDValueTest.php
+
+		-
+			message: '#^Caught class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
+			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/Type/EntityIDValueTest.php
 
@@ -595,8 +769,20 @@ parameters:
 			path: tests/SAML2/Type/ListOfStringsValueTest.php
 
 		-
+			message: '#^Caught class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/Type/ListOfStringsValueTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
+			count: 1
+			path: tests/SAML2/Type/SAMLAnyURIValueTest.php
+
+		-
+			message: '#^Caught class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
+			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/Type/SAMLAnyURIValueTest.php
 
@@ -607,8 +793,20 @@ parameters:
 			path: tests/SAML2/Type/SAMLDateTimeValueTest.php
 
 		-
+			message: '#^Caught class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/Type/SAMLDateTimeValueTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLStringValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
+			count: 1
+			path: tests/SAML2/Type/SAMLStringValueTest.php
+
+		-
+			message: '#^Caught class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
+			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/Type/SAMLStringValueTest.php
 
@@ -643,16 +841,46 @@ parameters:
 			path: tests/SAML2/XML/alg/DigestMethodTest.php
 
 		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/alg/DigestMethodTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/SAML2/XML/alg/DigestMethodTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 1
 			path: tests/SAML2/XML/alg/SigningMethodTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\PositiveIntegerValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\PositiveIntegerValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/alg/SigningMethodTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/alg/SigningMethodTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/SAML2/XML/alg/SigningMethodTest.php
+
+		-
+			message: '#^Access to constant NS_SOAP_ENV on an unknown class SimpleSAML\\SOAP11\\Constants\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/XML/ecp/RelayStateTest.php
 
 		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLStringValue\:\:fromString\(\)\.$#'
@@ -667,10 +895,46 @@ parameters:
 			path: tests/SAML2/XML/ecp/RelayStateTest.php
 
 		-
-			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XML\\Type\\BooleanValue\.$#'
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/XML/ecp/RelayStateTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/SAML2/XML/ecp/RelayStateTest.php
+
+		-
+			message: '#^Access to constant NS_SOAP_ENV on an unknown class SimpleSAML\\SOAP11\\Constants\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/ecp/RequestAuthenticatedTest.php
+
+		-
+			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\SOAP11\\Type\\MustUnderstandValue\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/ecp/RequestAuthenticatedTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/ecp/RequestAuthenticatedTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/SAML2/XML/ecp/RequestAuthenticatedTest.php
+
+		-
+			message: '#^Access to constant NS_SOAP_ENV on an unknown class SimpleSAML\\SOAP11\\Constants\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/XML/ecp/RequestTest.php
 
 		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\EntityIDValue\:\:fromString\(\)\.$#'
@@ -691,7 +955,7 @@ parameters:
 			path: tests/SAML2/XML/ecp/RequestTest.php
 
 		-
-			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XML\\Type\\BooleanValue\.$#'
+			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\BooleanValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/ecp/RequestTest.php
@@ -703,10 +967,46 @@ parameters:
 			path: tests/SAML2/XML/ecp/RequestTest.php
 
 		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/XML/ecp/RequestTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/SAML2/XML/ecp/RequestTest.php
+
+		-
+			message: '#^Access to constant NS_SOAP_ENV on an unknown class SimpleSAML\\SOAP11\\Constants\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/XML/ecp/ResponseTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 2
 			path: tests/SAML2/XML/ecp/ResponseTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 3
+			path: tests/SAML2/XML/ecp/ResponseTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 3
+			path: tests/SAML2/XML/ecp/ResponseTest.php
+
+		-
+			message: '#^Access to constant NS_SOAP_ENV on an unknown class SimpleSAML\\SOAP11\\Constants\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/XML/ecp/SubjectConfirmationTest.php
 
 		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\EntityIDValue\:\:fromString\(\)\.$#'
@@ -733,15 +1033,27 @@ parameters:
 			path: tests/SAML2/XML/ecp/SubjectConfirmationTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\NCNameValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NCNameValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/ecp/SubjectConfirmationTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 1
+			path: tests/SAML2/XML/ecp/SubjectConfirmationTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 3
+			path: tests/SAML2/XML/ecp/SubjectConfirmationTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 3
 			path: tests/SAML2/XML/ecp/SubjectConfirmationTest.php
 
 		-
@@ -769,13 +1081,13 @@ parameters:
 			path: tests/SAML2/XML/idpdisc/DiscoveryResponseTest.php
 
 		-
-			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XML\\Type\\BooleanValue\.$#'
+			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\BooleanValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/idpdisc/DiscoveryResponseTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\UnsignedShortValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\UnsignedShortValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/idpdisc/DiscoveryResponseTest.php
@@ -793,9 +1105,39 @@ parameters:
 			path: tests/SAML2/XML/init/RequestInitiatorTest.php
 
 		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/AbstractLocalizedNameTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/AbstractLocalizedNameTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/SAML2/XML/md/AbstractLocalizedNameTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 2
+			path: tests/SAML2/XML/md/AdditionalMetadataLocationTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/AdditionalMetadataLocationTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
 			path: tests/SAML2/XML/md/AdditionalMetadataLocationTest.php
 
 		-
@@ -829,13 +1171,13 @@ parameters:
 			path: tests/SAML2/XML/md/AffiliationDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\DurationValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\DurationValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/AffiliationDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/AffiliationDescriptorTest.php
@@ -847,25 +1189,37 @@ parameters:
 			path: tests/SAML2/XML/md/AffiliationDescriptorTest.php
 
 		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/AffiliationDescriptorTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/SAML2/XML/md/AffiliationDescriptorTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 5
 			path: tests/SAML2/XML/md/ArtifactResolutionServiceTest.php
 
 		-
-			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XML\\Type\\BooleanValue\.$#'
+			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\BooleanValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/md/ArtifactResolutionServiceTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\UnsignedShortValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\UnsignedShortValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/md/ArtifactResolutionServiceTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/ArtifactResolutionServiceTest.php
@@ -877,22 +1231,28 @@ parameters:
 			path: tests/SAML2/XML/md/AssertionConsumerServiceTest.php
 
 		-
-			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XML\\Type\\BooleanValue\.$#'
+			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\BooleanValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/AssertionConsumerServiceTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\UnsignedShortValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\UnsignedShortValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/AssertionConsumerServiceTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/AssertionConsumerServiceTest.php
+
+		-
+			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\AnyURIListValue\:\:fromString\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 5
+			path: tests/SAML2/XML/md/AttributeAuthorityDescriptorTest.php
 
 		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
@@ -907,7 +1267,7 @@ parameters:
 			path: tests/SAML2/XML/md/AttributeAuthorityDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/AttributeAuthorityDescriptorTest.php
@@ -925,6 +1285,18 @@ parameters:
 			path: tests/SAML2/XML/md/AttributeAuthorityDescriptorTest.php
 
 		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingElementException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/AttributeAuthorityDescriptorTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/SAML2/XML/md/AttributeAuthorityDescriptorTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 1
@@ -937,21 +1309,39 @@ parameters:
 			path: tests/SAML2/XML/md/AttributeConsumingServiceTest.php
 
 		-
-			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XML\\Type\\BooleanValue\.$#'
+			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\BooleanValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/md/AttributeConsumingServiceTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\UnsignedShortValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\UnsignedShortValue\.$#'
 			identifier: class.notFound
 			count: 5
 			path: tests/SAML2/XML/md/AttributeConsumingServiceTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 6
+			path: tests/SAML2/XML/md/AttributeConsumingServiceTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/AttributeConsumingServiceTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingElementException not found\.$#'
+			identifier: class.notFound
+			count: 4
+			path: tests/SAML2/XML/md/AttributeConsumingServiceTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 5
 			path: tests/SAML2/XML/md/AttributeConsumingServiceTest.php
 
 		-
@@ -973,7 +1363,7 @@ parameters:
 			path: tests/SAML2/XML/md/AuthnAuthorityDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/AuthnAuthorityDescriptorTest.php
@@ -1009,7 +1399,7 @@ parameters:
 			path: tests/SAML2/XML/md/ContactPersonTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/md/ContactPersonTest.php
@@ -1045,6 +1435,18 @@ parameters:
 			path: tests/SAML2/XML/md/ContactPersonTest.php
 
 		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/ContactPersonTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/SAML2/XML/md/ContactPersonTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\EmailAddressValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 2
@@ -1075,9 +1477,21 @@ parameters:
 			path: tests/SAML2/XML/md/EncryptionMethodTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\Base64BinaryValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\Base64BinaryValue\.$#'
 			identifier: class.notFound
 			count: 2
+			path: tests/SAML2/XML/md/EncryptionMethodTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/EncryptionMethodTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
 			path: tests/SAML2/XML/md/EncryptionMethodTest.php
 
 		-
@@ -1087,9 +1501,27 @@ parameters:
 			path: tests/SAML2/XML/md/EndpointTypeTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 2
+			path: tests/SAML2/XML/md/EndpointTypeTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\InvalidDOMElementException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/EndpointTypeTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/XML/md/EndpointTypeTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 3
 			path: tests/SAML2/XML/md/EndpointTypeTest.php
 
 		-
@@ -1111,16 +1543,22 @@ parameters:
 			path: tests/SAML2/XML/md/EntitiesDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/EntitiesDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/EntitiesDescriptorTest.php
+
+		-
+			message: '#^Access to constant NS_XSI on an unknown class SimpleSAML\\XMLSchema\\Constants\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/EntityDescriptorTest.php
 
 		-
 			message: '#^Call to an undefined method SimpleSAML\\SAML2\\Type\\EntityIDValue\:\:getValue\(\)\.$#'
@@ -1132,6 +1570,12 @@ parameters:
 			message: '#^Call to an undefined method SimpleSAML\\SAML2\\Type\\SAMLDateTimeValue\:\:getValue\(\)\.$#'
 			identifier: method.notFound
 			count: 2
+			path: tests/SAML2/XML/md/EntityDescriptorTest.php
+
+		-
+			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\AnyURIListValue\:\:fromString\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 4
 			path: tests/SAML2/XML/md/EntityDescriptorTest.php
 
 		-
@@ -1165,37 +1609,37 @@ parameters:
 			path: tests/SAML2/XML/md/EntityDescriptorTest.php
 
 		-
-			message: '#^Call to method getValue\(\) on an unknown class SimpleSAML\\XML\\Type\\DurationValue\.$#'
+			message: '#^Call to method getValue\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\DurationValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/EntityDescriptorTest.php
 
 		-
-			message: '#^Call to method getValue\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to method getValue\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/EntityDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\DurationValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\DurationValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/md/EntityDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/md/EntityDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 8
 			path: tests/SAML2/XML/md/EntityDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/md/EntityDescriptorTest.php
@@ -1210,6 +1654,24 @@ parameters:
 			message: '#^Class SimpleSAML\\SAML2\\XML\\md\\EmailAddress does not have a constructor and must be instantiated without any parameters\.$#'
 			identifier: new.noConstructor
 			count: 6
+			path: tests/SAML2/XML/md/EntityDescriptorTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/EntityDescriptorTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\TooManyElementsException not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/XML/md/EntityDescriptorTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 3
 			path: tests/SAML2/XML/md/EntityDescriptorTest.php
 
 		-
@@ -1231,19 +1693,19 @@ parameters:
 			path: tests/SAML2/XML/md/ExtensionsTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\PositiveIntegerValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\PositiveIntegerValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/md/ExtensionsTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\UnsignedShortValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\UnsignedShortValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/ExtensionsTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/ExtensionsTest.php
@@ -1267,6 +1729,12 @@ parameters:
 			path: tests/SAML2/XML/md/GivenNameTest.php
 
 		-
+			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\AnyURIListValue\:\:fromString\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: tests/SAML2/XML/md/IDPSSODescriptorTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 34
@@ -1279,19 +1747,19 @@ parameters:
 			path: tests/SAML2/XML/md/IDPSSODescriptorTest.php
 
 		-
-			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XML\\Type\\BooleanValue\.$#'
+			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\BooleanValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/md/IDPSSODescriptorTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\UnsignedShortValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\UnsignedShortValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/IDPSSODescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/IDPSSODescriptorTest.php
@@ -1315,9 +1783,27 @@ parameters:
 			path: tests/SAML2/XML/md/IndexedEndpointTypeTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\UnsignedShortValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\UnsignedShortValue\.$#'
 			identifier: class.notFound
 			count: 1
+			path: tests/SAML2/XML/md/IndexedEndpointTypeTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\InvalidDOMElementException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/IndexedEndpointTypeTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/IndexedEndpointTypeTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 2
 			path: tests/SAML2/XML/md/IndexedEndpointTypeTest.php
 
 		-
@@ -1327,9 +1813,21 @@ parameters:
 			path: tests/SAML2/XML/md/KeyDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 2
+			path: tests/SAML2/XML/md/KeyDescriptorTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/KeyDescriptorTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
 			path: tests/SAML2/XML/md/KeyDescriptorTest.php
 
 		-
@@ -1357,7 +1855,7 @@ parameters:
 			path: tests/SAML2/XML/md/OrganizationDisplayNameTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/OrganizationDisplayNameTest.php
@@ -1369,7 +1867,7 @@ parameters:
 			path: tests/SAML2/XML/md/OrganizationNameTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/OrganizationNameTest.php
@@ -1387,13 +1885,13 @@ parameters:
 			path: tests/SAML2/XML/md/OrganizationTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 3
 			path: tests/SAML2/XML/md/OrganizationTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/OrganizationTest.php
@@ -1405,10 +1903,16 @@ parameters:
 			path: tests/SAML2/XML/md/OrganizationURLTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/OrganizationURLTest.php
+
+		-
+			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\AnyURIListValue\:\:fromString\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 4
+			path: tests/SAML2/XML/md/PDPDescriptorTest.php
 
 		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
@@ -1417,7 +1921,7 @@ parameters:
 			path: tests/SAML2/XML/md/PDPDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/PDPDescriptorTest.php
@@ -1447,7 +1951,7 @@ parameters:
 			path: tests/SAML2/XML/md/RequestedAttributeTest.php
 
 		-
-			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XML\\Type\\BooleanValue\.$#'
+			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\BooleanValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/RequestedAttributeTest.php
@@ -1463,6 +1967,12 @@ parameters:
 			identifier: argument.type
 			count: 1
 			path: tests/SAML2/XML/md/RequestedAttributeTest.php
+
+		-
+			message: '#^Access to constant NS_XSI on an unknown class SimpleSAML\\XMLSchema\\Constants\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/XML/md/RoleDescriptorTest.php
 
 		-
 			message: '#^Call to an undefined method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:getValue\(\)\.$#'
@@ -1501,43 +2011,43 @@ parameters:
 			path: tests/SAML2/XML/md/RoleDescriptorTest.php
 
 		-
-			message: '#^Call to method getValue\(\) on an unknown class SimpleSAML\\XML\\Type\\DurationValue\.$#'
+			message: '#^Call to method getValue\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\DurationValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/md/RoleDescriptorTest.php
 
 		-
-			message: '#^Call to method getValue\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to method getValue\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/RoleDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\AnyURIValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\AnyURIValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/RoleDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\DurationValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\DurationValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/RoleDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/RoleDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 3
 			path: tests/SAML2/XML/md/RoleDescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 6
 			path: tests/SAML2/XML/md/RoleDescriptorTest.php
@@ -1573,6 +2083,24 @@ parameters:
 			path: tests/SAML2/XML/md/RoleDescriptorTest.php
 
 		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/RoleDescriptorTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/SAML2/XML/md/RoleDescriptorTest.php
+
+		-
+			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\AnyURIListValue\:\:fromString\(\)\.$#'
+			identifier: staticMethod.notFound
+			count: 3
+			path: tests/SAML2/XML/md/SPSSODescriptorTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\EmailAddressValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 1
@@ -1597,37 +2125,37 @@ parameters:
 			path: tests/SAML2/XML/md/SPSSODescriptorTest.php
 
 		-
-			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XML\\Type\\BooleanValue\.$#'
+			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\BooleanValue\.$#'
 			identifier: class.notFound
 			count: 4
 			path: tests/SAML2/XML/md/SPSSODescriptorTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\UnsignedShortValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\UnsignedShortValue\.$#'
 			identifier: class.notFound
 			count: 6
 			path: tests/SAML2/XML/md/SPSSODescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\DurationValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\DurationValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/SPSSODescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/SPSSODescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 6
 			path: tests/SAML2/XML/md/SPSSODescriptorTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/SPSSODescriptorTest.php
@@ -1645,13 +2173,25 @@ parameters:
 			path: tests/SAML2/XML/md/SPSSODescriptorTest.php
 
 		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/XML/md/SPSSODescriptorTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/SAML2/XML/md/SPSSODescriptorTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLStringValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 1
 			path: tests/SAML2/XML/md/ServiceDescriptionTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/md/ServiceDescriptionTest.php
@@ -1663,8 +2203,20 @@ parameters:
 			path: tests/SAML2/XML/md/ServiceNameTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/ServiceNameTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/ServiceNameTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
 			count: 1
 			path: tests/SAML2/XML/md/ServiceNameTest.php
 
@@ -1759,9 +2311,21 @@ parameters:
 			path: tests/SAML2/XML/mdrpi/PublicationInfoTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 3
+			path: tests/SAML2/XML/mdrpi/PublicationInfoTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/mdrpi/PublicationInfoTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
 			path: tests/SAML2/XML/mdrpi/PublicationInfoTest.php
 
 		-
@@ -1789,6 +2353,18 @@ parameters:
 			path: tests/SAML2/XML/mdrpi/PublicationTest.php
 
 		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/mdrpi/PublicationTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/SAML2/XML/mdrpi/PublicationTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\EntityIDValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 1
@@ -1813,9 +2389,21 @@ parameters:
 			path: tests/SAML2/XML/mdrpi/RegistrationInfoTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 3
+			path: tests/SAML2/XML/mdrpi/RegistrationInfoTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/mdrpi/RegistrationInfoTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
 			path: tests/SAML2/XML/mdrpi/RegistrationInfoTest.php
 
 		-
@@ -1825,7 +2413,7 @@ parameters:
 			path: tests/SAML2/XML/mdrpi/RegistrationPolicyTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/mdrpi/RegistrationPolicyTest.php
@@ -1837,7 +2425,7 @@ parameters:
 			path: tests/SAML2/XML/mdrpi/UsagePolicyTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/mdrpi/UsagePolicyTest.php
@@ -1849,7 +2437,7 @@ parameters:
 			path: tests/SAML2/XML/mdui/DescriptionTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/mdui/DescriptionTest.php
@@ -1885,7 +2473,7 @@ parameters:
 			path: tests/SAML2/XML/mdui/DiscoHintsTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/mdui/DiscoHintsTest.php
@@ -1915,7 +2503,7 @@ parameters:
 			path: tests/SAML2/XML/mdui/DisplayNameTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/mdui/DisplayNameTest.php
@@ -1963,7 +2551,7 @@ parameters:
 			path: tests/SAML2/XML/mdui/InformationURLTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/mdui/InformationURLTest.php
@@ -1975,7 +2563,7 @@ parameters:
 			path: tests/SAML2/XML/mdui/KeywordsTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/mdui/KeywordsTest.php
@@ -1993,21 +2581,33 @@ parameters:
 			path: tests/SAML2/XML/mdui/LogoTest.php
 
 		-
-			message: '#^Call to method toInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\PositiveIntegerValue\.$#'
+			message: '#^Call to method toInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\PositiveIntegerValue\.$#'
 			identifier: class.notFound
 			count: 6
 			path: tests/SAML2/XML/mdui/LogoTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\PositiveIntegerValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\PositiveIntegerValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/mdui/LogoTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 1
+			path: tests/SAML2/XML/mdui/LogoTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/XML/mdui/LogoTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 2
 			path: tests/SAML2/XML/mdui/LogoTest.php
 
 		-
@@ -2017,7 +2617,7 @@ parameters:
 			path: tests/SAML2/XML/mdui/PrivacyStatementURLTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/mdui/PrivacyStatementURLTest.php
@@ -2047,13 +2647,13 @@ parameters:
 			path: tests/SAML2/XML/mdui/UIInfoTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\PositiveIntegerValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\PositiveIntegerValue\.$#'
 			identifier: class.notFound
 			count: 4
 			path: tests/SAML2/XML/mdui/UIInfoTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\LanguageValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\LanguageValue\.$#'
 			identifier: class.notFound
 			count: 16
 			path: tests/SAML2/XML/mdui/UIInfoTest.php
@@ -2083,7 +2683,7 @@ parameters:
 			path: tests/SAML2/XML/saml/AdviceTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\NCNameValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NCNameValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/AssertionIDRefTest.php
@@ -2137,6 +2737,18 @@ parameters:
 			path: tests/SAML2/XML/saml/AssertionTest.php
 
 		-
+			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\saml\\EncryptedAssertion\:\:getEncryptedKeys\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/SAML2/XML/saml/AssertionTest.php
+
+		-
+			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\saml\\EncryptedID\:\:getEncryptedKeys\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/SAML2/XML/saml/AssertionTest.php
+
+		-
 			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\saml\\Issuer\:\:getContent\(\)\.$#'
 			identifier: method.notFound
 			count: 1
@@ -2185,25 +2797,25 @@ parameters:
 			path: tests/SAML2/XML/saml/AssertionTest.php
 
 		-
-			message: '#^Call to method getValue\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to method getValue\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/AssertionTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\Base64BinaryValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\Base64BinaryValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/AssertionTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 4
 			path: tests/SAML2/XML/saml/AssertionTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\NCNameValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NCNameValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/AssertionTest.php
@@ -2211,7 +2823,7 @@ parameters:
 		-
 			message: '#^Cannot call method getValue\(\) on string\.$#'
 			identifier: method.nonObject
-			count: 6
+			count: 4
 			path: tests/SAML2/XML/saml/AssertionTest.php
 
 		-
@@ -2239,6 +2851,18 @@ parameters:
 			path: tests/SAML2/XML/saml/AssertionTest.php
 
 		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingElementException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/saml/AssertionTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/SAML2/XML/saml/AssertionTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 1
@@ -2257,6 +2881,12 @@ parameters:
 			path: tests/SAML2/XML/saml/AttributeStatementTest.php
 
 		-
+			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\saml\\EncryptedAttribute\:\:getEncryptedKeys\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/SAML2/XML/saml/AttributeTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 1
@@ -2269,16 +2899,34 @@ parameters:
 			path: tests/SAML2/XML/saml/AttributeTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/saml/AttributeTest.php
 
 		-
-			message: '#^Cannot call method getValue\(\) on string\.$#'
-			identifier: method.nonObject
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/AttributeTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/SAML2/XML/saml/AttributeTest.php
+
+		-
+			message: '#^Access to constant NS_XS on an unknown class SimpleSAML\\XMLSchema\\Constants\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/XML/saml/AttributeValueTest.php
+
+		-
+			message: '#^Access to constant NS_XSI on an unknown class SimpleSAML\\XMLSchema\\Constants\.$#'
+			identifier: class.notFound
+			count: 3
+			path: tests/SAML2/XML/saml/AttributeValueTest.php
 
 		-
 			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\saml\\NameID\:\:getContent\(\)\.$#'
@@ -2347,7 +2995,7 @@ parameters:
 			path: tests/SAML2/XML/saml/AuthnContextDeclRefTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/AuthnContextDeclTest.php
@@ -2383,6 +3031,18 @@ parameters:
 			path: tests/SAML2/XML/saml/AuthnContextTest.php
 
 		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\TooManyElementsException not found\.$#'
+			identifier: class.notFound
+			count: 3
+			path: tests/SAML2/XML/saml/AuthnContextTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 3
+			path: tests/SAML2/XML/saml/AuthnContextTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\EntityIDValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 1
@@ -2425,7 +3085,7 @@ parameters:
 			path: tests/SAML2/XML/saml/AuthnContextWithClassRefAndDeclTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/AuthnContextWithClassRefAndDeclTest.php
@@ -2497,7 +3157,7 @@ parameters:
 			path: tests/SAML2/XML/saml/AuthnContextWithDeclTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/AuthnContextWithDeclTest.php
@@ -2551,6 +3211,30 @@ parameters:
 			path: tests/SAML2/XML/saml/AuthnStatementTest.php
 
 		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/saml/AuthnStatementTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingElementException not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/XML/saml/AuthnStatementTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\TooManyElementsException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/saml/AuthnStatementTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 4
+			path: tests/SAML2/XML/saml/AuthnStatementTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 3
@@ -2561,6 +3245,12 @@ parameters:
 			identifier: staticMethod.notFound
 			count: 2
 			path: tests/SAML2/XML/saml/AuthzDecisionStatementTest.php
+
+		-
+			message: '#^Access to constant NS_XSI on an unknown class SimpleSAML\\XMLSchema\\Constants\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/saml/BaseIDTest.php
 
 		-
 			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\saml\\Audience\:\:getContent\(\)\.$#'
@@ -2581,7 +3271,7 @@ parameters:
 			path: tests/SAML2/XML/saml/BaseIDTest.php
 
 		-
-			message: '#^Call to method getRawValue\(\) on an unknown class SimpleSAML\\XML\\Type\\QNameValue\.$#'
+			message: '#^Call to method getRawValue\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\QNameValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/BaseIDTest.php
@@ -2593,13 +3283,19 @@ parameters:
 			path: tests/SAML2/XML/saml/BaseIDTest.php
 
 		-
+			message: '#^Access to constant NS_XSI on an unknown class SimpleSAML\\XMLSchema\\Constants\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/saml/ConditionTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/ConditionTest.php
 
 		-
-			message: '#^Call to method getRawValue\(\) on an unknown class SimpleSAML\\XML\\Type\\QNameValue\.$#'
+			message: '#^Call to method getRawValue\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\QNameValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/ConditionTest.php
@@ -2623,7 +3319,7 @@ parameters:
 			path: tests/SAML2/XML/saml/ConditionsTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\NonNegativeIntegerValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NonNegativeIntegerValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/ConditionsTest.php
@@ -2633,6 +3329,18 @@ parameters:
 			identifier: new.noConstructor
 			count: 2
 			path: tests/SAML2/XML/saml/ConditionsTest.php
+
+		-
+			message: '#^Access to constant XPATH10_URI on an unknown class SimpleSAML\\XPath\\Constants\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/saml/EncryptedAssertionTest.php
+
+		-
+			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\saml\\EncryptedAssertion\:\:getEncryptedKeys\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/SAML2/XML/saml/EncryptedAssertionTest.php
 
 		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
@@ -2653,34 +3361,34 @@ parameters:
 			path: tests/SAML2/XML/saml/EncryptedAssertionTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\AnyURIValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\AnyURIValue\.$#'
 			identifier: class.notFound
 			count: 5
 			path: tests/SAML2/XML/saml/EncryptedAssertionTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\Base64BinaryValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\Base64BinaryValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/saml/EncryptedAssertionTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/EncryptedAssertionTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/EncryptedAssertionTest.php
 
 		-
-			message: '#^Cannot call method getValue\(\) on string\.$#'
-			identifier: method.nonObject
+			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\saml\\EncryptedAttribute\:\:getEncryptedKeys\(\)\.$#'
+			identifier: method.notFound
 			count: 1
-			path: tests/SAML2/XML/saml/EncryptedAssertionTest.php
+			path: tests/SAML2/XML/saml/EncryptedAttributeTest.php
 
 		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLStringValue\:\:fromString\(\)\.$#'
@@ -2689,10 +3397,10 @@ parameters:
 			path: tests/SAML2/XML/saml/EncryptedAttributeTest.php
 
 		-
-			message: '#^Cannot call method getValue\(\) on string\.$#'
-			identifier: method.nonObject
-			count: 1
-			path: tests/SAML2/XML/saml/EncryptedAttributeTest.php
+			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\saml\\EncryptedID\:\:getEncryptedKeys\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: tests/SAML2/XML/saml/EncryptedIDTest.php
 
 		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
@@ -2707,33 +3415,27 @@ parameters:
 			path: tests/SAML2/XML/saml/EncryptedIDTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\AnyURIValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\AnyURIValue\.$#'
 			identifier: class.notFound
 			count: 10
 			path: tests/SAML2/XML/saml/EncryptedIDTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\Base64BinaryValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\Base64BinaryValue\.$#'
 			identifier: class.notFound
 			count: 6
 			path: tests/SAML2/XML/saml/EncryptedIDTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/saml/EncryptedIDTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 4
-			path: tests/SAML2/XML/saml/EncryptedIDTest.php
-
-		-
-			message: '#^Cannot call method getValue\(\) on string\.$#'
-			identifier: method.nonObject
-			count: 3
 			path: tests/SAML2/XML/saml/EncryptedIDTest.php
 
 		-
@@ -2779,7 +3481,7 @@ parameters:
 			path: tests/SAML2/XML/saml/ProxyRestrictionTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\NonNegativeIntegerValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NonNegativeIntegerValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/ProxyRestrictionTest.php
@@ -2789,6 +3491,12 @@ parameters:
 			identifier: new.noConstructor
 			count: 2
 			path: tests/SAML2/XML/saml/ProxyRestrictionTest.php
+
+		-
+			message: '#^Access to constant NS_XSI on an unknown class SimpleSAML\\XMLSchema\\Constants\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/saml/StatementTest.php
 
 		-
 			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\saml\\Audience\:\:getContent\(\)\.$#'
@@ -2803,7 +3511,7 @@ parameters:
 			path: tests/SAML2/XML/saml/StatementTest.php
 
 		-
-			message: '#^Call to method getRawValue\(\) on an unknown class SimpleSAML\\XML\\Type\\QNameValue\.$#'
+			message: '#^Call to method getRawValue\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\QNameValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/StatementTest.php
@@ -2851,19 +3559,19 @@ parameters:
 			path: tests/SAML2/XML/saml/SubjectConfirmationDataTest.php
 
 		-
-			message: '#^Call to method getValue\(\) on an unknown class SimpleSAML\\XML\\Type\\NCNameValue\.$#'
+			message: '#^Call to method getValue\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NCNameValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/SubjectConfirmationDataTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\NCNameValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NCNameValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/saml/SubjectConfirmationDataTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 6
 			path: tests/SAML2/XML/saml/SubjectConfirmationDataTest.php
@@ -2899,15 +3607,33 @@ parameters:
 			path: tests/SAML2/XML/saml/SubjectConfirmationTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\NCNameValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NCNameValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/SubjectConfirmationTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 3
+			path: tests/SAML2/XML/saml/SubjectConfirmationTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/saml/SubjectConfirmationTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\TooManyElementsException not found\.$#'
+			identifier: class.notFound
+			count: 3
+			path: tests/SAML2/XML/saml/SubjectConfirmationTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 4
 			path: tests/SAML2/XML/saml/SubjectConfirmationTest.php
 
 		-
@@ -2921,6 +3647,12 @@ parameters:
 			identifier: staticMethod.notFound
 			count: 1
 			path: tests/SAML2/XML/saml/SubjectLocalityTest.php
+
+		-
+			message: '#^Access to constant NS_XSI on an unknown class SimpleSAML\\XMLSchema\\Constants\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/saml/SubjectTest.php
 
 		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\EntityIDValue\:\:fromString\(\)\.$#'
@@ -2947,13 +3679,13 @@ parameters:
 			path: tests/SAML2/XML/saml/SubjectTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\NCNameValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NCNameValue\.$#'
 			identifier: class.notFound
 			count: 3
 			path: tests/SAML2/XML/saml/SubjectTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\StringValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\StringValue\.$#'
 			identifier: class.notFound
 			count: 9
 			path: tests/SAML2/XML/saml/SubjectTest.php
@@ -2962,6 +3694,18 @@ parameters:
 			message: '#^Class SimpleSAML\\SAML2\\XML\\saml\\Audience does not have a constructor and must be instantiated without any parameters\.$#'
 			identifier: new.noConstructor
 			count: 1
+			path: tests/SAML2/XML/saml/SubjectTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\TooManyElementsException not found\.$#'
+			identifier: class.notFound
+			count: 3
+			path: tests/SAML2/XML/saml/SubjectTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 3
 			path: tests/SAML2/XML/saml/SubjectTest.php
 
 		-
@@ -2989,9 +3733,21 @@ parameters:
 			path: tests/SAML2/XML/samlp/AbstractMessageTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 3
+			path: tests/SAML2/XML/samlp/AbstractMessageTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingElementException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/samlp/AbstractMessageTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
 			path: tests/SAML2/XML/samlp/AbstractMessageTest.php
 
 		-
@@ -3025,7 +3781,7 @@ parameters:
 			path: tests/SAML2/XML/samlp/AbstractStatusResponseTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/samlp/AbstractStatusResponseTest.php
@@ -3033,6 +3789,18 @@ parameters:
 		-
 			message: '#^Class SimpleSAML\\SAML2\\XML\\samlp\\StatusMessage does not have a constructor and must be instantiated without any parameters\.$#'
 			identifier: new.noConstructor
+			count: 2
+			path: tests/SAML2/XML/samlp/AbstractStatusResponseTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingElementException not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/XML/samlp/AbstractStatusResponseTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
 			count: 2
 			path: tests/SAML2/XML/samlp/AbstractStatusResponseTest.php
 
@@ -3049,13 +3817,13 @@ parameters:
 			path: tests/SAML2/XML/samlp/ArtifactResolveTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\Base64BinaryValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\Base64BinaryValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/samlp/ArtifactResolveTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/samlp/ArtifactResolveTest.php
@@ -3085,25 +3853,25 @@ parameters:
 			path: tests/SAML2/XML/samlp/ArtifactResponseTest.php
 
 		-
-			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XML\\Type\\BooleanValue\.$#'
+			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\BooleanValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/samlp/ArtifactResponseTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/samlp/ArtifactResponseTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\NCNameValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NCNameValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/samlp/ArtifactResponseTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\Base64BinaryValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\Base64BinaryValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/samlp/ArtifactTest.php
@@ -3133,13 +3901,13 @@ parameters:
 			path: tests/SAML2/XML/samlp/AssertionIDRequestTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/samlp/AssertionIDRequestTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\NCNameValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NCNameValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/samlp/AssertionIDRequestTest.php
@@ -3181,9 +3949,33 @@ parameters:
 			path: tests/SAML2/XML/samlp/AttributeQueryTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 2
+			path: tests/SAML2/XML/samlp/AttributeQueryTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/samlp/AttributeQueryTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingElementException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/samlp/AttributeQueryTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\TooManyElementsException not found\.$#'
+			identifier: class.notFound
+			count: 3
+			path: tests/SAML2/XML/samlp/AttributeQueryTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 5
 			path: tests/SAML2/XML/samlp/AttributeQueryTest.php
 
 		-
@@ -3205,7 +3997,7 @@ parameters:
 			path: tests/SAML2/XML/samlp/AuthnQueryTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/samlp/AuthnQueryTest.php
@@ -3224,6 +4016,12 @@ parameters:
 
 		-
 			message: '#^Call to an undefined method SimpleSAML\\SAML2\\Type\\SAMLDateTimeValue\:\:getValue\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: tests/SAML2/XML/samlp/AuthnRequestTest.php
+
+		-
+			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\saml\\EncryptedID\:\:getEncryptedKeys\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: tests/SAML2/XML/samlp/AuthnRequestTest.php
@@ -3277,33 +4075,27 @@ parameters:
 			path: tests/SAML2/XML/samlp/AuthnRequestTest.php
 
 		-
-			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XML\\Type\\BooleanValue\.$#'
+			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\BooleanValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/samlp/AuthnRequestTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\NonNegativeIntegerValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NonNegativeIntegerValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/samlp/AuthnRequestTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\UnsignedShortValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\UnsignedShortValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/samlp/AuthnRequestTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 4
-			path: tests/SAML2/XML/samlp/AuthnRequestTest.php
-
-		-
-			message: '#^Cannot call method getValue\(\) on string\.$#'
-			identifier: method.nonObject
-			count: 1
 			path: tests/SAML2/XML/samlp/AuthnRequestTest.php
 
 		-
@@ -3331,6 +4123,24 @@ parameters:
 			path: tests/SAML2/XML/samlp/AuthnRequestTest.php
 
 		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingAttributeException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/samlp/AuthnRequestTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\TooManyElementsException not found\.$#'
+			identifier: class.notFound
+			count: 3
+			path: tests/SAML2/XML/samlp/AuthnRequestTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 4
+			path: tests/SAML2/XML/samlp/AuthnRequestTest.php
+
+		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 5
@@ -3349,7 +4159,7 @@ parameters:
 			path: tests/SAML2/XML/samlp/AuthzDecisionQueryTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/samlp/AuthzDecisionQueryTest.php
@@ -3415,9 +4225,27 @@ parameters:
 			path: tests/SAML2/XML/samlp/IDPListTest.php
 
 		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingElementException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/samlp/IDPListTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 1
+			path: tests/SAML2/XML/samlp/IDPListTest.php
+
+		-
 			message: '#^Call to an undefined method SimpleSAML\\SAML2\\Type\\SAMLDateTimeValue\:\:getValue\(\)\.$#'
 			identifier: method.notFound
 			count: 2
+			path: tests/SAML2/XML/samlp/LogoutRequestTest.php
+
+		-
+			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\saml\\EncryptedID\:\:getEncryptedKeys\(\)\.$#'
+			identifier: method.notFound
+			count: 1
 			path: tests/SAML2/XML/samlp/LogoutRequestTest.php
 
 		-
@@ -3451,21 +4279,33 @@ parameters:
 			path: tests/SAML2/XML/samlp/LogoutRequestTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 7
-			path: tests/SAML2/XML/samlp/LogoutRequestTest.php
-
-		-
-			message: '#^Cannot call method getValue\(\) on string\.$#'
-			identifier: method.nonObject
-			count: 1
 			path: tests/SAML2/XML/samlp/LogoutRequestTest.php
 
 		-
 			message: '#^Class SimpleSAML\\SAML2\\XML\\samlp\\SessionIndex does not have a constructor and must be instantiated without any parameters\.$#'
 			identifier: new.noConstructor
 			count: 6
+			path: tests/SAML2/XML/samlp/LogoutRequestTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\MissingElementException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/samlp/LogoutRequestTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\TooManyElementsException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/samlp/LogoutRequestTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 2
 			path: tests/SAML2/XML/samlp/LogoutRequestTest.php
 
 		-
@@ -3487,16 +4327,28 @@ parameters:
 			path: tests/SAML2/XML/samlp/LogoutResponseTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/samlp/LogoutResponseTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\NCNameValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NCNameValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/samlp/LogoutResponseTest.php
+
+		-
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\InvalidDOMElementException not found\.$#'
+			identifier: class.notFound
+			count: 2
+			path: tests/SAML2/XML/samlp/MessageFactoryTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
+			identifier: argument.type
+			count: 2
+			path: tests/SAML2/XML/samlp/MessageFactoryTest.php
 
 		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\Type\\SAMLAnyURIValue\:\:fromString\(\)\.$#'
@@ -3511,7 +4363,7 @@ parameters:
 			path: tests/SAML2/XML/samlp/NameIDPolicyTest.php
 
 		-
-			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XML\\Type\\BooleanValue\.$#'
+			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\BooleanValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/samlp/NameIDPolicyTest.php
@@ -3535,7 +4387,13 @@ parameters:
 			path: tests/SAML2/XML/samlp/RequestedAuthnContextTest.php
 
 		-
-			message: '#^Parameter \#1 \$requestedAuthnContexts of class SimpleSAML\\SAML2\\XML\\samlp\\RequestedAuthnContext constructor expects array\<SimpleSAML\\SAML2\\XML\\saml\\AuthnContextClassRef\|SimpleSAML\\SAML2\\XML\\saml\\AuthnContextDeclRef\>, array\<int, DOMDocument\|SimpleSAML\\SAML2\\XML\\saml\\AuthnContextDeclRef\> given\.$#'
+			message: '#^Class SimpleSAML\\XMLSchema\\Exception\\SchemaViolationException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/samlp/RequestedAuthnContextTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
 			identifier: argument.type
 			count: 1
 			path: tests/SAML2/XML/samlp/RequestedAuthnContextTest.php
@@ -3571,13 +4429,13 @@ parameters:
 			path: tests/SAML2/XML/samlp/ResponseTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/samlp/ResponseTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\NCNameValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NCNameValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/samlp/ResponseTest.php
@@ -3601,7 +4459,7 @@ parameters:
 			path: tests/SAML2/XML/samlp/ScopingTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\NonNegativeIntegerValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NonNegativeIntegerValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/samlp/ScopingTest.php
@@ -3673,19 +4531,19 @@ parameters:
 			path: tests/SAML2/XML/shibmd/KeyAuthorityTest.php
 
 		-
-			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XML\\Type\\UnsignedByteValue\.$#'
+			message: '#^Call to static method fromInteger\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\UnsignedByteValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/SAML2/XML/shibmd/KeyAuthorityTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\Base64BinaryValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\Base64BinaryValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/shibmd/KeyAuthorityTest.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/shibmd/KeyAuthorityTest.php
@@ -3703,13 +4561,13 @@ parameters:
 			path: tests/SAML2/XML/shibmd/ScopeTest.php
 
 		-
-			message: '#^Call to method toBoolean\(\) on an unknown class SimpleSAML\\XML\\Type\\BooleanValue\.$#'
+			message: '#^Call to method toBoolean\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\BooleanValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/shibmd/ScopeTest.php
 
 		-
-			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XML\\Type\\BooleanValue\.$#'
+			message: '#^Call to static method fromBoolean\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\BooleanValue\.$#'
 			identifier: class.notFound
 			count: 2
 			path: tests/SAML2/XML/shibmd/ScopeTest.php
@@ -3823,13 +4681,13 @@ parameters:
 			path: tests/bin/signedresponse_with_signedassertion.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/bin/signedresponse_with_signedassertion.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\NCNameValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NCNameValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/bin/signedresponse_with_signedassertion.php
@@ -3853,13 +4711,13 @@ parameters:
 			path: tests/bin/signedresponse_with_unsignedassertion.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/bin/signedresponse_with_unsignedassertion.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\NCNameValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NCNameValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/bin/signedresponse_with_unsignedassertion.php
@@ -3883,13 +4741,13 @@ parameters:
 			path: tests/bin/unsignedresponse_with_signedassertion.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\IDValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\IDValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/bin/unsignedresponse_with_signedassertion.php
 
 		-
-			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XML\\Type\\NCNameValue\.$#'
+			message: '#^Call to static method fromString\(\) on an unknown class SimpleSAML\\XMLSchema\\Type\\NCNameValue\.$#'
 			identifier: class.notFound
 			count: 1
 			path: tests/bin/unsignedresponse_with_signedassertion.php

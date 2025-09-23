@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
-use SimpleSAML\SAML2\XML\md\{AbstractLocalizedName, AbstractMdElement};
+use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\mdui\DisplayName;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{ArrayizableElementTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function dirname;

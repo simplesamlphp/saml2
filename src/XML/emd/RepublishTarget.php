@@ -17,6 +17,7 @@ final class RepublishTarget extends AbstractEmdElement
 {
     use TypedTextContentTrait;
 
+
     /** @var string */
     public const TEXTCONTENT_TYPE = SAMLAnyURIValue::class;
 

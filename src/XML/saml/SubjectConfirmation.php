@@ -8,8 +8,10 @@ use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\IdentifierTrait;
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XMLSchema\Exception\{InvalidDOMElementException, TooManyElementsException};
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
 use function array_pop;
 
@@ -107,7 +109,7 @@ final class SubjectConfirmation extends AbstractSamlElement implements SchemaVal
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Method', $this->getMethod()->getValue());
 
-        /** @var \SimpleSAML\XML\SerializableElementInterface|null $identifier */
+        /** @var \SimpleSAML\XML\SerializableElementInterface&\SimpleSAML\SAML2\XML\saml\IdentifierInterface $identifier */
         $identifier = $this->getIdentifier();
         $identifier?->toXML($e);
 

@@ -6,13 +6,16 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue};
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\XML\{SignableElementTrait, SignedElementTrait};
+use SimpleSAML\SAML2\XML\SignableElementTrait;
+use SimpleSAML\SAML2\XML\SignedElementTrait;
 use SimpleSAML\XMLSchema\Type\IDValue;
-use SimpleSAML\XMLSecurity\XML\{SignableElementInterface, SignedElementInterface};
+use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
+use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
 use function array_pop;
 

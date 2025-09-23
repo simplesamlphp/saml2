@@ -7,12 +7,10 @@ namespace SimpleSAML\SAML2\XML\md;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
-use SimpleSAML\XML\{
-    ArrayizableElementInterface,
-    SchemaValidatableElementInterface,
-    SchemaValidatableElementTrait,
-    TypedTextContentTrait,
-};
+use SimpleSAML\XML\ArrayizableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\TypedTextContentTrait;
 
 use function array_key_first;
 
@@ -27,6 +25,7 @@ final class TelephoneNumber extends AbstractMdElement implements
 {
     use SchemaValidatableElementTrait;
     use TypedTextContentTrait;
+
 
     /** @var string */
     public const TEXTCONTENT_TYPE = SAMLStringValue::class;

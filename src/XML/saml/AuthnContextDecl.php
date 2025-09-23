@@ -6,12 +6,10 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\XML\{
-    ExtendableAttributesTrait,
-    ExtendableElementTrait,
-    SchemaValidatableElementInterface,
-    SchemaValidatableElementTrait,
-};
+use SimpleSAML\XML\ExtendableAttributesTrait;
+use SimpleSAML\XML\ExtendableElementTrait;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
 

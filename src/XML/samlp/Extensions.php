@@ -9,7 +9,8 @@ use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtensionsTrait;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 
 /**

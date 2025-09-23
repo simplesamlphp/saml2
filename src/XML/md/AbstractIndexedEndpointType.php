@@ -12,7 +12,8 @@ use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\SerializableElementInterface;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
-use SimpleSAML\XMLSchema\Type\{BooleanValue, UnsignedShortValue};
+use SimpleSAML\XMLSchema\Type\BooleanValue;
+use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 
 use function array_filter;
 use function array_key_exists;

@@ -5,50 +5,53 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMText;
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\{
-    AnyURIListValue,
-    EmailAddressValue,
-    EntityIDValue,
-    SAMLAnyURIValue,
-    SAMLDateTimeValue,
-    SAMLStringValue,
-};
-use SimpleSAML\SAML2\XML\md\{
-    AbstractMdElement,
-    AbstractMetadataDocument,
-    AbstractSignedMdElement,
-    AdditionalMetadataLocation,
-    AffiliateMember,
-    AffiliationDescriptor,
-    AttributeAuthorityDescriptor,
-    AttributeService,
-    AuthnAuthorityDescriptor,
-    AuthnQueryService,
-    AuthzService,
-    ContactPerson,
-    EmailAddress,
-    EntityDescriptor,
-    Extensions,
-    IDPSSODescriptor,
-    Organization,
-    OrganizationDisplayName,
-    OrganizationName,
-    OrganizationURL,
-    PDPDescriptor,
-    SingleSignOnService,
-    UnknownRoleDescriptor,
-};
-use SimpleSAML\SAML2\XML\mdrpi\{PublicationInfo, UsagePolicy};
+use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\EmailAddressValue;
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
+use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
+use SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation;
+use SimpleSAML\SAML2\XML\md\AffiliateMember;
+use SimpleSAML\SAML2\XML\md\AffiliationDescriptor;
+use SimpleSAML\SAML2\XML\md\AttributeAuthorityDescriptor;
+use SimpleSAML\SAML2\XML\md\AttributeService;
+use SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor;
+use SimpleSAML\SAML2\XML\md\AuthnQueryService;
+use SimpleSAML\SAML2\XML\md\AuthzService;
+use SimpleSAML\SAML2\XML\md\ContactPerson;
+use SimpleSAML\SAML2\XML\md\EmailAddress;
+use SimpleSAML\SAML2\XML\md\EntityDescriptor;
+use SimpleSAML\SAML2\XML\md\Extensions;
+use SimpleSAML\SAML2\XML\md\IDPSSODescriptor;
+use SimpleSAML\SAML2\XML\md\Organization;
+use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
+use SimpleSAML\SAML2\XML\md\OrganizationName;
+use SimpleSAML\SAML2\XML\md\OrganizationURL;
+use SimpleSAML\SAML2\XML\md\PDPDescriptor;
+use SimpleSAML\SAML2\XML\md\SingleSignOnService;
+use SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor;
+use SimpleSAML\SAML2\XML\mdrpi\PublicationInfo;
+use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Constants as C_XSI;
-use SimpleSAML\XMLSchema\Exception\{MissingAttributeException, TooManyElementsException};
-use SimpleSAML\XMLSchema\Type\{DurationValue, IDValue, LanguageValue, StringValue};
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Type\DurationValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\LanguageValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;

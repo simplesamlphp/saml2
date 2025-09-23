@@ -6,7 +6,8 @@ namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\XML\saml\{AbstractCondition, Audience};
+use SimpleSAML\SAML2\XML\saml\AbstractCondition;
+use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XMLSchema\Constants as C_XSI;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;

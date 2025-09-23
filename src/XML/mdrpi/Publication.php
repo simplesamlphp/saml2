@@ -6,10 +6,12 @@ namespace SimpleSAML\SAML2\XML\mdrpi;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Exception\{ArrayValidationException, ProtocolViolationException};
-use SimpleSAML\SAML2\Type\{SAMLDateTimeValue, SAMLStringValue};
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 
 /**

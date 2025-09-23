@@ -4,16 +4,21 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Signature;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Signature\{MissingConfigurationException, ValidatorChain};
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue};
+use SimpleSAML\SAML2\Signature\MissingConfigurationException;
+use SimpleSAML\SAML2\Signature\ValidatorChain;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\samlp\{Response, Status, StatusCode};
+use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\XML\Type\IDValue;
 
 /**

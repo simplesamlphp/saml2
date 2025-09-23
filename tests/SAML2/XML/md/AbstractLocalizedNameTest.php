@@ -5,13 +5,17 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use DOMDocument;
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\md\{AbstractLocalizedName, AbstractMdElement, ServiceDescription};
+use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\ServiceDescription;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XMLSchema\Exception\{MissingAttributeException, SchemaViolationException};
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
 use function dirname;
 

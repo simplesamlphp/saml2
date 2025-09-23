@@ -7,12 +7,17 @@ namespace SimpleSAML\Test\SAML2\Response\Validation\ConstraintValidator;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator\IsSuccessful;
 use SimpleSAML\SAML2\Response\Validation\Result;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLStringValue};
-use SimpleSAML\SAML2\XML\samlp\{Response, Status, StatusCode, StatusMessage};
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
+use SimpleSAML\SAML2\XML\samlp\StatusMessage;
 
 /**
  * @package simplesamlphp/saml2

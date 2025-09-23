@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML;
 
-use SimpleSAML\XMLSchema\Type\{AnyURIValue, NCNameValue, QNameValue};
+use SimpleSAML\XMLSchema\Type\AnyURIValue;
+use SimpleSAML\XMLSchema\Type\NCNameValue;
+use SimpleSAML\XMLSchema\Type\QNameValue;
 
 /**
  * Interface for several extension points objects.

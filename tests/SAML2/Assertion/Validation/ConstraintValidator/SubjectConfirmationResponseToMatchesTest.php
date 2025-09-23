@@ -7,12 +7,14 @@ namespace SimpleSAML\Test\SAML2\Assertion\Validation\ConstraintValidator;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, EntityIDValue};
-use SimpleSAML\SAML2\XML\saml\{SubjectConfirmation, SubjectConfirmationData};
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\XMLSchema\Type\NCNameValue;
 

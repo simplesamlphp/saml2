@@ -6,8 +6,10 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
-use SimpleSAML\XML\{SchemaValidatableElementInterface, SchemaValidatableElementTrait};
-use SimpleSAML\XMLSchema\Type\{BooleanValue, UnsignedShortValue};
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
+use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 
 /**
  * A class implementing the md:ArtifactResolutionService element.

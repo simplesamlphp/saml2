@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, EntityIDValue};
-use SimpleSAML\SAML2\XML\saml\{
-    AbstractSamlElement,
-    AuthenticatingAuthority,
-    AuthnContext,
-    AuthnContextClassRef,
-    AuthnContextDecl,
-    AuthnContextDeclRef,
-};
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
+use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
+use SimpleSAML\SAML2\XML\saml\AuthnContext;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\XML\saml\AuthnContextDecl;
+use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 

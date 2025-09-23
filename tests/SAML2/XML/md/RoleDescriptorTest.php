@@ -4,49 +4,54 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Compat\{AbstractContainer, ContainerSingleton};
+use SimpleSAML\SAML2\Compat\AbstractContainer;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\{
-    AnyURIListValue,
-    EmailAddressValue,
-    KeyTypesValue,
-    SAMLAnyURIValue,
-    SAMLDateTimeValue,
-    SAMLStringValue,
-};
-use SimpleSAML\SAML2\XML\md\{
-    AbstractMdElement,
-    AbstractMetadataDocument,
-    AbstractRoleDescriptor,
-    AbstractRoleDescriptorType,
-    AbstractSignedMdElement,
-    Company,
-    ContactPerson,
-    EmailAddress,
-    EncryptionMethod,
-    Extensions,
-    GivenName,
-    KeyDescriptor,
-    KeyTypesEnum,
-    Organization,
-    OrganizationDisplayName,
-    OrganizationName,
-    OrganizationURL,
-    SurName,
-    TelephoneNumber,
-    UnknownRoleDescriptor,
-};
+use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\EmailAddressValue;
+use SimpleSAML\SAML2\Type\KeyTypesValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType;
+use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
+use SimpleSAML\SAML2\XML\md\Company;
+use SimpleSAML\SAML2\XML\md\ContactPerson;
+use SimpleSAML\SAML2\XML\md\EmailAddress;
+use SimpleSAML\SAML2\XML\md\EncryptionMethod;
+use SimpleSAML\SAML2\XML\md\Extensions;
+use SimpleSAML\SAML2\XML\md\GivenName;
+use SimpleSAML\SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\SAML2\XML\md\KeyTypesEnum;
+use SimpleSAML\SAML2\XML\md\Organization;
+use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
+use SimpleSAML\SAML2\XML\md\OrganizationName;
+use SimpleSAML\SAML2\XML\md\OrganizationURL;
+use SimpleSAML\SAML2\XML\md\SurName;
+use SimpleSAML\SAML2\XML\md\TelephoneNumber;
+use SimpleSAML\SAML2\XML\md\UnknownRoleDescriptor;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\Test\SAML2\CustomRoleDescriptor;
 use SimpleSAML\XML\Attribute as XMLAttribute;
-use SimpleSAML\XML\{Chunk, DOMDocumentFactory};
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Constants as C_XSI;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
-use SimpleSAML\XMLSchema\Type\{AnyURIValue, DurationValue, IDValue, LanguageValue, StringValue};
-use SimpleSAML\XMLSecurity\XML\ds\{KeyInfo, KeyName};
+use SimpleSAML\XMLSchema\Type\AnyURIValue;
+use SimpleSAML\XMLSchema\Type\DurationValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\LanguageValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
 use function dirname;
 use function strval;

@@ -10,21 +10,21 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\{AnyURIListValue, SAMLAnyURIValue};
-use SimpleSAML\SAML2\XML\md\{
-    AbstractMdElement,
-    AbstractMetadataDocument,
-    AbstractRoleDescriptor,
-    AbstractRoleDescriptorType,
-    AbstractSignedMdElement,
-    AssertionIDRequestService,
-    AuthnAuthorityDescriptor,
-    AuthnQueryService,
-    NameIDFormat,
-};
+use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
+use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType;
+use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
+use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
+use SimpleSAML\SAML2\XML\md\AuthnAuthorityDescriptor;
+use SimpleSAML\SAML2\XML\md\AuthnQueryService;
+use SimpleSAML\SAML2\XML\md\NameIDFormat;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\TestUtils\{SchemaValidationTestTrait, SerializableElementTestTrait};
+use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
+use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
@@ -150,6 +150,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AuthnQueryService must be an instance of EndpointType');
+
         new AuthnAuthorityDescriptor(
             [self::$aqs, ''],
             AnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
@@ -173,6 +174,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('AssertionIDRequestServices must be an instance of EndpointType');
+
         new AuthnAuthorityDescriptor(
             [self::$aqs],
             AnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),

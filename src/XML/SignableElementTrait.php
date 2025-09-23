@@ -8,21 +8,21 @@ use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XMLSchema\Type\{AnyURIValue, Base64BinaryValue};
+use SimpleSAML\XMLSchema\Type\AnyURIValue;
+use SimpleSAML\XMLSchema\Type\Base64BinaryValue;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmInterface;
 use SimpleSAML\XMLSecurity\Constants as C;
-use SimpleSAML\XMLSecurity\Exception\{RuntimeException, UnsupportedAlgorithmException};
+use SimpleSAML\XMLSecurity\Exception\RuntimeException;
+use SimpleSAML\XMLSecurity\Exception\UnsupportedAlgorithmException;
 use SimpleSAML\XMLSecurity\Utils\XML;
-use SimpleSAML\XMLSecurity\XML\ds\{
-    CanonicalizationMethod,
-    KeyInfo,
-    Signature,
-    SignatureMethod,
-    SignatureValue,
-    SignedInfo,
-    Transform,
-    Transforms,
-};
+use SimpleSAML\XMLSecurity\XML\ds\CanonicalizationMethod;
+use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
+use SimpleSAML\XMLSecurity\XML\ds\Signature;
+use SimpleSAML\XMLSecurity\XML\ds\SignatureMethod;
+use SimpleSAML\XMLSecurity\XML\ds\SignatureValue;
+use SimpleSAML\XMLSecurity\XML\ds\SignedInfo;
+use SimpleSAML\XMLSecurity\XML\ds\Transform;
+use SimpleSAML\XMLSecurity\XML\ds\Transforms;
 use SimpleSAML\XMLSecurity\XML\SignableElementTrait as BaseSignableElementTrait;
 
 use function base64_encode;

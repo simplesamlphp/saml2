@@ -5,28 +5,36 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\Assertion\Transformer;
 
 use DOMDocument;
-use PHPUnit\Framework\Attributes\{PreserveGlobalState, RunInSeparateProcess};
+use PHPUnit\Framework\Attributes\PreserveGlobalState;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
-use Psr\Log\{LoggerInterface, NullLogger};
-use SimpleSAML\SAML2\Assertion\{Processor, ProcessorBuilder};
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
+use SimpleSAML\SAML2\Assertion\Processor;
+use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Configuration\{Destination, IdentityProvider, PrivateKey, ServiceProvider};
+use SimpleSAML\SAML2\Configuration\Destination;
+use SimpleSAML\SAML2\Configuration\IdentityProvider;
+use SimpleSAML\SAML2\Configuration\PrivateKey;
+use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Signature\Validator;
-use SimpleSAML\SAML2\Type\{SAMLAnyURIValue, SAMLDateTimeValue, SAMLStringValue};
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\SAML2\XML\saml\{
-    Assertion,
-    AuthnContext,
-    AuthnContextClassRef,
-    AuthnStatement,
-    EncryptedID,
-    Issuer,
-    NameID,
-    Subject,
-};
-use SimpleSAML\SAML2\XML\samlp\{Response, Status, StatusCode};
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\AuthnContext;
+use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
+use SimpleSAML\SAML2\XML\saml\AuthnStatement;
+use SimpleSAML\SAML2\XML\saml\EncryptedID;
+use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\Subject;
+use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\SAML2\XML\samlp\Status;
+use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Type\IDValue;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;

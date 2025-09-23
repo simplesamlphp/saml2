@@ -6,7 +6,8 @@ namespace SimpleSAML\Test\SAML2\Binding;
 
 use Exception;
 use Nyholm\Psr7\ServerRequest;
-use PHPUnit\Framework\Attributes\{CoversClass, Group};
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Binding\HTTPArtifact;
 
