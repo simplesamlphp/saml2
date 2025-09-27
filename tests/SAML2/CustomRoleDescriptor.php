@@ -25,7 +25,7 @@ use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSchema\Type\DurationValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSchema\Type\QNameValue;
-use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 /**
  * Example class to demonstrate how RoleDescriptor can be extended.
@@ -47,7 +47,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
     protected const XSI_TYPE_PREFIX = 'ssp';
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NamespaceEnum::Other;
+    public const XS_ANY_ELT_NAMESPACE = NS::OTHER;
 
 
     /**

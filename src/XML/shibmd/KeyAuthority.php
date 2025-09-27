@@ -12,7 +12,7 @@ use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Type\UnsignedByteValue;
-use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 
 use function strval;
@@ -30,7 +30,7 @@ final class KeyAuthority extends AbstractShibmdElement implements SchemaValidata
 
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NamespaceEnum::Other;
+    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**

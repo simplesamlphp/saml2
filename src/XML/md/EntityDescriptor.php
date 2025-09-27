@@ -17,7 +17,7 @@ use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSchema\Type\DurationValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
-use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function is_null;
@@ -34,7 +34,7 @@ final class EntityDescriptor extends AbstractMetadataDocument implements SchemaV
 
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NamespaceEnum::Other;
+    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**

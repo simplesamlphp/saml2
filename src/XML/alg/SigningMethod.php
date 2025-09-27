@@ -12,7 +12,7 @@ use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Type\PositiveIntegerValue;
-use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 /**
  * Class for handling the alg:SigningMethod element.
@@ -27,7 +27,7 @@ final class SigningMethod extends AbstractAlgElement implements SchemaValidatabl
 
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NamespaceEnum::Any;
+    public const XS_ANY_ELT_NAMESPACE = NS::ANY;
 
 
     /**

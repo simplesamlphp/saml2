@@ -14,7 +14,7 @@ use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XMLSchema\Type\DurationValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
-use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 use function strval;
 
@@ -29,7 +29,7 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
 
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NamespaceEnum::Other;
+    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**

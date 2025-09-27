@@ -18,7 +18,7 @@ use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Exception\MissingElementException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
-use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 use function array_change_key_case;
 use function array_filter;
@@ -41,7 +41,7 @@ final class Organization extends AbstractMdElement implements
 
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NamespaceEnum::Other;
+    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**

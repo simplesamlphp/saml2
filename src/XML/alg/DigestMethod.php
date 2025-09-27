@@ -11,7 +11,7 @@ use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
-use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 /**
  * Class for handling the alg:DigestMethod element.
@@ -26,7 +26,7 @@ final class DigestMethod extends AbstractAlgElement implements SchemaValidatable
 
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NamespaceEnum::Any;
+    public const XS_ANY_ELT_NAMESPACE = NS::ANY;
 
 
     /**

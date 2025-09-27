@@ -11,7 +11,7 @@ use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
-use SimpleSAML\XMLSchema\XML\Enumeration\NamespaceEnum;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 /**
  * Class representing SAML2 AuthnContextDecl
@@ -26,10 +26,10 @@ final class AuthnContextDecl extends AbstractSamlElement implements SchemaValida
 
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NamespaceEnum::Any;
+    public const XS_ANY_ELT_NAMESPACE = NS::ANY;
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NamespaceEnum::Any;
+    public const XS_ANY_ATTR_NAMESPACE = NS::ANY;
 
 
     /**

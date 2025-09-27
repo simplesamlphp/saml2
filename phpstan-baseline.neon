@@ -259,24 +259,6 @@ parameters:
 			path: src/SOAPClient.php
 
 		-
-			message: '#^Access to constant Any on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/XML/alg/DigestMethod.php
-
-		-
-			message: '#^Access to constant Any on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/XML/alg/SigningMethod.php
-
-		-
-			message: '#^Access to constant Other on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 2
-			path: src/XML/md/AbstractEndpointType.php
-
-		-
 			message: '#^Unsafe usage of new static\(\)\.$#'
 			identifier: new.static
 			count: 2
@@ -295,28 +277,10 @@ parameters:
 			path: src/XML/md/AbstractLocalizedName.php
 
 		-
-			message: '#^Access to constant Other on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/XML/md/AbstractRoleDescriptorType.php
-
-		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\XML\\md\\AbstractSignedMdElement\:\:getXsiTypeNamespaceURI\(\)\.$#'
 			identifier: staticMethod.notFound
 			count: 1
 			path: src/XML/md/AbstractSignedMdElement.php
-
-		-
-			message: '#^Access to constant Other on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/XML/md/AffiliationDescriptor.php
-
-		-
-			message: '#^Access to constant Other on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/XML/md/ContactPerson.php
 
 		-
 			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getList\(\)\.$#'
@@ -331,28 +295,10 @@ parameters:
 			path: src/XML/md/EntitiesDescriptor.php
 
 		-
-			message: '#^Access to constant Other on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/XML/md/EntityDescriptor.php
-
-		-
-			message: '#^Access to constant Other on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/XML/md/Organization.php
-
-		-
 			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getList\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: src/XML/md/Organization.php
-
-		-
-			message: '#^Access to constant Other on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/XML/mdui/DiscoHints.php
 
 		-
 			message: '#^Call to an undefined method SimpleSAML\\XMLSchema\\Type\\Interface\\ValueTypeInterface\:\:toArray\(\)\.$#'
@@ -361,34 +307,10 @@ parameters:
 			path: src/XML/mdui/Keywords.php
 
 		-
-			message: '#^Access to constant Other on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/XML/mdui/UIInfo.php
-
-		-
-			message: '#^Access to constant Other on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/XML/saml/Advice.php
-
-		-
-			message: '#^Access to constant Other on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/XML/saml/Attribute.php
-
-		-
 			message: '#^Unsafe usage of new static\(\)\.$#'
 			identifier: new.static
 			count: 1
 			path: src/XML/saml/Attribute.php
-
-		-
-			message: '#^Access to constant Any on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 2
-			path: src/XML/saml/AuthnContextDecl.php
 
 		-
 			message: '#^Unsafe usage of new static\(\)\.$#'
@@ -407,27 +329,3 @@ parameters:
 			identifier: new.static
 			count: 1
 			path: src/XML/saml/NameIDType.php
-
-		-
-			message: '#^Access to constant Any on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/XML/saml/SubjectConfirmationData.php
-
-		-
-			message: '#^Access to constant Other on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/XML/saml/SubjectConfirmationData.php
-
-		-
-			message: '#^Access to constant Any on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/XML/samlp/StatusDetail.php
-
-		-
-			message: '#^Access to constant Other on an unknown class SimpleSAML\\XMLSchema\\XML\\Enumeration\\NamespaceEnum\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/XML/shibmd/KeyAuthority.php
