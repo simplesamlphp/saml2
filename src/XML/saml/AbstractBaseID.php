@@ -37,6 +37,7 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
     use ExtensionPointTrait;
     use SchemaValidatableElementTrait;
 
+
     /** @var string */
     public const LOCALNAME = 'BaseID';
 

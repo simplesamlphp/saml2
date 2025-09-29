@@ -46,6 +46,7 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
 {
     use RelayStateTrait;
 
+
     /**
      * @psalm-suppress UndefinedDocblockClass
      * @psalm-suppress UndefinedClass

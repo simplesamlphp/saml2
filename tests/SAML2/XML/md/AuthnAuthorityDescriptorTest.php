@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2\XML\md;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
@@ -108,14 +109,13 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     /**
      * Test that creating an AuthnAuthorityDescriptor without optional elements works.
      */
+    #[DoesNotPerformAssertions]
     public function testMarshallingWithoutOptionalElements(): void
     {
         new AuthnAuthorityDescriptor(
             [self::$aqs],
             [C::NS_SAMLP, C::PROTOCOL],
         );
-
-        $this->assertTrue(true);
     }
 
 
@@ -204,6 +204,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     /**
      * Test that creating an AuthnAuthorityDescriptor from XML without AssertionRequestIDService elements works.
      */
+    #[DoesNotPerformAssertions]
     public function testUnmarshallingWithoutAssertionIDRequestServices(): void
     {
         $xmlRepresentation = clone self::$xmlRepresentation;
@@ -211,13 +212,13 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($aidrs->item(0));
         AuthnAuthorityDescriptor::fromXML($xmlRepresentation->documentElement);
-        $this->assertTrue(true);
     }
 
 
     /**
      * Test that creating an AuthnAuthorityDescriptor from XML without NameIDFormat elements works.
      */
+    #[DoesNotPerformAssertions]
     public function testUnmarshallingWithoutNameIDFormats(): void
     {
         $xmlRepresentation = clone self::$xmlRepresentation;
@@ -227,6 +228,5 @@ final class AuthnAuthorityDescriptorTest extends TestCase
         /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($nidf->item(0));
         AuthnAuthorityDescriptor::fromXML($xmlRepresentation->documentElement);
-        $this->assertTrue(true);
     }
 }

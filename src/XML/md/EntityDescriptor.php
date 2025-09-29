@@ -30,6 +30,7 @@ final class EntityDescriptor extends AbstractMetadataDocument implements SchemaV
     use ExtendableAttributesTrait;
     use SchemaValidatableElementTrait;
 
+
     /** The namespace-attribute for the xs:anyAttribute element */
     public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 

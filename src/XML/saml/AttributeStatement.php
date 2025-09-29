@@ -20,6 +20,7 @@ class AttributeStatement extends AbstractStatementType implements SchemaValidata
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * AttributeStatement constructor.
      *

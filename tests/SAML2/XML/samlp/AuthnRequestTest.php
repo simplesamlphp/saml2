@@ -62,6 +62,7 @@ final class AuthnRequestTest extends TestCase
     use SerializableElementTestTrait;
     use SignedElementTestTrait;
 
+
     /** @var \Psr\Clock\ClockInterface */
     private static ClockInterface $clock;
 
@@ -256,7 +257,6 @@ AUTHNREQUEST;
         $document     = DOMDocumentFactory::fromString($xml);
         $authnRequest = AuthnRequest::fromXML($document->documentElement);
 
-        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $authnRequest->toXML();
         $this->assertXmlStringEqualsXmlString($document->C14N(), $e->ownerDocument->C14N());
     }

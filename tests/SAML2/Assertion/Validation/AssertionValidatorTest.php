@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\Assertion\Validation;
 
 use DOMDocument;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
@@ -127,18 +128,17 @@ XML
     /**
      * Verifies that the assertion validator works
      */
+    #[DoesNotPerformAssertions]
     #[PreserveGlobalState(false)]
     #[RunInSeparateProcess]
     public function testBasicValidation(): void
     {
         $assertion = Assertion::fromXML(self::$document->firstChild);
-
-        $result = self::$assertionProcessor->validateAssertion($assertion);
-        $this->assertNull($result);
+        self::$assertionProcessor->validateAssertion($assertion);
     }
 
-    /**
 
+    /**
      * Verifies that violations are caught
      */
     #[PreserveGlobalState(false)]

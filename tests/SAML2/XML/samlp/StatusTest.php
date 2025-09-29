@@ -36,6 +36,7 @@ final class StatusTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /** @var \DOMDocument $detail */
     private static DOMDocument $detail;
 

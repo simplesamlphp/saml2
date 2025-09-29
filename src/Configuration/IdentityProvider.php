@@ -69,6 +69,7 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
         return $this->get('sharedKey');
     }
 
+
     /**
      * @param string $name
      * @param bool $required

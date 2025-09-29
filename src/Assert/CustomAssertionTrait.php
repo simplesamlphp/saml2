@@ -15,6 +15,7 @@ trait CustomAssertionTrait
 {
     private static string $scheme_regex = '/^([a-z][a-z0-9\+\-\.]+[:])/i';
 
+
     /***********************************************************************************
      *  NOTE:  Custom assertions may be added below this line.                         *
      *         They SHOULD be marked as `private` to ensure the call is forced         *

@@ -50,9 +50,10 @@ final class IndexedEndpointTypeTest extends TestCase
      * Test that creating an IndexedEndpointType from scratch without specifying isDefault works.
      *
      * @param class-string $class
+     * @param string $xmlRepresentation
      */
     #[DataProvider('classProvider')]
-    public function testMarshallingWithoutIsDefault(string $class): void
+    public function testMarshallingWithoutIsDefault(string $class, string $xmlRepresentation): void
     {
         $binding = ($class === DiscoveryResponse::class) ? C::BINDING_IDPDISC : C::BINDING_HTTP_POST;
         $idxep = new $class(42, $binding, C::LOCATION_A);

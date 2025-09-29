@@ -28,6 +28,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * SPSSODescriptor constructor.
      *

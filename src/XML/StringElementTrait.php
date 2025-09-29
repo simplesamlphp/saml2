@@ -17,6 +17,7 @@ trait StringElementTrait
 {
     use BaseStringElementTrait;
 
+
     /**
      * Validate the content of the element.
      *

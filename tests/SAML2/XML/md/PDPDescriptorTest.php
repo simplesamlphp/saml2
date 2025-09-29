@@ -109,8 +109,8 @@ final class PDPDescriptorTest extends TestCase
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('All md:AuthzService endpoints must be an instance of AuthzService.');
 
-        /** @psalm-suppress InvalidArgument */
         new PDPDescriptor(
+            /** @phpstan-ignore argument.type */
             [self::$authzService, self::$assertionIDRequestService],
             ["urn:oasis:names:tc:SAML:2.0:protocol"],
         );
@@ -127,10 +127,10 @@ final class PDPDescriptorTest extends TestCase
             'All md:AssertionIDRequestService endpoints must be an instance of AssertionIDRequestService.',
         );
 
-        /** @psalm-suppress InvalidArgument */
         new PDPDescriptor(
             [self::$authzService],
             ["urn:oasis:names:tc:SAML:2.0:protocol"],
+            /** @phpstan-ignore argument.type */
             [self::$assertionIDRequestService, self::$authzService],
         );
     }

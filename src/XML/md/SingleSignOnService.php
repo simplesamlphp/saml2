@@ -17,6 +17,7 @@ final class SingleSignOnService extends AbstractEndpointType implements SchemaVa
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * SingleSignOnService constructor.
      *

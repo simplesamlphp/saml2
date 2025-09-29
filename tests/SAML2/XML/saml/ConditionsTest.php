@@ -35,6 +35,7 @@ final class ConditionsTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void

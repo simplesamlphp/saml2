@@ -30,6 +30,7 @@ final class AuthnContextClassRefTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     public static function setUpBeforeClass(): void
     {
         self::$testedClass = AuthnContextClassRef::class;

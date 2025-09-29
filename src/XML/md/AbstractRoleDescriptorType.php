@@ -24,6 +24,7 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
 {
     use ExtendableAttributesTrait;
 
+
     /** The namespace-attribute for the xs:anyAttribute element */
     public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 

@@ -56,7 +56,7 @@ class ArrayCollection implements Collection
     /**
      * @param \Closure $f
      *
-     * @return ArrayCollection
+     * @return \SimpleSAML\SAML2\Utilities\ArrayCollection
      */
     public function filter(Closure $filterFunction): Collection
     {
@@ -89,7 +89,7 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @throws RuntimeException
+     * @throws \SimpleSAML\SAML2\Exception\RuntimeException
      * @return bool|mixed
      */
     public function getOnlyElement()
@@ -127,7 +127,7 @@ class ArrayCollection implements Collection
     /**
      * @param \Closure $function
      *
-     * @return ArrayCollection
+     * @return \SimpleSAML\SAML2\Utilities\ArrayCollection
      */
     public function map(Closure $function): ArrayCollection
     {

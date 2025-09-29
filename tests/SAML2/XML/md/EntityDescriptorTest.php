@@ -431,6 +431,7 @@ XML
         );
     }
 
+
     /**
      * Test that creating an EntityDescriptor from XML fails if no entityID is provided.
      */

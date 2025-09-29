@@ -25,6 +25,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument implements Schem
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * EntitiesDescriptor constructor.
      *

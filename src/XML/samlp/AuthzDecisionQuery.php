@@ -34,6 +34,7 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery implements SchemaVal
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Constructor for SAML 2 AuthzDecisionQuery.
      *

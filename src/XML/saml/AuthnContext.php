@@ -27,6 +27,7 @@ final class AuthnContext extends AbstractSamlElement implements SchemaValidatabl
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize an AuthnContext.
      *

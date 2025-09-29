@@ -32,6 +32,7 @@ class ArtifactResponse extends AbstractStatusResponse implements SchemaValidatab
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Constructor for SAML 2 ArtifactResponse.
      *

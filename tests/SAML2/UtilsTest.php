@@ -53,13 +53,15 @@ final class UtilsTest extends TestCase
         $xml = $aq->toXML();
 
         $xpCache = XPath::getXPath($xml);
+        /** @var \DOMElement[] $nameId_after */
         $nameId_after = XPath::xpQuery($xml, './saml_assertion:Subject/saml_assertion:NameID', $xpCache);
         $this->assertTrue(count($nameId_after) === 1);
 
-        /** @var \DOMNode $nameId_after[0] */
-        $this->assertEquals('NameIDValue', $nameId_after[0]->textContent);
-        $this->assertEquals(C::NAMEID_TRANSIENT, $nameId_after[0]->getAttribute("Format"));
-        $this->assertEquals('urn:x-simplesamlphp:namequalifier', $nameId_after[0]->getAttribute("NameQualifier"));
-        $this->assertEquals('urn:x-simplesamlphp:spnamequalifier', $nameId_after[0]->getAttribute("SPNameQualifier"));
+        /** @var \DOMElement $first */
+        $first = $nameId_after[0];
+        $this->assertEquals('NameIDValue', $first->textContent);
+        $this->assertEquals(C::NAMEID_TRANSIENT, $first->getAttribute("Format"));
+        $this->assertEquals('urn:x-simplesamlphp:namequalifier', $first->getAttribute("NameQualifier"));
+        $this->assertEquals('urn:x-simplesamlphp:spnamequalifier', $first->getAttribute("SPNameQualifier"));
     }
 }

@@ -21,6 +21,7 @@ final class Evidence extends AbstractSamlElement implements SchemaValidatableEle
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * @param \SimpleSAML\SAML2\XML\saml\AssertionIDRef[] $assertionIDRef
      * @param \SimpleSAML\SAML2\XML\saml\AssertionURIRef[] $assertionURIRef

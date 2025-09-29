@@ -37,6 +37,7 @@ final class AttributeConsumingServiceTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /** @var \SimpleSAML\SAML2\XML\md\RequestedAttribute */
     private static RequestedAttribute $requestedAttribute;
 

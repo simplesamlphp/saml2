@@ -30,6 +30,7 @@ final class RegistrationInfo extends AbstractMdrpiElement implements
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Create/parse a mdrpi:RegistrationInfo element.
      *

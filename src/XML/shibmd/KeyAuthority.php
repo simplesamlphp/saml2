@@ -27,6 +27,7 @@ final class KeyAuthority extends AbstractShibmdElement implements SchemaValidata
     use ExtendableAttributesTrait;
     use SchemaValidatableElementTrait;
 
+
     /** The namespace-attribute for the xs:anyAttribute element */
     public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 

@@ -39,6 +39,7 @@ final class AuthnStatementTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void

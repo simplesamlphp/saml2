@@ -17,6 +17,7 @@ final class NameIDMappingService extends AbstractEndpointType implements SchemaV
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * NameIDMappingService constructor.
      *

@@ -37,6 +37,7 @@ final class DiscoveryResponseTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /** @var \SimpleSAML\XML\Chunk */
     private static Chunk $ext;
 

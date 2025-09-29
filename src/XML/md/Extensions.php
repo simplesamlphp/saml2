@@ -40,6 +40,7 @@ final class Extensions extends AbstractMdElement implements SchemaValidatableEle
     use ExtensionsTrait;
     use SchemaValidatableElementTrait;
 
+
     /**
      * Create an Extensions object from its md:Extensions XML representation.
      *

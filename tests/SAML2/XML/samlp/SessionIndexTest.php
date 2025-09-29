@@ -29,6 +29,7 @@ final class SessionIndexTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void

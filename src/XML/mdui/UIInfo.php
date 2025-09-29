@@ -39,8 +39,10 @@ final class UIInfo extends AbstractMduiElement implements
     use ExtendableElementTrait;
     use SchemaValidatableElementTrait;
 
+
     /** The namespace-attribute for the xs:any element */
     public const XS_ANY_ELT_NAMESPACE = NS::OTHER;
+
 
     /**
      * Create a UIInfo element.

@@ -47,6 +47,7 @@ final class LogoutRequestTest extends TestCase
     use SerializableElementTestTrait;
     use SignedElementTestTrait;
 
+
     /** @var \Psr\Clock\ClockInterface */
     private static ClockInterface $clock;
 
@@ -310,6 +311,7 @@ XML;
         );
     }
 
+
     /**
      */
     public function testGetReason(): void
@@ -349,7 +351,6 @@ XML;
         $logoutRequest2 = LogoutRequest::fromXML($logoutRequestElement);
         $this->assertEquals($reason, $logoutRequest2->getReason());
     }
-
 
 
     /**

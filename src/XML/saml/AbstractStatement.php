@@ -32,6 +32,7 @@ abstract class AbstractStatement extends AbstractStatementType implements
     use ExtensionPointTrait;
     use SchemaValidatableElementTrait;
 
+
     /** @var string */
     public const LOCALNAME = 'Statement';
 

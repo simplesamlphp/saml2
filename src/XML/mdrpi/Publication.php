@@ -30,6 +30,7 @@ final class Publication extends AbstractMdrpiElement implements
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Create/parse a mdrpi:PublicationInfo element.
      *

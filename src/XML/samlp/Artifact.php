@@ -21,6 +21,7 @@ final class Artifact extends AbstractSamlpElement implements SchemaValidatableEl
     use Base64ElementTrait;
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize an artifact.
      *

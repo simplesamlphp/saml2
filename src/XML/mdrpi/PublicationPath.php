@@ -25,6 +25,7 @@ final class PublicationPath extends AbstractMdrpiElement implements
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Create/parse a mdrpi:PublicationPath element.
      *

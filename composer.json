@@ -41,7 +41,7 @@
         "beste/clock": "~3.0.0",
         "mockery/mockery": "~1.6.12",
         "simplesamlphp/composer-xmlprovider-installer": "~1.0.2",
-        "simplesamlphp/simplesamlphp-test-framework": "~1.9.2"
+        "simplesamlphp/simplesamlphp-test-framework": "~1.10.2"
     },
     "suggest": {
         "ext-soap": "*"

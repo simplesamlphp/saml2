@@ -19,6 +19,7 @@ final class Issuer extends NameIDType implements SchemaValidatableElementInterfa
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize a saml:Issuer
      *

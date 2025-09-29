@@ -22,6 +22,7 @@ final class Scoping extends AbstractSamlpElement implements SchemaValidatableEle
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize a Scoping element.
      *

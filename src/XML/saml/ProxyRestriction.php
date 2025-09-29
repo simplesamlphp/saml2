@@ -20,6 +20,7 @@ final class ProxyRestriction extends AbstractConditionType implements SchemaVali
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * ProxyRestriction constructor.
      *

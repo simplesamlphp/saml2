@@ -36,6 +36,7 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
     use IdentifierTrait;
     use SchemaValidatableElementTrait;
 
+
     /**
      * Constructor for SAML 2 AttributeQuery.
      *

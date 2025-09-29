@@ -35,6 +35,7 @@ final class AuthzDecisionStatementTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /** @var \DOMDocument $evidence */
     private static DOMDocument $evidence;
 

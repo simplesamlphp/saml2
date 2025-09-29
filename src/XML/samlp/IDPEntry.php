@@ -26,6 +26,7 @@ final class IDPEntry extends AbstractSamlpElement implements SchemaValidatableEl
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize an IDPEntry element.
      *

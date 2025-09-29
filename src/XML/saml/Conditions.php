@@ -25,6 +25,7 @@ final class Conditions extends AbstractSamlElement implements SchemaValidatableE
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize a Conditions element.
      *

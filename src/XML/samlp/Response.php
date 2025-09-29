@@ -33,6 +33,7 @@ class Response extends AbstractStatusResponse implements SchemaValidatableElemen
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Constructor for SAML 2 response messages.
      *

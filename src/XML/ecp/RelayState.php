@@ -24,6 +24,7 @@ final class RelayState extends AbstractEcpElement implements SchemaValidatableEl
     use SchemaValidatableElementTrait;
     use StringElementTrait;
 
+
     /**
      * Create a ECP RelayState element.
      *

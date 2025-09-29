@@ -34,6 +34,7 @@ final class EvidenceTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /** @var \DOMDocument $assertionIDRef */
     private static DOMDocument $assertionIDRef;
 

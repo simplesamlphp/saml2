@@ -23,6 +23,7 @@ final class Subject extends AbstractSamlElement implements SchemaValidatableElem
     use IdentifierTrait;
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize a Subject element.
      *

@@ -32,6 +32,7 @@ final class SubjectConfirmationData extends AbstractSamlElement implements Schem
     use ExtendableElementTrait;
     use SchemaValidatableElementTrait;
 
+
     /** The namespace-attribute for the xs:any element */
     public const XS_ANY_ELT_NAMESPACE = NS::ANY;
 

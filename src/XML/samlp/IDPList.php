@@ -29,6 +29,7 @@ final class IDPList extends AbstractSamlpElement implements SchemaValidatableEle
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize an IDPList element.
      *

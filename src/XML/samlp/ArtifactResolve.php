@@ -32,6 +32,7 @@ class ArtifactResolve extends AbstractRequest implements SchemaValidatableElemen
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize an ArtifactResolve.
      *

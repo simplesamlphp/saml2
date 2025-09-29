@@ -21,6 +21,7 @@ final class AudienceRestriction extends AbstractConditionType implements SchemaV
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize a saml:AudienceRestriction
      *

@@ -30,6 +30,7 @@ final class NameID extends NameIDType implements
     use EncryptableElementTrait;
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize a saml:NameID
      *

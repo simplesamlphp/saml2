@@ -35,6 +35,7 @@ final class EncryptedAttributeTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /** @var \SimpleSAML\SAML2\Compat\AbstractContainer */
     private static AbstractContainer $containerBackup;
 

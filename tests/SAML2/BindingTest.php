@@ -8,9 +8,12 @@ use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Binding;
+use SimpleSAML\SAML2\Binding\HTTPArtifact;
+use SimpleSAML\SAML2\Binding\HTTPPost;
+use SimpleSAML\SAML2\Binding\HTTPRedirect;
+use SimpleSAML\SAML2\Binding\SOAP;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
-use SimpleSAML\SAML2\Binding\{HTTPArtifact, HTTPPost, HTTPRedirect, SOAP};
 
 /**
  * @package simplesamlphp\saml2

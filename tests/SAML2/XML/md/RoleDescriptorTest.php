@@ -93,6 +93,7 @@ final class RoleDescriptorTest extends TestCase
         );
     }
 
+
     /**
      */
     public static function tearDownAfterClass(): void

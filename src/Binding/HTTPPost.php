@@ -31,6 +31,7 @@ class HTTPPost extends Binding implements AsynchronousBindingInterface, RelaySta
 {
     use RelayStateTrait;
 
+
     /**
      * Send a SAML 2 message using the HTTP-POST binding.
      *

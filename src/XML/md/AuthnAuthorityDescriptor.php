@@ -26,6 +26,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType implemen
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * AuthnAuthorityDescriptor constructor.
      *

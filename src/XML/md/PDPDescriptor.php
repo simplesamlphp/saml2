@@ -26,6 +26,7 @@ final class PDPDescriptor extends AbstractRoleDescriptorType implements SchemaVa
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * PDPDescriptor constructor.
      *

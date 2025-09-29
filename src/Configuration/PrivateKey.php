@@ -74,6 +74,7 @@ class PrivateKey extends ArrayAdapter
         return $this->name;
     }
 
+
     /**
      * @return string
      *
@@ -85,6 +86,7 @@ class PrivateKey extends ArrayAdapter
 
         return $this->filePathOrContents;
     }
+
 
     /**
      * @return bool

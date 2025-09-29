@@ -39,6 +39,7 @@ final class OrganizationTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /** @var \DOMDocument */
     private static DOMDocument $ext;
 

@@ -23,6 +23,7 @@ class EncryptedAttribute extends AbstractSamlElement implements
     use EncryptedElementTrait;
     use SchemaValidatableElementTrait;
 
+
     /**
      * @inheritDoc
      *

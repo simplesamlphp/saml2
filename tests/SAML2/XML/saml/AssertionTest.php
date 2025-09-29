@@ -64,6 +64,7 @@ final class AssertionTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /** @var \Psr\Clock\ClockInterface */
     private static ClockInterface $clock;
 

@@ -30,6 +30,7 @@ final class AuthzDecisionStatement extends AbstractStatementType implements Sche
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize an AuthzDecisionStatement.
      *

@@ -30,6 +30,7 @@ class AttributeValue extends AbstractSamlElement implements SchemaValidatableEle
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Create an AttributeValue.
      *

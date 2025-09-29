@@ -26,6 +26,7 @@ final class RepublishRequest extends AbstractEmdElement implements
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * @param \SimpleSAML\SAML2\XML\emd\RepublishTarget $republishTarget
      */

@@ -35,6 +35,7 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
     use ExtensionPointTrait;
     use SchemaValidatableElementTrait;
 
+
     /** @var string */
     public const LOCALNAME = 'RoleDescriptor';
 

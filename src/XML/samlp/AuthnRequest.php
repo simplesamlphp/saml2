@@ -31,6 +31,7 @@ class AuthnRequest extends AbstractRequest implements SchemaValidatableElementIn
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Constructor for SAML 2 AuthnRequest
      *

@@ -30,6 +30,7 @@ final class EntityAttributes extends AbstractMdattrElement implements SchemaVali
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Create a EntityAttributes element.
      *

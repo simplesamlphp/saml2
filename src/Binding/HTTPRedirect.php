@@ -42,6 +42,7 @@ class HTTPRedirect extends Binding implements AsynchronousBindingInterface, Rela
 {
     use RelayStateTrait;
 
+
     /**
      * Create the redirect URL for a message.
      *

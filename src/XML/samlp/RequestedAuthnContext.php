@@ -26,6 +26,7 @@ final class RequestedAuthnContext extends AbstractSamlpElement implements Schema
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize a RequestedAuthnContext.
      *

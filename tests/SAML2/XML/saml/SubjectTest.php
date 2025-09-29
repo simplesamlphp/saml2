@@ -44,6 +44,7 @@ final class SubjectTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /** @var \DOMDocument */
     private static DOMDocument $subject;
 

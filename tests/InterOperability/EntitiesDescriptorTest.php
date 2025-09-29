@@ -24,6 +24,7 @@ final class EntitiesDescriptorTest extends TestCase
 {
     private int $failures;
 
+
     /**
      * @param \DOMElement $metadata;
      */

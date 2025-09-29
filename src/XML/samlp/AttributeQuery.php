@@ -43,11 +43,12 @@ class AttributeQuery extends AbstractSubjectQuery implements SchemaValidatableEl
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Constructor for SAML 2 AttributeQuery.
      *
      * @param \SimpleSAML\SAML2\XML\saml\Subject $subject
-     * @param DateTimeImmutable $issueInstant
+     * @param \DateTimeImmutable $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
      * @param string|null $id

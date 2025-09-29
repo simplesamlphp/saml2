@@ -19,6 +19,7 @@ final class SubjectLocality extends AbstractSamlElement implements SchemaValidat
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize an SubjectLocality.
      *

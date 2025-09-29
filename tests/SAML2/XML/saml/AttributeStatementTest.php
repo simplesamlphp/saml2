@@ -32,6 +32,7 @@ final class AttributeStatementTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void

@@ -23,6 +23,7 @@ final class RequestInitiator extends AbstractEndpointType implements SchemaValid
 {
     use SchemaValidatableElementTrait;
 
+
     /** @var string */
     public const NS = 'urn:oasis:names:tc:SAML:profiles:SSO:request-init';
 
@@ -31,6 +32,7 @@ final class RequestInitiator extends AbstractEndpointType implements SchemaValid
 
     /** @var string */
     public const SCHEMA = 'resources/schemas/sstc-request-initiation.xsd';
+
 
     /**
      * EndpointType constructor.

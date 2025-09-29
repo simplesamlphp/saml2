@@ -25,6 +25,7 @@ final class Status extends AbstractSamlpElement implements SchemaValidatableElem
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize a samlp:Status
      *

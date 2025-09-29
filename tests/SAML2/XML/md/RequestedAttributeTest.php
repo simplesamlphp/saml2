@@ -86,18 +86,6 @@ final class RequestedAttributeTest extends TestCase
 
 
     /**
-     * Test that creating a RequestedAttribute object from XML works when isRequired is missing.
-     */
-    public function testUnmarshallingWithoutIsRequired(): void
-    {
-        $xmlRepresentation = clone self::$xmlRepresentation;
-        $xmlRepresentation->documentElement->removeAttribute('isRequired');
-        $ra = RequestedAttribute::fromXML($xmlRepresentation->documentElement);
-        $this->assertNull($ra->getIsRequired());
-    }
-
-
-    /**
      * Test that creating a RequestedAttribute object from XML fails when isRequired is not boolean.
      */
     public function testUnmarshallingWithWrongIsRequired(): void

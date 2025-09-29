@@ -17,6 +17,7 @@ final class ArtifactResolutionService extends AbstractIndexedEndpointType implem
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * ArtifactResolutionService constructor.
      *

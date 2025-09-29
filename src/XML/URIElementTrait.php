@@ -19,6 +19,7 @@ trait URIElementTrait
 {
     use BaseURIElementTrait;
 
+
     /**
      * Validate the content of the element.
      *

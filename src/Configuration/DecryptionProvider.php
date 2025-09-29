@@ -27,7 +27,6 @@ interface DecryptionProvider
     public function getPrivateKey(string $name, ?bool $required = null);
 
 
-
     /**
      * @return array|null
      */

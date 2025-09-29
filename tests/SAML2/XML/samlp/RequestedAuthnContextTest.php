@@ -88,14 +88,13 @@ final class RequestedAuthnContextTest extends TestCase
             '". Got: DOMDocument',
         );
 
-        /** @psalm-suppress InvalidArgument */
-         new RequestedAuthnContext(
-             [
-                 DOMDocumentFactory::fromString('<root />'),
-                 $authnContextDeclRef,
-             ],
-             Comparison::EXACT,
-         );
+        new RequestedAuthnContext(
+            [
+                DOMDocumentFactory::fromString('<root />'),
+                $authnContextDeclRef,
+            ],
+            Comparison::EXACT,
+        );
     }
 
 

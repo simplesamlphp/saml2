@@ -21,6 +21,7 @@ final class StatusCode extends AbstractSamlpElement implements SchemaValidatable
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize a samlp:StatusCode
      *

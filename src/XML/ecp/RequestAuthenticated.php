@@ -25,6 +25,7 @@ final class RequestAuthenticated extends AbstractEcpElement implements SchemaVal
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Create a ECP RequestAuthenticated element.
      *

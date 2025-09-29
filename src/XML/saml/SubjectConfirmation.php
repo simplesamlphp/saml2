@@ -25,6 +25,7 @@ final class SubjectConfirmation extends AbstractSamlElement implements SchemaVal
     use IdentifierTrait;
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize (and parse) a SubjectConfirmation element.
      *

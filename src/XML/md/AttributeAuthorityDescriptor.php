@@ -29,6 +29,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType impl
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * AttributeAuthorityDescriptor constructor.
      *

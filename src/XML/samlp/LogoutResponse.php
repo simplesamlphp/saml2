@@ -28,6 +28,7 @@ final class LogoutResponse extends AbstractStatusResponse implements SchemaValid
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Constructor for SAML 2 LogoutResponse.
      *

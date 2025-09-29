@@ -24,6 +24,7 @@ final class AttributeConsumingService extends AbstractMdElement implements Schem
     use IndexedElementTrait;
     use SchemaValidatableElementTrait;
 
+
     /**
      * AttributeConsumingService constructor.
      *

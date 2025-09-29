@@ -32,6 +32,7 @@ abstract class AbstractCondition extends AbstractConditionType implements
     use ExtensionPointTrait;
     use SchemaValidatableElementTrait;
 
+
     /** @var string */
     public const LOCALNAME = 'Condition';
 

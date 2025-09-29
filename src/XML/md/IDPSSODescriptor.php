@@ -27,6 +27,7 @@ final class IDPSSODescriptor extends AbstractSSODescriptor implements SchemaVali
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * IDPSSODescriptor constructor.
      *

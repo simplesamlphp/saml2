@@ -35,6 +35,7 @@ final class SubjectConfirmationDataTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void

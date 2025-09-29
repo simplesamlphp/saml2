@@ -30,6 +30,7 @@ final class NameIDPolicy extends AbstractSamlpElement implements
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize a NameIDPolicy.
      *

@@ -25,6 +25,7 @@ final class SubjectConfirmation extends AbstractEcpElement implements SchemaVali
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Create a ECP SubjectConfirmation element.
      *

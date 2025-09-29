@@ -30,6 +30,7 @@ final class AssertionIDRequest extends AbstractRequest implements SchemaValidata
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize an AssertionIDRequest.
      *
@@ -67,7 +68,6 @@ final class AssertionIDRequest extends AbstractRequest implements SchemaValidata
             $extensions,
         );
     }
-
 
 
     /**

@@ -19,6 +19,7 @@ final class OneTimeUse extends AbstractConditionType implements SchemaValidatabl
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Convert XML into an OneTimeUse
      *

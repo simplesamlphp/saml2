@@ -28,6 +28,7 @@ final class AuthnStatement extends AbstractStatementType implements SchemaValida
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Initialize an AuthnStatement.
      *

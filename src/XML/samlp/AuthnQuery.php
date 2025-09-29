@@ -33,6 +33,7 @@ final class AuthnQuery extends AbstractSubjectQuery implements SchemaValidatable
 {
     use SchemaValidatableElementTrait;
 
+
     /**
      * Constructor for SAML 2 AuthnQuery.
      *

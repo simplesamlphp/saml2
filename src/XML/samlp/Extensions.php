@@ -23,6 +23,7 @@ final class Extensions extends AbstractSamlpElement implements SchemaValidatable
     use ExtensionsTrait;
     use SchemaValidatableElementTrait;
 
+
     /**
      * Create an Extensions object from its samlp:Extensions XML representation.
      *

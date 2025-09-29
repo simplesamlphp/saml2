@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
@@ -126,16 +127,17 @@ XML
         );
     }
 
+
     /**
      * Verifies that the assertion validator works
      */
+    #[DoesNotPerformAssertions]
     public function testBasicValidation(): void
     {
         $assertion = Assertion::fromXML(self::$document->documentElement);
-
-        $result = self::$assertionProcessor->validateAssertion($assertion);
-        $this->assertNull($result);
+        self::$assertionProcessor->validateAssertion($assertion);
     }
+
 
     /**
      * Verifies that SubjectConfirmation violations are caught

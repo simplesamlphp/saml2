@@ -22,6 +22,7 @@ final class DiscoveryResponse extends AbstractIndexedEndpointType implements Sch
 {
     use SchemaValidatableElementTrait;
 
+
     /** @var string */
     public const NS = C::NS_IDPDISC;
 
@@ -30,6 +31,7 @@ final class DiscoveryResponse extends AbstractIndexedEndpointType implements Sch
 
     /** @var string */
     public const SCHEMA = 'resources/schemas/sstc-saml-idp-discovery.xsd';
+
 
     /**
      * DiscoveryResponse constructor.

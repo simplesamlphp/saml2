@@ -35,6 +35,7 @@ final class AdviceTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /** @var \DOMDocument $assertionIDRef */
     private static DOMDocument $assertionIDRef;
 

@@ -28,6 +28,7 @@ class EncryptedID extends AbstractSamlElement implements
     use EncryptedElementTrait;
     use SchemaValidatableElementTrait;
 
+
     /**
      * @inheritDoc
      *

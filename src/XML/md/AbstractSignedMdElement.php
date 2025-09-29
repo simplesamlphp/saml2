@@ -26,6 +26,7 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements
         SignedElementTrait::getBlacklistedAlgorithms insteadof SignableElementTrait;
     }
 
+
     /**
      * The original signed XML
      *

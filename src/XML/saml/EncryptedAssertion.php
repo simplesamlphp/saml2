@@ -23,6 +23,7 @@ final class EncryptedAssertion extends AbstractSamlElement implements
     use EncryptedElementTrait;
     use SchemaValidatableElementTrait;
 
+
     /** @var bool */
     protected bool $wasSignedAtConstruction = false;
 
