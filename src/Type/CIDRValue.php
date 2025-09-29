@@ -12,6 +12,19 @@ use SimpleSAML\SAML2\Assert\Assert;
 class CIDRValue extends SAMLStringValue
 {
     /**
+     * Sanitize the content of the element.
+     *
+     * @param string $value  The unsanitized value
+     * @throws \Exception on failure
+     * @return string
+     */
+    protected function sanitizeValue(string $value): string
+    {
+        return static::collapseWhitespace(static::normalizeWhitespace($value));
+    }
+
+
+    /**
      * Validate the content of the element.
      *
      * @param string $value  The value to go in the XML textContent
