@@ -7,7 +7,6 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\AnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
@@ -65,18 +64,6 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
         protected array $contact = [],
         array $namespacedAttributes = [],
     ) {
-        /**
-         * A whitespace-delimited set of URIs that identify the set of protocol specifications supported by the
-         * role element. For SAML V2.0 entities, this set MUST include the SAML protocol namespace URI,
-         * urn:oasis:names:tc:SAML:2.0:protocol.
-         */
-        Assert::contains(
-            strval($protocolSupportEnumeration),
-            C::NS_SAMLP,
-            'SAML v2.0 entities MUST include the SAML protocol namespace URI in their'
-            . ' protocolSupportEnumeration attribute',
-            ProtocolViolationException::class,
-        );
         Assert::maxCount($contact, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $contact,
