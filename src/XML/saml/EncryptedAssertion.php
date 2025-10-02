@@ -24,10 +24,6 @@ final class EncryptedAssertion extends AbstractSamlElement implements
     use SchemaValidatableElementTrait;
 
 
-    /** @var bool */
-    protected bool $wasSignedAtConstruction = false;
-
-
     /**
      * @inheritDoc
      *
@@ -39,14 +35,5 @@ final class EncryptedAssertion extends AbstractSamlElement implements
         return Assertion::fromXML(
             DOMDocumentFactory::fromString($this->decryptData($decryptor))->documentElement,
         );
-    }
-
-
-    /**
-     * @return bool
-     */
-    public function wasSignedAtConstruction(): bool
-    {
-        return $this->wasSignedAtConstruction;
     }
 }
