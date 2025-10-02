@@ -90,7 +90,7 @@ class HTTPRedirect extends Binding implements AsynchronousBindingInterface, Rela
             $signatureValue = $signature->getSignatureValue();
 
             $msg .= '&SigAlg=' . urlencode($signatureMethod->getAlgorithm()->getValue());
-            $msg .= '&Signature=' . urlencode($signatureValue->getContent()->getValue());
+            $msg .= '&Signature=' . urlencode($signatureValue->getValue()->getValue());
         }
 
         if (str_contains($destination, '?')) {

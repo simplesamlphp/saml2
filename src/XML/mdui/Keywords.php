@@ -36,7 +36,6 @@ final class Keywords extends AbstractMduiElement implements
     public const TEXTCONTENT_TYPE = ListOfStringsValue::class;
 
 
-
     /**
      * Initialize a Keywords.
      *
@@ -130,6 +129,9 @@ final class Keywords extends AbstractMduiElement implements
      */
     public function toArray(): array
     {
-        return [$this->getLanguage()->getValue() => $this->getContent()->toArray()];
+        /** @var \SimpleSAML\SAML2\Type\ListOfStringsValue $content */
+        $content = $this->getContent();
+
+        return [$this->getLanguage()->getValue() => $content->toArray()];
     }
 }

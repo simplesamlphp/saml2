@@ -33,7 +33,7 @@ trait EncryptedElementTrait
      * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedData $encryptedData The EncryptedData object.
      * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey[] $decryptionKeys The EncryptedKey objects.
      */
-    public function __construct(
+    final public function __construct(
         protected EncryptedData $encryptedData,
         protected array $decryptionKeys = [],
     ) {
