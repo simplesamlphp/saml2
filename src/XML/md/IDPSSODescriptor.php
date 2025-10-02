@@ -4,19 +4,23 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
+use SimpleSAML\XMLSchema\Type\DurationValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
-use function preg_split;
+use function var_export;
 
 /**
  * Class representing SAML 2 IDPSSODescriptor.
@@ -32,17 +36,17 @@ final class IDPSSODescriptor extends AbstractSSODescriptor implements SchemaVali
      * IDPSSODescriptor constructor.
      *
      * @param \SimpleSAML\SAML2\XML\md\SingleSignOnService[] $singleSignOnService
-     * @param string[] $protocolSupportEnumeration
-     * @param bool|null $wantAuthnRequestsSigned
+     * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $wantAuthnRequestsSigned
      * @param \SimpleSAML\SAML2\XML\md\NameIDMappingService[] $nameIDMappingService
      * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
      * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfile
      * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attribute
-     * @param string|null $ID
-     * @param \DateTimeImmutable|null $validUntil
-     * @param string|null $cacheDuration
+     * @param \SimpleSAML\XMLSchema\Type\IDValue|null $ID
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil
+     * @param \SimpleSAML\XMLSchema\Type\DurationValue|null $cacheDuration
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
-     * @param string|null $errorURL
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $errorURL
      * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
      * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contact
@@ -53,17 +57,17 @@ final class IDPSSODescriptor extends AbstractSSODescriptor implements SchemaVali
      */
     public function __construct(
         protected array $singleSignOnService,
-        array $protocolSupportEnumeration,
-        protected ?bool $wantAuthnRequestsSigned = null,
+        AnyURIListValue $protocolSupportEnumeration,
+        protected ?BooleanValue $wantAuthnRequestsSigned = null,
         protected array $nameIDMappingService = [],
         protected array $assertionIDRequestService = [],
         protected array $attributeProfile = [],
         protected array $attribute = [],
-        ?string $ID = null,
-        ?DateTimeImmutable $validUntil = null,
-        ?string $cacheDuration = null,
+        ?IDValue $ID = null,
+        ?SAMLDateTimeValue $validUntil = null,
+        ?DurationValue $cacheDuration = null,
         ?Extensions $extensions = null,
-        ?string $errorURL = null,
+        ?SAMLAnyURIValue $errorURL = null,
         array $keyDescriptor = [],
         ?Organization $organization = null,
         array $contact = [],
@@ -121,9 +125,9 @@ final class IDPSSODescriptor extends AbstractSSODescriptor implements SchemaVali
     /**
      * Collect the value of the WantAuthnRequestsSigned-property
      *
-     * @return bool|null
+     * @return \SimpleSAML\XMLSchema\Type\BooleanValue|null
      */
-    public function wantAuthnRequestsSigned(): ?bool
+    public function wantAuthnRequestsSigned(): ?BooleanValue
     {
         return $this->wantAuthnRequestsSigned;
     }
@@ -190,21 +194,17 @@ final class IDPSSODescriptor extends AbstractSSODescriptor implements SchemaVali
      * @param \DOMElement $xml The XML element we should load.
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
      *   if one of the mandatory child-elements is missing
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'IDPSSODescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, IDPSSODescriptor::NS, InvalidDOMElementException::class);
-
-        $protocols = self::getAttribute($xml, 'protocolSupportEnumeration');
-        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
-        SAMLAssert::nullOrValidDateTime($validUntil);
 
         $orgs = Organization::getChildrenOfClass($xml);
         Assert::maxCount(
@@ -232,17 +232,17 @@ final class IDPSSODescriptor extends AbstractSSODescriptor implements SchemaVali
 
         $idpssod = new static(
             SingleSignOnService::getChildrenOfClass($xml),
-            preg_split('/[\s]+/', trim($protocols)),
-            self::getOptionalBooleanAttribute($xml, 'WantAuthnRequestsSigned', null),
+            self::getAttribute($xml, 'protocolSupportEnumeration', AnyURIListValue::class),
+            self::getOptionalAttribute($xml, 'WantAuthnRequestsSigned', BooleanValue::class, null),
             NameIDMappingService::getChildrenOfClass($xml),
             AssertionIDRequestService::getChildrenOfClass($xml),
             AttributeProfile::getChildrenOfClass($xml),
             Attribute::getChildrenOfClass($xml),
-            self::getOptionalAttribute($xml, 'ID', null),
-            $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
-            self::getOptionalAttribute($xml, 'cacheDuration', null),
+            self::getOptionalAttribute($xml, 'ID', IDValue::class, null),
+            self::getOptionalAttribute($xml, 'validUntil', SAMLDateTimeValue::class, null),
+            self::getOptionalAttribute($xml, 'cacheDuration', DurationValue::class, null),
             !empty($extensions) ? $extensions[0] : null,
-            self::getOptionalAttribute($xml, 'errorURL', null),
+            self::getOptionalAttribute($xml, 'errorURL', SAMLAnyURIValue::class, null),
             KeyDescriptor::getChildrenOfClass($xml),
             !empty($orgs) ? $orgs[0] : null,
             ContactPerson::getChildrenOfClass($xml),
@@ -270,8 +270,11 @@ final class IDPSSODescriptor extends AbstractSSODescriptor implements SchemaVali
     {
         $e = parent::toUnsignedXML($parent);
 
-        if (is_bool($this->wantAuthnRequestsSigned)) {
-            $e->setAttribute('WantAuthnRequestsSigned', $this->wantAuthnRequestsSigned ? 'true' : 'false');
+        if ($this->wantAuthnRequestsSigned() !== null) {
+            $e->setAttribute(
+                'WantAuthnRequestsSigned',
+                var_export($this->wantAuthnRequestsSigned()->toBoolean(), true),
+            );
         }
 
         foreach ($this->getSingleSignOnService() as $ep) {

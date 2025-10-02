@@ -13,6 +13,9 @@ use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Audience;
@@ -23,6 +26,7 @@ use SimpleSAML\SAML2\XML\saml\AuthnStatement;
 use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\Test\SAML2\Constants as C;
+use SimpleSAML\XML\Type\IDValue;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
@@ -56,24 +60,33 @@ final class SpIsValidAudienceTest extends MockeryTestCase
         self::$clock = Utils::getContainer()->getClock();
 
         // Create an Issuer
-        self::$issuer = new Issuer(C::ENTITY_IDP);
+        self::$issuer = new Issuer(
+            SAMLStringValue::fromString(C::ENTITY_IDP),
+        );
 
         // Create the conditions
         self::$conditions = new Conditions(
             null,
             null,
             [],
-            [new AudienceRestriction([new Audience(C::ENTITY_SP), new Audience(C::ENTITY_URN)])],
+            [
+                new AudienceRestriction([
+                    new Audience(SAMLAnyURIValue::fromString(C::ENTITY_SP)),
+                    new Audience(SAMLAnyURIValue::fromString(C::ENTITY_URN)),
+                ]),
+            ],
         );
 
         // Create the statements
         self::$authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef(C::AUTHNCONTEXT_CLASS_REF_LOA1),
+                new AuthnContextClassRef(
+                    SAMLAnyURIValue::fromString(C::AUTHNCONTEXT_CLASS_REF_LOA1),
+                ),
                 null,
                 null,
             ),
-            self::$clock->now(),
+            SAMLDateTimeValue::fromDateTime(self::$clock->now()),
         );
     }
 
@@ -93,8 +106,9 @@ final class SpIsValidAudienceTest extends MockeryTestCase
     {
         // Create an assertion
         $assertion = new Assertion(
+            id: IDValue::fromString('abc123'),
             issuer: self::$issuer,
-            issueInstant: self::$clock->now(),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             statements: [self::$authnStatement],
         );
 
@@ -117,8 +131,9 @@ final class SpIsValidAudienceTest extends MockeryTestCase
     {
         // Create an assertion
         $assertion = new Assertion(
+            id: IDValue::fromString('abc123'),
             issuer: self::$issuer,
-            issueInstant: self::$clock->now(),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             conditions: self::$conditions,
             statements: [self::$authnStatement],
         );
@@ -143,8 +158,9 @@ final class SpIsValidAudienceTest extends MockeryTestCase
     {
         // Create an assertion
         $assertion = new Assertion(
+            id: IDValue::fromString('abc123'),
             issuer: self::$issuer,
-            issueInstant: self::$clock->now(),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             conditions: self::$conditions,
             statements: [self::$authnStatement],
         );

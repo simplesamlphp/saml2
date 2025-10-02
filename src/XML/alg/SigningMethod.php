@@ -5,15 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\alg;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\XsNamespace as NS;
-
-use function strval;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Type\PositiveIntegerValue;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 /**
  * Class for handling the alg:SigningMethod element.
@@ -34,21 +33,17 @@ final class SigningMethod extends AbstractAlgElement implements SchemaValidatabl
     /**
      * Create/parse an alg:SigningMethod element.
      *
-     * @param string $algorithm
-     * @param int|null $minKeySize
-     * @param int|null $maxKeySize
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $algorithm
+     * @param \SimpleSAML\XMLSchema\Type\PositiveIntegerValue|null $minKeySize
+     * @param \SimpleSAML\XMLSchema\Type\PositiveIntegerValue|null $maxKeySize
      * @param \SimpleSAML\XML\Chunk[] $elements
      */
     public function __construct(
-        protected string $algorithm,
-        protected ?int $minKeySize = null,
-        protected ?int $maxKeySize = null,
+        protected SAMLAnyURIValue $algorithm,
+        protected ?PositiveIntegerValue $minKeySize = null,
+        protected ?PositiveIntegerValue $maxKeySize = null,
         array $elements = [],
     ) {
-        SAMLAssert::validURI($algorithm);
-        Assert::nullOrPositiveInteger($minKeySize);
-        Assert::nullOrPositiveInteger($maxKeySize);
-
         $this->setElements($elements);
     }
 
@@ -56,9 +51,9 @@ final class SigningMethod extends AbstractAlgElement implements SchemaValidatabl
     /**
      * Collect the value of the Algorithm-property
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue
      */
-    public function getAlgorithm(): string
+    public function getAlgorithm(): SAMLAnyURIValue
     {
         return $this->algorithm;
     }
@@ -67,9 +62,9 @@ final class SigningMethod extends AbstractAlgElement implements SchemaValidatabl
     /**
      * Collect the value of the MinKeySize-property
      *
-     * @return int|null
+     * @return \SimpleSAML\XMLSchema\Type\PositiveIntegerValue|null
      */
-    public function getMinKeySize(): ?int
+    public function getMinKeySize(): ?PositiveIntegerValue
     {
         return $this->minKeySize;
     }
@@ -78,9 +73,9 @@ final class SigningMethod extends AbstractAlgElement implements SchemaValidatabl
     /**
      * Collect the value of the MaxKeySize-property
      *
-     * @return int|null
+     * @return \SimpleSAML\XMLSchema\Type\PositiveIntegerValue|null
      */
-    public function getMaxKeySize(): ?int
+    public function getMaxKeySize(): ?PositiveIntegerValue
     {
         return $this->maxKeySize;
     }
@@ -92,9 +87,9 @@ final class SigningMethod extends AbstractAlgElement implements SchemaValidatabl
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied argument is missing the Algorithm attribute
      */
     public static function fromXML(DOMElement $xml): static
@@ -103,9 +98,9 @@ final class SigningMethod extends AbstractAlgElement implements SchemaValidatabl
         Assert::same($xml->namespaceURI, SigningMethod::NS, InvalidDOMElementException::class);
 
         return new static(
-            self::getAttribute($xml, 'Algorithm'),
-            self::getOptionalIntegerAttribute($xml, 'MinKeySize', null),
-            self::getOptionalIntegerAttribute($xml, 'MaxKeySize', null),
+            self::getAttribute($xml, 'Algorithm', SAMLAnyURIValue::class),
+            self::getOptionalAttribute($xml, 'MinKeySize', PositiveIntegerValue::class, null),
+            self::getOptionalAttribute($xml, 'MaxKeySize', PositiveIntegerValue::class, null),
             self::getChildElementsFromXML($xml),
         );
     }
@@ -121,14 +116,14 @@ final class SigningMethod extends AbstractAlgElement implements SchemaValidatabl
     {
         $e = $this->instantiateParentElement($parent);
 
-        $e->setAttribute('Algorithm', $this->getAlgorithm());
+        $e->setAttribute('Algorithm', $this->getAlgorithm()->getValue());
 
         if ($this->getMinKeySize() !== null) {
-            $e->setAttribute('MinKeySize', strval($this->getMinKeySize()));
+            $e->setAttribute('MinKeySize', $this->getMinKeySize()->getValue());
         }
 
         if ($this->getMaxKeySize() !== null) {
-            $e->setAttribute('MaxKeySize', strval($this->getMaxKeySize()));
+            $e->setAttribute('MaxKeySize', $this->getMaxKeySize()->getValue());
         }
 
         /** @var \SimpleSAML\XML\SerializableElementInterface $element */

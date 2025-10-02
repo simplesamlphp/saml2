@@ -1,6 +1,12 @@
 parameters:
 	ignoreErrors:
 		-
+			message: '#^Dead catch \- SimpleSAML\\Assert\\AssertionFailedException is never thrown in the try block\.$#'
+			identifier: catch.neverThrown
+			count: 1
+			path: tests/InterOperability/EntityDescriptorTest.php
+
+		-
 			message: '#^PHPDoc tag @var for property SimpleSAML\\Test\\SAML2\\Assertion\\Transformer\\NameIdDecryptionTransformerTest\:\:\$validator with type SimpleSAML\\SAML2\\Response\\Validation\\Validator is incompatible with native type SimpleSAML\\SAML2\\Signature\\Validator\.$#'
 			identifier: property.phpDocType
 			count: 1
@@ -85,7 +91,13 @@ parameters:
 			path: tests/SAML2/Response/XmlSignatureWrappingTest.php
 
 		-
-			message: '#^Parameter \#1 \$requestedAuthnContexts of class SimpleSAML\\SAML2\\XML\\samlp\\RequestedAuthnContext constructor expects array\<SimpleSAML\\SAML2\\XML\\saml\\AuthnContextClassRef\|SimpleSAML\\SAML2\\XML\\saml\\AuthnContextDeclRef\>, array\<int, DOMDocument\|SimpleSAML\\SAML2\\XML\\saml\\AuthnContextDeclRef\> given\.$#'
+			message: '#^Class SimpleSAML\\Test\\SAML2\\XML\\md\\AssertionFailedException not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: tests/SAML2/XML/md/RequestedAttributeTest.php
+
+		-
+			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
 			identifier: argument.type
 			count: 1
-			path: tests/SAML2/XML/samlp/RequestedAuthnContextTest.php
+			path: tests/SAML2/XML/md/RequestedAttributeTest.php

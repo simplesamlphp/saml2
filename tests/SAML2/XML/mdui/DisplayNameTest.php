@@ -7,12 +7,14 @@ namespace SimpleSAML\Test\SAML2\XML\mdui;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\mdui\DisplayName;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function dirname;
 use function strval;
@@ -54,7 +56,10 @@ final class DisplayNameTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = new DisplayName('en', 'University of Examples');
+        $name = new DisplayName(
+            LanguageValue::fromString('en'),
+            SAMLStringValue::fromString('University of Examples'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

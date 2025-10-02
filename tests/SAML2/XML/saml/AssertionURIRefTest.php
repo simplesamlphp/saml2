@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\Test\SAML2\XML\saml;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\AssertionURIRef;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -46,7 +47,9 @@ final class AssertionURIRefTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $assertionURIRef = new AssertionURIRef('urn:x-simplesamlphp:reference');
+        $assertionURIRef = new AssertionURIRef(
+            SAMLAnyURIValue::fromString('urn:x-simplesamlphp:reference'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

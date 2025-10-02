@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Certificate;
 
 use ArrayAccess;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Certificate\Exception\InvalidKeyUsageException;
 use SimpleSAML\SAML2\Exception\InvalidArgumentException;
 
