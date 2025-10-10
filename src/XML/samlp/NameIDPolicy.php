@@ -124,11 +124,11 @@ final class NameIDPolicy extends AbstractSamlpElement implements
     {
         $e = $this->instantiateParentElement($parent);
 
-        if ($this->getFormat()) {
+        if ($this->getFormat() !== null) {
             $e->setAttribute('Format', $this->getFormat()->getValue());
         }
 
-        if ($this->getSPNameQualifier()) {
+        if ($this->getSPNameQualifier() !== null) {
             $e->setAttribute('SPNameQualifier', $this->getSPNameQualifier()->getValue());
         }
 
@@ -206,9 +206,9 @@ final class NameIDPolicy extends AbstractSamlpElement implements
     public function toArray(): array
     {
         $data = [
-            'Format' => $this->getFormat()->getValue(),
-            'SPNameQualifier' => $this->getSPNameQualifier()->getValue(),
-            'AllowCreate' => $this->getAllowCreate()->toBoolean(),
+            'Format' => $this->getFormat()?->getValue(),
+            'SPNameQualifier' => $this->getSPNameQualifier()?->getValue(),
+            'AllowCreate' => $this->getAllowCreate()?->toBoolean(),
         ];
 
         return array_filter($data);
