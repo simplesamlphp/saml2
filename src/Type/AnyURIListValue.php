@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\Type;
 
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 use SimpleSAML\XMLSchema\Type\Interface\ListTypeInterface;
@@ -33,8 +34,10 @@ class AnyURIListValue extends SAMLAnyURIValue implements ListTypeInterface
      */
     protected function validateValue(string $value): void
     {
-        $uris = preg_split('/[\s]+/', $this->sanitizeValue($value), C::UNBOUNDED_LIMIT);
+        $sanitized = $this->sanitizeValue($value);
+        Assert::stringNotEmpty($sanitized, ProtocolViolationException::class);
 
+        $uris = preg_split('/[\s]+/', $sanitized, C::UNBOUNDED_LIMIT);
         Assert::allValidAnyURI($uris, SchemaViolationException::class);
     }
 

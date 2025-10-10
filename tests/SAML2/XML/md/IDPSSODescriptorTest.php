@@ -217,10 +217,6 @@ final class IDPSSODescriptorTest extends TestCase
     public function testMarshallingWithoutProtocolSupportThrowsException(): void
     {
         $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage(
-            'SAML v2.0 entities MUST include the SAML protocol namespace URI '
-            . 'in their protocolSupportEnumeration attribute',
-        );
 
         new IDPSSODescriptor(
             [

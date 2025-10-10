@@ -31,13 +31,14 @@ trait EncryptedElementTrait
      * Constructor for encrypted elements.
      *
      * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedData $encryptedData The EncryptedData object.
-     * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey[] $decryptionKeys The EncryptedKey objects.
+     * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey[] $encryptedKey The EncryptedKey objects.
      */
     final public function __construct(
         protected EncryptedData $encryptedData,
-        protected array $decryptionKeys = [],
+        array $encryptedKey = [],
     ) {
-        Assert::allIsInstanceOf($decryptionKeys, EncryptedKey::class, ProtocolViolationException::class);
+        Assert::allIsInstanceOf($encryptedKey, EncryptedKey::class, ProtocolViolationException::class);
+        $this->encryptedKey = $encryptedKey;
 
         /**
          * 6.2: The <EncryptedData> element's Type attribute SHOULD be used and, if it is
@@ -74,9 +75,9 @@ trait EncryptedElementTrait
     }
 
 
-    public function getDecryptionKeys(): array
+    public function getEncryptedKeys(): array
     {
-        return $this->decryptionKeys;
+        return $this->encryptedKey;
     }
 
 
@@ -118,7 +119,7 @@ trait EncryptedElementTrait
     {
         $e = $this->instantiateParentElement($parent);
         $this->encryptedData->toXML($e);
-        foreach ($this->getDecryptionKeys() as $key) {
+        foreach ($this->getEncryptedKeys() as $key) {
             $key->toXML($e);
         }
         return $e;

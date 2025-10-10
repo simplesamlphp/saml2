@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\AnyURIListValue;
 use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
@@ -30,7 +31,7 @@ final class AnyURIListValueTest extends TestCase
         try {
             AnyURIListValue::fromString($anyURIList);
             $this->assertTrue($shouldPass);
-        } catch (SchemaViolationException $e) {
+        } catch (ProtocolViolationException|SchemaViolationException $e) {
             $this->assertFalse($shouldPass);
         }
     }
@@ -55,7 +56,7 @@ final class AnyURIListValueTest extends TestCase
             'single' => [true, "urn:x-simplesamlphp:namespace"],
             'multiple' => [true, 'urn:x-simplesamlphp:namespace urn:x-ssp:ns'],
             'normalization' => [true, "urn:x-simplesamlphp:namespace \n   urn:x-ssp:ns"],
-            'empty' => [true, ''],
+            'empty' => [false, ''],
         ];
     }
 }
