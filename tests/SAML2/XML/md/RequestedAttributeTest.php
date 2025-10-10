@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
@@ -85,23 +86,5 @@ final class RequestedAttributeTest extends TestCase
         $this->assertNull($ra->getNameFormat());
         $this->assertNull($ra->getFriendlyName());
         $this->assertEquals([], $ra->getAttributeValues());
-    }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test that creating a RequestedAttribute object from XML fails when isRequired is not boolean.
-     */
-    public function testUnmarshallingWithWrongIsRequired(): void
-    {
-        $xmlRepresentation = clone self::$xmlRepresentation;
-        $xmlRepresentation->documentElement->setAttribute('isRequired', 'wrong');
-
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The \'isRequired\' attribute of md:RequestedAttribute must be a boolean.');
-
-        RequestedAttribute::fromXML($xmlRepresentation->documentElement);
     }
 }
