@@ -228,7 +228,7 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
     {
         $data = parent::toArray();
         $data['index'] = $this->getIndex()->toInteger();
-        $data['isDefault'] = $this->getIsDefault()->toBoolean();
+        $data['isDefault'] = $this->getIsDefault()?->toBoolean();
 
         return array_filter($data);
     }
