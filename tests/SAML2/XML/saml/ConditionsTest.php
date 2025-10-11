@@ -4,11 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
@@ -18,6 +19,7 @@ use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\NonNegativeIntegerValue;
 
 use function dirname;
 use function strval;
@@ -56,22 +58,26 @@ final class ConditionsTest extends TestCase
     public function testMarshalling(): void
     {
         $conditions = new Conditions(
-            new DateTimeImmutable('2014-07-17T01:01:18Z'),
-            new DateTimeImmutable('2024-01-18T06:21:48Z'),
+            SAMLDateTimeValue::fromString('2014-07-17T01:01:18Z'),
+            SAMLDateTimeValue::fromString('2024-01-18T06:21:48Z'),
             [],
             [
                 new AudienceRestriction(
                     [
-                        new Audience('http://sp.example.com/demo1/metadata.php'),
+                        new Audience(
+                            SAMLAnyURIValue::fromString('http://sp.example.com/demo1/metadata.php'),
+                        ),
                     ],
                 ),
             ],
             new OneTimeUse(),
             new ProxyRestriction(
                 [
-                    new Audience('http://sp.example.com/demo2/metadata.php'),
+                    new Audience(
+                        SAMLAnyURIValue::fromString('http://sp.example.com/demo2/metadata.php'),
+                    ),
                 ],
-                2,
+                NonNegativeIntegerValue::fromInteger(2),
             ),
         );
 

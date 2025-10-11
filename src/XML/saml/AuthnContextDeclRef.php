@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use SimpleSAML\SAML2\XML\URIElementTrait;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\TypedTextContentTrait;
 
 /**
  * Class representing SAML2 AuthnContextDeclRef
@@ -16,14 +17,9 @@ use SimpleSAML\XML\SchemaValidatableElementTrait;
 final class AuthnContextDeclRef extends AbstractSamlElement implements SchemaValidatableElementInterface
 {
     use SchemaValidatableElementTrait;
-    use URIElementTrait;
+    use TypedTextContentTrait;
 
 
-    /**
-     * @param string $content
-     */
-    public function __construct(string $content)
-    {
-        $this->setContent($content);
-    }
+    /** @var string */
+    public const TEXTCONTENT_TYPE = SAMLAnyURIValue::class;
 }

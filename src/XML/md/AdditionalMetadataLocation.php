@@ -5,14 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\SAML2\XML\URIElementTrait;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-
-use function trim;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 
 /**
  * Class representing SAML 2 metadata AdditionalMetadataLocation element.
@@ -22,32 +19,40 @@ use function trim;
 final class AdditionalMetadataLocation extends AbstractMdElement implements SchemaValidatableElementInterface
 {
     use SchemaValidatableElementTrait;
-    use URIElementTrait;
 
 
     /**
      * Create a new instance of AdditionalMetadataLocation
      *
-     * @param string $namespace
-     * @param string $location
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $namespace
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $location
      */
     public function __construct(
-        protected string $namespace,
-        string $location,
+        protected SAMLAnyURIValue $namespace,
+        protected SAMLAnyURIValue $location,
     ) {
-        SAMLAssert::validURI($namespace);
-        $this->setContent($location);
     }
 
 
     /**
      * Collect the value of the namespace-property
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue
      */
-    public function getNamespace(): string
+    public function getNamespace(): SAMLAnyURIValue
     {
         return $this->namespace;
+    }
+
+
+    /**
+     * Collect the value of the location-property
+     *
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue
+     */
+    public function getLocation(): SAMLAnyURIValue
+    {
+        return $this->location;
     }
 
 
@@ -57,9 +62,9 @@ final class AdditionalMetadataLocation extends AbstractMdElement implements Sche
      * @param \DOMElement $xml The XML element we should load.
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing any of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static
@@ -67,9 +72,10 @@ final class AdditionalMetadataLocation extends AbstractMdElement implements Sche
         Assert::same($xml->localName, 'AdditionalMetadataLocation', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AdditionalMetadataLocation::NS, InvalidDOMElementException::class);
 
-        $namespace = self::getAttribute($xml, 'namespace');
-
-        return new static($namespace, trim($xml->textContent));
+        return new static(
+            self::getAttribute($xml, 'namespace', SAMLAnyURIValue::class),
+            SAMLAnyURIValue::fromString($xml->textContent),
+        );
     }
 
 
@@ -82,8 +88,8 @@ final class AdditionalMetadataLocation extends AbstractMdElement implements Sche
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->textContent = $this->getContent();
-        $e->setAttribute('namespace', $this->getNamespace());
+        $e->textContent = $this->getLocation()->getValue();
+        $e->setAttribute('namespace', $this->getNamespace()->getValue());
 
         return $e;
     }

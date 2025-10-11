@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
@@ -14,6 +15,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function dirname;
 use function strval;
@@ -56,7 +58,10 @@ final class OrganizationDisplayNameTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = new OrganizationDisplayName('en', 'Identity Providers R US, a Division of Lerxst Corp.');
+        $name = new OrganizationDisplayName(
+            LanguageValue::fromString('en'),
+            SAMLStringValue::fromString('Identity Providers R US, a Division of Lerxst Corp.'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

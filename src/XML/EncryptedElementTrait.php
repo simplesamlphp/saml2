@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\AbstractElement;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\XML\EncryptedElementTrait as ParentEncryptedElementTrait;
@@ -31,19 +31,20 @@ trait EncryptedElementTrait
      * Constructor for encrypted elements.
      *
      * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedData $encryptedData The EncryptedData object.
-     * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey[] $decryptionKeys The EncryptedKey objects.
+     * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey[] $encryptedKey The EncryptedKey objects.
      */
-    public function __construct(
+    final public function __construct(
         protected EncryptedData $encryptedData,
-        protected array $decryptionKeys = [],
+        array $encryptedKey = [],
     ) {
-        Assert::allIsInstanceOf($decryptionKeys, EncryptedKey::class, ProtocolViolationException::class);
+        Assert::allIsInstanceOf($encryptedKey, EncryptedKey::class, ProtocolViolationException::class);
+        $this->encryptedKey = $encryptedKey;
 
         /**
          * 6.2: The <EncryptedData> element's Type attribute SHOULD be used and, if it is
          * present, MUST have the value http://www.w3.org/2001/04/xmlenc#Element.
          */
-        Assert::nullOrSame($encryptedData->getType(), C::XMLENC_ELEMENT);
+        Assert::nullOrSame($encryptedData->getType()->getValue(), C::XMLENC_ELEMENT);
 
         $keyInfo = $this->encryptedData->getKeyInfo();
         if ($keyInfo === null) {
@@ -52,7 +53,7 @@ trait EncryptedElementTrait
 
         foreach ($keyInfo->getInfo() as $info) {
             if ($info instanceof EncryptedKey) {
-                $this->encryptedKey = $info;
+                $this->encryptedKey = [$info];
                 break;
             }
         }
@@ -74,16 +75,16 @@ trait EncryptedElementTrait
     }
 
 
-    public function getDecryptionKeys(): array
+    public function getEncryptedKeys(): array
     {
-        return $this->decryptionKeys;
+        return $this->encryptedKey;
     }
 
 
     /**
      * @inheritDoc
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   If the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
@@ -118,7 +119,7 @@ trait EncryptedElementTrait
     {
         $e = $this->instantiateParentElement($parent);
         $this->encryptedData->toXML($e);
-        foreach ($this->getDecryptionKeys() as $key) {
+        foreach ($this->getEncryptedKeys() as $key) {
             $key->toXML($e);
         }
         return $e;

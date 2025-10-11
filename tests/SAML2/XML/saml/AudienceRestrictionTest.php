@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
@@ -52,8 +53,12 @@ final class AudienceRestrictionTest extends TestCase
     {
         $condition = new AudienceRestriction(
             [
-                new Audience('urn:test:audience1'),
-                new Audience('urn:test:audience2'),
+                new Audience(
+                    SAMLAnyURIValue::fromString('urn:test:audience1'),
+                ),
+                new Audience(
+                    SAMLAnyURIValue::fromString('urn:test:audience2'),
+                ),
             ],
         );
 

@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\TelephoneNumber;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -15,7 +16,7 @@ use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 /**
- * Tests for SurName.
+ * Tests for TelephoneNumber.
  *
  * @package simplesamlphp/saml2
  */
@@ -47,11 +48,13 @@ final class TelephoneNumberTest extends TestCase
 
 
     /**
-     * Test creating a TelehponeNumber object from scratch.
+     * Test creating a TelephoneNumber object from scratch.
      */
     public function testMarshalling(): void
     {
-        $name = new TelephoneNumber('+1234567890');
+        $name = new TelephoneNumber(
+            SAMLStringValue::fromString('+1234567890'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

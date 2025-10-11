@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\XML\samlp\Artifact;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\Base64BinaryValue;
 
 use function dirname;
 use function strval;
@@ -46,7 +47,9 @@ final class ArtifactTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $artifact = new Artifact('AAQAAM0ARI+cUaUKAx19/KC3fOV/vznNj8oE0JKKPQC8nTesXxPke7uRy+8=');
+        $artifact = new Artifact(
+            Base64BinaryValue::fromString('AAQAAM0ARI+cUaUKAx19/KC3fOV/vznNj8oE0JKKPQC8nTesXxPke7uRy+8='),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

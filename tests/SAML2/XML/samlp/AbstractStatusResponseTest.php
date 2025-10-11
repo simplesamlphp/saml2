@@ -9,6 +9,10 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\DomainValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -21,9 +25,9 @@ use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\SAML2\XML\samlp\StatusMessage;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingElementException;
+use SimpleSAML\XMLSchema\Exception\MissingElementException;
+use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
@@ -56,17 +60,23 @@ final class AbstractStatusResponseTest extends TestCase
     {
         $status = new Status(
             new StatusCode(
-                C::STATUS_SUCCESS,
+                SAMLAnyURIValue::fromString(C::STATUS_SUCCESS),
                 [
                     new StatusCode(
-                        'urn:test:OurSubStatusCode',
+                        SAMLAnyURIValue::fromString('urn:test:OurSubStatusCode'),
                     ),
                 ],
             ),
-            new StatusMessage('OurMessageText'),
+            new StatusMessage(
+                SAMLStringValue::fromString('OurMessageText'),
+            ),
         );
 
-        $response = new Response($status, self::$clock->now());
+        $response = new Response(
+            id: IDValue::fromString('SomeIDValue'),
+            status: $status,
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+        );
 
         $responseElement = $response->toXML();
 
@@ -96,21 +106,27 @@ final class AbstractStatusResponseTest extends TestCase
     {
         $status = new Status(
             new StatusCode(
-                C::STATUS_SUCCESS,
+                SAMLAnyURIValue::fromString(C::STATUS_SUCCESS),
                 [
-                    new StatusCode('urn:test:OurSubStatusCode'),
+                    new StatusCode(
+                        SAMLAnyURIValue::fromString('urn:test:OurSubStatusCode'),
+                    ),
                 ],
             ),
-            new StatusMessage('OurMessageText'),
+            new StatusMessage(
+                SAMLStringValue::fromString('OurMessageText'),
+            ),
         );
 
-        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
+        $issuer = new Issuer(
+            SAMLStringValue::fromString('urn:x-simplesamlphp:issuer'),
+        );
 
-        $scope = new Scope("scope");
+        $scope = new Scope(
+            DomainValue::fromString('scope.org'),
+        );
 
-        $extensions = new Extensions([
-            new Chunk($scope->toXML()),
-        ]);
+        $extensions = new Extensions([$scope]);
 
         $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
             C::SIG_RSA_SHA256,
@@ -118,7 +134,8 @@ final class AbstractStatusResponseTest extends TestCase
         );
 
         $response = new Response(
-            issueInstant: self::$clock->now(),
+            id: IDValue::fromString('SomeIDValue'),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             status: $status,
             issuer: $issuer,
             extensions: $extensions,

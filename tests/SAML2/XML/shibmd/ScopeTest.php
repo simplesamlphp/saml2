@@ -7,12 +7,14 @@ namespace SimpleSAML\Test\SAML2\XML\shibmd;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\shibmd\AbstractShibmdElement;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
 
 use function dirname;
 use function strval;
@@ -48,7 +50,10 @@ final class ScopeTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $scope = new Scope("example.org", false);
+        $scope = new Scope(
+            SAMLStringValue::fromString('example.org'),
+            BooleanValue::fromBoolean(false),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -58,34 +63,14 @@ final class ScopeTest extends TestCase
 
 
     /**
-     * Marshalling a scope which does not specificy the value for
-     * regexp explicitly (expect it to default to 'false').
-     */
-    public function testMarshallingImplicitRegexpValue(): void
-    {
-        $scope = new Scope("example.org");
-
-        $document = DOMDocumentFactory::fromString('<root />');
-        $scopeElement = $scope->toXML($document->documentElement);
-
-        $xpCache = XPath::getXPath($scopeElement);
-        /** @var \DOMElement[] $scopeElements */
-        $scopeElements = XPath::xpQuery($scopeElement, '/root/shibmd:Scope', $xpCache);
-        $this->assertCount(1, $scopeElements);
-        $scopeElement = $scopeElements[0];
-
-        $this->assertEquals('example.org', $scopeElement->nodeValue);
-        $this->assertEquals('urn:mace:shibboleth:metadata:1.0', $scopeElement->namespaceURI);
-        $this->assertEquals('false', $scopeElement->getAttribute('regexp'));
-    }
-
-
-    /**
      * Marshalling a scope which is in regexp form.
      */
     public function testMarshallingRegexp(): void
     {
-        $scope = new Scope("^(.*\.)?example\.edu$", true);
+        $scope = new Scope(
+            SAMLStringValue::fromString('^(.*\.)?example\.edu$'),
+            BooleanValue::fromBoolean(true),
+        );
 
         $document = DOMDocumentFactory::fromString('<root />');
         $scopeElement = $scope->toXML($document->documentElement);
@@ -111,7 +96,7 @@ final class ScopeTest extends TestCase
         $scope = Scope::fromXML(self::$xmlRepresentation->documentElement);
 
         $this->assertEquals('example.org', $scope->getContent());
-        $this->assertFalse($scope->isRegexpScope());
+        $this->assertFalse($scope->isRegexpScope()->toBoolean());
     }
 
 
@@ -126,6 +111,6 @@ final class ScopeTest extends TestCase
 
         $scope = Scope::fromXML($document->documentElement);
         $this->assertEquals('^(.*|)example.edu$', $scope->getContent());
-        $this->assertTrue($scope->isRegexpScope());
+        $this->assertTrue($scope->isRegexpScope()->toBoolean());
     }
 }

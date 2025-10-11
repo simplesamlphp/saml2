@@ -12,9 +12,11 @@ use PHPUnit\Framework\Attributes\Group;
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\SAML2\XML\samlp\Response;
+use SimpleSAML\XMLSchema\Type\NCNameValue;
 
 /**
  * @package simplesamlphp/saml2
@@ -40,8 +42,14 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
     public function testWhenTheResponseResponsetoIsNullTheSubjectConfirmationIsValid(): void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturnNull();
-        $subjectConfirmationData = new SubjectConfirmationData(null, null, null, 'someValue');
-        $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
+        $subjectConfirmationData = new SubjectConfirmationData(
+            inResponseTo: NCNameValue::fromString('someIDValue'),
+        );
+        $subjectConfirmation = new SubjectConfirmation(
+            SAMLAnyURIValue::fromString(C::CM_HOK),
+            null,
+            $subjectConfirmationData,
+        );
 
         $validator = new SubjectConfirmationResponseToMatches($this->response);
         $result = new Result();
@@ -57,9 +65,13 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
     #[Group('assertion-validation')]
     public function testWhenTheSubjectconfirmationResponsetoIsNullTheSubjectconfirmationIsValid(): void
     {
-        $this->response->shouldReceive('getInResponseTo')->andReturn('someValue');
+        $this->response->shouldReceive('getInResponseTo')->andReturn(NCNameValue::fromString('someIDValue'));
         $subjectConfirmationData = new SubjectConfirmationData();
-        $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
+        $subjectConfirmation = new SubjectConfirmation(
+            SAMLAnyURIValue::fromString(C::CM_HOK),
+            null,
+            $subjectConfirmationData,
+        );
 
         $validator = new SubjectConfirmationResponseToMatches($this->response);
         $result = new Result();
@@ -77,7 +89,11 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
     {
         $this->response->shouldReceive('getInResponseTo')->andReturnNull();
         $subjectConfirmationData = new SubjectConfirmationData();
-        $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
+        $subjectConfirmation = new SubjectConfirmation(
+            SAMLAnyURIValue::fromString(C::CM_HOK),
+            null,
+            $subjectConfirmationData,
+        );
 
         $validator = new SubjectConfirmationResponseToMatches($this->response);
         $result = new Result();
@@ -91,11 +107,17 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
     /**
      */
     #[Group('assertion-validation')]
-    public function testWhenTheSubjectconfirmationAndResponseResponsetoAreEqualTheSubjectconfirmationIsValid(): void
+    public function testWhenTheSubjectConfirmationAndResponseResponsetoAreEqualTheSubjectConfirmationIsValid(): void
     {
-        $this->response->shouldReceive('getInResponseTo')->andReturn('theSameValue');
-        $subjectConfirmationData = new SubjectConfirmationData(null, null, null, 'theSameValue');
-        $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
+        $this->response->shouldReceive('getInResponseTo')->andReturn(NCNameValue::fromString('someIDValue'));
+        $subjectConfirmationData = new SubjectConfirmationData(
+            inResponseTo: NCNameValue::fromString('someIDValue'),
+        );
+        $subjectConfirmation = new SubjectConfirmation(
+            SAMLAnyURIValue::fromString(C::CM_HOK),
+            null,
+            $subjectConfirmationData,
+        );
 
         $validator = new SubjectConfirmationResponseToMatches($this->response);
         $result = new Result();
@@ -111,9 +133,15 @@ final class SubjectConfirmationResponseToMatchesTest extends MockeryTestCase
     #[Group('assertion-validation')]
     public function testWhenTheSubjectconfirmationAndResponseResponsetoDifferTheSubjectconfirmationIsInvalid(): void
     {
-        $this->response->shouldReceive('getInResponseTo')->andReturn('someValue');
-        $subjectConfirmationData = new SubjectConfirmationData(null, null, null, 'anotherValue');
-        $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
+        $this->response->shouldReceive('getInResponseTo')->andReturn(NCNameValue::fromString('someIDValue'));
+        $subjectConfirmationData = new SubjectConfirmationData(
+            inResponseTo: NCNameValue::fromString('someOtherIDValue'),
+        );
+        $subjectConfirmation = new SubjectConfirmation(
+            SAMLAnyURIValue::fromString(C::CM_HOK),
+            null,
+            $subjectConfirmationData,
+        );
         $validator = new SubjectConfirmationResponseToMatches($this->response);
         $result = new Result();
 

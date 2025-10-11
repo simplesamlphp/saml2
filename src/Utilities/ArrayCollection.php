@@ -54,7 +54,7 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @param \Closure $f
+     * @param \Closure $filterFunction
      *
      * @return \SimpleSAML\SAML2\Utilities\ArrayCollection
      */

@@ -7,16 +7,19 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\XML\Comparison;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\AuthnContextComparisonTypeValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
+use SimpleSAML\SAML2\XML\samlp\AuthnContextComparisonTypeEnum;
 use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
 use function dirname;
 use function strval;
@@ -51,9 +54,14 @@ final class RequestedAuthnContextTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $authnContextDeclRef = new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml');
+        $authnContextDeclRef = new AuthnContextDeclRef(
+            SAMLAnyURIValue::fromString('https://example.org/relative/path/to/document.xml'),
+        );
 
-        $requestedAuthnContext = new RequestedAuthnContext([$authnContextDeclRef], Comparison::EXACT);
+        $requestedAuthnContext = new RequestedAuthnContext(
+            [$authnContextDeclRef],
+            AuthnContextComparisonTypeValue::fromEnum(AuthnContextComparisonTypeEnum::Exact),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -66,13 +74,20 @@ final class RequestedAuthnContextTest extends TestCase
      */
     public function testMarshallingWithMixedContextsFails(): void
     {
-        $authnContextDeclRef = new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml');
-        $authnContextClassRef = new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT);
+        $authnContextDeclRef = new AuthnContextDeclRef(
+            SAMLAnyURIValue::fromString('https://example.org/relative/path/to/document.xml'),
+        );
+        $authnContextClassRef = new AuthnContextClassRef(
+            SAMLAnyURIValue::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT),
+        );
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage('You need either AuthnContextClassRef or AuthnContextDeclRef, not both.');
 
-        new RequestedAuthnContext([$authnContextClassRef, $authnContextDeclRef], Comparison::EXACT);
+        new RequestedAuthnContext(
+            [$authnContextClassRef, $authnContextDeclRef],
+            AuthnContextComparisonTypeValue::fromEnum(AuthnContextComparisonTypeEnum::Exact),
+        );
     }
 
 
@@ -80,20 +95,23 @@ final class RequestedAuthnContextTest extends TestCase
      */
     public function testMarshallingWithInvalidContentFails(): void
     {
-        $authnContextDeclRef = new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml');
+        $authnContextDeclRef = new AuthnContextDeclRef(
+            SAMLAnyURIValue::fromString('https://example.org/relative/path/to/document.xml'),
+        );
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(SchemaViolationException::class);
         $this->expectExceptionMessage(
             'Expected an instance of any of "' . AuthnContextClassRef::class . '", "' . AuthnContextDeclRef::class .
             '". Got: DOMDocument',
         );
 
         new RequestedAuthnContext(
+            /** @phpstan-ignore argument.type */
             [
                 DOMDocumentFactory::fromString('<root />'),
                 $authnContextDeclRef,
             ],
-            Comparison::EXACT,
+            AuthnContextComparisonTypeValue::fromEnum(AuthnContextComparisonTypeEnum::Exact),
         );
     }
 
@@ -115,7 +133,7 @@ XML
             ,
         );
 
-        $this->expectException(AssertionFailedException::class);
+        $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage('You need either AuthnContextClassRef or AuthnContextDeclRef, not both.');
 
         RequestedAuthnContext::fromXML($document->documentElement);

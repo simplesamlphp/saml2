@@ -7,13 +7,15 @@ namespace SimpleSAML\Test\SAML2\XML\mdui;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\ListOfStringsValue;
 use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
 use SimpleSAML\SAML2\XML\mdui\Keywords;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function dirname;
 use function strval;
@@ -54,8 +56,10 @@ final class KeywordsTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $keywords = new Keywords("nl", ["KLM", "koninklijke luchtvaart"]);
-        $keywords->addKeyword("maatschappij");
+        $keywords = new Keywords(
+            LanguageValue::fromString("nl"),
+            ListOfStringsValue::fromString("KLM koninklijke+luchtvaart+maatschappij"),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -69,23 +73,11 @@ final class KeywordsTest extends TestCase
      */
     public function testKeywordWithPlusSignThrowsException(): void
     {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Keywords may not contain a "+" character');
+        $this->expectException(ProtocolViolationException::class);
 
-        new Keywords("en", ["csharp", "pascal", "c++"]);
-    }
-
-
-    /**
-     * Unmarshalling fails if attribute is empty
-     */
-    public function testUnmarshallingFailsMissingKeywords(): void
-    {
-        $document = clone self::$xmlRepresentation;
-        $document->documentElement->textContent = '';
-
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('Missing value for Keywords');
-        Keywords::fromXML($document->documentElement);
+        new Keywords(
+            LanguageValue::fromString("en"),
+            ListOfStringsValue::fromArray(["csharp", "pascal", "c++"]),
+        );
     }
 }

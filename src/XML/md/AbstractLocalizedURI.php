@@ -4,8 +4,16 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use DOMElement;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Type\LanguageValue;
+
+use function array_key_first;
 
 /**
  * Abstract class implementing LocalizedURIType.
@@ -14,64 +22,49 @@ use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
  */
 abstract class AbstractLocalizedURI extends AbstractLocalizedName
 {
+    /** @var string */
+    public const TEXTCONTENT_TYPE = SAMLAnyURIValue::class;
+
+
     /**
-     * Set the content of the element.
+     * LocalizedNameType constructor.
      *
-     * @param string $content  The value to go in the XML textContent
+     * @param \SimpleSAML\XMLSchema\Type\LanguageValue $language The language this string is localized in.
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $content The localized string.
      */
-    protected function setContent(string $content): void
-    {
-        $this->validateContent($content);
-        $this->content = $content;
+    final public function __construct(
+        protected LanguageValue $language,
+        SAMLAnyURIValue $content,
+    ) {
+        $content = SAMLStringValue::fromString($content->getValue());
+
+        parent::__construct($language, $content);
     }
 
 
     /**
-     * Get the content of the element.
+     * Create an instance of this object from its XML representation.
      *
-     * @return string
-     */
-    public function getContent(): string
-    {
-        return $this->sanitizeContent($this->getRawContent());
-    }
-
-
-    /**
-     * Get the raw and unsanitized content of the element.
+     * @param \DOMElement $xml
+     * @return static
      *
-     * @return string
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
+     *   if the qualified name of the supplied element is wrong
      */
-    public function getRawContent(): string
+    public static function fromXML(DOMElement $xml): static
     {
-        return $this->content;
-    }
+        Assert::same($xml->localName, static::getLocalName(), InvalidDOMElementException::class);
+        Assert::same($xml->namespaceURI, static::NS, InvalidDOMElementException::class);
+        Assert::true(
+            $xml->hasAttributeNS(C::NS_XML, 'lang'),
+            'Missing xml:lang from ' . static::getLocalName(),
+            MissingAttributeException::class,
+        );
 
-
-    /**
-     * Sanitize the content of the element.
-     *
-     * @param string $content  The unsanitized textContent
-     * @throws \Exception on failure
-     * @return string
-     */
-    protected function sanitizeContent(string $content): string
-    {
-        // We've seen metadata in the wild that had stray whitespace around URIs, causing assertions to fail
-        return trim($content);
-    }
-
-
-    /**
-     * Validate the content of the element.
-     *
-     * @param string $content  The value to go in the XML textContent
-     * @throws \Exception on failure
-     * @return void
-     */
-    protected function validateContent(string $content): void
-    {
-        SAMLAssert::validURI($this->sanitizeContent($content));
+        return new static(
+            LanguageValue::fromString($xml->getAttributeNS(C::NS_XML, 'lang')),
+            SAMLAnyURIValue::fromString($xml->textContent),
+        );
     }
 
 
@@ -85,12 +78,10 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
     {
         Assert::count($data, 1);
 
-        $lang = array_key_first($data);
-        Assert::stringNotEmpty($lang);
-
-        $value = $data[$lang];
-        Assert::stringNotEmpty($value);
-        SAMLAssert::validURI($value);
+        $lang = LanguageValue::fromString(array_key_first($data));
+        $value = SAMLAnyURIValue::fromString(
+            $data[$lang->getValue()],
+        );
 
         return new static($lang, $value);
     }

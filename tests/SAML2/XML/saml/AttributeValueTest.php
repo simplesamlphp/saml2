@@ -15,6 +15,7 @@ use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Constants as C_XSI;
 
 use function dirname;
 use function strval;
@@ -88,8 +89,8 @@ final class AttributeValueTest extends TestCase
         $this->assertEquals('xs:integer', $av->getXsiType());
 
         $nssaml = C::NS_SAML;
-        $nsxs = C::NS_XS;
-        $nsxsi = C::NS_XSI;
+        $nsxs = C_XSI::NS_XS;
+        $nsxsi = C_XSI::NS_XSI;
         $xml = <<<XML
 <saml:AttributeValue xmlns:saml="{$nssaml}" xmlns:xsi="{$nsxsi}" xmlns:xs="{$nsxs}" xsi:type="xs:integer">3</saml:AttributeValue>
 XML;
@@ -113,8 +114,8 @@ XML;
         $this->assertEquals('xs:dateTime', $av->getXsiType());
 
         $nssaml = C::NS_SAML;
-        $nsxs = C::NS_XS;
-        $nsxsi = C::NS_XSI;
+        $nsxs = C_XSI::NS_XS;
+        $nsxsi = C_XSI::NS_XSI;
         $xml = <<<XML
 <saml:AttributeValue xmlns:saml="{$nssaml}" xmlns:xsi="{$nsxsi}" xmlns:xs="{$nsxs}" xsi:type="xs:dateTime">2024-04-04T04:44:44Z</saml:AttributeValue>
 XML;
@@ -134,7 +135,7 @@ XML;
         $this->assertEquals('xs:nil', $av->getXsiType());
 
         $nssaml = C::NS_SAML;
-        $nsxsi = C::NS_XSI;
+        $nsxsi = C_XSI::NS_XSI;
         $xml = <<<XML
 <saml:AttributeValue xmlns:saml="{$nssaml}" xmlns:xsi="{$nsxsi}" xsi:nil="1"/>
 XML;

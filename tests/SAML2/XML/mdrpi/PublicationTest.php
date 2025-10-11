@@ -4,18 +4,19 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
-use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement;
 use SimpleSAML\SAML2\XML\mdrpi\Publication;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 
 use function dirname;
 use function strval;
@@ -58,9 +59,9 @@ final class PublicationTest extends TestCase
     public function testMarshalling(): void
     {
         $publication = new Publication(
-            'SomePublisher',
-            new DateTimeImmutable('2011-01-01T00:00:00Z'),
-            'SomePublicationId',
+            SAMLStringValue::fromString('SomePublisher'),
+            SAMLDateTimeValue::fromString('2011-01-01T00:00:00Z'),
+            SAMLStringValue::fromString('SomePublicationId'),
         );
 
         $this->assertEquals(
@@ -78,10 +79,6 @@ final class PublicationTest extends TestCase
         $document->setAttribute('creationInstant', '2011-01-01T00:00:00WT');
 
         $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage(
-            "\"2011-01-01T00:00:00WT\" is not a DateTime expressed in the UTC timezone "
-            . "using the 'Z' timezone identifier.",
-        );
         Publication::fromXML($document);
     }
 
