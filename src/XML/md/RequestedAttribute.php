@@ -5,12 +5,13 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-
-use function is_bool;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
 
 /**
  * Class representing SAML 2 metadata RequestedAttribute.
@@ -32,17 +33,17 @@ final class RequestedAttribute extends Attribute
     /**
      * RequestedAttribute constructor.
      *
-     * @param string $Name
-     * @param bool|null $isRequired
-     * @param string|null $NameFormat
-     * @param string|null $FriendlyName
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue $Name
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $isRequired
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $NameFormat
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $FriendlyName
      * @param \SimpleSAML\SAML2\XML\saml\AttributeValue[] $AttributeValues
      */
     public function __construct(
-        string $Name,
-        protected ?bool $isRequired = null,
-        ?string $NameFormat = null,
-        ?string $FriendlyName = null,
+        SAMLStringValue $Name,
+        protected ?BooleanValue $isRequired = null,
+        ?SAMLAnyURIValue $NameFormat = null,
+        ?SAMLStringValue $FriendlyName = null,
         array $AttributeValues = [],
     ) {
         parent::__construct($Name, $NameFormat, $FriendlyName, $AttributeValues);
@@ -52,9 +53,9 @@ final class RequestedAttribute extends Attribute
     /**
      * Collect the value of the isRequired-property
      *
-     * @return bool|null
+     * @return \SimpleSAML\XMLSchema\Type\BooleanValue|null
      */
-    public function getIsRequired(): ?bool
+    public function getIsRequired(): ?BooleanValue
     {
         return $this->isRequired;
     }
@@ -66,9 +67,9 @@ final class RequestedAttribute extends Attribute
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static
@@ -77,10 +78,10 @@ final class RequestedAttribute extends Attribute
         Assert::same($xml->namespaceURI, RequestedAttribute::NS, InvalidDOMElementException::class);
 
         return new static(
-            self::getAttribute($xml, 'Name'),
-            self::getOptionalBooleanAttribute($xml, 'isRequired', null),
-            self::getOptionalAttribute($xml, 'NameFormat', null),
-            self::getOptionalAttribute($xml, 'FriendlyName', null),
+            self::getAttribute($xml, 'Name', SAMLStringValue::class),
+            self::getOptionalAttribute($xml, 'isRequired', BooleanValue::class, null),
+            self::getOptionalAttribute($xml, 'NameFormat', SAMLAnyURIValue::class, null),
+            self::getOptionalAttribute($xml, 'FriendlyName', SAMLStringValue::class, null),
             AttributeValue::getChildrenOfClass($xml),
         );
     }
@@ -96,8 +97,8 @@ final class RequestedAttribute extends Attribute
     {
         $e = parent::toXML($parent);
 
-        if (is_bool($this->getIsRequired())) {
-            $e->setAttribute('isRequired', $this->getIsRequired() ? 'true' : 'false');
+        if ($this->getIsRequired()?->toBoolean() !== null) {
+            $e->setAttribute('isRequired', $this->getIsRequired()->toBoolean() ? 'true' : 'false');
         }
 
         return $e;

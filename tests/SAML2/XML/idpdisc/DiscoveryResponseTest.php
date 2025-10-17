@@ -8,6 +8,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\idpdisc\DiscoveryResponse;
 use SimpleSAML\SAML2\XML\md\AbstractIndexedEndpointType;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
@@ -18,6 +20,8 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
+use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 
 use function dirname;
 use function strval;
@@ -51,7 +55,12 @@ final class DiscoveryResponseTest extends TestCase
     {
         self::$testedClass = DiscoveryResponse::class;
 
-        self::$attr = new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'attr1', 'testval1');
+        self::$attr = new XMLAttribute(
+            'urn:x-simplesamlphp:namespace',
+            'ssp',
+            'attr1',
+            SAMLStringValue::fromString('testval1'),
+        );
 
         self::$ext = new Chunk(DOMDocumentFactory::fromString(
             '<some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>',
@@ -82,10 +91,10 @@ final class DiscoveryResponseTest extends TestCase
     public function testMarshalling(): void
     {
         $discoResponse = new DiscoveryResponse(
-            43,
-            C::BINDING_IDPDISC,
-            C::LOCATION_A,
-            false,
+            UnsignedShortValue::fromInteger(43),
+            SAMLAnyURIValue::fromString(C::BINDING_IDPDISC),
+            SAMLAnyURIValue::fromString(C::LOCATION_A),
+            BooleanValue::fromBoolean(false),
             null,
             [self::$ext],
             [self::$attr],
@@ -108,11 +117,11 @@ final class DiscoveryResponseTest extends TestCase
             'The \'ResponseLocation\' attribute must be omitted for idpdisc:DiscoveryResponse.',
         );
         new DiscoveryResponse(
-            42,
-            C::BINDING_IDPDISC,
-            C::LOCATION_A,
-            false,
-            'https://response.location/',
+            UnsignedShortValue::fromInteger(42),
+            SAMLAnyURIValue::fromString(C::BINDING_IDPDISC),
+            SAMLAnyURIValue::fromString(C::LOCATION_A),
+            BooleanValue::fromBoolean(false),
+            SAMLAnyURIValue::fromString('https://response.location/'),
         );
     }
 

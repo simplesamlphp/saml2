@@ -7,8 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\EntityIDValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -16,8 +15,6 @@ use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 use function dirname;
-use function sprintf;
-use function str_pad;
 use function strval;
 
 /**
@@ -54,34 +51,13 @@ final class AffiliateMemberTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $affiliateMember = new AffiliateMember('https://some.entity.org/id');
+        $affiliateMember = new AffiliateMember(
+            EntityIDValue::fromString('https://some.entity.org/id'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($affiliateMember),
         );
-    }
-
-
-    /**
-     */
-    public function testMarshallingEmptyThrowsException(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-
-        new AffiliateMember('');
-    }
-
-
-    /**
-     */
-    public function testMarshallingTooLongContentThrowsException(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage(
-            sprintf('An entityID cannot be longer than %d characters.', C::ENTITYID_MAX_LENGTH),
-        );
-
-        new AffiliateMember(str_pad('https://some.entity.org/id', C::ENTITYID_MAX_LENGTH + 1, 'a'));
     }
 }

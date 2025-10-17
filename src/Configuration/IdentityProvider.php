@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Configuration;
 
 use RuntimeException;
+use SimpleSAML\XMLSecurity\Constants as C;
 
 use function array_filter;
 use function array_pop;
@@ -108,7 +109,7 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
      */
     public function getBlacklistedAlgorithms(): ?array
     {
-        return $this->get('blacklistedEncryptionAlgorithms');
+        return $this->get('blacklistedEncryptionAlgorithms', [C::KEY_TRANSPORT_RSA_1_5]);
     }
 
 

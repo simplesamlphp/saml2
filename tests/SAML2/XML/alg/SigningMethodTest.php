@@ -7,14 +7,16 @@ namespace SimpleSAML\Test\SAML2\XML\alg;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\alg\AbstractAlgElement;
 use SimpleSAML\SAML2\XML\alg\SigningMethod;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Type\PositiveIntegerValue;
 
 use function dirname;
 use function strval;
@@ -50,9 +52,9 @@ final class SigningMethodTest extends TestCase
     public function testMarshalling(): void
     {
         $signingMethod = new SigningMethod(
-            C::SIG_RSA_SHA256,
-            1024,
-            4096,
+            SAMLAnyURIValue::fromString(C::SIG_RSA_SHA256),
+            PositiveIntegerValue::fromString('1024'),
+            PositiveIntegerValue::fromString('4096'),
             [
                 new Chunk(DOMDocumentFactory::fromString(
                     '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',

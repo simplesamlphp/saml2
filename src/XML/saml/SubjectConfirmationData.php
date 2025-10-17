@@ -4,22 +4,22 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DateTimeImmutable;
 use DOMElement;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Type\NCNameValue;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
-use function filter_var;
-use function is_null;
+use function strval;
 
 /**
  * Class representing SAML 2 SubjectConfirmationData element.
@@ -43,32 +43,36 @@ final class SubjectConfirmationData extends AbstractSamlElement implements Schem
     /**
      * Initialize (and parse) a SubjectConfirmationData element.
      *
-     * @param \DateTimeImmutable|null $notBefore
-     * @param \DateTimeImmutable|null $notOnOrAfter
-     * @param string|null $recipient
-     * @param string|null $inResponseTo
-     * @param string|null $address
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $notBefore
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $notOnOrAfter
+     * @param \SimpleSAML\SAML2\Type\EntityIDValue|null $recipient
+     * @param \SimpleSAML\XMLSchema\Type\NCNameValue|null $inResponseTo
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $address
      * @param \SimpleSAML\XML\SerializableElementInterface[] $children
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
-        protected ?DateTimeImmutable $notBefore = null,
-        protected ?DateTimeImmutable $notOnOrAfter = null,
-        protected ?string $recipient = null,
-        protected ?string $inResponseTo = null,
-        protected ?string $address = null,
+        protected ?SAMLDateTimeValue $notBefore = null,
+        protected ?SAMLDateTimeValue $notOnOrAfter = null,
+        protected ?EntityIDValue $recipient = null,
+        protected ?NCNameValue $inResponseTo = null,
+        protected ?SAMLStringValue $address = null,
         array $children = [],
         array $namespacedAttributes = [],
     ) {
-        Assert::nullOrSame($notBefore?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
-        Assert::nullOrSame($notOnOrAfter?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
-        Assert::nullOrNotWhitespaceOnly($recipient);
-        Assert::nullOrValidNCName($inResponseTo); // Covers the empty string
-
-        if (!is_null($address) && !filter_var($address, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 | FILTER_FLAG_IPV6)) {
-            Utils::getContainer()->getLogger()->warning(
-                sprintf('Provided argument (%s) is not a valid IP address.', $address),
-            );
+        if ($address !== null) {
+            try {
+                /**
+                 * IPv4 addresses SHOULD be represented in the usual dotted-decimal format (e.g., "1.2.3.4").
+                 * IPv6 addresses SHOULD be represented as defined by Section 2.2 of IETF RFC 3513 [RFC 3513]
+                 * (e.g., "FEDC:BA98:7654:3210:FEDC:BA98:7654:3210").
+                 */
+                Assert::ip($address->getValue());
+            } catch (AssertionFailedException) {
+                Utils::getContainer()->getLogger()->warning(
+                    sprintf('Provided address (%s) is not a valid IPv4 or IPv6  address.', $address->getValue()),
+                );
+            }
         }
 
         $this->setElements($children);
@@ -79,9 +83,9 @@ final class SubjectConfirmationData extends AbstractSamlElement implements Schem
     /**
      * Collect the value of the NotBefore-property
      *
-     * @return \DateTimeImmutable|null
+     * @return \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null
      */
-    public function getNotBefore(): ?DateTimeImmutable
+    public function getNotBefore(): ?SAMLDateTimeValue
     {
         return $this->notBefore;
     }
@@ -90,9 +94,9 @@ final class SubjectConfirmationData extends AbstractSamlElement implements Schem
     /**
      * Collect the value of the NotOnOrAfter-property
      *
-     * @return \DateTimeImmutable|null
+     * @return \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null
      */
-    public function getNotOnOrAfter(): ?DateTimeImmutable
+    public function getNotOnOrAfter(): ?SAMLDateTimeValue
     {
         return $this->notOnOrAfter;
     }
@@ -101,9 +105,9 @@ final class SubjectConfirmationData extends AbstractSamlElement implements Schem
     /**
      * Collect the value of the Recipient-property
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\EntityIDValue|null
      */
-    public function getRecipient(): ?string
+    public function getRecipient(): ?EntityIDValue
     {
         return $this->recipient;
     }
@@ -112,9 +116,9 @@ final class SubjectConfirmationData extends AbstractSamlElement implements Schem
     /**
      * Collect the value of the InResponseTo-property
      *
-     * @return string|null
+     * @return \SimpleSAML\XMLSchema\Type\NCNameValue|null
      */
-    public function getInResponseTo(): ?string
+    public function getInResponseTo(): ?NCNameValue
     {
         return $this->inResponseTo;
     }
@@ -123,9 +127,9 @@ final class SubjectConfirmationData extends AbstractSamlElement implements Schem
     /**
      * Collect the value of the Address-property
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue|null
      */
-    public function getAddress(): ?string
+    public function getAddress(): ?SAMLStringValue
     {
         return $this->address;
     }
@@ -138,13 +142,13 @@ final class SubjectConfirmationData extends AbstractSamlElement implements Schem
      */
     public function isEmptyElement(): bool
     {
-        return empty($this->notBefore)
-            && empty($this->notOnOrAfter)
-            && empty($this->recipient)
-            && empty($this->inResponseTo)
-            && empty($this->address)
-            && empty($this->elements)
-            && empty($this->namespacedAttributes);
+        return empty($this->getNotBefore())
+            && empty($this->getNotOnOrAfter())
+            && empty($this->getRecipient())
+            && empty($this->getInResponseTo())
+            && empty($this->getAddress())
+            && empty($this->getElements())
+            && empty($this->getAttributesNS());
     }
 
 
@@ -154,9 +158,9 @@ final class SubjectConfirmationData extends AbstractSamlElement implements Schem
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing any of the mandatory attributes
      * @throws \SimpleSAML\Assert\AssertionFailedException
      *   if NotBefore or NotOnOrAfter contain an invalid date.
@@ -166,34 +170,12 @@ final class SubjectConfirmationData extends AbstractSamlElement implements Schem
         Assert::same($xml->localName, 'SubjectConfirmationData', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SubjectConfirmationData::NS, InvalidDOMElementException::class);
 
-        $NotBefore = self::getOptionalAttribute($xml, 'NotBefore', null);
-        if ($NotBefore !== null) {
-            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
-            $NotBefore = preg_replace('/([.][0-9]+Z)$/', 'Z', $NotBefore, 1);
-
-            SAMLAssert::validDateTime($NotBefore, ProtocolViolationException::class);
-            $NotBefore = new DateTimeImmutable($NotBefore);
-        }
-
-        $NotOnOrAfter = self::getOptionalAttribute($xml, 'NotOnOrAfter', null);
-        if ($NotOnOrAfter !== null) {
-            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
-            $NotOnOrAfter = preg_replace('/([.][0-9]+Z)$/', 'Z', $NotOnOrAfter, 1);
-
-            SAMLAssert::validDateTime($NotOnOrAfter, ProtocolViolationException::class);
-            $NotOnOrAfter = new DateTimeImmutable($NotOnOrAfter);
-        }
-
-        $Recipient = self::getOptionalAttribute($xml, 'Recipient', null);
-        $InResponseTo = self::getOptionalAttribute($xml, 'InResponseTo', null);
-        $Address = self::getOptionalAttribute($xml, 'Address', null);
-
         return new static(
-            $NotBefore,
-            $NotOnOrAfter,
-            $Recipient,
-            $InResponseTo,
-            $Address,
+            self::getOptionalAttribute($xml, 'NotBefore', SAMLDateTimeValue::class, null),
+            self::getOptionalAttribute($xml, 'NotOnOrAfter', SAMLDateTimeValue::class, null),
+            self::getOptionalAttribute($xml, 'Recipient', EntityIDValue::class, null),
+            self::getOptionalAttribute($xml, 'InResponseTo', NCNameValue::class, null),
+            self::getOptionalAttribute($xml, 'Address', SAMLStringValue::class, null),
             self::getChildElementsFromXML($xml),
             self::getAttributesNSFromXML($xml),
         );
@@ -211,19 +193,19 @@ final class SubjectConfirmationData extends AbstractSamlElement implements Schem
         $e = $this->instantiateParentElement($parent);
 
         if ($this->getNotBefore() !== null) {
-            $e->setAttribute('NotBefore', $this->getNotBefore()->format(C::DATETIME_FORMAT));
+            $e->setAttribute('NotBefore', strval($this->getNotBefore()));
         }
         if ($this->getNotOnOrAfter() !== null) {
-            $e->setAttribute('NotOnOrAfter', $this->getNotOnOrAfter()->format(C::DATETIME_FORMAT));
+            $e->setAttribute('NotOnOrAfter', strval($this->getNotOnOrAfter()));
         }
         if ($this->getRecipient() !== null) {
-            $e->setAttribute('Recipient', $this->getRecipient());
+            $e->setAttribute('Recipient', strval($this->getRecipient()));
         }
         if ($this->getInResponseTo() !== null) {
-            $e->setAttribute('InResponseTo', $this->getInResponseTo());
+            $e->setAttribute('InResponseTo', strval($this->getInResponseTo()));
         }
         if ($this->getAddress() !== null) {
-            $e->setAttribute('Address', $this->getAddress());
+            $e->setAttribute('Address', strval($this->getAddress()));
         }
 
         foreach ($this->getAttributesNS() as $attr) {

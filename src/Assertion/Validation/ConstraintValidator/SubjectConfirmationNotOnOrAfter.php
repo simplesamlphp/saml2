@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
 
 use DateInterval;
-use SimpleSAML\Assert\Assert;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Assertion\Validation\SubjectConfirmationConstraintValidator;
 use SimpleSAML\SAML2\Utils;
@@ -23,12 +22,9 @@ class SubjectConfirmationNotOnOrAfter implements SubjectConfirmationConstraintVa
         SubjectConfirmation $subjectConfirmation,
         Result $result,
     ): void {
-        $data = $subjectConfirmation->getSubjectConfirmationData();
-        Assert::notNull($data);
-
-        /** @psalm-suppress PossiblyNullReference */
-        $notOnOrAfter = $data->getNotOnOrAfter();
+        $notOnOrAfter = $subjectConfirmation->getSubjectConfirmationData()?->getNotOnOrAfter()?->toDateTime();
         $clock = Utils::getContainer()->getClock();
+
         if ($notOnOrAfter !== null && $notOnOrAfter <= ($clock->now()->sub(new DateInterval('PT60S')))) {
             $result->addError('NotOnOrAfter in SubjectConfirmationData is in the past');
         }

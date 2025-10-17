@@ -2,32 +2,35 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\Test\SAML2\Assert;
+namespace SimpleSAML\Test\SAML2\Type;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Assert\Assert as SAML2Assert;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
 /**
- * Class \SimpleSAML\SAML2\Assert\URITest
+ * Class \SimpleSAML\Test\SAML2\Type\EntityIDValueTest
  *
  * @package simplesamlphp/saml2
  */
-#[CoversClass(SAML2Assert::class)]
-final class URITest extends TestCase
+#[Group('type')]
+#[CoversClass(EntityIDValue::class)]
+final class EntityIDValueTest extends TestCase
 {
     /**
      * @param boolean $shouldPass
-     * @param string $uri
+     * @param string $entityID
      */
-    #[DataProvider('provideURI')]
-    public function testValidURI(bool $shouldPass, string $uri): void
+    #[DataProvider('provideEntityID')]
+    public function testEntityID(bool $shouldPass, string $entityID): void
     {
         try {
-            SAML2Assert::validURI($uri);
+            EntityIDValue::fromString($entityID);
             $this->assertTrue($shouldPass);
         } catch (ProtocolViolationException | SchemaViolationException $e) {
             $this->assertFalse($shouldPass);
@@ -38,19 +41,19 @@ final class URITest extends TestCase
     /**
      * @return array<string, array{0: bool, 1: string}>
      */
-    public static function provideURI(): array
+    public static function provideEntityID(): array
     {
         return [
             'urn' => [true, 'urn:x-simplesamlphp:phpunit'],
             'same-doc' => [false, '#_53d830ab1be17291a546c95c7f1cdf8d3d23c959e6'],
             'url' => [true, 'https://www.simplesamlphp.org'],
-            'utf8_char' => [true, 'https://aä.com'],
-            'intl' => [true, 'https://niño.com'],
+            'diacritical' => [true, 'https://aä.com'],
             'spn' => [true, 'spn:a4cf592f-a64c-46ff-a788-b260f474525b'],
             'typos' => [false, 'https//www.uni.l/en/'],
-            'email' => [false, 'scoobydoo@whereareyou.org'],
             'spaces' => [false, 'this is silly'],
             'empty' => [false, ''],
+            'azure-common' => [true, 'https://sts.windows.net/{tenantid}/'],
+            'too_long' => [false, str_pad('urn:x-simplesamlphp-phpunit:', C::ENTITYID_MAX_LENGTH + 1, 'a')],
         ];
     }
 }

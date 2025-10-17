@@ -8,6 +8,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\GetComplete;
@@ -18,6 +21,7 @@ use SimpleSAML\SAML2\XML\samlp\Scoping;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\NonNegativeIntegerValue;
 
 use function dirname;
 use function strval;
@@ -52,12 +56,24 @@ final class ScopingTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'urn:test:testLoc1');
-        $getComplete = new GetComplete('https://some/location');
+        $entry1 = new IDPEntry(
+            EntityIDValue::fromString('urn:some:requester1'),
+            SAMLStringValue::fromString('testName1'),
+            EntityIDValue::fromString('urn:test:testLoc1'),
+        );
+        $getComplete = new GetComplete(
+            SAMLAnyURIValue::fromString('https://some/location'),
+        );
         $list = new IDPList([$entry1], $getComplete);
-        $requesterId = 'urn:some:requester';
+        $requesterId = EntityIDValue::fromString('urn:some:requester');
 
-        $scoping = new Scoping(2, $list, [new RequesterID($requesterId)]);
+        $scoping = new Scoping(
+            NonNegativeIntegerValue::fromInteger(2),
+            $list,
+            [
+                new RequesterID($requesterId),
+            ],
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -70,12 +86,24 @@ final class ScopingTest extends TestCase
      */
     public function testMarshallingElementOrdering(): void
     {
-        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'urn:test:testLoc1');
-        $getComplete = new GetComplete('https://some/location');
+        $entry1 = new IDPEntry(
+            EntityIDValue::fromString('urn:some:requester1'),
+            SAMLStringValue::fromString('testName1'),
+            EntityIDValue::fromString('urn:test:testLoc1'),
+        );
+        $getComplete = new GetComplete(
+            SAMLAnyURIValue::fromString('https://some/location'),
+        );
         $list = new IDPList([$entry1], $getComplete);
-        $requesterId = 'urn:some:requester';
+        $requesterId = EntityIDValue::fromString('urn:some:requester');
 
-        $scoping = new Scoping(2, $list, [new RequesterID($requesterId)]);
+        $scoping = new Scoping(
+            NonNegativeIntegerValue::fromInteger(2),
+            $list,
+            [
+                new RequesterID($requesterId),
+            ],
+        );
 
         $scopingElement = $scoping->toXML();
 

@@ -9,6 +9,8 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
 use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
@@ -21,6 +23,7 @@ use SimpleSAML\SAML2\XML\md\PDPDescriptor;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -63,13 +66,13 @@ final class PDPDescriptorTest extends TestCase
         );
 
         self::$authzService = new AuthzService(
-            C::BINDING_SOAP,
-            'https://IdentityProvider.com/SAML/AA/SOAP',
+            SAMLAnyURIValue::fromString(C::BINDING_SOAP),
+            SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/AA/SOAP'),
         );
 
         self::$assertionIDRequestService = new AssertionIDRequestService(
-            C::BINDING_URI,
-            'https://IdentityProvider.com/SAML/AA/URI',
+            SAMLAnyURIValue::fromString(C::BINDING_URI),
+            SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/AA/URI'),
         );
     }
 
@@ -84,14 +87,20 @@ final class PDPDescriptorTest extends TestCase
     {
         $pdpd = new PDPDescriptor(
             [self::$authzService],
-            ["urn:oasis:names:tc:SAML:2.0:protocol"],
+            AnyURIListValue::fromString(C::NS_SAMLP),
             [self::$assertionIDRequestService],
             [
-                new NameIDFormat(C::NAMEID_X509_SUBJECT_NAME),
-                new NameIDFormat(C::NAMEID_PERSISTENT),
-                new NameIDFormat(C::NAMEID_TRANSIENT),
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_X509_SUBJECT_NAME),
+                ),
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
+                ),
+                new NameIDFormat(
+                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
+                ),
             ],
-            'phpunit',
+            IDValue::fromString('phpunit'),
         );
 
         $this->assertEquals(
@@ -112,7 +121,7 @@ final class PDPDescriptorTest extends TestCase
         new PDPDescriptor(
             /** @phpstan-ignore argument.type */
             [self::$authzService, self::$assertionIDRequestService],
-            ["urn:oasis:names:tc:SAML:2.0:protocol"],
+            AnyURIListValue::fromString(C::NS_SAMLP),
         );
     }
 
@@ -129,7 +138,7 @@ final class PDPDescriptorTest extends TestCase
 
         new PDPDescriptor(
             [self::$authzService],
-            ["urn:oasis:names:tc:SAML:2.0:protocol"],
+            AnyURIListValue::fromString(C::NS_SAMLP),
             /** @phpstan-ignore argument.type */
             [self::$assertionIDRequestService, self::$authzService],
         );
@@ -143,7 +152,7 @@ final class PDPDescriptorTest extends TestCase
     {
         $pdpd = new PDPDescriptor(
             [self::$authzService],
-            ["urn:oasis:names:tc:SAML:2.0:protocol"],
+            AnyURIListValue::fromString(C::NS_SAMLP),
         );
         $this->assertEmpty($pdpd->getAssertionIDRequestService());
         $this->assertEmpty($pdpd->getNameIDFormat());

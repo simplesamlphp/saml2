@@ -21,6 +21,8 @@ use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Signature\Validator;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\samlp\Response;
@@ -28,6 +30,7 @@ use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Type\IDValue;
 
 /**
  * Tests for the Assertion validators
@@ -78,7 +81,15 @@ final class AssertionValidatorTest extends TestCase
         self::$logger = new NullLogger();
         self::$validator = new Validator(self::$logger);
         self::$destination = new Destination($destination);
-        self::$response = new Response(new Status(new StatusCode()), self::$clock->now());
+        self::$response = new Response(
+            id: IDValue::fromString('abc123'),
+            status: new Status(
+                new StatusCode(
+                    SAMLAnyURIValue::fromString(C::STATUS_SUCCESS),
+                ),
+            ),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+        );
 
         self::$identityProviderConfiguration = new IdentityProvider(['entityId' => $idpentity]);
         self::$serviceProviderConfiguration  = new ServiceProvider(['entityId' => $spentity]);

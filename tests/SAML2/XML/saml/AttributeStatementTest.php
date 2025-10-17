@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeStatement;
@@ -55,16 +56,22 @@ final class AttributeStatementTest extends TestCase
         $attrStatement = new AttributeStatement(
             [
                 new Attribute(
-                    name: 'urn:ServiceID',
-                    attributeValue: [new AttributeValue(1)],
+                    name: SAMLStringValue::fromString('urn:ServiceID'),
+                    attributeValue: [
+                        new AttributeValue(1),
+                    ],
                 ),
                 new Attribute(
-                    name: 'urn:EntityConcernedID',
-                    attributeValue: [new AttributeValue(1)],
+                    name: SAMLStringValue::fromString('urn:EntityConcernedID'),
+                    attributeValue: [
+                        new AttributeValue(1),
+                    ],
                 ),
                 new Attribute(
-                    name: 'urn:EntityConcernedSubID',
-                    attributeValue: [new AttributeValue(1)],
+                    name: SAMLStringValue::fromString('urn:EntityConcernedSubID'),
+                    attributeValue: [
+                        new AttributeValue(1),
+                    ],
                 ),
             ],
         );

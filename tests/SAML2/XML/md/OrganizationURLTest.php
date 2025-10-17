@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
@@ -15,6 +16,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function dirname;
 use function strval;
@@ -58,7 +60,10 @@ final class OrganizationURLTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = new OrganizationURL('en', 'https://IdentityProvider.com');
+        $name = new OrganizationURL(
+            LanguageValue::fromString('en'),
+            SAMLAnyURIValue::fromString('https://IdentityProvider.com'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

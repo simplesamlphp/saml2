@@ -4,13 +4,18 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\EmailAddressValue;
+use SimpleSAML\SAML2\Type\KeyTypesValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
 use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
@@ -23,6 +28,7 @@ use SimpleSAML\SAML2\XML\md\EncryptionMethod;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\md\GivenName;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\SAML2\XML\md\KeyTypesEnum;
 use SimpleSAML\SAML2\XML\md\Organization;
 use SimpleSAML\SAML2\XML\md\OrganizationDisplayName;
 use SimpleSAML\SAML2\XML\md\OrganizationName;
@@ -35,9 +41,15 @@ use SimpleSAML\Test\SAML2\CustomRoleDescriptor;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Constants as C_XSI;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Type\AnyURIValue;
+use SimpleSAML\XMLSchema\Type\DurationValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\LanguageValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
@@ -86,14 +98,6 @@ final class RoleDescriptorTest extends TestCase
     }
 
 
-    public function setUp(): void
-    {
-        self::$xmlRepresentation = DOMDocumentFactory::fromFile(
-            dirname(dirname(dirname(dirname(__FILE__)))) . '/resources/xml/md_RoleDescriptor.xml',
-        );
-    }
-
-
     /**
      */
     public static function tearDownAfterClass(): void
@@ -109,9 +113,9 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr_cp_1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
-        $attr_cp_2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
-        $attr_3 = new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'phpunit', 'test');
+        $attr_cp_1 = new XMLAttribute('urn:test:something', 'test', 'attr1', StringValue::fromString('testval1'));
+        $attr_cp_2 = new XMLAttribute('urn:test:something', 'test', 'attr2', StringValue::fromString('testval2'));
+        $attr_3 = new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'phpunit', StringValue::fromString('test'));
 
         $roleDescriptor = new CustomRoleDescriptor(
             [
@@ -119,48 +123,95 @@ final class RoleDescriptorTest extends TestCase
                     '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
                 )->documentElement),
             ],
-            [C::NS_SAMLP, C::PROTOCOL],
-            'TheID',
-            new DateTimeImmutable('2009-02-13T23:31:30Z'),
-            'PT5000S',
-            new Extensions([new Chunk(
-                DOMDocumentFactory::fromString(
-                    '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
-                )->documentElement,
-            )]),
-            'https://error.reporting/',
+            AnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
+            IDValue::fromString('TheID'),
+            SAMLDateTimeValue::fromString('2009-02-13T23:31:30Z'),
+            DurationValue::fromString('PT5000S'),
+            new Extensions([
+                new Chunk(
+                    DOMDocumentFactory::fromString(
+                        '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
+                    )->documentElement,
+                ),
+            ]),
+            SAMLAnyURIValue::fromString('https://error.reporting/'),
             [
                 new KeyDescriptor(
-                    new KeyInfo([new KeyName('IdentityProvider.com SSO Signing Key')]),
-                    'signing',
+                    new KeyInfo([
+                        new KeyName(
+                            StringValue::fromString('IdentityProvider.com SSO Signing Key'),
+                        ),
+                    ]),
+                    KeyTypesValue::fromEnum(KeyTypesEnum::SIGNING),
                 ),
                 new KeyDescriptor(
-                    new KeyInfo([new KeyName('IdentityProvider.com SSO Encryption Key')]),
-                    'encryption',
-                    [new EncryptionMethod(C::KEY_TRANSPORT_OAEP_MGF1P)],
+                    new KeyInfo([
+                        new KeyName(
+                            StringValue::fromString('IdentityProvider.com SSO Encryption Key'),
+                        ),
+                    ]),
+                    KeyTypesValue::fromEnum(KeyTypesEnum::ENCRYPTION),
+                    [
+                        new EncryptionMethod(
+                            AnyURIValue::fromString(C::KEY_TRANSPORT_OAEP_MGF1P),
+                        ),
+                    ],
                 ),
             ],
             new Organization(
-                [new OrganizationName('en', 'Identity Providers R US')],
-                [new OrganizationDisplayName('en', 'Identity Providers R US, a Division of Lerxst Corp.')],
-                [new OrganizationURL('en', 'https://IdentityProvider.com')],
+                [
+                    new OrganizationName(
+                        LanguageValue::fromString('en'),
+                        SAMLStringValue::fromString('Identity Providers R US'),
+                    ),
+                ],
+                [
+                    new OrganizationDisplayName(
+                        LanguageValue::fromString('en'),
+                        SAMLStringValue::fromString('Identity Providers R US, a Division of Lerxst Corp.'),
+                    ),
+                ],
+                [
+                    new OrganizationURL(
+                        LanguageValue::fromString('en'),
+                        SAMLAnyURIValue::fromString('https://IdentityProvider.com'),
+                    ),
+                ],
             ),
             [
                 new ContactPerson(
-                    contactType: 'other',
-                    company: new Company('Test Company'),
-                    givenName: new GivenName('John'),
-                    surName: new SurName('Doe'),
+                    contactType: SAMLStringValue::fromString('other'),
+                    company: new Company(
+                        SAMLStringValue::fromString('Test Company'),
+                    ),
+                    givenName: new GivenName(
+                        SAMLStringValue::fromString('John'),
+                    ),
+                    surName: new SurName(
+                        SAMLStringValue::fromString('Doe'),
+                    ),
                     emailAddress: [
-                        new EmailAddress('mailto:jdoe@test.company'),
-                        new EmailAddress('mailto:john.doe@test.company'),
+                        new EmailAddress(
+                            EmailAddressValue::fromString('mailto:jdoe@test.company'),
+                        ),
+                        new EmailAddress(
+                            EmailAddressValue::fromString('mailto:john.doe@test.company'),
+                        ),
                     ],
-                    telephoneNumber: [new TelephoneNumber('1-234-567-8901')],
+                    telephoneNumber: [
+                        new TelephoneNumber(
+                            SAMLStringValue::fromString('1-234-567-8901'),
+                        ),
+                    ],
                     namespacedAttribute: [$attr_cp_1, $attr_cp_2],
                 ),
                 new ContactPerson(
-                    contactType: 'technical',
-                    telephoneNumber: [new TelephoneNumber('1-234-567-8901')],
+                    contactType: SAMLStringValue::fromString('technical'),
+                    telephoneNumber: [
+                        new TelephoneNumber(
+                            SAMLStringValue::fromString('1-234-567-8901'),
+                        ),
+                    ],
                 ),
             ],
             [$attr_3],
@@ -183,22 +234,22 @@ final class RoleDescriptorTest extends TestCase
     {
         $descriptor = AbstractRoleDescriptor::fromXML(self::$xmlRepresentation->documentElement);
 
-        $this->assertInstanceOf(CustomRoleDescriptor::class, $descriptor);
+        $this->assertInstanceOf(AbstractRoleDescriptor::class, $descriptor);
         $this->assertCount(2, $descriptor->getKeyDescriptor());
         $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptor()[0]);
         $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptor()[1]);
         $this->assertEquals(
             [C::NS_SAMLP, C::PROTOCOL],
-            $descriptor->getProtocolSupportEnumeration(),
+            $descriptor->getProtocolSupportEnumeration()->toArray(),
         );
         $this->assertInstanceOf(Organization::class, $descriptor->getOrganization());
         $this->assertCount(2, $descriptor->getContactPerson());
         $this->assertInstanceOf(ContactPerson::class, $descriptor->getContactPerson()[0]);
         $this->assertInstanceOf(ContactPerson::class, $descriptor->getContactPerson()[1]);
         $this->assertEquals('TheID', $descriptor->getID());
-        $this->assertEquals('2009-02-13T23:31:30Z', $descriptor->getValidUntil()->format(C::DATETIME_FORMAT));
-        $this->assertEquals('PT5000S', $descriptor->getCacheDuration());
-        $this->assertEquals('https://error.reporting/', $descriptor->getErrorURL());
+        $this->assertEquals('2009-02-13T23:31:30Z', $descriptor->getValidUntil()->getValue());
+        $this->assertEquals('PT5000S', $descriptor->getCacheDuration()->getValue());
+        $this->assertEquals('https://error.reporting/', $descriptor->getErrorURL()->getValue());
 
         $extElement = $descriptor->getExtensions();
         $this->assertInstanceOf(Extensions::class, $extElement);
@@ -220,14 +271,15 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingUnregistered(): void
     {
-        $element = self::$xmlRepresentation->documentElement;
-        $element->setAttributeNS(
-            'http://www.w3.org/2000/xmlns/',
-            'xmlns:ssp',
-            'urn:x-simplesamlphp:namespace',
-        );
+        $element = clone self::$xmlRepresentation->documentElement;
+        $element->setAttributeNS(C_XSI::NS_XSI, 'xsi:type', 'ssp:UnknownRoleDescriptorType');
 
-        $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', 'ssp:UnknownRoleDescriptorType');
+        $type = new XMLAttribute(
+            C_XSI::NS_XSI,
+            'xsi',
+            'type',
+            StringValue::fromString('ssp:UnknownRoleDescriptorType'),
+        );
         $type->toXML($element);
 
         $descriptor = AbstractRoleDescriptor::fromXML($element);
@@ -238,16 +290,16 @@ final class RoleDescriptorTest extends TestCase
         $this->assertInstanceOf(KeyDescriptor::class, $descriptor->getKeyDescriptor()[1]);
         $this->assertEquals(
             [C::NS_SAMLP, C::PROTOCOL],
-            $descriptor->getProtocolSupportEnumeration(),
+            $descriptor->getProtocolSupportEnumeration()->toArray(),
         );
         $this->assertInstanceOf(Organization::class, $descriptor->getOrganization());
         $this->assertCount(2, $descriptor->getContactPerson());
         $this->assertInstanceOf(ContactPerson::class, $descriptor->getContactPerson()[0]);
         $this->assertInstanceOf(ContactPerson::class, $descriptor->getContactPerson()[1]);
-        $this->assertEquals('TheID', $descriptor->getID());
-        $this->assertEquals('2009-02-13T23:31:30Z', $descriptor->getValidUntil()->format(C::DATETIME_FORMAT));
-        $this->assertEquals('PT5000S', $descriptor->getCacheDuration());
-        $this->assertEquals('https://error.reporting/', $descriptor->getErrorURL());
+        $this->assertEquals('TheID', $descriptor->getID()->getValue());
+        $this->assertEquals('2009-02-13T23:31:30Z', $descriptor->getValidUntil()->getValue());
+        $this->assertEquals('PT5000S', $descriptor->getCacheDuration()->getValue());
+        $this->assertEquals('https://error.reporting/', $descriptor->getErrorURL()->getValue());
 
         $chunk = $descriptor->getRawRoleDescriptor();
         $this->assertEquals('md', $chunk->getPrefix());
@@ -263,7 +315,7 @@ final class RoleDescriptorTest extends TestCase
         $this->assertEquals('urn:x-simplesamlphp:namespace', $extensions[0]->getNamespaceURI());
         $this->assertEquals('Chunk', $extensions[0]->getLocalName());
 
-        $this->assertEquals($element->ownerDocument->saveXML($element), strval($chunk));
+        $this->assertEquals($element->ownerDocument?->saveXML($element), strval($descriptor));
     }
 
 
@@ -272,14 +324,15 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithoutSupportedProtocols(): void
     {
-        self::$xmlRepresentation->documentElement->removeAttribute('protocolSupportEnumeration');
+        $element = clone self::$xmlRepresentation->documentElement;
+        $element->removeAttribute('protocolSupportEnumeration');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage(
             'Missing \'protocolSupportEnumeration\' attribute on md:RoleDescriptor.',
         );
 
-        UnknownRoleDescriptor::fromXML(self::$xmlRepresentation->documentElement);
+        UnknownRoleDescriptor::fromXML($element);
     }
 
 
@@ -288,23 +341,11 @@ final class RoleDescriptorTest extends TestCase
      */
     public function testUnmarshallingWithEmptySupportedProtocols(): void
     {
-        self::$xmlRepresentation->documentElement->setAttribute('protocolSupportEnumeration', '');
+        $element = clone self::$xmlRepresentation->documentElement;
+        $element->setAttribute('protocolSupportEnumeration', '');
 
         $this->expectException(ProtocolViolationException::class);
 
-        UnknownRoleDescriptor::fromXML(self::$xmlRepresentation->documentElement);
-    }
-
-
-    /**
-     * Test that creating an UnknownRoleDescriptor from XML fails if errorURL is not a valid URL.
-     */
-    public function testUnmarshallingWithInvalidErrorURL(): void
-    {
-        self::$xmlRepresentation->documentElement->setAttribute('errorURL', 'not a URL');
-
-        $this->expectException(ProtocolViolationException::class);
-
-        UnknownRoleDescriptor::fromXML(self::$xmlRepresentation->documentElement);
+        UnknownRoleDescriptor::fromXML($element);
     }
 }

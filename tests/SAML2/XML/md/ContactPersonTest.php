@@ -10,6 +10,8 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\EmailAddressValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\Company;
 use SimpleSAML\SAML2\XML\md\ContactPerson;
@@ -21,10 +23,11 @@ use SimpleSAML\SAML2\XML\md\TelephoneNumber;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Type\StringValue;
 
 use function dirname;
 use function strval;
@@ -90,21 +93,38 @@ final class ContactPersonTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
-        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', StringValue::fromString('testval1'));
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', StringValue::fromString('testval2'));
 
         $contactPerson = new ContactPerson(
-            'other',
-            new Company('Test Company'),
-            new GivenName('John'),
-            new SurName('Doe'),
+            SAMLStringValue::fromString('other'),
+            new Company(
+                SAMLStringValue::fromString('Test Company'),
+            ),
+            new GivenName(
+                SAMLStringValue::fromString('John'),
+            ),
+            new SurName(
+                SAMLStringValue::fromString('Doe'),
+            ),
             new Extensions(
                 [
                     new Chunk(self::$ext->documentElement),
                 ],
             ),
-            [new EmailAddress('jdoe@test.company'), new EmailAddress('john.doe@test.company')],
-            [new TelephoneNumber('1-234-567-8901')],
+            [
+                new EmailAddress(
+                    EmailAddressValue::fromString('jdoe@test.company'),
+                ),
+                new EmailAddress(
+                    EmailAddressValue::fromString('john.doe@test.company'),
+                ),
+            ],
+            [
+                new TelephoneNumber(
+                    SAMLStringValue::fromString('1-234-567-8901'),
+                ),
+            ],
             [$attr1, $attr2],
         );
 
@@ -124,7 +144,9 @@ final class ContactPersonTest extends TestCase
         $this->expectExceptionMessage(
             'Expected one of: "technical", "support", "administrative", "billing", "other". Got: "wrong"',
         );
-        new ContactPerson('wrong');
+        new ContactPerson(
+            SAMLStringValue::fromString('wrong'),
+        );
     }
 
 

@@ -4,19 +4,17 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdrpi;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-
-use function preg_replace;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 
 /**
  * Class for handling the mdrpi:RegistrationInfo element.
@@ -34,16 +32,15 @@ final class RegistrationInfo extends AbstractMdrpiElement implements
     /**
      * Create/parse a mdrpi:RegistrationInfo element.
      *
-     * @param string $registrationAuthority
-     * @param \DateTimeImmutable|null $registrationInstant
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue $registrationAuthority
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $registrationInstant
      * @param \SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy[] $registrationPolicy
      */
     public function __construct(
-        protected string $registrationAuthority,
-        protected ?DateTimeImmutable $registrationInstant = null,
+        protected SAMLStringValue $registrationAuthority,
+        protected ?SAMLDateTimeValue $registrationInstant = null,
         protected array $registrationPolicy = [],
     ) {
-        Assert::nullOrSame($registrationInstant?->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
         Assert::maxCount($registrationPolicy, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($registrationPolicy, RegistrationPolicy::class);
 
@@ -69,9 +66,9 @@ final class RegistrationInfo extends AbstractMdrpiElement implements
     /**
      * Collect the value of the RegistrationAuthority property
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue
      */
-    public function getRegistrationAuthority(): string
+    public function getRegistrationAuthority(): SAMLStringValue
     {
         return $this->registrationAuthority;
     }
@@ -80,9 +77,9 @@ final class RegistrationInfo extends AbstractMdrpiElement implements
     /**
      * Collect the value of the registrationInstant property
      *
-     * @return \DateTimeImmutable|null
+     * @return \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null
      */
-    public function getRegistrationInstant(): ?DateTimeImmutable
+    public function getRegistrationInstant(): ?SAMLDateTimeValue
     {
         return $this->registrationInstant;
     }
@@ -105,9 +102,9 @@ final class RegistrationInfo extends AbstractMdrpiElement implements
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static
@@ -115,17 +112,8 @@ final class RegistrationInfo extends AbstractMdrpiElement implements
         Assert::same($xml->localName, 'RegistrationInfo', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, RegistrationInfo::NS, InvalidDOMElementException::class);
 
-        $registrationAuthority = self::getAttribute($xml, 'registrationAuthority');
-        $registrationInstant = self::getOptionalAttribute($xml, 'registrationInstant', null);
-
-        // 2.1.1:  Time values MUST be expressed in the UTC timezone using the 'Z' timezone identifier
-        if ($registrationInstant !== null) {
-            // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
-            $registrationInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $registrationInstant, 1);
-
-            SAMLAssert::validDateTime($registrationInstant, ProtocolViolationException::class);
-            $registrationInstant = new DateTimeImmutable($registrationInstant);
-        }
+        $registrationAuthority = self::getAttribute($xml, 'registrationAuthority', SAMLStringValue::class);
+        $registrationInstant = self::getOptionalAttribute($xml, 'registrationInstant', SAMLDateTimeValue::class, null);
         $RegistrationPolicy = RegistrationPolicy::getChildrenOfClass($xml);
 
         return new static($registrationAuthority, $registrationInstant, $RegistrationPolicy);
@@ -141,10 +129,10 @@ final class RegistrationInfo extends AbstractMdrpiElement implements
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('registrationAuthority', $this->getRegistrationAuthority());
+        $e->setAttribute('registrationAuthority', $this->getRegistrationAuthority()->getValue());
 
         if ($this->getRegistrationInstant() !== null) {
-            $e->setAttribute('registrationInstant', $this->getRegistrationInstant()->format(C::DATETIME_FORMAT));
+            $e->setAttribute('registrationInstant', $this->getRegistrationInstant()->getValue());
         }
 
         foreach ($this->getRegistrationPolicy() as $rp) {
@@ -166,8 +154,8 @@ final class RegistrationInfo extends AbstractMdrpiElement implements
         $data = self::processArrayContents($data);
 
         return new static(
-            $data['registrationAuthority'],
-            $data['registrationInstant'] ?? null,
+            SAMLStringValue::fromString($data['registrationAuthority']),
+            $data['registrationInstant'] !== null ? SAMLDateTimeValue::fromString($data['registrationInstant']) : null,
             $data['RegistrationPolicy'] ?? [],
         );
     }
@@ -196,8 +184,8 @@ final class RegistrationInfo extends AbstractMdrpiElement implements
 
         if (array_key_exists('registrationinstant', $data)) {
             Assert::string($data['registrationinstant'], ArrayValidationException::class);
-            SAMLAssert::validDateTime($data['registrationinstant'], ArrayValidationException::class);
-            $retval['registrationInstant'] = new DateTimeImmutable($data['registrationinstant']);
+            Assert::validSAMLDateTime($data['registrationinstant'], ArrayValidationException::class);
+            $retval['registrationInstant'] = $data['registrationinstant'];
         }
 
         if (array_key_exists('registrationpolicy', $data)) {
@@ -219,10 +207,10 @@ final class RegistrationInfo extends AbstractMdrpiElement implements
     public function toArray(): array
     {
         $data = [];
-        $data['registrationAuthority'] = $this->getRegistrationAuthority();
+        $data['registrationAuthority'] = $this->getRegistrationAuthority()->getValue();
 
         if ($this->getRegistrationInstant() !== null) {
-            $data['registrationInstant'] = $this->getRegistrationInstant()->format(C::DATETIME_FORMAT);
+            $data['registrationInstant'] = $this->getRegistrationInstant()->getValue();
         }
 
         if (!empty($this->getRegistrationPolicy())) {

@@ -18,9 +18,5 @@
     <xenc:CipherData>
       <xenc:CipherValue>he5ZBjtfp/1/Y3PgE/CWspDPADig9vuZ7yZyYXDQ1wA/HBTPCldtL/p6UT5RCAFYUwN6kp3jnHkhK1yMjrI1SMw0n5NEc2wO9N5inQIeQOZ8XD9yD9M5fHvWz2ByNMGlB35RWMnBRHzDi1PRV7Irwcs9WoiODh3i6j2vYXP7cAo=</xenc:CipherValue>
     </xenc:CipherData>
-    <xenc:ReferenceList>
-      <xenc:DataReference URI="#Encrypted_DATA_ID"/>
-    </xenc:ReferenceList>
-    <xenc:CarriedKeyName>Name of the key</xenc:CarriedKeyName>
   </xenc:EncryptedKey>
 </saml:EncryptedID>

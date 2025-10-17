@@ -4,11 +4,15 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\DomainValue;
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
@@ -17,11 +21,11 @@ use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnStatement;
 use SimpleSAML\SAML2\XML\saml\SubjectLocality;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Exception\MissingElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
 use function dirname;
 use function strval;
@@ -61,15 +65,24 @@ final class AuthnStatementTest extends TestCase
     {
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
+                new AuthnContextClassRef(
+                    SAMLAnyURIValue::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT),
+                ),
                 null,
                 null,
-                [new AuthenticatingAuthority('https://idp.example.com/SAML2')],
+                [
+                    new AuthenticatingAuthority(
+                        EntityIDValue::fromString('https://idp.example.com/SAML2'),
+                    ),
+                ],
             ),
-            new DateTimeImmutable('2020-03-23T23:37:24Z'),
-            new DateTimeImmutable('2020-03-23T23:37:24Z'),
-            '123',
-            new SubjectLocality('1.1.1.1', 'idp.example.org'),
+            SAMLDateTimeValue::fromString('2020-03-23T23:37:24Z'),
+            SAMLDateTimeValue::fromString('2020-03-23T23:37:24Z'),
+            SAMLStringValue::fromString('123'),
+            new SubjectLocality(
+                SAMLStringValue::fromString('1.1.1.1'),
+                DomainValue::fromString('idp.example.org'),
+            ),
         );
 
         $this->assertEquals(
@@ -85,15 +98,24 @@ final class AuthnStatementTest extends TestCase
     {
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
+                new AuthnContextClassRef(
+                    SAMLAnyURIValue::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT),
+                ),
                 null,
                 null,
-                [new AuthenticatingAuthority('https://idp.example.com/SAML2')],
+                [
+                    new AuthenticatingAuthority(
+                        EntityIDValue::fromString('https://idp.example.com/SAML2'),
+                    ),
+                ],
             ),
-            new DateTimeImmutable('2020-03-23T23:37:24Z'),
-            new DateTimeImmutable('2020-03-23T23:37:24Z'),
-            '123',
-            new SubjectLocality('1.1.1.1', 'idp.example.org'),
+            SAMLDateTimeValue::fromString('2020-03-23T23:37:24Z'),
+            SAMLDateTimeValue::fromString('2020-03-23T23:37:24Z'),
+            SAMLStringValue::fromString('123'),
+            new SubjectLocality(
+                SAMLStringValue::fromString('1.1.1.1'),
+                DomainValue::fromString('idp.example.org'),
+            ),
         );
 
         // Marshall it to a \DOMElement
