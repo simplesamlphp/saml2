@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Certificate;
 
-use SimpleSAML\SAML2\Certificate\PrivateKey;
 use SimpleSAML\SAML2\Configuration\DecryptionProvider;
 use SimpleSAML\SAML2\Configuration\PrivateKey as PrivateKeyConfiguration;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
-use SimpleSAML\SAML2\Utilities\File;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
+use SimpleSAML\XMLSecurity\Key\SymmetricKey;
 
 class PrivateKeyLoader
 {
@@ -18,17 +16,14 @@ class PrivateKeyLoader
      * Loads a private key based on the configuration given.
      *
      * @param \SimpleSAML\SAML2\Configuration\PrivateKey $key
-     * @return \SimpleSAML\SAML2\Certificate\PrivateKey
+     * @return \SimpleSAML\XMLSecurity\Key\PrivateKey
      */
     public function loadPrivateKey(PrivateKeyConfiguration $key): PrivateKey
     {
-        if ($key->isFile()) {
-            $privateKey = File::getFileContents($key->getFilePath());
-        } else {
-            $privateKey = $key->getContents();
-        }
-
-        return PrivateKey::create($privateKey, $key->getPassPhrase());
+        return PrivateKey::fromFile(
+            $key->isFile() ? $key->getFilePath() : $key->getContents(),
+            $key->getPassPhrase(),
+        );
     }
 
 
@@ -46,8 +41,7 @@ class PrivateKeyLoader
 
         $senderSharedKey = $identityProvider->getSharedKey();
         if ($senderSharedKey !== null) {
-            $key = new XMLSecurityKey(C::BLOCK_ENC_AES128);
-            $key->loadKey($senderSharedKey);
+            $key = new SymmetricKey($senderSharedKey);
             $decryptionKeys->add($key);
 
             return $decryptionKeys;
@@ -56,32 +50,13 @@ class PrivateKeyLoader
         $newPrivateKey = $serviceProvider->getPrivateKey(PrivateKeyConfiguration::NAME_NEW);
         if ($newPrivateKey instanceof PrivateKeyConfiguration) {
             $loadedKey = $this->loadPrivateKey($newPrivateKey);
-            $decryptionKeys->add($this->convertPrivateKeyToRsaKey($loadedKey));
+            $decryptionKeys->add($loadedKey);
         }
 
         $privateKey = $serviceProvider->getPrivateKey(PrivateKeyConfiguration::NAME_DEFAULT, true);
         $loadedKey  = $this->loadPrivateKey($privateKey);
-        $decryptionKeys->add($this->convertPrivateKeyToRsaKey($loadedKey));
+        $decryptionKeys->add($loadedKey);
 
         return $decryptionKeys;
-    }
-
-
-    /**
-     * @param \SimpleSAML\SAML2\Certificate\PrivateKey $privateKey
-     * @throws \Exception
-     * @return \SimpleSAML\XMLSecurity\XMLSecurityKey
-     */
-    private function convertPrivateKeyToRsaKey(PrivateKey $privateKey): XMLSecurityKey
-    {
-        $key = new XMLSecurityKey(XMLSecurityKey::RSA_1_5, ['type' => 'private']);
-        $passphrase = $privateKey->getPassphrase();
-        if ($passphrase) {
-            $key->passphrase = $passphrase;
-        }
-
-        $key->loadKey($privateKey->getKeyAsString());
-
-        return $key;
     }
 }
