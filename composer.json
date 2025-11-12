@@ -31,7 +31,7 @@
         "psr/http-message": "~2.0",
         "psr/log": "~2.3.1 || ~3.0.0",
         "simplesamlphp/assert": "~1.9.0",
-        "simplesamlphp/xml-common": "~2.0.3",
+        "simplesamlphp/xml-common": "~2.1.2",
         "simplesamlphp/xml-security": "~2.0.2",
         "simplesamlphp/xml-soap": "~2.0.3"
     },
@@ -40,7 +40,6 @@
 
         "beste/clock": "~3.0.0",
         "mockery/mockery": "~1.6.12",
-        "simplesamlphp/composer-xmlprovider-installer": "~1.0.2",
         "simplesamlphp/simplesamlphp-test-framework": "~1.10.2"
     },
     "suggest": {
