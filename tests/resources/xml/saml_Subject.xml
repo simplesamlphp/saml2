@@ -1,9 +1,9 @@
-<saml:Subject xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+<saml:Subject xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:test="urn:test:something" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
   <saml:NameID SPNameQualifier="https://sp.example.org/authentication/sp/metadata" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">SomeNameIDValue</saml:NameID>
   <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
     <saml:NameID SPNameQualifier="https://sp.example.org/authentication/sp/metadata" Format="urn:oasis:names:tc:SAML:2.0:nameid-format:transient">SomeOtherNameIDValue</saml:NameID>
-    <saml:SubjectConfirmationData xmlns:test="urn:test:something" NotBefore="2001-04-19T04:25:21Z" NotOnOrAfter="2009-02-13T23:31:30Z" Recipient="https://simplesamlphp.org/sp/metadata" InResponseTo="SomeRequestID" Address="127.0.0.1" test:attr1="testval1" test:attr2="testval2">
-      <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+    <saml:SubjectConfirmationData NotBefore="2001-04-19T04:25:21Z" NotOnOrAfter="2009-02-13T23:31:30Z" Recipient="https://simplesamlphp.org/sp/metadata" InResponseTo="SomeRequestID" Address="127.0.0.1" test:attr1="testval1" test:attr2="testval2">
+      <ds:KeyInfo>
         <ds:KeyName>SomeKey</ds:KeyName>
       </ds:KeyInfo>
       <some>Arbitrary Element</some>

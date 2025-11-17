@@ -1,5 +1,5 @@
-<samlp:AssertionIDRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" Version="2.0" ID="_2b0226190ca1c22de6f66e85f5c95158" IssueInstant="2014-09-22T13:42:00Z" Destination="https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO">
-  <saml:Issuer xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">https://gateway.stepup.org/saml20/sp/metadata</saml:Issuer>
-  <saml:AssertionIDRef xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">_abc123</saml:AssertionIDRef>
-  <saml:AssertionIDRef xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">_def456</saml:AssertionIDRef>
+<samlp:AssertionIDRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Version="2.0" ID="_2b0226190ca1c22de6f66e85f5c95158" IssueInstant="2014-09-22T13:42:00Z" Destination="https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO">
+  <saml:Issuer>https://gateway.stepup.org/saml20/sp/metadata</saml:Issuer>
+  <saml:AssertionIDRef>_abc123</saml:AssertionIDRef>
+  <saml:AssertionIDRef>_def456</saml:AssertionIDRef>
 </samlp:AssertionIDRequest>

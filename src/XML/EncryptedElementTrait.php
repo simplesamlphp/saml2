@@ -35,14 +35,14 @@ trait EncryptedElementTrait
      */
     final public function __construct(
         protected EncryptedData $encryptedData,
-        array $encryptedKey = [],
+        protected array $decryptionKeys = [],
     ) {
-        Assert::allIsInstanceOf($encryptedKey, EncryptedKey::class, ProtocolViolationException::class);
-        $this->encryptedKey = $encryptedKey;
+        Assert::allIsInstanceOf($decryptionKeys, EncryptedKey::class, ProtocolViolationException::class);
 
         /**
          * 6.2: The <EncryptedData> element's Type attribute SHOULD be used and, if it is
          * present, MUST have the value http://www.w3.org/2001/04/xmlenc#Element.
+         *
          */
         Assert::nullOrSame($encryptedData->getType()->getValue(), C::XMLENC_ELEMENT);
 
@@ -75,9 +75,9 @@ trait EncryptedElementTrait
     }
 
 
-    public function getEncryptedKeys(): array
+    public function getDecryptionKeys(): array
     {
-        return $this->encryptedKey;
+        return $this->decryptionKeys;
     }
 
 
@@ -118,10 +118,13 @@ trait EncryptedElementTrait
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
+
         $this->encryptedData->toXML($e);
-        foreach ($this->getEncryptedKeys() as $key) {
+
+        foreach ($this->getDecryptionKeys() as $key) {
             $key->toXML($e);
         }
+
         return $e;
     }
 }

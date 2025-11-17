@@ -330,13 +330,14 @@ XML
      */
     public function testMultipleIdentifiers(): void
     {
+        $dsNamespace = KeyInfo::NS;
         $samlNamespace = Subject::NS;
         $xsiNamespace = C_XSI::NS_XSI;
 
         $document = DOMDocumentFactory::fromString(
             <<<XML
-<saml:Subject xmlns:saml="{$samlNamespace}">
-  <saml:BaseID xmlns:ssp="urn:x-simplesamlphp:namespace" xmlns:xsi="{$xsiNamespace}" xsi:type="ssp:CustomBaseIDType">
+<saml:Subject xmlns:ds="{$dsNamespace}" xmlns:saml="{$samlNamespace}" xmlns:ssp="urn:x-simplesamlphp:namespace" xmlns:test="urn:test:something" xmlns:xsi="{$xsiNamespace}">
+  <saml:BaseID xsi:type="ssp:CustomBaseIDType">
     <saml:Audience>urn:some:audience</saml:Audience>
   </saml:BaseID>
   <saml:NameID
