@@ -1,6 +1,6 @@
-<ecp:Request xmlns:ecp="urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" SOAP-ENV:mustUnderstand="1" SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next" ProviderName="PHPUnit" IsPassive="1">
-  <saml:Issuer xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" NameQualifier="urn:x-simplesamlphp:namequalifier" SPNameQualifier="urn:x-simplesamlphp:spnamequalifier" Format="urn:the:format" SPProvidedID="TheSPProvidedID">urn:x-simplesamlphp:issuer</saml:Issuer>
-  <samlp:IDPList xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol">
+<ecp:Request xmlns:ecp="urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" SOAP-ENV:mustUnderstand="1" SOAP-ENV:actor="http://schemas.xmlsoap.org/soap/actor/next" ProviderName="PHPUnit" IsPassive="1">
+  <saml:Issuer NameQualifier="urn:x-simplesamlphp:namequalifier" SPNameQualifier="urn:x-simplesamlphp:spnamequalifier" Format="urn:the:format" SPProvidedID="TheSPProvidedID">urn:x-simplesamlphp:issuer</saml:Issuer>
+  <samlp:IDPList>
     <samlp:IDPEntry ProviderID="urn:some:requester1" Name="testName1" Loc="urn:test:testLoc1"/>
     <samlp:IDPEntry ProviderID="urn:some:requester2" Name="testName2" Loc="urn:test:testLoc2"/>
     <samlp:GetComplete>https://some/location</samlp:GetComplete>

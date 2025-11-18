@@ -1,14 +1,14 @@
-<md:RoleDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ssp="urn:x-simplesamlphp:namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol urn:x-simplesamlphp:protocol" errorURL="https://error.reporting/" ssp:phpunit="test" xsi:type="ssp:CustomRoleDescriptorType">
+<md:RoleDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ssp="urn:x-simplesamlphp:namespace" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:test="urn:test:something" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="TheID" validUntil="2009-02-13T23:31:30Z" cacheDuration="PT5000S" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol urn:x-simplesamlphp:protocol" errorURL="https://error.reporting/" ssp:phpunit="test" xsi:type="ssp:CustomRoleDescriptorType">
   <md:Extensions>
     <ssp:Chunk>Some</ssp:Chunk>
   </md:Extensions>
   <md:KeyDescriptor use="signing">
-    <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+    <ds:KeyInfo>
       <ds:KeyName>IdentityProvider.com SSO Signing Key</ds:KeyName>
     </ds:KeyInfo>
   </md:KeyDescriptor>
   <md:KeyDescriptor use="encryption">
-    <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+    <ds:KeyInfo>
       <ds:KeyName>IdentityProvider.com SSO Encryption Key</ds:KeyName>
     </ds:KeyInfo>
     <md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"></md:EncryptionMethod>
@@ -18,7 +18,7 @@
     <md:OrganizationDisplayName xml:lang="en">Identity Providers R US, a Division of Lerxst Corp.</md:OrganizationDisplayName>
     <md:OrganizationURL xml:lang="en">https://IdentityProvider.com</md:OrganizationURL>
   </md:Organization>
-  <md:ContactPerson xmlns:test="urn:test:something" contactType="other" test:attr1="testval1" test:attr2="testval2">
+  <md:ContactPerson contactType="other" test:attr1="testval1" test:attr2="testval2">
     <md:Company>Test Company</md:Company>
     <md:GivenName>John</md:GivenName>
     <md:SurName>Doe</md:SurName>

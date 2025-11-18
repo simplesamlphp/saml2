@@ -1182,7 +1182,9 @@ XML;
 
         $identifier = $assertionToVerify->getSubject()?->getIdentifier();
         $this->assertInstanceOf(EncryptedID::class, $identifier);
-
+//var_dump( $identifier->getEncryptedData()->getKeyInfo()->getInfo() );
+// This contains a Chunk  instead of an EncryptedKey-object
+// ToDo: figure out why
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $identifier->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),

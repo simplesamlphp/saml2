@@ -235,16 +235,16 @@ final class EntityDescriptorTest extends TestCase
     public function testMarshallingWithAffiliationDescriptor(): void
     {
         $ns_md = C::NS_MD;
+        $ns_mdrpi = C::NS_MDRPI;
         $entity_idp = C::ENTITY_IDP;
         $entity_other = C::ENTITY_OTHER;
 
         $document = DOMDocumentFactory::fromString(
             <<<XML
-<md:EntityDescriptor xmlns:md="{$ns_md}" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z"
+<md:EntityDescriptor xmlns:md="{$ns_md}" xmlns:mdrpi="{$ns_mdrpi}" ID="_5A3CHB081" validUntil="2020-02-05T09:39:25Z"
     cacheDuration="P2Y6M5DT12H35M30S" entityID="{$entity_idp}">
   <md:Extensions>
-    <mdrpi:PublicationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
-        publisher="http://publisher.ra/" creationInstant="2020-02-03T13:46:24Z">
+    <mdrpi:PublicationInfo publisher="http://publisher.ra/" creationInstant="2020-02-03T13:46:24Z">
       <mdrpi:UsagePolicy xml:lang="en">http://publisher.ra/policy.txt</mdrpi:UsagePolicy>
     </mdrpi:PublicationInfo>
   </md:Extensions>

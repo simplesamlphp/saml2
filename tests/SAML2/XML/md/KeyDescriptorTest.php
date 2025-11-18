@@ -97,8 +97,8 @@ final class KeyDescriptorTest extends TestCase
 
         $this->assertEquals(
             <<<XML
-<md:KeyDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
-  <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<md:KeyDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <ds:KeyInfo>
     <ds:KeyName>IdentityProvider.com SSO Key</ds:KeyName>
   </ds:KeyInfo>
 </md:KeyDescriptor>
@@ -134,8 +134,8 @@ XML
     {
         $document = DOMDocumentFactory::fromString(
             <<<XML
-<md:KeyDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
-  <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<md:KeyDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <ds:KeyInfo>
     <ds:KeyName>IdentityProvider.com SSO Key</ds:KeyName>
   </ds:KeyInfo>
 </md:KeyDescriptor>

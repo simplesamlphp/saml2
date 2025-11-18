@@ -1,5 +1,5 @@
-<saml:AuthnContext xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
-  <saml:AuthnContextDecl xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:ssp="urn:x-simplesamlphp:namespace" ssp:attr1="testval1">
+<saml:AuthnContext xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:ssp="urn:x-simplesamlphp:namespace">
+  <saml:AuthnContextDecl ssp:attr1="testval1">
     <ssp:AuthenticationContextDeclaration>
       <ssp:Identification nym="verinymity">
         <ssp:Extension>

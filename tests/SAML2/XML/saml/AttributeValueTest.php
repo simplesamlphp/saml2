@@ -149,17 +149,13 @@ XML;
     /**
      * Verifies that supplying an empty string as attribute value will
      * generate a tag with no content (instead of e.g. an empty tag).
-     *
      */
     public function testEmptyStringAttribute(): void
     {
         $av = new AttributeValue('');
         $xmlRepresentation = clone self::$xmlRepresentation;
         $xmlRepresentation->documentElement->textContent = '';
-//        $this->assertEqualXMLStructure(
-//            $this->xmlRepresentation->documentElement,
-//            $av->toXML(),
-//        );
+
         $this->assertEquals('', $av->getValue());
         $this->assertEquals('xs:string', $av->getXsiType());
     }
@@ -203,22 +199,22 @@ XML
     {
         $document = DOMDocumentFactory::fromString(
             <<<XML
-<saml:AttributeValue xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+<saml:AttributeValue xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
   <saml:EncryptedID>
-    <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Id="_4ea05f00adb06c642e0cb52f063e2570-1" Type="http://www.w3.org/2001/04/xmlenc#Element">
+    <xenc:EncryptedData Id="_4ea05f00adb06c642e0cb52f063e2570-1" Type="http://www.w3.org/2001/04/xmlenc#Element">
       <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#aes256-cbc"/>
-      <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+      <ds:KeyInfo>
         <ds:RetrievalMethod URI="#_dc9043a7cbec55c6fcc61f1cf64cf868-1" Type="http://www.w3.org/2001/04/xmlenc#EncryptedKey"/>
       </ds:KeyInfo>
       <xenc:CipherData>
         <xenc:CipherValue>vErnRkA0oSmtQGamjZGa9RFN25SUx1UVLsLAOtopt7pyywTD7wu9pyocfD4HqduXCsvaiZpJykz11utZdvtJ0sOdm9oE+lAtNTUnKzGSNoSopGCzwNu5pqwhIEvWEWeilmJayAC2elpRYOnUs/rePxibz0Wbqa7BItLt6ZkKTtMkv0U0PpgGenF1pWzsahRtw6Y5tFq7xFQkG/z0Lz5rJ+IxExYXgB3LN6FBmVcB1ioahk2ovOwbLQ+lNAdqUMhpZx6fgdL2v7g4OYPK0rDgSALU3gU3dvU4hC/Kk9N5Rkw=</xenc:CipherValue>
       </xenc:CipherData>
     </xenc:EncryptedData>
-    <xenc:EncryptedKey xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Id="_dc9043a7cbec55c6fcc61f1cf64cf868-1" Recipient="urn:nl-eid-gdi:1.0:DV:00000009900006840000:entities:9780">
+    <xenc:EncryptedKey Id="_dc9043a7cbec55c6fcc61f1cf64cf868-1" Recipient="urn:nl-eid-gdi:1.0:DV:00000009900006840000:entities:9780">
       <xenc:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p">
-        <ds:DigestMethod xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
+        <ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/>
       </xenc:EncryptionMethod>
-      <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+      <ds:KeyInfo>
         <ds:KeyName>_b420654655d491b49555c698f80efb7bda3ac6ef</ds:KeyName>
       </ds:KeyInfo>
       <xenc:CipherData>
