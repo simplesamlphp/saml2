@@ -13,7 +13,6 @@ use SimpleSAML\SAML2\XML\saml\Advice;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\AssertionIDRef;
 use SimpleSAML\SAML2\XML\saml\AssertionURIRef;
-use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;

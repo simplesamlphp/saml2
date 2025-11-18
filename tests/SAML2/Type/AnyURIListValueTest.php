@@ -31,7 +31,7 @@ final class AnyURIListValueTest extends TestCase
         try {
             AnyURIListValue::fromString($anyURIList);
             $this->assertTrue($shouldPass);
-        } catch (ProtocolViolationException|SchemaViolationException $e) {
+        } catch (ProtocolViolationException | SchemaViolationException $e) {
             $this->assertFalse($shouldPass);
         }
     }
@@ -48,7 +48,7 @@ final class AnyURIListValueTest extends TestCase
 
 
     /**
-     * @return array<string, array{0: true, 1: string}>
+     * @return array<array{0: bool, 1: string}>
      */
     public static function provideAnyURIList(): array
     {

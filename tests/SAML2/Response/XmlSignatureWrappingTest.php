@@ -66,8 +66,10 @@ final class XmlSignatureWrappingTest extends TestCase
      */
     private function getSignedAssertionWithSignatureThatReferencesAnotherAssertion(): Assertion
     {
-        $doc = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionWithInvalidReferencedId.xml');
-        return Assertion::fromXML($doc->firstChild);
+        $document = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionWithInvalidReferencedId.xml');
+        /** @var \DOMElement $element */
+        $element = $document->firstChild;
+        return Assertion::fromXML($element);
     }
 
 
@@ -77,6 +79,8 @@ final class XmlSignatureWrappingTest extends TestCase
     private function getSignedAssertionWithEmbeddedAssertionReferencedInSignature(): Assertion
     {
         $document = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionReferencedEmbeddedAssertion.xml');
-        return Assertion::fromXML($document->firstChild);
+        /** @var \DOMElement $element */
+        $element = $document->firstChild;
+        return Assertion::fromXML($element);
     }
 }

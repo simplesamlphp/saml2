@@ -31,7 +31,7 @@ trait EncryptedElementTrait
      * Constructor for encrypted elements.
      *
      * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedData $encryptedData The EncryptedData object.
-     * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey[] $encryptedKey The EncryptedKey objects.
+     * @param \SimpleSAML\XMLSecurity\XML\xenc\EncryptedKey[] $decryptionKeys The EncryptedKey objects.
      */
     final public function __construct(
         protected EncryptedData $encryptedData,

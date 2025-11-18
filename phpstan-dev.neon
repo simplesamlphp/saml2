@@ -2,5 +2,5 @@ parameters:
   level: 5
   paths:
     - tests
-#includes:
-#  - phpstan-baseline-dev.neon
+includes:
+  - phpstan-baseline-dev.neon

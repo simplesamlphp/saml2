@@ -7,6 +7,12 @@ parameters:
 			path: tests/InterOperability/EntityDescriptorTest.php
 
 		-
+			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''SimpleSAML\\\\SAML2\\\\Utilities\\\\ArrayCollection'' and SimpleSAML\\SAML2\\Utilities\\ArrayCollection will always evaluate to true\.$#'
+			identifier: staticMethod.alreadyNarrowedType
+			count: 1
+			path: tests/SAML2/Assertion/ProcessorTest.php
+
+		-
 			message: '#^PHPDoc tag @var for property SimpleSAML\\Test\\SAML2\\Assertion\\Transformer\\NameIdDecryptionTransformerTest\:\:\$validator with type SimpleSAML\\SAML2\\Response\\Validation\\Validator is incompatible with native type SimpleSAML\\SAML2\\Signature\\Validator\.$#'
 			identifier: property.phpDocType
 			count: 1
@@ -37,10 +43,22 @@ parameters:
 			path: tests/SAML2/Assertion/Validation/AssertionValidatorTest.php
 
 		-
+			message: '#^Missing call to parent\:\:setUp\(\) method\.$#'
+			identifier: phpunit.callParent
+			count: 1
+			path: tests/SAML2/Assertion/Validation/ConstraintValidator/SpIsValidAudienceTest.php
+
+		-
 			message: '#^Parameter \#1 \$serviceProvider of method SimpleSAML\\SAML2\\Assertion\\Validation\\ConstraintValidator\\SpIsValidAudience\:\:setServiceProvider\(\) expects SimpleSAML\\SAML2\\Configuration\\ServiceProvider, Mockery\\MockInterface given\.$#'
 			identifier: argument.type
 			count: 3
 			path: tests/SAML2/Assertion/Validation/ConstraintValidator/SpIsValidAudienceTest.php
+
+		-
+			message: '#^Missing call to parent\:\:setUp\(\) method\.$#'
+			identifier: phpunit.callParent
+			count: 1
+			path: tests/SAML2/Assertion/Validation/ConstraintValidator/SubjectConfirmationResponseToMatchesTest.php
 
 		-
 			message: '#^Parameter \#1 \$response of class SimpleSAML\\SAML2\\Assertion\\Validation\\ConstraintValidator\\SubjectConfirmationResponseToMatches constructor expects SimpleSAML\\SAML2\\XML\\samlp\\Response, Mockery\\MockInterface given\.$#'
@@ -67,10 +85,34 @@ parameters:
 			path: tests/SAML2/Certificate/KeyLoaderTest.php
 
 		-
+			message: '#^Missing call to parent\:\:setUp\(\) method\.$#'
+			identifier: phpunit.callParent
+			count: 1
+			path: tests/SAML2/Certificate/KeyLoaderTest.php
+
+		-
 			message: '#^Parameter \#1 \$config of method SimpleSAML\\SAML2\\Certificate\\KeyLoader\:\:loadKeysFromConfiguration\(\) expects SimpleSAML\\SAML2\\Configuration\\CertificateProvider, Mockery\\MockInterface given\.$#'
 			identifier: argument.type
 			count: 3
 			path: tests/SAML2/Certificate/KeyLoaderTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''SimpleSAML\\\\XMLSecurity\\\\Key\\\\PrivateKey'' and SimpleSAML\\XMLSecurity\\Key\\PrivateKey will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/SAML2/Certificate/PrivateKeyLoaderTest.php
+
+		-
+			message: '#^Missing call to parent\:\:setUp\(\) method\.$#'
+			identifier: phpunit.callParent
+			count: 1
+			path: tests/SAML2/Response/SignatureValidationTest.php
+
+		-
+			message: '#^Missing call to parent\:\:setUp\(\) method\.$#'
+			identifier: phpunit.callParent
+			count: 1
+			path: tests/SAML2/Response/Validation/ConstraintValidator/DestinationMatchesTest.php
 
 		-
 			message: '#^Parameter \#1 \$response of method SimpleSAML\\SAML2\\Response\\Validation\\ConstraintValidator\\DestinationMatches\:\:validate\(\) expects SimpleSAML\\SAML2\\XML\\samlp\\Response, Mockery\\MockInterface given\.$#'
@@ -79,25 +121,85 @@ parameters:
 			path: tests/SAML2/Response/Validation/ConstraintValidator/DestinationMatchesTest.php
 
 		-
+			message: '#^Missing call to parent\:\:setUp\(\) method\.$#'
+			identifier: phpunit.callParent
+			count: 1
+			path: tests/SAML2/Response/Validation/ConstraintValidator/IsSuccessfulTest.php
+
+		-
 			message: '#^Parameter \#1 \$response of method SimpleSAML\\SAML2\\Response\\Validation\\ConstraintValidator\\IsSuccessful\:\:validate\(\) expects SimpleSAML\\SAML2\\XML\\samlp\\Response, Mockery\\MockInterface given\.$#'
 			identifier: argument.type
 			count: 2
 			path: tests/SAML2/Response/Validation/ConstraintValidator/IsSuccessfulTest.php
 
 		-
-			message: '#^Parameter \#1 \$xml of static method SimpleSAML\\SAML2\\XML\\saml\\Assertion\:\:fromXML\(\) expects DOMElement, DOMNode\|null given\.$#'
-			identifier: argument.type
+			message: '#^Missing call to parent\:\:setUp\(\) method\.$#'
+			identifier: phpunit.callParent
+			count: 1
+			path: tests/SAML2/Signature/PublicKeyValidatorTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''ArrayIterator'' and ArrayIterator will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/SAML2/Utilities/ArrayCollectionTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''SimpleSAML\\\\SAML2\\\\Utilities\\\\ArrayCollection'' and SimpleSAML\\SAML2\\Utilities\\ArrayCollection will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
 			count: 2
-			path: tests/SAML2/Response/XmlSignatureWrappingTest.php
+			path: tests/SAML2/Utilities/ArrayCollectionTest.php
 
 		-
-			message: '#^Class SimpleSAML\\Test\\SAML2\\XML\\md\\AssertionFailedException not found\.$#'
-			identifier: class.notFound
-			count: 1
-			path: tests/SAML2/XML/md/RequestedAttributeTest.php
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''SimpleSAML\\\\SAML2\\\\XML\\\\md\\\\AdditionalMetadataLocation'' and SimpleSAML\\SAML2\\XML\\md\\AdditionalMetadataLocation will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 2
+			path: tests/SAML2/XML/md/EntityDescriptorTest.php
 
 		-
-			message: '#^Parameter \#1 \$exception of method PHPUnit\\Framework\\TestCase\:\:expectException\(\) expects class\-string\<Throwable\>, string given\.$#'
-			identifier: argument.type
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''SimpleSAML\\\\SAML2\\\\XML\\\\md\\\\ContactPerson'' and SimpleSAML\\SAML2\\XML\\md\\ContactPerson will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 3
+			path: tests/SAML2/XML/md/EntityDescriptorTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''SimpleSAML\\\\SAML2\\\\XML\\\\md\\\\SingleSignOnService'' and SimpleSAML\\SAML2\\XML\\md\\SingleSignOnService will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
 			count: 1
-			path: tests/SAML2/XML/md/RequestedAttributeTest.php
+			path: tests/SAML2/XML/md/IDPSSODescriptorTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''SimpleSAML\\\\SAML2\\\\XML\\\\md\\\\AbstractRoleDescriptor'' and SimpleSAML\\SAML2\\XML\\md\\AbstractRoleDescriptor will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/SAML2/XML/md/RoleDescriptorTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''SimpleSAML\\\\SAML2\\\\XML\\\\md\\\\ContactPerson'' and SimpleSAML\\SAML2\\XML\\md\\ContactPerson will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 4
+			path: tests/SAML2/XML/md/RoleDescriptorTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''SimpleSAML\\\\SAML2\\\\XML\\\\md\\\\KeyDescriptor'' and SimpleSAML\\SAML2\\XML\\md\\KeyDescriptor will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 4
+			path: tests/SAML2/XML/md/RoleDescriptorTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''SimpleSAML\\\\SAML2\\\\XML\\\\saml\\\\NameID'' and SimpleSAML\\SAML2\\XML\\saml\\NameID will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/SAML2/XML/saml/AssertionTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''SimpleSAML\\\\SAML2\\\\XML\\\\saml\\\\NameID'' and array\<SimpleSAML\\SAML2\\XML\\saml\\AttributeValue\|SimpleSAML\\SAML2\\XML\\saml\\IdentifierInterface\> will always evaluate to false\.$#'
+			identifier: method.impossibleType
+			count: 4
+			path: tests/SAML2/XML/saml/AssertionTest.php
+
+		-
+			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''SimpleSAML\\\\Test\\\\SAML2\\\\CustomStatement'' and SimpleSAML\\Test\\SAML2\\CustomStatement will always evaluate to true\.$#'
+			identifier: method.alreadyNarrowedType
+			count: 1
+			path: tests/SAML2/XML/saml/StatementTest.php
