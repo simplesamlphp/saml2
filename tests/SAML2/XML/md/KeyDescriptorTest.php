@@ -7,13 +7,17 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Type\KeyTypesValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\EncryptionMethod;
 use SimpleSAML\SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\SAML2\XML\md\KeyTypesEnum;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
@@ -55,9 +59,17 @@ final class KeyDescriptorTest extends TestCase
     public function testMarshalling(): void
     {
         $kd = new KeyDescriptor(
-            new KeyInfo([new KeyName('IdentityProvider.com SSO Key')]),
-            'signing',
-            [new EncryptionMethod('http://www.w3.org/2001/04/xmlenc#rsa-1_5')],
+            new KeyInfo([
+                new KeyName(
+                    StringValue::fromString('IdentityProvider.com SSO Key'),
+                ),
+            ]),
+            KeyTypesValue::fromEnum(KeyTypesEnum::SIGNING),
+            [
+                new EncryptionMethod(
+                    SAMLAnyURIValue::fromString('http://www.w3.org/2001/04/xmlenc#rsa-1_5'),
+                ),
+            ],
         );
 
         $this->assertEquals(
@@ -68,34 +80,25 @@ final class KeyDescriptorTest extends TestCase
 
 
     /**
-     * Test that creating a KeyDescriptor from scratch with a wrong use fails.
-     */
-    public function testMarshallingWrongUse(): void
-    {
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".');
-
-        new KeyDescriptor(
-            new KeyInfo([new KeyName('IdentityProvider.com SSO Key')]),
-            'wrong',
-        );
-    }
-
-
-    /**
      * Test that creating a KeyDescriptor from scratch without any optional argument works.
      */
     public function testMarshallingWithoutOptionalParameters(): void
     {
-        $kd = new KeyDescriptor(new KeyInfo([new KeyName('IdentityProvider.com SSO Key')]));
+        $kd = new KeyDescriptor(
+            new KeyInfo([
+                new KeyName(
+                    StringValue::fromString('IdentityProvider.com SSO Key'),
+                ),
+            ]),
+        );
 
         $this->assertNull($kd->getUse());
         $this->assertEmpty($kd->getEncryptionMethod());
 
         $this->assertEquals(
             <<<XML
-<md:KeyDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
-  <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<md:KeyDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <ds:KeyInfo>
     <ds:KeyName>IdentityProvider.com SSO Key</ds:KeyName>
   </ds:KeyInfo>
 </md:KeyDescriptor>
@@ -117,8 +120,8 @@ XML
         $xmlRepresentation = clone self::$xmlRepresentation;
         $xmlRepresentation->documentElement->setAttribute('use', 'wrong');
 
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The "use" attribute of a KeyDescriptor can only be "encryption" or "signing".');
+        $this->expectException(SchemaViolationException::class);
+        $this->expectExceptionMessage('Expected one of: "signing", "encryption". Got: "wrong"');
 
         KeyDescriptor::fromXML($xmlRepresentation->documentElement);
     }
@@ -131,8 +134,8 @@ XML
     {
         $document = DOMDocumentFactory::fromString(
             <<<XML
-<md:KeyDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata">
-  <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<md:KeyDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <ds:KeyInfo>
     <ds:KeyName>IdentityProvider.com SSO Key</ds:KeyName>
   </ds:KeyInfo>
 </md:KeyDescriptor>

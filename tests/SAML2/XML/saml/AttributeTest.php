@@ -11,15 +11,18 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\EncryptedAttribute;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
@@ -79,13 +82,13 @@ final class AttributeTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
-        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', StringValue::fromString('testval1'));
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', StringValue::fromString('testval2'));
 
         $attribute = new Attribute(
-            'TheName',
-            C::NAMEFORMAT_BASIC,
-            'TheFriendlyName',
+            SAMLStringValue::fromString('TheName'),
+            SAMLAnyURIValue::fromString(C::NAMEFORMAT_BASIC),
+            SAMLStringValue::fromString('TheFriendlyName'),
             [
                 new AttributeValue('FirstValue'),
                 new AttributeValue('SecondValue'),
@@ -138,7 +141,7 @@ final class AttributeTest extends TestCase
         $encattr = EncryptedAttribute::fromXML($doc->documentElement);
 
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encattr->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
+            $encattr->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
 

@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\Test\SAML2\XML\samlp;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\SessionIndex;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -46,7 +47,9 @@ final class SessionIndexTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $sessionIndex = new SessionIndex('SomeSessionIndex1');
+        $sessionIndex = new SessionIndex(
+            SAMLStringValue::fromString('SomeSessionIndex1'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

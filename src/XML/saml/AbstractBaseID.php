@@ -7,21 +7,21 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\EncryptableElementTrait;
 use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 use SimpleSAML\SAML2\XML\ExtensionPointTrait;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Constants as C_XSI;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
+use SimpleSAML\XMLSchema\Type\QNameValue;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
-
-use function count;
-use function explode;
 
 /**
  * SAML BaseID data type.
@@ -45,23 +45,23 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
     /**
      * Initialize a saml:BaseID from scratch
      *
-     * @param string $type
-     * @param string|null $NameQualifier
-     * @param string|null $SPNameQualifier
+     * @param \SimpleSAML\XMLSchema\Type\QNameValue $type
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $NameQualifier
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $SPNameQualifier
      */
     protected function __construct(
-        protected string $type,
-        ?string $NameQualifier = null,
-        ?string $SPNameQualifier = null,
+        protected QNameValue $type,
+        ?SAMLStringValue $NameQualifier = null,
+        ?SAMLStringValue $SPNameQualifier = null,
     ) {
         parent::__construct($NameQualifier, $SPNameQualifier);
     }
 
 
     /**
-     * @inheritDoc
+     * @return \SimpleSAML\XMLSchema\Type\QNameValue
      */
-    public function getXsiType(): string
+    public function getXsiType(): QNameValue
     {
         return $this->type;
     }
@@ -73,7 +73,7 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
@@ -81,24 +81,12 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
         Assert::same($xml->localName, 'BaseID', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, C::NS_SAML, InvalidDOMElementException::class);
         Assert::true(
-            $xml->hasAttributeNS(C::NS_XSI, 'type'),
+            $xml->hasAttributeNS(C_XSI::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:BaseID> element.',
             SchemaViolationException::class,
         );
 
-        $type = $xml->getAttributeNS(C::NS_XSI, 'type');
-        Assert::validQName($type, SchemaViolationException::class);
-
-        // first, try to resolve the type to a full namespaced version
-        $qname = explode(':', $type, 2);
-        if (count($qname) === 2) {
-            list($prefix, $element) = $qname;
-        } else {
-            $prefix = null;
-            list($element) = $qname;
-        }
-        $ns = $xml->lookupNamespaceUri($prefix);
-        $type = ($ns === null) ? $element : implode(':', [$ns, $element]);
+        $type = QNameValue::fromDocument($xml->getAttributeNS(C_XSI::NS_XSI, 'type'), $xml);
 
         // now check if we have a handler registered for it
         $handler = Utils::getContainer()->getExtensionHandler($type);
@@ -107,8 +95,8 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
             return new UnknownID(
                 new Chunk($xml),
                 $type,
-                self::getOptionalAttribute($xml, 'NameQualifier', null),
-                self::getOptionalAttribute($xml, 'SPNameQualifier', null),
+                self::getOptionalAttribute($xml, 'NameQualifier', SAMLStringValue::class, null),
+                self::getOptionalAttribute($xml, 'SPNameQualifier', SAMLStringValue::class, null),
             );
         }
 
@@ -133,18 +121,18 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
         $e->setAttributeNS(
             'http://www.w3.org/2000/xmlns/',
             'xmlns:' . static::getXsiTypePrefix(),
-            static::getXsiTypeNamespaceURI(),
+            static::getXsiTypeNamespaceURI()->getValue(),
         );
 
-        $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', $this->getXsiType());
+        $type = new XMLAttribute(C_XSI::NS_XSI, 'xsi', 'type', $this->getXsiType());
         $type->toXML($e);
 
         if ($this->getNameQualifier() !== null) {
-            $e->setAttribute('NameQualifier', $this->getNameQualifier());
+            $e->setAttribute('NameQualifier', $this->getNameQualifier()->getValue());
         }
 
         if ($this->getSPNameQualifier() !== null) {
-            $e->setAttribute('SPNameQualifier', $this->getSPNameQualifier());
+            $e->setAttribute('SPNameQualifier', $this->getSPNameQualifier()->getValue());
         }
 
         return $e;

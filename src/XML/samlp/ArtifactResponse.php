@@ -4,22 +4,24 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\NCNameValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
-use function preg_replace;
 use function version_compare;
 
 /**
@@ -36,35 +38,32 @@ class ArtifactResponse extends AbstractStatusResponse implements SchemaValidatab
     /**
      * Constructor for SAML 2 ArtifactResponse.
      *
+     * @param \SimpleSAML\XMLSchema\Type\IDValue $id
      * @param \SimpleSAML\SAML2\XML\samlp\Status $status
-     * @param \DateTimeImmutable $issueInstant
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
-     * @param string|null $id
-     * @param string $version
-     * @param string|null $inResponseTo
-     * @param string|null $destination
-     * @param string|null $consent
+     * @param \SimpleSAML\XMLSchema\Type\NCNameValue|null $inResponseTo
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions|null $extensions
      * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage|null $message
      */
     final public function __construct(
+        IDValue $id,
         Status $status,
-        DateTimeImmutable $issueInstant,
+        SAMLDateTimeValue $issueInstant,
         ?Issuer $issuer = null,
-        ?string $id = null,
-        string $version = '2.0',
-        ?string $inResponseTo = null,
-        ?string $destination = null,
-        ?string $consent = null,
+        ?NCNameValue $inResponseTo = null,
+        ?SAMLAnyURIValue $destination = null,
+        ?SAMLAnyURIValue $consent = null,
         ?Extensions $extensions = null,
         protected ?AbstractMessage $message = null,
     ) {
         parent::__construct(
+            $id,
             $status,
             $issueInstant,
             $issuer,
-            $id,
-            $version,
             $inResponseTo,
             $destination,
             $consent,
@@ -90,9 +89,9 @@ class ArtifactResponse extends AbstractStatusResponse implements SchemaValidatab
      * @param \DOMElement $xml
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static
@@ -100,23 +99,9 @@ class ArtifactResponse extends AbstractStatusResponse implements SchemaValidatab
         Assert::same($xml->localName, 'ArtifactResponse', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ArtifactResponse::NS, InvalidDOMElementException::class);
 
-        $version = self::getAttribute($xml, 'Version');
-        Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
-        Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
-
-        $id = self::getAttribute($xml, 'ID');
-        Assert::validNCName($id); // Covers the empty string
-
-        $inResponseTo = self::getOptionalAttribute($xml, 'InResponseTo', null);
-        $destination = self::getOptionalAttribute($xml, 'Destination', null);
-        $consent = self::getOptionalAttribute($xml, 'Consent', null);
-
-        $issueInstant = self::getAttribute($xml, 'IssueInstant');
-        // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
-        $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
-
-        Assert::validDateTime($issueInstant, ProtocolViolationException::class);
-        $issueInstant = new DateTimeImmutable($issueInstant);
+        $version = self::getAttribute($xml, 'Version', SAMLStringValue::class);
+        Assert::true(version_compare('2.0', $version->getValue(), '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', $version->getValue(), '>='), RequestVersionTooHighException::class);
 
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::countBetween($issuer, 0, 1);
@@ -155,14 +140,13 @@ class ArtifactResponse extends AbstractStatusResponse implements SchemaValidatab
         );
 
         $response = new static(
+            self::getAttribute($xml, 'ID', IDValue::class),
             array_pop($status),
-            $issueInstant,
+            self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
             empty($issuer) ? null : array_pop($issuer),
-            $id,
-            $version,
-            $inResponseTo,
-            $destination,
-            $consent,
+            self::getOptionalAttribute($xml, 'InResponseTo', NCNameValue::class, null),
+            self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
+            self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
             empty($extensions) ? null : array_pop($extensions),
             $message,
         );

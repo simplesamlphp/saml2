@@ -5,13 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\emd;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
 use function array_pop;
 
@@ -53,9 +54,9 @@ final class RepublishRequest extends AbstractEmdElement implements
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static
@@ -102,7 +103,11 @@ final class RepublishRequest extends AbstractEmdElement implements
         Assert::keyExists($data, 'RepublishTarget', ArrayValidationException::class);
         Assert::string($data['RepublishTarget'], ArrayValidationException::class);
 
-        return new static(new RepublishTarget($data['RepublishTarget']));
+        return new static(
+            new RepublishTarget(
+                SAMLAnyURIValue::fromString($data['RepublishTarget']),
+            ),
+        );
     }
 
 
@@ -113,6 +118,6 @@ final class RepublishRequest extends AbstractEmdElement implements
      */
     public function toArray(): array
     {
-        return ['RepublishTarget' => $this->getRepublishTarget()->getContent()];
+        return ['RepublishTarget' => $this->getRepublishTarget()->getContent()->getValue()];
     }
 }

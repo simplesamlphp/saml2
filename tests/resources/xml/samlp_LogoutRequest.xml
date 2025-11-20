@@ -1,9 +1,9 @@
-<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Version="2.0" ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b" IssueInstant="2023-01-23T21:39:20Z">
+<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Version="2.0" ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b" IssueInstant="2023-01-23T21:39:20Z">
   <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
   <saml:EncryptedID>
-    <xenc:EncryptedData xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" Type="http://www.w3.org/2001/04/xmlenc#Element">
+    <xenc:EncryptedData Type="http://www.w3.org/2001/04/xmlenc#Element">
       <xenc:EncryptionMethod Algorithm="http://www.w3.org/2009xmlenc11#aes256-gcm"/>
-      <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+      <ds:KeyInfo>
         <xenc:EncryptedKey>
           <xenc:EncryptionMethod Algorithm="http://www.w3.org/2009/xmlenc11#rsa-oaep"/>
           <xenc:CipherData>
@@ -15,7 +15,7 @@
         <xenc:CipherValue>MN9qX/dEA1oXIS9Dowjhax2cWTZ88ADKpnZ7zI/okqlqpu7okUf/HACkh+hwo5r+BZSyE06RITOAhFBczwjJsZVBwbf/cUb7JjD0pMvywWkEhNoak4OTA5RVXo96bqoRL6co6Bz3GOJBmTUEnXUZATyWcazf</xenc:CipherValue>
       </xenc:CipherData>
     </xenc:EncryptedData>
-    <xenc:EncryptedKey xmlns:xenc="http://www.w3.org/2001/04/xmlenc#">
+    <xenc:EncryptedKey>
       <xenc:EncryptionMethod Algorithm="http://www.w3.org/2009/xmlenc11#rsa-oaep"/>
       <xenc:CipherData>
         <xenc:CipherValue>grf3DVcVDV8EVCbfl9+jf6XX6gNjGSTenPqCAQhztFP6YJ3o6BS3XVbilA08CEBx0ci9PDfAsQKDl6fyBMgVSoL17zvJhNpyC7XCniIyCskUv0WmT9xCuIDNzEMZy5InunKf3KRtCRJGQzdjkoxRY3Q8Qczm2x2UoEVfzlpj2n8=</xenc:CipherValue>

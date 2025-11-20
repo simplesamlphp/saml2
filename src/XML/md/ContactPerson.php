@@ -5,23 +5,25 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 use function array_change_key_case;
 use function array_filter;
 use function array_key_exists;
 use function array_keys;
+use function array_map;
 use function array_pop;
 use function count;
 
@@ -57,7 +59,7 @@ final class ContactPerson extends AbstractMdElement implements
     /**
      * ContactPerson constructor.
      *
-     * @param string $contactType
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue $contactType
      * @param \SimpleSAML\SAML2\XML\md\Company|null $company
      * @param \SimpleSAML\SAML2\XML\md\GivenName|null $givenName
      * @param \SimpleSAML\SAML2\XML\md\SurName|null $surName
@@ -67,7 +69,7 @@ final class ContactPerson extends AbstractMdElement implements
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttribute
      */
     public function __construct(
-        protected string $contactType,
+        protected SAMLStringValue $contactType,
         protected ?Company $company = null,
         protected ?GivenName $givenName = null,
         protected ?SurName $surName = null,
@@ -76,7 +78,7 @@ final class ContactPerson extends AbstractMdElement implements
         protected array $telephoneNumber = [],
         array $namespacedAttribute = [],
     ) {
-        Assert::oneOf($contactType, self::CONTACT_TYPES);
+        Assert::oneOf($contactType->getValue(), self::CONTACT_TYPES);
         Assert::maxCount($emailAddress, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($emailAddress, EmailAddress::class);
         Assert::maxCount($telephoneNumber, C::UNBOUNDED_LIMIT);
@@ -90,9 +92,9 @@ final class ContactPerson extends AbstractMdElement implements
     /**
      * Collect the value of the contactType-property
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue
      */
-    public function getContactType(): string
+    public function getContactType(): SAMLStringValue
     {
         return $this->contactType;
     }
@@ -159,11 +161,11 @@ final class ContactPerson extends AbstractMdElement implements
      * @param \DOMElement $xml The XML element we should load.
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static
@@ -171,7 +173,7 @@ final class ContactPerson extends AbstractMdElement implements
         Assert::same($xml->localName, 'ContactPerson', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ContactPerson::NS, InvalidDOMElementException::class);
 
-        $contactType = self::getAttribute($xml, 'contactType');
+        $contactType = self::getAttribute($xml, 'contactType', SAMLStringValue::class);
 
         $company = Company::getChildrenOfClass($xml);
         Assert::maxCount($company, 1, 'More than one Company in md:ContactPerson');
@@ -212,7 +214,7 @@ final class ContactPerson extends AbstractMdElement implements
     {
         $e = $this->instantiateParentElement($parent);
 
-        $e->setAttribute('contactType', $this->getContactType());
+        $e->setAttribute('contactType', $this->getContactType()->getValue());
 
         foreach ($this->getAttributesNS() as $attr) {
             $attr->toXML($e);
@@ -246,13 +248,17 @@ final class ContactPerson extends AbstractMdElement implements
         $data = self::processArrayContents($data);
 
         return new static(
-            $data['contactType'],
-            $data['Company'] ?? null,
-            $data['GivenName'] ?? null,
-            $data['SurName'] ?? null,
+            SAMLStringValue::fromString($data['contactType']),
+            $data['Company'] !== null ? new Company(SAMLStringValue::fromString($data['Company'])) : null,
+            $data['GivenName'] !== null ? new GivenName(SAMLStringValue::fromString($data['GivenName'])) : null,
+            $data['SurName'] !== null ? new SurName(SAMLStringValue::fromString($data['SurName'])) : null,
             $data['Extensions'] ?? null,
-            $data['EmailAddress'] ?? [],
-            $data['TelephoneNumber'] ?? [],
+            $data['EmailAddress'] !== null
+                ? array_map([EmailAddress::class, 'fromArray'], [$data['EmailAddress']])
+                : [],
+            $data['TelephoneNumber'] !== null
+                ? array_map([TelephoneNumber::class, 'fromArray'], [$data['TelephoneNumber']])
+                : [],
             $data['attributes'] ?? [],
         );
     }
@@ -292,24 +298,24 @@ final class ContactPerson extends AbstractMdElement implements
 
         if (array_key_exists('company', $data)) {
             Assert::string($data['company'], ArrayValidationException::class);
-            $retval['Company'] = new Company($data['company']);
+            $retval['Company'] = $data['company'];
         }
 
         if (array_key_exists('givenname', $data)) {
             Assert::string($data['givenname'], ArrayValidationException::class);
-            $retval['GivenName'] = new GivenName($data['givenname']);
+            $retval['GivenName'] = $data['givenname'];
         }
 
         if (array_key_exists('surname', $data)) {
             Assert::string($data['surname'], ArrayValidationException::class);
-            $retval['SurName'] = new SurName($data['surname']);
+            $retval['SurName'] = $data['surname'];
         }
 
         if (array_key_exists('emailaddress', $data)) {
             Assert::isArray($data['emailaddress'], ArrayValidationException::class);
             Assert::allString($data['emailaddress'], ArrayValidationException::class);
             foreach ($data['emailaddress'] as $email) {
-                $retval['EmailAddress'][] = new EmailAddress($email);
+                $retval['EmailAddress'][] = $email;
             }
         }
 
@@ -317,7 +323,7 @@ final class ContactPerson extends AbstractMdElement implements
             Assert::isArray($data['telephonenumber'], ArrayValidationException::class);
             Assert::allString($data['telephonenumber'], ArrayValidationException::class);
             foreach ($data['telephonenumber'] as $telephone) {
-                $retval['TelephoneNumber'][] = new TelephoneNumber($telephone);
+                $retval['TelephoneNumber'][] = $telephone;
             }
         }
 
@@ -346,10 +352,10 @@ final class ContactPerson extends AbstractMdElement implements
     public function toArray(): array
     {
         $data = [
-            'ContactType' => $this->getContactType(),
-            'Company' => $this->getCompany()?->getContent(),
-            'GivenName' => $this->getGivenName()?->getContent(),
-            'SurName' => $this->getSurName()?->getContent(),
+            'ContactType' => $this->getContactType()->getValue(),
+            'Company' => $this->getCompany()?->getContent()->getValue(),
+            'GivenName' => $this->getGivenName()?->getContent()->getValue(),
+            'SurName' => $this->getSurName()?->getContent()->getValue(),
             'EmailAddress' => [],
             'TelephoneNumber' => [],
             'Extensions' => $this->Extensions?->getList(),

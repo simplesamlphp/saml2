@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
-use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
@@ -17,6 +18,8 @@ use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\Base64BinaryValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -53,15 +56,16 @@ final class ArtifactResolveTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $issuer = new Issuer('https://ServiceProvider.com/SAML');
-        $artifact = 'AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=';
+        $issuer = new Issuer(
+            SAMLStringValue::fromString('https://ServiceProvider.com/SAML'),
+        );
+        $artifact = Base64BinaryValue::fromString('AAQAADWNEw5VT47wcO4zX/iEzMmFQvGknDfws2ZtqSGdkNSbsW1cmVR0bzU=');
 
         $artifactResolve = new ArtifactResolve(
+            IDValue::fromString('_6c3a4f8b9c2d'),
             new Artifact($artifact),
-            new DateTimeImmutable('2004-01-21T19:00:49Z'),
+            SAMLDateTimeValue::fromString('2004-01-21T19:00:49Z'),
             $issuer,
-            '_6c3a4f8b9c2d',
-            '2.0',
         );
 
         $this->assertEquals(

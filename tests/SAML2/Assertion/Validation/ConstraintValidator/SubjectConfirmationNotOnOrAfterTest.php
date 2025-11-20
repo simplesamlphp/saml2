@@ -13,6 +13,8 @@ use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmatio
 use SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotOnOrAfter;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmation;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
@@ -42,9 +44,15 @@ final class SubjectConfirmationNotOnOrAfterTest extends TestCase
     {
         $subjectConfirmationData = new SubjectConfirmationData(
             null,
-            self::$clock->now()->sub(new DateInterval('PT60S')),
+            SAMLDateTimeValue::fromDateTime(
+                self::$clock->now()->sub(new DateInterval('PT60S')),
+            ),
         );
-        $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
+        $subjectConfirmation = new SubjectConfirmation(
+            SAMLAnyURIValue::fromString(C::CM_HOK),
+            null,
+            $subjectConfirmationData,
+        );
 
         $validator = new SubjectConfirmationNotOnOrAfter();
         $result = new Result();
@@ -63,9 +71,15 @@ final class SubjectConfirmationNotOnOrAfterTest extends TestCase
     {
         $subjectConfirmationData = new SubjectConfirmationData(
             null,
-            self::$clock->now()->sub(new DateInterval('PT59S')),
+            SAMLDateTimeValue::fromDateTime(
+                self::$clock->now()->sub(new DateInterval('PT59S')),
+            ),
         );
-        $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
+        $subjectConfirmation = new SubjectConfirmation(
+            SAMLAnyURIValue::fromString(C::CM_HOK),
+            null,
+            $subjectConfirmationData,
+        );
 
         $validator = new SubjectConfirmationNotOnOrAfter();
         $result = new Result();
@@ -81,8 +95,15 @@ final class SubjectConfirmationNotOnOrAfterTest extends TestCase
     #[Group('assertion-validation')]
     public function testCurrentTimeIsValid(): void
     {
-        $subjectConfirmationData = new SubjectConfirmationData(null, self::$clock->now());
-        $subjectConfirmation = new SubjectConfirmation(C::CM_HOK, null, $subjectConfirmationData);
+        $subjectConfirmationData = new SubjectConfirmationData(
+            null,
+            SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+        );
+        $subjectConfirmation = new SubjectConfirmation(
+            SAMLAnyURIValue::fromString(C::CM_HOK),
+            null,
+            $subjectConfirmationData,
+        );
 
         $validator = new SubjectConfirmationNotBefore();
         $result = new Result();

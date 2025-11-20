@@ -82,6 +82,12 @@ jobs:
             wget https://mds.edugain.org/edugain-v2.xml -O /tmp/metadata/edugain.xml
             wget https://technical.edugain.org/mds-v2.cer -O /tmp/metadata/edugain-pub.crt
 
+      - name: Download eduID metadata & public key
+        if: steps.cache-metadata.outputs.cache-hit != 'true'
+        run: |
+            mkdir -p /tmp/metadata
+            wget https://metadata.eduid.cz/entities/eduid -O /tmp/metadata/eduid.xml
+            wget https://www.eduid.cz/docs/eduid/metadata/metadata.eduid.cz.crt.pem -O /tmp/metadata/eduid.crt
 
       - name: Download eduID metadata & public key
         if: steps.cache-metadata.outputs.cache-hit != 'true'

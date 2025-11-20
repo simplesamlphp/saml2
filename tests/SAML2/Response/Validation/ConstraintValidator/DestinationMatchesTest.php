@@ -12,6 +12,7 @@ use PHPUnit\Framework\Attributes\Group;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Response\Validation\ConstraintValidator\DestinationMatches;
 use SimpleSAML\SAML2\Response\Validation\Result;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\samlp\Response;
 
 /**
@@ -37,8 +38,10 @@ final class DestinationMatchesTest extends MockeryTestCase
     #[Group('response-validation')]
     public function testAResponseIsValidWhenTheDestinationsMatch(): void
     {
-        $expectedDestination = new Destination('VALID DESTINATION');
-        $this->response->shouldReceive('getDestination')->once()->andReturn('VALID DESTINATION');
+        $expectedDestination = new Destination('urn:x-simplesamlphp:validDestination');
+        $this->response->shouldReceive('getDestination')->once()->andReturn(
+            SAMLAnyURIValue::fromString('urn:x-simplesamlphp:validDestination'),
+        );
         $validator = new DestinationMatches($expectedDestination);
         $result    = new Result();
 
@@ -53,9 +56,11 @@ final class DestinationMatchesTest extends MockeryTestCase
     #[Group('response-validation')]
     public function testAResponseIsNotValidWhenTheDestinationsAreNotEqual(): void
     {
-        $this->response->shouldReceive('getDestination')->once()->andReturn('FOO');
+        $this->response->shouldReceive('getDestination')->once()->andReturn(
+            SAMLAnyURIValue::fromString('urn:x-simplesamlphp:invalidDestination'),
+        );
         $validator = new DestinationMatches(
-            new Destination('BAR'),
+            new Destination('urn:x-simplesamlphp:validDestination'),
         );
         $result = new Result();
 
@@ -64,6 +69,13 @@ final class DestinationMatchesTest extends MockeryTestCase
 
         $this->assertFalse($result->isValid());
         $this->assertCount(1, $errors);
-        $this->assertEquals('Destination in response "FOO" does not match the expected destination "BAR"', $errors[0]);
+        $this->assertEquals(
+            sprintf(
+                'Destination in response "%s" does not match the expected destination "%s"',
+                'urn:x-simplesamlphp:invalidDestination',
+                'urn:x-simplesamlphp:validDestination',
+            ),
+            $errors[0],
+        );
     }
 }

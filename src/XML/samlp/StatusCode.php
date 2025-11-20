@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+
+use function strval;
 
 /**
  * SAML StatusCode data type.
@@ -25,14 +27,13 @@ final class StatusCode extends AbstractSamlpElement implements SchemaValidatable
     /**
      * Initialize a samlp:StatusCode
      *
-     * @param string $Value
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $Value
      * @param \SimpleSAML\SAML2\XML\samlp\StatusCode[] $subCodes
      */
     public function __construct(
-        protected string $Value = C::STATUS_SUCCESS,
+        protected SAMLAnyURIValue $Value,
         protected array $subCodes = [],
     ) {
-        SAMLAssert::validURI($Value);
         Assert::maxCount($subCodes, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($subCodes, StatusCode::class);
     }
@@ -41,9 +42,9 @@ final class StatusCode extends AbstractSamlpElement implements SchemaValidatable
     /**
      * Collect the Value
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue
      */
-    public function getValue(): string
+    public function getValue(): SAMLAnyURIValue
     {
         return $this->Value;
     }
@@ -66,9 +67,9 @@ final class StatusCode extends AbstractSamlpElement implements SchemaValidatable
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static
@@ -76,12 +77,9 @@ final class StatusCode extends AbstractSamlpElement implements SchemaValidatable
         Assert::same($xml->localName, 'StatusCode', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, StatusCode::NS, InvalidDOMElementException::class);
 
-        $Value = self::getAttribute($xml, 'Value');
-        $subCodes = StatusCode::getChildrenOfClass($xml);
-
         return new static(
-            $Value,
-            $subCodes,
+            self::getAttribute($xml, 'Value', SAMLAnyURIValue::class),
+            StatusCode::getChildrenOfClass($xml),
         );
     }
 
@@ -95,7 +93,7 @@ final class StatusCode extends AbstractSamlpElement implements SchemaValidatable
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('Value', $this->getValue());
+        $e->setAttribute('Value', strval($this->getValue()));
 
         foreach ($this->getSubCodes() as $subCode) {
             $subCode->toXML($e);

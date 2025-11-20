@@ -1,6 +1,30 @@
 parameters:
 	ignoreErrors:
 		-
+			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\samlp\\AbstractMessage\:\:addValidator\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Binding/HTTPArtifact.php
+
+		-
+			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\samlp\\ArtifactResponse\:\:validate\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/Binding/HTTPArtifact.php
+
+		-
+			message: '#^Call to method addURLparameters\(\) on an unknown class SimpleSAML\\Utils\\HTTP\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Binding/HTTPArtifact.php
+
+		-
+			message: '#^Call to method getString\(\) on an unknown class SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/Binding/HTTPArtifact.php
+
+		-
 			message: '#^Call to static method addSign\(\) on an unknown class SimpleSAML\\Module\\saml\\Message\.$#'
 			identifier: class.notFound
 			count: 1
@@ -33,56 +57,74 @@ parameters:
 		-
 			message: '#^Parameter \$key of method SimpleSAML\\SAML2\\Binding\\HTTPArtifact\:\:validateSignature\(\) has invalid type SimpleSAML\\XMLSecurity\\XMLSecurityKey\.$#'
 			identifier: class.notFound
-			count: 1
+			count: 2
 			path: src/Binding/HTTPArtifact.php
 
 		-
 			message: '#^Parameter \$sp of method SimpleSAML\\SAML2\\Binding\\HTTPArtifact\:\:setSPMetadata\(\) has invalid type SimpleSAML\\Configuration\.$#'
 			identifier: class.notFound
-			count: 1
+			count: 2
 			path: src/Binding/HTTPArtifact.php
 
 		-
 			message: '#^Property SimpleSAML\\SAML2\\Binding\\HTTPArtifact\:\:\$spMetadata has unknown class SimpleSAML\\Configuration as its type\.$#'
 			identifier: class.notFound
-			count: 1
+			count: 2
 			path: src/Binding/HTTPArtifact.php
 
 		-
-			message: '#^Parameter \$configuration of method SimpleSAML\\SAML2\\Configuration\\SimpleSAMLConverter\:\:convertToIdentityProvider\(\) has invalid type SimpleSAML\\Configuration\.$#'
+			message: '#^Access to property \$key on an unknown class SimpleSAML\\XMLSecurity\\XMLSecurityKey\.$#'
 			identifier: class.notFound
 			count: 1
-			path: src/Configuration/SimpleSAMLConverter.php
+			path: src/SOAPClient.php
 
 		-
-			message: '#^Parameter \$configuration of method SimpleSAML\\SAML2\\Configuration\\SimpleSAMLConverter\:\:convertToServiceProvider\(\) has invalid type SimpleSAML\\Configuration\.$#'
-			identifier: class.notFound
+			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\samlp\\AbstractMessage\:\:addValidator\(\)\.$#'
+			identifier: method.notFound
 			count: 1
-			path: src/Configuration/SimpleSAMLConverter.php
+			path: src/SOAPClient.php
 
 		-
-			message: '#^Parameter \$configuration of method SimpleSAML\\SAML2\\Configuration\\SimpleSAMLConverter\:\:enrichForDecryptionProvider\(\) has invalid type SimpleSAML\\Configuration\.$#'
+			message: '#^Call to method getCertPath\(\) on an unknown class SimpleSAML\\Utils\\Config\.$#'
 			identifier: class.notFound
 			count: 1
-			path: src/Configuration/SimpleSAMLConverter.php
+			path: src/SOAPClient.php
 
 		-
-			message: '#^Parameter \$configuration of method SimpleSAML\\SAML2\\Configuration\\SimpleSAMLConverter\:\:enrichForIdentityProvider\(\) has invalid type SimpleSAML\\Configuration\.$#'
+			message: '#^Call to method getPublicKeys\(\) on an unknown class SimpleSAML\\Configuration\.$#'
 			identifier: class.notFound
 			count: 1
-			path: src/Configuration/SimpleSAMLConverter.php
+			path: src/SOAPClient.php
 
 		-
-			message: '#^Parameter \$configuration of method SimpleSAML\\SAML2\\Configuration\\SimpleSAMLConverter\:\:enrichForServiceProvider\(\) has invalid type SimpleSAML\\Configuration\.$#'
+			message: '#^Call to method getString\(\) on an unknown class SimpleSAML\\Configuration\.$#'
 			identifier: class.notFound
-			count: 1
-			path: src/Configuration/SimpleSAMLConverter.php
+			count: 3
+			path: src/SOAPClient.php
 
 		-
-			message: '#^Parameter \$configuration of method SimpleSAML\\SAML2\\Configuration\\SimpleSAMLConverter\:\:pluckConfiguration\(\) has invalid type SimpleSAML\\Configuration\.$#'
+			message: '#^Call to method getValue\(\) on an unknown class SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 3
+			path: src/SOAPClient.php
+
+		-
+			message: '#^Call to method hasValue\(\) on an unknown class SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 5
+			path: src/SOAPClient.php
+
+		-
+			message: '#^Call to method loadPrivateKey\(\) on an unknown class SimpleSAML\\Utils\\Crypto\.$#'
 			identifier: class.notFound
 			count: 1
-			path: src/Configuration/SimpleSAMLConverter.php
+			path: src/SOAPClient.php
+
+		-
+			message: '#^Call to method loadPublicKey\(\) on an unknown class SimpleSAML\\Utils\\Crypto\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SOAPClient.php
 
 		-
 			message: '#^Instantiated class SimpleSAML\\Utils\\Config not found\.$#'
@@ -99,19 +141,19 @@ parameters:
 		-
 			message: '#^Parameter \$dstMetadata of method SimpleSAML\\SAML2\\SOAPClient\:\:send\(\) has invalid type SimpleSAML\\Configuration\.$#'
 			identifier: class.notFound
-			count: 1
+			count: 2
 			path: src/SOAPClient.php
 
 		-
 			message: '#^Parameter \$key of method SimpleSAML\\SAML2\\SOAPClient\:\:validateSSL\(\) has invalid type SimpleSAML\\XMLSecurity\\XMLSecurityKey\.$#'
 			identifier: class.notFound
-			count: 1
+			count: 2
 			path: src/SOAPClient.php
 
 		-
 			message: '#^Parameter \$srcMetadata of method SimpleSAML\\SAML2\\SOAPClient\:\:send\(\) has invalid type SimpleSAML\\Configuration\.$#'
 			identifier: class.notFound
-			count: 1
+			count: 2
 			path: src/SOAPClient.php
 
 		-
@@ -127,22 +169,10 @@ parameters:
 			path: src/XML/md/AbstractIndexedEndpointType.php
 
 		-
-			message: '#^Access to undefined constant static\(SimpleSAML\\SAML2\\XML\\md\\AbstractRoleDescriptor\)\:\:XSI_TYPE_NAME\.$#'
-			identifier: classConstant.notFound
+			message: '#^Unsafe usage of new static\(\)\.$#'
+			identifier: new.static
 			count: 2
-			path: src/XML/md/AbstractRoleDescriptor.php
-
-		-
-			message: '#^Access to undefined constant static\(SimpleSAML\\SAML2\\XML\\md\\AbstractRoleDescriptor\)\:\:XSI_TYPE_NAMESPACE\.$#'
-			identifier: classConstant.notFound
-			count: 2
-			path: src/XML/md/AbstractRoleDescriptor.php
-
-		-
-			message: '#^Access to undefined constant static\(SimpleSAML\\SAML2\\XML\\md\\AbstractRoleDescriptor\)\:\:XSI_TYPE_PREFIX\.$#'
-			identifier: classConstant.notFound
-			count: 2
-			path: src/XML/md/AbstractRoleDescriptor.php
+			path: src/XML/md/AbstractLocalizedName.php
 
 		-
 			message: '#^Call to an undefined static method SimpleSAML\\SAML2\\XML\\md\\AbstractSignedMdElement\:\:getXsiTypeNamespaceURI\(\)\.$#'
@@ -151,76 +181,28 @@ parameters:
 			path: src/XML/md/AbstractSignedMdElement.php
 
 		-
-			message: '#^Access to undefined constant static\(SimpleSAML\\SAML2\\XML\\saml\\AbstractBaseID\)\:\:XSI_TYPE_NAME\.$#'
-			identifier: classConstant.notFound
-			count: 2
-			path: src/XML/saml/AbstractBaseID.php
+			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getList\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/XML/md/ContactPerson.php
 
 		-
-			message: '#^Access to undefined constant static\(SimpleSAML\\SAML2\\XML\\saml\\AbstractBaseID\)\:\:XSI_TYPE_NAMESPACE\.$#'
-			identifier: classConstant.notFound
-			count: 2
-			path: src/XML/saml/AbstractBaseID.php
+			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getList\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/XML/md/EntitiesDescriptor.php
 
 		-
-			message: '#^Access to undefined constant static\(SimpleSAML\\SAML2\\XML\\saml\\AbstractBaseID\)\:\:XSI_TYPE_PREFIX\.$#'
-			identifier: classConstant.notFound
-			count: 2
-			path: src/XML/saml/AbstractBaseID.php
-
-		-
-			message: '#^Access to undefined constant static\(SimpleSAML\\SAML2\\XML\\saml\\AbstractCondition\)\:\:XSI_TYPE_NAME\.$#'
-			identifier: classConstant.notFound
-			count: 2
-			path: src/XML/saml/AbstractCondition.php
-
-		-
-			message: '#^Access to undefined constant static\(SimpleSAML\\SAML2\\XML\\saml\\AbstractCondition\)\:\:XSI_TYPE_NAMESPACE\.$#'
-			identifier: classConstant.notFound
-			count: 2
-			path: src/XML/saml/AbstractCondition.php
-
-		-
-			message: '#^Access to undefined constant static\(SimpleSAML\\SAML2\\XML\\saml\\AbstractCondition\)\:\:XSI_TYPE_PREFIX\.$#'
-			identifier: classConstant.notFound
-			count: 2
-			path: src/XML/saml/AbstractCondition.php
-
-		-
-			message: '#^Access to undefined constant static\(SimpleSAML\\SAML2\\XML\\saml\\AbstractStatement\)\:\:XSI_TYPE_NAME\.$#'
-			identifier: classConstant.notFound
-			count: 2
-			path: src/XML/saml/AbstractStatement.php
-
-		-
-			message: '#^Access to undefined constant static\(SimpleSAML\\SAML2\\XML\\saml\\AbstractStatement\)\:\:XSI_TYPE_NAMESPACE\.$#'
-			identifier: classConstant.notFound
-			count: 2
-			path: src/XML/saml/AbstractStatement.php
-
-		-
-			message: '#^Access to undefined constant static\(SimpleSAML\\SAML2\\XML\\saml\\AbstractStatement\)\:\:XSI_TYPE_PREFIX\.$#'
-			identifier: classConstant.notFound
-			count: 2
-			path: src/XML/saml/AbstractStatement.php
+			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getList\(\)\.$#'
+			identifier: method.notFound
+			count: 1
+			path: src/XML/md/Organization.php
 
 		-
 			message: '#^Unsafe usage of new static\(\)\.$#'
 			identifier: new.static
 			count: 1
 			path: src/XML/saml/Attribute.php
-
-		-
-			message: '#^Unsafe usage of new static\(\)\.$#'
-			identifier: new.static
-			count: 1
-			path: src/XML/saml/EncryptedAttribute.php
-
-		-
-			message: '#^Unsafe usage of new static\(\)\.$#'
-			identifier: new.static
-			count: 1
-			path: src/XML/saml/EncryptedID.php
 
 		-
 			message: '#^Unsafe usage of new static\(\)\.$#'

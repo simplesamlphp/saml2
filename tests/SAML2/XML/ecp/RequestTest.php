@@ -7,17 +7,21 @@ namespace SimpleSAML\Test\SAML2\XML\ecp;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\ecp\AbstractEcpElement;
 use SimpleSAML\SAML2\XML\ecp\Request;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\GetComplete;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
-use SimpleSAML\SOAP\Constants as SOAP;
+use SimpleSAML\SOAP11\Constants as SOAP;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
 
 use function dirname;
 use function strval;
@@ -51,18 +55,33 @@ final class RequestTest extends TestCase
     public function testMarshalling(): void
     {
         $issuer = new Issuer(
-            'urn:x-simplesamlphp:issuer',
-            'urn:x-simplesamlphp:namequalifier',
-            'urn:x-simplesamlphp:spnamequalifier',
-            'urn:the:format',
-            'TheSPProvidedID',
+            SAMLStringValue::fromString('urn:x-simplesamlphp:issuer'),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:namequalifier'),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),
+            SAMLAnyURIValue::fromString('urn:the:format'),
+            SAMLStringValue::fromString('TheSPProvidedID'),
         );
-        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'urn:test:testLoc1');
-        $entry2 = new IDPEntry('urn:some:requester2', 'testName2', 'urn:test:testLoc2');
-        $getComplete = new GetComplete('https://some/location');
+        $entry1 = new IDPEntry(
+            EntityIDValue::fromString('urn:some:requester1'),
+            SAMLStringValue::fromString('testName1'),
+            SAMLAnyURIValue::fromString('urn:test:testLoc1'),
+        );
+        $entry2 = new IDPEntry(
+            EntityIDValue::fromString('urn:some:requester2'),
+            SAMLStringValue::fromString('testName2'),
+            SAMLAnyURIValue::fromString('urn:test:testLoc2'),
+        );
+        $getComplete = new GetComplete(
+            SAMLAnyURIValue::fromString('https://some/location'),
+        );
         $idpList = new IDPList([$entry1, $entry2], $getComplete);
 
-        $request = new Request($issuer, $idpList, 'PHPUnit', true);
+        $request = new Request(
+            $issuer,
+            $idpList,
+            SAMLStringValue::fromString('PHPUnit'),
+            BooleanValue::fromBoolean(true),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -76,7 +95,7 @@ final class RequestTest extends TestCase
     public function testUnmarshallingWithMissingMustUnderstandThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;
-        $document->removeAttributeNS(SOAP::NS_SOAP_ENV_11, 'mustUnderstand');
+        $document->removeAttributeNS(SOAP::NS_SOAP_ENV, 'mustUnderstand');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing env:mustUnderstand attribute in <ecp:Request>.');
@@ -90,7 +109,7 @@ final class RequestTest extends TestCase
     public function testUnmarshallingWithMissingActorThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;
-        $document->removeAttributeNS(SOAP::NS_SOAP_ENV_11, 'actor');
+        $document->removeAttributeNS(SOAP::NS_SOAP_ENV, 'actor');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing env:actor attribute in <ecp:Request>.');

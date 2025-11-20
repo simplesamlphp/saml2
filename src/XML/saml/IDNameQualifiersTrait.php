@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+
 /**
  * SAML IDNameQualifier attribute group.
  *
@@ -14,9 +16,9 @@ trait IDNameQualifiersTrait
     /**
      * Collect the value of the NameQualifier-property
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue|null
      */
-    public function getNameQualifier(): ?string
+    public function getNameQualifier(): ?SAMLStringValue
     {
         return $this->NameQualifier;
     }
@@ -25,9 +27,9 @@ trait IDNameQualifiersTrait
     /**
      * Collect the value of the SPNameQualifier-property
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue|null
      */
-    public function getSPNameQualifier(): ?string
+    public function getSPNameQualifier(): ?SAMLStringValue
     {
         return $this->SPNameQualifier;
     }

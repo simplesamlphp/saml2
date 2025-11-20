@@ -1,9 +1,9 @@
-<samlp:Status xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol">
+<samlp:Status xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:ssp="urn:custom:ssp">
   <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Responder">
     <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:RequestDenied"/>
   </samlp:StatusCode>
   <samlp:StatusMessage>Something went wrong</samlp:StatusMessage>
   <samlp:StatusDetail>
-    <ssp:Cause xmlns:ssp="urn:custom:ssp">org.sourceid.websso.profiles.idp.FailedAuthnSsoException</ssp:Cause>
+    <ssp:Cause>org.sourceid.websso.profiles.idp.FailedAuthnSsoException</ssp:Cause>
   </samlp:StatusDetail>
 </samlp:Status>

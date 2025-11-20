@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\Test\SAML2\XML\samlp;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\EntityIDValue;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\RequesterID;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -50,7 +51,9 @@ final class RequesterIDTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $requesterId = new RequesterID('urn:some:requester');
+        $requesterId = new RequesterID(
+            EntityIDValue::fromString('urn:some:requester'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

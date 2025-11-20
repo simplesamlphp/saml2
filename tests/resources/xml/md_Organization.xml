@@ -1,6 +1,6 @@
-<md:Organization xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ssp="urn:x-simplesamlphp:namespace" ssp:attr1="value1">
+<md:Organization xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ssp="urn:x-simplesamlphp:namespace" xmlns:some="urn:mace:some:metadata:1.0" ssp:attr1="value1">
   <md:Extensions>
-    <some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>
+    <some:Ext>SomeExtension</some:Ext>
   </md:Extensions>
   <md:OrganizationName xml:lang="en">Identity Providers R US</md:OrganizationName>
   <md:OrganizationDisplayName xml:lang="en">Identity Providers R US, a Division of Lerxst Corp.</md:OrganizationDisplayName>

@@ -7,13 +7,16 @@ namespace SimpleSAML\Test\SAML2\Binding;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use SimpleSAML\SAML2\Binding\SOAP;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
 use SimpleSAML\SAML2\XML\ecp\Response;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
-use SimpleSAML\SOAP\Constants as C;
+use SimpleSAML\SOAP11\Constants as C;
+use SimpleSAML\SOAP11\Type\MustUnderstandValue;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function dirname;
@@ -21,6 +24,7 @@ use function dirname;
 /**
  * @package simplesamlphp\saml2
  */
+#[Group('bindings')]
 #[CoversClass(SOAP::class)]
 final class SOAPTest extends MockeryTestCase
 {
@@ -86,7 +90,7 @@ SOAP);
 SOAP);
 
         /** @var \DOMElement $body */
-        $body = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV_11, 'Body')->item(0);
+        $body = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV, 'Body')->item(0);
         $message->toXML($body);
 
         $soap = new SOAP();
@@ -109,17 +113,21 @@ SOAP);
 <?xml version="1.0" encoding="UTF-8"?>
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Header /><SOAP-ENV:Body /></SOAP-ENV:Envelope>
 SOAP);
-        $requestAuthenticated = new RequestAuthenticated(true);
-        $ecpResponse = new Response('https://example.org/metadata');
+        $requestAuthenticated = new RequestAuthenticated(
+            MustUnderstandValue::fromBoolean(true),
+        );
+        $ecpResponse = new Response(
+            SAMLAnyURIValue::fromString('https://example.org/metadata'),
+        );
 
 
         /** @var \DOMElement $header */
-        $header = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV_11, 'Header')->item(0);
+        $header = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV, 'Header')->item(0);
         $requestAuthenticated->toXML($header);
         $ecpResponse->toXML($header);
 
         /** @var \DOMElement $body */
-        $body = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV_11, 'Body')->item(0);
+        $body = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV, 'Body')->item(0);
         $message->toXML($body);
 
         $soap = new SOAP();

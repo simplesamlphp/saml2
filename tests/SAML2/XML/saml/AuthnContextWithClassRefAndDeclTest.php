@@ -8,6 +8,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
@@ -18,6 +20,7 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\StringValue;
 
 use function dirname;
 use function strval;
@@ -68,14 +71,20 @@ XML
 
         $authnContextDecl = new AuthnContextDecl(
             [$chunk],
-            [new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'attr1', 'testval1')],
+            [new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'attr1', StringValue::fromString('testval1'))],
         );
 
         $authnContext = new AuthnContext(
-            authnContextClassRef: new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
+            authnContextClassRef: new AuthnContextClassRef(
+                SAMLAnyURIValue::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT),
+            ),
             authnContextDecl: $authnContextDecl,
             authnContextDeclRef: null,
-            authenticatingAuthorities: [new AuthenticatingAuthority('https://idp.example.com/SAML2')],
+            authenticatingAuthorities: [
+                new AuthenticatingAuthority(
+                    EntityIDValue::fromString('https://idp.example.com/SAML2'),
+                ),
+            ],
         );
 
         $this->assertEquals(

@@ -7,14 +7,16 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\RequestedAttribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
 
 use function dirname;
 use function strval;
@@ -54,11 +56,13 @@ final class RequestedAttributeTest extends TestCase
     public function testMarshalling(): void
     {
         $ra = new RequestedAttribute(
-            'attr',
-            true,
-            C::NAMEFORMAT_BASIC,
-            'Attribute',
-            [new AttributeValue('value1')],
+            SAMLStringValue::fromString('attr'),
+            BooleanValue::fromBoolean(true),
+            SAMLAnyURIValue::fromString(C::NAMEFORMAT_BASIC),
+            SAMLStringValue::fromString('Attribute'),
+            [
+                new AttributeValue('value1'),
+            ],
         );
 
         $this->assertEquals(
@@ -73,29 +77,13 @@ final class RequestedAttributeTest extends TestCase
      */
     public function testMarshallingWithoutOptionalArguments(): void
     {
-        $ra = new RequestedAttribute('attr');
-        $this->assertEquals('attr', $ra->getName());
+        $ra = new RequestedAttribute(
+            SAMLStringValue::fromString('attr'),
+        );
+        $this->assertEquals('attr', $ra->getName()->getValue());
         $this->assertNull($ra->getIsRequired());
         $this->assertNull($ra->getNameFormat());
         $this->assertNull($ra->getFriendlyName());
         $this->assertEquals([], $ra->getAttributeValues());
-    }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test that creating a RequestedAttribute object from XML fails when isRequired is not boolean.
-     */
-    public function testUnmarshallingWithWrongIsRequired(): void
-    {
-        $xmlRepresentation = clone self::$xmlRepresentation;
-        $xmlRepresentation->documentElement->setAttribute('isRequired', 'wrong');
-
-        $this->expectException(AssertionFailedException::class);
-        $this->expectExceptionMessage('The \'isRequired\' attribute of md:RequestedAttribute must be a boolean.');
-
-        RequestedAttribute::fromXML($xmlRepresentation->documentElement);
     }
 }

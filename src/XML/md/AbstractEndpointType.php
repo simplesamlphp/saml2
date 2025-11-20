@@ -5,16 +5,16 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Attribute as XMLAttribute;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\SerializableElementInterface;
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 use function array_change_key_case;
 use function array_key_exists;
@@ -52,25 +52,21 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
     /**
      * EndpointType constructor.
      *
-     * @param string $binding
-     * @param string $location
-     * @param string|null $responseLocation
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $binding
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $location
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $responseLocation
      * @param \SimpleSAML\XML\ElementInterface[] $children
      * @param array<\SimpleSAML\XML\Attribute> $attributes
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function __construct(
-        protected string $binding,
-        protected string $location,
-        protected ?string $responseLocation = null,
+        protected SAMLAnyURIValue $binding,
+        protected SAMLAnyURIValue $location,
+        protected ?SAMLAnyURIValue $responseLocation = null,
         array $children = [],
         array $attributes = [],
     ) {
-        SAMLAssert::validURI($binding);
-        SAMLAssert::validURI($location);
-        SAMLAssert::nullOrValidURI($responseLocation);
-
         $this->setElements($children);
         $this->setAttributesNS($attributes);
     }
@@ -79,9 +75,9 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
     /**
      * Collect the value of the Binding property.
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue
      */
-    public function getBinding(): string
+    public function getBinding(): SAMLAnyURIValue
     {
         return $this->binding;
     }
@@ -90,9 +86,9 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
     /**
      * Collect the value of the Location property.
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue
      */
-    public function getLocation(): string
+    public function getLocation(): SAMLAnyURIValue
     {
         return $this->location;
     }
@@ -101,9 +97,9 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
     /**
      * Collect the value of the ResponseLocation property.
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null
      */
-    public function getResponseLocation(): ?string
+    public function getResponseLocation(): ?SAMLAnyURIValue
     {
         return $this->responseLocation;
     }
@@ -117,9 +113,9 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
      * @param \DOMElement $xml The XML element we should load.
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing any of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static
@@ -133,9 +129,9 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
         );
 
         return new static(
-            self::getAttribute($xml, 'Binding'),
-            self::getAttribute($xml, 'Location'),
-            self::getOptionalAttribute($xml, 'ResponseLocation', null),
+            self::getAttribute($xml, 'Binding', SAMLAnyURIValue::class),
+            self::getAttribute($xml, 'Location', SAMLAnyURIValue::class),
+            self::getOptionalAttribute($xml, 'ResponseLocation', SAMLAnyURIValue::class, null),
             self::getChildElementsFromXML($xml),
             self::getAttributesNSFromXML($xml),
         );
@@ -152,11 +148,11 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
     {
         $e = parent::instantiateParentElement($parent);
 
-        $e->setAttribute('Binding', $this->getBinding());
-        $e->setAttribute('Location', $this->getLocation());
+        $e->setAttribute('Binding', $this->getBinding()->getValue());
+        $e->setAttribute('Location', $this->getLocation()->getValue());
 
         if ($this->getResponseLocation() !== null) {
-            $e->setAttribute('ResponseLocation', $this->getResponseLocation());
+            $e->setAttribute('ResponseLocation', $this->getResponseLocation()->getValue());
         }
 
         foreach ($this->getAttributesNS() as $attr) {
@@ -185,9 +181,9 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
         $data = self::processArrayContents($data);
 
         return new static(
-            $data['Binding'],
-            $data['Location'],
-            $data['ResponseLocation'] ?? null,
+            SAMLAnyURIValue::fromString($data['Binding']),
+            SAMLAnyURIValue::fromString($data['Location']),
+            $data['ResponseLocation'] !== null ? SAMLAnyURIValue::fromString($data['ResponseLocation']) : null,
             $data['children'] ?? [],
             $data['attributes'] ?? [],
         );
@@ -260,9 +256,9 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
     public function toArray(): array
     {
         $data = [
-            'Binding' => $this->getBinding(),
-            'Location' => $this->getLocation(),
-            'ResponseLocation' => $this->getResponseLocation(),
+            'Binding' => $this->getBinding()->getValue(),
+            'Location' => $this->getLocation()->getValue(),
+            'ResponseLocation' => $this->getResponseLocation()?->getValue(),
             'children' => $this->getElements(),
         ];
 

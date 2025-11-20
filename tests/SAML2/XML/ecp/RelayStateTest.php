@@ -7,13 +7,14 @@ namespace SimpleSAML\Test\SAML2\XML\ecp;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\ecp\AbstractEcpElement;
 use SimpleSAML\SAML2\XML\ecp\RelayState;
-use SimpleSAML\SOAP\Constants as SOAP;
+use SimpleSAML\SOAP11\Constants as SOAP;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 
 use function dirname;
 use function strval;
@@ -46,7 +47,9 @@ final class RelayStateTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $relayState = new RelayState('AGDY854379dskssda');
+        $relayState = new RelayState(
+            SAMLStringValue::fromString('AGDY854379dskssda'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -60,7 +63,7 @@ final class RelayStateTest extends TestCase
     public function testUnmarshallingWithMissingMustUnderstandThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;
-        $document->removeAttributeNS(SOAP::NS_SOAP_ENV_11, 'mustUnderstand');
+        $document->removeAttributeNS(SOAP::NS_SOAP_ENV, 'mustUnderstand');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing env:mustUnderstand attribute in <ecp:RelayState>.');
@@ -74,7 +77,7 @@ final class RelayStateTest extends TestCase
     public function testUnmarshallingWithMissingActorThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;
-        $document->removeAttributeNS(SOAP::NS_SOAP_ENV_11, 'actor');
+        $document->removeAttributeNS(SOAP::NS_SOAP_ENV, 'actor');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing env:actor attribute in <ecp:RelayState>.');

@@ -13,7 +13,6 @@ use SimpleSAML\SAML2\XML\saml\Advice;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\AssertionIDRef;
 use SimpleSAML\SAML2\XML\saml\AssertionURIRef;
-use SimpleSAML\SAML2\XML\saml\EncryptedAssertion;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -45,9 +44,6 @@ final class AdviceTest extends TestCase
     /** @var \DOMDocument $assertion */
     private static DOMDocument $assertion;
 
-    /** @var \DOMDocument $encryptedAssertion */
-    private static DOMDocument $encryptedAssertion;
-
 
     /**
      */
@@ -70,10 +66,6 @@ final class AdviceTest extends TestCase
         self::$assertion = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Assertion.xml',
         );
-
-        self::$encryptedAssertion = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedAssertion.xml',
-        );
     }
 
 
@@ -90,7 +82,7 @@ final class AdviceTest extends TestCase
             [AssertionIDRef::fromXML(self::$assertionIDRef->documentElement)],
             [AssertionURIRef::fromXML(self::$assertionURIRef->documentElement)],
             [Assertion::fromXML(self::$assertion->documentElement)],
-            [EncryptedAssertion::fromXML(self::$encryptedAssertion->documentElement)],
+            [],
             [$chunk],
         );
 

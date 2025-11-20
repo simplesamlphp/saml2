@@ -5,6 +5,7 @@ require_once(dirname(__FILE__, 3) . '/vendor/autoload.php');
 
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Compat\MockContainer;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\EncryptedAttribute;
@@ -21,8 +22,10 @@ $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
     PEMCertificatesMock::getPublicKey(PEMCertificatesMock::PUBLIC_KEY),
 );
 $attribute = new Attribute(
-    name: 'urn:encrypted:attribute',
-    attributeValue: [new AttributeValue('very secret data')],
+    name: SAMLStringValue::fromString('urn:encrypted:attribute'),
+    attributeValue: [
+        new AttributeValue(SAMLStringValue::fromString('very secret data')),
+    ],
 );
 $encAttribute = new EncryptedAttribute($attribute->encrypt($encryptor));
 

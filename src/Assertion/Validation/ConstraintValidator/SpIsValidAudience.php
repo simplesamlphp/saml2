@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Assertion\Validation\ConstraintValidator;
 
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Assertion\Validation\AssertionConstraintValidator;
 use SimpleSAML\SAML2\Assertion\Validation\Result;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
@@ -60,10 +60,10 @@ class SpIsValidAudience implements
         foreach ($audienceRestrictions as $audienceRestriction) {
             $audiences = $audienceRestriction->getAudience();
             foreach ($audiences as $audience) {
-                if ($entityId === $audience->getContent()) {
+                if ($entityId === $audience->getContent()->getValue()) {
                     return;
                 }
-                $all[] = $audience->getContent();
+                $all[] = $audience->getContent()->getValue();
             }
         }
 

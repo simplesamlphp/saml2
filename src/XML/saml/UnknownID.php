@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XMLSchema\Type\QNameValue;
 
 /**
  * Class for unknown identifiers.
@@ -16,15 +18,15 @@ final class UnknownID extends AbstractBaseID
 {
     /**
      * @param \SimpleSAML\XML\Chunk $chunk The whole BaseID element as a chunk object.
-     * @param string $type The xsi:type of this identifier.
-     * @param string|null $NameQualifier
-     * @param string|null $SPNameQualifier
+     * @param \SimpleSAML\XMLSchema\Type\QNameValue $type The xsi:type of this identifier.
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $NameQualifier
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $SPNameQualifier
      */
     public function __construct(
         protected Chunk $chunk,
-        string $type,
-        ?string $NameQualifier = null,
-        ?string $SPNameQualifier = null,
+        QNameValue $type,
+        ?SAMLStringValue $NameQualifier = null,
+        ?SAMLStringValue $SPNameQualifier = null,
     ) {
         parent::__construct($type, $NameQualifier, $SPNameQualifier);
     }

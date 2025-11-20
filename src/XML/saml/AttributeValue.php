@@ -11,9 +11,10 @@ use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XML\AbstractElement;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Constants as C_XSI;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 
 use function class_exists;
 use function explode;
@@ -98,7 +99,7 @@ class AttributeValue extends AbstractSamlElement implements SchemaValidatableEle
      * @param \DOMElement $xml The XML element we should load
      * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
@@ -122,16 +123,16 @@ class AttributeValue extends AbstractSamlElement implements SchemaValidatableEle
                 $value = Chunk::fromXML($node);
             }
         } elseif (
-            $xml->hasAttributeNS(C::NS_XSI, "type") &&
-            $xml->getAttributeNS(C::NS_XSI, "type") === "xs:integer"
+            $xml->hasAttributeNS(C_XSI::NS_XSI, "type") &&
+            $xml->getAttributeNS(C_XSI::NS_XSI, "type") === "xs:integer"
         ) {
             Assert::numeric($xml->textContent);
 
             // we have an integer as value
             $value = intval($xml->textContent);
         } elseif (
-            $xml->hasAttributeNS(C::NS_XSI, "type") &&
-            $xml->getAttributeNS(C::NS_XSI, "type") === "xs:dateTime"
+            $xml->hasAttributeNS(C_XSI::NS_XSI, "type") &&
+            $xml->getAttributeNS(C_XSI::NS_XSI, "type") === "xs:dateTime"
         ) {
             Assert::validDateTime($xml->textContent);
 
@@ -139,9 +140,9 @@ class AttributeValue extends AbstractSamlElement implements SchemaValidatableEle
             $value = new DateTimeImmutable($xml->textContent);
         } elseif (
             // null value
-            $xml->hasAttributeNS(C::NS_XSI, "nil") &&
-            ($xml->getAttributeNS(C::NS_XSI, "nil") === "1" ||
-                $xml->getAttributeNS(C::NS_XSI, "nil") === "true")
+            $xml->hasAttributeNS(C_XSI::NS_XSI, "nil") &&
+            ($xml->getAttributeNS(C_XSI::NS_XSI, "nil") === "1" ||
+                $xml->getAttributeNS(C_XSI::NS_XSI, "nil") === "true")
         ) {
             Assert::isEmpty($xml->nodeValue);
             Assert::isEmpty($xml->textContent);
@@ -172,20 +173,20 @@ class AttributeValue extends AbstractSamlElement implements SchemaValidatableEle
         switch ($type) {
             case "integer":
                 // make sure that the xs namespace is available in the AttributeValue
-                $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C::NS_XSI);
-                $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xs', C::NS_XS);
-                $e->setAttributeNS(C::NS_XSI, 'xsi:type', 'xs:integer');
+                $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C_XSI::NS_XSI);
+                $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xs', C_XSI::NS_XS);
+                $e->setAttributeNS(C_XSI::NS_XSI, 'xsi:type', 'xs:integer');
                 $e->textContent = strval($value);
                 break;
             case "NULL":
-                $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C::NS_XSI);
-                $e->setAttributeNS(C::NS_XSI, 'xsi:nil', '1');
+                $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C_XSI::NS_XSI);
+                $e->setAttributeNS(C_XSI::NS_XSI, 'xsi:nil', '1');
                 break;
             case "object":
                 if ($value instanceof DateTimeInterface) {
-                    $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C::NS_XSI);
-                    $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xs', C::NS_XS);
-                    $e->setAttributeNS(C::NS_XSI, 'xsi:type', 'xs:dateTime');
+                    $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C_XSI::NS_XSI);
+                    $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xs', C_XSI::NS_XS);
+                    $e->setAttributeNS(C_XSI::NS_XSI, 'xsi:type', 'xs:dateTime');
                     $e->textContent = $value->format(C::DATETIME_FORMAT);
                 } else {
                     $value->toXML($e);

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
-use SimpleSAML\SAML2\XML\StringElementTrait;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\TypedTextContentTrait;
 
 use function array_key_first;
 
@@ -23,16 +24,11 @@ final class TelephoneNumber extends AbstractMdElement implements
     SchemaValidatableElementInterface
 {
     use SchemaValidatableElementTrait;
-    use StringElementTrait;
+    use TypedTextContentTrait;
 
 
-    /**
-     * @param string $content
-     */
-    public function __construct(string $content)
-    {
-        $this->setContent($content);
-    }
+    /** @var string */
+    public const TEXTCONTENT_TYPE = SAMLStringValue::class;
 
 
     /**
@@ -46,7 +42,9 @@ final class TelephoneNumber extends AbstractMdElement implements
         Assert::allString($data, ArrayValidationException::class);
 
         $index = array_key_first($data);
-        return new static($data[$index]);
+        return new static(
+            SAMLStringValue::fromString($data[$index]),
+        );
     }
 
 
@@ -57,6 +55,6 @@ final class TelephoneNumber extends AbstractMdElement implements
      */
     public function toArray(): array
     {
-        return [$this->getContent()];
+        return [$this->getContent()->getValue()];
     }
 }

@@ -7,6 +7,8 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Action;
 use SimpleSAML\Test\SAML2\Constants as C;
@@ -49,8 +51,8 @@ final class ActionTest extends TestCase
     public function testMarshalling(): void
     {
         $action = new Action(
-            C::NAMESPACE,
-            'SomeAction',
+            SAMLAnyURIValue::fromString(C::NAMESPACE),
+            SAMLStringValue::fromString('SomeAction'),
         );
 
         $this->assertEquals(

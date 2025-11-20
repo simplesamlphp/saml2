@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\NameIDFormat;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -50,7 +51,9 @@ final class NameIDFormatTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $nameIdFormat = new NameIDFormat(C::NAMEID_PERSISTENT);
+        $nameIdFormat = new NameIDFormat(
+            SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

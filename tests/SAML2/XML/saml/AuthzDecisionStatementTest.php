@@ -8,11 +8,17 @@ use DOMDocument;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\XML\Decision;
+use SimpleSAML\SAML2\Type\DecisionTypeValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\AbstractStatement;
 use SimpleSAML\SAML2\XML\saml\Action;
+use SimpleSAML\SAML2\XML\saml\Assertion;
+use SimpleSAML\SAML2\XML\saml\AssertionIDRef;
+use SimpleSAML\SAML2\XML\saml\AssertionURIRef;
 use SimpleSAML\SAML2\XML\saml\AuthzDecisionStatement;
+use SimpleSAML\SAML2\XML\saml\DecisionTypeEnum;
 use SimpleSAML\SAML2\XML\saml\Evidence;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -36,8 +42,14 @@ final class AuthzDecisionStatementTest extends TestCase
     use SerializableElementTestTrait;
 
 
-    /** @var \DOMDocument $evidence */
-    private static DOMDocument $evidence;
+    /** @var \DOMDocument $assertionIDRef */
+    private static DOMDocument $assertionIDRef;
+
+    /** @var \DOMDocument $assertionURIRef */
+    private static DOMDocument $assertionURIRef;
+
+    /** @var \DOMDocument $assertion */
+    private static DOMDocument $assertion;
 
 
     /**
@@ -50,8 +62,16 @@ final class AuthzDecisionStatementTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/saml_AuthzDecisionStatement.xml',
         );
 
-        self::$evidence = DOMDocumentFactory::fromFile(
-            dirname(__FILE__, 4) . '/resources/xml/saml_Evidence.xml',
+        self::$assertionIDRef = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/saml_AssertionIDRef.xml',
+        );
+
+        self::$assertionURIRef = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/saml_AssertionURIRef.xml',
+        );
+
+        self::$assertion = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/saml_Assertion.xml',
         );
     }
 
@@ -60,14 +80,26 @@ final class AuthzDecisionStatementTest extends TestCase
      */
     public function testMarshalling(): void
     {
+        $evidence = new Evidence(
+            [AssertionIDRef::fromXML(self::$assertionIDRef->documentElement)],
+            [AssertionURIRef::fromXML(self::$assertionURIRef->documentElement)],
+            [Assertion::fromXML(self::$assertion->documentElement)],
+        );
+
         $authzDecisionStatement = new AuthzDecisionStatement(
-            'urn:x-simplesamlphp:resource',
-            Decision::PERMIT,
+            SAMLAnyURIValue::fromString('urn:x-simplesamlphp:resource'),
+            DecisionTypeValue::fromEnum(DecisionTypeEnum::Permit),
             [
-                new Action('urn:x-simplesamlphp:namespace', 'SomeAction'),
-                new Action('urn:x-simplesamlphp:namespace', 'OtherAction'),
+                new Action(
+                    SAMLAnyURIValue::fromString('urn:x-simplesamlphp:namespace'),
+                    SAMLStringValue::fromString('SomeAction'),
+                ),
+                new Action(
+                    SAMLAnyURIValue::fromString('urn:x-simplesamlphp:namespace'),
+                    SAMLStringValue::fromString('OtherAction'),
+                ),
             ],
-            Evidence::fromXML(self::$evidence->documentElement),
+            $evidence,
         );
 
         $this->assertEquals(

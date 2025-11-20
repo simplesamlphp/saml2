@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML;
 
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XMLSecurity\Exception\ReferenceValidationFailedException;
@@ -39,9 +39,8 @@ trait SignedElementTrait
 
         $reference = array_pop($references);
         Assert::notNull($reference->getURI(), "URI attribute not found.", ReferenceValidationFailedException::class);
-        Assert::validURI($reference->getURI(), ReferenceValidationFailedException::class);
         Assert::startsWith(
-            $reference->getURI(),
+            $reference->getURI()->getValue(),
             '#',
             "Reference must contain a same-document reference to the ID-attribute of the root element.",
             ReferenceValidationFailedException::class,

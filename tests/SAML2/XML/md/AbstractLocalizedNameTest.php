@@ -14,7 +14,8 @@ use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\ServiceDescription;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
 use function dirname;
 
@@ -40,33 +41,6 @@ final class AbstractLocalizedNameTest extends TestCase
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/md_ServiceDescription.xml',
         );
-    }
-
-
-    // test marshalling
-
-
-    /**
-     * Test that creating a ServiceDescription from scratch with an empty language fails.
-     */
-    public function testMarshallingWithEmptyLang(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
-
-        new ServiceDescription('', 'Academic Journals R US and only us');
-    }
-
-
-    /**
-     * Test that creating a ServiceDescription from scratch with an empty value works.
-     */
-    public function testMarshallingWithEmptyValue(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
-
-        new ServiceDescription('en', '');
     }
 
 
@@ -96,8 +70,8 @@ final class AbstractLocalizedNameTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $xmlRepresentation->documentElement->setAttributeNS(C::NS_XML, 'lang', '');
 
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
+        $this->expectException(SchemaViolationException::class);
+        $this->expectExceptionMessage('"" is not a valid xs:language');
 
         ServiceDescription::fromXML($xmlRepresentation->documentElement);
     }
@@ -112,7 +86,7 @@ final class AbstractLocalizedNameTest extends TestCase
         $xmlRepresentation->documentElement->textContent = '';
 
         $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Expected a non-whitespace string. Got: ""');
+        $this->expectExceptionMessage('"" is not a SAML2.0-compliant string');
 
         ServiceDescription::fromXML($xmlRepresentation->documentElement);
     }

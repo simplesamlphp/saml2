@@ -7,16 +7,19 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\GetComplete;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\MissingElementException;
 
 use function dirname;
 use function strval;
@@ -60,9 +63,19 @@ final class IDPListTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'urn:test:testLoc1');
-        $entry2 = new IDPEntry('urn:some:requester2', 'testName2', 'urn:test:testLoc2');
-        $getComplete = new GetComplete('https://some/location');
+        $entry1 = new IDPEntry(
+            EntityIDValue::fromString('urn:some:requester1'),
+            SAMLStringValue::fromString('testName1'),
+            SAMLAnyURIValue::fromString('urn:test:testLoc1'),
+        );
+        $entry2 = new IDPEntry(
+            EntityIDValue::fromString('urn:some:requester2'),
+            SAMLStringValue::fromString('testName2'),
+            SAMLAnyURIValue::fromString('urn:test:testLoc2'),
+        );
+        $getComplete = new GetComplete(
+            SAMLAnyURIValue::fromString('https://some/location'),
+        );
         $list = new IDPList([$entry1, $entry2], $getComplete);
 
         $this->assertEquals(
@@ -76,9 +89,19 @@ final class IDPListTest extends TestCase
      */
     public function testMarshallingElementOrdering(): void
     {
-        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'urn:test:testLoc1');
-        $entry2 = new IDPEntry('urn:some:requester2', 'testName2', 'urn:test:testLoc2');
-        $getComplete = new GetComplete('https://some/location');
+        $entry1 = new IDPEntry(
+            EntityIDValue::fromString('urn:some:requester1'),
+            SAMLStringValue::fromString('testName1'),
+            SAMLAnyURIValue::fromString('urn:test:testLoc1'),
+        );
+        $entry2 = new IDPEntry(
+            EntityIDValue::fromString('urn:some:requester2'),
+            SAMLStringValue::fromString('testName2'),
+            SAMLAnyURIValue::fromString('urn:test:testLoc2'),
+        );
+        $getComplete = new GetComplete(
+            SAMLAnyURIValue::fromString('https://some/location'),
+        );
         $list = new IDPList([$entry1, $entry2], $getComplete);
 
         $listElement = $list->toXML();
@@ -109,7 +132,11 @@ final class IDPListTest extends TestCase
 XML
         ;
 
-        $entry1 = new IDPEntry('urn:some:requester1', 'testName1', 'urn:test:testLoc1');
+        $entry1 = new IDPEntry(
+            EntityIDValue::fromString('urn:some:requester1'),
+            SAMLStringValue::fromString('testName1'),
+            SAMLAnyURIValue::fromString('urn:test:testLoc1'),
+        );
         $list = new IDPList([$entry1]);
 
         $entries = $list->getIdpEntry();

@@ -4,17 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdui;
 
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Exception\InvalidArgumentException;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\XML\StringElementTrait;
+use SimpleSAML\SAML2\Type\DomainValue;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-
-use function filter_var;
-use function preg_replace;
-use function rtrim;
-use function sprintf;
+use SimpleSAML\XML\TypedTextContentTrait;
 
 /**
  * Class implementing DomainHint.
@@ -24,46 +17,9 @@ use function sprintf;
 final class DomainHint extends AbstractMduiElement implements SchemaValidatableElementInterface
 {
     use SchemaValidatableElementTrait;
-    use StringElementTrait;
+    use TypedTextContentTrait;
 
 
-    /**
-     * @param string $content
-     */
-    public function __construct(string $content)
-    {
-        $this->setContent($content);
-    }
-
-
-    /**
-     * Sanitize the content of the element.
-     *
-     * @param string $content  The unsanitized textContent
-     * @throws \Exception on failure
-     * @return string
-     */
-    protected function sanitizeContent(string $content): string
-    {
-        // Remove prefixed schema and/or trailing whitespace + forward slashes
-        return rtrim(preg_replace('#^http[s]?://#i', '', $content), " \n\r\t\v\x00/");
-    }
-
-
-    /**
-     * Validate the content of the element.
-     *
-     * @param string $content  The value to go in the XML textContent
-     * @throws \Exception on failure
-     * @return void
-     */
-    protected function validateContent(string $content): void
-    {
-        $sanitizedContent = $this->sanitizeContent($content);
-        Assert::notWhitespaceOnly($sanitizedContent, ProtocolViolationException::class);
-
-        if (!filter_var($sanitizedContent, FILTER_VALIDATE_DOMAIN, FILTER_FLAG_HOSTNAME)) {
-            throw new InvalidArgumentException(sprintf('DomainHint is not a valid hostname;  %s', $sanitizedContent));
-        }
-    }
+    /** @var string */
+    public const TEXTCONTENT_TYPE = DomainValue::class;
 }

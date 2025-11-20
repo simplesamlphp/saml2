@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\SubjectConfirmationData;
 use SimpleSAML\Test\SAML2\Constants as C;
@@ -16,6 +18,8 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\NCNameValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
@@ -57,17 +61,21 @@ final class SubjectConfirmationDataTest extends TestCase
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 
-        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
-        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', StringValue::fromString('testval1'));
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', StringValue::fromString('testval2'));
 
         $subjectConfirmationData = new SubjectConfirmationData(
-            new DateTimeImmutable('2001-04-19T04:25:21Z'),
-            new DateTimeImmutable('2009-02-13T23:31:30Z'),
-            C::ENTITY_SP,
-            'SomeRequestID',
-            '127.0.0.1',
+            SAMLDateTimeValue::fromString('2001-04-19T04:25:21Z'),
+            SAMLDateTimeValue::fromString('2009-02-13T23:31:30Z'),
+            EntityIDValue::fromString(C::ENTITY_SP),
+            NCNameValue::fromString('SomeRequestID'),
+            SAMLStringValue::fromString('127.0.0.1'),
             [
-                new KeyInfo([new KeyName('SomeKey')]),
+                new KeyInfo([
+                    new KeyName(
+                        StringValue::fromString('SomeKey'),
+                    ),
+                ]),
                 new Chunk($arbitrary->documentElement),
             ],
             [$attr1, $attr2],
@@ -86,17 +94,21 @@ final class SubjectConfirmationDataTest extends TestCase
     {
         $arbitrary = DOMDocumentFactory::fromString('<some>Arbitrary Element</some>');
 
-        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
-        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', StringValue::fromString('testval1'));
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', StringValue::fromString('testval2'));
 
         $subjectConfirmationData = new SubjectConfirmationData(
-            new DateTimeImmutable('2001-04-19T04:25:21Z'),
-            new DateTimeImmutable('2009-02-13T23:31:30Z'),
-            C::ENTITY_SP,
-            'SomeRequestID',
-            'non-IP',
+            SAMLDateTimeValue::fromString('2001-04-19T04:25:21Z'),
+            SAMLDateTimeValue::fromString('2009-02-13T23:31:30Z'),
+            EntityIDValue::fromString(C::ENTITY_SP),
+            NCNameValue::fromString('SomeRequestID'),
+            SAMLStringValue::fromString('non-IP'),
             [
-                new KeyInfo([new KeyName('SomeKey')]),
+                new KeyInfo([
+                    new KeyName(
+                        StringValue::fromString('SomeKey'),
+                    ),
+                ]),
                 new Chunk($arbitrary->documentElement),
             ],
             [$attr1, $attr2],
@@ -104,15 +116,15 @@ final class SubjectConfirmationDataTest extends TestCase
 
         $this->assertEquals(
             '2001-04-19T04:25:21Z',
-            $subjectConfirmationData->getNotBefore()->format(C::DATETIME_FORMAT),
+            $subjectConfirmationData->getNotBefore()->getValue(),
         );
         $this->assertEquals(
             '2009-02-13T23:31:30Z',
-            $subjectConfirmationData->getNotOnOrAfter()->format(C::DATETIME_FORMAT),
+            $subjectConfirmationData->getNotOnOrAfter()->getValue(),
         );
-        $this->assertEquals(C::ENTITY_SP, $subjectConfirmationData->getRecipient());
-        $this->assertEquals('SomeRequestID', $subjectConfirmationData->getInResponseTo());
-        $this->assertEquals('non-IP', $subjectConfirmationData->getAddress());
+        $this->assertEquals(C::ENTITY_SP, $subjectConfirmationData->getRecipient()->getValue());
+        $this->assertEquals('SomeRequestID', $subjectConfirmationData->getInResponseTo()->getValue());
+        $this->assertEquals('non-IP', $subjectConfirmationData->getAddress()->getValue());
 
         $attributes = $subjectConfirmationData->getAttributesNS();
         $this->assertCount(2, $attributes);

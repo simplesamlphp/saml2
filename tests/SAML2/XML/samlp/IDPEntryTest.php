@@ -7,6 +7,9 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -54,7 +57,11 @@ final class IDPEntryTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $entry = new IDPEntry('urn:some:requester', 'testName', 'urn:test:testLoc');
+        $entry = new IDPEntry(
+            EntityIDValue::fromString('urn:some:requester'),
+            SAMLStringValue::fromString('testName'),
+            SAMLAnyURIValue::fromString('urn:test:testLoc'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -71,9 +78,11 @@ final class IDPEntryTest extends TestCase
         $document->documentElement->removeAttribute('Name');
         $document->documentElement->removeAttribute('Loc');
 
-        $entry = new IDPEntry('urn:some:requester');
+        $entry = new IDPEntry(
+            EntityIDValue::fromString('urn:some:requester'),
+        );
 
-        $this->assertEquals('urn:some:requester', $entry->getProviderID());
+        $this->assertEquals('urn:some:requester', $entry->getProviderID()->getValue());
         $this->assertNull($entry->getName());
         $this->assertNull($entry->getLoc());
 

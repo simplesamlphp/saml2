@@ -1,6 +1,6 @@
-<md:ContactPerson contactType="other" test:attr1="testval1" test:attr2="testval2" xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:test="urn:test:something">
+<md:ContactPerson xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:test="urn:test:something" xmlns:some="urn:mace:some:metadata:1.0" contactType="other" test:attr1="testval1" test:attr2="testval2">
   <md:Extensions>
-    <some:Ext xmlns:some="urn:mace:some:metadata:1.0">SomeExtension</some:Ext>
+    <some:Ext>SomeExtension</some:Ext>
   </md:Extensions>
   <md:Company>Test Company</md:Company>
   <md:GivenName>John</md:GivenName>

@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
-use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement;
 use SimpleSAML\SAML2\XML\mdrpi\Publication;
 use SimpleSAML\SAML2\XML\mdrpi\PublicationPath;
@@ -64,11 +65,15 @@ final class PublicationPathTest extends TestCase
     public function testMarshalling(): void
     {
         $publicationPath = new PublicationPath([
-            new Publication('SomePublisher', new DateTimeImmutable('2011-01-01T00:00:00Z'), 'SomePublicationId'),
             new Publication(
-                'SomeOtherPublisher',
-                new DateTimeImmutable('2011-01-01T00:00:00Z'),
-                'SomeOtherPublicationId',
+                SAMLStringValue::fromString('SomePublisher'),
+                SAMLDateTimeValue::fromString('2011-01-01T00:00:00Z'),
+                SAMLStringValue::fromString('SomePublicationId'),
+            ),
+            new Publication(
+                SAMLStringValue::fromString('SomeOtherPublisher'),
+                SAMLDateTimeValue::fromString('2011-01-01T00:00:00Z'),
+                SAMLStringValue::fromString('SomeOtherPublicationId'),
             ),
         ]);
 

@@ -4,21 +4,23 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
+use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\EncryptableElementTrait;
 use SimpleSAML\SAML2\XML\SignableElementTrait;
 use SimpleSAML\SAML2\XML\SignedElementTrait;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
-use SimpleSAML\XML\Utils\Random as RandomUtils;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\MissingElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
@@ -29,6 +31,7 @@ use function array_filter;
 use function array_merge;
 use function array_pop;
 use function array_values;
+use function strval;
 
 /**
  * Class representing a SAML 2 assertion.
@@ -45,6 +48,8 @@ final class Assertion extends AbstractSamlElement implements
         EncryptableElementTrait::getBlacklistedAlgorithms insteadof SignedElementTrait;
         EncryptableElementTrait::getBlacklistedAlgorithms insteadof SignableElementTrait;
     }
+
+
     use SchemaValidatableElementTrait;
     use SignableElementTrait;
     use SignedElementTrait;
@@ -67,29 +72,26 @@ final class Assertion extends AbstractSamlElement implements
      * Assertion constructor.
      *
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
-     * @param string|null $id
-     * @param \DateTimeImmutable $issueInstant
+     * @param \SimpleSAML\XMLSchema\Type\IDValue $id
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Subject|null $subject
      * @param \SimpleSAML\SAML2\XML\saml\Conditions|null $conditions
      * @param \SimpleSAML\SAML2\XML\saml\AbstractStatementType[] $statements
      */
     public function __construct(
         protected Issuer $issuer,
-        protected DateTimeImmutable $issueInstant,
-        protected ?string $id = null,
+        protected SAMLDateTimeValue $issueInstant,
+        protected IDValue $id,
         protected ?Subject $subject = null,
         protected ?Conditions $conditions = null,
         protected array $statements = [],
     ) {
-        Assert::same($issueInstant->getTimeZone()->getName(), 'Z', ProtocolViolationException::class);
-        Assert::nullOrValidNCName($id); // Covers the empty string
         Assert::true(
             $subject || !empty($statements),
             "Either a <saml:Subject> or some statement must be present in a <saml:Assertion>",
         );
         Assert::maxCount($statements, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($statements, AbstractStatementType::class);
-        Assert::nullOrNotWhitespaceOnly($id);
     }
 
 
@@ -151,14 +153,10 @@ final class Assertion extends AbstractSamlElement implements
     /**
      * Retrieve the identifier of this assertion.
      *
-     * @return string The identifier of this assertion.
+     * @return \SimpleSAML\XMLSchema\Type\IDValue The identifier of this assertion.
      */
-    public function getId(): string
+    public function getId(): IDValue
     {
-        if ($this->id === null) {
-            return (new RandomUtils())->generateId();
-        }
-
         return $this->id;
     }
 
@@ -166,9 +164,9 @@ final class Assertion extends AbstractSamlElement implements
     /**
      * Retrieve the issue timestamp of this assertion.
      *
-     * @return \DateTimeImmutable The issue timestamp of this assertion, as an UNIX timestamp.
+     * @return \SimpleSAML\SAML2\Type\SAMLDateTimeValue The issue timestamp of this assertion, as an UNIX timestamp.
      */
-    public function getIssueInstant(): DateTimeImmutable
+    public function getIssueInstant(): SAMLDateTimeValue
     {
         return $this->issueInstant;
     }
@@ -240,29 +238,24 @@ final class Assertion extends AbstractSamlElement implements
      * @return static
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\MissingElementException if one of the mandatory child-elements is missing
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
+     *   if one of the mandatory child-elements is missing
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
+     *   if too many child-elements of a type are specified
      * @throws \Exception
      */
     public static function fromXML(DOMElement $xml): static
     {
         Assert::same($xml->localName, 'Assertion', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Assertion::NS, InvalidDOMElementException::class);
-        Assert::same(self::getAttribute($xml, 'Version'), '2.0', 'Unsupported version: %s');
 
-        $id = self::getAttribute($xml, 'ID');
-        Assert::validNCName($id); // Covers the empty string
-
-        $issueInstant = self::getAttribute($xml, 'IssueInstant');
-        // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
-        $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
-
-        Assert::validDateTime($issueInstant, ProtocolViolationException::class);
-        $issueInstant = new DateTimeImmutable($issueInstant);
+        $version = self::getAttribute($xml, 'Version', SAMLStringValue::class);
+        Assert::true(version_compare('2.0', strval($version), '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', strval($version), '>='), RequestVersionTooHighException::class);
 
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::minCount($issuer, 1, 'Missing <saml:Issuer> in assertion.', MissingElementException::class);
@@ -293,8 +286,8 @@ final class Assertion extends AbstractSamlElement implements
 
         $assertion = new static(
             array_pop($issuer),
-            $issueInstant,
-            $id,
+            self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
+            self::getAttribute($xml, 'ID', IDValue::class),
             array_pop($subject),
             array_pop($conditions),
             array_merge($authnStatement, $attrStatement, $statements),
@@ -321,8 +314,8 @@ final class Assertion extends AbstractSamlElement implements
         $e = $this->instantiateParentElement($parent);
 
         $e->setAttribute('Version', '2.0');
-        $e->setAttribute('ID', $this->getId());
-        $e->setAttribute('IssueInstant', $this->getIssueInstant()->format(C::DATETIME_FORMAT));
+        $e->setAttribute('ID', strval($this->getId()));
+        $e->setAttribute('IssueInstant', strval($this->getIssueInstant()));
 
         $this->getIssuer()->toXML($e);
         $this->getSubject()?->toXML($e);
