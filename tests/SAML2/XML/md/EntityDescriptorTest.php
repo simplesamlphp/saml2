@@ -494,10 +494,17 @@ XML
             $entityDescriptor->getAdditionalMetadataLocation()[1],
         );
 
-        $this->assertEquals(
+        // Normalize both documents before comparing
+        $expectedDoc = DOMDocumentFactory::fromString(
             $xmlRepresentation->saveXML($xmlRepresentation->documentElement),
-            strval($entityDescriptor),
         );
+        $expected = DOMDocumentFactory::normalizeDocument($expectedDoc);
+
+        $actualDoc = DOMDocumentFactory::fromString((string) $entityDescriptor);
+        $actual = DOMDocumentFactory::normalizeDocument($actualDoc);
+
+        // Compare normalized XML
+        $this->assertXmlStringEqualsXmlString($expected->saveXML(), $actual->saveXML());
     }
 
 

@@ -69,5 +69,15 @@
             "phpstan/extension-installer": true,
             "simplesamlphp/composer-xmlprovider-installer": true
         }
+    },
+    "scripts": {
+        "pre-commit": [
+            "vendor/bin/phpcs -p",
+            "vendor/bin/composer-require-checker check --config-file=tools/composer-require-checker.json composer.json",
+            "vendor/bin/phpstan analyze -c phpstan.neon",
+            "vendor/bin/phpstan analyze -c phpstan-dev.neon",
+            "vendor/bin/composer-unused",
+            "vendor/bin/phpunit --no-coverage --testdox"
+        ]
     }
 }
