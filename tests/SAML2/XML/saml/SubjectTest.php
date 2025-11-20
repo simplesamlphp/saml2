@@ -266,7 +266,12 @@ XML
         AbstractBaseID::fromXML(self::$baseId->documentElement)->toXML($document->documentElement);
         SubjectConfirmation::fromXML(self::$subjectConfirmation->documentElement)->toXML($document->documentElement);
 
-        $this->assertXmlStringEqualsXmlString($document->saveXML(), strval($subject));
+        // Normalize both documents before comparing
+        $expected = DOMDocumentFactory::normalizeDocument($document);
+        $actualDoc = DOMDocumentFactory::fromString((string) $subject);
+        $actual = DOMDocumentFactory::normalizeDocument($actualDoc);
+
+        $this->assertXmlStringEqualsXmlString($expected->saveXML(), $actual->saveXML());
     }
 
 
