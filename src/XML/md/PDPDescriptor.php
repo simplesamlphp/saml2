@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\XML\Constants as C;
@@ -32,7 +32,7 @@ final class PDPDescriptor extends AbstractRoleDescriptorType implements SchemaVa
      * PDPDescriptor constructor.
      *
      * @param \SimpleSAML\SAML2\XML\md\AuthzService[] $authzService
-     * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIListValue $protocolSupportEnumeration
      * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
      * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
      * @param \SimpleSAML\XMLSchema\Type\IDValue|null $ID
@@ -47,7 +47,7 @@ final class PDPDescriptor extends AbstractRoleDescriptorType implements SchemaVa
      */
     public function __construct(
         protected array $authzService,
-        AnyURIListValue $protocolSupportEnumeration,
+        SAMLAnyURIListValue $protocolSupportEnumeration,
         protected array $assertionIDRequestService = [],
         protected array $nameIDFormat = [],
         ?IDValue $ID = null,
@@ -163,7 +163,7 @@ final class PDPDescriptor extends AbstractRoleDescriptorType implements SchemaVa
 
         $pdp = new static(
             AuthzService::getChildrenOfClass($xml),
-            self::getAttribute($xml, 'protocolSupportEnumeration', AnyURIListValue::class),
+            self::getAttribute($xml, 'protocolSupportEnumeration', SAMLAnyURIListValue::class),
             AssertionIDRequestService::getChildrenOfClass($xml),
             NameIDFormat::getChildrenOfClass($xml),
             self::getOptionalAttribute($xml, 'ID', IDValue::class, null),

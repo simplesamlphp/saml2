@@ -9,8 +9,8 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\AnyURIListValue;
 use SimpleSAML\SAML2\Type\KeyTypesValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
@@ -96,7 +96,7 @@ final class IDPSSODescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/SSO/Browser'),
                 ),
             ],
-            protocolSupportEnumeration: AnyURIListValue::fromString(C::NS_SAMLP),
+            protocolSupportEnumeration: SAMLAnyURIListValue::fromString(C::NS_SAMLP),
             wantAuthnRequestsSigned: BooleanValue::fromBoolean(true),
             nameIDMappingService: [
                 new NameIDMappingService(
@@ -207,7 +207,7 @@ final class IDPSSODescriptorTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('At least one SingleSignOnService must be specified.');
-        new IDPSSODescriptor([], AnyURIListValue::fromString(C::NS_SAMLP));
+        new IDPSSODescriptor([], SAMLAnyURIListValue::fromString(C::NS_SAMLP));
     }
 
 
@@ -225,7 +225,7 @@ final class IDPSSODescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString(C::LOCATION_A),
                 ),
             ],
-            AnyURIListValue::fromString(''),
+            SAMLAnyURIListValue::fromString(''),
         );
     }
 
@@ -246,7 +246,7 @@ final class IDPSSODescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString(C::LOCATION_B),
                 ),
             ],
-            AnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
+            SAMLAnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
         );
         $this->assertNull($idpssod->wantAuthnRequestsSigned());
         $this->assertEquals([], $idpssod->getNameIDMappingService());

@@ -7,15 +7,13 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\XML\ExtendableAttributesTrait;
 use SimpleSAML\XMLSchema\Type\DurationValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSchema\XML\Constants\NS;
-
-use function strval;
 
 /**
  * Class representing SAML2 RoleDescriptorType.
@@ -34,7 +32,7 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
     /**
      * Initialize a RoleDescriptor.
      *
-     * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIListValue $protocolSupportEnumeration
      *   A set of URI specifying the protocols supported.
      * @param \SimpleSAML\XMLSchema\Type\IDValue|null $ID The ID for this document. Defaults to null.
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
@@ -53,7 +51,7 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
-        protected AnyURIListValue $protocolSupportEnumeration,
+        protected SAMLAnyURIListValue $protocolSupportEnumeration,
         ?IDValue $ID = null,
         ?SAMLDateTimeValue $validUntil = null,
         ?DurationValue $cacheDuration = null,
@@ -97,9 +95,9 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
     /**
      * Collect the value of the protocolSupportEnumeration property.
      *
-     * @return \SimpleSAML\SAML2\Type\AnyURIListValue
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIListValue
      */
-    public function getProtocolSupportEnumeration(): AnyURIListValue
+    public function getProtocolSupportEnumeration(): SAMLAnyURIListValue
     {
         return $this->protocolSupportEnumeration;
     }
@@ -147,10 +145,10 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toUnsignedXML($parent);
-        $e->setAttribute('protocolSupportEnumeration', strval($this->getProtocolSupportEnumeration()));
+        $e->setAttribute('protocolSupportEnumeration', $this->getProtocolSupportEnumeration()->getValue());
 
         if ($this->getErrorURL() !== null) {
-            $e->setAttribute('errorURL', strval($this->getErrorURL()));
+            $e->setAttribute('errorURL', $this->getErrorURL()->getValue());
         }
 
         foreach ($this->getKeyDescriptor() as $kd) {

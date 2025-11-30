@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\XML\saml\Attribute;
@@ -35,7 +35,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType impl
      * AttributeAuthorityDescriptor constructor.
      *
      * @param \SimpleSAML\SAML2\XML\md\AttributeService[] $attributeService
-     * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIListValue $protocolSupportEnumeration
      * @param \SimpleSAML\SAML2\XML\md\AssertionIDRequestService[] $assertionIDRequestService
      * @param \SimpleSAML\SAML2\XML\md\NameIDFormat[] $nameIDFormat
      * @param \SimpleSAML\SAML2\XML\md\AttributeProfile[] $attributeProfile
@@ -52,7 +52,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType impl
      */
     public function __construct(
         protected array $attributeService,
-        AnyURIListValue $protocolSupportEnumeration,
+        SAMLAnyURIListValue $protocolSupportEnumeration,
         protected array $assertionIDRequestService = [],
         protected array $nameIDFormat = [],
         protected array $attributeProfile = [],
@@ -217,7 +217,7 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType impl
 
         $authority = new static(
             $attrServices,
-            self::getAttribute($xml, 'protocolSupportEnumeration', AnyURIListValue::class),
+            self::getAttribute($xml, 'protocolSupportEnumeration', SAMLAnyURIListValue::class),
             $assertIDReqServices,
             $nameIDFormats,
             $attrProfiles,

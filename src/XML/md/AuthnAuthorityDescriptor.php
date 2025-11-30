@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\XML\Constants as C;
@@ -32,7 +32,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType implemen
      * AuthnAuthorityDescriptor constructor.
      *
      * @param array $authnQueryService
-     * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIListValue $protocolSupportEnumeration
      * @param array $assertionIDRequestService
      * @param array $nameIDFormat
      * @param \SimpleSAML\XMLSchema\Type\IDValue|null $ID
@@ -47,7 +47,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType implemen
      */
     public function __construct(
         protected array $authnQueryService,
-        AnyURIListValue $protocolSupportEnumeration,
+        SAMLAnyURIListValue $protocolSupportEnumeration,
         protected array $assertionIDRequestService = [],
         protected array $nameIDFormat = [],
         ?IDValue $ID = null,
@@ -172,7 +172,7 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType implemen
 
         $authority = new static(
             $authnQueryServices,
-            self::getAttribute($xml, 'protocolSupportEnumeration', AnyURIListValue::class),
+            self::getAttribute($xml, 'protocolSupportEnumeration', SAMLAnyURIListValue::class),
             $assertionIDRequestServices,
             $nameIDFormats,
             self::getOptionalAttribute($xml, 'ID', IDValue::class, null),

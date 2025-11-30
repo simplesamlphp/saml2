@@ -10,9 +10,9 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\AnyURIListValue;
 use SimpleSAML\SAML2\Type\EmailAddressValue;
 use SimpleSAML\SAML2\Type\KeyTypesValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
@@ -123,7 +123,7 @@ final class RoleDescriptorTest extends TestCase
                     '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
                 )->documentElement),
             ],
-            AnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
+            SAMLAnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
             IDValue::fromString('TheID'),
             SAMLDateTimeValue::fromString('2009-02-13T23:31:30Z'),
             DurationValue::fromString('PT5000S'),

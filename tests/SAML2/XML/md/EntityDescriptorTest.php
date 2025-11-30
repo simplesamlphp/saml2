@@ -9,9 +9,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\AnyURIListValue;
 use SimpleSAML\SAML2\Type\EmailAddressValue;
 use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
@@ -106,7 +106,7 @@ final class EntityDescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString('https://engine.test.example.edu/authentication/idp/single-sign-on'),
                 ),
             ],
-            AnyURIListValue::fromString(C::NS_SAMLP),
+            SAMLAnyURIListValue::fromString(C::NS_SAMLP),
         );
         $attrad = new AttributeAuthorityDescriptor(
             [
@@ -115,7 +115,7 @@ final class EntityDescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString('https://idp.example.org/AttributeService'),
                 ),
             ],
-            AnyURIListValue::fromString(C::NS_SAMLP),
+            SAMLAnyURIListValue::fromString(C::NS_SAMLP),
         );
         $authnad = new AuthnAuthorityDescriptor(
             [
@@ -124,7 +124,7 @@ final class EntityDescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString('http://www.example.com/aqs'),
                 ),
             ],
-            AnyURIListValue::fromString(C::NS_SAMLP),
+            SAMLAnyURIListValue::fromString(C::NS_SAMLP),
         );
         $pdpd = new PDPDescriptor(
             [
@@ -133,7 +133,7 @@ final class EntityDescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString('https://IdentityProvider.com/SAML/AA/SOAP'),
                 ),
             ],
-            AnyURIListValue::fromString(C::NS_SAMLP),
+            SAMLAnyURIListValue::fromString(C::NS_SAMLP),
         );
         $org = new Organization(
             [

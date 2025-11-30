@@ -8,7 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
@@ -110,7 +110,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
         );
         $aad = new AttributeAuthorityDescriptor(
             [self::$as],
-            AnyURIListValue::fromString(C::NS_SAMLP),
+            SAMLAnyURIListValue::fromString(C::NS_SAMLP),
             [self::$aidrs],
             [
                 new NameIDFormat(
@@ -148,7 +148,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     public function testMarshallingWithEmptySupportedProtocols(): void
     {
         $this->expectException(ProtocolViolationException::class);
-        new AttributeAuthorityDescriptor([self::$as], AnyURIListValue::fromString(''));
+        new AttributeAuthorityDescriptor([self::$as], SAMLAnyURIListValue::fromString(''));
     }
 
 
@@ -159,7 +159,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
     {
         $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage('AttributeAuthorityDescriptor must contain at least one AttributeService.');
-        new AttributeAuthorityDescriptor([], AnyURIListValue::fromString(C::NS_SAMLP));
+        new AttributeAuthorityDescriptor([], SAMLAnyURIListValue::fromString(C::NS_SAMLP));
     }
 
 
@@ -168,7 +168,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithoutOptionalParameters(): void
     {
-        $aad = new AttributeAuthorityDescriptor([self::$as], AnyURIListValue::fromString(C::NS_SAMLP));
+        $aad = new AttributeAuthorityDescriptor([self::$as], SAMLAnyURIListValue::fromString(C::NS_SAMLP));
         $this->assertEmpty($aad->getAssertionIDRequestService());
         $this->assertEmpty($aad->getNameIDFormat());
         $this->assertEmpty($aad->getID());
@@ -187,7 +187,7 @@ final class AttributeAuthorityDescriptorTest extends TestCase
      */
     public function testMarshallingWithEmptyAssertionIDRequestService(): void
     {
-        $aad = new AttributeAuthorityDescriptor([self::$as], AnyURIListValue::fromString(C::NS_SAMLP), []);
+        $aad = new AttributeAuthorityDescriptor([self::$as], SAMLAnyURIListValue::fromString(C::NS_SAMLP), []);
         $this->assertEmpty($aad->getAssertionIDRequestService());
         $this->assertEmpty($aad->getNameIDFormat());
         $this->assertEmpty($aad->getID());
