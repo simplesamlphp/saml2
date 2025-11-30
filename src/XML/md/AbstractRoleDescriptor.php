@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Utils;
@@ -47,7 +47,7 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
      * Initialize a md:RoleDescriptor from scratch.
      *
      * @param \SimpleSAML\XMLSchema\Type\QNameValue $type
-     * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIListValue $protocolSupportEnumeration
      *   A set of URI specifying the protocols supported.
      * @param \SimpleSAML\XMLSchema\Type\IDValue|null $ID The ID for this document. Defaults to null.
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
@@ -67,7 +67,7 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
      */
     public function __construct(
         protected QNameValue $type,
-        AnyURIListValue $protocolSupportEnumeration,
+        SAMLAnyURIListValue $protocolSupportEnumeration,
         ?IDValue $ID = null,
         ?SAMLDateTimeValue $validUntil = null,
         ?DurationValue $cacheDuration = null,
@@ -147,7 +147,7 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
             return new UnknownRoleDescriptor(
                 new Chunk($xml),
                 $type,
-                self::getAttribute($xml, 'protocolSupportEnumeration', AnyURIListValue::class),
+                self::getAttribute($xml, 'protocolSupportEnumeration', SAMLAnyURIListValue::class),
                 self::getOptionalAttribute($xml, 'ID', IDValue::class, null),
                 self::getOptionalAttribute($xml, 'validUntil', SAMLDateTimeValue::class, null),
                 self::getOptionalAttribute($xml, 'cacheDuration', DurationValue::class, null),

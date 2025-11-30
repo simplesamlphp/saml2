@@ -9,7 +9,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
@@ -87,7 +87,7 @@ final class PDPDescriptorTest extends TestCase
     {
         $pdpd = new PDPDescriptor(
             [self::$authzService],
-            AnyURIListValue::fromString(C::NS_SAMLP),
+            SAMLAnyURIListValue::fromString(C::NS_SAMLP),
             [self::$assertionIDRequestService],
             [
                 new NameIDFormat(
@@ -121,7 +121,7 @@ final class PDPDescriptorTest extends TestCase
         new PDPDescriptor(
             /** @phpstan-ignore argument.type */
             [self::$authzService, self::$assertionIDRequestService],
-            AnyURIListValue::fromString(C::NS_SAMLP),
+            SAMLAnyURIListValue::fromString(C::NS_SAMLP),
         );
     }
 
@@ -138,7 +138,7 @@ final class PDPDescriptorTest extends TestCase
 
         new PDPDescriptor(
             [self::$authzService],
-            AnyURIListValue::fromString(C::NS_SAMLP),
+            SAMLAnyURIListValue::fromString(C::NS_SAMLP),
             /** @phpstan-ignore argument.type */
             [self::$assertionIDRequestService, self::$authzService],
         );
@@ -152,7 +152,7 @@ final class PDPDescriptorTest extends TestCase
     {
         $pdpd = new PDPDescriptor(
             [self::$authzService],
-            AnyURIListValue::fromString(C::NS_SAMLP),
+            SAMLAnyURIListValue::fromString(C::NS_SAMLP),
         );
         $this->assertEmpty($pdpd->getAssertionIDRequestService());
         $this->assertEmpty($pdpd->getNameIDFormat());

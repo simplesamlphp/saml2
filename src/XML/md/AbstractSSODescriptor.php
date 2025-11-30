@@ -7,7 +7,7 @@ namespace SimpleSAML\SAML2\XML\md;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\XML\Constants as C;
@@ -24,7 +24,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptorType
     /**
      * Initialize a RoleDescriptor.
      *
-     * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIListValue $protocolSupportEnumeration
      *   A set of URI specifying the protocols supported.
      * @param \SimpleSAML\XMLSchema\Type\IDValue|null $ID The ID for this document. Defaults to null.
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
@@ -50,7 +50,7 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptorType
      *   Defaults to an empty array.
      */
     public function __construct(
-        AnyURIListValue $protocolSupportEnumeration,
+        SAMLAnyURIListValue $protocolSupportEnumeration,
         ?IDValue $ID = null,
         ?SAMLDateTimeValue $validUntil = null,
         ?DurationValue $cacheDuration = null,

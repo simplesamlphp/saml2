@@ -6,7 +6,7 @@ namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\XML\md\AbstractRoleDescriptor;
@@ -54,7 +54,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
      * CustomRoleDescriptor constructor.
      *
      * @param \SimpleSAML\XML\SerializableElementInterface[] $chunk
-     * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIListValue $protocolSupportEnumeration
      *   A set of URI specifying the protocols supported.
      * @param \SimpleSAML\XMLSchema\Type\IDValue|null $ID The ID for this document. Defaults to null.
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validity for this document.
@@ -74,7 +74,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
      */
     public function __construct(
         protected array $chunk,
-        AnyURIListValue $protocolSupportEnumeration,
+        SAMLAnyURIListValue $protocolSupportEnumeration,
         ?IDValue $ID = null,
         ?SAMLDateTimeValue $validUntil = null,
         ?DurationValue $cacheDuration = null,
@@ -158,7 +158,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
 
         return new static(
             self::getChildElementsFromXML($xml),
-            self::getAttribute($xml, 'protocolSupportEnumeration', AnyURIListValue::class),
+            self::getAttribute($xml, 'protocolSupportEnumeration', SAMLAnyURIListValue::class),
             self::getOptionalAttribute($xml, 'ID', IDValue::class, null),
             self::getOptionalAttribute($xml, 'validUntil', SAMLDateTimeValue::class, null),
             self::getOptionalAttribute($xml, 'cacheDuration', DurationValue::class, null),

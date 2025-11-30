@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\XML\Constants as C;
@@ -36,7 +36,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
      * SPSSODescriptor constructor.
      *
      * @param array<\SimpleSAML\SAML2\XML\md\AssertionConsumerService> $assertionConsumerService
-     * @param \SimpleSAML\SAML2\Type\AnyURIListValue $protocolSupportEnumeration
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIListValue $protocolSupportEnumeration
      * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $authnRequestsSigned
      * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $wantAssertionsSigned
      * @param array<\SimpleSAML\SAML2\XML\md\AttributeConsumingService> $attributeConsumingService
@@ -55,7 +55,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
      */
     public function __construct(
         protected array $assertionConsumerService,
-        AnyURIListValue $protocolSupportEnumeration,
+        SAMLAnyURIListValue $protocolSupportEnumeration,
         protected ?BooleanValue $authnRequestsSigned = null,
         protected ?BooleanValue $wantAssertionsSigned = null,
         protected array $attributeConsumingService = [],
@@ -206,7 +206,7 @@ final class SPSSODescriptor extends AbstractSSODescriptor implements SchemaValid
 
         $spssod = new static(
             AssertionConsumerService::getChildrenOfClass($xml),
-            self::getAttribute($xml, 'protocolSupportEnumeration', AnyURIListValue::class),
+            self::getAttribute($xml, 'protocolSupportEnumeration', SAMLAnyURIListValue::class),
             self::getOptionalAttribute($xml, 'AuthnRequestsSigned', BooleanValue::class, null),
             self::getOptionalAttribute($xml, 'WantAssertionsSigned', BooleanValue::class, null),
             AttributeConsumingService::getChildrenOfClass($xml),

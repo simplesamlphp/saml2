@@ -9,17 +9,15 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
-use SimpleSAML\XMLSchema\Type\Interface\ListTypeInterface;
+use SimpleSAML\XMLSchema\Type\Helper\AnyURIListValue;
 
 use function array_map;
 use function preg_split;
-use function str_replace;
-use function trim;
 
 /**
  * @package simplesaml/saml2
  */
-class AnyURIListValue extends SAMLAnyURIValue implements ListTypeInterface
+class SAMLAnyURIListValue extends AnyURIListValue
 {
     /** @var string */
     public const SCHEMA_TYPE = 'AnyURIList';
@@ -39,23 +37,6 @@ class AnyURIListValue extends SAMLAnyURIValue implements ListTypeInterface
 
         $uris = preg_split('/[\s]+/', $sanitized, C::UNBOUNDED_LIMIT);
         Assert::allValidAnyURI($uris, SchemaViolationException::class);
-    }
-
-
-    /**
-     * Convert an array of xs:anyURI items into a saml:AnyURIList
-     *
-     * @param string[] $uris
-     * @return static
-     */
-    public static function fromArray(array $uris): static
-    {
-        $str = '';
-        foreach ($uris as $uri) {
-            $str .= str_replace(' ', '+', $uri) . ' ';
-        }
-
-        return new static(trim($str));
     }
 
 

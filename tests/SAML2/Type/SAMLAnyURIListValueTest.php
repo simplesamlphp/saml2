@@ -9,17 +9,17 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\AnyURIListValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
 /**
- * Class \SimpleSAML\Test\SAML2\Type\AnyURIListTest
+ * Class \SimpleSAML\Test\SAML2\Type\SAMLAnyURIListTest
  *
  * @package simplesamlphp/saml2
  */
 #[Group('type')]
-#[CoversClass(AnyURIListValue::class)]
-final class AnyURIListValueTest extends TestCase
+#[CoversClass(SAMLAnyURIListValue::class)]
+final class SAMLAnyURIListValueTest extends TestCase
 {
     /**
      * @param boolean $shouldPass
@@ -29,7 +29,7 @@ final class AnyURIListValueTest extends TestCase
     public function testAnyURIList(bool $shouldPass, string $anyURIList): void
     {
         try {
-            AnyURIListValue::fromString($anyURIList);
+            SAMLAnyURIListValue::fromString($anyURIList);
             $this->assertTrue($shouldPass);
         } catch (ProtocolViolationException | SchemaViolationException $e) {
             $this->assertFalse($shouldPass);
@@ -42,7 +42,7 @@ final class AnyURIListValueTest extends TestCase
      */
     public function testToArray(): void
     {
-        $anyURIList = AnyURIListValue::fromString("urn:x-simplesamlphp:namespace urn:x-ssp:ns");
+        $anyURIList = SAMLAnyURIListValue::fromString("urn:x-simplesamlphp:namespace urn:x-ssp:ns");
         $this->assertEquals(['urn:x-simplesamlphp:namespace', 'urn:x-ssp:ns'], $anyURIList->toArray());
     }
 

@@ -8,9 +8,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Type\AnyURIListValue;
 use SimpleSAML\SAML2\Type\EmailAddressValue;
 use SimpleSAML\SAML2\Type\KeyTypesValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
@@ -208,7 +208,7 @@ final class SPSSODescriptorTest extends TestCase
 
         $spssod = new SPSSODescriptor(
             [$acs1, $acs2],
-            AnyURIListValue::fromString(C::NS_SAMLP),
+            SAMLAnyURIListValue::fromString(C::NS_SAMLP),
             BooleanValue::fromBoolean(true),
             BooleanValue::fromBoolean(false),
             [$attrcs1, $attrcs2],
@@ -247,7 +247,7 @@ final class SPSSODescriptorTest extends TestCase
 
         new SPSSODescriptor(
             [],
-            AnyURIListValue::fromString(C::NS_SAMLP),
+            SAMLAnyURIListValue::fromString(C::NS_SAMLP),
         );
     }
 
@@ -265,7 +265,7 @@ final class SPSSODescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString(C::LOCATION_A),
                 ),
             ],
-            AnyURIListValue::fromString(C::NS_SAMLP),
+            SAMLAnyURIListValue::fromString(C::NS_SAMLP),
         );
 
         $this->assertNull($spssod->getAuthnRequestsSigned());
