@@ -16,3 +16,5 @@ comment:
   branches: null
 github_checks:
   annotations: false
+ignore:
+  - 'classes/element.registry.php'
