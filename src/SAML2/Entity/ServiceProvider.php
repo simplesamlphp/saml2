@@ -222,6 +222,7 @@ final class ServiceProvider
         }
 
         // Decrypt and verify assertions, then rebuild the response.
+        // @TODO: replace this with clone: https://www.php.net/releases/8.5/en.php#clone-with
         $verifiedAssertions = $this->decryptAndVerifyAssertions($verifiedResponse->getAssertions());
         $decryptedResponse = new Response(
             $verifiedResponse->getStatus(),
