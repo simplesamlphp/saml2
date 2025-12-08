@@ -24,7 +24,7 @@
         "psr/log": "~2.3.1 || ~3.0.0",
         "simplesamlphp/assert": "~1.8.1",
         "simplesamlphp/xml-common": "~1.25.0",
-        "simplesamlphp/xml-security": "~1.13.4",
+        "simplesamlphp/xml-security": "~1.13.8",
         "simplesamlphp/xml-soap": "~1.7.0"
     },
     "require-dev": {
