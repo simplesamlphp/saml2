@@ -15,7 +15,7 @@
         "ext-zlib": "*",
 
         "psr/log": "~1.1 || ^2.0 || ^3.0",
-        "robrichards/xmlseclibs": "^3.1.1",
+        "robrichards/xmlseclibs": "^3.1.4",
         "webmozart/assert": "^1.9"
     },
     "require-dev": {
