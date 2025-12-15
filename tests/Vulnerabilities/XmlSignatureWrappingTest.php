@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Response;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
@@ -16,6 +17,7 @@ use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 /**
  * @package simplesamlphp/saml2
  */
+#[Group('vulnerabilities')]
 final class XmlSignatureWrappingTest extends TestCase
 {
     /** @var \SimpleSAML\SAML2\Signature\Validator */
@@ -66,7 +68,10 @@ final class XmlSignatureWrappingTest extends TestCase
      */
     private function getSignedAssertionWithSignatureThatReferencesAnotherAssertion(): Assertion
     {
-        $document = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionWithInvalidReferencedId.xml');
+        $document = DOMDocumentFactory::fromFile(
+            dirname(__DIR__, 1) . '/resources/xml/vulnerabilities/signedAssertionWithInvalidReferencedId.xml',
+        );
+
         /** @var \DOMElement $element */
         $element = $document->firstChild;
         return Assertion::fromXML($element);
@@ -78,7 +83,10 @@ final class XmlSignatureWrappingTest extends TestCase
      */
     private function getSignedAssertionWithEmbeddedAssertionReferencedInSignature(): Assertion
     {
-        $document = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionReferencedEmbeddedAssertion.xml');
+        $document = DOMDocumentFactory::fromFile(
+            dirname(__DIR__, 1) . '/resources/xml/vulnerabilities/signedAssertionReferencedEmbeddedAssertion.xml',
+        );
+
         /** @var \DOMElement $element */
         $element = $document->firstChild;
         return Assertion::fromXML($element);

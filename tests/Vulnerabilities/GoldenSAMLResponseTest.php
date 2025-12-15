@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Response;
 
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\samlp\Response;
@@ -23,7 +22,6 @@ use function dirname;
  * @package simplesamlphp/saml2
  */
 #[Group('vulnerabilities')]
-#[CoversClass(ResponseProcessor::class)]
 final class GoldenSAMLResponseTest extends TestCase
 {
     /**
