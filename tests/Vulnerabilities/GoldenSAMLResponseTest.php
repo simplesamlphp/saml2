@@ -12,7 +12,6 @@ use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\CryptoEncoding\PEM;
 use SimpleSAML\XMLSecurity\Exception\CanonicalizationFailedException;
 use SimpleSAML\XMLSecurity\Key\PublicKey;
-use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 use function dirname;
 
@@ -38,7 +37,10 @@ final class GoldenSAMLResponseTest extends TestCase
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
             $assertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm()->getValue(),
             new PublicKey(
-                new PEM(PEM::TYPE_PUBLIC_KEY, $assertion->getSignature()->getKeyInfo()->getInfo()[0]->getData()[0]->getContent()->getValue()),
+                new PEM(
+                    PEM::TYPE_PUBLIC_KEY,
+                    $assertion->getSignature()->getKeyInfo()->getInfo()[0]->getData()[0]->getContent()->getValue(),
+                ),
             ),
         );
 
