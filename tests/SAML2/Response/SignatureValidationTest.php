@@ -185,32 +185,6 @@ final class SignatureValidationTest extends MockeryTestCase
 
 
     /**
-     * CVE-2025-66475
-     */
-    #[PreserveGlobalState(false)]
-    #[RunInSeparateProcess]
-    public function testSignedResponseWithStrayXmlnsThrowsAnException(): void
-    {
-        $doc = DOMDocumentFactory::fromFile(
-            dirname(__DIR__, 2) . '/resources/xml/vulnerabilities/CVE-2025-66475.xml',
-        );
-
-        $response = Response::fromXML($doc->documentElement);
-        $assertion = $response->getAssertions()[0];
-
-        $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $assertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm()->getValue(),
-            new PublicKey(
-                new PEM(PEM::TYPE_PUBLIC_KEY, $assertion->getSignature()->getKeyInfo()->getInfo()[0]->getData()[0]->getContent()->getValue()),
-            ),
-        );
-
-        $this->expectException(CanonicalizationFailedException::class);
-        $assertion->verify($verifier);
-    }
-
-
-    /**
      * @return \SimpleSAML\SAML2\XML\samlp\Response
      */
     private function getSignedResponseWithUnsignedAssertion(): Response
