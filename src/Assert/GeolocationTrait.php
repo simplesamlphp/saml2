@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Assert;
 
-use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 
 /**
@@ -16,8 +15,6 @@ trait GeolocationTrait
     //private static string $geolocation_regex = '/^geo:([-+]?\d+(?:\.\d+)?),([-+]?\d+(?:\.\d+)?)(?:\?z=(\d{1,2}))?$/';
 
     /**
-     * @param string $value
-     * @param string $message
      */
     protected static function validGeolocation(string $value, string $message = ''): void
     {
@@ -28,10 +25,6 @@ trait GeolocationTrait
         // );
         // The regex above is incomplete, so for now we only test for a valid URI
 
-        try {
-            static::validAnyURI($value);
-        } catch (AssertionFailedException $e) {
-            throw new ProtocolViolationException($e->getMessage());
-        }
+        static::validAnyURI($value, ProtocolViolationException::class);
     }
 }

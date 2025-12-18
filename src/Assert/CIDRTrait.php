@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Assert;
 
-use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 
 /**
@@ -42,19 +41,14 @@ trait CIDRTrait
 
 
     /**
-     * @param string $value
-     * @param string $message
      */
     protected static function validCIDR(string $value, string $message = ''): void
     {
-        try {
-            parent::regex(
-                $value,
-                self::$cidr_regex,
-                $message ?: '%s is not a valid RFC4632 CIDR-block',
-            );
-        } catch (AssertionFailedException $e) {
-            throw new ProtocolViolationException($e->getMessage());
-        }
+        parent::regex(
+            $value,
+            self::$cidr_regex,
+            $message ?: '%s is not a valid RFC4632 CIDR-block',
+            ProtocolViolationException::class,
+        );
     }
 }

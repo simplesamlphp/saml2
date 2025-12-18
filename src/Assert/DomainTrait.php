@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Assert;
 
-use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 
 /**
@@ -20,19 +19,14 @@ trait DomainTrait
 
 
     /**
-     * @param string $value
-     * @param string $message
      */
     protected static function validDomain(string $value, string $message = ''): void
     {
-        try {
-            parent::regex(
-                $value,
-                self::$domain_regex,
-                $message ?: '%s is not a valid domain name',
-            );
-        } catch (AssertionFailedException $e) {
-            throw new ProtocolViolationException($e->getMessage());
-        }
+        parent::regex(
+            $value,
+            self::$domain_regex,
+            $message ?: '%s is not a valid domain name',
+            ProtocolViolationException::class,
+        );
     }
 }
