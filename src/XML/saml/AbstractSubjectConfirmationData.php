@@ -8,6 +8,7 @@ use DOMElement;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\EntityIDValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
@@ -61,6 +62,15 @@ abstract class AbstractSubjectConfirmationData extends AbstractAnyType
         array $children = [],
         array $namespacedAttributes = [],
     ) {
+        /** SAML 2.0 Core specifications paragraph 2.4.1.2 */
+        if ($notBefore !== null && $notOnOrAfter !== null) {
+            Assert::true(
+                $notBefore->toDateTime() < $notOnOrAfter->toDateTime(),
+                "The value for NotBefore MUST be less than (earlier than) the value for NotOnOrAfter.",
+                ProtocolViolationException::class,
+            );
+        }
+
         if ($address !== null) {
             try {
                 /**

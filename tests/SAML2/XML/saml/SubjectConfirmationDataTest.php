@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\EntityIDValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
@@ -84,6 +85,19 @@ final class SubjectConfirmationDataTest extends TestCase
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($subjectConfirmationData),
+        );
+    }
+
+
+    /**
+     */
+    public function testMarshallingNotBeforeAfterNotOnOrAfter(): void
+    {
+        $this->expectException(ProtocolViolationException::class);
+
+        new SubjectConfirmationData(
+            SAMLDateTimeValue::fromString('2009-02-13T23:31:30Z'),
+            SAMLDateTimeValue::fromString('2001-04-19T04:25:21Z'),
         );
     }
 
