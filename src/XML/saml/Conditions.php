@@ -43,6 +43,15 @@ final class Conditions extends AbstractSamlElement implements SchemaValidatableE
         protected ?OneTimeUse $oneTimeUse = null,
         protected ?ProxyRestriction $proxyRestriction = null,
     ) {
+        /** SAML 2.0 Core specifications paragraph 2.5.1.2 */
+        if ($notBefore !== null && $notOnOrAfter !== null) {
+            Assert::true(
+                $notBefore->toDateTime() < $notOnOrAfter->toDateTime(),
+                "The value for NotBefore MUST be less than (earlier than) the value for NotOnOrAfter.",
+                ProtocolViolationException::class,
+            );
+        }
+
         Assert::maxCount($condition, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($condition, AbstractCondition::class);
         Assert::maxCount($audienceRestriction, C::UNBOUNDED_LIMIT);

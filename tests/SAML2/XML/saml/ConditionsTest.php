@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
@@ -84,6 +85,19 @@ final class ConditionsTest extends TestCase
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($conditions),
+        );
+    }
+
+
+    /**
+     */
+    public function testMarshallingNotBeforeAfterNotOnOrAfter(): void
+    {
+        $this->expectException(ProtocolViolationException::class);
+
+        new Conditions(
+            SAMLDateTimeValue::fromString('2024-01-18T06:21:48Z'),
+            SAMLDateTimeValue::fromString('2014-07-17T01:01:18Z'),
         );
     }
 

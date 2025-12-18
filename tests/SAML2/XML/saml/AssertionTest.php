@@ -528,7 +528,7 @@ XML;
           <saml:SubjectConfirmationData NotOnOrAfter="2011-08-31T08:51:05Z" Recipient="https://sp.example.com/assertion_consumer" InResponseTo="_13603a6565a69297e9809175b052d115965121c8" />
         </saml:SubjectConfirmation>
       </saml:Subject>
-      <saml:Conditions NotOnOrAfter="2011-08-31T08:51:05Z" NotBefore="2011-08-31T08:51:05Z">
+      <saml:Conditions NotOnOrAfter="2011-08-31T08:51:05Z" NotBefore="2011-08-31T08:51:04Z">
         <saml:AudienceRestriction>
           <saml:Audience>urn:test:ServiceProvider</saml:Audience>
         </saml:AudienceRestriction>
