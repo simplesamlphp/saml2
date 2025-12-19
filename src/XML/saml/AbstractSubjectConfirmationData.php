@@ -41,6 +41,12 @@ abstract class AbstractSubjectConfirmationData extends AbstractAnyType
     /** The namespace-attribute for the xs:anyAttribute element */
     public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
+    /** The exclusions for the xs:anyAttribute element */
+    public const XS_ANY_ATTR_EXCLUSIONS = [
+        ['urn:oasis:names:tc:SAML:2.0:assertion', '*'],
+        ['urn:oasis:names:tc:SAML:2.0:protocol', '*'],
+    ];
+
 
     /**
      * Initialize (and parse) a SubjectConfirmationData element.
@@ -87,6 +93,14 @@ abstract class AbstractSubjectConfirmationData extends AbstractAnyType
         }
 
         $this->setElements($children);
+
+        foreach ($namespacedAttributes as $attr) {
+            Assert::notNull(
+                $attr->getNamespaceURI(),
+                "Local (non-namespaced) attributes are not allowed.",
+                ProtocolViolationException::class,
+            );
+        }
         $this->setAttributesNS($namespacedAttributes);
     }
 
