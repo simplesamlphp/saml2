@@ -14,12 +14,9 @@ use SimpleSAML\XML\AbstractElement;
  */
 abstract class AbstractShibmdElement extends AbstractElement
 {
-    /** @var string */
-    public const NS = C::NS_SHIBMD;
+    public const string NS = C::NS_SHIBMD;
 
-    /** @var string */
-    public const NS_PREFIX = 'shibmd';
+    public const string NS_PREFIX = 'shibmd';
 
-    /** @var string */
-    public const SCHEMA = 'resources/schemas/sstc-saml-metadata-shibmd-v1.0.xsd';
+    public const string SCHEMA = 'resources/schemas/sstc-saml-metadata-shibmd-v1.0.xsd';
 }

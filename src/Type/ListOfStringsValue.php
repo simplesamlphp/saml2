@@ -20,22 +20,17 @@ use function trim;
  */
 class ListOfStringsValue extends SAMLStringValue implements ListTypeInterface
 {
-    /** @var string */
-    public const SCHEMA_TYPE = 'ListOfStrings';
+    public const string SCHEMA_TYPE = 'ListOfStrings';
 
-    /** @var string */
-    public const SCHEMA_NAMESPACEURI = C::NS_MDUI;
+    public const string SCHEMA_NAMESPACEURI = C::NS_MDUI;
 
-    /** @var string */
-    public const SCHEMA_NAMESPACE_PREFIX = 'mdui';
+    public const string SCHEMA_NAMESPACE_PREFIX = 'mdui';
 
 
     /**
      * Validate the value.
      *
-     * @param string $value
      * @throws \SimpleSAML\XMLSchema\Exception\SchemaViolationException on failure
-     * @return void
      */
     protected function validateValue(string $value): void
     {
@@ -49,7 +44,6 @@ class ListOfStringsValue extends SAMLStringValue implements ListTypeInterface
      * Convert an array of xs:string items into a mdui:ListOfStrings
      *
      * @param string[] $keywords
-     * @return static
      */
     public static function fromArray(array $keywords): static
     {
@@ -67,7 +61,7 @@ class ListOfStringsValue extends SAMLStringValue implements ListTypeInterface
     /**
      * Convert this mdui:ListOfStrings to an array of xs:string items
      *
-     * @return array<\SimpleSAML\SAML2\Type\SAMLStringValue>
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue[]
      */
     public function toArray(): array
     {

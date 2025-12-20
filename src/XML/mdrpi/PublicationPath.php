@@ -17,6 +17,7 @@ use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
  * Class for handling the mdrpi:PublicationPath element.
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/saml-metadata-rpi/v1.0/saml-metadata-rpi-v1.0.pdf
+ *
  * @package simplesamlphp/saml2
  */
 final class PublicationPath extends AbstractMdrpiElement implements
@@ -52,8 +53,6 @@ final class PublicationPath extends AbstractMdrpiElement implements
 
     /**
      * Test if an object, at the state it's in, would produce an empty XML-element
-     *
-     * @return bool
      */
     public function isEmptyElement(): bool
     {
@@ -85,9 +84,6 @@ final class PublicationPath extends AbstractMdrpiElement implements
 
     /**
      * Convert this element to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -104,8 +100,7 @@ final class PublicationPath extends AbstractMdrpiElement implements
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{array} $data
      */
     public static function fromArray(array $data): static
     {
@@ -123,7 +118,7 @@ final class PublicationPath extends AbstractMdrpiElement implements
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{array}
      */
     public function toArray(): array
     {

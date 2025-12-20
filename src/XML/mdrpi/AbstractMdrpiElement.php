@@ -16,12 +16,9 @@ use SimpleSAML\XML\AbstractElement;
  */
 abstract class AbstractMdrpiElement extends AbstractElement
 {
-    /** @var string */
-    public const NS = C::NS_MDRPI;
+    public const string NS = C::NS_MDRPI;
 
-    /** @var string */
-    public const NS_PREFIX = 'mdrpi';
+    public const string NS_PREFIX = 'mdrpi';
 
-    /** @var string */
-    public const SCHEMA = 'resources/schemas/saml-metadata-rpi-v1.0.xsd';
+    public const string SCHEMA = 'resources/schemas/saml-metadata-rpi-v1.0.xsd';
 }

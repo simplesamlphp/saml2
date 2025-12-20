@@ -62,6 +62,9 @@ trait SignedElementTrait
     }
 
 
+    /**
+     * @return array|null
+     */
     public function getBlacklistedAlgorithms(): ?array
     {
         $container = ContainerSingleton::getInstance();

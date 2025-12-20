@@ -14,5 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class NoPassiveException extends ProtocolViolationException
 {
-    public const DEFAULT_MESSAGE = 'Cannot perform passive authentication.';
+    public const string DEFAULT_MESSAGE = 'Cannot perform passive authentication.';
 }

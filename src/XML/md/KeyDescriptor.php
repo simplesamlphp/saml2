@@ -80,9 +80,6 @@ final class KeyDescriptor extends AbstractMdElement implements SchemaValidatable
     /**
      * Initialize an KeyDescriptor.
      *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
@@ -109,9 +106,6 @@ final class KeyDescriptor extends AbstractMdElement implements SchemaValidatable
 
     /**
      * Convert this KeyDescriptor to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this KeyDescriptor to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

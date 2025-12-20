@@ -32,8 +32,7 @@ abstract class AbstractStatement extends AbstractStatementType implements
     use SchemaValidatableElementTrait;
 
 
-    /** @var string */
-    public const LOCALNAME = 'Statement';
+    public const string LOCALNAME = 'Statement';
 
 
     /**
@@ -58,9 +57,6 @@ abstract class AbstractStatement extends AbstractStatementType implements
 
     /**
      * Convert an XML element into a Statement.
-     *
-     * @param \DOMElement $xml The root XML element
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -95,9 +91,6 @@ abstract class AbstractStatement extends AbstractStatementType implements
 
     /**
      * Convert this Statement to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this Statement.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

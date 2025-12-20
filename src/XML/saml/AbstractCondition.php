@@ -32,8 +32,7 @@ abstract class AbstractCondition extends AbstractConditionType implements
     use SchemaValidatableElementTrait;
 
 
-    /** @var string */
-    public const LOCALNAME = 'Condition';
+    public const string LOCALNAME = 'Condition';
 
 
     /**
@@ -58,9 +57,6 @@ abstract class AbstractCondition extends AbstractConditionType implements
 
     /**
      * Convert an XML element into a Condition.
-     *
-     * @param \DOMElement $xml The root XML element
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -95,9 +91,6 @@ abstract class AbstractCondition extends AbstractConditionType implements
 
     /**
      * Convert this Condition to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this Condition.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

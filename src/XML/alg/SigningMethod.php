@@ -27,7 +27,7 @@ final class SigningMethod extends AbstractAlgElement implements SchemaValidatabl
 
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::ANY;
+    public const string XS_ANY_ELT_NAMESPACE = NS::ANY;
 
 
     /**
@@ -36,7 +36,7 @@ final class SigningMethod extends AbstractAlgElement implements SchemaValidatabl
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $algorithm
      * @param \SimpleSAML\XMLSchema\Type\PositiveIntegerValue|null $minKeySize
      * @param \SimpleSAML\XMLSchema\Type\PositiveIntegerValue|null $maxKeySize
-     * @param \SimpleSAML\XML\Chunk[] $elements
+     * @param \SimpleSAML\XML\SerializableElementInterface[] $elements
      */
     public function __construct(
         protected SAMLAnyURIValue $algorithm,
@@ -85,7 +85,6 @@ final class SigningMethod extends AbstractAlgElement implements SchemaValidatabl
      * Convert XML into a SigningMethod
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -110,7 +109,6 @@ final class SigningMethod extends AbstractAlgElement implements SchemaValidatabl
      * Convert this element to XML.
      *
      * @param \DOMElement|null $parent The element we should append to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

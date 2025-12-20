@@ -23,9 +23,6 @@ final class Terminate extends AbstractSamlpElement implements SchemaValidatableE
     /**
      * Convert XML into a Terminate
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
@@ -40,9 +37,6 @@ final class Terminate extends AbstractSamlpElement implements SchemaValidatableE
 
     /**
      * Convert this Terminate to XML.
-     *
-     * @param \DOMElement|null $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this Terminate.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

@@ -33,8 +33,6 @@ class IsSuccessful implements ConstraintValidator
 
     /**
      * @param \SimpleSAML\SAML2\XML\samlp\Status $responseStatus
-     *
-     * @return string
      */
     private function buildMessage(Status $responseStatus): string
     {
@@ -61,8 +59,6 @@ class IsSuccessful implements ConstraintValidator
     /**
      * Truncate the status if it is prefixed by its urn.
      * @param string $status
-     *
-     * @return string
      */
     private function truncateStatus(string $status): string
     {

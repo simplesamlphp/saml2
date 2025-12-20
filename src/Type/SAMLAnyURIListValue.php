@@ -19,16 +19,13 @@ use function preg_split;
  */
 class SAMLAnyURIListValue extends AnyURIListValue
 {
-    /** @var string */
-    public const SCHEMA_TYPE = 'AnyURIList';
+    public const string SCHEMA_TYPE = 'AnyURIList';
 
 
     /**
      * Validate the value.
      *
-     * @param string $value
      * @throws \SimpleSAML\XMLSchema\Exception\SchemaViolationException on failure
-     * @return void
      */
     protected function validateValue(string $value): void
     {
@@ -43,7 +40,7 @@ class SAMLAnyURIListValue extends AnyURIListValue
     /**
      * Convert this saml:AnyURIList to an array of xs:anyURI items
      *
-     * @return array<\SimpleSAML\SAML2\Type\SAMLAnyURIValue>
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue[]
      */
     public function toArray(): array
     {

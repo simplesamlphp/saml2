@@ -145,9 +145,6 @@ abstract class AbstractSSODescriptor extends AbstractRoleDescriptorType
 
     /**
      * Add this SSODescriptorType to an EntityDescriptor.
-     *
-     * @param  \DOMElement|null $parent The EntityDescriptor we should append this SSODescriptorType to.
-     * @return \DOMElement The generated SSODescriptor DOMElement.
      */
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {

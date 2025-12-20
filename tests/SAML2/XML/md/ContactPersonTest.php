@@ -47,7 +47,6 @@ final class ContactPersonTest extends TestCase
     use SerializableElementTestTrait;
 
 
-    /** @var \DOMDocument */
     private static DOMDocument $ext;
 
 
@@ -192,7 +191,6 @@ final class ContactPersonTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $company = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'Company');
         $newCompany = $xmlRepresentation->createElementNS(C::NS_MD, 'Company', 'Alt. Co.');
-        /** @psalm-suppress PossiblyNullPropertyFetch */
         $xmlRepresentation->documentElement->insertBefore($newCompany, $company->item(0)->nextSibling);
 
         $this->expectException(AssertionFailedException::class);
@@ -210,7 +208,6 @@ final class ContactPersonTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $givenName = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'GivenName');
         $newName = $xmlRepresentation->createElementNS(C::NS_MD, 'GivenName', 'New Name');
-        /** @psalm-suppress PossiblyNullPropertyFetch */
         $xmlRepresentation->documentElement->insertBefore($newName, $givenName->item(0)->nextSibling);
 
         $this->expectException(AssertionFailedException::class);
@@ -228,7 +225,6 @@ final class ContactPersonTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $surName = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'SurName');
         $newName = $xmlRepresentation->createElementNS(C::NS_MD, 'SurName', 'New Name');
-        /** @psalm-suppress PossiblyNullPropertyFetch */
         $xmlRepresentation->documentElement->insertBefore($newName, $surName->item(0)->nextSibling);
 
         $this->expectException(AssertionFailedException::class);

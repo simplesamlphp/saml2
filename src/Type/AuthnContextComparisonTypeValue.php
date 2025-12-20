@@ -16,16 +16,13 @@ use function array_column;
  */
 class AuthnContextComparisonTypeValue extends StringValue
 {
-    /** @var string */
-    public const SCHEMA_TYPE = 'authnContextComparisonType';
+    public const string SCHEMA_TYPE = 'authnContextComparisonType';
 
 
     /**
      * Validate the value.
      *
-     * @param string $value  The value
      * @throws \Exception on failure
-     * @return void
      */
     protected function validateValue(string $value): void
     {
@@ -39,7 +36,6 @@ class AuthnContextComparisonTypeValue extends StringValue
 
     /**
      * @param \SimpleSAML\SAML2\XML\samlp\AuthnContextComparisonTypeEnum $value
-     * @return static
      */
     public static function fromEnum(AuthnContextComparisonTypeEnum $value): static
     {

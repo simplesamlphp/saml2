@@ -49,8 +49,6 @@ class X509 extends Key
 
     /**
      * Get the certificate representation
-     *
-     * @return string
      */
     public function getCertificate(): string
     {

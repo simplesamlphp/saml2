@@ -14,12 +14,9 @@ use SimpleSAML\XML\AbstractElement;
  */
 abstract class AbstractMdattrElement extends AbstractElement
 {
-    /** @var string */
-    public const NS = C::NS_MDATTR;
+    public const string NS = C::NS_MDATTR;
 
-    /** @var string */
-    public const NS_PREFIX = 'mdattr';
+    public const string NS_PREFIX = 'mdattr';
 
-    /** @var string */
-    public const SCHEMA = 'resources/schemas/sstc-metadata-attr.xsd';
+    public const string SCHEMA = 'resources/schemas/sstc-metadata-attr.xsd';
 }

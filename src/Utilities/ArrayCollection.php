@@ -54,8 +54,6 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @param \Closure $filterFunction
-     *
      * @return \SimpleSAML\SAML2\Utilities\ArrayCollection
      */
     public function filter(Closure $filterFunction): Collection
@@ -76,7 +74,6 @@ class ArrayCollection implements Collection
 
     /**
      * @param mixed $element
-     *
      */
     public function remove($element): void
     {
@@ -89,8 +86,9 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @throws \SimpleSAML\SAML2\Exception\RuntimeException
      * @return bool|mixed
+     *
+     * @throws \SimpleSAML\SAML2\Exception\RuntimeException
      */
     public function getOnlyElement()
     {
@@ -136,7 +134,6 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @return int
      */
     public function count(): int
     {
@@ -155,8 +152,6 @@ class ArrayCollection implements Collection
 
     /**
      * @param mixed $offset
-     *
-     * @return bool
      */
     public function offsetExists($offset): bool
     {

@@ -23,9 +23,6 @@ final class OneTimeUse extends AbstractConditionType implements SchemaValidatabl
     /**
      * Convert XML into an OneTimeUse
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   If the qualified name of the supplied element is wrong
      */
@@ -40,9 +37,6 @@ final class OneTimeUse extends AbstractConditionType implements SchemaValidatabl
 
     /**
      * Convert this OneTimeUse to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this OneTimeUse.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

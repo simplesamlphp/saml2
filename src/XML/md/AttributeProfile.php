@@ -20,6 +20,5 @@ final class AttributeProfile extends AbstractMdElement implements SchemaValidata
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = SAMLAnyURIValue::class;
+    public const string TEXTCONTENT_TYPE = SAMLAnyURIValue::class;
 }

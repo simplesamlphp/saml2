@@ -23,15 +23,15 @@ final class Action extends AbstractSamlElement
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = SAMLStringValue::class;
+    public const string TEXTCONTENT_TYPE = SAMLStringValue::class;
 
 
     /**
      * Initialize an Action.
      *
+     * NOTE: The namespace-attribute was marked REQUIRED in the 2012 SAML errata (E36)
+     *
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $namespace
-     *   NOTE: The namespace-attribute was marked REQUIRED in the 2012 SAML errata (E36)
      * @param \SimpleSAML\SAML2\Type\SAMLStringValue $content
      */
     public function __construct(
@@ -56,9 +56,6 @@ final class Action extends AbstractSamlElement
     /**
      * Convert XML into a Action
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
@@ -76,9 +73,6 @@ final class Action extends AbstractSamlElement
 
     /**
      * Convert this Action to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this Action to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

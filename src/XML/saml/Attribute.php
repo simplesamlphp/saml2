@@ -35,7 +35,7 @@ class Attribute extends AbstractSamlElement implements
 
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**
@@ -45,7 +45,7 @@ class Attribute extends AbstractSamlElement implements
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $nameFormat
      * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $friendlyName
      * @param \SimpleSAML\SAML2\XML\saml\AttributeValue[] $attributeValue
-     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttribute
+     * @param \SimpleSAML\XML\Attribute[] $namespacedAttribute
      */
     public function __construct(
         protected SAMLStringValue $name,
@@ -120,6 +120,9 @@ class Attribute extends AbstractSamlElement implements
     }
 
 
+    /**
+     * @return \SimpleSAML\XMLSecurity\Backend\EncryptionBackend|null
+     */
     public function getEncryptionBackend(): ?EncryptionBackend
     {
         // return the encryption backend you want to use,
@@ -130,9 +133,6 @@ class Attribute extends AbstractSamlElement implements
 
     /**
      * Convert XML into a Attribute
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -156,9 +156,6 @@ class Attribute extends AbstractSamlElement implements
 
     /**
      * Convert this Attribute to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this Attribute to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

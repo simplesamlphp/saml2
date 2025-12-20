@@ -206,9 +206,6 @@ final class EntitiesDescriptor extends AbstractMetadataDocument implements Schem
     /**
      * Initialize an EntitiesDescriptor from an existing XML document.
      *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
@@ -265,8 +262,6 @@ final class EntitiesDescriptor extends AbstractMetadataDocument implements Schem
     /**
      * Convert this assertion to an unsigned XML document.
      * This method does not sign the resulting XML document.
-     *
-     * @return \DOMElement The root element of the DOM tree
      */
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {

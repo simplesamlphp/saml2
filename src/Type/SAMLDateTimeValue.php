@@ -14,14 +14,11 @@ use SimpleSAML\XMLSchema\Type\DateTimeValue;
 class SAMLDateTimeValue extends DateTimeValue
 {
     // Lowercase p as opposed to the base-class to covert the timestamp to UTC as demanded by the SAML specifications
-    public const DATETIME_FORMAT = 'Y-m-d\\TH:i:sp';
+    public const string DATETIME_FORMAT = 'Y-m-d\\TH:i:sp';
 
 
     /**
      * Validate the value.
-     *
-     * @param string $value
-     * @return void
      */
     protected function validateValue(string $value): void
     {

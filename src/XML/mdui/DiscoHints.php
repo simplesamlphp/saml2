@@ -11,7 +11,6 @@ use SimpleSAML\SAML2\Type\CIDRValue;
 use SimpleSAML\SAML2\Type\DomainValue;
 use SimpleSAML\SAML2\Type\GeolocationValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
@@ -28,6 +27,7 @@ use function array_keys;
  * Class for handling the metadata extensions for login and discovery user interface
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
+ *
  * @package simplesamlphp/saml2
  */
 final class DiscoHints extends AbstractMduiElement implements
@@ -39,13 +39,13 @@ final class DiscoHints extends AbstractMduiElement implements
 
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ELT_NAMESPACE = NS::OTHER;
 
 
     /**
      * Create a DiscoHints element.
      *
-     * @param \SimpleSAML\XML\Chunk[] $children
+     * @param \SimpleSAML\XML\SerializableElementInterface[] $children
      * @param \SimpleSAML\SAML2\XML\mdui\IPHint[] $ipHint
      * @param \SimpleSAML\SAML2\XML\mdui\DomainHint[] $domainHint
      * @param \SimpleSAML\SAML2\XML\mdui\GeolocationHint[] $geolocationHint
@@ -103,9 +103,9 @@ final class DiscoHints extends AbstractMduiElement implements
     /**
      * Add the value to the elements-property
      *
-     * @param \SimpleSAML\XML\Chunk $child
+     * @param \SimpleSAML\XML\SerializableElementInterface $child
      */
-    public function addChild(Chunk $child): void
+    public function addChild(SerializableElementInterface $child): void
     {
         $this->elements[] = $child;
     }
@@ -113,8 +113,6 @@ final class DiscoHints extends AbstractMduiElement implements
 
     /**
      * Test if an object, at the state it's in, would produce an empty XML-element
-     *
-     * @return bool
      */
     public function isEmptyElement(): bool
     {
@@ -127,9 +125,6 @@ final class DiscoHints extends AbstractMduiElement implements
 
     /**
      * Convert XML into a DiscoHints
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -150,9 +145,6 @@ final class DiscoHints extends AbstractMduiElement implements
 
     /**
      * Convert this DiscoHints to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -182,8 +174,12 @@ final class DiscoHints extends AbstractMduiElement implements
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'children'?: array,
+     *   'IPHint'?: array,
+     *   'DomainHint'?: array,
+     *   'GeolocationHint'?: array,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -202,8 +198,18 @@ final class DiscoHints extends AbstractMduiElement implements
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'children'?: array,
+     *   'IPHint'?: array,
+     *   'DomainHint'?: array,
+     *   'GeolocationHint'?: array,
+     * } $data
+     * @return array{
+     *   'children'?: array,
+     *   'IPHint'?: array,
+     *   'DomainHint'?: array,
+     *   'GeolocationHint'?: array,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -270,7 +276,12 @@ final class DiscoHints extends AbstractMduiElement implements
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'children'?: array,
+     *   'IPHint'?: array,
+     *   'DomainHint'?: array,
+     *   'GeolocationHint'?: array,
+     * }
      */
     public function toArray(): array
     {

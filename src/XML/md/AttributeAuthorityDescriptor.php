@@ -162,9 +162,6 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType impl
     /**
      * Initialize an IDPSSODescriptor.
      *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
@@ -244,8 +241,6 @@ final class AttributeAuthorityDescriptor extends AbstractRoleDescriptorType impl
     /**
      * Convert this assertion to an unsigned XML document.
      * This method does not sign the resulting XML document.
-     *
-     * @return \DOMElement The root element of the DOM tree
      */
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {

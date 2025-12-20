@@ -48,8 +48,6 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
 
 
     /**
-     * @psalm-suppress UndefinedDocblockClass
-     * @psalm-suppress UndefinedClass
      * @var \SimpleSAML\Configuration
      */
     private Configuration $spMetadata;
@@ -58,16 +56,15 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
     /**
      * Create the redirect URL for a message.
      *
-     * @param  \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message.
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message.
+     * @return string The URL the user should be redirected to in order to send a message.
+     *
      * @throws \Exception
-     * @return string        The URL the user should be redirected to in order to send a message.
      */
     public function getRedirectURL(AbstractMessage $message): string
     {
-        /** @psalm-suppress UndefinedClass */
         $config = Configuration::getInstance();
 
-        /** @psalm-suppress UndefinedClass */
         $store = StoreFactory::getInstance($config->getString('store.type'));
         if ($store === false) {
             throw new Exception('Unable to send artifact without a datastore configured.');
@@ -97,7 +94,6 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             $params['RelayState'] = $relayState;
         }
 
-        /** @psalm-suppress UndefinedClass */
         $httpUtils = new HTTP();
         return $httpUtils->addURLparameters($destination, $params);
     }
@@ -211,8 +207,6 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
 
     /**
      * @param \SimpleSAML\Configuration $sp
-     *
-     * @psalm-suppress UndefinedClass
      */
     public function setSPMetadata(Configuration $sp): void
     {
@@ -225,7 +219,6 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
      *
      * @param \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $message
      * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key
-     * @return bool
      */
     public static function validateSignature(ArtifactResponse $message, XMLSecurityKey $key): bool
     {

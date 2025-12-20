@@ -14,7 +14,6 @@ class Result
 
 
     /**
-     * @param string $message
      */
     public function addError(string $message): void
     {
@@ -23,7 +22,6 @@ class Result
 
 
     /**
-     * @return bool
      */
     public function isValid(): bool
     {

@@ -13,16 +13,12 @@ interface RelayStateInterface
 {
     /**
      * Set the RelayState associated with he message.
-     *
-     * @param string|null $relayState The RelayState.
      */
     public function setRelayState(?string $relayState = null): void;
 
 
     /**
      * Get the RelayState associated with the message.
-     *
-     * @return string|null The RelayState.
      */
     public function getRelayState(): ?string;
 }

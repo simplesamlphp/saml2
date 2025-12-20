@@ -9,7 +9,6 @@ use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XML\ArrayizableElementInterface;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\ExtendableElementTrait;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
@@ -29,6 +28,7 @@ use function array_unique;
  * Class for handling the metadata extensions for login and discovery user interface
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
+ *
  * @package simplesamlphp/saml2
  */
 final class UIInfo extends AbstractMduiElement implements
@@ -40,7 +40,7 @@ final class UIInfo extends AbstractMduiElement implements
 
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ELT_NAMESPACE = NS::OTHER;
 
 
     /**
@@ -52,7 +52,7 @@ final class UIInfo extends AbstractMduiElement implements
      * @param \SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL[] $privacyStatementURL
      * @param \SimpleSAML\SAML2\XML\mdui\Keywords[] $keywords
      * @param \SimpleSAML\SAML2\XML\mdui\Logo[] $logo
-     * @param \SimpleSAML\XML\Chunk[] $children
+     * @param \SimpleSAML\XML\SerializableElementInterface[] $children
      */
     public function __construct(
         protected array $displayName = [],
@@ -206,9 +206,9 @@ final class UIInfo extends AbstractMduiElement implements
     /**
      * Add the value to the elements-property
      *
-     * @param \SimpleSAML\XML\Chunk $child
+     * @param \SimpleSAML\XML\SerializableElementInterface $child
      */
-    public function addChild(Chunk $child): void
+    public function addChild(SerializableElementInterface $child): void
     {
         $this->elements[] = $child;
     }
@@ -234,10 +234,11 @@ final class UIInfo extends AbstractMduiElement implements
     /**
      * Test localized elements for multiple items with the same language
      *
-     * @param (\SimpleSAML\SAML2\XML\md\AbstractLocalizedURI|
-     *         \SimpleSAML\SAML2\XML\md\AbstractLocalizedName|
-     *         \SimpleSAML\SAML2\XML\mdui\Keywords)[] $elements
-     * @return void
+     * @param (
+     *   \SimpleSAML\SAML2\XML\md\AbstractLocalizedURI|
+     *   \SimpleSAML\SAML2\XML\md\AbstractLocalizedName|
+     *   \SimpleSAML\SAML2\XML\mdui\Keywords
+     * )[] $elements
      */
     private function testLocalizedElements(array $elements)
     {
@@ -263,9 +264,6 @@ final class UIInfo extends AbstractMduiElement implements
 
     /**
      * Convert XML into a UIInfo
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -297,9 +295,6 @@ final class UIInfo extends AbstractMduiElement implements
 
     /**
      * Convert this UIInfo to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -341,10 +336,15 @@ final class UIInfo extends AbstractMduiElement implements
     /**
      * Create a class from an array
      *
-     * NOTE: this method does not support passing additional child-objects
-     *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'DisplayName'?: array,
+     *   'Description'?: array,
+     *   'InformationURL'?: array,
+     *   'PrivacyStatementURL'?: array,
+     *   'Keywords'?: array,
+     *   'Logo'?: array,
+     *   'children'?: array,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -366,8 +366,24 @@ final class UIInfo extends AbstractMduiElement implements
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'DisplayName'?: array,
+     *   'Description'?: array,
+     *   'InformationURL'?: array,
+     *   'PrivacyStatementURL'?: array,
+     *   'Keywords'?: array,
+     *   'Logo'?: array,
+     *   'children'?: array,
+     * } $data
+     * @return array{
+     *   'DisplayName'?: array,
+     *   'Description'?: array,
+     *   'InformationURL'?: array,
+     *   'PrivacyStatementURL'?: array,
+     *   'Keywords'?: array,
+     *   'Logo'?: array,
+     *   'children'?: array,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -443,9 +459,15 @@ final class UIInfo extends AbstractMduiElement implements
     /**
      * Create an array from this class
      *
-     * NOTE: this method does not support passing additional child-objects
-     *
-     * @return array
+     * @return array{
+     *   'DisplayName'?: array,
+     *   'Description'?: array,
+     *   'InformationURL'?: array,
+     *   'PrivacyStatementURL'?: array,
+     *   'Keywords'?: array,
+     *   'Logo'?: array,
+     *   'children'?: array,
+     * }
      */
     public function toArray(): array
     {

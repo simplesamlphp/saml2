@@ -26,23 +26,24 @@ use function strval;
  */
 abstract class AbstractSubjectConfirmationData extends AbstractAnyType
 {
-    /** @var string */
-    public const NS = C::NS_SAML;
+    public const string NS = C::NS_SAML;
 
-    /** @var string */
-    public const NS_PREFIX = 'saml';
+    public const string NS_PREFIX = 'saml';
 
-    /** @var string */
-    public const SCHEMA = 'resources/schemas/saml-schema-assertion-2.0.xsd';
+    public const string SCHEMA = 'resources/schemas/saml-schema-assertion-2.0.xsd';
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::ANY;
+    public const string XS_ANY_ELT_NAMESPACE = NS::ANY;
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
-    /** The exclusions for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_EXCLUSIONS = [
+    /**
+     * The exclusions for the xs:anyAttribute element
+     *
+     * @var array<int, array<int, string>>
+     */
+    public const array XS_ANY_ATTR_EXCLUSIONS = [
         ['urn:oasis:names:tc:SAML:2.0:assertion', '*'],
         ['urn:oasis:names:tc:SAML:2.0:protocol', '*'],
     ];
@@ -162,8 +163,6 @@ abstract class AbstractSubjectConfirmationData extends AbstractAnyType
 
     /**
      * Test if an object, at the state it's in, would produce an empty XML-element
-     *
-     * @return bool
      */
     public function isEmptyElement(): bool
     {
@@ -179,9 +178,6 @@ abstract class AbstractSubjectConfirmationData extends AbstractAnyType
 
     /**
      * Convert this element to XML.
-     *
-     * @param  \DOMElement|null $parent The parent element we should append this element to.
-     * @return \DOMElement This element, as XML.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

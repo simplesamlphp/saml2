@@ -27,15 +27,13 @@ final class RelayState extends AbstractEcpElement implements SchemaValidatableEl
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = SAMLStringValue::class;
+    public const string TEXTCONTENT_TYPE = SAMLStringValue::class;
 
 
     /**
      * Convert XML into a RelayState
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -78,7 +76,6 @@ final class RelayState extends AbstractEcpElement implements SchemaValidatableEl
      * Convert this ECP RelayState to XML.
      *
      * @param \DOMElement|null $parent The element we should append this element to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

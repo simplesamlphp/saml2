@@ -16,16 +16,13 @@ use function array_column;
  */
 class DecisionTypeValue extends StringValue
 {
-    /** @var string */
-    public const SCHEMA_TYPE = 'decisionType';
+    public const string SCHEMA_TYPE = 'decisionType';
 
 
     /**
      * Validate the value.
      *
-     * @param string $value  The value
      * @throws \Exception on failure
-     * @return void
      */
     protected function validateValue(string $value): void
     {
@@ -39,7 +36,6 @@ class DecisionTypeValue extends StringValue
 
     /**
      * @param \SimpleSAML\SAML2\XML\saml\DecisionTypeEnum $value
-     * @return static
      */
     public static function fromEnum(DecisionTypeEnum $value): static
     {

@@ -21,7 +21,6 @@ class ArrayAdapter implements Queryable
 
 
     /**
-     * @param string $key
      * @param mixed|null $defaultValue
      * @return mixed
      */
@@ -36,8 +35,6 @@ class ArrayAdapter implements Queryable
 
 
     /**
-     * @param string $key
-     * @return bool
      */
     public function has(string $key): bool
     {

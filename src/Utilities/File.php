@@ -17,8 +17,6 @@ class File
 {
     /**
      * @param string $file full absolute path to the file
-     *
-     * @return string
      */
     public static function getFileContents(string $file): string
     {

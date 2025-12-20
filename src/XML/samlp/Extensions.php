@@ -30,9 +30,6 @@ final class Extensions extends AbstractSamlpElement implements SchemaValidatable
      * For those supported extensions, an object of the corresponding class will be created. The rest will be added
      * as a \SimpleSAML\XML\Chunk object.
      *
-     * @param \DOMElement $xml
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */

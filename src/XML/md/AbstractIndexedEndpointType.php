@@ -98,7 +98,6 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
      * Add this endpoint to an XML element.
      *
      * @param \DOMElement $parent The element we should append this endpoint to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -134,8 +133,15 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'index': int,
+     *   'Binding': string,
+     *   'Location': string,
+     *   'isDefault'?: bool,
+     *   'ResponseLocation'?: string,
+     *   'children'?: array,
+     *   'attributes'?: array,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -157,8 +163,24 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'index': int,
+     *   'Binding': string,
+     *   'Location': string,
+     *   'isDefault'?: bool,
+     *   'ResponseLocation'?: string,
+     *   'children'?: array,
+     *   'attributes'?: array,
+     * } $data
+     * @return array{
+     *   'index': int,
+     *   'Binding': string,
+     *   'Location': string,
+     *   'isDefault'?: bool,
+     *   'ResponseLocation'?: string,
+     *   'children'?: array,
+     *   'attributes'?: array,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -222,7 +244,15 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'index': int,
+     *   'Binding': string,
+     *   'Location': string,
+     *   'isDefault'?: bool,
+     *   'ResponseLocation'?: string,
+     *   'children'?: array,
+     *   'attributes'?: array,
+     * }
      */
     public function toArray(): array
     {

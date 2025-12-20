@@ -32,11 +32,9 @@ final class Logo extends AbstractMduiElement implements
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = SAMLAnyURIValue::class;
+    public const string TEXTCONTENT_TYPE = SAMLAnyURIValue::class;
 
 
-    /** @var string */
     private static string $scheme_regex = '/^(data|http[s]?[:])/i';
 
 
@@ -62,8 +60,8 @@ final class Logo extends AbstractMduiElement implements
      * Validate the content of the element.
      *
      * @param string $content  The value to go in the XML textContent
+     *
      * @throws \InvalidArgumentException on failure
-     * @return void
      */
     protected function validateContent(string $content): void
     {
@@ -108,9 +106,6 @@ final class Logo extends AbstractMduiElement implements
     /**
      * Convert XML into a Logo
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
@@ -133,9 +128,6 @@ final class Logo extends AbstractMduiElement implements
 
     /**
      * Convert this Logo to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this Logo to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -155,8 +147,12 @@ final class Logo extends AbstractMduiElement implements
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'url': string,
+     *   'height'?: int,
+     *   'width'?: int,
+     *   'lang'?: string,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -175,8 +171,18 @@ final class Logo extends AbstractMduiElement implements
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'url': string,
+     *   'height'?: int,
+     *   'width'?: int,
+     *   'lang'?: string,
+     * } $data
+     * @return array{
+     *   'url': string,
+     *   'height'?: int,
+     *   'width'?: int,
+     *   'lang'?: string,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -219,7 +225,12 @@ final class Logo extends AbstractMduiElement implements
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'url': string,
+     *   'height'?: int,
+     *   'width'?: int,
+     *   'lang'?: string,
+     * }
      */
     public function toArray(): array
     {

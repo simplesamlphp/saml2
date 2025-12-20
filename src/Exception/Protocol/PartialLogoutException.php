@@ -14,5 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class PartialLogoutException extends ProtocolViolationException
 {
-    public const DEFAULT_MESSAGE = 'Unable to propagate logout to all other session participants.';
+    public const string DEFAULT_MESSAGE = 'Unable to propagate logout to all other session participants.';
 }

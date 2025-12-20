@@ -80,10 +80,40 @@ final class AttributeConsumingService extends AbstractMdElement implements Schem
 
 
     /**
-     * Initialize / parse an AttributeConsumingService.
+     * Get the localized names of this service.
      *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return static
+     * @return \SimpleSAML\SAML2\XML\md\ServiceName[]
+     */
+    public function getServiceName(): array
+    {
+        return $this->serviceName;
+    }
+
+
+    /**
+     * Collect the value of the ServiceDescription-property
+     *
+     * @return \SimpleSAML\SAML2\XML\md\ServiceDescription[]
+     */
+    public function getServiceDescription(): array
+    {
+        return $this->serviceDescription;
+    }
+
+
+    /**
+     * Collect the value of the RequestedAttribute-property
+     *
+     * @return \SimpleSAML\SAML2\XML\md\RequestedAttribute[]
+     */
+    public function getRequestedAttribute(): array
+    {
+        return $this->requestedAttribute;
+    }
+
+
+    /**
+     * Initialize / parse an AttributeConsumingService.
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -118,43 +148,7 @@ final class AttributeConsumingService extends AbstractMdElement implements Schem
 
 
     /**
-     * Get the localized names of this service.
-     *
-     * @return \SimpleSAML\SAML2\XML\md\ServiceName[]
-     */
-    public function getServiceName(): array
-    {
-        return $this->serviceName;
-    }
-
-
-    /**
-     * Collect the value of the ServiceDescription-property
-     *
-     * @return \SimpleSAML\SAML2\XML\md\ServiceDescription[]
-     */
-    public function getServiceDescription(): array
-    {
-        return $this->serviceDescription;
-    }
-
-
-    /**
-     * Collect the value of the RequestedAttribute-property
-     *
-     * @return \SimpleSAML\SAML2\XML\md\RequestedAttribute[]
-     */
-    public function getRequestedAttribute(): array
-    {
-        return $this->requestedAttribute;
-    }
-
-
-    /**
      * Convert to \DOMElement.
-     *
-     * @param \DOMElement $parent The element we should append this AttributeConsumingService to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

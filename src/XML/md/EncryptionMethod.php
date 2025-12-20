@@ -18,12 +18,9 @@ class EncryptionMethod extends AbstractEncryptionMethod implements SchemaValidat
     use SchemaValidatableElementTrait;
 
 
-    /** @var string */
-    public const NS = AbstractMdElement::NS;
+    public const string NS = AbstractMdElement::NS;
 
-    /** @var string */
-    public const NS_PREFIX = AbstractMdElement::NS_PREFIX;
+    public const string NS_PREFIX = AbstractMdElement::NS_PREFIX;
 
-    /** @var string */
-    public const SCHEMA = AbstractMdElement::SCHEMA;
+    public const string SCHEMA = AbstractMdElement::SCHEMA;
 }

@@ -41,8 +41,6 @@ class PublicKeyValidator extends AbstractChainedValidator
     /**
      * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface $signedElement
      * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
-     *
-     * @return bool
      */
     public function canValidate(
         SignedElementInterface $signedElement,
@@ -57,8 +55,6 @@ class PublicKeyValidator extends AbstractChainedValidator
     /**
      * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface $signedElement
      * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
-     *
-     * @return bool
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */

@@ -40,8 +40,6 @@ class Processor
     /**
      * Indicates whether or not the response was signed. This is required in order to be able to check whether either
      * the reponse or one of its assertions was signed
-     *
-     * @var bool
      */
     private bool $responseIsSigned = false;
 
@@ -90,6 +88,7 @@ class Processor
      * Checks the preconditions that must be valid in order for the response to be processed.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\Response $response
+     *
      * @throws \SimpleSAML\SAML2\Response\Exception\PreconditionNotMetException
      */
     private function enforcePreconditions(Response $response): void
@@ -105,6 +104,7 @@ class Processor
     /**
      * @param \SimpleSAML\SAML2\XML\samlp\Response $response
      * @param \SimpleSAML\SAML2\Configuration\IdentityProvider $identityProviderConfiguration
+     *
      * @throws \SimpleSAML\SAML2\Response\Exception\InvalidResponseException
      */
     private function verifySignature(Response $response, IdentityProvider $identityProviderConfiguration): void
@@ -136,9 +136,10 @@ class Processor
 
     /**
      * @param \SimpleSAML\SAML2\XML\samlp\Response $response
+     * @return \SimpleSAML\SAML2\Utilities\ArrayCollection
+     *
      * @throws \SimpleSAML\SAML2\Response\Exception\UnsignedResponseException
      * @throws \SimpleSAML\SAML2\Response\Exception\NoAssertionsFoundException
-     * @return \SimpleSAML\SAML2\Utilities\ArrayCollection
      */
     private function processAssertions(Response $response): ArrayCollection
     {

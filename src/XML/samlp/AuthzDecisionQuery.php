@@ -84,7 +84,7 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery implements SchemaVal
     /**
      * Collect the value of the action-property
      *
-     * @return array
+     * @return \SimpleSAML\SAML2\XML\saml\Action[]
      */
     public function getAction(): array
     {
@@ -106,9 +106,6 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery implements SchemaVal
     /**
      * Convert XML into an AuthzDecisionQuery
      *
-     * @param \DOMElement $xml The XML element we should load
-     *
-     * @return static
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
@@ -188,8 +185,6 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery implements SchemaVal
     /**
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
-     *
-     * @return \DOMElement The root element of the DOM tree
      */
     protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {

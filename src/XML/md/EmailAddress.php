@@ -25,29 +25,27 @@ final class EmailAddress extends AbstractMdElement implements
     SchemaValidatableElementInterface
 {
     use SchemaValidatableElementTrait;
-    use TypedTextContentTrait;
+    use TypedTextContentTrait {
+        TypedTextContentTrait::getContent as getRawContent;
+    }
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = EmailAddressValue::class;
+    public const string TEXTCONTENT_TYPE = EmailAddressValue::class;
 
 
     /**
      * Get the content of the element.
-     *
-     * @return string
      */
     public function getContent(): string
     {
-        return preg_filter('/^/', 'mailto:', $this->content->getValue());
+        return preg_filter('/^/', 'mailto:', $this->getRawContent()->getValue());
     }
 
 
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array<string> $data
      */
     public static function fromArray(array $data): static
     {
@@ -63,7 +61,7 @@ final class EmailAddress extends AbstractMdElement implements
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array<string>
      */
     public function toArray(): array
     {

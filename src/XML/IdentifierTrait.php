@@ -54,7 +54,6 @@ trait IdentifierTrait
     /**
      * Retrieve an identifier of any type from XML
      *
-     * @param \DOMElement $xml
      * @return \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null
      * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified

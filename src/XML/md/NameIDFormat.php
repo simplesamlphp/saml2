@@ -20,6 +20,5 @@ final class NameIDFormat extends AbstractMdElement implements SchemaValidatableE
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = SAMLAnyURIValue::class;
+    public const string TEXTCONTENT_TYPE = SAMLAnyURIValue::class;
 }

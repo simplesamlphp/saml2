@@ -89,6 +89,9 @@ final class NameID extends NameIDType implements
     }
 
 
+    /**
+     * @return \SimpleSAML\XMLSecurity\Backend\EncryptionBackend
+     */
     public function getEncryptionBackend(): ?EncryptionBackend
     {
         // return the encryption backend you want to use,
@@ -100,8 +103,13 @@ final class NameID extends NameIDType implements
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'value': string,
+     *   'NameQualifier'?: string,
+     *   'SPNameQualifier'?: string,
+     *   'Format'?: string,
+     *   'SPProvidedID'?: string,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -121,8 +129,20 @@ final class NameID extends NameIDType implements
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'value': string,
+     *   'NameQualifier'?: string,
+     *   'SPNameQualifier'?: string,
+     *   'Format'?: string,
+     *   'SPProvidedID'?: string,
+     * } $data
+     * @return array{
+     *   'value': string,
+     *   'NameQualifier'?: string,
+     *   'SPNameQualifier'?: string,
+     *   'Format'?: string,
+     *   'SPProvidedID'?: string,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -172,7 +192,13 @@ final class NameID extends NameIDType implements
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'value': string,
+     *   'NameQualifier'?: string,
+     *   'SPNameQualifier'?: string,
+     *   'Format'?: string,
+     *   'SPProvidedID'?: string,
+     * }
      */
     public function toArray(): array
     {

@@ -14,5 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class ProxyCountExceededException extends ProtocolViolationException
 {
-    public const DEFAULT_MESSAGE = 'Proxy count exceeded.';
+    public const string DEFAULT_MESSAGE = 'Proxy count exceeded.';
 }

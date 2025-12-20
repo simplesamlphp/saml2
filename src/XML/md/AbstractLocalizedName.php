@@ -27,8 +27,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = SAMLStringValue::class;
+    public const string TEXTCONTENT_TYPE = SAMLStringValue::class;
 
 
     /**
@@ -59,9 +58,6 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
     /**
      * Create an instance of this object from its XML representation.
      *
-     * @param \DOMElement $xml
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
@@ -83,8 +79,6 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
 
 
     /**
-     * @param \DOMElement|null $parent
-     * @return \DOMElement
      */
     final public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -99,8 +93,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array<string, string> $data
      */
     public static function fromArray(array $data): static
     {
@@ -116,7 +109,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array<string, string>
      */
     public function toArray(): array
     {

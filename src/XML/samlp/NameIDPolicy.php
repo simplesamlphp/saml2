@@ -77,8 +77,6 @@ final class NameIDPolicy extends AbstractSamlpElement implements
 
     /**
      * Test if an object, at the state it's in, would produce an empty XML-element
-     *
-     * @return bool
      */
     public function isEmptyElement(): bool
     {
@@ -90,9 +88,6 @@ final class NameIDPolicy extends AbstractSamlpElement implements
 
     /**
      * Convert XML into a NameIDPolicy
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -116,9 +111,6 @@ final class NameIDPolicy extends AbstractSamlpElement implements
 
     /**
      * Convert this NameIDPolicy to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this NameIDPolicy to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -143,8 +135,11 @@ final class NameIDPolicy extends AbstractSamlpElement implements
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'Format'?: string,
+     *   'SPNameQualifier'?: string,
+     *   'AllowCreate'?: string,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -162,8 +157,16 @@ final class NameIDPolicy extends AbstractSamlpElement implements
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'Format'?: string,
+     *   'SPNameQualifier'?: string,
+     *   'AllowCreate'?: string,
+     * } $data
+     * @return array{
+     *   'Format'?: string,
+     *   'SPNameQualifier'?: string,
+     *   'AllowCreate'?: string,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -201,7 +204,11 @@ final class NameIDPolicy extends AbstractSamlpElement implements
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'Format'?: string,
+     *   'SPNameQualifier'?: string,
+     *   'AllowCreate'?: string,
+     * }
      */
     public function toArray(): array
     {
