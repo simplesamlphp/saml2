@@ -94,14 +94,6 @@ abstract class AbstractSubjectConfirmationData extends AbstractAnyType
         }
 
         $this->setElements($children);
-
-        foreach ($namespacedAttributes as $attr) {
-            Assert::notNull(
-                $attr->getNamespaceURI(),
-                "Local (non-namespaced) attributes are not allowed.",
-                ProtocolViolationException::class,
-            );
-        }
         $this->setAttributesNS($namespacedAttributes);
     }
 

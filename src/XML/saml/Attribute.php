@@ -37,6 +37,16 @@ class Attribute extends AbstractSamlElement implements
     /** The namespace-attribute for the xs:anyAttribute element */
     public const string XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
+    /**
+     * The exclusions for the xs:anyAttribute element
+     *
+     * @var array<int, array<int, string>>
+     */
+    public const array XS_ANY_ATTR_EXCLUSIONS = [
+        ['urn:oasis:names:tc:SAML:2.0:assertion', '*'],
+        ['urn:oasis:names:tc:SAML:2.0:protocol', '*'],
+    ];
+
 
     /**
      * Initialize an Attribute.
