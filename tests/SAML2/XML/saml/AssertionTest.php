@@ -212,68 +212,6 @@ final class AssertionTest extends TestCase
 
 
     /**
-     * Test to parse a basic assertion
-     */
-    public function testUnmarshalling(): void
-    {
-        $accr = C::AUTHNCONTEXT_CLASS_REF_LOA1;
-        $entity_idp = C::ENTITY_IDP;
-        $entity_sp = C::ENTITY_SP;
-        $entity_other = C::ENTITY_OTHER;
-
-        // Unmarshall an assertion
-        $xml = <<<XML
-<saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-                ID="_593e33ddf86449ce4d4c22b60ac48e067d98a0b2bf"
-                Version="2.0"
-                IssueInstant="2010-03-05T13:34:28Z"
->
-  <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
-  <saml:Conditions>
-    <saml:AudienceRestriction>
-      <saml:Audience>{$entity_sp}</saml:Audience>
-      <saml:Audience>{$entity_other}</saml:Audience>
-    </saml:AudienceRestriction>
-  </saml:Conditions>
-  <saml:AuthnStatement AuthnInstant="2010-03-05T13:34:28Z">
-    <saml:AuthnContext>
-      <saml:AuthnContextClassRef>{$accr}</saml:AuthnContextClassRef>
-      <saml:AuthenticatingAuthority>{$entity_idp}</saml:AuthenticatingAuthority>
-      <saml:AuthenticatingAuthority>{$entity_other}</saml:AuthenticatingAuthority>
-    </saml:AuthnContext>
-  </saml:AuthnStatement>
-</saml:Assertion>
-XML;
-        $document  = DOMDocumentFactory::fromString($xml);
-        $assertion = Assertion::fromXML($document->documentElement);
-
-        // Was not signed
-        $this->assertFalse($assertion->wasSignedAtConstruction());
-
-        // Test for valid audiences
-        $conditions = $assertion->getConditions();
-        $this->assertNotNull($conditions);
-
-        $audienceRestriction = $conditions->getAudienceRestriction();
-        $this->assertCount(1, $audienceRestriction);
-
-        $restriction1 = array_pop($audienceRestriction);
-        $this->assertCount(2, $restriction1->getAudience());
-
-        $audience = $restriction1->getAudience();
-        $this->assertEquals($entity_sp, $audience[0]->getContent());
-        $this->assertEquals($entity_other, $audience[1]->getContent());
-
-        // Test for Authenticating Authorities
-        $authnStatements = $assertion->getAuthnStatements();
-        $assertionAuthenticatingAuthorities = $authnStatements[0]->getAuthnContext()->getAuthenticatingAuthorities();
-        $this->assertCount(2, $assertionAuthenticatingAuthorities);
-        $this->assertEquals($entity_idp, $assertionAuthenticatingAuthorities[0]->getContent());
-        $this->assertEquals($entity_other, $assertionAuthenticatingAuthorities[1]->getContent());
-    }
-
-
-    /**
      * Test an assertion with lots of options
      */
     public function testMarshallingUnmarshallingChristmas(): void
@@ -293,6 +231,30 @@ XML;
                         new Audience(EntityIDValue::fromString(C::ENTITY_SP)),
                         new Audience(EntityIDValue::fromString(C::ENTITY_OTHER)),
                     ],
+                ),
+            ],
+        );
+
+        // Create the Subject
+        $subject = new Subject(
+            new NameID(
+                value: SAMLStringValue::fromString('SomeNameIDValue'),
+                SPNameQualifier: SAMLStringValue::fromString('https://sp.example.org/authentication/sp/metadata'),
+                Format: SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
+            ),
+            [
+                new SubjectConfirmation(
+                    SAMLAnyURIValue::fromString('urn:oasis:names:tc:SAML:2.0:cm:bearer'),
+                    new NameID(
+                        value: SAMLStringValue::fromString('SomeOtherNameIDValue'),
+                        SPNameQualifier: SAMLStringValue::fromString('https://sp.example.org/authentication/sp/metadata'),
+                        Format: SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
+                    ),
+                    new SubjectConfirmationData(
+                        notOnOrAfter: SAMLDateTimeValue::fromString('2011-08-31T08:51:05Z'),
+                        recipient: EntityIDValue::fromString('https://sp.example.org/authentication/sp/consume-assertion'),
+                        inResponseTo: NCNameValue::fromString('_13603a6565a69297e9809175b052d115965121c8'),
+                    ),
                 ),
             ],
         );
@@ -358,6 +320,7 @@ XML;
         $assertion = new Assertion(
             issuer: $issuer,
             id: IDValue::fromString('_123abc'),
+            subject: $subject,
             issueInstant: SAMLDateTimeValue::fromString('2011-08-31T08:51:05Z'),
             conditions: $conditions,
             statements: $statements,
@@ -860,6 +823,7 @@ XML;
         $entity_idp = C::ENTITY_IDP;
         $entity_sp = C::ENTITY_SP;
         $entity_other = C::ENTITY_OTHER;
+        $nameid_transient = C::NAMEID_TRANSIENT;
 
         $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -868,6 +832,9 @@ XML;
                 IssueInstant="2010-03-05T13:34:28Z"
 >
   <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
+  <saml:Subject>
+    <saml:NameID Format="{$nameid_transient}">5</saml:NameID>
+  </saml:Subject>
   <saml:Conditions>
     <saml:AudienceRestriction>
       <saml:Audience>{$entity_sp}</saml:Audience>
@@ -1070,6 +1037,7 @@ XML;
         $entity_idp = C::ENTITY_IDP;
         $entity_sp = C::ENTITY_SP;
         $entity_other = C::ENTITY_OTHER;
+        $nameid_transient = C::NAMEID_TRANSIENT;
 
         $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -1078,6 +1046,9 @@ XML;
                 IssueInstant="2010-03-05T13:34:28Z"
 >
   <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
+  <saml:Subject>
+    <saml:NameID Format="{$nameid_transient}">5</saml:NameID>
+  </saml:Subject>
   <saml:Conditions>
     <saml:AudienceRestriction>
       <saml:Audience>{$entity_sp}</saml:Audience>
@@ -1188,9 +1159,7 @@ XML;
 
         $identifier = $assertionToVerify->getSubject()?->getIdentifier();
         $this->assertInstanceOf(EncryptedID::class, $identifier);
-//var_dump( $identifier->getEncryptedData()->getKeyInfo()->getInfo() );
-// This contains a Chunk  instead of an EncryptedKey-object
-// ToDo: figure out why
+
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $identifier->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
@@ -1313,6 +1282,7 @@ XML;
         $entity_idp = C::ENTITY_IDP;
         $entity_sp = C::ENTITY_SP;
         $entity_other = C::ENTITY_OTHER;
+        $nameid_transient = C::NAMEID_TRANSIENT;
 
         $xml = <<<XML
 <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
@@ -1321,6 +1291,9 @@ XML;
                 IssueInstant="2010-03-05T13:34:28Z"
 >
   <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
+  <saml:Subject>
+    <saml:NameID Format="{$nameid_transient}">5</saml:NameID>
+  </saml:Subject>
   <saml:Conditions>
     <saml:AudienceRestriction>
       <saml:Audience>{$entity_sp}</saml:Audience>

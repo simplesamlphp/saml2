@@ -25,6 +25,8 @@ use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnStatement;
 use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Type\IDValue;
 
@@ -46,6 +48,9 @@ final class SpIsValidAudienceTest extends MockeryTestCase
     /** @var \SimpleSAML\SAML2\XML\saml\Issuer */
     private static Issuer $issuer;
 
+    /** @var \SimpleSAML\SAML2\XML\saml\Subject */
+    private static Subject $subject;
+
     /** @var \Mockery\MockInterface */
     private MockInterface $serviceProvider;
 
@@ -62,6 +67,14 @@ final class SpIsValidAudienceTest extends MockeryTestCase
         // Create an Issuer
         self::$issuer = new Issuer(
             SAMLStringValue::fromString(C::ENTITY_IDP),
+        );
+
+        // Create Subject
+        self::$subject = new Subject(
+            new NameID(
+                value: SAMLStringValue::fromString("just_a_basic_identifier"),
+                Format: SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
+            ),
         );
 
         // Create the conditions
@@ -107,6 +120,7 @@ final class SpIsValidAudienceTest extends MockeryTestCase
         // Create an assertion
         $assertion = new Assertion(
             id: IDValue::fromString('abc123'),
+            subject: self::$subject,
             issuer: self::$issuer,
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             statements: [self::$authnStatement],
@@ -132,6 +146,7 @@ final class SpIsValidAudienceTest extends MockeryTestCase
         // Create an assertion
         $assertion = new Assertion(
             id: IDValue::fromString('abc123'),
+            subject: self::$subject,
             issuer: self::$issuer,
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             conditions: self::$conditions,
@@ -159,6 +174,7 @@ final class SpIsValidAudienceTest extends MockeryTestCase
         // Create an assertion
         $assertion = new Assertion(
             id: IDValue::fromString('abc123'),
+            subject: self::$subject,
             issuer: self::$issuer,
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             conditions: self::$conditions,

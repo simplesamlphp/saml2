@@ -21,6 +21,8 @@ use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnStatement;
 use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\Issuer;
+use SimpleSAML\SAML2\XML\saml\NameID;
+use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Type\IDValue;
 
@@ -35,6 +37,9 @@ final class NotBeforeTest extends TestCase
 
     /** @var \SimpleSAML\SAML2\XML\saml\Issuer */
     private static Issuer $issuer;
+
+    /** @var \SimpleSAML\SAML2\XML\saml\Subject */
+    private static Subject $subject;
 
     /** @var \SimpleSAML\SAML2\XML\saml\AuthnStatement */
     private static AuthnStatement $authnStatement;
@@ -62,6 +67,14 @@ final class NotBeforeTest extends TestCase
             ),
             SAMLDateTimeValue::fromDateTime(self::$clock->now()),
         );
+
+        // Create Subject
+        self::$subject = new Subject(
+            new NameID(
+                value: SAMLStringValue::fromString("just_a_basic_identifier"),
+                Format: SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
+            ),
+        );
     }
 
 
@@ -80,6 +93,7 @@ final class NotBeforeTest extends TestCase
         // Create an assertion
         $assertion = new Assertion(
             id: IDValue::fromString('abc123'),
+            subject: self::$subject,
             issuer: self::$issuer,
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             conditions: $conditions,
@@ -111,6 +125,7 @@ final class NotBeforeTest extends TestCase
         // Create an assertion
         $assertion = new Assertion(
             id: IDValue::fromString('abc123'),
+            subject: self::$subject,
             issuer: self::$issuer,
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             conditions: $conditions,
@@ -139,6 +154,7 @@ final class NotBeforeTest extends TestCase
         // Create an assertion
         $assertion = new Assertion(
             id: IDValue::fromString('abc123'),
+            subject: self::$subject,
             issuer: self::$issuer,
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             conditions: $conditions,

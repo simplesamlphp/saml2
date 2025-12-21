@@ -31,6 +31,7 @@ use function array_filter;
 use function array_merge;
 use function array_pop;
 use function array_values;
+use function count;
 use function strval;
 
 /**
@@ -84,9 +85,22 @@ final class Assertion extends AbstractSamlElement implements
         Assert::true(
             $subject || !empty($statements),
             "Either a <saml:Subject> or some statement must be present in a <saml:Assertion>",
+            ProtocolViolationException::class,
         );
         Assert::maxCount($statements, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($statements, AbstractStatementType::class);
+
+        $authnStatements = array_values(array_filter($statements, function ($statement) {
+            return $statement instanceof AuthnStatement;
+        }));
+
+        if (count($authnStatements) > 0) {
+            Assert::notNull(
+                $subject,
+                "Assertions containing an <AuthnStatement> element MUST contain a <Subject> element.",
+                ProtocolViolationException::class,
+            );
+        }
     }
 
 
