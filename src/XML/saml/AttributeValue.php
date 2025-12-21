@@ -35,13 +35,6 @@ class AttributeValue extends AbstractSamlElement implements SchemaValidatableEle
     /**
      * Create an AttributeValue.
      *
-     * The value of this element. Can be one of:
-     *  - string
-     *  - int
-     *  - null
-     *  - \DateTimeInterface
-     *  - \SimpleSAML\XML\AbstractElement
-     *
      * @param string|int|null|\DateTimeInterface|\SimpleSAML\XML\AbstractElement $value
      * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied value is neither a string or a DOMElement
      */
@@ -53,8 +46,6 @@ class AttributeValue extends AbstractSamlElement implements SchemaValidatableEle
 
     /**
      * Get the XSI type of this attribute value.
-     *
-     * @return string
      */
     public function getXsiType(): string
     {
@@ -95,9 +86,6 @@ class AttributeValue extends AbstractSamlElement implements SchemaValidatableEle
 
     /**
      * Convert XML into a AttributeValue
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -158,10 +146,6 @@ class AttributeValue extends AbstractSamlElement implements SchemaValidatableEle
 
     /**
      * Append this attribute value to an element.
-     *
-     * @param \DOMElement|null $parent The element we should append this attribute value to.
-     *
-     * @return \DOMElement The generated AttributeValue element.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

@@ -50,7 +50,6 @@ final class RequestAuthenticated extends AbstractEcpElement implements SchemaVal
      * Convert XML into a RequestAuthenticated
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -89,7 +88,6 @@ final class RequestAuthenticated extends AbstractEcpElement implements SchemaVal
      * Convert this ECP RequestAuthentication to XML.
      *
      * @param \DOMElement|null $parent The element we should append this element to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

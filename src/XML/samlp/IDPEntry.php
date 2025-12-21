@@ -74,9 +74,6 @@ final class IDPEntry extends AbstractSamlpElement implements SchemaValidatableEl
     /**
      * Convert XML into a IDPEntry-element
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
@@ -97,9 +94,6 @@ final class IDPEntry extends AbstractSamlpElement implements SchemaValidatableEl
 
     /**
      * Convert this IDPEntry to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this IDPEntry to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -121,8 +115,11 @@ final class IDPEntry extends AbstractSamlpElement implements SchemaValidatableEl
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'ProviderID': string,
+     *   'Name'?: string,
+     *   'Loc'?: string,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -140,8 +137,16 @@ final class IDPEntry extends AbstractSamlpElement implements SchemaValidatableEl
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'ProviderID': string,
+     *   'Name'?: string,
+     *   'Loc'?: string,
+     * } $data
+     * @return array{
+     *   'ProviderID': string,
+     *   'Name'?: string,
+     *   'Loc'?: string,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -180,7 +185,11 @@ final class IDPEntry extends AbstractSamlpElement implements SchemaValidatableEl
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'ProviderID': string,
+     *   'Name'?: string,
+     *   'Loc'?: string,
+     * }
      */
     public function toArray(): array
     {

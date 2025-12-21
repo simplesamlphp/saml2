@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Certificate\KeyCollection;
 use SimpleSAML\SAML2\Configuration\CertificateProvider;
 use SimpleSAML\SAML2\Utilities\File;
 use SimpleSAML\XMLSecurity\Utils\Certificate;
+use Traversable;
 
 use function count;
 use function preg_match;
@@ -40,8 +41,6 @@ class KeyLoader
      * Prioritisation order is keys > certData > certificate
      *
      * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $config
-     * @param string|null $usage
-     * @param bool $required
      * @return \SimpleSAML\SAML2\Certificate\KeyCollection
      */
     public static function extractPublicKeys(
@@ -57,8 +56,6 @@ class KeyLoader
 
     /**
      * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $config
-     * @param null|string $usage
-     * @param bool $required
      * @return \SimpleSAML\SAML2\Certificate\KeyCollection
      */
     public function loadKeysFromConfiguration(
@@ -92,11 +89,8 @@ class KeyLoader
     /**
      * Loads the keys given, optionally excluding keys when a usage is given and they
      * are not configured to be used with the usage given
-     *
-     * @param array|\Traversable $configuredKeys
-     * @param string|null $usage
      */
-    public function loadKeys($configuredKeys, ?string $usage = null): void
+    public function loadKeys(array|Traversable $configuredKeys, ?string $usage = null): void
     {
         foreach ($configuredKeys as $keyData) {
             if (isset($keyData['X509Certificate'])) {
@@ -116,8 +110,6 @@ class KeyLoader
 
     /**
      * Attempts to load a key based on the given certificateData
-     *
-     * @param string $certificateData
      */
     public function loadCertificateData(string $certificateData): void
     {
@@ -156,7 +148,6 @@ class KeyLoader
 
 
     /**
-     * @return bool
      */
     public function hasKeys(): bool
     {

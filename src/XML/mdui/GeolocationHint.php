@@ -20,6 +20,5 @@ final class GeolocationHint extends AbstractMduiElement implements SchemaValidat
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = GeolocationValue::class;
+    public const string TEXTCONTENT_TYPE = GeolocationValue::class;
 }

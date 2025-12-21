@@ -21,9 +21,6 @@ abstract class MessageFactory
     /**
      * Convert an XML element into a message.
      *
-     * @param \DOMElement $xml The root XML element
-     * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The message
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */

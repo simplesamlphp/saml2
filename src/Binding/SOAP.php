@@ -35,10 +35,11 @@ class SOAP extends Binding implements SynchronousBindingInterface
 {
     /**
      * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message
-     * @throws \Exception
      * @return string|false The XML or false on error
+     *
+     * @throws \Exception
      */
-    public function getOutputToSend(AbstractMessage $message)
+    public function getOutputToSend(AbstractMessage $message): string|false
     {
         $header = new Header();
 
@@ -113,7 +114,7 @@ class SOAP extends Binding implements SynchronousBindingInterface
     /**
      * @return string|false
      */
-    protected function getInputStream()
+    protected function getInputStream(): string|false
     {
         return file_get_contents('php://input');
     }

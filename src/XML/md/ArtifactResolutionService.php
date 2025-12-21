@@ -32,7 +32,7 @@ final class ArtifactResolutionService extends AbstractIndexedEndpointType implem
      * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $isDefault
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $unused
      * @param list<\SimpleSAML\XML\Attribute> $attributes
-     * @param array $children
+     * @param \SimpleSAML\XML\SerializableElementInterface[] $children
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */

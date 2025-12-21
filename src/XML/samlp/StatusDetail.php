@@ -24,13 +24,13 @@ final class StatusDetail extends AbstractSamlpElement implements SchemaValidatab
 
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::ANY;
+    public const string XS_ANY_ELT_NAMESPACE = NS::ANY;
 
 
     /**
      * Initialize a samlp:StatusDetail
      *
-     * @param \SimpleSAML\XML\Chunk[] $details
+     * @param \SimpleSAML\XML\SerializableElementInterface[] $details
      */
     public function __construct(array $details = [])
     {
@@ -40,8 +40,6 @@ final class StatusDetail extends AbstractSamlpElement implements SchemaValidatab
 
     /**
      * Test if an object, at the state it's in, would produce an empty XML-element
-     *
-     * @return bool
      */
     public function isEmptyElement(): bool
     {
@@ -51,9 +49,6 @@ final class StatusDetail extends AbstractSamlpElement implements SchemaValidatab
 
     /**
      * Convert XML into a StatusDetail
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -71,9 +66,6 @@ final class StatusDetail extends AbstractSamlpElement implements SchemaValidatab
 
     /**
      * Convert this StatusDetail to XML.
-     *
-     * @param \DOMElement|null $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this StatusDetail.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

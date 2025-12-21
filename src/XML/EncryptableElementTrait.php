@@ -17,6 +17,9 @@ trait EncryptableElementTrait
     use ParentEncryptableElementTrait;
 
 
+    /**
+     * @return array|null
+     */
     public function getBlacklistedAlgorithms(): ?array
     {
         $container = ContainerSingleton::getInstance();

@@ -60,6 +60,9 @@ trait EncryptedElementTrait
     }
 
 
+    /**
+     * @return array|null
+     */
     public function getBlacklistedAlgorithms(): ?array
     {
         $container = ContainerSingleton::getInstance();
@@ -67,6 +70,9 @@ trait EncryptedElementTrait
     }
 
 
+    /**
+     * @return \SimpleSAML\XMLSecurity\Backend\EncryptionBackend|null
+     */
     public function getEncryptionBackend(): ?EncryptionBackend
     {
         // return the encryption backend you want to use,

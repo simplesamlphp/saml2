@@ -52,6 +52,7 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
+     *
      * @throws \Exception
      */
     public function __construct(
@@ -111,9 +112,6 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
 
     /**
      * Convert XML into a LogoutRequest
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -188,8 +186,6 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
     /**
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
-     *
-     * @return \DOMElement The root element of the DOM tree
      */
     protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {

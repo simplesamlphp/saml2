@@ -798,7 +798,9 @@ XML;
         $this->expectException(SignatureVerificationFailedException::class);
         $this->expectExceptionMessage('Failed to verify signature.');
 
-        $assertion->verify($verifier);
+        // When PHP 8.5 becomes the minimum:
+        // (void)$assertion->verify($verifier);
+        $result = $assertion->verify($verifier);
     }
 
 
@@ -819,7 +821,9 @@ XML;
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Algorithm provided in key does not match algorithm used in signature.');
 
-        $assertion->verify($verifier);
+        // When PHP 8.5 becomes the minimum:
+        // (void)$assertion->verify($verifier);
+        $result = $assertion->verify($verifier);
     }
 
 
@@ -840,7 +844,9 @@ XML;
         $this->expectException(SignatureVerificationFailedException::class);
         $this->expectExceptionMessage('Failed to verify signature.');
 
-        $assertion->verify($verifier);
+        // When PHP 8.5 becomes the minimum:
+        // (void)$assertion->verify($verifier);
+        $result = $assertion->verify($verifier);
     }
 
 

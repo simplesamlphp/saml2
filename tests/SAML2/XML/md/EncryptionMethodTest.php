@@ -104,6 +104,8 @@ final class EncryptionMethodTest extends TestCase
     }
 
 
+    /**
+     */
     public function testMarshallingElementOrdering(): void
     {
         $alg = C::KEY_TRANSPORT_OAEP_MGF1P;

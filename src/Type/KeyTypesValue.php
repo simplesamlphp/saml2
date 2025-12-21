@@ -18,9 +18,7 @@ class KeyTypesValue extends SAMLStringValue
     /**
      * Validate the content of the element.
      *
-     * @param string $content  The value to go in the XML textContent
      * @throws \Exception on failure
-     * @return void
      */
     protected function validateValue(string $content): void
     {

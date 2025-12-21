@@ -14,5 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class NoSupportedIDPException extends ProtocolViolationException
 {
-    public const DEFAULT_MESSAGE = 'No supported IdP.';
+    public const string DEFAULT_MESSAGE = 'No supported IdP.';
 }

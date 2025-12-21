@@ -41,7 +41,7 @@ final class Organization extends AbstractMdElement implements
 
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**
@@ -114,9 +114,6 @@ final class Organization extends AbstractMdElement implements
     /**
      * Initialize an Organization element.
      *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
@@ -161,9 +158,6 @@ final class Organization extends AbstractMdElement implements
 
     /**
      * Convert this Organization to XML.
-     *
-     * @param \DOMElement|null $parent The element we should add this organization to.
-     * @return \DOMElement This Organization-element.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -194,8 +188,13 @@ final class Organization extends AbstractMdElement implements
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'OrganizationName': string,
+     *   'OrganizationDisplayName': string,
+     *   'OrganizationURL': string,
+     *   'Extensions'?: array,
+     *   'attributes'?: array,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -215,8 +214,20 @@ final class Organization extends AbstractMdElement implements
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'OrganizationName': string,
+     *   'OrganizationDisplayName': string,
+     *   'OrganizationURL': string,
+     *   'Extensions'?: array,
+     *   'attributes'?: array,
+     * } $data
+     * @return array{
+     *   'OrganizationName': string,
+     *   'OrganizationDisplayName': string,
+     *   'OrganizationURL': string,
+     *   'Extensions'?: array,
+     *   'attributes'?: array,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -282,7 +293,13 @@ final class Organization extends AbstractMdElement implements
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'OrganizationName': string,
+     *   'OrganizationDisplayName': string,
+     *   'OrganizationURL': string,
+     *   'Extensions'?: array,
+     *   'attributes'?: array,
+     * }
      */
     public function toArray(): array
     {

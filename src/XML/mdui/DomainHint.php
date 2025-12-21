@@ -20,6 +20,5 @@ final class DomainHint extends AbstractMduiElement implements SchemaValidatableE
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = DomainValue::class;
+    public const string TEXTCONTENT_TYPE = DomainValue::class;
 }

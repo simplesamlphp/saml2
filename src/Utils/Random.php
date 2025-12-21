@@ -2,10 +2,7 @@
 
 declare(strict_types=1);
 
-namespace SimpleSAML\XML\Utils;
-
-use function bin2hex;
-use function random_bytes;
+namespace SimpleSAML\SAML2\Utils;
 
 /**
  * @package simplesamlphp/saml2

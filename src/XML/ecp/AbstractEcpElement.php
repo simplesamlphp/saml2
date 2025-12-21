@@ -16,12 +16,9 @@ use SimpleSAML\XML\AbstractElement;
  */
 abstract class AbstractEcpElement extends AbstractElement
 {
-    /** @var string */
-    public const NS = C::NS_ECP;
+    public const string NS = C::NS_ECP;
 
-    /** @var string */
-    public const NS_PREFIX = 'ecp';
+    public const string NS_PREFIX = 'ecp';
 
-    /** @var string */
-    public const SCHEMA = 'resources/schemas/saml-schema-ecp-2.0.xsd';
+    public const string SCHEMA = 'resources/schemas/saml-schema-ecp-2.0.xsd';
 }

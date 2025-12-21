@@ -39,8 +39,7 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
     use SchemaValidatableElementTrait;
 
 
-    /** @var string */
-    public const LOCALNAME = 'RoleDescriptor';
+    public const string LOCALNAME = 'RoleDescriptor';
 
 
     /**
@@ -106,8 +105,6 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
 
     /**
      * Convert XML into an RoleDescriptor
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong

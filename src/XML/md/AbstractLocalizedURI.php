@@ -22,8 +22,7 @@ use function array_key_first;
  */
 abstract class AbstractLocalizedURI extends AbstractLocalizedName
 {
-    /** @var string */
-    public const TEXTCONTENT_TYPE = SAMLAnyURIValue::class;
+    public const string TEXTCONTENT_TYPE = SAMLAnyURIValue::class;
 
 
     /**
@@ -44,9 +43,6 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
 
     /**
      * Create an instance of this object from its XML representation.
-     *
-     * @param \DOMElement $xml
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -71,8 +67,7 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array<string, string> $data
      */
     public static function fromArray(array $data): static
     {

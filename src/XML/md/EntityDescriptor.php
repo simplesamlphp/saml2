@@ -34,7 +34,7 @@ final class EntityDescriptor extends AbstractMetadataDocument implements SchemaV
 
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**
@@ -103,9 +103,6 @@ final class EntityDescriptor extends AbstractMetadataDocument implements SchemaV
 
     /**
      * Convert an existing XML into an EntityDescriptor object
-     *
-     * @param \DOMElement $xml An existing EntityDescriptor XML document.
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -282,8 +279,6 @@ final class EntityDescriptor extends AbstractMetadataDocument implements SchemaV
     /**
      * Convert this assertion to an unsigned XML document.
      * This method does not sign the resulting XML document.
-     *
-     * @return \DOMElement The root element of the DOM tree
      */
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {

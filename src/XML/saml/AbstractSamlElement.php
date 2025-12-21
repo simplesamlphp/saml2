@@ -14,12 +14,9 @@ use SimpleSAML\XML\AbstractElement;
  */
 abstract class AbstractSamlElement extends AbstractElement
 {
-    /** @var string */
-    public const NS = C::NS_SAML;
+    public const string NS = C::NS_SAML;
 
-    /** @var string */
-    public const NS_PREFIX = 'saml';
+    public const string NS_PREFIX = 'saml';
 
-    /** @var string */
-    public const SCHEMA = 'resources/schemas/saml-schema-assertion-2.0.xsd';
+    public const string SCHEMA = 'resources/schemas/saml-schema-assertion-2.0.xsd';
 }

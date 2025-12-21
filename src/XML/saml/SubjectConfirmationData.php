@@ -27,9 +27,6 @@ final class SubjectConfirmationData extends AbstractSubjectConfirmationData impl
     /**
      * Convert XML into a SubjectConfirmationData
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException

@@ -55,15 +55,10 @@ final class Assertion extends AbstractSamlElement implements
     use SignedElementTrait;
 
 
-    /**
-     * @var bool
-     */
     protected bool $wasSignedAtConstruction = false;
 
     /**
      * The original signed XML
-     *
-     * @var \DOMElement
      */
     protected DOMElement $xml;
 
@@ -184,7 +179,6 @@ final class Assertion extends AbstractSamlElement implements
 
 
     /**
-     * @return bool
      */
     public function wasSignedAtConstruction(): bool
     {
@@ -194,8 +188,6 @@ final class Assertion extends AbstractSamlElement implements
 
     /**
      * Get the XML element.
-     *
-     * @return \DOMElement
      */
     public function getXML(): DOMElement
     {
@@ -205,8 +197,6 @@ final class Assertion extends AbstractSamlElement implements
 
     /**
      * Set the XML element.
-     *
-     * @param \DOMElement $xml
      */
     private function setXML(DOMElement $xml): void
     {
@@ -215,7 +205,6 @@ final class Assertion extends AbstractSamlElement implements
 
 
     /**
-     * @return \DOMElement
      */
     protected function getOriginalXML(): DOMElement
     {
@@ -223,6 +212,9 @@ final class Assertion extends AbstractSamlElement implements
     }
 
 
+    /**
+     * @return \SimpleSAML\XMLSecurity\Backend\EncryptionBackend|null
+     */
     public function getEncryptionBackend(): ?EncryptionBackend
     {
         // return the encryption backend you want to use,
@@ -233,9 +225,6 @@ final class Assertion extends AbstractSamlElement implements
 
     /**
      * Convert XML into an Assertion
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
@@ -306,8 +295,6 @@ final class Assertion extends AbstractSamlElement implements
     /**
      * Convert this assertion to an unsigned XML document.
      * This method does not sign the resulting XML document.
-     *
-     * @return \DOMElement The root element of the DOM tree
      */
     protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
@@ -332,9 +319,6 @@ final class Assertion extends AbstractSamlElement implements
     /**
      * Convert this assertion to a signed XML element, if a signer was set.
      *
-     * @param \DOMElement|null $parent The DOM node the assertion should be created in.
-     *
-     * @return \DOMElement This assertion.
      * @throws \Exception
      */
     public function toXML(?DOMElement $parent = null): DOMElement

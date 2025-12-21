@@ -68,7 +68,6 @@ trait ExtensionsTrait
 
 
     /**
-     * @return bool
      */
     public function isEmptyElement(): bool
     {
@@ -109,8 +108,6 @@ trait ExtensionsTrait
 
 
     /**
-     * @param \DOMElement|null $parent
-     * @return \DOMElement
      */
     abstract public function instantiateParentElement(?DOMElement $parent = null): DOMElement;
 }

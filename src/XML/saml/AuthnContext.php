@@ -107,9 +107,6 @@ final class AuthnContext extends AbstractSamlElement implements SchemaValidatabl
     /**
      * Convert XML into a AuthnContext
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
@@ -155,9 +152,6 @@ final class AuthnContext extends AbstractSamlElement implements SchemaValidatabl
 
     /**
      * Convert this AuthContextDeclRef to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this AuthnContextDeclRef to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

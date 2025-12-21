@@ -42,12 +42,14 @@ final class ContactPerson extends AbstractMdElement implements
 
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
     /**
      * The several different contact types as defined per specification
+     *
+     * @var string[]
      */
-    public const CONTACT_TYPES = [
+    public const array CONTACT_TYPES = [
         'technical',
         'support',
         'administrative',
@@ -66,7 +68,7 @@ final class ContactPerson extends AbstractMdElement implements
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @param \SimpleSAML\SAML2\XML\md\EmailAddress[] $emailAddress
      * @param \SimpleSAML\SAML2\XML\md\TelephoneNumber[] $telephoneNumber
-     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttribute
+     * @param \SimpleSAML\XML\Attribute[] $namespacedAttribute
      */
     public function __construct(
         protected SAMLStringValue $contactType,
@@ -158,9 +160,6 @@ final class ContactPerson extends AbstractMdElement implements
     /**
      * Initialize a ContactPerson element.
      *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
@@ -205,10 +204,6 @@ final class ContactPerson extends AbstractMdElement implements
 
     /**
      * Convert this ContactPerson to XML.
-     *
-     * @param \DOMElement|null $parent The element we should add this contact to.
-     *
-     * @return \DOMElement The new ContactPerson-element.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -240,8 +235,16 @@ final class ContactPerson extends AbstractMdElement implements
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'contactType': string,
+     *   'Company'?: string,
+     *   'GivenName'?: string,
+     *   'SurName'?: string,
+     *   'Extensions'?: array,
+     *   'EmailAddress'?: array,
+     *   'TelephoneNumber'?: array,
+     *   'attributes'?: array,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -268,8 +271,26 @@ final class ContactPerson extends AbstractMdElement implements
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'contactType': string,
+     *   'Company'?: string,
+     *   'GivenName'?: string,
+     *   'SurName'?: string,
+     *   'Extensions'?: array,
+     *   'EmailAddress'?: array,
+     *   'TelephoneNumber'?: array,
+     *   'attributes'?: array,
+     * } $data
+     * @return array{
+     *   'contactType': string,
+     *   'Company'?: string,
+     *   'GivenName'?: string,
+     *   'SurName'?: string,
+     *   'Extensions'?: array,
+     *   'EmailAddress'?: array,
+     *   'TelephoneNumber'?: array,
+     *   'attributes'?: array,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -347,7 +368,16 @@ final class ContactPerson extends AbstractMdElement implements
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'contactType': string,
+     *   'Company'?: string,
+     *   'GivenName'?: string,
+     *   'SurName'?: string,
+     *   'Extensions'?: array,
+     *   'EmailAddress'?: array,
+     *   'TelephoneNumber'?: array,
+     *   'attributes'?: array,
+     * }
      */
     public function toArray(): array
     {

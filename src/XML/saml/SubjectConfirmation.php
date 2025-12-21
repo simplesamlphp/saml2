@@ -67,9 +67,6 @@ final class SubjectConfirmation extends AbstractSamlElement implements SchemaVal
     /**
      * Convert XML into a SubjectConfirmation
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
@@ -100,9 +97,6 @@ final class SubjectConfirmation extends AbstractSamlElement implements SchemaVal
 
     /**
      * Convert this element to XML.
-     *
-     * @param  \DOMElement|null $parent The parent element we should append this element to.
-     * @return \DOMElement This element, as XML.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

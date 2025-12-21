@@ -13,5 +13,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class InvalidNameIDPolicyException extends ProtocolViolationException
 {
-    public const DEFAULT_MESSAGE = 'Invalid NameID policy.';
+    public const string DEFAULT_MESSAGE = 'Invalid NameID policy.';
 }

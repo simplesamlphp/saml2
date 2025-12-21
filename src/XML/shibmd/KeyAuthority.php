@@ -30,7 +30,7 @@ final class KeyAuthority extends AbstractShibmdElement implements SchemaValidata
 
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**
@@ -76,9 +76,6 @@ final class KeyAuthority extends AbstractShibmdElement implements SchemaValidata
     /**
      * Convert XML into a KeyAuthority
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
@@ -98,9 +95,6 @@ final class KeyAuthority extends AbstractShibmdElement implements SchemaValidata
 
     /**
      * Convert this KeyAuthority to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this KeyAuthority to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

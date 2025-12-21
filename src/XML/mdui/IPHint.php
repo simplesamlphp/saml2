@@ -20,6 +20,5 @@ final class IPHint extends AbstractMduiElement implements SchemaValidatableEleme
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = CIDRValue::class;
+    public const string TEXTCONTENT_TYPE = CIDRValue::class;
 }

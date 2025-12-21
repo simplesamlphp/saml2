@@ -134,6 +134,9 @@ trait SignableElementTrait
     }
 
 
+    /**
+     * @return array|null
+     */
     public function getBlacklistedAlgorithms(): ?array
     {
         $container = ContainerSingleton::getInstance();

@@ -25,8 +25,7 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = SAMLStringValue::class;
+    public const string TEXTCONTENT_TYPE = SAMLStringValue::class;
 
 
     /**
@@ -74,9 +73,6 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
     /**
      * Convert XML into an NameID
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
@@ -97,9 +93,6 @@ abstract class NameIDType extends AbstractSamlElement implements IdentifierInter
 
     /**
      * Convert this NameIDType to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this NameIDType.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

@@ -127,9 +127,6 @@ final class PDPDescriptor extends AbstractRoleDescriptorType implements SchemaVa
     /**
      * Initialize an IDPSSODescriptor from a given XML document.
      *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
@@ -189,8 +186,6 @@ final class PDPDescriptor extends AbstractRoleDescriptorType implements SchemaVa
     /**
      * Add this PDPDescriptor to an EntityDescriptor.
      *
-     * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
-     * @return \DOMElement
      * @throws \Exception
      */
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement

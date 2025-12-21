@@ -20,6 +20,5 @@ final class AuthnContextDeclRef extends AbstractSamlElement implements SchemaVal
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = SAMLAnyURIValue::class;
+    public const string TEXTCONTENT_TYPE = SAMLAnyURIValue::class;
 }

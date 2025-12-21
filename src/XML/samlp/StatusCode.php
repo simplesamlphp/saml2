@@ -64,9 +64,6 @@ final class StatusCode extends AbstractSamlpElement implements SchemaValidatable
     /**
      * Convert XML into a StatusCode
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
@@ -86,9 +83,6 @@ final class StatusCode extends AbstractSamlpElement implements SchemaValidatable
 
     /**
      * Convert this StatusCode to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this StatusCode to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

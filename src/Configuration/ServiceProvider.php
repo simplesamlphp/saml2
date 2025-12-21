@@ -27,7 +27,6 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
 
 
     /**
-     * @return null|string
      */
     public function getCertificateData(): ?string
     {
@@ -36,7 +35,6 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
 
 
     /**
-     * @return null|string
      */
     public function getCertificateFile(): ?string
     {
@@ -54,7 +52,6 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
 
 
     /**
-     * @return string|null
      */
     public function getEntityId(): ?string
     {
@@ -63,7 +60,6 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
 
 
     /**
-     * @return null|bool
      */
     public function isAssertionEncryptionRequired(): ?bool
     {
@@ -72,7 +68,6 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
 
 
     /**
-     * @return null|string
      */
     public function getSharedKey(): ?string
     {
@@ -81,8 +76,6 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
 
 
     /**
-     * @param string $name
-     * @param bool $required
      * @return mixed|null
      */
     public function getPrivateKey(string $name, ?bool $required = null)

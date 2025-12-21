@@ -106,9 +106,6 @@ class AttributeQuery extends AbstractSubjectQuery implements SchemaValidatableEl
     /**
      * Create a class from XML
      *
-     * @param \DOMElement $xml
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
@@ -173,8 +170,6 @@ class AttributeQuery extends AbstractSubjectQuery implements SchemaValidatableEl
     /**
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
-     *
-     * @return \DOMElement The root element of the DOM tree
      */
     protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {

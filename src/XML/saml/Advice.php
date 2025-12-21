@@ -26,7 +26,7 @@ final class Advice extends AbstractSamlElement implements SchemaValidatableEleme
 
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ELT_NAMESPACE = NS::OTHER;
 
 
     /**
@@ -34,7 +34,7 @@ final class Advice extends AbstractSamlElement implements SchemaValidatableEleme
      * @param \SimpleSAML\SAML2\XML\saml\AssertionURIRef[] $assertionURIRef
      * @param \SimpleSAML\SAML2\XML\saml\Assertion[] $assertion
      * @param \SimpleSAML\SAML2\XML\saml\EncryptedAssertion[] $encryptedAssertion
-     * @param \SimpleSAML\XML\Chunk[] $elements
+     * @param \SimpleSAML\XML\SerializableElementInterface[] $elements
      */
     public function __construct(
         protected array $assertionIDRef = [],
@@ -58,8 +58,6 @@ final class Advice extends AbstractSamlElement implements SchemaValidatableEleme
 
     /**
      * Test if an object, at the state it's in, would produce an empty XML-element
-     *
-     * @return bool
      */
     public function isEmptyElement(): bool
     {
@@ -110,9 +108,6 @@ final class Advice extends AbstractSamlElement implements SchemaValidatableEleme
     /**
      * Convert XML into an Advice
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   If the qualified name of the supplied element is wrong
      */
@@ -143,9 +138,6 @@ final class Advice extends AbstractSamlElement implements SchemaValidatableEleme
 
     /**
      * Convert this Advince to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this Condition.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

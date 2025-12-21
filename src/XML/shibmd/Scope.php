@@ -25,8 +25,7 @@ final class Scope extends AbstractShibmdElement implements SchemaValidatableElem
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = SAMLStringValue::class;
+    public const string TEXTCONTENT_TYPE = SAMLStringValue::class;
 
 
     /**
@@ -57,9 +56,6 @@ final class Scope extends AbstractShibmdElement implements SchemaValidatableElem
     /**
      * Convert XML into a Scope
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
@@ -77,9 +73,6 @@ final class Scope extends AbstractShibmdElement implements SchemaValidatableElem
 
     /**
      * Convert this Scope to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this Scope to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

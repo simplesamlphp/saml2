@@ -126,6 +126,7 @@ class HTTPRedirect extends Binding implements AsynchronousBindingInterface, Rela
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
+     *
      * @throws \Exception
      *
      * NPath is currently too high but solving that just moves code around.

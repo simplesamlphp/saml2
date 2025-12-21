@@ -13,5 +13,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class AuthnFailedException extends ProtocolViolationException
 {
-    public const DEFAULT_MESSAGE = 'Authentication failed.';
+    public const string DEFAULT_MESSAGE = 'Authentication failed.';
 }

@@ -14,5 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class UnknownAttrProfileException extends ProtocolViolationException
 {
-    public const DEFAULT_MESSAGE = 'Unknown attribute profile.';
+    public const string DEFAULT_MESSAGE = 'Unknown attribute profile.';
 }

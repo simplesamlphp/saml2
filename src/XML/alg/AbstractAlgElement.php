@@ -15,12 +15,9 @@ use SimpleSAML\XML\AbstractElement;
  */
 abstract class AbstractAlgElement extends AbstractElement
 {
-    /** @var string */
-    public const NS = C::NS_ALG;
+    public const string NS = C::NS_ALG;
 
-    /** @var string */
-    public const NS_PREFIX = 'alg';
+    public const string NS_PREFIX = 'alg';
 
-    /** @var string */
-    public const SCHEMA = 'resources/schemas/sstc-saml-metadata-algsupport-v1.0.xsd';
+    public const string SCHEMA = 'resources/schemas/sstc-saml-metadata-algsupport-v1.0.xsd';
 }

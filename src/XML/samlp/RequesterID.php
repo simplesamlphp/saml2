@@ -24,15 +24,13 @@ final class RequesterID extends AbstractSamlpElement implements SchemaValidatabl
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = EntityIDValue::class;
+    public const string TEXTCONTENT_TYPE = EntityIDValue::class;
 
 
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array<string> $data
      */
     public static function fromArray(array $data): static
     {
@@ -48,7 +46,7 @@ final class RequesterID extends AbstractSamlpElement implements SchemaValidatabl
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array<string>
      */
     public function toArray(): array
     {

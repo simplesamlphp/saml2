@@ -14,5 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class UnknownPrincipalException extends ProtocolViolationException
 {
-    public const DEFAULT_MESSAGE = 'Unknown principal.';
+    public const string DEFAULT_MESSAGE = 'Unknown principal.';
 }

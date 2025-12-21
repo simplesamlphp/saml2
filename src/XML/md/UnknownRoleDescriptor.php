@@ -41,7 +41,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
      *   The organization running this entity. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contacts
      *   An array of contacts for this entity. Defaults to an empty array.
-     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
+     * @param \SimpleSAML\XML\Attribute[] $namespacedAttributes
      */
     protected function __construct(
         protected Chunk $chunk,
@@ -86,9 +86,6 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
 
     /**
      * Convert this RoleDescriptor to XML.
-     *
-     * @param \DOMElement|null $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this unknown RoleDescriptor.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

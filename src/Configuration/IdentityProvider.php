@@ -27,7 +27,6 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
 
 
     /**
-     * @return string|null
      */
     public function getCertificateData(): ?string
     {
@@ -36,7 +35,6 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
 
 
     /**
-     * @return string|null
      */
     public function getCertificateFile(): ?string
     {
@@ -54,7 +52,6 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
 
 
     /**
-     * @return bool|null
      */
     public function isAssertionEncryptionRequired(): ?bool
     {
@@ -63,7 +60,6 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
 
 
     /**
-     * @return string|null
      */
     public function getSharedKey(): ?string
     {
@@ -72,8 +68,6 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
 
 
     /**
-     * @param string $name
-     * @param bool $required
      * @return mixed|null
      */
     public function getPrivateKey(string $name, ?bool $required = null)
@@ -114,7 +108,6 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
 
 
     /**
-     * @return string|null
      */
     public function getEntityId(): ?string
     {

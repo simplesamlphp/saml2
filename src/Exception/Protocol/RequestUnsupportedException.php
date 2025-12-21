@@ -13,5 +13,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class RequestUnsupportedException extends ProtocolViolationException
 {
-    public const DEFAULT_MESSAGE = 'Unsupported request.';
+    public const string DEFAULT_MESSAGE = 'Unsupported request.';
 }

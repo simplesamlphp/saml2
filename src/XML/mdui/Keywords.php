@@ -32,8 +32,7 @@ final class Keywords extends AbstractMduiElement implements
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = ListOfStringsValue::class;
+    public const string TEXTCONTENT_TYPE = ListOfStringsValue::class;
 
 
     /**
@@ -64,9 +63,6 @@ final class Keywords extends AbstractMduiElement implements
     /**
      * Convert XML into a Keywords
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
@@ -88,9 +84,7 @@ final class Keywords extends AbstractMduiElement implements
     /**
      * Convert this Keywords to XML.
      *
-     * @param \DOMElement|null $parent The element we should append this Keywords to.
      * @throws \Exception
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -105,8 +99,7 @@ final class Keywords extends AbstractMduiElement implements
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array<string, string> $data
      */
     public static function fromArray(array $data): static
     {
@@ -125,7 +118,7 @@ final class Keywords extends AbstractMduiElement implements
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array<string, string>
      */
     public function toArray(): array
     {
