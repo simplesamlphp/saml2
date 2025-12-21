@@ -554,6 +554,12 @@ XML
                     ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
                     IssueInstant="1970-01-01T01:33:31Z">
       <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
+      <saml:Subject>
+        <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">s00000000:123456789</saml:NameID>
+        <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+          <saml:SubjectConfirmationData NotOnOrAfter="2011-08-31T08:51:05Z" Recipient="https://sp.example.com/assertion_consumer" InResponseTo="_13603a6565a69297e9809175b052d115965121c8" />
+        </saml:SubjectConfirmation>
+      </saml:Subject>
       <saml:Conditions/>
       <saml:AttributeStatement>
         <saml:Attribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.10" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
@@ -609,6 +615,12 @@ XML;
                     ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
                     IssueInstant="1970-01-01T01:33:31Z">
       <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
+      <saml:Subject>
+        <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">s00000000:123456789</saml:NameID>
+        <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+          <saml:SubjectConfirmationData NotOnOrAfter="2011-08-31T08:51:05Z" Recipient="https://sp.example.com/assertion_consumer" InResponseTo="_13603a6565a69297e9809175b052d115965121c8" />
+        </saml:SubjectConfirmation>
+      </saml:Subject>
       <saml:Conditions/>
       <saml:AttributeStatement>
         <saml:Attribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.10" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
@@ -648,6 +660,12 @@ XML;
                     ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
                     IssueInstant="1970-01-01T01:33:31Z">
       <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
+      <saml:Subject>
+        <saml:NameID Format="urn:oasis:names:tc:SAML:2.0:nameid-format:persistent">s00000000:123456789</saml:NameID>
+        <saml:SubjectConfirmation Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
+          <saml:SubjectConfirmationData NotOnOrAfter="2011-08-31T08:51:05Z" Recipient="https://sp.example.com/assertion_consumer" InResponseTo="_13603a6565a69297e9809175b052d115965121c8" />
+        </saml:SubjectConfirmation>
+      </saml:Subject>
       <saml:Conditions/>
       <saml:AttributeStatement>
         <saml:Attribute Name="urn:mace:dir:attribute-def:eduPersonTargetedID" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">

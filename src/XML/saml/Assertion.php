@@ -94,10 +94,14 @@ final class Assertion extends AbstractSamlElement implements
             return $statement instanceof AuthnStatement;
         }));
 
-        if (count($authnStatements) > 0) {
+        $attributeStatements = array_values(array_filter($statements, function ($statement) {
+            return $statement instanceof AttributeStatement;
+        }));
+
+        if (count($attributeStatements) > 0) {
             Assert::notNull(
                 $subject,
-                "Assertions containing an <AuthnStatement> element MUST contain a <Subject> element.",
+                "Assertions containing an <AttributeStatement> element MUST contain a <Subject> element.",
                 ProtocolViolationException::class,
             );
         }
