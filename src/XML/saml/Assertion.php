@@ -95,6 +95,26 @@ final class Assertion extends AbstractSamlElement implements
             return $statement instanceof AuthnStatement;
         }));
 
+        if (count($authnStatements) > 0) {
+            Assert::notNull(
+                $subject,
+                "Assertions containing an <AuthnStatement> element MUST contain a <Subject> element.",
+                ProtocolViolationException::class,
+            );
+        }
+
+        $authzDecisionStatements = array_values(array_filter($statements, function ($statement) {
+            return $statement instanceof AuthzDecisionStatement;
+        }));
+
+        if (count($authzDecisionStatements) > 0) {
+            Assert::notNull(
+                $subject,
+                "Assertions containing an <AuthzDecisionStatement> element MUST contain a <Subject> element.",
+                ProtocolViolationException::class,
+            );
+        }
+
         $attributeStatements = array_values(array_filter($statements, function ($statement) {
             return $statement instanceof AttributeStatement;
         }));
