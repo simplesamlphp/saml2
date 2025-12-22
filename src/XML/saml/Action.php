@@ -59,6 +59,12 @@ final class Action extends AbstractSamlElement
                 array_column(GHPPEnum::cases(), 'value'),
                 ProtocolViolationException::class,
             );
+        } elseif ($namespace->equals(C::ACTION_UNIX)) {
+            Assert::regex(
+                $content->getValue(),
+                '/^[0-7]{4}$/',
+                ProtocolViolationException::class,
+            );
         }
 
         $this->setContent($content);

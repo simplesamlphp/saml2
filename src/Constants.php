@@ -480,6 +480,11 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const string ACTION_GHPP = 'urn:oasis:names:tc:SAML:1.0:action:ghpp';
 
     /**
+     * Unix file permissions
+     */
+    public const string ACTION_UNIX = 'urn:oasis:names:tc:SAML:1.0:action:unix';
+
+    /**
      * Sent when the principal wishes to terminate the indicated session
      */
     public const string LOGOUT_USER = 'urn:oasis:names:tc:SAML:2.0:logout:user';
