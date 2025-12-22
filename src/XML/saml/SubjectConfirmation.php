@@ -103,9 +103,7 @@ final class SubjectConfirmation extends AbstractSamlElement implements SchemaVal
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Method', $this->getMethod()->getValue());
 
-        /** @var \SimpleSAML\XML\SerializableElementInterface&\SimpleSAML\SAML2\XML\saml\IdentifierInterface $identifier */
-        $identifier = $this->getIdentifier();
-        $identifier?->toXML($e);
+        $this->getIdentifier()?->toXML($e);
 
         if ($this->getSubjectConfirmationData() !== null && !$this->getSubjectConfirmationData()->isEmptyElement()) {
             $this->getSubjectConfirmationData()->toXML($e);

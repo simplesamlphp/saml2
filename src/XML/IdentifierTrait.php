@@ -32,7 +32,7 @@ trait IdentifierTrait
     /**
      * Collect the value of the identifier-property
      *
-     * @return \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null
+     * @return (\SimpleSAML\XML\SerializableElementInterface&\SimpleSAML\SAML2\XML\saml\IdentifierInterface)|null
      */
     public function getIdentifier(): ?IdentifierInterface
     {

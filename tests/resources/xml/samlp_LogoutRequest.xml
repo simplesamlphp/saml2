@@ -1,4 +1,4 @@
-<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Version="2.0" ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b" IssueInstant="2023-01-23T21:39:20Z">
+<samlp:LogoutRequest xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xenc="http://www.w3.org/2001/04/xmlenc#" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" Version="2.0" ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5b" IssueInstant="2023-01-23T21:39:20Z" Consent="urn:oasis:names:tc:SAML:2.0:consent:unspecified">
   <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
   <saml:EncryptedID>
     <xenc:EncryptedData Type="http://www.w3.org/2001/04/xmlenc#Element">

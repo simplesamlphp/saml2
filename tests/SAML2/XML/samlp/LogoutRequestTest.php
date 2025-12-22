@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils;
@@ -80,6 +81,7 @@ final class LogoutRequestTest extends TestCase
 
         $logoutRequest = new LogoutRequest(
             id: IDValue::fromString('SomeIDValue'),
+            consent: SAMLAnyURIValue::fromString(C::CONSENT_UNSPECIFIED),
             identifier: $nameId,
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             sessionIndexes: [
@@ -106,6 +108,7 @@ final class LogoutRequestTest extends TestCase
         );
         $logoutRequest = new LogoutRequest(
             id: IDValue::fromString('SomeIDValue'),
+            consent: SAMLAnyURIValue::fromString(C::CONSENT_UNSPECIFIED),
             identifier: $nameId,
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             sessionIndexes: [
@@ -133,6 +136,7 @@ final class LogoutRequestTest extends TestCase
 
         $logoutRequest = new LogoutRequest(
             id: IDValue::fromString('SomeIDValue'),
+            consent: SAMLAnyURIValue::fromString(C::CONSENT_UNSPECIFIED),
             identifier: $nameId,
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             sessionIndexes: [
@@ -201,6 +205,7 @@ final class LogoutRequestTest extends TestCase
 
         $logoutRequest = new LogoutRequest(
             identifier: $eid,
+            consent: SAMLAnyURIValue::fromString(C::CONSENT_UNSPECIFIED),
             id: IDValue::fromString('SomeIDValue'),
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
         );

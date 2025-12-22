@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Utils\XPath;
@@ -47,8 +46,8 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     /**
      * Initialize a message.
      *
-     * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param \SimpleSAML\XMLSchema\Type\IDValue $id
+     * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $issueInstant
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
@@ -177,7 +176,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
             $root->setAttribute('Destination', $this->getDestination()->getValue());
         }
 
-        if ($this->getConsent() !== null && $this->getConsent()->getValue() !== C::CONSENT_UNSPECIFIED) {
+        if ($this->getConsent() !== null) {
             $root->setAttribute('Consent', $this->getConsent()->getValue());
         }
 

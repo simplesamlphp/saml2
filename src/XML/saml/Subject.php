@@ -96,9 +96,7 @@ final class Subject extends AbstractSamlElement implements SchemaValidatableElem
     {
         $e = $this->instantiateParentElement($parent);
 
-        /** @var \SimpleSAML\XML\SerializableElementInterface&\SimpleSAML\SAML2\XML\saml\IdentifierInterface $identifier */
-        $identifier = $this->getIdentifier();
-        $identifier?->toXML($e);
+        $this->getIdentifier()?->toXML($e);
 
         foreach ($this->getSubjectConfirmation() as $sc) {
             $sc->toXML($e);

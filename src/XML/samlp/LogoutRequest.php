@@ -199,9 +199,7 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
             $e->setAttribute('Reason', $this->getReason()->getValue());
         }
 
-        /** @var \SimpleSAML\XML\SerializableElementInterface&\SimpleSAML\SAML2\XML\saml\IdentifierInterface $identifier */
-        $identifier = $this->getIdentifier();
-        $identifier->toXML($e);
+        $this->getIdentifier()->toXML($e);
 
         foreach ($this->getSessionIndexes() as $sessionIndex) {
             $sessionIndex->toXML($e);
