@@ -11,10 +11,7 @@ use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
-use SimpleSAML\SAML2\XML\IdentifierTrait;
-use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
@@ -28,20 +25,18 @@ use function array_pop;
 use function strval;
 
 /**
- * Class for SAML 2 NameIDMappingResponse messages.
+ * Class for SAML 2 ManageNameIDResponse messages.
  *
  * @package simplesamlphp/saml2
  */
-class NameIDMappingResponse extends AbstractStatusResponse implements SchemaValidatableElementInterface
+class ManageNameIDResponse extends AbstractStatusResponse implements SchemaValidatableElementInterface
 {
-    use IdentifierTrait;
     use SchemaValidatableElementTrait;
 
 
     /**
      * Constructor for SAML 2 response messages.
      *
-     * @param \SimpleSAML\SAML2\XML\saml\NameID|\SimpleSAML\SAML2\XML\saml\EncryptedID $identifier
      * @param \SimpleSAML\XMLSchema\Type\IDValue $id
      * @param \SimpleSAML\SAML2\XML\samlp\Status $status
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $issueInstant
@@ -52,7 +47,6 @@ class NameIDMappingResponse extends AbstractStatusResponse implements SchemaVali
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      */
     final public function __construct(
-        NameID|EncryptedID $identifier,
         IDValue $id,
         Status $status,
         SAMLDateTimeValue $issueInstant,
@@ -62,8 +56,6 @@ class NameIDMappingResponse extends AbstractStatusResponse implements SchemaVali
         ?SAMLAnyURIValue $consent = null,
         ?Extensions $extensions = null,
     ) {
-        $this->setIdentifier($identifier);
-
         parent::__construct(
             $id,
             $status,
@@ -78,7 +70,7 @@ class NameIDMappingResponse extends AbstractStatusResponse implements SchemaVali
 
 
     /**
-     * Convert XML into a NameIDMappingResponse element.
+     * Convert XML into a ManageNameIDResponse element.
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -115,7 +107,6 @@ class NameIDMappingResponse extends AbstractStatusResponse implements SchemaVali
         );
 
         $response = new static(
-            self::getIdentifierFromXML($xml),
             self::getAttribute($xml, 'ID', IDValue::class),
             array_pop($status),
             self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
@@ -133,18 +124,5 @@ class NameIDMappingResponse extends AbstractStatusResponse implements SchemaVali
         }
 
         return $response;
-    }
-
-
-    /**
-     * Convert the response message to an XML element.
-     */
-    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
-    {
-        $e = parent::toUnsignedXML($parent);
-
-        $this->getIdentifier()->toXML($e);
-
-        return $e;
     }
 }

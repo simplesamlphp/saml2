@@ -1,0 +1,6 @@
+<samlp:ManageNameIDResponse xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Version="2.0" ID="abc123" IssueInstant="2021-03-25T16:53:26Z" Destination="https://example.org/metadata" Consent="urn:oasis:names:tc:SAML:2.0:consent:current-explicit" InResponseTo="PHPUnit">
+  <saml:Issuer>https://IdentityProvider.com</saml:Issuer>
+  <samlp:Status>
+    <samlp:StatusCode Value="urn:oasis:names:tc:SAML:2.0:status:Success"/>
+  </samlp:Status>
+</samlp:ManageNameIDResponse>
