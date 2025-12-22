@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\EncryptableElementTrait;
@@ -85,7 +86,7 @@ class Attribute extends AbstractSamlElement implements
         }
 
         $types = array_map(
-            function(AttributeValue $av) {
+            function (AttributeValue $av) {
                 return $av->getXsiType();
             },
             $attributeValue,
