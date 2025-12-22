@@ -465,6 +465,21 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const string STATUS_VERSION_MISMATCH = 'urn:oasis:names:tc:SAML:2.0:status:VersionMismatch';
 
     /**
+     * Read/Write/Execute/Delete/Control
+     */
+    public const string ACTION_RWEDC = 'urn:oasis:names:tc:SAML:1.0:action:rwedc';
+
+    /**
+     * Read/Write/Execute/Delete/Control with Negation
+     */
+    public const string ACTION_RWEDC_NEGATION = 'urn:oasis:names:tc:SAML:1.0:action:rwedc-negation';
+
+    /**
+     * Get/Head/Put/Post
+     */
+    public const string ACTION_GHPP = 'urn:oasis:names:tc:SAML:1.0:action:ghpp';
+
+    /**
      * The maximum size for any entityid as per specification
      */
     public const int ENTITYID_MAX_LENGTH = 1024;

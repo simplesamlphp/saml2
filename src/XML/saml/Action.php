@@ -6,11 +6,14 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\XML\TypedTextContentTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 
+use function array_column;
 use function strval;
 
 /**
@@ -38,6 +41,26 @@ final class Action extends AbstractSamlElement
         protected SAMLAnyURIValue $namespace,
         SAMLStringValue $content,
     ) {
+        if ($namespace->equals(C::ACTION_RWEDC)) {
+            Assert::oneOf(
+                $content->getValue(),
+                array_column(RWEDCEnum::cases(), 'value'),
+                ProtocolViolationException::class,
+            );
+        } elseif ($namespace->equals(C::ACTION_RWEDC_NEGATION)) {
+            Assert::oneOf(
+                $content->getValue(),
+                array_column(RWEDCNegationEnum::cases(), 'value'),
+                ProtocolViolationException::class,
+            );
+        } elseif ($namespace->equals(C::ACTION_GHPP)) {
+            Assert::oneOf(
+                $content->getValue(),
+                array_column(GHPPEnum::cases(), 'value'),
+                ProtocolViolationException::class,
+            );
+        }
+
         $this->setContent($content);
     }
 
@@ -61,7 +84,7 @@ final class Action extends AbstractSamlElement
      */
     public static function fromXML(DOMElement $xml): static
     {
-        Assert::same($xml->localName, 'Action', InvalidDOMElementException::class);
+        Assert::same($xml->localName, static::getLocalName(), InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Action::NS, InvalidDOMElementException::class);
 
         return new self(
