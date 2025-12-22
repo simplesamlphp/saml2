@@ -5,12 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
-use SimpleSAML\SAML2\Assert\Assert;
-use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\XML\ElementInterface;
-
-use function in_array;
+use SimpleSAML\XML\ExtendableElementTrait;
 
 /**
  * Trait grouping common functionality for elements implementing ExtensionType.
@@ -19,8 +14,7 @@ use function in_array;
  */
 trait ExtensionsTrait
 {
-    /** @var \SimpleSAML\XML\SerializableElementInterface[] */
-    protected array $extensions = [];
+    use ExtendableElementTrait;
 
 
     /**
@@ -30,40 +24,7 @@ trait ExtensionsTrait
      */
     public function __construct(array $extensions)
     {
-        Assert::maxCount($extensions, C::UNBOUNDED_LIMIT);
-        Assert::allIsInstanceOf($extensions, ElementInterface::class);
-
-        foreach ($extensions as $extension) {
-            /** @var \SimpleSAML\XML\AbstractElement $extension */
-            $namespace = $extension->getNamespaceURI();
-
-            Assert::notNull(
-                $namespace,
-                'Extensions MUST NOT include global (non-namespace-qualified) elements.',
-                ProtocolViolationException::class,
-            );
-            Assert::true(
-                !in_array($namespace, [C::NS_SAML, C::NS_SAMLP], true),
-                'Extensions MUST NOT include any SAML-defined namespace elements.',
-                ProtocolViolationException::class,
-            );
-        }
-
-        /**
-         * Set an array with all extensions present.
-         */
-        $this->extensions = $extensions;
-    }
-
-
-    /**
-     * Get an array with all extensions present.
-     *
-     * @return \SimpleSAML\XML\SerializableElementInterface[]
-     */
-    public function getList(): array
-    {
-        return $this->extensions;
+        $this->setElements($extensions);
     }
 
 
@@ -71,11 +32,11 @@ trait ExtensionsTrait
      */
     public function isEmptyElement(): bool
     {
-        if (empty($this->getList())) {
+        if (empty($this->getElements())) {
             return true;
         }
 
-        foreach ($this->getList() as $extension) {
+        foreach ($this->getElements() as $extension) {
             if ($extension->isEmptyElement() === false) {
                 return false;
             }
@@ -96,7 +57,7 @@ trait ExtensionsTrait
         $e = $this->instantiateParentElement($parent);
 
         if (!$this->isEmptyElement()) {
-            foreach ($this->getList() as $extension) {
+            foreach ($this->getElements() as $extension) {
                 if (!$extension->isEmptyElement()) {
                     $extension->toXML($e);
                 }

@@ -44,7 +44,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
         ?Extensions $extensions = null,
     ) {
         if ($extensions !== null) {
-            $exts = $extensions->getList();
+            $exts = $extensions->getElements();
 
             /**
              * MDUI 2.1: this element MUST NOT appear more than once within a given <md:Extensions> element.

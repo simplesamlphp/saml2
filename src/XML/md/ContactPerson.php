@@ -388,7 +388,7 @@ final class ContactPerson extends AbstractMdElement implements
             'SurName' => $this->getSurName()?->getContent()->getValue(),
             'EmailAddress' => [],
             'TelephoneNumber' => [],
-            'Extensions' => $this->Extensions?->getList(),
+            'Extensions' => $this->Extensions?->getElements(),
             'attributes' => [],
         ];
 

@@ -27,6 +27,7 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 use function array_key_exists;
 
@@ -39,6 +40,21 @@ final class Extensions extends AbstractMdElement implements SchemaValidatableEle
 {
     use ExtensionsTrait;
     use SchemaValidatableElementTrait;
+
+
+    /** The namespace-attribute for the xs:any element */
+    public const string XS_ANY_ELT_NAMESPACE = NS::OTHER;
+
+    /**
+     * The exclusions for the xs:any element
+     *
+     * @var array<int, array<int, string>>
+     */
+    public const array XS_ANY_ELT_EXCLUSIONS = [
+        ['urn:oasis:names:tc:SAML:2.0:assertion', '*'],
+        ['urn:oasis:names:tc:SAML:2.0:metadata', '*'],
+        ['urn:oasis:names:tc:SAML:2.0:protocol', '*'],
+    ];
 
 
     /**

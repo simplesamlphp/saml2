@@ -47,6 +47,7 @@ class Attribute extends AbstractSamlElement implements
      */
     public const array XS_ANY_ATTR_EXCLUSIONS = [
         ['urn:oasis:names:tc:SAML:2.0:assertion', '*'],
+        ['urn:oasis:names:tc:SAML:2.0:metadata', '*'],
         ['urn:oasis:names:tc:SAML:2.0:protocol', '*'],
     ];
 

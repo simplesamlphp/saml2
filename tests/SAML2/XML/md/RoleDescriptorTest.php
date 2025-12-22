@@ -254,7 +254,7 @@ final class RoleDescriptorTest extends TestCase
         $extElement = $descriptor->getExtensions();
         $this->assertInstanceOf(Extensions::class, $extElement);
 
-        $extensions = $extElement->getList();
+        $extensions = $extElement->getElements();
         $this->assertCount(1, $extensions);
         $this->assertInstanceOf(Chunk::class, $extensions[0]);
         $this->assertEquals('urn:x-simplesamlphp:namespace', $extensions[0]->getNamespaceURI());
@@ -309,7 +309,7 @@ final class RoleDescriptorTest extends TestCase
         $extElement = $descriptor->getExtensions();
         $this->assertInstanceOf(Extensions::class, $extElement);
 
-        $extensions = $extElement->getList();
+        $extensions = $extElement->getElements();
         $this->assertCount(1, $extensions);
         $this->assertInstanceOf(Chunk::class, $extensions[0]);
         $this->assertEquals('urn:x-simplesamlphp:namespace', $extensions[0]->getNamespaceURI());

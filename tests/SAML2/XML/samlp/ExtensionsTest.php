@@ -7,7 +7,6 @@ namespace SimpleSAML\Test\SAML2\XML\samlp;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\Extensions;
@@ -15,6 +14,8 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 use SimpleSAML\XMLSchema\Type\StringValue;
 
 use function dirname;
@@ -80,8 +81,7 @@ XML
      */
     public function testMarshallingWithNonNamespacedExtensions(): void
     {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Extensions MUST NOT include global (non-namespace-qualified) elements.');
+        $this->expectException(SchemaViolationException::class);
 
         new Extensions([new Chunk(DOMDocumentFactory::fromString('<child/>')->documentElement)]);
     }
@@ -92,8 +92,7 @@ XML
      */
     public function testMarshallingWithSamlDefinedNamespacedExtensions(): void
     {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Extensions MUST NOT include any SAML-defined namespace elements.');
+        $this->expectException(InvalidDOMElementException::class);
 
         new Extensions([new AttributeValue(StringValue::fromString('something'))]);
     }

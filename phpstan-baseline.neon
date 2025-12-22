@@ -181,19 +181,19 @@ parameters:
 			path: src/XML/md/AbstractSignedMdElement.php
 
 		-
-			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getList\(\)\.$#'
+			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getElements\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: src/XML/md/ContactPerson.php
 
 		-
-			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getList\(\)\.$#'
+			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getElements\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: src/XML/md/EntitiesDescriptor.php
 
 		-
-			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getList\(\)\.$#'
+			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getElements\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: src/XML/md/Organization.php

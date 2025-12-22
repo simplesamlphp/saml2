@@ -307,7 +307,7 @@ final class Organization extends AbstractMdElement implements
             'OrganizationName' => [],
             'OrganizationDisplayName' => [],
             'OrganizationURL' => [],
-            'Extensions' => $this->getExtensions()?->getList(),
+            'Extensions' => $this->getExtensions()?->getElements(),
             'attributes' => [],
         ];
 
