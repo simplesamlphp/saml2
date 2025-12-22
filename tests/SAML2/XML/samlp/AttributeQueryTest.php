@@ -31,6 +31,8 @@ use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 use SimpleSAML\XMLSchema\Exception\MissingElementException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\IntegerValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -87,16 +89,16 @@ final class AttributeQueryTest extends TestCase
                 new Attribute(
                     name: SAMLStringValue::fromString('test1'),
                     attributeValue: [
-                        new AttributeValue('test1_attrv1'),
-                        new AttributeValue('test1_attrv2'),
+                        new AttributeValue(StringValue::fromString('test1_attrv1')),
+                        new AttributeValue(StringValue::fromString('test1_attrv2')),
                     ],
                 ),
                 new Attribute(
                     name: SAMLStringValue::fromString('test2'),
                     attributeValue: [
-                        new AttributeValue('test2_attrv1'),
-                        new AttributeValue('test2_attrv2'),
-                        new AttributeValue('test2_attrv3'),
+                        new AttributeValue(StringValue::fromString('test2_attrv1')),
+                        new AttributeValue(StringValue::fromString('test2_attrv2')),
+                        new AttributeValue(StringValue::fromString('test2_attrv3')),
                     ],
                 ),
                 new Attribute(
@@ -105,8 +107,8 @@ final class AttributeQueryTest extends TestCase
                 new Attribute(
                     name: SAMLStringValue::fromString('test4'),
                     attributeValue: [
-                        new AttributeValue(4),
-                        new AttributeValue(23),
+                        new AttributeValue(IntegerValue::fromInteger(4)),
+                        new AttributeValue(IntegerValue::fromInteger(23)),
                     ],
                 ),
             ],
@@ -139,17 +141,17 @@ final class AttributeQueryTest extends TestCase
                     name: SAMLStringValue::fromString('test1'),
                     nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_BASIC),
                     attributeValue: [
-                        new AttributeValue('test1_attrv1'),
-                        new AttributeValue('test1_attrv2'),
+                        new AttributeValue(StringValue::fromString('test1_attrv1')),
+                        new AttributeValue(StringValue::fromString('test1_attrv2')),
                     ],
                 ),
                 new Attribute(
                     name: SAMLStringValue::fromString('test2'),
                     nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_BASIC),
                     attributeValue: [
-                        new AttributeValue('test2_attrv1'),
-                        new AttributeValue('test2_attrv2'),
-                        new AttributeValue('test2_attrv3'),
+                        new AttributeValue(StringValue::fromString('test2_attrv1')),
+                        new AttributeValue(StringValue::fromString('test2_attrv2')),
+                        new AttributeValue(StringValue::fromString('test2_attrv3')),
                     ],
                 ),
                 new Attribute(
@@ -162,7 +164,7 @@ final class AttributeQueryTest extends TestCase
 
         // Test Attribute Names
         $xpCache = XPath::getXPath($attributeQueryElement);
-        /** @psalm-var \DOMElement[] $attributes */
+        /** @var \DOMElement[] $attributes */
         $attributes = XPath::xpQuery($attributeQueryElement, './saml_assertion:Attribute', $xpCache);
         $this->assertCount(3, $attributes);
         $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));
@@ -198,7 +200,7 @@ final class AttributeQueryTest extends TestCase
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $aq = AttributeQuery::fromXML($document->documentElement);
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
+        /** @var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
         $issuer = $aq->getIssuer();
 
         // Sanity check
@@ -238,7 +240,7 @@ XML;
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $aq = AttributeQuery::fromXML($document->documentElement);
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
+        /** @var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
         $issuer = $aq->getIssuer();
 
         // Sanity check

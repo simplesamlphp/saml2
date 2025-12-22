@@ -29,6 +29,7 @@ use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Exception\MissingElementException;
 use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -101,11 +102,11 @@ final class AttributeAuthorityDescriptorTest extends TestCase
             SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
             SAMLStringValue::fromString('eduPersonAffiliation'),
             [
-                new AttributeValue('member'),
-                new AttributeValue('student'),
-                new AttributeValue('faculty'),
-                new AttributeValue('employee'),
-                new AttributeValue('staff'),
+                new AttributeValue(StringValue::fromString('member')),
+                new AttributeValue(StringValue::fromString('student')),
+                new AttributeValue(StringValue::fromString('faculty')),
+                new AttributeValue(StringValue::fromString('employee')),
+                new AttributeValue(StringValue::fromString('staff')),
             ],
         );
         $aad = new AttributeAuthorityDescriptor(

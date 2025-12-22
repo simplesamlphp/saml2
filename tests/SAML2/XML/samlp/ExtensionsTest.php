@@ -15,6 +15,7 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\StringValue;
 
 use function dirname;
 use function strval;
@@ -94,6 +95,6 @@ XML
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage('Extensions MUST NOT include any SAML-defined namespace elements.');
 
-        new Extensions([new AttributeValue('something')]);
+        new Extensions([new AttributeValue(StringValue::fromString('something'))]);
     }
 }

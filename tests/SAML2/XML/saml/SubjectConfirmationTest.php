@@ -159,7 +159,7 @@ XML
         $this->assertCount(1, $subjectConfirmationElements);
 
         // Test ordering of SubjectConfirmation contents
-        /** @psalm-var \DOMElement[] $subjectConfirmationElements */
+        /** @var \DOMElement[] $subjectConfirmationElements */
         $subjectConfirmationElements = XPath::xpQuery(
             $subjectConfirmationElement,
             './saml_assertion:NameID/following-sibling::*',

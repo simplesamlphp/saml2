@@ -400,7 +400,7 @@ XML;
         $messageElement = $message->toXML();
         $xp = XPath::xpQuery($messageElement, '.', XPath::getXPath($messageElement));
 
-        /** @psalm-var \DOMElement $query */
+        /** @var \DOMElement $query */
         $query = $xp[0];
         $this->assertEquals('somethingNEW', $query->getAttribute('ID'));
     }

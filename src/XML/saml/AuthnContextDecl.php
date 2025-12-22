@@ -85,7 +85,6 @@ final class AuthnContextDecl extends AbstractSamlElement implements SchemaValida
         }
 
         foreach ($this->getElements() as $element) {
-            /** @psalm-var \SimpleSAML\XML\SerializableElementInterface $element */
             $element->toXML($e);
         }
 

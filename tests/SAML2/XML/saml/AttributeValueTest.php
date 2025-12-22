@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -16,6 +15,9 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Constants as C_XSI;
+use SimpleSAML\XMLSchema\Type\DateTimeValue;
+use SimpleSAML\XMLSchema\Type\IntegerValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 
 use function dirname;
 use function strval;
@@ -54,9 +56,9 @@ final class AttributeValueTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $av = new AttributeValue(2);
-        $this->assertIsInt($av->getValue());
-        $this->assertEquals(2, $av->getValue());
+        $av = new AttributeValue(IntegerValue::fromInteger(2));
+        $this->assertInstanceOf(IntegerValue::class, $av->getValue());
+        $this->assertEquals(2, $av->getValue()->toInteger());
         $this->assertEquals('xs:integer', $av->getXsiType());
 
         $this->assertEquals(
@@ -71,7 +73,7 @@ final class AttributeValueTest extends TestCase
      */
     public function testMarshallingString(): void
     {
-        $av = new AttributeValue('value');
+        $av = new AttributeValue(StringValue::fromString('value'));
 
         $this->assertEquals('value', $av->getValue());
         $this->assertEquals('xs:string', $av->getXsiType());
@@ -83,16 +85,16 @@ final class AttributeValueTest extends TestCase
      */
     public function testMarshallingInteger(): void
     {
-        $av = new AttributeValue(3);
+        $av = new AttributeValue(IntegerValue::fromInteger(3));
 
-        $this->assertEquals(3, $av->getValue());
+        $this->assertEquals('3', $av->getValue()->getValue());
         $this->assertEquals('xs:integer', $av->getXsiType());
 
         $nssaml = C::NS_SAML;
         $nsxs = C_XSI::NS_XS;
         $nsxsi = C_XSI::NS_XSI;
         $xml = <<<XML
-<saml:AttributeValue xmlns:saml="{$nssaml}" xmlns:xsi="{$nsxsi}" xmlns:xs="{$nsxs}" xsi:type="xs:integer">3</saml:AttributeValue>
+<saml:AttributeValue xmlns:saml="{$nssaml}" xmlns:xs="{$nsxs}" xmlns:xsi="{$nsxsi}" xsi:type="xs:integer">3</saml:AttributeValue>
 XML;
         $this->assertEquals(
             $xml,
@@ -106,18 +108,17 @@ XML;
      */
     public function testMarshallingDateTime(): void
     {
-        $av = new AttributeValue(new DateTimeImmutable("2024-04-04T04:44:44Z"));
+        $av = new AttributeValue(DateTimeValue::fromString("2024-04-04T04:44:44Z"));
 
-        /** @var \DateTimeInterface $value */
-        $value = $av->getValue();
-        $this->assertEquals('2024-04-04T04:44:44Z', $value->format(C::DATETIME_FORMAT));
+        $value = $av->getValue()->getValue();
+        $this->assertEquals('2024-04-04T04:44:44Z', $value);
         $this->assertEquals('xs:dateTime', $av->getXsiType());
 
         $nssaml = C::NS_SAML;
         $nsxs = C_XSI::NS_XS;
         $nsxsi = C_XSI::NS_XSI;
         $xml = <<<XML
-<saml:AttributeValue xmlns:saml="{$nssaml}" xmlns:xsi="{$nsxsi}" xmlns:xs="{$nsxs}" xsi:type="xs:dateTime">2024-04-04T04:44:44Z</saml:AttributeValue>
+<saml:AttributeValue xmlns:saml="{$nssaml}" xmlns:xs="{$nsxs}" xmlns:xsi="{$nsxsi}" xsi:type="xs:dateTime">2024-04-04T04:44:44Z</saml:AttributeValue>
 XML;
         $this->assertEquals(
             $xml,
@@ -152,11 +153,11 @@ XML;
      */
     public function testEmptyStringAttribute(): void
     {
-        $av = new AttributeValue('');
+        $av = new AttributeValue(StringValue::fromString(''));
         $xmlRepresentation = clone self::$xmlRepresentation;
         $xmlRepresentation->documentElement->textContent = '';
 
-        $this->assertEquals('', $av->getValue());
+        $this->assertEquals('', $av->getValue()->getValue());
         $this->assertEquals('xs:string', $av->getXsiType());
     }
 

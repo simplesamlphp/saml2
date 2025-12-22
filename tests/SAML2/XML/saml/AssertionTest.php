@@ -47,7 +47,9 @@ use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Exception\MissingElementException;
 use SimpleSAML\XMLSchema\Type\Base64BinaryValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\IntegerValue;
 use SimpleSAML\XMLSchema\Type\NCNameValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
@@ -153,19 +155,19 @@ final class AssertionTest extends TestCase
             new Attribute(
                 name: SAMLStringValue::fromString('urn:test:ServiceID'),
                 attributeValue: [
-                    new AttributeValue(1),
+                    new AttributeValue(IntegerValue::fromInteger(1)),
                 ],
             ),
             new Attribute(
                 name: SAMLStringValue::fromString('urn:test:EntityConcernedID'),
                 attributeValue: [
-                    new AttributeValue(1),
+                    new AttributeValue(IntegerValue::fromInteger(1)),
                 ],
             ),
             new Attribute(
                 name: SAMLStringValue::fromString('urn:test:EntityConcernedSubID'),
                 attributeValue: [
-                    new AttributeValue(1),
+                    new AttributeValue(IntegerValue::fromInteger(1)),
                 ],
             ),
         ]);
@@ -294,15 +296,15 @@ final class AssertionTest extends TestCase
                 new Attribute(
                     name: SAMLStringValue::fromString('name1'),
                     attributeValue: [
-                        new AttributeValue('value1'),
-                        new AttributeValue('value2'),
+                        new AttributeValue(StringValue::fromString('value1')),
+                        new AttributeValue(StringValue::fromString('value2')),
                     ],
                 ),
                 new Attribute(
                     name: SAMLStringValue::fromString('name2'),
                     nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_UNSPECIFIED),
                     attributeValue: [
-                        new AttributeValue(2),
+                        new AttributeValue(IntegerValue::fromInteger(2)),
                     ],
                 ),
                 new Attribute(
@@ -364,7 +366,7 @@ final class AssertionTest extends TestCase
         $this->assertCount(3, $attributes);
         $this->assertCount(2, $attributes[0]->getAttributeValues());
         $this->assertEquals("value1", $attributes[0]->getAttributeValues()[0]->getValue());
-        $this->assertEquals(2, $attributes[1]->getAttributeValues()[0]->getValue());
+        $this->assertEquals('2', $attributes[1]->getAttributeValues()[0]->getValue()->getValue());
         $this->assertNull($attributes[2]->getAttributeValues()[0]->getValue());
 
         $this->assertNull($attributes[0]->getNameFormat());
@@ -504,13 +506,13 @@ final class AssertionTest extends TestCase
       </saml:AuthnStatement>
       <saml:AttributeStatement>
         <saml:Attribute Name="urn:test:ServiceID">
-          <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
+          <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
         </saml:Attribute>
         <saml:Attribute Name="urn:test:EntityConcernedID">
-          <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
+          <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
         </saml:Attribute>
         <saml:Attribute Name="urn:test:EntityConcernedSubID">
-          <saml:AttributeValue xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
+          <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string">1</saml:AttributeValue>
         </saml:Attribute>
       </saml:AttributeStatement>
     </saml:Assertion>
@@ -586,10 +588,10 @@ XML;
         $maceValue = $attributes[1]->getAttributeValues()[0];
         $oidValue = $attributes[0]->getAttributeValues()[0];
 
-        /** @psalm-var (\SimpleSAML\SAML2\XML\saml\AttributeValue|\SimpleSAML\SAML2\XML\saml\IdentifierInterface)[] $mValue */
+        /** @var (\SimpleSAML\SAML2\XML\saml\AttributeValue|\SimpleSAML\SAML2\XML\saml\IdentifierInterface)[] $mValue */
         $mValue = $maceValue->getValue();
 
-        /** @psalm-var (\SimpleSAML\SAML2\XML\saml\AttributeValue|\SimpleSAML\SAML2\XML\saml\IdentifierInterface)[] $oValue */
+        /** @var (\SimpleSAML\SAML2\XML\saml\AttributeValue|\SimpleSAML\SAML2\XML\saml\IdentifierInterface)[] $oValue */
         $oValue = $oidValue->getValue();
 
         $this->assertInstanceOf(NameID::class, $mValue);
@@ -609,7 +611,6 @@ XML;
             <saml:Assertion
                     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
                     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                     Version="2.0"
                     ID="_93af655219464fb403b34436cfb0c5cb1d9a5502"
@@ -692,10 +693,7 @@ XML;
         $maceFirstValue = $values[0];
         $maceSecondValue = $values[1];
 
-        /** @psalm-var (\SimpleSAML\SAML2\XML\saml\AttributeValue|\SimpleSAML\SAML2\XML\saml\IdentifierInterface)[] $firstValue */
         $firstValue = $maceFirstValue->getValue();
-
-        /** @psalm-var (\SimpleSAML\SAML2\XML\saml\AttributeValue|\SimpleSAML\SAML2\XML\saml\IdentifierInterface)[] $secondValue */
         $secondValue = $maceSecondValue->getValue();
 
         $this->assertInstanceOf(NameID::class, $firstValue);
@@ -726,7 +724,7 @@ XML;
         // Was signed
         $this->assertTrue($assertion->wasSignedAtConstruction());
 
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Assertion $verified */
+        /** @var \SimpleSAML\SAML2\XML\saml\Assertion $verified */
         $verified = $assertion->verify($verifier);
 
         // Double-check that we can actually retrieve some basics.
@@ -750,14 +748,12 @@ XML;
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Assertion $verified */
+        /** @var \SimpleSAML\SAML2\XML\saml\Assertion $verified */
         $verified = $assertion->verify($verifier);
-
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Subject $subject */
         $subject = $verified->getSubject();
-
-        /** @var \SimpleSAML\SAML2\XML\saml\NameID $identifier */
+        /** @var \SimpleSAML\SAML2\XML\saml\NameID */
         $identifier = $subject->getIdentifier();
+
         $this->assertEquals("SomeNameIDValue", $identifier->getContent());
     }
 
@@ -1215,15 +1211,15 @@ XML;
                     name: SAMLStringValue::fromString('name1'),
                     nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_UNSPECIFIED),
                     attributeValue: [
-                        new AttributeValue('value1'),
-                        new AttributeValue('value2'),
+                        new AttributeValue(StringValue::fromString('value1')),
+                        new AttributeValue(StringValue::fromString('value2')),
                     ],
                 ),
                 new Attribute(
                     name: SAMLStringValue::fromString('name2'),
                     nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_UNSPECIFIED),
                     attributeValue: [
-                        new AttributeValue('value3'),
+                        new AttributeValue(StringValue::fromString('value3')),
                     ],
                 ),
             ],
@@ -1276,7 +1272,7 @@ XML;
         $this->assertEquals('urn:x-simplesamlphp:issuer', $issuerElements[0]->textContent);
 
         // Test ordering of Assertion contents
-        /** @psalm-var \DOMElement[] $assertionElements */
+        /** @var \DOMElement[] $assertionElements */
         $assertionElements = XPath::xpQuery(
             $assertionElement,
             './saml_assertion:Issuer/following-sibling::*',

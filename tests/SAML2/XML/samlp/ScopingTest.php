@@ -109,12 +109,12 @@ final class ScopingTest extends TestCase
 
         // Test for an IDPList
         $xpCache = XPath::getXPath($scopingElement);
-        /** @psalm-var \DOMElement[] $scopingElements */
+        /** @var \DOMElement[] $scopingElements */
         $scopingElements = XPath::xpQuery($scopingElement, './saml_protocol:IDPList', $xpCache);
         $this->assertCount(1, $scopingElements);
 
         // Test ordering of Scoping contents
-        /** @psalm-var \DOMElement[] $scopingElements */
+        /** @var \DOMElement[] $scopingElements */
         $scopingElements = XPath::xpQuery($scopingElement, './saml_protocol:IDPList/following-sibling::*', $xpCache);
         $this->assertCount(1, $scopingElements);
         $this->assertEquals('samlp:RequesterID', $scopingElements[0]->tagName);

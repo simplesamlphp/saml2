@@ -134,7 +134,6 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             throw new Exception('Missing SAMLart parameter.');
         }
 
-        /** @psalm-suppress UndefinedClass */
         $metadataHandler = MetaDataStorageHandler::getMetadataHandler(Configuration::getInstance());
 
         $idpMetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
@@ -159,10 +158,6 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             "ArtifactResolutionService endpoint being used is := " . $endpoint['Location'],
         );
 
-        /**
-         * @psalm-suppress UndefinedClass
-         * @psalm-suppress DocblockTypeContradiction
-         */
         Assert::notEmpty($this->spMetadata, 'Cannot process received message without SP metadata.');
 
         /**
@@ -174,7 +169,6 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
         $ar = new ArtifactResolve(new Artifact($artifact), null, $issuer, null, '2.0', $endpoint['Location']);
 
         // sign the request
-        /** @psalm-suppress UndefinedClass */
         MSG::addSign($this->spMetadata, $idpMetadata, $ar); // Shoaib - moved from the SOAPClient.
 
         $soap = new SOAPClient();

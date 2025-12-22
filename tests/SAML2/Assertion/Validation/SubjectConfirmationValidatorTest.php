@@ -98,7 +98,6 @@ final class SubjectConfirmationValidatorTest extends TestCase
         );
 
         $ns_xsi = C_XSI::NS_XSI;
-        $ns_xs = C_XSI::NS_XS;
         $ns_saml = C::NS_SAML;
         $nameid_persistent = C::NAMEID_PERSISTENT;
         $entity_idp = C::ENTITY_IDP;
@@ -109,7 +108,6 @@ final class SubjectConfirmationValidatorTest extends TestCase
         self::$document = DOMDocumentFactory::fromString(
             <<<XML
     <saml:Assertion xmlns:xsi="{$ns_xsi}"
-                    xmlns:xs="{$ns_xs}"
                     xmlns:saml="{$ns_saml}"
                     ID="_45e42090d8cbbfa52d5a394b01049fc2221e274182"
                     Version="2.0"

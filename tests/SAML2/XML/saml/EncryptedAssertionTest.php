@@ -174,11 +174,9 @@ final class EncryptedAssertionTest extends TestCase
         );
 
         $encAssertion = new EncryptedAssertion($assertion->encrypt($encryptor));
-        /** @psalm-suppress ArgumentTypeCoercion */
         $doc = DOMDocumentFactory::fromString(strval($encAssertion));
 
         $encAssertion = EncryptedAssertion::fromXML($doc->documentElement);
-        /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encAssertion->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),

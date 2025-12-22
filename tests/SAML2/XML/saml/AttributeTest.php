@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -22,6 +21,8 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Type\DateTimeValue;
+use SimpleSAML\XMLSchema\Type\IntegerValue;
 use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
@@ -90,10 +91,10 @@ final class AttributeTest extends TestCase
             SAMLAnyURIValue::fromString(C::NAMEFORMAT_BASIC),
             SAMLStringValue::fromString('TheFriendlyName'),
             [
-                new AttributeValue('FirstValue'),
-                new AttributeValue('SecondValue'),
-                new AttributeValue(3),
-                new AttributeValue(new DateTimeImmutable('2024-04-04T04:44:44Z')),
+                new AttributeValue(StringValue::fromString('FirstValue')),
+                new AttributeValue(StringValue::fromString('SecondValue')),
+                new AttributeValue(IntegerValue::fromInteger(3)),
+                new AttributeValue(DateTimeValue::fromString('2024-04-04T04:44:44Z')),
                 new AttributeValue(null),
             ],
             [$attr1, $attr2],

@@ -108,7 +108,6 @@ class ArtifactResponse extends AbstractStatusResponse implements SchemaValidatab
         $status = $status[0];
         $message = null;
 
-        /** @psalm-suppress RedundantCondition */
         for ($child = $status->nextSibling; $child !== null; $child = $child->nextSibling) {
             if ($child instanceof DOMElement) {
                 $message = MessageFactory::fromXML($child);

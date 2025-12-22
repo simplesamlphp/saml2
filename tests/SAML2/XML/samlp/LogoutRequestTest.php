@@ -148,7 +148,7 @@ final class LogoutRequestTest extends TestCase
         $this->assertCount(1, $logoutRequestElements);
 
         // Test ordering of LogoutRequest contents
-        /** @psalm-var \DOMElement[] $logoutRequestElements */
+        /** @var \DOMElement[] $logoutRequestElements */
         $logoutRequestElements = XPath::xpQuery(
             $logoutRequestElement,
             './saml_assertion:NameID/following-sibling::*',
@@ -181,7 +181,6 @@ final class LogoutRequestTest extends TestCase
         $this->assertEquals('SomeSessionIndex1', $sessionIndexes[0]->getContent()->getValue());
         $this->assertEquals('SomeSessionIndex2', $sessionIndexes[1]->getContent()->getValue());
 
-        /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encid->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),

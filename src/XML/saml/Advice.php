@@ -160,7 +160,6 @@ final class Advice extends AbstractSamlElement implements SchemaValidatableEleme
         }
 
         foreach ($this->getElements() as $element) {
-            /** @psalm-var \SimpleSAML\XML\SerializableElementInterface $element */
             $element->toXML($e);
         }
 

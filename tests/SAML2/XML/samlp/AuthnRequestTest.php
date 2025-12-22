@@ -212,7 +212,7 @@ final class AuthnRequestTest extends TestCase
         $this->assertCount(1, $authnRequestElements);
 
         // Test ordering of AuthnRequest contents
-        /** @psalm-var \DOMElement[] $authnRequestElements */
+        /** @var \DOMElement[] $authnRequestElements */
         $authnRequestElements = XPath::xpQuery(
             $authnRequestElement,
             './saml_assertion:Subject/following-sibling::*',
@@ -311,7 +311,6 @@ AUTHNREQUEST;
         $identifier = $subject->getIdentifier();
         $this->assertInstanceOf(EncryptedID::class, $identifier);
 
-        /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $identifier->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),

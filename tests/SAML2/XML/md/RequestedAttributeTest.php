@@ -17,6 +17,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Type\BooleanValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 
 use function dirname;
 use function strval;
@@ -61,7 +62,7 @@ final class RequestedAttributeTest extends TestCase
             SAMLAnyURIValue::fromString(C::NAMEFORMAT_BASIC),
             SAMLStringValue::fromString('Attribute'),
             [
-                new AttributeValue('value1'),
+                new AttributeValue(StringValue::fromString('value1')),
             ],
         );
 

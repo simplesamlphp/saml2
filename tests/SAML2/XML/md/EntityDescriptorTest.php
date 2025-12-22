@@ -440,10 +440,6 @@ XML
         $type->toXML($customd);
 
         $newline = new DOMText("\n  ");
-        /**
-         * @psalm-suppress PossiblyNullPropertyFetch
-         * @psalm-suppress PossiblyNullReference
-         */
         $pdpd->parentNode->insertBefore($customd, $pdpd->nextSibling);
         $pdpd->parentNode->insertBefore($newline, $customd);
         $entityDescriptor = EntityDescriptor::fromXML($xmlRepresentation->documentElement);

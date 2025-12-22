@@ -36,6 +36,7 @@ use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Type\LanguageValue;
 use SimpleSAML\XMLSchema\Type\PositiveIntegerValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 
 use function dirname;
@@ -178,7 +179,7 @@ final class ExtensionsTest extends TestCase
         $this->expectException(ProtocolViolationException::class);
         $this->expectExceptionMessage('Extensions MUST NOT include any SAML-defined namespace elements.');
 
-        new Extensions([new AttributeValue('something')]);
+        new Extensions([new AttributeValue(StringValue::fromString('something'))]);
     }
 
 

@@ -27,6 +27,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XML\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
@@ -67,9 +68,9 @@ final class EntityAttributesTest extends TestCase
             name: SAMLStringValue::fromString('attrib1'),
             nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_BASIC),
             attributeValue: [
-                new AttributeValue('is'),
-                new AttributeValue('really'),
-                new AttributeValue('cool'),
+                new AttributeValue(StringValue::fromString('is')),
+                new AttributeValue(StringValue::fromString('really')),
+                new AttributeValue(StringValue::fromString('cool')),
             ],
         );
 
@@ -99,31 +100,35 @@ final class EntityAttributesTest extends TestCase
                 name: SAMLStringValue::fromString('urn:mace:dir:attribute-def:uid'),
                 nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
                 attributeValue: [
-                    new AttributeValue('student2'),
+                    new AttributeValue(StringValue::fromString('student2')),
                 ],
             ),
             new Attribute(
                 name: SAMLStringValue::fromString('urn:mace:terena.org:attribute-def:schacHomeOrganization'),
                 nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
                 attributeValue: [
-                    new AttributeValue('university.example.org'),
-                    new AttributeValue('bbb.cc'),
+                    new AttributeValue(StringValue::fromString('university.example.org')),
+                    new AttributeValue(StringValue::fromString('bbb.cc')),
                 ],
             ),
             new Attribute(
                 name: SAMLStringValue::fromString('urn:schac:attribute-def:schacPersonalUniqueCode'),
                 nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
                 attributeValue: [
-                    new AttributeValue('urn:schac:personalUniqueCode:nl:local:uvt.nl:memberid:524020'),
-                    new AttributeValue('urn:schac:personalUniqueCode:nl:local:surfnet.nl:studentid:12345'),
+                    new AttributeValue(
+                        StringValue::fromString('urn:schac:personalUniqueCode:nl:local:uvt.nl:memberid:524020'),
+                    ),
+                    new AttributeValue(
+                        StringValue::fromString('urn:schac:personalUniqueCode:nl:local:surfnet.nl:studentid:12345'),
+                    ),
                 ],
             ),
             new Attribute(
                 name: SAMLStringValue::fromString('urn:mace:dir:attribute-def:eduPersonAffiliation'),
                 nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
                 attributeValue: [
-                    new AttributeValue('member'),
-                    new AttributeValue('student'),
+                    new AttributeValue(StringValue::fromString('member')),
+                    new AttributeValue(StringValue::fromString('student')),
                 ],
             ),
         ]);
@@ -157,9 +162,9 @@ final class EntityAttributesTest extends TestCase
             name: SAMLStringValue::fromString('foo'),
             nameFormat: SAMLAnyURIValue::fromString('urn:simplesamlphp:v1:simplesamlphp'),
             attributeValue: [
-                new AttributeValue('is'),
-                new AttributeValue('really'),
-                new AttributeValue('cool'),
+                new AttributeValue(StringValue::fromString('is')),
+                new AttributeValue(StringValue::fromString('really')),
+                new AttributeValue(StringValue::fromString('cool')),
             ],
         );
 

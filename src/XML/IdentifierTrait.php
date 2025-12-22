@@ -94,7 +94,6 @@ trait IdentifierTrait
             TooManyElementsException::class,
         );
 
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null $identifier */
         $identifier = array_pop($identifiers);
 
         return $identifier;

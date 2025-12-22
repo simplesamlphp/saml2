@@ -123,7 +123,7 @@ final class SPSSODescriptorTest extends TestCase
             FriendlyName: SAMLStringValue::fromString('eduPersonEntitlement'),
             AttributeValues: [
                 new AttributeValue(
-                    'https://ServiceProvider.com/entitlements/123456789',
+                    StringValue::fromString('https://ServiceProvider.com/entitlements/123456789'),
                 ),
             ],
         );

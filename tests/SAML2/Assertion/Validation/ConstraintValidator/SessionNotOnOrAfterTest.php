@@ -124,7 +124,7 @@ final class SessionNotOnOrAfterTest extends TestCase
         // Create an assertion
         $assertion = new Assertion(
             id: IDValue::fromString('abc123'),
-            subject: $subject,
+            subject: self::$subject,
             issuer: self::$issuer,
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             statements: [$authnStatement],

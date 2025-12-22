@@ -168,10 +168,6 @@ final class PDPDescriptorTest extends TestCase
     public function testUnmarshallingWithoutAuthzServiceDescriptors(): void
     {
         $xmlRepresentation = clone self::$xmlRepresentation;
-        /**
-         * @psalm-suppress PossiblyNullArgument
-         * @psalm-suppress PossiblyNullPropertyFetch
-         */
         $xmlRepresentation->documentElement->removeChild(
             $xmlRepresentation->documentElement->firstChild->nextSibling,
         );
