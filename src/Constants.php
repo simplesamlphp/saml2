@@ -480,6 +480,16 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const string ACTION_GHPP = 'urn:oasis:names:tc:SAML:1.0:action:ghpp';
 
     /**
+     * Sent when the principal wishes to terminate the indicated session
+     */
+    public const string LOGOUT_USER = 'urn:oasis:names:tc:SAML:2.0:logout:user';
+
+    /**
+     * Sent when an administrator wishes to terminate the indicated session
+     */
+    public const string LOGOUT_ADMIN = 'urn:oasis:names:tc:SAML:2.0:logout:admin';
+
+    /**
      * The maximum size for any entityid as per specification
      */
     public const int ENTITYID_MAX_LENGTH = 1024;
