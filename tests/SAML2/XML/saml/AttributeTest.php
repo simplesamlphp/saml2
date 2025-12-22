@@ -93,9 +93,6 @@ final class AttributeTest extends TestCase
             [
                 new AttributeValue(StringValue::fromString('FirstValue')),
                 new AttributeValue(StringValue::fromString('SecondValue')),
-                new AttributeValue(IntegerValue::fromInteger(3)),
-                new AttributeValue(DateTimeValue::fromString('2024-04-04T04:44:44Z')),
-                new AttributeValue(null),
             ],
             [$attr1, $attr2],
         );

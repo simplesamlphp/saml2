@@ -18,6 +18,8 @@ use SimpleSAML\XMLSchema\XML\Constants\NS;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
 
+use function array_unique;
+use function count;
 use function strval;
 
 /**
@@ -65,7 +67,7 @@ class Attribute extends AbstractSamlElement implements
         array $namespacedAttribute = [],
     ) {
         Assert::maxCount($attributeValue, C::UNBOUNDED_LIMIT);
-        Assert::allIsInstanceOf($attributeValue, AttributeValue::class, 'Invalid AttributeValue.');
+        Assert::allIsInstanceOf($attributeValue, AttributeValue::class, InvalidDOMElementException::class);
 
         switch (strval($nameFormat)) {
             case C::NAMEFORMAT_URI:
@@ -80,6 +82,22 @@ class Attribute extends AbstractSamlElement implements
                     sprintf("Attribute name `%s` does not match its declared format `%s`", $name, $nameFormat),
                 );
                 break;
+        }
+
+        $types = array_map(
+            function(AttributeValue $av) {
+                return $av->getXsiType();
+            },
+            $attributeValue,
+        );
+
+        if ($types !== []) {
+            Assert::same(
+                count(array_unique($types)),
+                1,
+                "All of the <AttributeValue> elements must have the identical datatype assigned.",
+                ProtocolViolationException::class,
+            );
         }
 
         $this->setAttributesNS($namespacedAttribute);
