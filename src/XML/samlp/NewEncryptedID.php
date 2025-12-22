@@ -8,7 +8,6 @@ use InvalidArgumentException;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\SAML2\XML\saml\AbstractEncryptedElement;
-use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
@@ -23,9 +22,7 @@ use function implode;
  *
  * @package simplesamlphp/saml2
  */
-final class NewEncryptedID extends AbstractEncryptedElement implements
-    IdentifierInterface,
-    SchemaValidatableElementInterface
+final class NewEncryptedID extends AbstractEncryptedElement implements SchemaValidatableElementInterface
 {
     use SchemaValidatableElementTrait;
 
