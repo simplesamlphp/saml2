@@ -93,7 +93,7 @@ final class RequestAuthenticated extends AbstractEcpElement implements SchemaVal
     {
         $e = $this->instantiateParentElement($parent);
 
-        if ($this->getMustUnderstand() !== null) {
+        if ($this->getMustUnderstand() !== null && $this->getMustUnderstand()->toBoolean() !== false) {
             $this->getMustUnderstand()->toAttribute()->toXML($e);
         }
 
