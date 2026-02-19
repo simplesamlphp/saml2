@@ -74,12 +74,8 @@ final class AffiliationDescriptorTest extends TestCase
         $affiliationDescriptor = new AffiliationDescriptor(
             affiliationOwnerId: EntityIDValue::fromString(C::ENTITY_IDP),
             affiliateMember: [
-                new AffiliateMember(
-                    EntityIDValue::fromString(C::ENTITY_SP),
-                ),
-                new AffiliateMember(
-                    EntityIDValue::fromString(C::ENTITY_OTHER),
-                ),
+                AffiliateMember::fromString(C::ENTITY_SP),
+                AffiliateMember::fromString(C::ENTITY_OTHER),
             ],
             ID: IDValue::fromString('TheID'),
             validUntil: SAMLDateTimeValue::fromString('2009-02-13T23:31:30Z'),
@@ -88,9 +84,7 @@ final class AffiliationDescriptorTest extends TestCase
                 new KeyDescriptor(
                     new KeyInfo(
                         [
-                            new KeyName(
-                                SAMLStringValue::fromString('IdentityProvider.com SSO Key'),
-                            ),
+                            KeyName::fromString('IdentityProvider.com SSO Key'),
                         ],
                     ),
                     KeyTypesValue::fromEnum(KeyTypesEnum::SIGNING),

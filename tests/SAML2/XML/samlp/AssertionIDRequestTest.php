@@ -20,7 +20,6 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Type\IDValue;
-use SimpleSAML\XMLSchema\Type\NCNameValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -64,12 +63,8 @@ final class AssertionIDRequestTest extends TestCase
     {
         $assertionIDRequest = new AssertionIDRequest(
             assertionIDRef: [
-                new AssertionIDRef(
-                    NCNameValue::fromString('_abc123'),
-                ),
-                new AssertionIDRef(
-                    NCNameValue::fromString('_def456'),
-                ),
+                AssertionIDRef::fromString('_abc123'),
+                AssertionIDRef::fromString('_def456'),
             ],
             issuer: new Issuer(
                 SAMLStringValue::fromString('https://gateway.stepup.org/saml20/sp/metadata'),

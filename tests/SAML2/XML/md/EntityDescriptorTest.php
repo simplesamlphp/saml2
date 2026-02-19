@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\EmailAddressValue;
 use SimpleSAML\SAML2\Type\EntityIDValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
@@ -159,25 +158,19 @@ final class EntityDescriptorTest extends TestCase
             new ContactPerson(
                 contactType: SAMLStringValue::fromString('support'),
                 emailAddress: [
-                    new EmailAddress(
-                        EmailAddressValue::fromString('help@example.edu'),
-                    ),
+                    EmailAddress::fromString('help@example.edu'),
                 ],
             ),
             new ContactPerson(
                 contactType: SAMLStringValue::fromString('technical'),
                 emailAddress: [
-                    new EmailAddress(
-                        EmailAddressValue::fromString('root@example.edu'),
-                    ),
+                    EmailAddress::fromString('root@example.edu'),
                 ],
             ),
             new ContactPerson(
                 contactType: SAMLStringValue::fromString('administrative'),
                 emailAddress: [
-                    new EmailAddress(
-                        EmailAddressValue::fromString('info@example.edu'),
-                    ),
+                    EmailAddress::fromString('info@example.edu'),
                 ],
             ),
         ];
@@ -280,9 +273,7 @@ XML
         $ad = new AffiliationDescriptor(
             $entityid,
             [
-                new AffiliateMember(
-                    EntityIDValue::fromString(C::ENTITY_OTHER),
-                ),
+                AffiliateMember::fromString(C::ENTITY_OTHER),
             ],
         );
         $org = new Organization(
@@ -309,25 +300,19 @@ XML
             new ContactPerson(
                 contactType: SAMLStringValue::fromString('support'),
                 emailAddress: [
-                    new EmailAddress(
-                        EmailAddressValue::fromString('help@example.edu'),
-                    ),
+                    EmailAddress::fromString('help@example.edu'),
                 ],
             ),
             new ContactPerson(
                 contactType: SAMLStringValue::fromString('technical'),
                 emailAddress: [
-                    new EmailAddress(
-                        EmailAddressValue::fromString('root@example.edu'),
-                    ),
+                    EmailAddress::fromString('root@example.edu'),
                 ],
             ),
             new ContactPerson(
                 contactType: SAMLStringValue::fromString('administrative'),
                 emailAddress: [
-                    new EmailAddress(
-                        EmailAddressValue::fromString('info@example.edu'),
-                    ),
+                    EmailAddress::fromString('info@example.edu'),
                 ],
             ),
         ];
@@ -402,9 +387,7 @@ XML
         $affiliationDescriptor = new AffiliationDescriptor(
             EntityIDValue::fromString(C::ENTITY_IDP),
             [
-                new AffiliateMember(
-                    EntityIDValue::fromString(C::ENTITY_SP),
-                ),
+                AffiliateMember::fromString(C::ENTITY_SP),
             ],
         );
         $affiliationDescriptor->toXML($xmlRepresentation->documentElement);

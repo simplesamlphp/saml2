@@ -84,12 +84,8 @@ final class EntityAttributesTest extends TestCase
             condition: [],
             audienceRestriction: [
                 new AudienceRestriction([
-                    new Audience(
-                        SAMLAnyURIValue::fromString(C::ENTITY_IDP),
-                    ),
-                    new Audience(
-                        SAMLAnyURIValue::fromString(C::ENTITY_URN),
-                    ),
+                    Audience::fromString(C::ENTITY_IDP),
+                    Audience::fromString(C::ENTITY_URN),
                 ]),
             ],
         );

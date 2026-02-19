@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\SAML2\XML\saml\AbstractBaseIDType;
@@ -83,9 +82,7 @@ final class BaseIDTest extends TestCase
     {
         $baseId = new CustomBaseID(
             [
-                new Audience(
-                    SAMLAnyURIValue::fromString('urn:some:audience'),
-                ),
+                Audience::fromString('urn:some:audience'),
             ],
             SAMLStringValue::fromString('urn:x-simplesamlphp:namequalifier'),
             SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),

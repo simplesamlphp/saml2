@@ -114,23 +114,13 @@ final class AttributeAuthorityDescriptorTest extends TestCase
             SAMLAnyURIListValue::fromString(C::NS_SAMLP),
             [self::$aidrs],
             [
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_X509_SUBJECT_NAME),
-                ),
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
-                ),
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
-                ),
+                NameIDFormat::fromString(C::NAMEID_X509_SUBJECT_NAME),
+                NameIDFormat::fromString(C::NAMEID_PERSISTENT),
+                NameIDFormat::fromString(C::NAMEID_TRANSIENT),
             ],
             [
-                new AttributeProfile(
-                    SAMLAnyURIValue::fromString(C::PROFILE_1),
-                ),
-                new AttributeProfile(
-                    SAMLAnyURIValue::fromString(C::PROFILE_2),
-                ),
+                AttributeProfile::fromString(C::PROFILE_1),
+                AttributeProfile::fromString(C::PROFILE_2),
             ],
             [$attr1, $attr2],
             IDValue::fromString('phpunit'),

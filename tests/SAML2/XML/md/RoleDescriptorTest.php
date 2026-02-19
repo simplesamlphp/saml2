@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\EmailAddressValue;
 use SimpleSAML\SAML2\Type\KeyTypesValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
@@ -138,17 +137,13 @@ final class RoleDescriptorTest extends TestCase
             [
                 new KeyDescriptor(
                     new KeyInfo([
-                        new KeyName(
-                            StringValue::fromString('IdentityProvider.com SSO Signing Key'),
-                        ),
+                        KeyName::fromString('IdentityProvider.com SSO Signing Key'),
                     ]),
                     KeyTypesValue::fromEnum(KeyTypesEnum::SIGNING),
                 ),
                 new KeyDescriptor(
                     new KeyInfo([
-                        new KeyName(
-                            StringValue::fromString('IdentityProvider.com SSO Encryption Key'),
-                        ),
+                        KeyName::fromString('IdentityProvider.com SSO Encryption Key'),
                     ]),
                     KeyTypesValue::fromEnum(KeyTypesEnum::ENCRYPTION),
                     [
@@ -181,36 +176,22 @@ final class RoleDescriptorTest extends TestCase
             [
                 new ContactPerson(
                     contactType: SAMLStringValue::fromString('other'),
-                    company: new Company(
-                        SAMLStringValue::fromString('Test Company'),
-                    ),
-                    givenName: new GivenName(
-                        SAMLStringValue::fromString('John'),
-                    ),
-                    surName: new SurName(
-                        SAMLStringValue::fromString('Doe'),
-                    ),
+                    company: Company::fromString('Test Company'),
+                    givenName: GivenName::fromString('John'),
+                    surName: SurName::fromString('Doe'),
                     emailAddress: [
-                        new EmailAddress(
-                            EmailAddressValue::fromString('mailto:jdoe@test.company'),
-                        ),
-                        new EmailAddress(
-                            EmailAddressValue::fromString('mailto:john.doe@test.company'),
-                        ),
+                        EmailAddress::fromString('mailto:jdoe@test.company'),
+                        EmailAddress::fromString('mailto:john.doe@test.company'),
                     ],
                     telephoneNumber: [
-                        new TelephoneNumber(
-                            SAMLStringValue::fromString('1-234-567-8901'),
-                        ),
+                        TelephoneNumber::fromString('1-234-567-8901'),
                     ],
                     namespacedAttribute: [$attr_cp_1, $attr_cp_2],
                 ),
                 new ContactPerson(
                     contactType: SAMLStringValue::fromString('technical'),
                     telephoneNumber: [
-                        new TelephoneNumber(
-                            SAMLStringValue::fromString('1-234-567-8901'),
-                        ),
+                        TelephoneNumber::fromString('1-234-567-8901'),
                     ],
                 ),
             ],

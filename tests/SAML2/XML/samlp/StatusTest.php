@@ -10,7 +10,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
-use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\Status;
@@ -72,9 +71,7 @@ final class StatusTest extends TestCase
                     ),
                 ],
             ),
-            new StatusMessage(
-                SAMLStringValue::fromString('Something went wrong'),
-            ),
+            StatusMessage::fromString('Something went wrong'),
             [
                 StatusDetail::fromXML(
                     DOMDocumentFactory::fromFile(
@@ -104,9 +101,7 @@ final class StatusTest extends TestCase
                     ),
                 ],
             ),
-            new StatusMessage(
-                SAMLStringValue::fromString('Something went wrong'),
-            ),
+            StatusMessage::fromString('Something went wrong'),
             [
                 new StatusDetail([new Chunk(self::$detail->documentElement)]),
             ],

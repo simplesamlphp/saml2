@@ -7,7 +7,6 @@ namespace SimpleSAML\Test\SAML2\XML\ecp;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\ecp\AbstractEcpElement;
 use SimpleSAML\SAML2\XML\ecp\RelayState;
 use SimpleSAML\SOAP11\Constants as SOAP;
@@ -47,9 +46,7 @@ final class RelayStateTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $relayState = new RelayState(
-            SAMLStringValue::fromString('AGDY854379dskssda'),
-        );
+        $relayState = RelayState::fromString('AGDY854379dskssda');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

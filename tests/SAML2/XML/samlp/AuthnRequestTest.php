@@ -124,12 +124,8 @@ final class AuthnRequestTest extends TestCase
         // Create RequestedAuthnContext
         $rac = new RequestedAuthnContext(
             [
-                new AuthnContextClassRef(
-                    SAMLAnyURIValue::fromString('urn:test:accr1'),
-                ),
-                new AuthnContextClassRef(
-                    SAMLAnyURIValue::fromString('urn:test:accr2'),
-                ),
+                AuthnContextClassRef::fromString('urn:test:accr1'),
+                AuthnContextClassRef::fromString('urn:test:accr2'),
             ],
             AuthnContextComparisonTypeValue::fromEnum(AuthnContextComparisonTypeEnum::Better),
         );
@@ -156,18 +152,14 @@ final class AuthnRequestTest extends TestCase
             [
                 new AudienceRestriction(
                     [
-                        new Audience(
-                            SAMLAnyURIValue::fromstring('http://sp.example.com/demo1/metadata.php'),
-                        ),
+                        Audience::fromstring('http://sp.example.com/demo1/metadata.php'),
                     ],
                 ),
             ],
             new OneTimeUse(),
             new ProxyRestriction(
                 [
-                    new Audience(
-                        SAMLAnyURIValue::fromString('http://sp.example.com/demo2/metadata.php'),
-                    ),
+                    Audience::fromString('http://sp.example.com/demo2/metadata.php'),
                 ],
                 NonNegativeIntegerValue::fromInteger(2),
             ),
@@ -179,13 +171,9 @@ final class AuthnRequestTest extends TestCase
             SAMLStringValue::fromString('testName1'),
             SAMLAnyURIValue::fromString('urn:test:testLoc1'),
         );
-        $getComplete = new GetComplete(
-            SAMLAnyURIValue::fromString('https://some/location'),
-        );
+        $getComplete = GetComplete::fromString('https://some/location');
         $list = new IDPList([$entry1], $getComplete);
-        $requesterId = new RequesterID(
-            EntityIDValue::fromString('urn:some:requester'),
-        );
+        $requesterId = RequesterID::fromString('urn:some:requester');
         $scoping = new Scoping(
             NonNegativeIntegerValue::fromInteger(2),
             $list,

@@ -7,9 +7,6 @@ namespace SimpleSAML\Test\SAML2\XML\mdui;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\CIDRValue;
-use SimpleSAML\SAML2\Type\DomainValue;
-use SimpleSAML\SAML2\Type\GeolocationValue;
 use SimpleSAML\SAML2\Type\ListOfStringsValue;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
@@ -68,28 +65,16 @@ final class DiscoHintsTest extends TestCase
     {
         $discoHints = new DiscoHints(
             ipHint: [
-                new IPHint(
-                    CIDRValue::fromString("130.59.0.0/16"),
-                ),
-                new IPHint(
-                    CIDRValue::fromString("2001:620::0/96"),
-                ),
+                IPHint::fromString("130.59.0.0/16"),
+                IPHint::fromString("2001:620::0/96"),
             ],
             domainHint: [
-                new DomainHint(
-                    DomainValue::fromString("example.com"),
-                ),
-                new DomainHint(
-                    DomainValue::fromString("www.example.com"),
-                ),
+                DomainHint::fromString("example.com"),
+                DomainHint::fromString("www.example.com"),
             ],
             geolocationHint: [
-                new GeolocationHint(
-                    GeolocationValue::fromString("geo:47.37328,8.531126"),
-                ),
-                new GeolocationHint(
-                    GeolocationValue::fromString("geo:19.34343,12.342514"),
-                ),
+                GeolocationHint::fromString("geo:47.37328,8.531126"),
+                GeolocationHint::fromString("geo:19.34343,12.342514"),
             ],
         );
 

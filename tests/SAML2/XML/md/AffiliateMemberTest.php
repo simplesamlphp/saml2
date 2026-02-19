@@ -7,7 +7,6 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\EntityIDValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AffiliateMember;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -51,9 +50,7 @@ final class AffiliateMemberTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $affiliateMember = new AffiliateMember(
-            EntityIDValue::fromString('https://some.entity.org/id'),
-        );
+        $affiliateMember = AffiliateMember::fromString('https://some.entity.org/id');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

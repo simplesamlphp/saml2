@@ -17,7 +17,6 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
-use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
@@ -60,9 +59,7 @@ final class KeyDescriptorTest extends TestCase
     {
         $kd = new KeyDescriptor(
             new KeyInfo([
-                new KeyName(
-                    StringValue::fromString('IdentityProvider.com SSO Key'),
-                ),
+                KeyName::fromString('IdentityProvider.com SSO Key'),
             ]),
             KeyTypesValue::fromEnum(KeyTypesEnum::SIGNING),
             [
@@ -86,9 +83,7 @@ final class KeyDescriptorTest extends TestCase
     {
         $kd = new KeyDescriptor(
             new KeyInfo([
-                new KeyName(
-                    StringValue::fromString('IdentityProvider.com SSO Key'),
-                ),
+                KeyName::fromString('IdentityProvider.com SSO Key'),
             ]),
         );
 

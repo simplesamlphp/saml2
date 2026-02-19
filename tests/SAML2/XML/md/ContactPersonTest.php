@@ -10,7 +10,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\EmailAddressValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\Company;
@@ -97,32 +96,20 @@ final class ContactPersonTest extends TestCase
 
         $contactPerson = new ContactPerson(
             SAMLStringValue::fromString('other'),
-            new Company(
-                SAMLStringValue::fromString('Test Company'),
-            ),
-            new GivenName(
-                SAMLStringValue::fromString('John'),
-            ),
-            new SurName(
-                SAMLStringValue::fromString('Doe'),
-            ),
+            Company::fromString('Test Company'),
+            GivenName::fromString('John'),
+            SurName::fromString('Doe'),
             new Extensions(
                 [
                     new Chunk(self::$ext->documentElement),
                 ],
             ),
             [
-                new EmailAddress(
-                    EmailAddressValue::fromString('jdoe@test.company'),
-                ),
-                new EmailAddress(
-                    EmailAddressValue::fromString('john.doe@test.company'),
-                ),
+                EmailAddress::fromString('jdoe@test.company'),
+                EmailAddress::fromString('john.doe@test.company'),
             ],
             [
-                new TelephoneNumber(
-                    SAMLStringValue::fromString('1-234-567-8901'),
-                ),
+                TelephoneNumber::fromString('1-234-567-8901'),
             ],
             [$attr1, $attr2],
         );

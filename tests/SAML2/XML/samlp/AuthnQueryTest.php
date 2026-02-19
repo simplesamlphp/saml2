@@ -70,9 +70,7 @@ final class AuthnQueryTest extends TestCase
             value: SAMLStringValue::fromString('urn:example:subject'),
             Format: SAMLAnyURIValue::fromString(C::NAMEID_UNSPECIFIED),
         );
-        $authnContextDeclRef = new AuthnContextDeclRef(
-            SAMLAnyURIValue::fromString('https://example.org/relative/path/to/document.xml'),
-        );
+        $authnContextDeclRef = AuthnContextDeclRef::fromString('https://example.org/relative/path/to/document.xml');
         $requestedAuthnContext = new RequestedAuthnContext(
             [$authnContextDeclRef],
             AuthnContextComparisonTypeValue::fromEnum(AuthnContextComparisonTypeEnum::Exact),

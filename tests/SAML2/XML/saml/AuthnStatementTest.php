@@ -9,8 +9,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\DomainValue;
-use SimpleSAML\SAML2\Type\EntityIDValue;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils\XPath;
@@ -65,15 +63,11 @@ final class AuthnStatementTest extends TestCase
     {
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef(
-                    SAMLAnyURIValue::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT),
-                ),
+                AuthnContextClassRef::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT),
                 null,
                 null,
                 [
-                    new AuthenticatingAuthority(
-                        EntityIDValue::fromString('https://idp.example.com/SAML2'),
-                    ),
+                    AuthenticatingAuthority::fromString('https://idp.example.com/SAML2'),
                 ],
             ),
             SAMLDateTimeValue::fromString('2020-03-23T23:37:24Z'),
@@ -98,15 +92,11 @@ final class AuthnStatementTest extends TestCase
     {
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef(
-                    SAMLAnyURIValue::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT),
-                ),
+                AuthnContextClassRef::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT),
                 null,
                 null,
                 [
-                    new AuthenticatingAuthority(
-                        EntityIDValue::fromString('https://idp.example.com/SAML2'),
-                    ),
+                    AuthenticatingAuthority::fromString('https://idp.example.com/SAML2'),
                 ],
             ),
             SAMLDateTimeValue::fromString('2020-03-23T23:37:24Z'),

@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Type\EmailAddressValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\EmailAddress;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -53,9 +52,7 @@ final class EmailAddressTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $email = new EmailAddress(
-            EmailAddressValue::fromString('john.doe@example.org'),
-        );
+        $email = EmailAddress::fromString('john.doe@example.org');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -70,9 +67,7 @@ final class EmailAddressTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Expected a value to be a valid e-mail address. Got: "not so valid"');
-        new EmailAddress(
-            EmailAddressValue::fromString('not so valid'),
-        );
+        EmailAddress::fromString('not so valid');
     }
 
 

@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Audience;
@@ -65,18 +64,14 @@ final class ConditionsTest extends TestCase
             [
                 new AudienceRestriction(
                     [
-                        new Audience(
-                            SAMLAnyURIValue::fromString('http://sp.example.com/demo1/metadata.php'),
-                        ),
+                        Audience::fromString('http://sp.example.com/demo1/metadata.php'),
                     ],
                 ),
             ],
             new OneTimeUse(),
             new ProxyRestriction(
                 [
-                    new Audience(
-                        SAMLAnyURIValue::fromString('http://sp.example.com/demo2/metadata.php'),
-                    ),
+                    Audience::fromString('http://sp.example.com/demo2/metadata.php'),
                 ],
                 NonNegativeIntegerValue::fromInteger(2),
             ),

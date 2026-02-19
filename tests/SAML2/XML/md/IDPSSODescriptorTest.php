@@ -120,12 +120,8 @@ final class IDPSSODescriptorTest extends TestCase
                 ),
             ],
             attributeProfile: [
-                new AttributeProfile(
-                    SAMLAnyURIValue::fromString('urn:attribute:profile1'),
-                ),
-                new AttributeProfile(
-                    SAMLAnyURIValue::fromString('urn:attribute:profile2'),
-                ),
+                AttributeProfile::fromString('urn:attribute:profile1'),
+                AttributeProfile::fromString('urn:attribute:profile2'),
             ],
             attribute: [
                 new Attribute(
@@ -149,9 +145,7 @@ final class IDPSSODescriptorTest extends TestCase
             keyDescriptor: [
                 new KeyDescriptor(
                     new KeyInfo([
-                        new KeyName(
-                            SAMLStringValue::fromString('IdentityProvider.com SSO Key'),
-                        ),
+                        KeyName::fromString('IdentityProvider.com SSO Key'),
                     ]),
                     KeyTypesValue::fromEnum(KeyTypesEnum::SIGNING),
                 ),
@@ -182,15 +176,9 @@ final class IDPSSODescriptorTest extends TestCase
                 ),
             ],
             nameIDFormat: [
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_X509_SUBJECT_NAME),
-                ),
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
-                ),
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
-                ),
+                NameIDFormat::fromString(C::NAMEID_X509_SUBJECT_NAME),
+                NameIDFormat::fromString(C::NAMEID_PERSISTENT),
+                NameIDFormat::fromString(C::NAMEID_TRANSIENT),
             ],
         );
 

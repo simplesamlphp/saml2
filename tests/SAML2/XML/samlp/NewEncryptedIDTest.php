@@ -10,7 +10,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\AbstractEncryptedElement;
@@ -25,7 +24,6 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Type\AnyURIValue;
-use SimpleSAML\XMLSchema\Type\Base64BinaryValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
@@ -97,9 +95,7 @@ final class NewEncryptedIDTest extends TestCase
     {
         $ed = new EncryptedData(
             cipherData: new CipherData(
-                new CipherValue(
-                    Base64BinaryValue::fromString('720FAxwOXcv8ast9YvQutUoue+YA2FgLLNaD/FZrWiNexTkPyZ8CWrcf2zZj2zrOwTjQ9KJvzvCuzq4fM51sU1boOakLpz05NonDdMgeWW/eWcOJJfOZs0tYvYc5qZ/R+BzRnJsGG6w2ZmipEi88X/8uA85c'),
-                ),
+                CipherValue::fromString('720FAxwOXcv8ast9YvQutUoue+YA2FgLLNaD/FZrWiNexTkPyZ8CWrcf2zZj2zrOwTjQ9KJvzvCuzq4fM51sU1boOakLpz05NonDdMgeWW/eWcOJJfOZs0tYvYc5qZ/R+BzRnJsGG6w2ZmipEi88X/8uA85c'),
             ),
             type: AnyURIValue::fromString(C::XMLENC_ELEMENT),
             encryptionMethod: new EncryptionMethod(
@@ -108,9 +104,7 @@ final class NewEncryptedIDTest extends TestCase
             keyInfo: new KeyInfo([
                 new EncryptedKey(
                     cipherData: new CipherData(
-                        new CipherValue(
-                            Base64BinaryValue::fromString('he5ZBjtfp/1/Y3PgE/CWspDPADig9vuZ7yZyYXDQ1wA/HBTPCldtL/p6UT5RCAFYUwN6kp3jnHkhK1yMjrI1SMw0n5NEc2wO9N5inQIeQOZ8XD9yD9M5fHvWz2ByNMGlB35RWMnBRHzDi1PRV7Irwcs9WoiODh3i6j2vYXP7cAo='),
-                        ),
+                        CipherValue::fromString('he5ZBjtfp/1/Y3PgE/CWspDPADig9vuZ7yZyYXDQ1wA/HBTPCldtL/p6UT5RCAFYUwN6kp3jnHkhK1yMjrI1SMw0n5NEc2wO9N5inQIeQOZ8XD9yD9M5fHvWz2ByNMGlB35RWMnBRHzDi1PRV7Irwcs9WoiODh3i6j2vYXP7cAo='),
                     ),
                     encryptionMethod: new EncryptionMethod(
                         AnyURIValue::fromString('http://www.w3.org/2009/xmlenc11#rsa-oaep'),
@@ -120,15 +114,11 @@ final class NewEncryptedIDTest extends TestCase
         );
         $ek = new EncryptedKey(
             cipherData: new CipherData(
-                new CipherValue(
-                    Base64BinaryValue::fromString('he5ZBjtfp/1/Y3PgE/CWspDPADig9vuZ7yZyYXDQ1wA/HBTPCldtL/p6UT5RCAFYUwN6kp3jnHkhK1yMjrI1SMw0n5NEc2wO9N5inQIeQOZ8XD9yD9M5fHvWz2ByNMGlB35RWMnBRHzDi1PRV7Irwcs9WoiODh3i6j2vYXP7cAo='),
-                ),
+                CipherValue::fromString('he5ZBjtfp/1/Y3PgE/CWspDPADig9vuZ7yZyYXDQ1wA/HBTPCldtL/p6UT5RCAFYUwN6kp3jnHkhK1yMjrI1SMw0n5NEc2wO9N5inQIeQOZ8XD9yD9M5fHvWz2ByNMGlB35RWMnBRHzDi1PRV7Irwcs9WoiODh3i6j2vYXP7cAo='),
             ),
             id: IDValue::fromString('Encrypted_KEY_ID'),
             recipient: StringValue::fromString(C::ENTITY_SP),
-            carriedKeyName: new CarriedKeyName(
-                StringValue::fromString('Name of the key'),
-            ),
+            carriedKeyName: CarriedKeyName::fromString('Name of the key'),
             encryptionMethod: new EncryptionMethod(
                 AnyURIValue::fromString('http://www.w3.org/2009/xmlenc11#rsa-oaep'),
             ),
@@ -153,9 +143,7 @@ final class NewEncryptedIDTest extends TestCase
     {
         $ed = new EncryptedData(
             cipherData: new CipherData(
-                new CipherValue(
-                    Base64BinaryValue::fromString('iFz/8KASJCLCAHqaAKhZXWOG/TPZlgTxcQ25lTGxdSdEsGYz7cg5lfZAbcN3UITCP9MkJsyjMlRsQouIqBkoPCGZz8NXibDkQ8OUeE7JdkFgKvgUMXawp+uDL4gHR8L7l6SPAmWZU3Hx/Wg9pTJBOpTjwoS0'),
-                ),
+                CipherValue::fromString('iFz/8KASJCLCAHqaAKhZXWOG/TPZlgTxcQ25lTGxdSdEsGYz7cg5lfZAbcN3UITCP9MkJsyjMlRsQouIqBkoPCGZz8NXibDkQ8OUeE7JdkFgKvgUMXawp+uDL4gHR8L7l6SPAmWZU3Hx/Wg9pTJBOpTjwoS0'),
             ),
             encryptionMethod: new EncryptionMethod(
                 AnyURIValue::fromString('http://www.w3.org/2001/04/xmlenc#aes128-cbc'),
@@ -164,9 +152,7 @@ final class NewEncryptedIDTest extends TestCase
             keyInfo: new KeyInfo([
                 new EncryptedKey(
                     cipherData: new CipherData(
-                        new CipherValue(
-                            Base64BinaryValue::fromString('GMhpk09X+quNC/SsnxcDglZU/DCLAu9bMJ5bPcgaBK4s3F1eXciU8hlOYNaskSwP86HmA704NbzSDOHAgN6ckR+iCssxA7XCBjz0hltsgfn5p9Rh8qKtKltiXvxo/xXTcSXXZXNcE0R2KTya0P4DjZvYYgbIls/AH8ZyDV07ntI='),
-                        ),
+                        CipherValue::fromString('GMhpk09X+quNC/SsnxcDglZU/DCLAu9bMJ5bPcgaBK4s3F1eXciU8hlOYNaskSwP86HmA704NbzSDOHAgN6ckR+iCssxA7XCBjz0hltsgfn5p9Rh8qKtKltiXvxo/xXTcSXXZXNcE0R2KTya0P4DjZvYYgbIls/AH8ZyDV07ntI='),
                     ),
                     encryptionMethod: new EncryptionMethod(
                         AnyURIValue::fromString('http://www.w3.org/2009/xmlenc11#rsa-oaep'),
@@ -176,15 +162,11 @@ final class NewEncryptedIDTest extends TestCase
         );
         $ek = new EncryptedKey(
             cipherData: new CipherData(
-                new CipherValue(
-                    Base64BinaryValue::fromString('GMhpk09X+quNC/SsnxcDglZU/DCLAu9bMJ5bPcgaBK4s3F1eXciU8hlOYNaskSwP86HmA704NbzSDOHAgN6ckR+iCssxA7XCBjz0hltsgfn5p9Rh8qKtKltiXvxo/xXTcSXXZXNcE0R2KTya0P4DjZvYYgbIls/AH8ZyDV07ntI='),
-                ),
+                CipherValue::fromString('GMhpk09X+quNC/SsnxcDglZU/DCLAu9bMJ5bPcgaBK4s3F1eXciU8hlOYNaskSwP86HmA704NbzSDOHAgN6ckR+iCssxA7XCBjz0hltsgfn5p9Rh8qKtKltiXvxo/xXTcSXXZXNcE0R2KTya0P4DjZvYYgbIls/AH8ZyDV07ntI='),
             ),
             id: IDValue::fromString('Encrypted_KEY_ID'),
             recipient: StringValue::fromString(C::ENTITY_SP),
-            carriedKeyName: new CarriedKeyName(
-                StringValue::fromString('Name of the key'),
-            ),
+            carriedKeyName: CarriedKeyName::fromString('Name of the key'),
             encryptionMethod: new EncryptionMethod(
                 AnyURIValue::fromString('http://www.w3.org/2001/04/xmlenc#rsa-1_5'),
             ),
@@ -245,9 +227,7 @@ final class NewEncryptedIDTest extends TestCase
         // test a custom BaseID that's registered
         $customId = new CustomBaseID(
             [
-                new Audience(
-                    SAMLAnyURIValue::fromString('urn:some:audience'),
-                ),
+                Audience::fromString('urn:some:audience'),
             ],
             SAMLStringValue::fromString('urn:x-simplesamlphp:namequalifier'),
             SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),

@@ -127,9 +127,7 @@ final class AssertionTest extends TestCase
             condition: [],
             audienceRestriction: [
                 new AudienceRestriction([
-                    new Audience(
-                        EntityIDValue::fromString(C::ENTITY_SP),
-                    ),
+                    Audience::fromString(C::ENTITY_SP),
                 ]),
             ],
         );
@@ -137,9 +135,7 @@ final class AssertionTest extends TestCase
         // Create the AuthnStatement
         $authnStatement = new AuthnStatement(
             authnContext: new AuthnContext(
-                new AuthnContextClassRef(
-                    SAMLAnyURIValue::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT),
-                ),
+                AuthnContextClassRef::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT),
                 null,
                 null,
             ),
@@ -230,8 +226,8 @@ final class AssertionTest extends TestCase
             audienceRestriction: [
                 new AudienceRestriction(
                     [
-                        new Audience(EntityIDValue::fromString(C::ENTITY_SP)),
-                        new Audience(EntityIDValue::fromString(C::ENTITY_OTHER)),
+                        Audience::fromString(C::ENTITY_SP),
+                        Audience::fromString(C::ENTITY_OTHER),
                     ],
                 ),
             ],
@@ -264,20 +260,12 @@ final class AssertionTest extends TestCase
         // Create AuthnStatement
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef(
-                    SAMLAnyURIValue::fromString(C::AUTHNCONTEXT_CLASS_REF_LOA1),
-                ),
+                AuthnContextClassRef::fromString(C::AUTHNCONTEXT_CLASS_REF_LOA1),
                 null,
-                new AuthnContextDeclRef(
-                    SAMLAnyURIValue::fromString('https://example.org/relative/path/to/document.xml'),
-                ),
+                AuthnContextDeclRef::fromString('https://example.org/relative/path/to/document.xml'),
                 [
-                    new AuthenticatingAuthority(
-                        EntityIDValue::fromString(C::ENTITY_IDP),
-                    ),
-                    new AuthenticatingAuthority(
-                        EntityIDValue::fromString(C::ENTITY_OTHER),
-                    ),
+                    AuthenticatingAuthority::fromString(C::ENTITY_IDP),
+                    AuthenticatingAuthority::fromString(C::ENTITY_OTHER),
                 ],
             ),
             SAMLDateTimeValue::fromString('2011-08-31T08:51:04Z'),
@@ -1122,8 +1110,8 @@ XML;
             audienceRestriction: [
                 new AudienceRestriction(
                     [
-                        new Audience(SAMLAnyURIValue::fromString(C::ENTITY_SP)),
-                        new Audience(SAMLAnyURIValue::fromString(C::ENTITY_OTHER)),
+                        Audience::fromString(C::ENTITY_SP),
+                        Audience::fromString(C::ENTITY_OTHER),
                     ],
                 ),
             ],
@@ -1147,9 +1135,7 @@ XML;
         // Create the statements
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef(
-                    SAMLAnyURIValue::fromString(C::AUTHNCONTEXT_CLASS_REF_LOA2),
-                ),
+                AuthnContextClassRef::fromString(C::AUTHNCONTEXT_CLASS_REF_LOA2),
                 null,
                 null,
             ),
@@ -1197,8 +1183,8 @@ XML;
         $conditions = new Conditions(
             audienceRestriction: [
                 new AudienceRestriction([
-                    new Audience(SAMLAnyURIValue::fromString(C::ENTITY_SP)),
-                    new Audience(SAMLAnyURIValue::fromString(C::ENTITY_OTHER)),
+                    Audience::fromString(C::ENTITY_SP),
+                    Audience::fromString(C::ENTITY_OTHER),
                 ]),
             ],
         );
@@ -1228,9 +1214,7 @@ XML;
         // Create the statements
         $authnStatement = new AuthnStatement(
             new AuthnContext(
-                new AuthnContextClassRef(
-                    SAMLAnyURIValue::fromString(C::AUTHNCONTEXT_CLASS_REF_URN),
-                ),
+                AuthnContextClassRef::fromString(C::AUTHNCONTEXT_CLASS_REF_URN),
                 null,
                 null,
             ),

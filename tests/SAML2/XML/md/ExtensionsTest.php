@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\CIDRValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
@@ -107,9 +106,7 @@ final class ExtensionsTest extends TestCase
             SAMLAnyURIValue::fromString('https://example.org/authenticate/sp'),
         );
         $discoHints = new DiscoHints([], [
-            new IPHint(
-                CIDRValue::fromString('127.0.0.0/8'),
-            ),
+            IPHint::fromString('127.0.0.0/8'),
         ]);
         $digestMethod = new DigestMethod(
             SAMLAnyURIValue::fromString(C::DIGEST_SHA256),
@@ -120,9 +117,7 @@ final class ExtensionsTest extends TestCase
             PositiveIntegerValue::fromInteger(4096),
         );
         $republishRequest = new RepublishRequest(
-            new RepublishTarget(
-                SAMLAnyURIValue::fromString('http://edugain.org/'),
-            ),
+            RepublishTarget::fromString('http://edugain.org/'),
         );
 
         $extensions = new Extensions([

@@ -7,7 +7,6 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AttributeProfile;
 use SimpleSAML\Test\SAML2\Constants as C;
@@ -51,9 +50,7 @@ final class AttributeProfileTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attributeProfile = new AttributeProfile(
-            SAMLAnyURIValue::fromString(C::PROFILE_1),
-        );
+        $attributeProfile = AttributeProfile::fromString(C::PROFILE_1);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

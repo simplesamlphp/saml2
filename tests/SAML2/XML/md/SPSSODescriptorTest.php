@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Type\EmailAddressValue;
 use SimpleSAML\SAML2\Type\KeyTypesValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
@@ -162,9 +161,7 @@ final class SPSSODescriptorTest extends TestCase
         ]);
         $kd = new KeyDescriptor(
             new KeyInfo([
-                new KeyName(
-                    StringValue::fromString('ServiceProvider.com SSO Key'),
-                ),
+                KeyName::fromString('ServiceProvider.com SSO Key'),
             ]),
             KeyTypesValue::fromEnum(KeyTypesEnum::SIGNING),
         );
@@ -191,9 +188,7 @@ final class SPSSODescriptorTest extends TestCase
         $contact = new ContactPerson(
             contactType: SAMLStringValue::fromString('other'),
             emailAddress: [
-                new EmailAddress(
-                    EmailAddressValue::fromString('john.doe@test.company'),
-                ),
+                EmailAddress::fromString('john.doe@test.company'),
             ],
         );
         $ars = new ArtifactResolutionService(
@@ -224,9 +219,7 @@ final class SPSSODescriptorTest extends TestCase
             [$slo1, $slo2],
             [$mnids],
             [
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
-                ),
+                NameIDFormat::fromString(C::NAMEID_TRANSIENT),
             ],
         );
 

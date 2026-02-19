@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -49,9 +48,7 @@ final class AuthnContextClassRefTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $authnContextClassRef = new AuthnContextClassRef(
-            SAMLAnyURIValue::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT),
-        );
+        $authnContextClassRef = AuthnContextClassRef::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

@@ -90,12 +90,8 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             SAMLAnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
             [self::$aidrs],
             [
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
-                ),
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
-                ),
+                NameIDFormat::fromString(C::NAMEID_PERSISTENT),
+                NameIDFormat::fromString(C::NAMEID_TRANSIENT),
             ],
             IDValue::fromString('phpunit'),
         );
@@ -119,12 +115,8 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             SAMLAnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
             [self::$aidrs],
             [
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
-                ),
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
-                ),
+                NameIDFormat::fromString(C::NAMEID_PERSISTENT),
+                NameIDFormat::fromString(C::NAMEID_TRANSIENT),
             ],
         );
     }
@@ -156,12 +148,8 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             SAMLAnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
             [self::$aidrs],
             [
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
-                ),
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
-                ),
+                NameIDFormat::fromString(C::NAMEID_PERSISTENT),
+                NameIDFormat::fromString(C::NAMEID_TRANSIENT),
             ],
         );
     }
@@ -180,12 +168,8 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             SAMLAnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
             [self::$aidrs, ''],
             [
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
-                ),
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
-                ),
+                NameIDFormat::fromString(C::NAMEID_PERSISTENT),
+                NameIDFormat::fromString(C::NAMEID_TRANSIENT),
             ],
         );
     }

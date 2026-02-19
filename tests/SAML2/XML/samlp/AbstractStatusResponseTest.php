@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\DomainValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
@@ -122,9 +121,7 @@ final class AbstractStatusResponseTest extends TestCase
             SAMLStringValue::fromString('urn:x-simplesamlphp:issuer'),
         );
 
-        $scope = new Scope(
-            DomainValue::fromString('scope.org'),
-        );
+        $scope = Scope::fromString('scope.org');
 
         $extensions = new Extensions([$scope]);
 

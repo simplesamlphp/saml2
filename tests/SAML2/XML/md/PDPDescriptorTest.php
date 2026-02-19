@@ -90,15 +90,9 @@ final class PDPDescriptorTest extends TestCase
             SAMLAnyURIListValue::fromString(C::NS_SAMLP),
             [self::$assertionIDRequestService],
             [
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_X509_SUBJECT_NAME),
-                ),
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
-                ),
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
-                ),
+                NameIDFormat::fromString(C::NAMEID_X509_SUBJECT_NAME),
+                NameIDFormat::fromString(C::NAMEID_PERSISTENT),
+                NameIDFormat::fromString(C::NAMEID_TRANSIENT),
             ],
             IDValue::fromString('phpunit'),
         );

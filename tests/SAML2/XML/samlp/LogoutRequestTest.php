@@ -85,7 +85,7 @@ final class LogoutRequestTest extends TestCase
             identifier: $nameId,
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             sessionIndexes: [
-                new SessionIndex(SAMLStringValue::fromString('SessionIndexValue')),
+                SessionIndex::fromString('SessionIndexValue'),
             ],
         );
 
@@ -112,8 +112,8 @@ final class LogoutRequestTest extends TestCase
             identifier: $nameId,
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             sessionIndexes: [
-                new SessionIndex(SAMLStringValue::fromString('SessionIndexValue1')),
-                new SessionIndex(SAMLStringValue::fromString('SessionIndexValue2')),
+                SessionIndex::fromString('SessionIndexValue1'),
+                SessionIndex::fromString('SessionIndexValue2'),
             ],
         );
         $logoutRequestElement = $logoutRequest->toXML();
@@ -140,7 +140,7 @@ final class LogoutRequestTest extends TestCase
             identifier: $nameId,
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             sessionIndexes: [
-                new SessionIndex(SAMLStringValue::fromString('SessionIndexValue')),
+                SessionIndex::fromString('SessionIndexValue'),
             ],
         );
 
@@ -427,8 +427,8 @@ XML;
         );
 
         $sessionIndexes = [
-            new SessionIndex(SAMLStringValue::fromString('SessionIndexValue1')),
-            new SessionIndex(SAMLStringValue::fromString('SessionIndexValue2')),
+            SessionIndex::fromString('SessionIndexValue1'),
+            SessionIndex::fromString('SessionIndexValue2'),
         ];
 
         $logoutRequest = new LogoutRequest(

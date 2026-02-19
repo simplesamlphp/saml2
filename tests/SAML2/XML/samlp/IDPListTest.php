@@ -73,9 +73,7 @@ final class IDPListTest extends TestCase
             SAMLStringValue::fromString('testName2'),
             SAMLAnyURIValue::fromString('urn:test:testLoc2'),
         );
-        $getComplete = new GetComplete(
-            SAMLAnyURIValue::fromString('https://some/location'),
-        );
+        $getComplete = GetComplete::fromString('https://some/location');
         $list = new IDPList([$entry1, $entry2], $getComplete);
 
         $this->assertEquals(
