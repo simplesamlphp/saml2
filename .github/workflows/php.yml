@@ -61,15 +61,15 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
 
-      - name: Decide whether to run code coverage or not
+      - name: Run unit tests with coverage
+        if: ${{ matrix.php-versions == '8.3' && matrix.operating-system == 'ubuntu-latest' }}
+        run: |
+          ./vendor/bin/phpunit
+
+      - name: Run unit tests (no coverage)
         if: ${{ matrix.php-versions != '8.3' || matrix.operating-system != 'ubuntu-latest' }}
         run: |
-          echo "NO_COVERAGE=--no-coverage" >> $GITHUB_ENV
-
-      - name: Run unit tests
-        run: |
-          echo $NO_COVERAGE
-          ./vendor/bin/phpunit $NO_COVERAGE
+          ./vendor/bin/phpunit --no-coverage
 
       - name: Save coverage data
         if: ${{ matrix.php-versions == '8.3' && matrix.operating-system == 'ubuntu-latest' }}
