@@ -8,7 +8,7 @@ on:
 
 jobs:
   basic-tests:
-    name: Syntax and unit tests, PHP ${{ matrix.php-versions }}, ${{ matrix.operating-system }}
+    name: Unit tests, PHP ${{ matrix.php-versions }}, ${{ matrix.operating-system }}
     runs-on: ${{ matrix.operating-system }}
     strategy:
       fail-fast: false
@@ -58,9 +58,6 @@ jobs:
 
       - name: Install Composer dependencies
         run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
-
-      - name: Syntax check PHP
-        run: bash vendor/bin/check-syntax-php.sh
 
       - name: Decide whether to run code coverage or not
         if: ${{ matrix.php-versions != '8.3' || matrix.operating-system != 'ubuntu-latest' }}
@@ -115,38 +112,28 @@ jobs:
       - name: Security check for updated dependencies
         uses: symfonycorp/security-checker-action@v5
 
-  sanity-check:
-    name: Sanity checks
-    runs-on: [ubuntu-latest]
+  phplinter:
+    name: 'PHP-Linter'
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.3', '8.4', '8.5']
 
-    steps:
-      - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
-        with:
-          php-version: '8.3'
-          extensions: mbstring, xml
-          coverage: none
+    uses: simplesamlphp/simplesamlphp-test-framework/.github/workflows/reusable_phplinter.yml@v1.11.0
+    with:
+      php-version: ${{ matrix.php-version }}
 
-      - name: Setup problem matchers for PHP
-        run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+  linter:
+    name: 'Linter'
+    strategy:
+      fail-fast: false
 
-      - uses: actions/checkout@v3
-
-      - name: Cache composer dependencies
-        uses: actions/cache@v3
-        with:
-            path: $COMPOSER_CACHE
-            key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-            restore-keys: ${{ runner.os }}-composer-
-
-      - name: Install Composer dependencies
-        run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
-
-      - name: Syntax check YAML / XML / JSON
-        run: |
-          bash vendor/bin/check-syntax-yaml.sh
-          bash vendor/bin/check-syntax-xml.sh
-          bash vendor/bin/check-syntax-json.sh
+    uses: simplesamlphp/simplesamlphp-test-framework/.github/workflows/reusable_linter.yml@v1.11.0
+    with:
+      enable_eslinter: false
+      enable_jsonlinter: true
+      enable_stylelinter: false
+      enable_yamllinter: true
 
   quality:
     name: Quality control
