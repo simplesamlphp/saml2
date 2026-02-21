@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\Certificate;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use SAML2\Configuration\PrivateKey as ConfPrivateKey;
 use SAML2\Certificate\PrivateKey;
 use SAML2\Certificate\PrivateKeyLoader;
@@ -27,12 +29,13 @@ class PrivateKeyLoaderTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group        certificate
-     * @test
      * @dataProvider privateKeyTestProvider
      *
      * @param \SAML2\Configuration\PrivateKey $configuredKey
      * @return void
      */
+    #[Test]
+    #[DataProvider('privateKeyTestProvider')]
     public function loading_a_configured_private_key_returns_a_certificate_private_key(
         \SAML2\Configuration\PrivateKey $configuredKey
     ) : void {
@@ -49,7 +52,7 @@ class PrivateKeyLoaderTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    public function privateKeyTestProvider() : array
+    public static function privateKeyTestProvider() : array
     {
         return [
             'no passphrase'   => [

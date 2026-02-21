@@ -4,16 +4,17 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
+use PHPUnit\Framework\Attributes\Test;
 use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotOnOrAfter;
 use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
 use SAML2\Assertion\Validation\Result;
-use Test\SAML2\ControlledTimeTest;
+use Test\SAML2\ControlledTimeTestCase;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to not contaminate the other
  * tests.
  */
-class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
+class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTestCase
 {
     /**
      * @var \Mockery\MockInterface
@@ -40,12 +41,12 @@ class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
 
     /**
      * @group assertion-validation
-     * @test
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      * @return void
      */
+    #[Test]
     public function timestamp_in_the_past_before_graceperiod_is_not_valid() : void
     {
         $this->subjectConfirmationData->setNotOnOrAfter($this->currentTime - 60);
@@ -62,12 +63,12 @@ class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
 
     /**
      * @group assertion-validation
-     * @test
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      * @return void
      */
+    #[Test]
     public function time_within_graceperiod_is_valid() : void
     {
         $this->subjectConfirmationData->setNotOnOrAfter($this->currentTime - 59);
@@ -83,12 +84,12 @@ class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTest
 
     /**
      * @group assertion-validation
-     * @test
      *
      * @runInSeparateProcess
      * @preserveGlobalState disabled
      * @return void
      */
+    #[Test]
     public function current_time_is_valid() : void
     {
         $this->subjectConfirmationData->setNotOnOrAfter($this->currentTime);

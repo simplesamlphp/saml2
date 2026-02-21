@@ -13,8 +13,10 @@
 
     <rule ref="Generic.NamingConventions.UpperCaseConstantName.ConstantNotUpperCase">
         <exclude-pattern>**/Assertion.php</exclude-pattern>
+        <exclude-pattern>**/AuthnRequest.php</exclude-pattern>
         <exclude-pattern>**/LogoutRequest.php</exclude-pattern>
         <exclude-pattern>**/EncryptedAssertion.php</exclude-pattern>
+        <exclude-pattern>**/StatusResponse.php</exclude-pattern>
     </rule>
 
     <!-- Lines can be a little bit longer before they break the build -->

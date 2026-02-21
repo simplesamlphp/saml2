@@ -10,9 +10,9 @@ use SAML2\Utils;
 use SAML2\XML\saml\Issuer;
 
 /**
- * Class \SAML2\XML\md\issuerShowAllTest
+ * Class \SAML2\XML\md\IssuerXMLShowAllTest
  */
-class IssuerShowAllTest extends \PHPUnit\Framework\TestCase
+class IssuerXMLShowAllTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return void

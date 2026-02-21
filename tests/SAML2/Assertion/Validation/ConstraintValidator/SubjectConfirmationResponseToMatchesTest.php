@@ -6,6 +6,7 @@ namespace SAML2\Assertion\Validation\ConstraintValidator;
 
 use Mockery;
 
+use PHPUnit\Framework\Attributes\Test;
 use SAML2\Assertion\Validation\Result;
 use SAML2\Response;
 use SAML2\XML\saml\SubjectConfirmation;
@@ -45,9 +46,9 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
 
     /**
      * @group assertion-validation
-     * @test
      * @return void
      */
+    #[Test]
     public function when_the_response_responseto_is_null_the_subject_confirmation_is_valid() : void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturnNull();
@@ -66,9 +67,9 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
 
     /**
      * @group assertion-validation
-     * @test
      * @return void
      */
+    #[Test]
     public function when_the_subjectconfirmation_responseto_is_null_the_subjectconfirmation_is_valid() : void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturn('someValue');
@@ -87,9 +88,9 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
 
     /**
      * @group assertion-validation
-     * @test
      * @return void
      */
+    #[Test]
     public function when_the_subjectconfirmation_and_response_responseto_are_null_the_subjectconfirmation_is_valid() : void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturnNull();
@@ -108,9 +109,9 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
 
     /**
      * @group assertion-validation
-     * @test
      * @return void
      */
+    #[Test]
     public function when_the_subjectconfirmation_and_response_responseto_are_equal_the_subjectconfirmation_is_valid() : void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturn('theSameValue');
@@ -129,9 +130,9 @@ class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\
 
     /**
      * @group assertion-validation
-     * @test
      * @return void
      */
+    #[Test]
     public function when_the_subjectconfirmation_and_response_responseto_differ_the_subjectconfirmation_is_invalid() : void
     {
         $this->response->shouldReceive('getInResponseTo')->andReturn('someValue');

@@ -59,16 +59,12 @@ class AttributeValueTest extends \PHPUnit\Framework\TestCase
 
         $expectedStructureDocument = new \DOMDocument();
         $expectedStructureDocument->loadXML(<<<ATTRIBUTEVALUE
-<saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="TheName"
- NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
-  <saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></saml:AttributeValue>
-</saml:Attribute>
+<saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName"><saml:AttributeValue xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string"></saml:AttributeValue></saml:Attribute>
 ATTRIBUTEVALUE
         );
         $expectedStructure = $expectedStructureDocument->documentElement;
 
-        $this->assertEqualXMLStructure($expectedStructure, $returnedStructure);
+        $this->assertEquals($expectedStructure, $returnedStructure);
         $this->assertEquals("", $attribute->getAttributeValue()[0]->getString());
     }
 
@@ -96,20 +92,14 @@ ATTRIBUTEVALUE
 
         $document = DOMDocumentFactory::fromString('<root />');
         $returnedStructure = $attribute->toXML($document->firstChild);
-
         $expectedStructureDocument = new \DOMDocument();
         $expectedStructureDocument->loadXML(<<<ATTRIBUTEXML
-<saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-  Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName">
-  <saml:AttributeValue>
-    <NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">urn:collab:person:surftest.nl:example</NameID>
-  </saml:AttributeValue>
-</saml:Attribute>
+<saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="TheName" NameFormat="TheNameFormat" FriendlyName="TheFriendlyName"><saml:AttributeValue><NameID Format="urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified">urn:collab:person:surftest.nl:example</NameID></saml:AttributeValue></saml:Attribute>
 ATTRIBUTEXML
         );
         $expectedStructure = $expectedStructureDocument->documentElement;
 
-        $this->assertEqualXMLStructure($expectedStructure, $returnedStructure);
+        $this->assertEquals($expectedStructure, $returnedStructure);
         $this->assertEquals("urn:collab:person:surftest.nl:example", $attribute->getAttributeValue()[0]->getString());
     }
 

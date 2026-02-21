@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\Certificate;
 
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 use SAML2\Certificate\Key;
 use SAML2\Certificate\Exception\InvalidKeyUsageException;
 use SAML2\Exception\InvalidArgumentException;
@@ -12,9 +14,9 @@ class KeyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group certificate
-     * @test
      * @return void
      */
+    #[Test]
     public function invalid_key_usage_should_throw_an_exception() : void
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
@@ -25,10 +27,10 @@ class KeyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group certificate
-     * @dataProvider functionProvider
-     * @test
      * @return void
      */
+    #[DataProvider('functionProvider')]
+    #[Test]
     public function invalid_offset_type_should_throw_an_exception($function, $params) : void
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
@@ -39,9 +41,9 @@ class KeyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group certificate
-     * @test
      * @return void
      */
+    #[Test]
     public function assert_that_key_usage_check_works_correctly() : void
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
@@ -56,9 +58,9 @@ class KeyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group certificate
-     * @test
      * @return void
      */
+    #[Test]
     public function assert_that_offsetget_works_correctly() : void
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
@@ -68,9 +70,9 @@ class KeyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group certificate
-     * @test
      * @return void
      */
+    #[Test]
     public function assert_that_offsetunset_unsets_offset() : void
     {
         $key = new Key([Key::USAGE_SIGNING => true, Key::USAGE_ENCRYPTION => true]);
@@ -88,7 +90,7 @@ class KeyTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public function functionProvider() : array
+    public static function functionProvider() : array
     {
         return [
             'offsetGet' => ['offsetGet', [0]],

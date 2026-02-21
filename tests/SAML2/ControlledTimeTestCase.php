@@ -13,7 +13,7 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  * @runTestsInSeparateProcesses
  * @package simplesamlphp\saml2
  */
-abstract class ControlledTimeTest extends MockeryTestCase
+abstract class ControlledTimeTestCase extends MockeryTestCase
 {
     /** @var int */
     protected $currentTime = 1;

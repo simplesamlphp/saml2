@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
+use PHPUnit\Framework\Attributes\Test;
 use \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationRecipientMatches;
 use \SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationResponseToMatches;
 use \SAML2\Assertion\Validation\Result;
@@ -38,9 +39,9 @@ class SubjectConfirmationRecipientMathchesTest extends \Mockery\Adapter\Phpunit\
 
     /**
      * @group assertion-validation
-     * @test
      * @return void
      */
+    #[Test]
     public function when_the_subject_confirmation_recipient_differs_from_the_destination_the_sc_is_invalid() : void
     {
         $this->subjectConfirmation->getSubjectConfirmationData()->setRecipient('someDestination');
@@ -59,9 +60,9 @@ class SubjectConfirmationRecipientMathchesTest extends \Mockery\Adapter\Phpunit\
 
     /**
      * @group assertion-validation
-     * @test
      * @return void
      */
+    #[Test]
     public function when_the_subject_confirmation_recipient_equals_the_destination_the_sc_is_invalid() : void
     {
         $this->subjectConfirmation->getSubjectConfirmationData()->setRecipient('theSameDestination');

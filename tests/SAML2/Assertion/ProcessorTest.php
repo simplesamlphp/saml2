@@ -6,6 +6,7 @@ namespace SAML2\Assertion;
 
 use Mockery as m;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @runTestsInSeparateProcesses
@@ -44,8 +45,8 @@ class ProcessorTest extends MockeryTestCase
     }
 
     /**
-     * @test
      */
+    #[Test]
     public function processor_correctly_encrypts_assertions(): void
     {
         $testData = [
@@ -70,8 +71,8 @@ class ProcessorTest extends MockeryTestCase
     }
 
     /**
-     * @test
      */
+    #[Test]
     public function unsuported_assertions_are_rejected(): void
     {
         $this->expectException('\SAML2\Assertion\Exception\InvalidAssertionException');

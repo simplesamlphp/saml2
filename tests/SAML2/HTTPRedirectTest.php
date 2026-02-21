@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2;
 
 use Exception;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Error\Warning;
 use SAML2\DOMDocumentFactory;
 use SAML2\HTTPRedirect;
@@ -205,8 +206,8 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * Construct an authnrequest and send it.
      * @return void
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testSendAuthnrequest() : void
     {
         $request = new AuthnRequest();
@@ -220,8 +221,8 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      * Construct an authnresponse and send it.
      * Also test setting a relaystate and destination for the response.
      * @return void
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testSendAuthnResponse() : void
     {
         $issuer = new Issuer();
@@ -240,8 +241,8 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * Test setting destination in the HR binding.
      * @return void
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testSendAuthnResponseBespokeDestination() : void
     {
         $issuer = new Issuer();

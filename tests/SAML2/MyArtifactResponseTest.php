@@ -10,7 +10,7 @@ use SAML2\AuthnRequest;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
 
-class ArtifactResponseTest extends \PHPUnit\Framework\TestCase
+class MyArtifactResponseTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @return void

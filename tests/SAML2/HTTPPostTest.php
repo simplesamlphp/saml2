@@ -4,8 +4,9 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-use PHPUnit_Framework_Error_Warning;
-use PHPUnit_Framework_TestCase;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
+use PHPUnit\Framework\Error\Warning;
+use PHPUnit\Framework\TestCase;
 use SimpleSAML\Utils\HTTP;
 
 use SAML2\AuthnRequest;
@@ -86,8 +87,8 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * Construct an authnrequest and send it to the destination set in the binding.
      * @return void
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testSendAuthnRequestWithDestinationInBinding() : void
     {
         $request = new AuthnRequest();
@@ -100,8 +101,8 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * Construct an authnrequest with a destination set and try to send it.
      * @return void
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testSendAuthnRequestWithDestination() : void
     {
         $request = new AuthnRequest();
@@ -115,8 +116,8 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      * Construct an authnresponse and send it.
      * Also test setting a relaystate and destination for the response.
      * @return void
-     * @doesNotPerformAssertions
      */
+    #[DoesNotPerformAssertions]
     public function testSendAuthnResponse() : void
     {
         $issuer  = new Issuer();

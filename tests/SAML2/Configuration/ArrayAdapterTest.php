@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace SAML2\Configuration;
 
+use PHPUnit\Framework\Attributes\Test;
 use SAML2\Configuration\ArrayAdapter;
 
 class ArrayAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group configuration
-     * @test
      * @return void
      */
+    #[Test]
     public function set_configuration_can_be_queried() : void
     {
         $configuration = new ArrayAdapter(['foo' => 'bar']);
@@ -25,9 +26,9 @@ class ArrayAdapterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group configuration
-     * @test
      * @return void
      */
+    #[Test]
     public function default_values_are_returned_for_unavailable_configuration() : void
     {
         $configuration = ['foo' => 'bar'];

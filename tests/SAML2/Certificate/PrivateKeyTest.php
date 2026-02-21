@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Certificate;
 
+use PHPUnit\Framework\Attributes\Test;
 use SAML2\CertificatesMock;
 use SAML2\Certificate\PrivateKey;
 
@@ -11,9 +12,9 @@ class PrivateKeyTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
     /**
      * @group certificate
-     * @test
      * @return void
      */
+    #[Test]
     public function test_create_from_key() : void
     {
         $key = CertificatesMock::getPlainPrivateKey();

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Signature;
 
+use PHPUnit\Framework\Attributes\Test;
 use SAML2\CertificatesMock;
 use SAML2\Certificate\Key;
 use SAML2\Certificate\KeyCollection;
@@ -34,10 +35,10 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
 
     /**
-     * @test
      * @group signature
      * @return void
      */
+    #[Test]
     public function it_cannot_validate_if_no_keys_can_be_loaded() : void
     {
         $keyloaderMock = $this->prepareKeyLoader(new KeyCollection());
@@ -48,10 +49,10 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
 
     /**
-     * @test
      * @group signature
      * @return void
      */
+    #[Test]
     public function it_will_validate_when_keys_can_be_loaded() : void
     {
         $keyloaderMock = $this->prepareKeyLoader(new KeyCollection([1, 2]));
@@ -62,10 +63,10 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
 
     /**
-     * @test
      * @group signature
      * @return void
      */
+    #[Test]
     public function non_X509_keys_are_not_used_for_validation() : void
     {
         $controlledCollection = new KeyCollection([
@@ -86,10 +87,10 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
 
     /**
-     * @test
      * @group signature
      * @return void
      */
+    #[Test]
     public function signed_message_with_valid_signature_is_validated_correctly() : void
     {
         $pattern = Certificate::CERTIFICATE_PATTERN;

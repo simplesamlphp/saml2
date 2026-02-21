@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use SAML2\AttributeQuery;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -200,9 +201,9 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
     /**
      * Test xsDateTime format validity
      *
-     * @dataProvider xsDateTimes
      * @return void
      */
+    #[DataProvider('xsDateTimes')]
     public function testXsDateTimeToTimestamp($shouldPass, $time, $expectedTs = null) : void
     {
         try {
@@ -218,7 +219,7 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function xsDateTimes() : array
+    public static function xsDateTimes() : array
     {
         return [
             [true, '2015-01-01T00:00:00Z', 1420070400],

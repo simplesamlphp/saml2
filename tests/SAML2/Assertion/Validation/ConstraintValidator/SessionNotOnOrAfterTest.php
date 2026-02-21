@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
+use PHPUnit\Framework\Attributes\Test;
 use SAML2\Assertion\Validation\ConstraintValidator\SessionNotOnOrAfter;
 use SAML2\Assertion\Validation\Result;
-use Test\SAML2\ControlledTimeTest;
+use Test\SAML2\ControlledTimeTestCase;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
@@ -14,7 +15,7 @@ use Test\SAML2\ControlledTimeTest;
  *
  * @runTestsInSeparateProcesses
  */
-class SessionNotOnOrAfterTest extends ControlledTimeTest
+class SessionNotOnOrAfterTest extends ControlledTimeTestCase
 {
     /**
      * @var \Mockery\MockInterface
@@ -34,9 +35,9 @@ class SessionNotOnOrAfterTest extends ControlledTimeTest
 
     /**
      * @group assertion-validation
-     * @test
      * @return void
      */
+    #[Test]
     public function timestamp_in_the_past_before_graceperiod_is_not_valid() : void
     {
         $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime - 60);
@@ -53,8 +54,8 @@ class SessionNotOnOrAfterTest extends ControlledTimeTest
 
     /**
      * @group assertion-validation
-     * @test
      */
+    #[Test]
     public function time_within_graceperiod_is_valid()
     {
         $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime - 59);
@@ -70,9 +71,9 @@ class SessionNotOnOrAfterTest extends ControlledTimeTest
 
     /**
      * @group assertion-validation
-     * @test
      * @return void
      */
+    #[Test]
     public function current_time_is_valid() : void
     {
         $this->assertion->shouldReceive('getSessionNotOnOrAfter')->andReturn($this->currentTime);

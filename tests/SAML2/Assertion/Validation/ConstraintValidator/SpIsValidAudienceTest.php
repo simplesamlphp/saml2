@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
+use PHPUnit\Framework\Attributes\Test;
 use SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience;
 use SAML2\Assertion\Validation\Result;
 
@@ -37,9 +38,9 @@ class SpIsValidAudienceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
     /**
      * @group assertion-validation
-     * @test
      * @return void
      */
+    #[Test]
     public function when_no_valid_audiences_are_given_the_assertion_is_valid() : void
     {
         $this->assertion->shouldReceive('getValidAudiences')->andReturn(null);
@@ -57,9 +58,9 @@ class SpIsValidAudienceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
     /**
      * @group assertion-validation
-     * @test
      * @return void
      */
+    #[Test]
     public function if_the_sp_entity_id_is_not_in_the_valid_audiences_the_assertion_is_invalid() : void
     {
         $this->assertion->shouldReceive('getValidAudiences')->andReturn(['someEntityId']);
@@ -78,9 +79,9 @@ class SpIsValidAudienceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
     /**
      * @group assertion-validation
-     * @test
      * @return void
      */
+    #[Test]
     public function the_assertion_is_valid_when_the_current_sp_entity_id_is_a_valid_audience() : void
     {
         $this->assertion->shouldReceive('getValidAudiences')->andReturn(['foo', 'bar', 'validEntityId', 'baz']);

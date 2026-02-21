@@ -156,6 +156,7 @@ XML;
     {
         $response = new Response();
         $response->setIssueInstant(1453323439);
+        $response->setID('phpunit');
         $response->setStatus([
             'Code' => 'OurStatusCode'
         ]);
@@ -165,20 +166,11 @@ XML;
 
         $expectedStructureDocument = new \DOMDocument();
         $expectedStructureDocument->loadXML(<<<STATUSXML
-<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
-                xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
-                ID="123"
-                Version="2.0"
-                IssueInstant="2016-01-20T20:57:19Z"
-                InResponseTo="aabb12234">
-  <samlp:Status>
-    <samlp:StatusCode Value="OurStatusCode"/>
-  </samlp:Status>
-</samlp:Response>
+<samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="phpunit" Version="2.0" IssueInstant="2016-01-20T20:57:19Z" InResponseTo="aabb12234"><samlp:Status><samlp:StatusCode Value="OurStatusCode"/></samlp:Status></samlp:Response>
 STATUSXML
        );
        $expectedStructure = $expectedStructureDocument->documentElement;
-       $this->assertEqualXMLStructure($expectedStructure, $responseElement);
+       $this->assertEquals($expectedStructure, $responseElement);
     }
 
 
