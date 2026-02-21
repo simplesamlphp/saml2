@@ -31,7 +31,7 @@ abstract class Binding
      * @throws \SAML2\Exception\Protocol\UnsupportedBindingException
      * @return \SAML2\Binding The binding.
      */
-    public static function getBinding(string $urn) : Binding
+    public static function getBinding(string $urn): Binding
     {
         switch ($urn) {
             case Constants::BINDING_HTTP_POST:
@@ -48,7 +48,7 @@ abstract class Binding
             case Constants::BINDING_PAOS:
                 return new SOAP();
             default:
-                throw new UnsupportedBindingException('Unsupported binding: '.var_export($urn, true));
+                throw new UnsupportedBindingException('Unsupported binding: ' . var_export($urn, true));
         }
     }
 
@@ -64,7 +64,7 @@ abstract class Binding
      * @throws \SAML2\Exception\Protocol\UnsupportedBindingException
      * @return \SAML2\Binding The binding.
      */
-    public static function getCurrentBinding() : Binding
+    public static function getCurrentBinding(): Binding
     {
         switch ($_SERVER['REQUEST_METHOD']) {
             case 'GET':
@@ -94,8 +94,11 @@ abstract class Binding
                      */
                     ($contentType === 'text/xml' || $contentType === 'application/xml')
                     // See paragraph 3.2.3 of Binding for SAML2 (OASIS)
-                    || (isset($_SERVER['HTTP_SOAPACTION']) && $_SERVER['HTTP_SOAPACTION'] === 'http://www.oasis-open.org/committees/security'))
-                {
+                    || (
+                        isset($_SERVER['HTTP_SOAPACTION'])
+                        && $_SERVER['HTTP_SOAPACTION'] === 'http://www.oasis-open.org/committees/security'
+                    )
+                ) {
                     return new SOAP();
                 }
                 break;
@@ -103,15 +106,15 @@ abstract class Binding
 
         $logger = Utils::getContainer()->getLogger();
         $logger->warning('Unable to find the SAML 2 binding used for this request.');
-        $logger->warning('Request method: '.var_export($_SERVER['REQUEST_METHOD'], true));
+        $logger->warning('Request method: ' . var_export($_SERVER['REQUEST_METHOD'], true));
         if (!empty($_GET)) {
-            $logger->warning("GET parameters: '".implode("', '", array_map('addslashes', array_keys($_GET)))."'");
+            $logger->warning("GET parameters: '" . implode("', '", array_map('addslashes', array_keys($_GET))) . "'");
         }
         if (!empty($_POST)) {
-            $logger->warning("POST parameters: '".implode("', '", array_map('addslashes', array_keys($_POST)))."'");
+            $logger->warning("POST parameters: '" . implode("', '", array_map('addslashes', array_keys($_POST))) . "'");
         }
         if (isset($_SERVER['CONTENT_TYPE'])) {
-            $logger->warning('Content-Type: '.var_export($_SERVER['CONTENT_TYPE'], true));
+            $logger->warning('Content-Type: ' . var_export($_SERVER['CONTENT_TYPE'], true));
         }
 
         throw new UnsupportedBindingException('Unable to find the SAML 2 binding used for this request.');
@@ -123,7 +126,7 @@ abstract class Binding
      *
      * @return string|null $destination The destination the message will be delivered to.
      */
-    public function getDestination() : ?string
+    public function getDestination(): ?string
     {
         return $this->destination;
     }
@@ -135,9 +138,8 @@ abstract class Binding
      * Set to null to use the destination set in the message.
      *
      * @param string|null $destination The destination the message should be delivered to.
-     * @return void
      */
-    public function setDestination(?string $destination = null) : void
+    public function setDestination(?string $destination = null): void
     {
         $this->destination = $destination;
     }
@@ -150,9 +152,8 @@ abstract class Binding
      * The message will be delivered to the destination set in the message.
      *
      * @param \SAML2\Message $message The message which should be sent.
-     * @return void
      */
-    abstract public function send(Message $message) : void;
+    abstract public function send(Message $message): void;
 
 
     /**

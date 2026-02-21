@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use DOMDocument;
+use DOMElement;
+use Exception;
 use Webmozart\Assert\Assert;
 
 /**
@@ -19,14 +22,13 @@ class HTTPPost extends Binding
      * Note: This function never returns.
      *
      * @param \SAML2\Message $message The message we should send.
-     * @return void
      */
-    public function send(Message $message) : void
+    public function send(Message $message): void
     {
         if ($this->destination === null) {
             $destination = $message->getDestination();
             if ($destination === null) {
-                throw new \Exception('Cannot send message, no destination set.');
+                throw new Exception('Cannot send message, no destination set.');
             }
         } else {
             $destination = $this->destination;
@@ -72,19 +74,19 @@ class HTTPPost extends Binding
         } elseif (array_key_exists('SAMLResponse', $_POST)) {
             $msgStr = $_POST['SAMLResponse'];
         } else {
-            throw new \Exception('Missing SAMLRequest or SAMLResponse parameter.');
+            throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
 
         $msgStr = base64_decode($msgStr, true);
 
-        $xml = new \DOMDocument();
+        $xml = new DOMDocument();
         $xml->loadXML($msgStr);
         $msgStr = $xml->saveXML();
 
         $document = DOMDocumentFactory::fromString($msgStr);
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
-        if (!$document->firstChild instanceof \DOMElement) {
-            throw new \Exception('Malformed SAML message received.');
+        if (!$document->firstChild instanceof DOMElement) {
+            throw new Exception('Malformed SAML message received.');
         }
 
         $msg = Message::fromXML($document->firstChild);

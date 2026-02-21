@@ -11,10 +11,9 @@ interface SubjectConfirmationConstraintValidator
     /**
      * @param SubjectConfirmation $subjectConfirmation
      * @param Result $result
-     * @return void
      */
     public function validate(
         SubjectConfirmation $subjectConfirmation,
         Result $result
-    ) : void;
+    ): void;
 }

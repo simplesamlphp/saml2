@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMElement;
+use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
-
 use SAML2\XML\saml\NameID;
 
 /**
@@ -84,9 +84,9 @@ class LogoutRequest extends Request
         /** @var \DOMElement[] $nameId */
         $nameId = Utils::xpQuery($xml, './saml_assertion:NameID | ./saml_assertion:EncryptedID/xenc:EncryptedData');
         if (empty($nameId)) {
-            throw new \Exception('Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.');
+            throw new Exception('Missing <saml:NameID> or <saml:EncryptedID> in <samlp:LogoutRequest>.');
         } elseif (count($nameId) > 1) {
-            throw new \Exception('More than one <saml:NameID> or <saml:EncryptedD> in <samlp:LogoutRequest>.');
+            throw new Exception('More than one <saml:NameID> or <saml:EncryptedD> in <samlp:LogoutRequest>.');
         }
         if ($nameId[0]->localName === 'EncryptedData') {
             /* The NameID element is encrypted. */
@@ -108,7 +108,7 @@ class LogoutRequest extends Request
      *
      * @return int|null The expiration time of this request.
      */
-    public function getNotOnOrAfter() : ?int
+    public function getNotOnOrAfter(): ?int
     {
         return $this->notOnOrAfter;
     }
@@ -118,9 +118,8 @@ class LogoutRequest extends Request
      * Set the expiration time of this request.
      *
      * @param int|null $notOnOrAfter The expiration time of this request.
-     * @return void
      */
-    public function setNotOnOrAfter(?int $notOnOrAfter = null) : void
+    public function setNotOnOrAfter(?int $notOnOrAfter = null): void
     {
         $this->notOnOrAfter = $notOnOrAfter;
     }
@@ -153,7 +152,7 @@ class LogoutRequest extends Request
      *
      * @return bool True if the NameId is encrypted, false if not.
      */
-    public function isNameIdEncrypted() : bool
+    public function isNameIdEncrypted(): bool
     {
         if ($this->encryptedNameId !== null) {
             return true;
@@ -167,12 +166,11 @@ class LogoutRequest extends Request
      * Encrypt the NameID in the LogoutRequest.
      *
      * @param XMLSecurityKey $key The encryption key.
-     * @return void
      */
-    public function encryptNameId(XMLSecurityKey $key) : void
+    public function encryptNameId(XMLSecurityKey $key): void
     {
         if ($this->nameId === null) {
-            throw new \Exception('Cannot encrypt NameID without a NameID set.');
+            throw new Exception('Cannot encrypt NameID without a NameID set.');
         }
         /* First create a XML representation of the NameID. */
         $doc = DOMDocumentFactory::create();
@@ -207,9 +205,8 @@ class LogoutRequest extends Request
      *
      * @param XMLSecurityKey $key The decryption key.
      * @param array $blacklist Blacklisted decryption algorithms.
-     * @return void
      */
-    public function decryptNameId(XMLSecurityKey $key, array $blacklist = []) : void
+    public function decryptNameId(XMLSecurityKey $key, array $blacklist = []): void
     {
         if ($this->encryptedNameId === null) {
             /* No NameID to decrypt. */
@@ -229,10 +226,10 @@ class LogoutRequest extends Request
      * @throws \Exception
      * @return \SAML2\XML\saml\NameID|null The name identifier of the session that should be terminated.
      */
-    public function getNameId() : ?NameID
+    public function getNameId(): ?NameID
     {
         if ($this->encryptedNameId !== null) {
-            throw new \Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
+            throw new Exception('Attempted to retrieve encrypted NameID without decrypting it first.');
         }
 
         return $this->nameId;
@@ -243,9 +240,8 @@ class LogoutRequest extends Request
      * Set the name identifier of the session that should be terminated.
      *
      * @param \SAML2\XML\saml\NameID $nameId The name identifier of the session that should be terminated.
-     * @return void
      */
-    public function setNameId(NameID $nameId) : void
+    public function setNameId(NameID $nameId): void
     {
         $this->nameId = $nameId;
     }
@@ -256,7 +252,7 @@ class LogoutRequest extends Request
      *
      * @return array The SessionIndexes, or an empty array if all sessions should be terminated.
      */
-    public function getSessionIndexes() : array
+    public function getSessionIndexes(): array
     {
         return $this->sessionIndexes;
     }
@@ -266,9 +262,8 @@ class LogoutRequest extends Request
      * Set the SessionIndexes of the sessions that should be terminated.
      *
      * @param array $sessionIndexes The SessionIndexes, or an empty array if all sessions should be terminated.
-     * @return void
      */
-    public function setSessionIndexes(array $sessionIndexes) : void
+    public function setSessionIndexes(array $sessionIndexes): void
     {
         $this->sessionIndexes = $sessionIndexes;
     }
@@ -279,7 +274,7 @@ class LogoutRequest extends Request
      *
      * @return string|null The sesion index of the session that should be terminated.
      */
-    public function getSessionIndex() : ?string
+    public function getSessionIndex(): ?string
     {
         if (empty($this->sessionIndexes)) {
             return null;
@@ -293,9 +288,8 @@ class LogoutRequest extends Request
      * Set the sesion index of the session that should be terminated.
      *
      * @param string|null $sessionIndex The sesion index of the session that should be terminated.
-     * @return void
      */
-    public function setSessionIndex(?string $sessionIndex = null) : void
+    public function setSessionIndex(?string $sessionIndex = null): void
     {
         if (is_null($sessionIndex)) {
             $this->sessionIndexes = [];
@@ -310,10 +304,10 @@ class LogoutRequest extends Request
      *
      * @return \DOMElement This logout request.
      */
-    public function toUnsignedXML() : DOMElement
+    public function toUnsignedXML(): DOMElement
     {
         if ($this->encryptedNameId === null && $this->nameId === null) {
-            throw new \Exception('Cannot convert LogoutRequest to XML without a NameID set.');
+            throw new Exception('Cannot convert LogoutRequest to XML without a NameID set.');
         }
 
         $root = parent::toUnsignedXML();
@@ -329,7 +323,7 @@ class LogoutRequest extends Request
         if ($this->encryptedNameId === null) {
             $this->nameId->toXML($root);
         } else {
-            $eid = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:'.'EncryptedID');
+            $eid = $root->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:' . 'EncryptedID');
             $root->appendChild($eid);
             $eid->appendChild($root->ownerDocument->importNode($this->encryptedNameId, true));
         }

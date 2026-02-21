@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\Assertion;
 
 use Psr\Log\LoggerInterface;
-
 use SAML2\Assertion;
 use SAML2\Assertion\Exception\NotDecryptedException;
 use SAML2\Certificate\PrivateKeyLoader;
@@ -59,10 +58,8 @@ class Decrypter
 
     /**
      * Allows for checking whether either the SP or the IdP requires assertion encryption
-     *
-     * @return bool
      */
-    public function isEncryptionRequired() : bool
+    public function isEncryptionRequired(): bool
     {
         return $this->identityProvider->isAssertionEncryptionRequired()
             || $this->serviceProvider->isAssertionEncryptionRequired();
@@ -71,10 +68,9 @@ class Decrypter
 
     /**
      * @param \SAML2\EncryptedAssertion $assertion
-     *
      * @return \SAML2\Assertion
      */
-    public function decrypt(EncryptedAssertion $assertion) : Assertion
+    public function decrypt(EncryptedAssertion $assertion): Assertion
     {
         $decryptionKeys = $this->privateKeyLoader->loadDecryptionKeys($this->identityProvider, $this->serviceProvider);
         $blacklistedKeys = $this->identityProvider->getBlacklistedAlgorithms();

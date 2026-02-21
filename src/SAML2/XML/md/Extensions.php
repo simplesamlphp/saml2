@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\alg\Common as ALG;
@@ -43,7 +42,7 @@ class Extensions
      *          \SAML2\XML\alg\SigningMethod|
      *          \SAML2\XML\Chunk)[]  Array of extensions.
      */
-    public static function getList(DOMElement $parent) : array
+    public static function getList(DOMElement $parent): array
     {
         $ret = [];
         $supported = [
@@ -72,8 +71,10 @@ class Extensions
 
         /** @var \DOMElement $node */
         foreach (Utils::xpQuery($parent, './saml_metadata:Extensions/*') as $node) {
-            if (!is_null($node->namespaceURI) && array_key_exists($node->namespaceURI, $supported) &&
-                array_key_exists($node->localName, $supported[$node->namespaceURI])
+            if (
+                !is_null($node->namespaceURI)
+                && array_key_exists($node->namespaceURI, $supported)
+                && array_key_exists($node->localName, $supported[$node->namespaceURI])
             ) {
                 $ret[] = new $supported[$node->namespaceURI][$node->localName]($node);
             } else {
@@ -90,9 +91,8 @@ class Extensions
      *
      * @param \DOMElement $parent The element we should add the extensions to.
      * @param \SAML2\XML\Chunk[] $extensions List of extension objects.
-     * @return void
      */
-    public static function addList(DOMElement $parent, array $extensions) : void
+    public static function addList(DOMElement $parent, array $extensions): void
     {
         if (empty($extensions)) {
             return;

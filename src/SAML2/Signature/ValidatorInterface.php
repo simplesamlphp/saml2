@@ -14,11 +14,9 @@ interface ValidatorInterface
      *
      * @param \SAML2\SignedElement             $signedElement
      * @param \SAML2\Configuration\CertificateProvider $configuration
-     *
-     * @return bool
      */
     public function hasValidSignature(
         SignedElement $signedElement,
         CertificateProvider $configuration
-    ) : bool;
+    ): bool;
 }

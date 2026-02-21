@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace SAML2\XML\mdattr;
 
 use DOMElement;
-use Webmozart\Assert\Assert;
-
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\saml\Attribute;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for handling the EntityAttributes metadata extension.
@@ -22,7 +21,7 @@ class EntityAttributes
     /**
      * The namespace used for the EntityAttributes extension.
      */
-    const NS = 'urn:oasis:names:tc:SAML:metadata:attribute';
+    public const NS = 'urn:oasis:names:tc:SAML:metadata:attribute';
 
     /**
      * Array with child elements.
@@ -61,7 +60,7 @@ class EntityAttributes
      *
      * @return (\SAML2\XML\Chunk|\SAML2\XML\saml\Attribute)[]
      */
-    public function getChildren() : array
+    public function getChildren(): array
     {
         return $this->children;
     }
@@ -71,9 +70,8 @@ class EntityAttributes
      * Set the value of the childen-property
      *
      * @param array $children
-     * @return void
      */
-    public function setChildren(array $children) : void
+    public function setChildren(array $children): void
     {
         $this->children = $children;
     }
@@ -83,9 +81,8 @@ class EntityAttributes
      * Add the value to the children-property
      *
      * @param \SAML2\XML\Chunk|\SAML2\XML\saml\Attribute $child
-     * @return void
      */
-    public function addChildren($child) : void
+    public function addChildren($child): void
     {
         Assert::isInstanceOfAny($child, [Chunk::class, Attribute::class]);
         $this->children[] = $child;
@@ -96,9 +93,8 @@ class EntityAttributes
      * Convert this EntityAttributes to XML.
      *
      * @param \DOMElement $parent The element we should append to.
-     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         $doc = $parent->ownerDocument;
 

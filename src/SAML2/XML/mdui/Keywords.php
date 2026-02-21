@@ -59,10 +59,8 @@ class Keywords
 
     /**
      * Collect the value of the lang-property
-     *
-     * @return string
      */
-    public function getLanguage() : string
+    public function getLanguage(): string
     {
         return $this->lang;
     }
@@ -70,11 +68,8 @@ class Keywords
 
     /**
      * Set the value of the lang-property
-     *
-     * @param string $lang
-     * @return void
      */
-    public function setLanguage(string $lang) : void
+    public function setLanguage(string $lang): void
     {
         $this->lang = $lang;
     }
@@ -85,7 +80,7 @@ class Keywords
      *
      * @return string[]
      */
-    public function getKeywords() : array
+    public function getKeywords(): array
     {
         return $this->Keywords;
     }
@@ -95,9 +90,8 @@ class Keywords
      * Set the value of the Keywords-property
      *
      * @param string[] $keywords
-     * @return void
      */
-    public function setKeywords(array $keywords) : void
+    public function setKeywords(array $keywords): void
     {
         $this->Keywords = $keywords;
     }
@@ -107,9 +101,8 @@ class Keywords
      * Add the value to the Keywords-property
      *
      * @param string $keyword
-     * @return void
      */
-    public function addKeyword(string $keyword) : void
+    public function addKeyword(string $keyword): void
     {
         $this->Keywords[] = $keyword;
     }
@@ -120,9 +113,8 @@ class Keywords
      *
      * @param \DOMElement $parent The element we should append this Keywords to.
      * @throws \Exception
-     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         Assert::notEmpty($this->lang, "Cannot convert Keywords to XML without a language set.");
 
@@ -135,7 +127,7 @@ class Keywords
             if (strpos($keyword, "+") !== false) {
                 throw new \Exception('Keywords may not contain a "+" character.');
             }
-            $value .= str_replace(' ', '+', $keyword).' ';
+            $value .= str_replace(' ', '+', $keyword) . ' ';
         }
         $value = rtrim($value);
         $e->appendChild($doc->createTextNode($value));

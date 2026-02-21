@@ -20,18 +20,16 @@ class Result
     /**
      * @param string $message
      * @throws InvalidArgumentException
-     * @return void
      */
-    public function addError(string $message) : void
+    public function addError(string $message): void
     {
         $this->errors[] = $message;
     }
 
 
     /**
-     * @return bool
      */
-    public function isValid() : bool
+    public function isValid(): bool
     {
         return empty($this->errors);
     }
@@ -40,7 +38,7 @@ class Result
     /**
      * @return array
      */
-    public function getErrors() : array
+    public function getErrors(): array
     {
         return $this->errors;
     }

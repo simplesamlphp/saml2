@@ -25,9 +25,9 @@ use SOAP_1_1;
  */
 class SOAPClient
 {
-    const START_SOAP_ENVELOPE = '<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">\
+    public const START_SOAP_ENVELOPE = '<soap-env:Envelope xmlns:soap-env="http://schemas.xmlsoap.org/soap/envelope/">\
         <soap-env:Header/><soap-env:Body>';
-    const END_SOAP_ENVELOPE = '</soap-env:Body></soap-env:Envelope>';
+    public const END_SOAP_ENVELOPE = '</soap-env:Body></soap-env:Envelope>';
 
 
     /**
@@ -41,7 +41,7 @@ class SOAPClient
      *
      * @psalm-suppress UndefinedClass
      */
-    public function send(Message $msg, Configuration $srcMetadata, ?Configuration $dstMetadata = null) : Message
+    public function send(Message $msg, Configuration $srcMetadata, ?Configuration $dstMetadata = null): Message
     {
         $issuer = $msg->getIssuer();
 
@@ -73,8 +73,8 @@ class SOAPClient
             $privateKey = $cryptoUtils->loadPrivateKey($srcMetadata);
             $publicKey = $cryptoUtils->loadPublicKey($srcMetadata);
             if ($privateKey !== null && $publicKey !== null && isset($publicKey['PEM'])) {
-                $keyCertData = $privateKey['PEM'].$publicKey['PEM'];
-                $file = $container->getTempDir().'/'.sha1($keyCertData).'.pem';
+                $keyCertData = $privateKey['PEM'] . $publicKey['PEM'];
+                $file = $container->getTempDir() . '/' . sha1($keyCertData) . '.pem';
                 if (!file_exists($file)) {
                     $container->writeFile($file, $keyCertData);
                 }
@@ -93,11 +93,11 @@ class SOAPClient
                 if ($key['type'] !== 'X509Certificate') {
                     continue;
                 }
-                $certData .= "-----BEGIN CERTIFICATE-----\n".
-                    chunk_split($key['X509Certificate'], 64).
+                $certData .= "-----BEGIN CERTIFICATE-----\n" .
+                    chunk_split($key['X509Certificate'], 64) .
                     "-----END CERTIFICATE-----\n";
             }
-            $peerCertFile = $container->getTempDir().'/'.sha1($certData).'.pem';
+            $peerCertFile = $container->getTempDir() . '/' . sha1($certData) . '.pem';
             if (!file_exists($peerCertFile)) {
                 $container->writeFile($peerCertFile, $certData);
             }
@@ -131,7 +131,7 @@ class SOAPClient
 
         // Add soap-envelopes
         $request = $msg->toSignedXML();
-        $request = self::START_SOAP_ENVELOPE.$request->ownerDocument->saveXML($request).self::END_SOAP_ENVELOPE;
+        $request = self::START_SOAP_ENVELOPE . $request->ownerDocument->saveXML($request) . self::END_SOAP_ENVELOPE;
 
         $container->debugMessage($request, 'out');
 
@@ -184,9 +184,8 @@ class SOAPClient
      *
      * @param \SAML2\Message $msg The message we should add a validator to.
      * @param resource $context The stream context.
-     * @return void
      */
-    private static function addSSLValidator(Message $msg, $context) : void
+    private static function addSSLValidator(Message $msg, $context): void
     {
         $options = stream_context_get_options($context);
         if (!isset($options['ssl']['peer_certificate'])) {
@@ -224,9 +223,8 @@ class SOAPClient
      * @param string $data The public key that was used on the connection.
      * @param XMLSecurityKey $key The key we should validate the certificate against.
      * @throws \Exception
-     * @return void
      */
-    public static function validateSSL(string $data, XMLSecurityKey $key) : void
+    public static function validateSSL(string $data, XMLSecurityKey $key): void
     {
         $container = ContainerSingleton::getInstance();
         /** @psalm-suppress PossiblyNullArgument */
@@ -253,9 +251,8 @@ class SOAPClient
      * Extracts the SOAP Fault from SOAP message
      *
      * @param \DOMDocument $soapMessage Soap response needs to be type DOMDocument
-     * @return string|null $soapfaultstring
      */
-    private function getSOAPFault(DOMDocument $soapMessage) : ?string
+    private function getSOAPFault(DOMDocument $soapMessage): ?string
     {
         /** @psalm-suppress PossiblyNullArgument */
         $soapFault = Utils::xpQuery($soapMessage->firstChild, '/soap-env:Envelope/soap-env:Body/soap-env:Fault');

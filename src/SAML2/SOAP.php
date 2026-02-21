@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMDocument;
-
 use SAML2\Exception\Protocol\UnsupportedBindingException;
 use SAML2\XML\ecp\Response as ECPResponse;
 
@@ -32,7 +31,7 @@ class SOAP extends Binding
 SOAP;
         $envelope = sprintf($envelope, Constants::NS_SOAP);
 
-        $doc = new DOMDocument;
+        $doc = new DOMDocument();
         $doc->loadXML($envelope);
 
         // In the Artifact Resolution profile, this will be an ArtifactResolve
@@ -75,9 +74,8 @@ SOAP;
      * Note: This function never returns.
      *
      * @param \SAML2\Message $message The message we should send.
-     * @return void
      */
-    public function send(Message $message) : void
+    public function send(Message $message): void
     {
         header('Content-Type: text/xml', true);
 
@@ -98,7 +96,7 @@ SOAP;
      * @throws \Exception If unable to receive the message
      * @return \SAML2\Message The received message.
      */
-    public function receive() : Message
+    public function receive(): Message
     {
         $postText = $this->getInputStream();
 

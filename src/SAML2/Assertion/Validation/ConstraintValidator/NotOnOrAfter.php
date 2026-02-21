@@ -15,9 +15,8 @@ class NotOnOrAfter implements
     /**
      * @param Assertion $assertion
      * @param Result $result
-     * @return void
      */
-    public function validate(Assertion $assertion, Result $result) : void
+    public function validate(Assertion $assertion, Result $result): void
     {
         $notValidOnOrAfterTimestamp = $assertion->getNotOnOrAfter();
         if (($notValidOnOrAfterTimestamp !== null) && ($notValidOnOrAfterTimestamp <= (Temporal::getTime() - 60))) {

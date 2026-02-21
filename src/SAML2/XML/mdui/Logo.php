@@ -75,10 +75,8 @@ class Logo
 
     /**
      * Collect the value of the url-property
-     *
-     * @return string
      */
-    public function getUrl() : string
+    public function getUrl(): string
     {
         return $this->url;
     }
@@ -86,11 +84,8 @@ class Logo
 
     /**
      * Set the value of the url-property
-     *
-     * @param string $url
-     * @return void
      */
-    public function setUrl(string $url) : void
+    public function setUrl(string $url): void
     {
         if (!filter_var(trim($url), FILTER_VALIDATE_URL) && substr(trim($url), 0, 5) !== 'data:') {
             throw new \InvalidArgumentException('mdui:Logo is not a valid URL.');
@@ -101,10 +96,8 @@ class Logo
 
     /**
      * Collect the value of the lang-property
-     *
-     * @return string|null
      */
-    public function getLanguage() : ?string
+    public function getLanguage(): ?string
     {
         return $this->lang;
     }
@@ -112,11 +105,8 @@ class Logo
 
     /**
      * Set the value of the lang-property
-     *
-     * @param string $lang
-     * @return void
      */
-    public function setLanguage(string $lang) : void
+    public function setLanguage(string $lang): void
     {
         $this->lang = $lang;
     }
@@ -124,10 +114,8 @@ class Logo
 
     /**
      * Collect the value of the height-property
-     *
-     * @return int
      */
-    public function getHeight() : int
+    public function getHeight(): int
     {
         return $this->height;
     }
@@ -135,11 +123,8 @@ class Logo
 
     /**
      * Set the value of the height-property
-     *
-     * @param int $height
-     * @return void
      */
-    public function setHeight(int $height) : void
+    public function setHeight(int $height): void
     {
         $this->height = $height;
     }
@@ -147,10 +132,8 @@ class Logo
 
     /**
      * Collect the value of the width-property
-     *
-     * @return int
      */
-    public function getWidth() : int
+    public function getWidth(): int
     {
         return $this->width;
     }
@@ -158,11 +141,8 @@ class Logo
 
     /**
      * Set the value of the width-property
-     *
-     * @param int $width
-     * @return void
      */
-    public function setWidth(int $width) : void
+    public function setWidth(int $width): void
     {
         $this->width = $width;
     }
@@ -172,9 +152,8 @@ class Logo
      * Convert this Logo to XML.
      *
      * @param \DOMElement $parent The element we should append this Logo to.
-     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         $doc = $parent->ownerDocument;
 

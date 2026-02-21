@@ -52,18 +52,16 @@ class ArtifactResponse extends StatusResponse
 
     /**
      * @param \DOMElement|null $any
-     * @return void
      */
-    public function setAny(?DOMElement $any = null) : void
+    public function setAny(?DOMElement $any = null): void
     {
         $this->any = $any;
     }
 
 
     /**
-     * @return \DOMElement|null
      */
-    public function getAny() : ?DOMElement
+    public function getAny(): ?DOMElement
     {
         return $this->any;
     }
@@ -74,7 +72,7 @@ class ArtifactResponse extends StatusResponse
      *
      * @return \DOMElement This response.
      */
-    public function toUnsignedXML() : DOMElement
+    public function toUnsignedXML(): DOMElement
     {
         $root = parent::toUnsignedXML();
         if (isset($this->any)) {

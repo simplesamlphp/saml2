@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\Compat;
 
-use \Psr\Log\LoggerInterface;
+use Psr\Log\LoggerInterface;
 
 abstract class AbstractContainer
 {
@@ -12,14 +12,13 @@ abstract class AbstractContainer
      * Get a PSR-3 compatible logger.
      * @return \Psr\Log\LoggerInterface
      */
-    abstract public function getLogger() : LoggerInterface;
+    abstract public function getLogger(): LoggerInterface;
 
 
     /**
      * Generate a random identifier for identifying SAML2 documents.
-     * @return string
      */
-    abstract public function generateId() : string;
+    abstract public function generateId(): string;
 
 
     /**
@@ -32,31 +31,25 @@ abstract class AbstractContainer
      * - **decrypt** XML that was just decrypted
      *
      * @param \DOMElement|string $message
-     * @param string $type
-     * @return void
      */
-    abstract public function debugMessage($message, string $type) : void;
+    abstract public function debugMessage($message, string $type): void;
 
 
 
     /**
      * Trigger the user to perform a GET to the given URL with the given data.
      *
-     * @param string $url
      * @param array $data
-     * @return void
      */
-    abstract public function redirect(string $url, array $data = []) : void;
+    abstract public function redirect(string $url, array $data = []): void;
 
 
     /**
      * Trigger the user to perform a POST to the given URL with the given data.
      *
-     * @param string $url
      * @param array $data
-     * @return void
      */
-    abstract public function postRedirect(string $url, array $data = []) : void;
+    abstract public function postRedirect(string $url, array $data = []): void;
 
 
     /**
@@ -66,7 +59,7 @@ abstract class AbstractContainer
      * to the current user.
      * @return string Path to a temporary directory, without a trailing directory separator.
      */
-    abstract public function getTempDir() : string;
+    abstract public function getTempDir(): string;
 
 
     /**
@@ -78,7 +71,6 @@ abstract class AbstractContainer
      * @param string $filename The path to the file we want to write to.
      * @param string $data The data we should write to the file.
      * @param int $mode The permissions to apply to the file. Defaults to 0600.
-     * @return void
      */
-    abstract public function writeFile(string $filename, string $data, ?int $mode = null) : void;
+    abstract public function writeFile(string $filename, string $data, ?int $mode = null): void;
 }

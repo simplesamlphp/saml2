@@ -14,8 +14,10 @@ use SAML2\Exception\InvalidArgumentException;
 class Key implements \ArrayAccess
 {
     // Possible key usages
-    const USAGE_SIGNING = 'signing';
-    const USAGE_ENCRYPTION = 'encryption';
+    public const USAGE_SIGNING = 'signing';
+
+    public const USAGE_ENCRYPTION = 'encryption';
+
 
     /**
      * @var array
@@ -37,11 +39,8 @@ class Key implements \ArrayAccess
 
     /**
      * Whether or not the key is configured to be used for usage given
-     *
-     * @param string $usage
-     * @return bool
      */
-    public function canBeUsedFor(string $usage) : bool
+    public function canBeUsedFor(string $usage): bool
     {
         if (!in_array($usage, static::getValidKeyUsages(), true)) {
             throw new InvalidKeyUsageException($usage);
@@ -55,7 +54,7 @@ class Key implements \ArrayAccess
      * Returns the list of valid key usage options
      * @return array
      */
-    public static function getValidKeyUsages() : array
+    public static function getValidKeyUsages(): array
     {
         return [
             self::USAGE_ENCRYPTION,
@@ -67,11 +66,10 @@ class Key implements \ArrayAccess
     /**
      * @param mixed $offset
      * @throws InvalidArgumentException
-     * @return bool
      *
      * Type hint not possible due to upstream method signature
      */
-    public function offsetExists($offset) : bool
+    public function offsetExists($offset): bool
     {
         if (!is_string($offset)) {
             throw InvalidArgumentException::invalidType('string', $offset);
@@ -101,9 +99,8 @@ class Key implements \ArrayAccess
      * @param mixed $offset
      * @param mixed $value
      * @throws InvalidArgumentException
-     * @return void
      */
-    public function offsetSet($offset, $value) : void
+    public function offsetSet($offset, $value): void
     {
         if (!is_string($offset)) {
             throw InvalidArgumentException::invalidType('string', $offset);
@@ -115,11 +112,10 @@ class Key implements \ArrayAccess
     /**
      * @param mixed $offset
      * @throws InvalidArgumentException
-     * @return void
      *
      * Type hint not possible due to upstream method signature
      */
-    public function offsetUnset($offset) : void
+    public function offsetUnset($offset): void
     {
         if (!is_string($offset)) {
             throw InvalidArgumentException::invalidType('string', $offset);

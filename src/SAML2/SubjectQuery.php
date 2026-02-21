@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2;
 
 use DOMElement;
-
 use SAML2\XML\saml\NameID;
 
 /**
@@ -52,9 +51,8 @@ abstract class SubjectQuery extends Request
      *
      * @param \DOMElement $xml The SubjectQuery XML element.
      * @throws \Exception
-     * @return void
      */
-    private function parseSubject(\DOMElement $xml) : void
+    private function parseSubject(\DOMElement $xml): void
     {
         /** @var \DOMElement[] $subject */
         $subject = Utils::xpQuery($xml, './saml_assertion:Subject');
@@ -80,7 +78,7 @@ abstract class SubjectQuery extends Request
      *
      * @return \SAML2\XML\saml\NameID|null The name identifier of the assertion.
      */
-    public function getNameId() : ?NameID
+    public function getNameId(): ?NameID
     {
         return $this->nameId;
     }
@@ -90,9 +88,8 @@ abstract class SubjectQuery extends Request
      * Set the NameId of the subject in the query.
      *
      * @param \SAML2\XML\saml\NameID|null $nameId The name identifier of the assertion.
-     * @return void
      */
-    public function setNameId(?NameID $nameId = null) : void
+    public function setNameId(?NameID $nameId = null): void
     {
         $this->nameId = $nameId;
     }
@@ -103,7 +100,7 @@ abstract class SubjectQuery extends Request
      *
      * @return \DOMElement This subject query.
      */
-    public function toUnsignedXML() : DOMElement
+    public function toUnsignedXML(): DOMElement
     {
         if ($this->nameId === null) {
             throw new \Exception('Cannot convert SubjectQuery to XML without a NameID set.');

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-
 use SAML2\Utils;
 
 /**
@@ -45,7 +44,7 @@ class IndexedEndpointType extends EndpointType
         }
 
         if (!$xml->hasAttribute('index')) {
-            throw new \Exception('Missing index on '.$xml->tagName);
+            throw new \Exception('Missing index on ' . $xml->tagName);
         }
         $this->index = intval($xml->getAttribute('index'));
 
@@ -55,10 +54,8 @@ class IndexedEndpointType extends EndpointType
 
     /**
      * Collect the value of the index property.
-     *
-     * @return int
      */
-    public function getIndex() : int
+    public function getIndex(): int
     {
         return $this->index;
     }
@@ -66,11 +63,8 @@ class IndexedEndpointType extends EndpointType
 
     /**
      * Set the value of the index property.
-     *
-     * @param int $index
-     * @return void
      */
-    public function setIndex(int $index) : void
+    public function setIndex(int $index): void
     {
         $this->index = $index;
     }
@@ -78,10 +72,8 @@ class IndexedEndpointType extends EndpointType
 
     /**
      * Collect the value of the isDefault property.
-     *
-     * @return bool|null
      */
-    public function getIsDefault() : ?bool
+    public function getIsDefault(): ?bool
     {
         return $this->isDefault;
     }
@@ -89,11 +81,8 @@ class IndexedEndpointType extends EndpointType
 
     /**
      * Set the value of the isDefault property.
-     *
-     * @param bool|null $flag
-     * @return void
      */
-    public function setIsDefault(?bool $flag = null) : void
+    public function setIsDefault(?bool $flag = null): void
     {
         $this->isDefault = $flag;
     }
@@ -105,9 +94,8 @@ class IndexedEndpointType extends EndpointType
      * @param \DOMElement $parent The element we should append this endpoint to.
      * @param string $name The name of the element we should create.
      * @param string $namespace The namesapce of the element we should create.
-     * @return \DOMElement
      */
-    protected function toXMLInternal(DOMElement $parent, string $namespace, string $name) : DOMElement
+    protected function toXMLInternal(DOMElement $parent, string $namespace, string $name): DOMElement
     {
         $e = parent::toXMLInternal($parent, $namespace, $name);
         $e->setAttribute('index', strval($this->index));

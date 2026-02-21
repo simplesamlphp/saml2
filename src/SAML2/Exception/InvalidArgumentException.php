@@ -14,7 +14,7 @@ class InvalidArgumentException extends BuiltinInvalidArgumentException implement
      *
      * @return \SAML2\Exception\InvalidArgumentException
      */
-    public static function invalidType(string $expected, $parameter) : InvalidArgumentException
+    public static function invalidType(string $expected, $parameter): InvalidArgumentException
     {
         $message = sprintf(
             'Invalid Argument type: "%s" expected, "%s" given',

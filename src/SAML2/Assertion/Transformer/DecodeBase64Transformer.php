@@ -20,9 +20,8 @@ class DecodeBase64Transformer implements
 
     /**
      * @param IdentityProvider $identityProvider
-     * @return void
      */
-    public function setIdentityProvider(IdentityProvider $identityProvider) : void
+    public function setIdentityProvider(IdentityProvider $identityProvider): void
     {
         $this->identityProvider = $identityProvider;
     }
@@ -32,7 +31,7 @@ class DecodeBase64Transformer implements
      * @param Assertion $assertion
      * @return Assertion
      */
-    public function transform(Assertion $assertion) : Assertion
+    public function transform(Assertion $assertion): Assertion
     {
         if (!$this->identityProvider->hasBase64EncodedAttributes()) {
             return $assertion;
@@ -50,10 +49,9 @@ class DecodeBase64Transformer implements
 
 
     /**
-     * @param string $value
      * @return array
      */
-    private function decodeValue(string $value) : array
+    private function decodeValue(string $value): array
     {
         $elements = explode('_', $value);
         return array_map('base64_decode', $elements);

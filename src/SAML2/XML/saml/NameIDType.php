@@ -1,4 +1,5 @@
 <?php
+
 /**
  * SAML NameIDType abstract data type.
  *
@@ -11,12 +12,12 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
+use JsonSerializable;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use Serializable;
-use JsonSerializable;
 
-abstract class NameIDType implements Serializable, \JsonSerializable
+abstract class NameIDType implements Serializable, JsonSerializable
 {
     use IDNameQualifiersTrait;
 
@@ -92,10 +93,8 @@ abstract class NameIDType implements Serializable, \JsonSerializable
 
     /**
      * Collect the value of the Format-property
-     *
-     * @return string|null
      */
-    public function getFormat() : ?string
+    public function getFormat(): ?string
     {
         return $this->Format;
     }
@@ -103,11 +102,8 @@ abstract class NameIDType implements Serializable, \JsonSerializable
 
     /**
      * Set the value of the Format-property
-     *
-     * @param string|null $format
-     * @return void
      */
-    public function setFormat(?string $format = null) : void
+    public function setFormat(?string $format = null): void
     {
         $this->Format = $format;
     }
@@ -115,10 +111,8 @@ abstract class NameIDType implements Serializable, \JsonSerializable
 
     /**
      * Collect the value of the value-property
-     *
-     * @return string
      */
-    public function getValue() : string
+    public function getValue(): string
     {
         return $this->value;
     }
@@ -126,11 +120,8 @@ abstract class NameIDType implements Serializable, \JsonSerializable
 
     /**
      * Set the value of the value-property
-     * @param string $value
-     *
-     * @return void
      */
-    public function setValue(string $value) : void
+    public function setValue(string $value): void
     {
         $this->value = $value;
     }
@@ -138,10 +129,8 @@ abstract class NameIDType implements Serializable, \JsonSerializable
 
     /**
      * Collect the value of the SPProvidedID-property
-     *
-     * @return string|null
      */
-    public function getSPProvidedID() : ?string
+    public function getSPProvidedID(): ?string
     {
         return $this->SPProvidedID;
     }
@@ -149,11 +138,8 @@ abstract class NameIDType implements Serializable, \JsonSerializable
 
     /**
      * Set the value of the SPProvidedID-property
-     *
-     * @param string|null $spProvidedID
-     * @return void
      */
-    public function setSPProvidedID(?string $spProvidedID = null) : void
+    public function setSPProvidedID(?string $spProvidedID = null): void
     {
         $this->SPProvidedID = $spProvidedID;
     }
@@ -165,7 +151,7 @@ abstract class NameIDType implements Serializable, \JsonSerializable
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this NameIDType.
      */
-    public function toXML(?DOMElement $parent = null) : DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         if ($parent === null) {
             $parent = DOMDocumentFactory::create();
@@ -204,7 +190,7 @@ abstract class NameIDType implements Serializable, \JsonSerializable
      *
      * @return string The NameID serialized.
      */
-    public function serialize() : string
+    public function serialize(): string
     {
         return serialize([
             'NameQualifier' => $this->NameQualifier,
@@ -221,11 +207,10 @@ abstract class NameIDType implements Serializable, \JsonSerializable
      * Un-serialize this NameID.
      *
      * @param string $serialized The serialized NameID.
-     * @return void
      *
      * Type hint not possible due to upstream method signature
      */
-    public function unserialize($serialized) : void
+    public function unserialize($serialized): void
     {
         $unserialized = unserialize($serialized);
         foreach ($unserialized as $k => $v) {

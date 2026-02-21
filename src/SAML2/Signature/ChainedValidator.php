@@ -19,11 +19,9 @@ interface ChainedValidator extends ValidatorInterface
      *
      * @param \SAML2\SignedElement $signedElement
      * @param \SAML2\Configuration\CertificateProvider $configuration
-     *
-     * @return bool
      */
     public function canValidate(
         SignedElement $signedElement,
         CertificateProvider $configuration
-    ) : bool;
+    ): bool;
 }

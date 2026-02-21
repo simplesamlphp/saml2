@@ -102,7 +102,7 @@ abstract class StatusResponse extends Message
      *
      * @return bool true if the status code is success, false if not.
      */
-    public function isSuccess() : bool
+    public function isSuccess(): bool
     {
         Assert::keyExists($this->status, "Code");
 
@@ -115,7 +115,7 @@ abstract class StatusResponse extends Message
      *
      * @return string|null The ID of the request.
      */
-    public function getInResponseTo() : ?string
+    public function getInResponseTo(): ?string
     {
         return $this->inResponseTo;
     }
@@ -125,9 +125,8 @@ abstract class StatusResponse extends Message
      * Set the ID of the request this is a response to.
      *
      * @param string|null $inResponseTo The ID of the request.
-     * @return void
      */
-    public function setInResponseTo(?string $inResponseTo = null) : void
+    public function setInResponseTo(?string $inResponseTo = null): void
     {
         $this->inResponseTo = $inResponseTo;
     }
@@ -138,7 +137,7 @@ abstract class StatusResponse extends Message
      *
      * @return array The status code.
      */
-    public function getStatus() : array
+    public function getStatus(): array
     {
         return $this->status;
     }
@@ -148,9 +147,8 @@ abstract class StatusResponse extends Message
      * Set the status code.
      *
      * @param array $status The status code.
-     * @return void
      */
-    public function setStatus(array $status) : void
+    public function setStatus(array $status): void
     {
         Assert::keyExists($status, "Code", 'Cannot set status without a Code key in the array.');
 
@@ -169,7 +167,7 @@ abstract class StatusResponse extends Message
      *
      * @return \DOMElement This status response.
      */
-    public function toUnsignedXML() : DOMElement
+    public function toUnsignedXML(): DOMElement
     {
         $root = parent::toUnsignedXML();
 

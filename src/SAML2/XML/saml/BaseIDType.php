@@ -1,13 +1,13 @@
 <?php
 
-declare(strict_types=1);
-
 /**
  * Base class corresponding to the BaseID element.
  *
  * @author Jaime Pérez Crespo, UNINETT AS <jaime.perez@uninett.no>
  * @package simplesamlphp/saml2
  */
+
+declare(strict_types=1);
 
 namespace SAML2\XML\saml;
 
@@ -57,7 +57,7 @@ abstract class BaseIDType
      * @param \DOMElement $parent The element we are converting to XML.
      * @return \DOMElement The XML element after adding the data corresponding to this BaseID.
      */
-    public function toXML(?DOMElement $parent = null) : DOMElement
+    public function toXML(?DOMElement $parent = null): DOMElement
     {
         if ($parent === null) {
             $parent = DOMDocumentFactory::create();

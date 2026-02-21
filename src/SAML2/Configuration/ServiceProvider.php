@@ -21,18 +21,16 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
 
 
     /**
-     * @return null|string
      */
-    public function getCertificateData() : ?string
+    public function getCertificateData(): ?string
     {
         return $this->get('certificateData');
     }
 
 
     /**
-     * @return null|string
      */
-    public function getCertificateFile() : ?string
+    public function getCertificateFile(): ?string
     {
         return $this->get('certificateFile');
     }
@@ -48,35 +46,30 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
 
 
     /**
-     * @return string|null
      */
-    public function getEntityId() : ?string
+    public function getEntityId(): ?string
     {
         return $this->get('entityId');
     }
 
 
     /**
-     * @return null|bool
      */
-    public function isAssertionEncryptionRequired() : ?bool
+    public function isAssertionEncryptionRequired(): ?bool
     {
         return $this->get('assertionEncryptionEnabled');
     }
 
 
     /**
-     * @return null|string
      */
-    public function getSharedKey() : ?string
+    public function getSharedKey(): ?string
     {
         return $this->get('sharedKey');
     }
 
 
     /**
-     * @param string $name
-     * @param bool $required
      * @return mixed|null
      */
     public function getPrivateKey(string $name, ?bool $required = null)
@@ -110,7 +103,7 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
     /**
      * @return array
      */
-    public function getBlacklistedAlgorithms() : array
+    public function getBlacklistedAlgorithms(): array
     {
         return $this->get('blacklistedEncryptionAlgorithms', [XMLSecurityKey::RSA_1_5]);
     }

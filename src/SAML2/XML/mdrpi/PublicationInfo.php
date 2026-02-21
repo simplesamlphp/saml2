@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace SAML2\XML\mdrpi;
 
 use DOMElement;
-use Webmozart\Assert\Assert;
-
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class for handling the mdrpi:PublicationInfo element.
@@ -79,10 +78,8 @@ class PublicationInfo
 
     /**
      * Collect the value of the publisher-property
-     *
-     * @return string
      */
-    public function getPublisher() : string
+    public function getPublisher(): string
     {
         return $this->publisher;
     }
@@ -90,10 +87,8 @@ class PublicationInfo
 
     /**
      * Collect the value of the creationInstant-property
-     *
-     * @return int|null
      */
-    public function getCreationInstant() : ?int
+    public function getCreationInstant(): ?int
     {
         return $this->creationInstant;
     }
@@ -101,10 +96,8 @@ class PublicationInfo
 
     /**
      * Collect the value of the publicationId-property
-     *
-     * @return string|null
      */
-    public function getPublicationId() : ?string
+    public function getPublicationId(): ?string
     {
         return $this->publicationId;
     }
@@ -115,7 +108,7 @@ class PublicationInfo
      *
      * @return array
      */
-    public function getUsagePolicy() : array
+    public function getUsagePolicy(): array
     {
         return $this->UsagePolicy;
     }
@@ -123,11 +116,8 @@ class PublicationInfo
 
     /**
      * Set the value of the publisher-property
-     *
-     * @param string $publisher
-     * @return void
      */
-    public function setPublisher(string $publisher) : void
+    public function setPublisher(string $publisher): void
     {
         $this->publisher = $publisher;
     }
@@ -135,11 +125,8 @@ class PublicationInfo
 
     /**
      * Set the value of the creationInstant-property
-     *
-     * @param int|null $creationInstant
-     * @return void
      */
-    public function setCreationInstant(?int $creationInstant = null) : void
+    public function setCreationInstant(?int $creationInstant = null): void
     {
         $this->creationInstant = $creationInstant;
     }
@@ -147,11 +134,8 @@ class PublicationInfo
 
     /**
      * Set the value of the publicationId-property
-     *
-     * @param string|null $publicationId
-     * @return void
      */
-    public function setPublicationId(?string $publicationId = null) : void
+    public function setPublicationId(?string $publicationId = null): void
     {
         $this->publicationId = $publicationId;
     }
@@ -161,9 +145,8 @@ class PublicationInfo
      * Set the value of the UsagePolicy-property
      *
      * @param array $usagePolicy
-     * @return void
      */
-    public function setUsagePolicy(array $usagePolicy) : void
+    public function setUsagePolicy(array $usagePolicy): void
     {
         $this->UsagePolicy = $usagePolicy;
     }
@@ -173,9 +156,8 @@ class PublicationInfo
      * Convert this element to XML.
      *
      * @param \DOMElement $parent The element we should append to.
-     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         Assert::notEmpty($this->publisher, "Cannot convert PublicationInfo to XML without a publisher set.");
 

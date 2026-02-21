@@ -10,8 +10,7 @@ interface Transformer
 {
     /**
      * @param \SAML2\Assertion $assertion
-     *
      * @return \SAML2\Assertion
      */
-    public function transform(Assertion $assertion) : Assertion;
+    public function transform(Assertion $assertion): Assertion;
 }

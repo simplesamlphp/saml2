@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-
 use SAML2\Utils;
 
 /**
@@ -78,10 +77,8 @@ class SPSSODescriptor extends SSODescriptorType
 
     /**
      * Collect the value of the AuthnRequestsSigned-property
-     *
-     * @return bool|null
      */
-    public function getAuthnRequestsSigned() : ?bool
+    public function getAuthnRequestsSigned(): ?bool
     {
         return $this->AuthnRequestsSigned;
     }
@@ -89,11 +86,8 @@ class SPSSODescriptor extends SSODescriptorType
 
     /**
      * Set the value of the AuthnRequestsSigned-property
-     *
-     * @param bool|null $flag
-     * @return void
      */
-    public function setAuthnRequestsSigned(?bool $flag = null) : void
+    public function setAuthnRequestsSigned(?bool $flag = null): void
     {
         $this->AuthnRequestsSigned = $flag;
     }
@@ -101,10 +95,8 @@ class SPSSODescriptor extends SSODescriptorType
 
     /**
      * Collect the value of the WantAssertionsSigned-property
-     *
-     * @return bool|null
      */
-    public function wantAssertionsSigned() : ?bool
+    public function wantAssertionsSigned(): ?bool
     {
         return $this->WantAssertionsSigned;
     }
@@ -112,11 +104,8 @@ class SPSSODescriptor extends SSODescriptorType
 
     /**
      * Set the value of the WantAssertionsSigned-property
-     *
-     * @param bool|null $flag
-     * @return void
      */
-    public function setWantAssertionsSigned(?bool $flag = null) : void
+    public function setWantAssertionsSigned(?bool $flag = null): void
     {
         $this->WantAssertionsSigned = $flag;
     }
@@ -127,7 +116,7 @@ class SPSSODescriptor extends SSODescriptorType
      *
      * @return array
      */
-    public function getAssertionConsumerService() : array
+    public function getAssertionConsumerService(): array
     {
         return $this->AssertionConsumerService;
     }
@@ -137,9 +126,8 @@ class SPSSODescriptor extends SSODescriptorType
      * Set the value of the AssertionConsumerService-property
      *
      * @param array $acs
-     * @return void
      */
-    public function setAssertionConsumerService(array $acs) : void
+    public function setAssertionConsumerService(array $acs): void
     {
         $this->AssertionConsumerService = $acs;
     }
@@ -149,9 +137,8 @@ class SPSSODescriptor extends SSODescriptorType
      * Add the value to the AssertionConsumerService-property
      *
      * @param \SAML2\XML\md\IndexedEndpointType $acs
-     * @return void
      */
-    public function addAssertionConsumerService(IndexedEndpointType $acs) : void
+    public function addAssertionConsumerService(IndexedEndpointType $acs): void
     {
         $this->AssertionConsumerService[] = $acs;
     }
@@ -162,7 +149,7 @@ class SPSSODescriptor extends SSODescriptorType
      *
      * @return array
      */
-    public function getAttributeConsumingService() : array
+    public function getAttributeConsumingService(): array
     {
         return $this->AttributeConsumingService;
     }
@@ -172,9 +159,8 @@ class SPSSODescriptor extends SSODescriptorType
      * Add the value to the AttributeConsumingService-property
      *
      * @param \SAML2\XML\md\AttributeConsumingService $acs
-     * @return void
      */
-    public function addAttributeConsumingService(AttributeConsumingService $acs) : void
+    public function addAttributeConsumingService(AttributeConsumingService $acs): void
     {
         $this->AttributeConsumingService[] = $acs;
     }
@@ -184,9 +170,8 @@ class SPSSODescriptor extends SSODescriptorType
      * Set the value of the AttributeConsumingService-property
      *
      * @param array $acs
-     * @return void
      */
-    public function setAttributeConsumingService(array $acs) : void
+    public function setAttributeConsumingService(array $acs): void
     {
         $this->AttributeConsumingService = $acs;
     }
@@ -196,9 +181,8 @@ class SPSSODescriptor extends SSODescriptorType
      * Add this SPSSODescriptor to an EntityDescriptor.
      *
      * @param \DOMElement $parent The EntityDescriptor we should append this SPSSODescriptor to.
-     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         $e = parent::toXML($parent);
 

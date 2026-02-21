@@ -28,19 +28,16 @@ class Destination
 
     /**
      * @param \SAML2\Configuration\Destination $otherDestination
-     *
-     * @return bool
      */
-    public function equals(Destination $otherDestination) : bool
+    public function equals(Destination $otherDestination): bool
     {
         return $this->destination === $otherDestination->destination;
     }
 
 
     /**
-     * @return string
      */
-    public function __toString() : string
+    public function __toString(): string
     {
         return $this->destination;
     }

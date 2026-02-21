@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-
 use SAML2\Constants;
 
 /**
@@ -57,12 +56,12 @@ class EndpointType
         }
 
         if (!$xml->hasAttribute('Binding')) {
-            throw new \Exception('Missing Binding on '.$xml->tagName);
+            throw new \Exception('Missing Binding on ' . $xml->tagName);
         }
         $this->setBinding($xml->getAttribute('Binding'));
 
         if (!$xml->hasAttribute('Location')) {
-            throw new \Exception('Missing Location on '.$xml->tagName);
+            throw new \Exception('Missing Location on ' . $xml->tagName);
         }
         $this->Location = $xml->getAttribute('Location');
 
@@ -74,7 +73,7 @@ class EndpointType
             if ($a->namespaceURI === null) {
                 continue; /* Not namespace-qualified -- skip. */
             }
-            $fullName = '{'.$a->namespaceURI.'}'.$a->localName;
+            $fullName = '{' . $a->namespaceURI . '}' . $a->localName;
             $this->attributes[$fullName] = [
                 'qualifiedName' => $a->nodeName,
                 'namespaceURI' => $a->namespaceURI,
@@ -91,9 +90,9 @@ class EndpointType
      * @param string $localName The local name.
      * @return bool true if the attribute exists, false if not.
      */
-    public function hasAttributeNS(string $namespaceURI, string $localName) : bool
+    public function hasAttributeNS(string $namespaceURI, string $localName): bool
     {
-        $fullName = '{'.$namespaceURI.'}'.$localName;
+        $fullName = '{' . $namespaceURI . '}' . $localName;
 
         return isset($this->attributes[$fullName]);
     }
@@ -106,9 +105,9 @@ class EndpointType
      * @param string $localName The local name.
      * @return string The value of the attribute, or an empty string if the attribute does not exist.
      */
-    public function getAttributeNS(string $namespaceURI, string $localName) : string
+    public function getAttributeNS(string $namespaceURI, string $localName): string
     {
-        $fullName = '{'.$namespaceURI.'}'.$localName;
+        $fullName = '{' . $namespaceURI . '}' . $localName;
         if (!isset($this->attributes[$fullName])) {
             return '';
         }
@@ -126,7 +125,7 @@ class EndpointType
      * @throws \Exception
      * @return void
      */
-    public function setAttributeNS(string $namespaceURI, string $qualifiedName, string $value) : void
+    public function setAttributeNS(string $namespaceURI, string $qualifiedName, string $value): void
     {
         $name = explode(':', $qualifiedName, 2);
         if (count($name) < 2) {
@@ -134,7 +133,7 @@ class EndpointType
         }
         $localName = $name[1];
 
-        $fullName = '{'.$namespaceURI.'}'.$localName;
+        $fullName = '{' . $namespaceURI . '}' . $localName;
         $this->attributes[$fullName] = [
             'qualifiedName' => $qualifiedName,
             'namespaceURI' => $namespaceURI,
@@ -148,21 +147,18 @@ class EndpointType
      *
      * @param string $namespaceURI The namespace URI.
      * @param string $localName The local name.
-     * @return void
      */
-    public function removeAttributeNS(string $namespaceURI, string $localName) : void
+    public function removeAttributeNS(string $namespaceURI, string $localName): void
     {
-        $fullName = '{'.$namespaceURI.'}'.$localName;
+        $fullName = '{' . $namespaceURI . '}' . $localName;
         unset($this->attributes[$fullName]);
     }
 
 
     /**
      * Collect the value of the Binding property.
-     *
-     * @return string|null
      */
-    public function getBinding() : ?string
+    public function getBinding(): ?string
     {
         return $this->Binding;
     }
@@ -170,11 +166,8 @@ class EndpointType
 
     /**
      * Set the value of the Binding property.
-     *
-     * @param string $binding
-     * @return void
      */
-    public function setBinding(string $binding) : void
+    public function setBinding(string $binding): void
     {
         $this->Binding = $binding;
     }
@@ -182,10 +175,8 @@ class EndpointType
 
     /**
      * Collect the value of the Location property.
-     *
-     * @return string|null
      */
-    public function getLocation() : ?string
+    public function getLocation(): ?string
     {
         return $this->Location;
     }
@@ -193,10 +184,8 @@ class EndpointType
 
     /**
      * Set the value of the Location-property.
-     * @param string|null $location
-     * @return void
      */
-    public function setLocation(?string $location = null) : void
+    public function setLocation(?string $location = null): void
     {
         $this->Location = $location;
     }
@@ -204,10 +193,8 @@ class EndpointType
 
     /**
      * Collect the value of the ResponseLocation property.
-     *
-     * @return string|null
      */
-    public function getResponseLocation() : ?string
+    public function getResponseLocation(): ?string
     {
         return $this->ResponseLocation;
     }
@@ -215,11 +202,8 @@ class EndpointType
 
     /**
      * Set the value of the ResponseLocation property.
-     *
-     * @param string|null $responseLocation
-     * @return void
      */
-    public function setResponseLocation(?string $responseLocation = null) : void
+    public function setResponseLocation(?string $responseLocation = null): void
     {
         $this->ResponseLocation = $responseLocation;
     }
@@ -231,9 +215,8 @@ class EndpointType
      * @param \DOMElement $parent The element we should append this endpoint to.
      * @param string $name The name of the element we should create.
      * @param string $namespace The namespace of the element we should create
-     * @return \DOMElement
      */
-    protected function toXMLInternal(DOMElement $parent, string $namespace, string $name) : DOMElement
+    protected function toXMLInternal(DOMElement $parent, string $namespace, string $name): DOMElement
     {
         $e = $parent->ownerDocument->createElementNS($namespace, $name);
         $parent->appendChild($e);
@@ -264,10 +247,8 @@ class EndpointType
      * Convert this Attribute to XML.
      *
      * @param \DOMElement $parent The element we should append this Attribute to.
-     * @param string $name
-     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent, string $name) : \DOMElement
+    public function toXML(DOMElement $parent, string $name): DOMElement
     {
         return $this->toXMLInternal($parent, Constants::NS_MD, $name);
     }

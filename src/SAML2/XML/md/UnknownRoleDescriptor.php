@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-
 use SAML2\XML\Chunk;
 
 /**
@@ -40,9 +39,8 @@ class UnknownRoleDescriptor extends RoleDescriptor
      * Add this RoleDescriptor to an EntityDescriptor.
      *
      * @param \DOMElement $parent The EntityDescriptor we should append this RoleDescriptor to.
-     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         return $this->xml->toXML($parent);
     }

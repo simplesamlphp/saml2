@@ -22,16 +22,12 @@ interface CertificateProvider extends Queryable
     /**
      * Returns the contents of an X509 pem certificate, without the '-----BEGIN CERTIFICATE-----' and
      * '-----END CERTIFICATE-----'.
-     *
-     * @return null|string
      */
-    public function getCertificateData() : ?string;
+    public function getCertificateData(): ?string;
 
 
     /**
      * Returns the full path to the (local) file that contains the X509 pem certificate.
-     *
-     * @return null|string
      */
-    public function getCertificateFile() : ?string;
+    public function getCertificateFile(): ?string;
 }

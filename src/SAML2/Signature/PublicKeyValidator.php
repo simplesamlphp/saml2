@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\Signature;
 
 use Psr\Log\LoggerInterface;
-
 use SAML2\Certificate\Key;
 use SAML2\Certificate\KeyLoader;
 use SAML2\Certificate\X509;
@@ -42,13 +41,11 @@ class PublicKeyValidator extends AbstractChainedValidator
     /**
      * @param \SAML2\SignedElement $signedElement
      * @param \SAML2\Configuration\CertificateProvider $configuration
-     *
-     * @return bool
      */
     public function canValidate(
         SignedElement $signedElement,
         CertificateProvider $configuration
-    ) : bool {
+    ): bool {
         $this->configuredKeys = $this->keyLoader->extractPublicKeys($configuration);
 
         return !!count($this->configuredKeys);
@@ -58,13 +55,11 @@ class PublicKeyValidator extends AbstractChainedValidator
     /**
      * @param \SAML2\SignedElement $signedElement
      * @param \SAML2\Configuration\CertificateProvider $configuration
-     *
-     * @return bool
      */
     public function hasValidSignature(
         SignedElement $signedElement,
         CertificateProvider $configuration
-    ) : bool {
+    ): bool {
         $logger = $this->logger;
         $pemCandidates = $this->configuredKeys->filter(function (Key $key) use ($logger) {
             if (!$key instanceof X509) {

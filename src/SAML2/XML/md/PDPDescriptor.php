@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use Webmozart\Assert\Assert;
-
 use SAML2\Constants;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 metadata PDPDescriptor.
@@ -81,7 +80,7 @@ class PDPDescriptor extends RoleDescriptor
      *
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getAuthzService() : array
+    public function getAuthzService(): array
     {
         return $this->AuthzService;
     }
@@ -91,9 +90,8 @@ class PDPDescriptor extends RoleDescriptor
      * Set the value of the AuthzService-property
      *
      * @param \SAML2\XML\md\EndpointType[] $authzService
-     * @return void
      */
-    public function setAuthzService(array $authzService = []) : void
+    public function setAuthzService(array $authzService = []): void
     {
         $this->AuthzService = $authzService;
     }
@@ -103,9 +101,8 @@ class PDPDescriptor extends RoleDescriptor
      * Add the value to the AuthzService-property
      *
      * @param \SAML2\XML\md\EndpointType $authzService
-     * @return void
      */
-    public function addAuthzService(EndpointType $authzService) : void
+    public function addAuthzService(EndpointType $authzService): void
     {
         $this->AuthzService[] = $authzService;
     }
@@ -116,7 +113,7 @@ class PDPDescriptor extends RoleDescriptor
      *
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getAssertionIDRequestService() : array
+    public function getAssertionIDRequestService(): array
     {
         return $this->AssertionIDRequestService;
     }
@@ -126,9 +123,8 @@ class PDPDescriptor extends RoleDescriptor
      * Set the value of the AssertionIDRequestService-property
      *
      * @param \SAML2\XML\md\EndpointType[] $assertionIDRequestService
-     * @return void
      */
-    public function setAssertionIDRequestService(array $assertionIDRequestService) : void
+    public function setAssertionIDRequestService(array $assertionIDRequestService): void
     {
         $this->AssertionIDRequestService = $assertionIDRequestService;
     }
@@ -138,9 +134,8 @@ class PDPDescriptor extends RoleDescriptor
      * Add the value to the AssertionIDRequestService-property
      *
      * @param \SAML2\XML\md\EndpointType $assertionIDRequestService
-     * @return void
      */
-    public function addAssertionIDRequestService(EndpointType $assertionIDRequestService) : void
+    public function addAssertionIDRequestService(EndpointType $assertionIDRequestService): void
     {
         $this->AssertionIDRequestService[] = $assertionIDRequestService;
     }
@@ -151,7 +146,7 @@ class PDPDescriptor extends RoleDescriptor
      *
      * @return string[]
      */
-    public function getNameIDFormat() : array
+    public function getNameIDFormat(): array
     {
         return $this->NameIDFormat;
     }
@@ -161,9 +156,8 @@ class PDPDescriptor extends RoleDescriptor
      * Set the value of the NameIDFormat-property
      *
      * @param string[] $nameIDFormat
-     * @return void
      */
-    public function setNameIDFormat(array $nameIDFormat) : void
+    public function setNameIDFormat(array $nameIDFormat): void
     {
         $this->NameIDFormat = $nameIDFormat;
     }
@@ -173,9 +167,8 @@ class PDPDescriptor extends RoleDescriptor
      * Add this PDPDescriptor to an EntityDescriptor.
      *
      * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
-     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         Assert::notEmpty($this->AuthzService);
 

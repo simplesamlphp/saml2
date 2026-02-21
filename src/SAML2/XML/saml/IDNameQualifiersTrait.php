@@ -35,8 +35,6 @@ trait IDNameQualifiersTrait
 
     /**
      * Collect the value of the NameQualifier-property
-     *
-     * @return string|null
      */
     public function getNameQualifier(): ?string
     {
@@ -46,11 +44,8 @@ trait IDNameQualifiersTrait
 
     /**
      * Set the value of the NameQualifier-property
-     *
-     * @param string|null $nameQualifier
-     * @return void
      */
-    public function setNameQualifier(?string $nameQualifier = null) : void
+    public function setNameQualifier(?string $nameQualifier = null): void
     {
         $this->NameQualifier = $nameQualifier;
     }
@@ -58,8 +53,6 @@ trait IDNameQualifiersTrait
 
     /**
      * Collect the value of the SPNameQualifier-property
-     *
-     * @return string|null
      */
     public function getSPNameQualifier(): ?string
     {
@@ -69,11 +62,8 @@ trait IDNameQualifiersTrait
 
     /**
      * Set the value of the SPNameQualifier-property
-     *
-     * @param string|null $spNameQualifier
-     * @return void
      */
-    public function setSPNameQualifier(?string $spNameQualifier = null) : void
+    public function setSPNameQualifier(?string $spNameQualifier = null): void
     {
         $this->SPNameQualifier = $spNameQualifier;
     }

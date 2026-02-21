@@ -5,9 +5,8 @@ declare(strict_types=1);
 namespace SAML2\XML\shibmd;
 
 use DOMElement;
-use Webmozart\Assert\Assert;
-
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class which represents the Scope element found in Shibboleth metadata.
@@ -20,7 +19,7 @@ class Scope
     /**
      * The namespace used for the Scope extension element.
      */
-    const NS = 'urn:mace:shibboleth:metadata:1.0';
+    public const NS = 'urn:mace:shibboleth:metadata:1.0';
 
     /**
      * The scope.
@@ -55,10 +54,8 @@ class Scope
 
     /**
      * Collect the value of the scope-property
-     *
-     * @return string
      */
-    public function getScope() : string
+    public function getScope(): string
     {
         return $this->scope;
     }
@@ -66,11 +63,8 @@ class Scope
 
     /**
      * Set the value of the scope-property
-     *
-     * @param string $scope
-     * @return void
      */
-    public function setScope(string $scope) : void
+    public function setScope(string $scope): void
     {
         $this->scope = $scope;
     }
@@ -78,10 +72,8 @@ class Scope
 
     /**
      * Collect the value of the regexp-property
-     *
-     * @return bool
      */
-    public function isRegexpScope() : bool
+    public function isRegexpScope(): bool
     {
         return $this->regexp;
     }
@@ -89,11 +81,8 @@ class Scope
 
     /**
      * Set the value of the regexp-property
-     *
-     * @param bool $regexp
-     * @return void
      */
-    public function setIsRegexpScope(bool $regexp) : void
+    public function setIsRegexpScope(bool $regexp): void
     {
         $this->regexp = $regexp;
     }
@@ -103,9 +92,8 @@ class Scope
      * Convert this Scope to XML.
      *
      * @param \DOMElement $parent The element we should append this Scope to.
-     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         Assert::notEmpty($this->scope);
 

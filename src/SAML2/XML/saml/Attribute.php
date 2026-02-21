@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
-
 use SAML2\Constants;
 use SAML2\Utils;
 
@@ -80,10 +79,8 @@ class Attribute
 
     /**
      * Collect the value of the Name-property
-     *
-     * @return string|null
      */
-    public function getName() : ?string
+    public function getName(): ?string
     {
         return $this->Name;
     }
@@ -91,11 +88,8 @@ class Attribute
 
     /**
      * Set the value of the Name-property
-     *
-     * @param string $name
-     * @return void
      */
-    public function setName(string $name) : void
+    public function setName(string $name): void
     {
         $this->Name = $name;
     }
@@ -103,10 +97,8 @@ class Attribute
 
     /**
      * Collect the value of the NameFormat-property
-     *
-     * @return string|null
      */
-    public function getNameFormat() : ?string
+    public function getNameFormat(): ?string
     {
         return $this->NameFormat;
     }
@@ -114,11 +106,8 @@ class Attribute
 
     /**
      * Set the value of the NameFormat-property
-     *
-     * @param string|null $nameFormat
-     * @return void
      */
-    public function setNameFormat(?string $nameFormat = null) : void
+    public function setNameFormat(?string $nameFormat = null): void
     {
         $this->NameFormat = $nameFormat;
     }
@@ -126,10 +115,8 @@ class Attribute
 
     /**
      * Collect the value of the FriendlyName-property
-     *
-     * @return string|null
      */
-    public function getFriendlyName() : ?string
+    public function getFriendlyName(): ?string
     {
         return $this->FriendlyName;
     }
@@ -137,11 +124,8 @@ class Attribute
 
     /**
      * Set the value of the FriendlyName-property
-     *
-     * @param string|null $friendlyName
-     * @return void
      */
-    public function setFriendlyName(?string $friendlyName = null) : void
+    public function setFriendlyName(?string $friendlyName = null): void
     {
         $this->FriendlyName = $friendlyName;
     }
@@ -152,7 +136,7 @@ class Attribute
      *
      * @return \SAML2\XML\saml\AttributeValue[]
      */
-    public function getAttributeValue() : array
+    public function getAttributeValue(): array
     {
         return $this->AttributeValue;
     }
@@ -162,9 +146,8 @@ class Attribute
      * Set the value of the AttributeValue-property
      *
      * @param array $attributeValue
-     * @return void
      */
-    public function setAttributeValue(array $attributeValue) : void
+    public function setAttributeValue(array $attributeValue): void
     {
         $this->AttributeValue = $attributeValue;
     }
@@ -174,9 +157,8 @@ class Attribute
      * Add the value to the AttributeValue-property
      *
      * @param \SAML2\XML\saml\AttributeValue $attributeValue
-     * @return void
      */
-    public function addAttributeValue(AttributeValue $attributeValue) : void
+    public function addAttributeValue(AttributeValue $attributeValue): void
     {
         $this->AttributeValue[] = $attributeValue;
     }
@@ -189,9 +171,8 @@ class Attribute
      * @param \DOMElement $parent The element we should append this Attribute to.
      * @param string $namespace The namespace the element should be created in.
      * @param string $name The name of the element.
-     * @return \DOMElement
      */
-    protected function toXMLInternal(DOMElement $parent, string $namespace, string $name) : DOMElement
+    protected function toXMLInternal(DOMElement $parent, string $namespace, string $name): DOMElement
     {
         $e = $parent->ownerDocument->createElementNS($namespace, $name);
         $parent->appendChild($e);
@@ -221,9 +202,8 @@ class Attribute
      * Convert this Attribute to XML.
      *
      * @param \DOMElement $parent The element we should append this Attribute to.
-     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent) : \DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         return $this->toXMLInternal($parent, Constants::NS_SAML, 'saml:Attribute');
     }

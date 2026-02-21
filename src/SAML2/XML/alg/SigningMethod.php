@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\alg;
 
 use DOMElement;
+use Exception;
 use Webmozart\Assert\Assert;
 
 /**
@@ -54,7 +55,7 @@ class SigningMethod
         }
 
         if (!$xml->hasAttribute('Algorithm')) {
-            throw new \Exception('Missing required attribute "Algorithm" in alg:SigningMethod element.');
+            throw new Exception('Missing required attribute "Algorithm" in alg:SigningMethod element.');
         }
         $this->Algorithm = $xml->getAttribute('Algorithm');
 
@@ -73,7 +74,7 @@ class SigningMethod
      *
      * @return string
      */
-    public function getAlgorithm()
+    public function getAlgorithm(): string
     {
         return $this->Algorithm;
     }
@@ -83,9 +84,8 @@ class SigningMethod
      * Set the value of the Algorithm-property
      *
      * @param string $algorithm
-     * @return void
      */
-    public function setAlgorithm(string $algorithm) : void
+    public function setAlgorithm(string $algorithm): void
     {
         $this->Algorithm = $algorithm;
     }
@@ -93,10 +93,8 @@ class SigningMethod
 
     /**
      * Collect the value of the MinKeySize-property
-     *
-     * @return int|null
      */
-    public function getMinKeySize() : ?int
+    public function getMinKeySize(): ?int
     {
         return $this->MinKeySize;
     }
@@ -104,11 +102,8 @@ class SigningMethod
 
     /**
      * Set the value of the MinKeySize-property
-     *
-     * @param int|null $minKeySize
-     * @return void
      */
-    public function setMinKeySize(?int $minKeySize = null) : void
+    public function setMinKeySize(?int $minKeySize = null): void
     {
         $this->MinKeySize = $minKeySize;
     }
@@ -116,10 +111,8 @@ class SigningMethod
 
     /**
      * Collect the value of the MaxKeySize-property
-     *
-     * @return int|null
      */
-    public function getMaxKeySize() : ?int
+    public function getMaxKeySize(): ?int
     {
         return $this->MaxKeySize;
     }
@@ -127,11 +120,8 @@ class SigningMethod
 
     /**
      * Set the value of the MaxKeySize-property
-     *
-     * @param int|null $maxKeySize
-     * @return void
      */
-    public function setMaxKeySize(?int $maxKeySize = null) : void
+    public function setMaxKeySize(?int $maxKeySize = null): void
     {
         $this->MaxKeySize = $maxKeySize;
     }
@@ -141,10 +131,8 @@ class SigningMethod
      * Convert this element to XML.
      *
      * @param \DOMElement $parent The element we should append to.
-     * @return \DOMElement
-     * @throws \Exception
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         Assert::notEmpty($this->Algorithm, 'Cannot convert SigningMethod to XML without an Algorithm set.');
         Assert::nullOrInteger($this->MinKeySize);

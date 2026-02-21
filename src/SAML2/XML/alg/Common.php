@@ -13,5 +13,5 @@ namespace SAML2\XML\alg;
  */
 class Common
 {
-    const NS = 'urn:oasis:names:tc:SAML:metadata:algsupport';
+    public const NS = 'urn:oasis:names:tc:SAML:metadata:algsupport';
 }

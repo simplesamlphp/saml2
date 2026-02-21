@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\mdrpi;
 
 use DOMElement;
-
 use SAML2\Utils;
 
 /**
@@ -69,10 +68,8 @@ class RegistrationInfo
 
     /**
      * Collect the value of the RegistrationAuthority property
-     *
-     * @return string|null
      */
-    public function getRegistrationAuthority() : ?string
+    public function getRegistrationAuthority(): ?string
     {
         return $this->registrationAuthority;
     }
@@ -80,11 +77,8 @@ class RegistrationInfo
 
     /**
      * Set the value of the registrationAuthority property
-     *
-     * @param string $registrationAuthority
-     * @return void
      */
-    public function setRegistrationAuthority(string $registrationAuthority) : void
+    public function setRegistrationAuthority(string $registrationAuthority): void
     {
         $this->registrationAuthority = $registrationAuthority;
     }
@@ -92,10 +86,8 @@ class RegistrationInfo
 
     /**
      * Collect the value of the registrationInstant property
-     *
-     * @return int|null
      */
-    public function getRegistrationInstant() : ?int
+    public function getRegistrationInstant(): ?int
     {
         return $this->registrationInstant;
     }
@@ -103,11 +95,8 @@ class RegistrationInfo
 
     /**
      * Set the value of the registrationInstant property
-     *
-     * @param int|null $registrationInstant
-     * @return void
      */
-    public function setRegistrationInstant(?int $registrationInstant = null) : void
+    public function setRegistrationInstant(?int $registrationInstant = null): void
     {
         $this->registrationInstant = $registrationInstant;
     }
@@ -118,7 +107,7 @@ class RegistrationInfo
      *
      * @return array
      */
-    public function getRegistrationPolicy() : array
+    public function getRegistrationPolicy(): array
     {
         return $this->RegistrationPolicy;
     }
@@ -128,9 +117,8 @@ class RegistrationInfo
      * Set the value of the RegistrationPolicy property
      *
      * @param array $registrationPolicy
-     * @return void
      */
-    public function setRegistrationPolicy(array $registrationPolicy) : void
+    public function setRegistrationPolicy(array $registrationPolicy): void
     {
         $this->RegistrationPolicy = $registrationPolicy;
     }
@@ -140,9 +128,8 @@ class RegistrationInfo
      * Convert this element to XML.
      *
      * @param \DOMElement $parent The element we should append to.
-     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         if (empty($this->registrationAuthority)) {
             throw new \Exception('Missing required registration authority.');

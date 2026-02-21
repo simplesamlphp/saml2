@@ -16,12 +16,11 @@ class SubjectConfirmationNotBefore implements
     /**
      * @param SubjectConfirmation $subjectConfirmation
      * @param Result $result
-     * @return void
      */
     public function validate(
         SubjectConfirmation $subjectConfirmation,
         Result $result
-    ) : void {
+    ): void {
         $data = $subjectConfirmation->getSubjectConfirmationData();
         Assert::notNull($data);
 

@@ -5,10 +5,9 @@ declare(strict_types=1);
 namespace SAML2\XML\saml;
 
 use DOMElement;
-use Webmozart\Assert\Assert;
-
 use SAML2\Constants;
 use SAML2\Utils;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing SAML 2 SubjectConfirmation element.
@@ -76,10 +75,8 @@ class SubjectConfirmation
 
     /**
      * Collect the value of the Method-property
-     *
-     * @return string|null
      */
-    public function getMethod() : ?string
+    public function getMethod(): ?string
     {
         return $this->Method;
     }
@@ -87,11 +84,8 @@ class SubjectConfirmation
 
     /**
      * Set the value of the Method-property
-     *
-     * @param string $method
-     * @return void
      */
-    public function setMethod(string $method) : void
+    public function setMethod(string $method): void
     {
         $this->Method = $method;
     }
@@ -102,7 +96,7 @@ class SubjectConfirmation
      *
      * @return \SAML2\XML\saml\NameID|null
      */
-    public function getNameID() : ?NameID
+    public function getNameID(): ?NameID
     {
         return $this->NameID;
     }
@@ -112,9 +106,8 @@ class SubjectConfirmation
      * Set the value of the NameID-property
      *
      * @param \SAML2\XML\saml\NameID $nameId
-     * @return void
      */
-    public function setNameID(?NameID $nameId = null) : void
+    public function setNameID(?NameID $nameId = null): void
     {
         $this->NameID = $nameId;
     }
@@ -125,7 +118,7 @@ class SubjectConfirmation
      *
      * @return \SAML2\XML\saml\SubjectConfirmationData|null
      */
-    public function getSubjectConfirmationData() : ?SubjectConfirmationData
+    public function getSubjectConfirmationData(): ?SubjectConfirmationData
     {
         return $this->SubjectConfirmationData;
     }
@@ -135,9 +128,8 @@ class SubjectConfirmation
      * Set the value of the SubjectConfirmationData-property
      *
      * @param \SAML2\XML\saml\SubjectConfirmationData|null $subjectConfirmationData
-     * @return void
      */
-    public function setSubjectConfirmationData(?SubjectConfirmationData $subjectConfirmationData = null) : void
+    public function setSubjectConfirmationData(?SubjectConfirmationData $subjectConfirmationData = null): void
     {
         $this->SubjectConfirmationData = $subjectConfirmationData;
     }
@@ -149,7 +141,7 @@ class SubjectConfirmation
      * @param  \DOMElement $parent The parent element we should append this element to.
      * @return \DOMElement This element, as XML.
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         Assert::notNull($this->Method, "Cannot convert SubjectConfirmation to XML without a Method set.");
 

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\saml\Attribute;
@@ -111,10 +110,8 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Collect the value of the WantAuthnRequestsSigned-property
-     *
-     * @return bool|null
      */
-    public function wantAuthnRequestsSigned() : ?bool
+    public function wantAuthnRequestsSigned(): ?bool
     {
         return $this->WantAuthnRequestsSigned;
     }
@@ -122,11 +119,8 @@ class IDPSSODescriptor extends SSODescriptorType
 
     /**
      * Set the value of the WantAuthnRequestsSigned-property
-     *
-     * @param bool|null $flag
-     * @return void
      */
-    public function setWantAuthnRequestsSigned(?bool $flag = null) : void
+    public function setWantAuthnRequestsSigned(?bool $flag = null): void
     {
         $this->WantAuthnRequestsSigned = $flag;
     }
@@ -137,7 +131,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getSingleSignOnService() : array
+    public function getSingleSignOnService(): array
     {
         return $this->SingleSignOnService;
     }
@@ -147,9 +141,8 @@ class IDPSSODescriptor extends SSODescriptorType
      * Set the value of the SingleSignOnService-property
      *
      * @param array $singleSignOnService
-     * @return void
      */
-    public function setSingleSignOnService(array $singleSignOnService) : void
+    public function setSingleSignOnService(array $singleSignOnService): void
     {
         $this->SingleSignOnService = $singleSignOnService;
     }
@@ -159,9 +152,8 @@ class IDPSSODescriptor extends SSODescriptorType
      * Add the value to the SingleSignOnService-property
      *
      * @param \SAML2\XML\md\EndpointType $singleSignOnService
-     * @return void
      */
-    public function addSingleSignOnService(EndpointType $singleSignOnService) : void
+    public function addSingleSignOnService(EndpointType $singleSignOnService): void
     {
         $this->SingleSignOnService[] = $singleSignOnService;
     }
@@ -172,7 +164,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getNameIDMappingService() : array
+    public function getNameIDMappingService(): array
     {
         return $this->NameIDMappingService;
     }
@@ -182,9 +174,8 @@ class IDPSSODescriptor extends SSODescriptorType
      * Set the value of the NameIDMappingService-property
      *
      * @param array $nameIDMappingService
-     * @return void
      */
-    public function setNameIDMappingService(array $nameIDMappingService) : void
+    public function setNameIDMappingService(array $nameIDMappingService): void
     {
         $this->NameIDMappingService = $nameIDMappingService;
     }
@@ -194,9 +185,8 @@ class IDPSSODescriptor extends SSODescriptorType
      * Add the value to the NameIDMappingService-property
      *
      * @param \SAML2\XML\md\EndpointType $nameIDMappingService
-     * @return void
      */
-    public function addNameIDMappingService(EndpointType $nameIDMappingService) : void
+    public function addNameIDMappingService(EndpointType $nameIDMappingService): void
     {
         $this->NameIDMappingService[] = $nameIDMappingService;
     }
@@ -207,7 +197,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * @return \SAML2\XML\md\EndpointType[]
      */
-    public function getAssertionIDRequestService() : array
+    public function getAssertionIDRequestService(): array
     {
         return $this->AssertionIDRequestService;
     }
@@ -217,9 +207,8 @@ class IDPSSODescriptor extends SSODescriptorType
      * Set the value of the AssertionIDRequestService-property
      *
      * @param array $assertionIDRequestService
-     * @return void
      */
-    public function setAssertionIDRequestService(array $assertionIDRequestService) : void
+    public function setAssertionIDRequestService(array $assertionIDRequestService): void
     {
         $this->AssertionIDRequestService = $assertionIDRequestService;
     }
@@ -229,9 +218,8 @@ class IDPSSODescriptor extends SSODescriptorType
      * Add the value to the AssertionIDRequestService-property
      *
      * @param \SAML2\XML\md\EndpointType $assertionIDRequestService
-     * @return void
      */
-    public function addAssertionIDRequestService(EndpointType $assertionIDRequestService) : void
+    public function addAssertionIDRequestService(EndpointType $assertionIDRequestService): void
     {
         $this->AssertionIDRequestService[] = $assertionIDRequestService;
     }
@@ -241,7 +229,7 @@ class IDPSSODescriptor extends SSODescriptorType
      * Collect the value of the AttributeProfile-property
      * @return array
      */
-    public function getAttributeProfile() : array
+    public function getAttributeProfile(): array
     {
         return $this->AttributeProfile;
     }
@@ -251,9 +239,8 @@ class IDPSSODescriptor extends SSODescriptorType
      * Set the value of the AttributeProfile-property
      *
      * @param array $attributeProfile
-     * @return void
      */
-    public function setAttributeProfile(array $attributeProfile) : void
+    public function setAttributeProfile(array $attributeProfile): void
     {
         $this->AttributeProfile = $attributeProfile;
     }
@@ -264,7 +251,7 @@ class IDPSSODescriptor extends SSODescriptorType
      *
      * @return \SAML2\XML\saml\Attribute[]
      */
-    public function getAttribute() : array
+    public function getAttribute(): array
     {
         return $this->Attribute;
     }
@@ -274,9 +261,8 @@ class IDPSSODescriptor extends SSODescriptorType
      * Set the value of the Attribute-property
      *
      * @param array $attribute
-     * @return void
      */
-    public function setAttribute(array $attribute) : void
+    public function setAttribute(array $attribute): void
     {
         $this->Attribute = $attribute;
     }
@@ -286,9 +272,8 @@ class IDPSSODescriptor extends SSODescriptorType
      * Addthe value to the Attribute-property
      *
      * @param \SAML2\XML\saml\Attribute $attribute
-     * @return void
      */
-    public function addAttribute(Attribute $attribute) : void
+    public function addAttribute(Attribute $attribute): void
     {
         $this->Attribute[] = $attribute;
     }
@@ -298,9 +283,8 @@ class IDPSSODescriptor extends SSODescriptorType
      * Add this IDPSSODescriptor to an EntityDescriptor.
      *
      * @param \DOMElement $parent The EntityDescriptor we should append this IDPSSODescriptor to.
-     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         $e = parent::toXML($parent);
 

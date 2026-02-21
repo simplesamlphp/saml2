@@ -6,7 +6,6 @@ namespace SAML2\XML\ecp;
 
 use DOMElement;
 use InvalidArgumentException;
-
 use SAML2\Constants;
 
 /**
@@ -57,10 +56,8 @@ class Response
 
     /**
      * Collect the value of the AssertionConsumerServiceURL-property
-     *
-     * @return string
      */
-    public function getAssertionConsumerServiceURL() : string
+    public function getAssertionConsumerServiceURL(): string
     {
         return $this->AssertionConsumerServiceURL;
     }
@@ -71,9 +68,8 @@ class Response
      *
      * @param string $assertionConsumerServiceURL
      * @throws InvalidArgumentException
-     * @return void
--     */
-    public function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL) : void
+     */
+    public function setAssertionConsumerServiceURL(string $assertionConsumerServiceURL): void
     {
         if (!filter_var($assertionConsumerServiceURL, FILTER_VALIDATE_URL)) {
             throw new InvalidArgumentException('AssertionConsumerServiceURL is not a valid URL.');
@@ -87,9 +83,8 @@ class Response
      *
      * @param \DOMElement $parent The element we should append this element to.
      * @throws InvalidArgumentException
-     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         $acs = $this->getAssertionConsumerServiceURL();
         if (!isset($acs)) {

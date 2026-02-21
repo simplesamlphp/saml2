@@ -5,12 +5,11 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use Webmozart\Assert\Assert;
-
 use SAML2\Constants;
 use SAML2\Utils;
 use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
+use Webmozart\Assert\Assert;
 
 /**
  * Class representing a KeyDescriptor element.
@@ -79,10 +78,8 @@ class KeyDescriptor
 
     /**
      * Collect the value of the use property.
-     *
-     * @return string|null
      */
-    public function getUse() : ?string
+    public function getUse(): ?string
     {
         return $this->use;
     }
@@ -90,11 +87,8 @@ class KeyDescriptor
 
     /**
      * Set the value of the use property.
-     *
-     * @param string|null $use
-     * @return void
      */
-    public function setUse(?string $use = null) : void
+    public function setUse(?string $use = null): void
     {
         $this->use = $use;
     }
@@ -105,7 +99,7 @@ class KeyDescriptor
      *
      * @return \SAML2\XML\ds\KeyInfo|null
      */
-    public function getKeyInfo() : ?KeyInfo
+    public function getKeyInfo(): ?KeyInfo
     {
         return $this->KeyInfo;
     }
@@ -115,9 +109,8 @@ class KeyDescriptor
      * Set the value of the KeyInfo property.
      *
      * @param \SAML2\XML\ds\KeyInfo $keyInfo
-     * @return void
      */
-    public function setKeyInfo(KeyInfo $keyInfo) : void
+    public function setKeyInfo(KeyInfo $keyInfo): void
     {
         $this->KeyInfo = $keyInfo;
     }
@@ -128,7 +121,7 @@ class KeyDescriptor
      *
      * @return \SAML2\XML\Chunk[]
      */
-    public function getEncryptionMethod() : array
+    public function getEncryptionMethod(): array
     {
         return $this->EncryptionMethod;
     }
@@ -138,9 +131,8 @@ class KeyDescriptor
      * Set the value of the EncryptionMethod property.
      *
      * @param \SAML2\XML\Chunk[] $encryptionMethod
-     * @return void
      */
-    public function setEncryptionMethod(array $encryptionMethod) : void
+    public function setEncryptionMethod(array $encryptionMethod): void
     {
         $this->EncryptionMethod = $encryptionMethod;
     }
@@ -150,9 +142,8 @@ class KeyDescriptor
      * Add the value to the EncryptionMethod property.
      *
      * @param \SAML2\XML\Chunk $encryptionMethod
-     * @return void
      */
-    public function addEncryptionMethod(Chunk $encryptionMethod) : void
+    public function addEncryptionMethod(Chunk $encryptionMethod): void
     {
         $this->EncryptionMethod[] = $encryptionMethod;
     }
@@ -162,9 +153,8 @@ class KeyDescriptor
      * Convert this KeyDescriptor to XML.
      *
      * @param \DOMElement $parent The element we should append this KeyDescriptor to.
-     * @return \DOMElement
      */
-    public function toXML(DOMElement $parent) : DOMElement
+    public function toXML(DOMElement $parent): DOMElement
     {
         if ($this->KeyInfo === null) {
             throw new \Exception('Cannot convert KeyDescriptor to XML without KeyInfo set.');
