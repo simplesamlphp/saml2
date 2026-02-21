@@ -24,7 +24,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-versions }}
           ini-values: error_reporting=E_ALL^E_DEPRECATED
-          extensions: mbstring, sodium, xml
+          extensions: intl, mbstring, sodium, xml
           coverage: xdebug
 
       - name: Setup problem matchers for PHP
