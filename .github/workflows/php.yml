@@ -1,10 +1,11 @@
+---
 name: CI
 
-on:
+on:  # yamllint disable-line rule:truthy
   push:
-    branches: [ '**' ]
+    branches: ['**']
   pull_request:
-    branches: [ master, release-* ]
+    branches: [master, release-*]
 
 jobs:
   basic-tests:
@@ -18,7 +19,8 @@ jobs:
 
     steps:
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
+        # https://github.com/shivammathur/setup-php
+        uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
           ini-values: error_reporting=E_ALL^E_DEPRECATED
@@ -73,20 +75,21 @@ jobs:
         if: ${{ matrix.php-versions == '8.3' && matrix.operating-system == 'ubuntu-latest' }}
         uses: actions/upload-artifact@v4
         with:
-            name: build-data
-            path: ${{ github.workspace }}/build
+          name: build-data
+          path: ${{ github.workspace }}/build
 
   security:
     name: Security checks
     runs-on: [ubuntu-latest]
     steps:
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
+        # https://github.com/shivammathur/setup-php
+        uses: shivammathur/setup-php@v2
         with:
-            php-version: '8.3'
-            extensions: mbstring, xml
-            tools: composer:v2
-            coverage: none
+          php-version: '8.3'
+          extensions: mbstring, xml
+          tools: composer:v2
+          coverage: none
 
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
@@ -96,9 +99,9 @@ jobs:
       - name: Cache composer dependencies
         uses: actions/cache@v3
         with:
-            path: $COMPOSER_CACHE
-            key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-            restore-keys: ${{ runner.os }}-composer-
+          path: $COMPOSER_CACHE
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
         run: composer install --no-progress --prefer-dist --optimize-autoloader
@@ -142,7 +145,8 @@ jobs:
 
     steps:
       - name: Setup PHP, with composer and extensions
-        uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
+        # https://github.com/shivammathur/setup-php
+        uses: shivammathur/setup-php@v2
         with:
           php-version: '8.3'
           extensions: mbstring, xml
@@ -155,9 +159,9 @@ jobs:
       - name: Cache composer dependencies
         uses: actions/cache@v3
         with:
-            path: $COMPOSER_CACHE
-            key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-            restore-keys: ${{ runner.os }}-composer-
+          path: $COMPOSER_CACHE
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
         run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
