@@ -14,7 +14,7 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-latest, windows-latest]
-        php-versions: ['7.1', '7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3', '8.4']
+        php-versions: ['8.3', '8.4', '8.5']
 
     steps:
       - name: Setup PHP, with composer and extensions
@@ -63,7 +63,7 @@ jobs:
         run: bash vendor/bin/check-syntax-php.sh
 
       - name: Decide whether to run code coverage or not
-        if: ${{ matrix.php-versions != '8.0' || matrix.operating-system != 'ubuntu-latest' }}
+        if: ${{ matrix.php-versions != '8.3' || matrix.operating-system != 'ubuntu-latest' }}
         run: |
           echo "NO_COVERAGE=--no-coverage" >> $GITHUB_ENV
 
@@ -73,7 +73,7 @@ jobs:
           ./vendor/bin/phpunit $NO_COVERAGE
 
       - name: Save coverage data
-        if: ${{ matrix.php-versions == '8.0' && matrix.operating-system == 'ubuntu-latest' }}
+        if: ${{ matrix.php-versions == '8.3' && matrix.operating-system == 'ubuntu-latest' }}
         uses: actions/upload-artifact@v4
         with:
             name: build-data
@@ -86,7 +86,7 @@ jobs:
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
         with:
-            php-version: '8.0'
+            php-version: '8.3'
             extensions: mbstring, xml
             tools: composer:v2
             coverage: none
@@ -123,7 +123,7 @@ jobs:
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
         with:
-          php-version: '8.0'
+          php-version: '8.3'
           extensions: mbstring, xml
           coverage: none
 
@@ -157,7 +157,7 @@ jobs:
       - name: Setup PHP, with composer and extensions
         uses: shivammathur/setup-php@v2 #https://github.com/shivammathur/setup-php
         with:
-          php-version: '8.0'
+          php-version: '8.3'
           extensions: mbstring, xml
 
       - name: Setup problem matchers for PHP
