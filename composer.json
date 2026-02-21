@@ -19,6 +19,7 @@
         "webmozart/assert": "^2.0"
     },
     "require-dev": {
+        "mockery/mockery": "~1.6",
         "simplesamlphp/simplesamlphp-test-framework": "~1.11"
     },
     "conflict": {
