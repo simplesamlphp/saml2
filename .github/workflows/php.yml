@@ -38,7 +38,7 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Get composer cache directory (linux)
         if: ${{ matrix.operating-system == 'ubuntu-latest' }}
@@ -49,7 +49,7 @@ jobs:
         run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$env:GITHUB_ENV"
 
       - name: Cache composer dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: ${{ env.COMPOSER_CACHE }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -73,7 +73,7 @@ jobs:
 
       - name: Save coverage data
         if: ${{ matrix.php-versions == '8.3' && matrix.operating-system == 'ubuntu-latest' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: build-data
           path: ${{ github.workspace }}/build
@@ -94,13 +94,13 @@ jobs:
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Get composer cache directory (linux)
         run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$GITHUB_ENV"
 
       - name: Cache composer dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: ${{ env.COMPOSER_CACHE }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -157,13 +157,13 @@ jobs:
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
 
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Get composer cache directory (linux)
         run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$GITHUB_ENV"
 
       - name: Cache composer dependencies
-        uses: actions/cache@v3
+        uses: actions/cache@v5
         with:
           path: ${{ env.COMPOSER_CACHE }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -172,13 +172,17 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v7
         with:
           name: build-data
           path: ${{ github.workspace }}/build
 
       - name: Codecov
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: true
+          verbose: true
 
       - name: PHP Code Sniffer
         continue-on-error: true
