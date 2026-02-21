@@ -188,9 +188,12 @@ jobs:
         continue-on-error: true
         run: php vendor/bin/phpcs src/
 
-      - name: Psalm
+      - name: PHPStan
         continue-on-error: true
-        run: php vendor/bin/psalm --show-info=true
+        run: |
+          vendor/bin/phpstan analyze -c phpstan.neon
 
-      - name: Psalter
-        run: php vendor/bin/psalter --issues=UnnecessaryVarAnnotation --dry-run
+      - name: PHPStan (testsuite)
+        continue-on-error: true
+        run: |
+          vendor/bin/phpstan analyze -c phpstan-dev.neon
