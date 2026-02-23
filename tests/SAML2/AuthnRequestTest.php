@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use DOMDocument;
 use SAML2\AuthnRequest;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
@@ -11,14 +12,12 @@ use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\Utils;
 
-use DOMDocument;
-
 /**
  * Class \SAML2\AuthnRequestTest
  */
 class AuthnRequestTest extends \PHPUnit\Framework\TestCase
 {
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $authnRequest = new AuthnRequest();
         $authnRequest->setRequestedAuthnContext([
@@ -50,7 +49,7 @@ class AuthnRequestTest extends \PHPUnit\Framework\TestCase
     }
 
 
-    public function testMarshallingOfSimpleRequest() : void
+    public function testMarshallingOfSimpleRequest(): void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -83,7 +82,7 @@ AUTHNREQUEST;
     /**
      * Test unmarshalling / marshalling of XML with Extensions element
      */
-    public function testExtensionOrdering() : void
+    public function testExtensionOrdering(): void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -117,7 +116,7 @@ AUTHNREQUEST;
     }
 
 
-    public function testThatTheSubjectIsCorrectlyRead() : void
+    public function testThatTheSubjectIsCorrectlyRead(): void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -143,7 +142,7 @@ AUTHNREQUEST;
     }
 
 
-    public function testThatTheSubjectCanBeSetBySettingTheNameId() : void
+    public function testThatTheSubjectCanBeSetBySettingTheNameId(): void
     {
         $request = new AuthnRequest();
         $nameId = new NameID();
@@ -157,7 +156,7 @@ AUTHNREQUEST;
     }
 
 
-    public function testThatAnEncryptedNameIdCanBeDecrypted() : void
+    public function testThatAnEncryptedNameIdCanBeDecrypted(): void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -204,7 +203,7 @@ AUTHNREQUEST;
      * Due to the fact that the symmetric key is generated each time, we cannot test whether or not the resulting XML
      * matches a specific XML, but we can test whether or not the resulting structure is actually correct, conveying
      * all information required to decrypt the NameId.
-    public function testThatAnEncryptedNameIdResultsInTheCorrectXmlStructure() : void
+    public function testThatAnEncryptedNameIdResultsInTheCorrectXmlStructure(): void
     {
         // the NameID we're going to encrypt
         $nameId = new NameID();
@@ -267,7 +266,7 @@ AUTHNREQUEST;
      * Test for setting IDPEntry values via setIDPList.
      * Tests legacy support (single string), array of attributes, and skipping of unknown attributes.
      */
-    public function testIDPlistAttributes() : void
+    public function testIDPlistAttributes(): void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -299,7 +298,7 @@ AUTHNREQUEST;
     /**
      * Test for getting IDPlist values.
      */
-    public function testgetIDPlistAttributes() : void
+    public function testgetIDPlistAttributes(): void
     {
         $xmlRequest = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -333,7 +332,7 @@ AUTHNREQUEST;
     /**
      * Test that parsing IDPList without ProviderID throws exception.
      */
-    public function testScopeWithoutProviderIDThrowsException() : void
+    public function testScopeWithoutProviderIDThrowsException(): void
     {
         $xmlRequest = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -360,7 +359,7 @@ AUTHNREQUEST;
     /**
      * Test setting a requesterID.
      */
-    public function testRequesterIdIsAddedCorrectly() : void
+    public function testRequesterIdIsAddedCorrectly(): void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -391,7 +390,7 @@ AUTHNREQUEST;
     /**
      * Test reading a requesterID.
      */
-    public function testRequesterIdIsReadCorrectly() : void
+    public function testRequesterIdIsReadCorrectly(): void
     {
         $requesterId = [
             'https://engine.demo.openconext.org/authentication/sp/metadata',
@@ -423,7 +422,7 @@ AUTHNREQUEST;
     /**
      * Test setting a ProxyCount.
      */
-    public function testProxyCountIsAddedCorrectly() : void
+    public function testProxyCountIsAddedCorrectly(): void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -454,7 +453,7 @@ AUTHNREQUEST;
     /**
      * Test reading ProxyCount
      */
-    public function testProxyCountIsReadCorrectly() : void
+    public function testProxyCountIsReadCorrectly(): void
     {
         $proxyCount = 10;
 
@@ -485,7 +484,7 @@ AUTHNREQUEST;
     /**
      * Test getting NameIDPolicy
      */
-    public function testGettingNameIDPolicy() : void
+    public function testGettingNameIDPolicy(): void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -525,7 +524,7 @@ AUTHNREQUEST;
     /**
      * Test setting NameIDPolicy results in expected XML
      */
-    public function testSettingNameIDPolicy() : void
+    public function testSettingNameIDPolicy(): void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -559,7 +558,7 @@ AUTHNREQUEST;
     /**
      * Test setting NameIDPolicy with only a Format results in expected XML
      */
-    public function testSettingNameIDPolicyFormatOnly() : void
+    public function testSettingNameIDPolicyFormatOnly(): void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -589,7 +588,7 @@ AUTHNREQUEST;
     /**
      * Test setting NameIDPolicy with invalid type for AllowCreate.
      */
-    public function testSettingNameIDPolicyToIncorrectTypeAllowCreate() : void
+    public function testSettingNameIDPolicyToIncorrectTypeAllowCreate(): void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -610,7 +609,7 @@ AUTHNREQUEST;
     /**
      * Test setting NameIDPolicy with invalid type for SPNameQualifier.
      */
-    public function testSettingNameIDPolicyToIncorrectTypeSPNameQualifier() : void
+    public function testSettingNameIDPolicyToIncorrectTypeSPNameQualifier(): void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -632,7 +631,7 @@ AUTHNREQUEST;
      * Test setting NameIDPolicy with one invalid type for Format.
      * It would be nice to iterate over various types to check this more thoroughly.
      */
-    public function testSettingNameIDPolicyToIncorrectTypeFormat() : void
+    public function testSettingNameIDPolicyToIncorrectTypeFormat(): void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -653,7 +652,7 @@ AUTHNREQUEST;
     /**
      * Test getting ForceAuthn
      */
-    public function testGettingForceAuthn() : void
+    public function testGettingForceAuthn(): void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -698,7 +697,7 @@ AUTHNREQUEST;
     /**
      * Test setting ForceAuthn
      */
-    public function testSettingForceAuthnResultsInCorrectXML() : void
+    public function testSettingForceAuthnResultsInCorrectXML(): void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -727,7 +726,7 @@ AUTHNREQUEST;
     /**
      * Test getting IsPassive
      */
-    public function testGettingIsPassive() : void
+    public function testGettingIsPassive(): void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -789,7 +788,7 @@ AUTHNREQUEST;
     /**
      * Test setting IsPassive
      */
-    public function testSettingIsPassiveResultsInCorrectXML() : void
+    public function testSettingIsPassiveResultsInCorrectXML(): void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -818,7 +817,7 @@ AUTHNREQUEST;
     /**
      * Test setting ProviderName
      */
-    public function testSettingProviderNameResultsInCorrectXml() : void
+    public function testSettingProviderNameResultsInCorrectXml(): void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -847,7 +846,7 @@ AUTHNREQUEST;
     /**
      * Test getting ProviderName
      */
-    public function testGettingProviderName() : void
+    public function testGettingProviderName(): void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -874,7 +873,7 @@ AUTHNREQUEST;
     /**
      * Test setting ProtocolBinding and AssertionConsumerServiceURL
      */
-    public function testSettingProtocolBindingAndACSUrl() : void
+    public function testSettingProtocolBindingAndACSUrl(): void
     {
         // the Issuer
         $issuer = new Issuer();
@@ -904,7 +903,7 @@ AUTHNREQUEST;
     /**
      * Test that having multiple subject tags throws an exception.
      */
-    public function testMultipleSubjectsThrowsException() : void
+    public function testMultipleSubjectsThrowsException(): void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -933,7 +932,7 @@ AUTHNREQUEST;
     /**
      * Test that having multiple NameIds in a subject tag throws an exception.
      */
-    public function testMultipleNameIdsInSubjectThrowsException() : void
+    public function testMultipleNameIdsInSubjectThrowsException(): void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -960,7 +959,7 @@ AUTHNREQUEST;
     /**
      * Test that a subject tag without a NameId throws an exception.
      */
-    public function testEmptySubjectThrowsException() : void
+    public function testEmptySubjectThrowsException(): void
     {
         $xml = <<<AUTHNREQUEST
 <samlp:AuthnRequest
@@ -985,7 +984,7 @@ AUTHNREQUEST;
     /**
      * Test setting audiences.
      */
-    public function testAudiencesAreAddedCorrectly() : void
+    public function testAudiencesAreAddedCorrectly(): void
     {
         $issuer = new Issuer();
         $issuer->setValue('https://gateway.example.org/saml20/sp/metadata');
@@ -1012,7 +1011,7 @@ AUTHNREQUEST;
     /**
      * Test reading audiences.
      */
-    public function testAudiencesAreReadCorrectly() : void
+    public function testAudiencesAreReadCorrectly(): void
     {
         $expectedAudiences = array('https://sp1.example.org', 'https://sp2.example.org');
 

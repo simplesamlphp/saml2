@@ -19,7 +19,7 @@ class EntityAttributesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $attribute1 = new Attribute();
         $attribute1->setName('urn:simplesamlphp:v1:simplesamlphp');
@@ -59,7 +59,7 @@ class EntityAttributesTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute">
@@ -90,7 +90,7 @@ XML
     /**
      * @return void
      */
-    public function testUnmarshallingAttributes() : void
+    public function testUnmarshallingAttributes(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute">

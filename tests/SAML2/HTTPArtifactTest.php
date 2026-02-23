@@ -14,7 +14,7 @@ class HTTPArtifactTest extends \PHPUnit\Framework\TestCase
      * parameter is missing.
      * @return void
      */
-    public function testArtifactMissingUrlParamThrowsException() : void
+    public function testArtifactMissingUrlParamThrowsException(): void
     {
         $_REQUEST = ['a' => 'b', 'c' => 'd'];
 

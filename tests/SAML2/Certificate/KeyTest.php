@@ -14,10 +14,9 @@ class KeyTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group certificate
-     * @return void
      */
     #[Test]
-    public function invalid_key_usage_should_throw_an_exception() : void
+    public function invalidKeyUsageShouldThrowAnException(): void
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
         $this->expectException(InvalidKeyUsageException::class);
@@ -27,11 +26,10 @@ class KeyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group certificate
-     * @return void
      */
     #[DataProvider('functionProvider')]
     #[Test]
-    public function invalid_offset_type_should_throw_an_exception($function, $params) : void
+    public function invalidOffsetTypeShouldThrowAnException($function, $params): void
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
         $this->expectException(InvalidArgumentException::class);
@@ -41,10 +39,9 @@ class KeyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group certificate
-     * @return void
      */
     #[Test]
-    public function assert_that_key_usage_check_works_correctly() : void
+    public function assertThatKeyUsageCheckWorksCorrectly(): void
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
 
@@ -58,10 +55,9 @@ class KeyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group certificate
-     * @return void
      */
     #[Test]
-    public function assert_that_offsetget_works_correctly() : void
+    public function assertThatOffsetgetWorksCorrectly(): void
     {
         $key = new Key([Key::USAGE_SIGNING => true]);
         $this->assertTrue($key->offsetGet(Key::USAGE_SIGNING));
@@ -70,10 +66,9 @@ class KeyTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group certificate
-     * @return void
      */
     #[Test]
-    public function assert_that_offsetunset_unsets_offset() : void
+    public function assertThatOffsetunsetUnsetsOffset(): void
     {
         $key = new Key([Key::USAGE_SIGNING => true, Key::USAGE_ENCRYPTION => true]);
         $this->assertTrue($key->offsetExists(Key::USAGE_SIGNING));
@@ -90,7 +85,7 @@ class KeyTest extends \PHPUnit\Framework\TestCase
     /**
      * @return array
      */
-    public static function functionProvider() : array
+    public static function functionProvider(): array
     {
         return [
             'offsetGet' => ['offsetGet', [0]],

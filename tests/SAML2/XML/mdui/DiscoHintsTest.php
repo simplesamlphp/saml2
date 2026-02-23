@@ -18,7 +18,7 @@ class DiscoHintsTest extends \PHPUnit\Framework\TestCase
      * Test marshalling a basic DiscoHints element
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $discoHints = new DiscoHints();
         $discoHints->setIPHint(["192.168.6.0/24", "fd00:0123:aa:1001::/64"]);
@@ -65,7 +65,7 @@ class DiscoHintsTest extends \PHPUnit\Framework\TestCase
      * Create an empty discoHints element
      * @return void
      */
-    public function testMarshallingEmpty() : void
+    public function testMarshallingEmpty(): void
     {
         $discoHints = new DiscoHints();
 
@@ -80,7 +80,7 @@ class DiscoHintsTest extends \PHPUnit\Framework\TestCase
      * Test unmarshalling a basic DiscoHints element
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdui:DiscoHints xmlns:mdui="urn:oasis:names:tc:SAML:metadata:ui">
@@ -112,7 +112,7 @@ XML
      * Add a Keywords element to the children attribute
      * @return void
      */
-    public function testMarshallingChildren() : void
+    public function testMarshallingChildren(): void
     {
         $discoHints = new DiscoHints();
         $keywords = new Keywords();

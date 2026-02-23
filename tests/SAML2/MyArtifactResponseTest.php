@@ -15,7 +15,7 @@ class MyArtifactResponseTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $issuer1 = new Issuer();
         $issuer2 = new Issuer();
@@ -45,7 +45,7 @@ class MyArtifactResponseTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $xml = <<<XML
 <samlp:ArtifactResponse

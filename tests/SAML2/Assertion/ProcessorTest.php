@@ -47,7 +47,7 @@ class ProcessorTest extends MockeryTestCase
     /**
      */
     #[Test]
-    public function processor_correctly_encrypts_assertions(): void
+    public function processorCorrectlyEncryptsAssertions(): void
     {
         $testData = [
             [new \SAML2\Assertion()],
@@ -73,7 +73,7 @@ class ProcessorTest extends MockeryTestCase
     /**
      */
     #[Test]
-    public function unsuported_assertions_are_rejected(): void
+    public function unsuportedAssertionsAreRejected(): void
     {
         $this->expectException('\SAML2\Assertion\Exception\InvalidAssertionException');
         $this->expectExceptionMessage('The assertion must be of type: EncryptedAssertion or Assertion');

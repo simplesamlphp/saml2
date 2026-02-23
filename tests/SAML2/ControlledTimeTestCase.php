@@ -25,4 +25,3 @@ abstract class ControlledTimeTestCase extends MockeryTestCase
         $timing->shouldReceive('getTime')->andReturn($this->currentTime);
     }
 }
-

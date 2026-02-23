@@ -16,7 +16,7 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $registrationInfo = new RegistrationInfo();
         $registrationInfo->setRegistrationAuthority('https://ExampleAuthority');
@@ -55,7 +55,7 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdrpi:RegistrationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
@@ -86,7 +86,7 @@ XML
     /**
      * @return void
      */
-    public function testMissingPublisherThrowsException() : void
+    public function testMissingPublisherThrowsException(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <mdrpi:RegistrationInfo xmlns:mdrpi="urn:oasis:names:tc:SAML:metadata:rpi"
@@ -103,7 +103,7 @@ XML
     /**
      * @return void
      */
-    public function testEmptyRegistrationAuthorityOutboundThrowsException() : void
+    public function testEmptyRegistrationAuthorityOutboundThrowsException(): void
     {
         $registrationInfo = new RegistrationInfo();
         $registrationInfo->setRegistrationAuthority('');

@@ -11,10 +11,9 @@ class ArrayAdapterTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @group configuration
-     * @return void
      */
     #[Test]
-    public function set_configuration_can_be_queried() : void
+    public function setConfigurationCanBeQueried(): void
     {
         $configuration = new ArrayAdapter(['foo' => 'bar']);
 
@@ -26,10 +25,9 @@ class ArrayAdapterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @group configuration
-     * @return void
      */
     #[Test]
-    public function default_values_are_returned_for_unavailable_configuration() : void
+    public function defaultValuesAreReturnedForUnavailableConfiguration(): void
     {
         $configuration = ['foo' => 'bar'];
 

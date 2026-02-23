@@ -17,7 +17,7 @@ class NameIDTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $nameId = new NameID();
         $nameId->setNameQualifier('TheNameQualifier');
@@ -42,7 +42,7 @@ class NameIDTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $samlNamespace = Constants::NS_SAML;
         $document = DOMDocumentFactory::fromString(<<<XML
@@ -62,7 +62,7 @@ XML
     /**
      * @return void
      */
-    public function testToString() : void
+    public function testToString(): void
     {
         $nameId = new NameID();
         $nameId->setNameQualifier('TheNameQualifier');
@@ -71,8 +71,8 @@ XML
         $nameId->setSPProvidedID('TheSPProvidedID');
         $nameId->setValue('TheNameIDValue');
 
-        $output = '<saml:NameID xmlns:saml="'.\SAML2\Constants::NS_SAML.'" NameQualifier="TheNameQualifier" '.
-                  'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">'.
+        $output = '<saml:NameID xmlns:saml="' . \SAML2\Constants::NS_SAML . '" NameQualifier="TheNameQualifier" ' .
+                  'SPNameQualifier="TheSPNameQualifier" Format="TheFormat" SPProvidedID="TheSPProvidedID">' .
                   'TheNameIDValue</saml:NameID>';
 
         $this->assertXmlStringEqualsXmlString($output, $nameId->__toString());
@@ -84,7 +84,7 @@ XML
      * Serialize a NameID and unserialize that again.
      * @return void
      */
-    public function testSerialize() : void
+    public function testSerialize(): void
     {
         $nid1 = new NameID();
         $nid1->setValue('aap:noot:mies');

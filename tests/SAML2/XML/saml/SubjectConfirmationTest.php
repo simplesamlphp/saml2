@@ -19,7 +19,7 @@ class SubjectConfirmationTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMarshalling() : void
+    public function testMarshalling(): void
     {
         $nameId = new NameID();
         $nameId->setValue('SomeNameIDValue');
@@ -44,11 +44,10 @@ class SubjectConfirmationTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
         $samlNamespace = Constants::NS_SAML;
-        $document = DOMDocumentFactory::fromString(
-<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
   <saml:NameID>SomeNameIDValue</saml:NameID>
   <saml:SubjectConfirmationData/>
@@ -67,11 +66,10 @@ XML
     /**
      * @return void
      */
-    public function testMethodMissingThrowsException() : void
+    public function testMethodMissingThrowsException(): void
     {
         $samlNamespace = Constants::NS_SAML;
-        $document = DOMDocumentFactory::fromString(
-<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}">
   <saml:NameID>SomeNameIDValue</saml:NameID>
   <saml:SubjectConfirmationData/>
@@ -87,11 +85,10 @@ XML
     /**
      * @return void
      */
-    public function testManyNameIDThrowsException() : void
+    public function testManyNameIDThrowsException(): void
     {
         $samlNamespace = Constants::NS_SAML;
-        $document = DOMDocumentFactory::fromString(
-<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
   <saml:NameID>SomeNameIDValue</saml:NameID>
   <saml:NameID>AnotherNameIDValue</saml:NameID>
@@ -108,11 +105,10 @@ XML
     /**
      * @return void
      */
-    public function testManySubjectConfirmationDataThrowsException() : void
+    public function testManySubjectConfirmationDataThrowsException(): void
     {
         $samlNamespace = Constants::NS_SAML;
-        $document = DOMDocumentFactory::fromString(
-<<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="SomeMethod">
   <saml:NameID>SomeNameIDValue</saml:NameID>
   <saml:SubjectConfirmationData Recipient="Me" />

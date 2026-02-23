@@ -26,7 +26,7 @@ class NotOnOrAfterTest extends ControlledTimeTestCase
     /**
      * @return void
      */
-    public function setUp() : void
+    public function setUp(): void
     {
         parent::setUp();
         $this->assertion = \Mockery::mock(\SAML2\Assertion::class);
@@ -35,10 +35,9 @@ class NotOnOrAfterTest extends ControlledTimeTestCase
 
     /**
      * @group assertion-validation
-     * @return void
      */
     #[Test]
-    public function timestamp_in_the_past_before_graceperiod_is_not_valid() : void
+    public function timestampInThePastBeforeGraceperiodIsNotValid(): void
     {
         $this->assertion->shouldReceive('getNotOnOrAfter')->andReturn($this->currentTime - 60);
 
@@ -56,7 +55,7 @@ class NotOnOrAfterTest extends ControlledTimeTestCase
      * @group assertion-validation
      */
     #[Test]
-    public function time_within_graceperiod_is_valid()
+    public function timeWithinGraceperiodIsValid(): void
     {
         $this->assertion->shouldReceive('getNotOnOrAfter')->andReturn($this->currentTime - 59);
 
@@ -71,10 +70,9 @@ class NotOnOrAfterTest extends ControlledTimeTestCase
 
     /**
      * @group assertion-validation
-     * @return void
      */
     #[Test]
-    public function current_time_is_valid() : void
+    public function currentTimeIsValid(): void
     {
         $this->assertion->shouldReceive('getNotOnOrAfter')->andReturn($this->currentTime);
 

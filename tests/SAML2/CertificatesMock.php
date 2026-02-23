@@ -99,7 +99,7 @@ UQ==
     /**
      * @return XMLSecurityKey
      */
-    public static function getPublicKey() : XMLSecurityKey
+    public static function getPublicKey(): XMLSecurityKey
     {
         $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_1_5, ['type' => 'public']);
         $publicKey->loadKey(self::PUBLIC_KEY_PEM);
@@ -110,7 +110,7 @@ UQ==
     /**
      * @return XMLSecurityKey
      */
-    public static function getPrivateKey() : XMLSecurityKey
+    public static function getPrivateKey(): XMLSecurityKey
     {
         $privateKey = new XMLSecurityKey(XMLSecurityKey::RSA_1_5, ['type' => 'private']);
         $privateKey->loadKey(self::PRIVATE_KEY_PEM);
@@ -121,7 +121,7 @@ UQ==
     /**
      * @return XMLSecurityKey
      */
-    public static function getPublicKey2() : XMLSecurityKey
+    public static function getPublicKey2(): XMLSecurityKey
     {
         $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_1_5, ['type' => 'public']);
         $publicKey->loadKey(self::PUBLIC_KEY_2_PEM);
@@ -132,7 +132,7 @@ UQ==
     /**
      * @return XMLSecurityKey
      */
-    public static function getPublicKey3() : XMLSecurityKey
+    public static function getPublicKey3(): XMLSecurityKey
     {
         $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, ['type' => 'public']);
         $publicKey->loadKey(self::PUBLIC_KEY_3_PEM);
@@ -143,7 +143,7 @@ UQ==
     /**
      * @return XMLSecurityKey
      */
-    public static function getPublicKeySha256() : XMLSecurityKey
+    public static function getPublicKeySha256(): XMLSecurityKey
     {
         $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
         $publicKey->loadKey(self::PUBLIC_KEY_PEM);
@@ -154,7 +154,7 @@ UQ==
     /**
      * @return XMLSecurityKey
      */
-    public static function getPublicKey2Sha256() : XMLSecurityKey
+    public static function getPublicKey2Sha256(): XMLSecurityKey
     {
         $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
         $publicKey->loadKey(self::PUBLIC_KEY_2_PEM);
@@ -166,7 +166,7 @@ UQ==
      * Load a X.509 certificate with a DSA public key as RSA key
      * @return XMLSecurityKey
      */
-    public static function getPublicKeyDSAasRSA() : XMLSecurityKey
+    public static function getPublicKeyDSAasRSA(): XMLSecurityKey
     {
         $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
         $publicKey->loadKey(self::PUBLIC_KEY_DSA_PEM);
@@ -208,6 +208,6 @@ UQ==
      */
     public static function getPlainInvalidPublicKey()
     {
-        return substr(self::PUBLIC_KEY_PEM,200);
+        return substr(self::PUBLIC_KEY_PEM, 200);
     }
 }

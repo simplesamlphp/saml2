@@ -18,10 +18,9 @@ class EntityDescriptorTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    public function testMissingAffiliationId() : void
+    public function testMissingAffiliationId(): void
     {
-        $document = DOMDocumentFactory::fromString(
-        <<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor>
         <AffiliateMember>test</AffiliateMember>
@@ -37,10 +36,9 @@ XML
     /**
      * @return void
      */
-    public function testMissingEntityId() : void
+    public function testMissingEntityId(): void
     {
-        $document = DOMDocumentFactory::fromString(
-        <<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="asdf">
         <AffiliateMember>test</AffiliateMember>
@@ -56,10 +54,9 @@ XML
     /**
      * @return void
      */
-    public function testMissingAffiliateMember() : void
+    public function testMissingAffiliateMember(): void
     {
-        $document = DOMDocumentFactory::fromString(
-        <<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="asdf">
     </AffiliationDescriptor>
@@ -74,10 +71,9 @@ XML
     /**
      * @return void
      */
-    public function testMissingDescriptor() : void
+    public function testMissingDescriptor(): void
     {
-        $document = DOMDocumentFactory::fromString(
-        <<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
 </EntityDescriptor>
 XML
@@ -90,10 +86,9 @@ XML
     /**
      * @return void
      */
-    public function testInvalidValidUntil() : void
+    public function testInvalidValidUntil(): void
     {
-        $document = DOMDocumentFactory::fromString(
-        <<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor validUntil="asdf" entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="asd">
         <AffiliateMember>test</AffiliateMember>
@@ -109,10 +104,9 @@ XML
     /**
      * @return void
      */
-    public function testUnmarshalling() : void
+    public function testUnmarshalling(): void
     {
-        $document = DOMDocumentFactory::fromString(
-        <<<XML
+        $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor entityID="theEntityID" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
     <AffiliationDescriptor affiliationOwnerID="asdf" ID="theAffiliationDescriptorID" validUntil="2010-02-01T12:34:56Z" cacheDuration="PT9000S" >
         <AffiliateMember>test</AffiliateMember>
@@ -145,7 +139,7 @@ XML
     /**
      * @return void
      */
-    public function testUnmarshalling2() : void
+    public function testUnmarshalling2(): void
     {
         $document = DOMDocumentFactory::fromString(<<<XML
 <EntityDescriptor entityID="theEntityID" ID="theID" validUntil="2010-01-01T12:34:56Z" cacheDuration="PT5000S" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
