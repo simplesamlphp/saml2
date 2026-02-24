@@ -101,10 +101,6 @@ class EncryptedAssertion
                 throw new Exception('Unknown key type for encryption: ' . $key->type);
         }
 
-        /**
-         * @var \DOMElement encryptedData
-         * @psalm-suppress UndefinedClass
-         */
         $this->encryptedData = $enc->encryptNode($symmetricKey);
     }
 

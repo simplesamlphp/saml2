@@ -268,9 +268,9 @@ class EntityDescriptor extends SignedElementHelper
     /**
      * Add an Extension.
      *
-     * @param \SAML2\XML\Chunk $extensions The Extensions
+     * @param \SAML2\XML\Chunk $extension The Extensions
      */
-    public function addExtension(Extensions $extension): void
+    public function addExtension(Chunk $extension): void
     {
         $this->Extensions[] = $extension;
     }

@@ -22,7 +22,6 @@ class Logger implements LoggerInterface
      */
     public function emergency($message, array $context = []): void
     {
-        /** @psalm-suppress UndefinedClass */
         SspLogger::emergency($message . ($context ? " " . var_export($context, true) : ""));
     }
 
@@ -40,7 +39,6 @@ class Logger implements LoggerInterface
      */
     public function alert($message, array $context = []): void
     {
-        /** @psalm-suppress UndefinedClass */
         SspLogger::alert($message . ($context ? " " . var_export($context, true) : ""));
     }
 
@@ -56,7 +54,6 @@ class Logger implements LoggerInterface
      */
     public function critical($message, array $context = []): void
     {
-        /** @psalm-suppress UndefinedClass */
         SspLogger::critical($message . ($context ? " " . var_export($context, true) : ""));
     }
 
@@ -72,7 +69,6 @@ class Logger implements LoggerInterface
      */
     public function error($message, array $context = []): void
     {
-        /** @psalm-suppress UndefinedClass */
         SspLogger::error($message . ($context ? " " . var_export($context, true) : ""));
     }
 
@@ -90,7 +86,6 @@ class Logger implements LoggerInterface
      */
     public function warning($message, array $context = []): void
     {
-        /** @psalm-suppress UndefinedClass */
         SspLogger::warning($message . ($context ? " " . var_export($context, true) : ""));
     }
 
@@ -104,7 +99,6 @@ class Logger implements LoggerInterface
      */
     public function notice($message, array $context = []): void
     {
-        /** @psalm-suppress UndefinedClass */
         SspLogger::notice($message . ($context ? " " . var_export($context, true) : ""));
     }
 
@@ -121,7 +115,6 @@ class Logger implements LoggerInterface
      */
     public function info($message, array $context = []): void
     {
-        /** @psalm-suppress UndefinedClass */
         SspLogger::info($message . ($context ? " " . var_export($context, true) : ""));
     }
 
@@ -135,7 +128,6 @@ class Logger implements LoggerInterface
      */
     public function debug($message, array $context = []): void
     {
-        /** @psalm-suppress UndefinedClass */
         SspLogger::debug($message . ($context ? " " . var_export($context, true) : ""));
     }
 
@@ -151,7 +143,6 @@ class Logger implements LoggerInterface
      */
     public function log($level, $message, array $context = []): void
     {
-        /** @psalm-suppress RedundantConditionGivenDocblockType */
         Assert::string($message);
 
         switch ($level) {

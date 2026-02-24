@@ -38,7 +38,6 @@ class SubjectConfirmationRecipientMatches implements
         $data = $subjectConfirmation->getSubjectConfirmationData();
         Assert::notNull($data);
 
-        /** @psalm-suppress PossiblyNullReference */
         $recipient = $data->getRecipient();
         if ($recipient && !$this->destination->equals(new Destination($recipient))) {
             $result->addError(sprintf(

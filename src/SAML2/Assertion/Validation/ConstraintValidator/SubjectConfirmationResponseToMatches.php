@@ -36,7 +36,6 @@ class SubjectConfirmationResponseToMatches implements
         $data = $subjectConfirmation->getSubjectConfirmationData();
         Assert::notNull($data);
 
-        /** @psalm-suppress PossiblyNullReference */
         $inResponseTo = $data->getInResponseTo();
         if ($inResponseTo && ($this->getInResponseTo() !== false) && ($this->getInResponseTo() !== $inResponseTo)) {
             $result->addError(sprintf(

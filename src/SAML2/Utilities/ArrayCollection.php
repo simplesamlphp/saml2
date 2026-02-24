@@ -51,7 +51,7 @@ class ArrayCollection implements Collection
 
 
     /**
-     * @param \Closure $f
+     * @param \Closure $filterFunction
      *
      * @return ArrayCollection
      */

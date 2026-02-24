@@ -72,7 +72,7 @@ interface Collection extends \ArrayAccess, \Countable, \IteratorAggregate
 
 
     /**
-     * @param mixed $element
+     * @param mixed $key
      */
     public function remove($key): void;
 

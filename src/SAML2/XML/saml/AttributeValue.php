@@ -91,7 +91,8 @@ class AttributeValue implements Serializable
         Assert::same($this->getElement()->namespaceURI, Constants::NS_SAML);
         Assert::same($this->getElement()->localName, "AttributeValue");
 
-        return $parent->appendChild($parent->ownerDocument->importNode($this->element, true));
+        $parent->appendChild($parent->ownerDocument->importNode($this->element, true));
+        return $parent;
     }
 
 
@@ -169,7 +170,7 @@ class AttributeValue implements Serializable
      * This method will be invoked by any calls to unserialize(), allowing us to restore any data that might not
      * be serializable in its original form (e.g.: DOM objects).
      *
-     * @param array $vars The XML object that we want to restore.
+     * @param array $serialized The XML object that we want to restore.
      */
     public function __unserialize(array $serialized): void
     {

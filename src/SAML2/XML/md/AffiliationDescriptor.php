@@ -8,6 +8,7 @@ use DOMElement;
 use SAML2\Constants;
 use SAML2\SignedElementHelper;
 use SAML2\Utils;
+use SAML2\XML\Chunk;
 use Webmozart\Assert\Assert;
 
 /**
@@ -165,9 +166,9 @@ class AffiliationDescriptor extends SignedElementHelper
     /**
      * Add an Extension.
      *
-     * @param Extensions $extensions The Extensions
+     * @param \SAML2\XML\Chunk $extension The Extensions
      */
-    public function addExtension(Extensions $extension): void
+    public function addExtension(Chunk $extension): void
     {
         $this->Extensions[] = $extension;
     }

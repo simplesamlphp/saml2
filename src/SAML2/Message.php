@@ -8,6 +8,7 @@ use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
+use SAML2\XML\Chunk;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\Extensions;
 
@@ -479,7 +480,6 @@ abstract class Message extends SignedElement
              * after the issuer node.
              */
             $issuerNode = $root->firstChild;
-            /** @psalm-suppress PossiblyNullPropertyFetch */
             $insertBefore = $issuerNode->nextSibling;
         } else {
             /* No issuer node - the signature element should be the first element. */
@@ -597,11 +597,11 @@ abstract class Message extends SignedElement
     /**
      * Add an Extension.
      *
-     * @param \SAML2\XML\samlp\Extensions $extensions The Extensions
+     * @param \SAML2\XML\Chunk $extension The Extensions
      */
-    public function addExtension(Extensions $extension): void
+    public function addExtension(Extensions $extensions): void
     {
-        $this->extensions[] = $extension;
+        $this->extensions[] = $extensions;
     }
 
 

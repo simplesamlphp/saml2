@@ -66,7 +66,7 @@ class KeyDescriptor
         } elseif (empty($keyInfo)) {
             throw new \Exception('No ds:KeyInfo in the KeyDescriptor.');
         }
-        /** @var \DOMElement $keyInfo[0] */
+        /** @var \DOMElement[] $keyInfo */
         $this->KeyInfo = new KeyInfo($keyInfo[0]);
 
         /** @var \DOMElement $em */

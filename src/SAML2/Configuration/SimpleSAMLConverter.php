@@ -16,8 +16,6 @@ class SimpleSAMLConverter
      * @param string                    $certificatePrefix
      *
      * @return \SAML2\Configuration\IdentityProvider
-     *
-     * @psalm-suppress UndefinedClass
      */
     public static function convertToIdentityProvider(
         Configuration $configuration,
@@ -36,8 +34,6 @@ class SimpleSAMLConverter
      * @param string                    $certificatePrefix
      *
      * @return \SAML2\Configuration\ServiceProvider
-     *
-     * @psalm-suppress UndefinedClass
      */
     public static function convertToServiceProvider(
         Configuration $configuration,
@@ -56,8 +52,6 @@ class SimpleSAMLConverter
      * @param string                    $prefix
      *
      * @return array
-     *
-     * @psalm-suppress UndefinedClass
      */
     protected static function pluckConfiguration(Configuration $configuration, string $prefix = ''): array
     {
@@ -94,8 +88,6 @@ class SimpleSAMLConverter
     /**
      * @param \SimpleSAML\Configuration $configuration
      * @param array                     $baseConfiguration
-     *
-     * @psalm-suppress UndefinedClass
      */
     protected static function enrichForIdentityProvider(Configuration $configuration, array &$baseConfiguration): void
     {
@@ -107,8 +99,6 @@ class SimpleSAMLConverter
     /**
      * @param \SimpleSAML\Configuration $configuration
      * @param array                     $baseConfiguration
-     *
-     * @psalm-suppress UndefinedClass
      */
     protected static function enrichForServiceProvider(Configuration $configuration, array &$baseConfiguration): void
     {
@@ -119,8 +109,6 @@ class SimpleSAMLConverter
     /**
      * @param \SimpleSAML\Configuration $configuration
      * @param array                     $baseConfiguration
-     *
-     * @psalm-suppress UndefinedClass
      */
     protected static function enrichForDecryptionProvider(
         Configuration $configuration,

@@ -38,8 +38,6 @@ class SOAPClient
      * @param \SimpleSAML\Configuration $dstMetadata The metadata of the destination of the message.
      * @throws \Exception
      * @return \SAML2\Message The response we received.
-     *
-     * @psalm-suppress UndefinedClass
      */
     public function send(Message $msg, Configuration $srcMetadata, ?Configuration $dstMetadata = null): Message
     {
@@ -227,7 +225,6 @@ class SOAPClient
     public static function validateSSL(string $data, XMLSecurityKey $key): void
     {
         $container = ContainerSingleton::getInstance();
-        /** @psalm-suppress PossiblyNullArgument */
         $keyInfo = openssl_pkey_get_details($key->key);
         if ($keyInfo === false) {
             throw new Exception('Unable to get key details from XMLSecurityKey.');
@@ -254,7 +251,6 @@ class SOAPClient
      */
     private function getSOAPFault(DOMDocument $soapMessage): ?string
     {
-        /** @psalm-suppress PossiblyNullArgument */
         $soapFault = Utils::xpQuery($soapMessage->firstChild, '/soap-env:Envelope/soap-env:Body/soap-env:Fault');
 
         if (empty($soapFault)) {

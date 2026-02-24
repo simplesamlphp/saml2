@@ -144,14 +144,14 @@ class ProcessorBuilder
      */
     private static function createAssertionTransformerChain(
         LoggerInterface $logger,
-        PrivateKeyLoader $keyloader,
+        PrivateKeyLoader $keyLoader,
         IdentityProvider $identityProvider,
         ServiceProvider $serviceProvider
     ): TransformerChain {
         $chain = new TransformerChain($identityProvider, $serviceProvider);
         $chain->addTransformerStep(new DecodeBase64Transformer());
         $chain->addTransformerStep(
-            new NameIdDecryptionTransformer($logger, $keyloader)
+            new NameIdDecryptionTransformer($logger, $keyLoader)
         );
 
         return $chain;

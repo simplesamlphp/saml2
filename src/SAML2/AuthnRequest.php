@@ -685,7 +685,6 @@ class AuthnRequest extends Request
         $doc  = new DOMDocument();
         $root = $doc->createElement('root');
         $doc->appendChild($root);
-        /** @psalm-suppress PossiblyNullReference */
         $this->nameId->toXML($root);
         /** @var \DOMElement $nameId */
         $nameId = $root->firstChild;
@@ -703,10 +702,6 @@ class AuthnRequest extends Request
         $symmetricKey->generateSessionKey();
         $enc->encryptKey($key, $symmetricKey);
 
-        /**
-         * @var \DOMElement encryptedNameId
-         * @psalm-suppress UndefinedClass
-         */
         $this->encryptedNameId = $enc->encryptNode($symmetricKey);
         $this->nameId = null;
     }
@@ -747,7 +742,7 @@ class AuthnRequest extends Request
     /**
      * Set the SubjectConfirmation elements that should be included in the assertion.
      *
-     * @param array \SAML2\XML\saml\SubjectConfirmation[]
+     * @param \SAML2\XML\saml\SubjectConfirmation[] $subjectConfirmation
      */
     public function setSubjectConfirmation(array $subjectConfirmation): void
     {

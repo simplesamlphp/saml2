@@ -1,0 +1,307 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to method debugSAMLMessage\(\) on an unknown class SimpleSAML\\Utils\\XML\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Container.php
+
+		-
+			message: '#^Call to method generateID\(\) on an unknown class SimpleSAML\\Utils\\Random\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Container.php
+
+		-
+			message: '#^Call to method getTempDir\(\) on an unknown class SimpleSAML\\Utils\\System\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Container.php
+
+		-
+			message: '#^Call to method redirectTrustedURL\(\) on an unknown class SimpleSAML\\Utils\\HTTP\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Container.php
+
+		-
+			message: '#^Call to method submitPOSTData\(\) on an unknown class SimpleSAML\\Utils\\HTTP\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Container.php
+
+		-
+			message: '#^Call to method writeFile\(\) on an unknown class SimpleSAML\\Utils\\System\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Container.php
+
+		-
+			message: '#^Instantiated class SimpleSAML\\Utils\\HTTP not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Container.php
+
+		-
+			message: '#^Instantiated class SimpleSAML\\Utils\\Random not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Container.php
+
+		-
+			message: '#^Instantiated class SimpleSAML\\Utils\\System not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Container.php
+
+		-
+			message: '#^Instantiated class SimpleSAML\\Utils\\XML not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Container.php
+
+		-
+			message: '#^Property SAML2\\Compat\\Ssp\\Container\:\:\$utilsHttp has unknown class SimpleSAML\\Utils\\HTTP as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Container.php
+
+		-
+			message: '#^Property SAML2\\Compat\\Ssp\\Container\:\:\$utilsRandom has unknown class SimpleSAML\\Utils\\Random as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Container.php
+
+		-
+			message: '#^Property SAML2\\Compat\\Ssp\\Container\:\:\$utilsSystem has unknown class SimpleSAML\\Utils\\System as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Container.php
+
+		-
+			message: '#^Property SAML2\\Compat\\Ssp\\Container\:\:\$utilsXml has unknown class SimpleSAML\\Utils\\XML as its type\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Container.php
+
+		-
+			message: '#^Call to static method alert\(\) on an unknown class SimpleSAML\\Logger\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Logger.php
+
+		-
+			message: '#^Call to static method critical\(\) on an unknown class SimpleSAML\\Logger\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Logger.php
+
+		-
+			message: '#^Call to static method debug\(\) on an unknown class SimpleSAML\\Logger\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Logger.php
+
+		-
+			message: '#^Call to static method emergency\(\) on an unknown class SimpleSAML\\Logger\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Logger.php
+
+		-
+			message: '#^Call to static method error\(\) on an unknown class SimpleSAML\\Logger\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Logger.php
+
+		-
+			message: '#^Call to static method info\(\) on an unknown class SimpleSAML\\Logger\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Logger.php
+
+		-
+			message: '#^Call to static method notice\(\) on an unknown class SimpleSAML\\Logger\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Logger.php
+
+		-
+			message: '#^Call to static method warning\(\) on an unknown class SimpleSAML\\Logger\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Compat/Ssp/Logger.php
+
+		-
+			message: '#^Call to method getArray\(\) on an unknown class SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Configuration/SimpleSAMLConverter.php
+
+		-
+			message: '#^Call to method getBoolean\(\) on an unknown class SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 3
+			path: src/SAML2/Configuration/SimpleSAMLConverter.php
+
+		-
+			message: '#^Call to method getString\(\) on an unknown class SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 10
+			path: src/SAML2/Configuration/SimpleSAMLConverter.php
+
+		-
+			message: '#^Call to method getValue\(\) on an unknown class SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/Configuration/SimpleSAMLConverter.php
+
+		-
+			message: '#^Call to method hasValue\(\) on an unknown class SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 7
+			path: src/SAML2/Configuration/SimpleSAMLConverter.php
+
+		-
+			message: '#^Parameter \$configuration of method SAML2\\Configuration\\SimpleSAMLConverter\:\:convertToIdentityProvider\(\) has invalid type SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/SAML2/Configuration/SimpleSAMLConverter.php
+
+		-
+			message: '#^Parameter \$configuration of method SAML2\\Configuration\\SimpleSAMLConverter\:\:convertToServiceProvider\(\) has invalid type SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/SAML2/Configuration/SimpleSAMLConverter.php
+
+		-
+			message: '#^Parameter \$configuration of method SAML2\\Configuration\\SimpleSAMLConverter\:\:enrichForDecryptionProvider\(\) has invalid type SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/SAML2/Configuration/SimpleSAMLConverter.php
+
+		-
+			message: '#^Parameter \$configuration of method SAML2\\Configuration\\SimpleSAMLConverter\:\:enrichForIdentityProvider\(\) has invalid type SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/SAML2/Configuration/SimpleSAMLConverter.php
+
+		-
+			message: '#^Parameter \$configuration of method SAML2\\Configuration\\SimpleSAMLConverter\:\:enrichForServiceProvider\(\) has invalid type SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/SAML2/Configuration/SimpleSAMLConverter.php
+
+		-
+			message: '#^Parameter \$configuration of method SAML2\\Configuration\\SimpleSAMLConverter\:\:pluckConfiguration\(\) has invalid type SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/SAML2/Configuration/SimpleSAMLConverter.php
+
+		-
+			message: '#^Call to method addURLparameters\(\) on an unknown class SimpleSAML\\Utils\\HTTP\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/HTTPArtifact.php
+
+		-
+			message: '#^Call to static method addSign\(\) on an unknown class SimpleSAML\\Module\\saml\\Message\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/HTTPArtifact.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/HTTPArtifact.php
+
+		-
+			message: '#^Call to static method getInstance\(\) on an unknown class SimpleSAML\\Store\\StoreFactory\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/HTTPArtifact.php
+
+		-
+			message: '#^Call to static method getMetadataHandler\(\) on an unknown class SimpleSAML\\Metadata\\MetaDataStorageHandler\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/HTTPArtifact.php
+
+		-
+			message: '#^Instantiated class SimpleSAML\\Utils\\HTTP not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/HTTPArtifact.php
+
+		-
+			message: '#^Parameter \$sp of method SAML2\\HTTPArtifact\:\:setSPMetadata\(\) has invalid type SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/SAML2/HTTPArtifact.php
+
+		-
+			message: '#^Call to method getCertPath\(\) on an unknown class SimpleSAML\\Utils\\Config\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/SOAPClient.php
+
+		-
+			message: '#^Call to method getPublicKeys\(\) on an unknown class SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/SOAPClient.php
+
+		-
+			message: '#^Call to method getString\(\) on an unknown class SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 3
+			path: src/SAML2/SOAPClient.php
+
+		-
+			message: '#^Call to method getValue\(\) on an unknown class SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 3
+			path: src/SAML2/SOAPClient.php
+
+		-
+			message: '#^Call to method hasValue\(\) on an unknown class SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 5
+			path: src/SAML2/SOAPClient.php
+
+		-
+			message: '#^Call to method loadPrivateKey\(\) on an unknown class SimpleSAML\\Utils\\Crypto\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/SOAPClient.php
+
+		-
+			message: '#^Call to method loadPublicKey\(\) on an unknown class SimpleSAML\\Utils\\Crypto\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/SOAPClient.php
+
+		-
+			message: '#^Instantiated class SimpleSAML\\Utils\\Config not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/SOAPClient.php
+
+		-
+			message: '#^Instantiated class SimpleSAML\\Utils\\Crypto not found\.$#'
+			identifier: class.notFound
+			count: 1
+			path: src/SAML2/SOAPClient.php
+
+		-
+			message: '#^Parameter \$dstMetadata of method SAML2\\SOAPClient\:\:send\(\) has invalid type SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/SAML2/SOAPClient.php
+
+		-
+			message: '#^Parameter \$srcMetadata of method SAML2\\SOAPClient\:\:send\(\) has invalid type SimpleSAML\\Configuration\.$#'
+			identifier: class.notFound
+			count: 2
+			path: src/SAML2/SOAPClient.php

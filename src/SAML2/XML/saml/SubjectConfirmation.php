@@ -148,7 +148,6 @@ class SubjectConfirmation
         $e = $parent->ownerDocument->createElementNS(Constants::NS_SAML, 'saml:SubjectConfirmation');
         $parent->appendChild($e);
 
-        /** @psalm-suppress PossiblyNullArgument */
         $e->setAttribute('Method', $this->Method);
 
         if ($this->NameID !== null) {

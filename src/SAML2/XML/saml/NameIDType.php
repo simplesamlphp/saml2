@@ -59,6 +59,8 @@ abstract class NameIDType implements Serializable, JsonSerializable
      */
     protected $value = '';
 
+    protected $nodeName;
+
 
     /**
      * Initialize a saml:NameIDType, either from scratch or from an existing \DOMElement.
@@ -88,6 +90,7 @@ abstract class NameIDType implements Serializable, JsonSerializable
         }
 
         $this->value = trim($xml->textContent);
+        $this->nodeName = $this->getNodeName();
     }
 
 
@@ -146,6 +149,21 @@ abstract class NameIDType implements Serializable, JsonSerializable
 
 
     /**
+     * Get the nodeName
+     */
+    public function getNodeName(): string
+    {
+        $fqdn = get_called_class();
+
+        if ($pos = strrpos($fqdn, '\\')) {
+            return 'saml:' . substr($fqdn, $pos + 1);
+        }
+
+        return 'saml:' . $pos;
+    }
+
+
+    /**
      * Convert this NameIDType to XML.
      *
      * @param \DOMElement $parent The element we are converting to XML.
@@ -159,7 +177,7 @@ abstract class NameIDType implements Serializable, JsonSerializable
         } else {
             $doc = $parent->ownerDocument;
         }
-        $element = $doc->createElementNS(Constants::NS_SAML, $this->nodeName);
+        $element = $doc->createElementNS(Constants::NS_SAML, $this->getNodeName());
         $parent->appendChild($element);
 
         if ($this->NameQualifier !== null) {

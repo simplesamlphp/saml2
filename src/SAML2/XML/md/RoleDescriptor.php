@@ -126,7 +126,7 @@ class RoleDescriptor extends SignedElementHelper
         if (count($organization) > 1) {
             throw new \Exception('More than one Organization in the entity.');
         } elseif (!empty($organization)) {
-            /** @var \DOMElement $organization[0] */
+            /** @var \DOMElement[] $organization */
             $this->Organization = new Organization($organization[0]);
         }
 
@@ -217,9 +217,9 @@ class RoleDescriptor extends SignedElementHelper
     /**
      * Add an Extension.
      *
-     * @param \SAML2\XML\Chunk $extensions The Extensions
+     * @param \SAML2\XML\Chunk $extension The Extensions
      */
-    public function addExtension(Extensions $extension): void
+    public function addExtension(Chunk $extension): void
     {
         $this->Extensions[] = $extension;
     }

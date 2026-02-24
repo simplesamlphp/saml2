@@ -17,11 +17,6 @@ use SAML2\DOMDocumentFactory;
 class Issuer extends NameIDType
 {
     /**
-     * @var string
-     */
-    protected $nodeName = 'saml:Issuer';
-
-    /**
      * if $this->SAML2IssuerShowAll is set false
      * From saml-core-2.0-os 8.3.6, when the entity Format is used: "The NameQualifier, SPNameQualifier, and
      * SPProvidedID attributes MUST be omitted."
@@ -59,8 +54,6 @@ class Issuer extends NameIDType
          * a system entity use a URL containing its own domain name to identify itself.
          *
          * @see saml-core-2.0-os
-         *
-         * @var string
          */
         $this->setFormat(Constants::NAMEID_ENTITY);
 

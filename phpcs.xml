@@ -4,6 +4,9 @@
         By default it is less stringent about long lines than other coding standards
     </description>
 
+    <file>src</file>
+    <file>tests</file>
+
     <!-- Use this to exclude paths. You can have multiple patterns -->
     <!--<exclude-pattern>*/tests/*</exclude-pattern>-->
     <!--<exclude-pattern>*/other/*</exclude-pattern>-->
@@ -19,6 +22,7 @@
     <!-- Ignore files with side effects that we cannot fix -->
     <rule ref="PSR1.Files.SideEffects">
         <exclude-pattern>src/_autoload.php</exclude-pattern>
+        <exclude-pattern>tests/SAML2/XML/md/RoleDescriptorTest.php</exclude-pattern>
     </rule>
 
     <!-- Lines can be a little bit longer before they break the build -->
@@ -40,5 +44,6 @@
         <exclude-pattern>src/SAML2/Utilities/Certificate.php</exclude-pattern>
         <exclude-pattern>src/SAML2/Utilities/Collection.php</exclude-pattern>
         <exclude-pattern>src/SAML2/Utilities/Temporal.php</exclude-pattern>
+        <exclude-pattern>tests/**</exclude-pattern>
     </rule>
 </ruleset>

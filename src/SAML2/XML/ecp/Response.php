@@ -87,9 +87,6 @@ class Response
     public function toXML(DOMElement $parent): DOMElement
     {
         $acs = $this->getAssertionConsumerServiceURL();
-        if (!isset($acs)) {
-            throw new InvalidArgumentException("AssertionConsumerServiceURL must be a string");
-        }
 
         $doc = $parent->ownerDocument;
         $response = $doc->createElementNS(Constants::NS_ECP, 'ecp:Response');

@@ -322,7 +322,7 @@ class ContactPerson
     /**
      * Add an Extension.
      *
-     * @param \SAML2\XML\Chunk $extensions The Extensions
+     * @param \SAML2\XML\Chunk $extension The Extensions
      */
     public function addExtension(Chunk $extension): void
     {

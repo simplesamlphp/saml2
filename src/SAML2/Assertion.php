@@ -615,11 +615,12 @@ class Assertion extends SignedElement
      */
     private function parseEncryptedAttributes(DOMElement $xml): void
     {
-        /** @var \DOMElement[] encryptedAttributes */
-        $this->encryptedAttributes = Utils::xpQuery(
+        /** @var \DOMElement[] $encryptedAttributes */
+        $encryptedAttributes = Utils::xpQuery(
             $xml,
             './saml_assertion:AttributeStatement/saml_assertion:EncryptedAttribute'
         );
+        $this->encryptedAttributes = $encryptedAttributes;
     }
 
 
@@ -806,10 +807,6 @@ class Assertion extends SignedElement
         $symmetricKey->generateSessionKey();
         $enc->encryptKey($key, $symmetricKey);
 
-        /**
-         * @var \DOMElement encryptedNameId
-         * @psalm-suppress UndefinedClass
-         */
         $this->encryptedNameId = $enc->encryptNode($symmetricKey);
         $this->nameId = null;
     }
@@ -1762,14 +1759,11 @@ class Assertion extends SignedElement
              */
             $symmetricKey = new XMLSecurityKey(XMLSecurityKey::AES256_CBC);
             $symmetricKey->generateSessionKey();
-            /** @psalm-suppress PossiblyNullArgument */
             $EncAssert->encryptKey($this->encryptionKey, $symmetricKey);
-            /** @psalm-suppress UndefinedClass */
             $EncrNode = $EncAssert->encryptNode($symmetricKey);
 
             $EncAttribute = $document->createElementNS(Constants::NS_SAML, 'saml:EncryptedAttribute');
             $attributeStatement->appendChild($EncAttribute);
-            /** @psalm-suppress InvalidArgument */
             $n = $document->importNode($EncrNode, true);
             $EncAttribute->appendChild($n);
         }

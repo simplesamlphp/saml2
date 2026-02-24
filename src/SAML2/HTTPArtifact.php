@@ -37,10 +37,8 @@ class HTTPArtifact extends Binding
      */
     public function getRedirectURL(Message $message): string
     {
-        /** @psalm-suppress UndefinedClass */
         $config = Configuration::getInstance();
 
-        /** @psalm-suppress UndefinedClass */
         $store = StoreFactory::getInstance($config->getString('store.type'));
         if ($store === false) {
             throw new Exception('Unable to send artifact without a datastore configured.');
@@ -106,7 +104,6 @@ class HTTPArtifact extends Binding
             throw new Exception('Missing SAMLart parameter.');
         }
 
-        /** @psalm-suppress UndefinedClass */
         $metadataHandler = MetaDataStorageHandler::getMetadataHandler();
 
         $idpMetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
@@ -143,13 +140,12 @@ class HTTPArtifact extends Binding
         $ar->setDestination($endpoint['Location']);
 
         // sign the request
-        /** @psalm-suppress UndefinedClass */
         MSG::addSign($this->spMetadata, $idpMetadata, $ar); // Shoaib - moved from the SOAPClient.
 
         $soap = new SOAPClient();
 
         // Send message through SoapClient
-        /** @var \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $artifactResponse */
+        /** @var \SAML2\ArtifactResponse $artifactResponse */
         $artifactResponse = $soap->send($ar, $this->spMetadata, $idpMetadata);
 
         if (!$artifactResponse->isSuccess()) {
@@ -176,8 +172,6 @@ class HTTPArtifact extends Binding
 
     /**
      * @param \SimpleSAML\Configuration $sp
-     *
-     * @psalm-suppress UndefinedClass
      */
     public function setSPMetadata(Configuration $sp): void
     {

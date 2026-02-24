@@ -146,7 +146,6 @@ class Utils
             throw new Exception('Unsupported signing algorithm.');
         }
 
-        /** @psalm-suppress PossiblyNullArgument */
         $keyInfo = openssl_pkey_get_details($key->key);
         if ($keyInfo === false) {
             throw new Exception('Unable to get key details from XMLSecurityKey.');
@@ -176,14 +175,13 @@ class Utils
     {
         Assert::keyExists($info, "Signature");
 
-        /** @var XMLSecurityDSig $objXMLSecDSig */
+        /** @var \RobRichards\XMLSecLibs\XMLSecurityDSig $objXMLSecDSig */
         $objXMLSecDSig = $info['Signature'];
+        /** @var \DOMElement $sigNode */
+        $sigNode = $objXMLSecDSig->sigNode;
 
-        /**
-         * @var \DOMElement[] $sigMethod
-         * @var \DOMElement $objXMLSecDSig->sigNode
-         */
-        $sigMethod = self::xpQuery($objXMLSecDSig->sigNode, './ds:SignedInfo/ds:SignatureMethod');
+        /** @var \DOMElement[] $sigMethod */
+        $sigMethod = self::xpQuery($sigNode, './ds:SignedInfo/ds:SignatureMethod');
         if (empty($sigMethod)) {
             throw new Exception('Missing SignatureMethod element.');
         }
@@ -442,7 +440,6 @@ class Utils
             try {
                 /**
                  * @var string $key
-                 * @psalm-suppress UndefinedClass
                  */
                 $key = $encKey->decryptKey($symmetricKeyInfo);
                 if (strlen($key) !== $keySize) {
@@ -465,7 +462,6 @@ class Utils
                     throw new Exception('No CipherValue available in the encrypted element.');
                 }
 
-                /** @psalm-suppress PossiblyNullArgument */
                 $pkey = openssl_pkey_get_details($symmetricKeyInfo->key);
                 $pkey = sha1(serialize($pkey), true);
                 $key = sha1($encryptedKey . $pkey, true);
@@ -498,7 +494,6 @@ class Utils
 
         /**
          * @var string $decrypted
-         * @psalm-suppress UndefinedClass
          */
         $decrypted = $enc->decryptNode($symmetricKey, false);
 
@@ -518,7 +513,6 @@ class Utils
             throw new Exception('Failed to parse decrypted XML. Maybe the wrong sharedkey was used?', 0, $e);
         }
 
-        /** @psalm-suppress PossiblyNullPropertyFetch */
         $decryptedElement = $newDoc->firstChild->firstChild;
         if (!($decryptedElement instanceof DOMElement)) {
             throw new Exception('Missing decrypted element or it was not actually a DOMElement.');
