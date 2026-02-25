@@ -30,7 +30,8 @@ class BindingTest extends \PHPUnit\Framework\TestCase
         $bind = Binding::getBinding(Constants::BINDING_PAOS);
         $this->assertInstanceOf(SOAP::class, $bind);
 
-        $this->expectException(UnsupportedBindingException::class, 'Unsupported binding:');
+        $this->expectException(UnsupportedBindingException::class);
+        $this->expectExceptionMessage('Unsupported binding:');
         $bind = Binding::getBinding('nonsense');
     }
 
@@ -54,7 +55,8 @@ class BindingTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(HTTPArtifact::class, $bind);
 
         $_GET = ['aap' => 'noot'];
-        $this->expectException(UnsupportedBindingException::class, 'Unable to find the current binding.');
+        $this->expectException(UnsupportedBindingException::class);
+        $this->expectExceptionMessage('Unable to find the SAML 2 binding used for this request.');
         $bind = Binding::getCurrentBinding();
     }
 
@@ -93,7 +95,8 @@ class BindingTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf(HTTPArtifact::class, $bind);
 
         $_POST = ['AAP' => 'Noot'];
-        $this->expectException(UnsupportedBindingException::class, 'Unable to find the current binding.');
+        $this->expectException(UnsupportedBindingException::class);
+        $this->expectExceptionMessage('Unable to find the SAML 2 binding used for this request.');
         $bind = Binding::getCurrentBinding();
     }
 
@@ -105,7 +108,8 @@ class BindingTest extends \PHPUnit\Framework\TestCase
     {
         $_SERVER['REQUEST_METHOD'] = 'PUT';
         $_SERVER['CONTENT_TYPE'] = 'text/xml';
-        $this->expectException(UnsupportedBindingException::class, 'Unable to find the current binding.');
+        $this->expectException(UnsupportedBindingException::class);
+        $this->expectExceptionMessage('Unable to find the SAML 2 binding used for this request.');
         $bind = Binding::getCurrentBinding();
     }
 

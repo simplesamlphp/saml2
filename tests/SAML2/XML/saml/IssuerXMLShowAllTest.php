@@ -28,6 +28,7 @@ class IssuerXMLShowAllTest extends \PHPUnit\Framework\TestCase
         $issuerElement = $issuer->toXML();
         $issuerElements = Utils::xpQuery($issuerElement, '/saml_assertion:Issuer');
         $this->assertCount(1, $issuerElements);
+        /** @var \DOMElement $issuerElement */
         $issuerElement = $issuerElements[0];
 
         $this->assertEquals('TheNameQualifier', $issuerElement->getAttribute("NameQualifier"));

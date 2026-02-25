@@ -29,6 +29,7 @@ class NameIDTest extends \PHPUnit\Framework\TestCase
 
         $nameIdElements = Utils::xpQuery($nameIdElement, '/saml_assertion:NameID');
         $this->assertCount(1, $nameIdElements);
+        /** @var \DOMElement $nameIdElement */
         $nameIdElement = $nameIdElements[0];
 
         $this->assertEquals('TheNameQualifier', $nameIdElement->getAttribute("NameQualifier"));

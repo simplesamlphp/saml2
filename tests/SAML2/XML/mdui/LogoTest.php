@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdui;
 
+use Exception;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\mdui\Logo;
 use SAML2\Utils;
@@ -28,6 +29,7 @@ class LogoTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $logo->toXML($document->firstChild);
 
+        /** @var \DOMElement[] $logoElements */
         $logoElements = Utils::xpQuery(
             $xml,
             '/root/*[local-name()=\'Logo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
@@ -89,7 +91,8 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing url value for Logo');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing url value for Logo');
         $logo = new Logo($document->firstChild);
     }
 
@@ -105,7 +108,8 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing width of Logo');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing width of Logo');
         $logo = new Logo($document->firstChild);
     }
 
@@ -121,7 +125,8 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing height of Logo');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing height of Logo');
         $logo = new Logo($document->firstChild);
     }
 }

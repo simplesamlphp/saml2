@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
+use Mockery;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Test;
+use SAML2\Assertion;
 use SAML2\Assertion\Validation\ConstraintValidator\SpIsValidAudience;
 use SAML2\Assertion\Validation\Result;
+use SAML2\Configuration\ServiceProvider;
 
 /**
  * Because we're mocking a static call, we have to run it in separate processes so as to no contaminate the other
@@ -14,25 +18,18 @@ use SAML2\Assertion\Validation\Result;
  */
 class SpIsValidAudienceTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private $assertion;
+    private MockInterface&Assertion $assertion;
 
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private $serviceProvider;
+    private MockInterface&ServiceProvider $serviceProvider;
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
         parent::setUp();
-        $this->assertion = \Mockery::mock(\SAML2\Assertion::class);
-        $this->serviceProvider = \Mockery::mock(\SAML2\Configuration\ServiceProvider::class);
+        $this->assertion = Mockery::mock(Assertion::class);
+        $this->serviceProvider = Mockery::mock(ServiceProvider::class);
     }
 
 

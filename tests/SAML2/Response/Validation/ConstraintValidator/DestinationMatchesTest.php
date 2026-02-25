@@ -21,6 +21,8 @@ class DestinationMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function setUp(): void
     {
+        parent::setUp();
+
         $this->response = \Mockery::mock('SAML2\Response');
     }
 

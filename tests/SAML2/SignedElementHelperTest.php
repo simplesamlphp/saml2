@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace SAML2;
 
-use SAML2\SignedElementHelperMock;
-use SAML2\CertificatesMock;
+use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
+use SAML2\CertificatesMock;
 use SAML2\SignedElementHelper;
+use SAML2\SignedElementHelperMock;
 use SAML2\Utils;
 
 /**
@@ -27,6 +28,8 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function setUp(): void
     {
+        parent::setUp();
+
         $mock = new SignedElementHelperMock();
         $mock->setSignatureKey(CertificatesMock::getPrivateKey());
         $mock->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
@@ -64,6 +67,7 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
             '/root/ds:Signature/ds:SignedInfo/ds:Reference/ds:DigestValue'
         );
         $this->assertCount(1, $digestValueElements);
+        // @phpstan-ignore property.notFound
         $digestValueElements[0]->firstChild->data = 'invalid';
         $tmp = new SignedElementHelperMock($signedMockElementCopy);
         $this->assertFalse(
@@ -84,10 +88,13 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $signedMockElementCopy->ownerDocument->appendChild($signedMockElementCopy);
         $digestValueElements = Utils::xpQuery($signedMockElementCopy, '/root/ds:Signature/ds:SignatureValue');
         $this->assertCount(1, $digestValueElements);
+
+        // @phpstan-ignore property.notFound
         $digestValueElements[0]->firstChild->data = 'invalid';
         $tmp = new SignedElementHelperMock($signedMockElementCopy);
 
-        $this->expectException(\Exception::class, 'Unable to validate Signature');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unable to validate Signature');
         $tmp->validate(CertificatesMock::getPublicKey());
     }
 

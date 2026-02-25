@@ -8,6 +8,8 @@ use PHPUnit\Framework\Attributes\Test;
 use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotOnOrAfter;
 use SAML2\Assertion\Validation\ConstraintValidator\SubjectConfirmationNotBefore;
 use SAML2\Assertion\Validation\Result;
+use SAML2\XML\saml\SubjectConfirmation;
+use SAML2\XML\saml\SubjectConfirmationData;
 use Test\SAML2\ControlledTimeTestCase;
 
 /**
@@ -16,25 +18,18 @@ use Test\SAML2\ControlledTimeTestCase;
  */
 class SubjectConfirmationNotOnOrAfterTest extends ControlledTimeTestCase
 {
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private $subjectConfirmation;
+    private SubjectConfirmation $subjectConfirmation;
 
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private $subjectConfirmationData;
+    private SubjectConfirmationData $subjectConfirmationData;
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
         parent::setUp();
-        $this->subjectConfirmation = new \SAML2\XML\saml\SubjectConfirmation();
-        $this->subjectConfirmationData = new \SAML2\XML\saml\SubjectConfirmationData();
+        $this->subjectConfirmation = new SubjectConfirmation();
+        $this->subjectConfirmationData = new SubjectConfirmationData();
         $this->subjectConfirmation->setSubjectConfirmationData($this->subjectConfirmationData);
     }
 

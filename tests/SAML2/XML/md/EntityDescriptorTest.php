@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Exception;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\EntityDescriptor;
 use SAML2\XML\md\AffiliationDescriptor;
@@ -28,7 +29,8 @@ class EntityDescriptorTest extends \PHPUnit\Framework\TestCase
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\Exception::class, 'Missing affiliationOwnerID on AffiliationDescriptor.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing affiliationOwnerID on AffiliationDescriptor.');
         new EntityDescriptor($document->firstChild);
     }
 
@@ -46,7 +48,8 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\Exception::class, 'Missing required attribute entityID on EntityDescriptor.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing required attribute entityID on EntityDescriptor.');
         new EntityDescriptor($document->firstChild);
     }
 
@@ -63,7 +66,8 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\Exception::class, 'Missing AffiliateMember in AffiliationDescriptor.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing AffiliateMember in AffiliationDescriptor.');
         new EntityDescriptor($document->firstChild);
     }
 
@@ -78,7 +82,8 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\Exception::class, 'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.');
         new EntityDescriptor($document->firstChild);
     }
 
@@ -96,7 +101,8 @@ XML
 </EntityDescriptor>
 XML
         );
-        $this->expectException(\Exception::Class, 'Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: asdf');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid SAML2 timestamp passed to xsDateTimeToTimestamp: asdf');
         new EntityDescriptor($document->firstChild);
     }
 

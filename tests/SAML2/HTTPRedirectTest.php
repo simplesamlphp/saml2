@@ -106,7 +106,8 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $this->assertTrue($result);
 
         // validate with another cert, should fail
-        $this->expectException(\Exception::class, 'Unable to validate signature');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unable to validate signature');
         $result = $request->validate(CertificatesMock::getPublicKeySha256());
     }
 
@@ -124,7 +125,8 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $request = $hr->receive();
 
         // validate with wrong type of cert
-        $this->expectException(\Exception::class, 'Invalid key type for validating signature');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid key type for validating signature');
         $result = $request->validate(CertificatesMock::getPublicKey());
     }
 
@@ -138,7 +140,8 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $qs = 'SAMLRequest=pVJNb9swDP0rhu6O7XjeGiEJkDYoGqDbgibboZdCkahEgEx5Ir11%2F36y02FdD7n0JPDjPT4%2BcU6q9Z1c9XzCB%2FjRA3H23HokORYWoo8ogyJHElULJFnL3erzvZxOStnFwEEHL15BLiMUEUR2AUW2WS%2FEUw2NrXRp7NWshEPVzJqm%2BTQzVV1DddC21rUy1tq6norsO0RKyIVIRAlO1MMGiRVySpVVk1fTvKr25ZVsGvnh46PI1mkbh4pH1Im5I1kUgEeHMKE%2BWh0QnnmCvlBpf0B2emwunOkKcnj0kJM7Yj7oXf2VfhOQ%2BhbiDuJPp%2BHbw%2F0%2F8uSIdf4tO7m28zC4U7TB9KnendKAIabzO82VpjFrwKrec06dyLYv%2Fl47NEnNZWsP5yaSd%2Fv9Nt9%2B3e3Fcj5wy9GquHyPxhZYGcXqjcR58XrA%2FHxLX5K0zXobvNO%2Fs9sQW8WXlQ8ZZ3I7tkqOCsmlz0iWex9%2B3URQDAvBsQdRLM8j%2F7%2FY5R8%3D&RelayState=https%3A%2F%2Fprofile.surfconext.nl%2F&SAMLEncoding=urn%3Aoasis%3Anames%3Atc%3ASAML%3A2.0%3Abindings%3AURL-Encoding%3Anone';
         $_SERVER['QUERY_STRING'] = $qs;
 
-        $this->expectException(\Exception::class, 'Unknown SAMLEncoding:');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Unknown SAMLEncoding:');
         $hr = new HTTPRedirect();
         $request = $hr->receive();
     }
@@ -152,7 +155,8 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $qs = 'SAMLRequest=nVLBauMwEP0Vo7sjW7FpKpJA2rBsoNuGOruHXhZFHm8EsuRqxtv27yvbWWgvYelFgjfvzbx5zBJVazu56enkHuG5B6TktbUO5VhYsT446RUalE61gJK0rDY%2F7qSYZbILnrz2ln2QXFYoRAhkvGPJbrtiv7VoygJEoTJ9LOusXDSFuJ4vdH6cxwoIEGUjsrqoFUt%2BQcCoXLHYKMoRe9g5JOUoQlleprlI8%2FyQz6W4ksXiiSXbuI1xikbViahDyfkRSM2wD40DmjnL0bSdhcE6Hx7BTd3xqnqoIPw1GmbdqWPJNx80jCGtGIUeWLL5t8mtd9i3EM78n493%2FzWr9XVvx%2B58mj39IlUaR%2FQmKOPq4Dtkyf4c9E1EjPtzOePjREL5%2FXDYp%2FuH6sDWy6G3HDML66%2B5ayO7VlHx2dySf2y9nM7pPprabffeGv02ZNcquux5QEydNiNVUlAODTiKMVvrX24DKIJz8nw9jfx8tOt3&RelayState=https%3A%2F%2Fbeta.surfnet.nl%2Fsimplesaml%2Fmodule.php%2Fcore%2Fauthenticate.php%3Fas%3DBraindrops&Signature=b%2Bqe%2FXGgICOrEL1v9dwuoy0RJtJ%2FGNAr7gJGYSJzLG0riPKwo7v5CH8GPC2P9IRikaeaNeQrnhBAaf8FCWrO0cLFw4qR6msK9bxRBGk%2BhIaTUYCh54ETrVCyGlmBneMgC5%2FiCRvtEW3ESPXCCqt8Ncu98yZmv9LIVyHSl67Se%2BfbB9sDw3%2FfzwYIHRMqK2aS8jnsnqlgnBGGOXqIqN3%2Bd%2F2dwtCfz14s%2F9odoYzSUv32qfNPiPez6PSNqwhwH7dWE3TlO%2FjZmz0DnOeQ2ft6qdZEi5ZN5KCV6VmNKpkrLMq6DDPnuwPm%2F8oCAoT88R2jG7uf9QZB%2BArWJKMEhDLsCA%3D%3D';
         $_SERVER['QUERY_STRING'] = $qs;
 
-        $this->expectException(\Exception::class, 'Missing signature algorithm');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing signature algorithm');
         $hr = new HTTPRedirect();
         $request = $hr->receive();
     }
@@ -184,7 +188,8 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $qs = 'aap=noot&mies=jet&wim&RelayState=etc';
         $_SERVER['QUERY_STRING'] = $qs;
 
-        $this->expectException(\Exception::class, 'Missing SAMLRequest or SAMLResponse parameter.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing SAMLRequest or SAMLResponse parameter.');
         $hr = new HTTPRedirect();
         $hr->receive();
     }
@@ -198,7 +203,8 @@ class HTTPRedirectTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     {
         $request = new AuthnRequest();
         $hr = new HTTPRedirect();
-        $this->expectException('Exception', 'Cannot build a redirect URL, no destination set.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot build a redirect URL, no destination set.');
         $hr->send($request);
     }
 

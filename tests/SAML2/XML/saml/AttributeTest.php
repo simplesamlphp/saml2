@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Exception;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\Utils;
@@ -34,6 +35,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
 
         $attributeElements = Utils::xpQuery($attributeElement, '/root/saml_assertion:Attribute');
         $this->assertCount(1, $attributeElements);
+        /** @var \DOMElement $attributeElement */
         $attributeElement = $attributeElements[0];
 
         $this->assertEquals('TheName', $attributeElement->getAttribute('Name'));
@@ -79,7 +81,8 @@ XML
 </saml:Attribute>
 XML
         );
-        $this->expectException(\Exception::class, 'Missing Name on Attribute.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing Name on Attribute.');
         new Attribute($document->firstChild);
     }
 }

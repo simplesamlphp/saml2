@@ -28,6 +28,7 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
 
         $scopeElements = Utils::xpQuery($scopeElement, '/root/shibmd:Scope');
         $this->assertCount(1, $scopeElements);
+        /** @var \DOMElement $scopeElement */
         $scopeElement = $scopeElements[0];
 
         $this->assertEquals('example.org', $scopeElement->nodeValue);
@@ -51,6 +52,7 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
 
         $scopeElements = Utils::xpQuery($scopeElement, '/root/shibmd:Scope');
         $this->assertCount(1, $scopeElements);
+        /** @var \DOMElement $scopeElement */
         $scopeElement = $scopeElements[0];
 
         $this->assertEquals('example.org', $scopeElement->nodeValue);
@@ -74,6 +76,7 @@ class ScopeTest extends \PHPUnit\Framework\TestCase
 
         $scopeElements = Utils::xpQuery($scopeElement, '/root/shibmd:Scope');
         $this->assertCount(1, $scopeElements);
+        /** @var \DOMElement $scopeElement */
         $scopeElement = $scopeElements[0];
 
         $this->assertEquals('^(.*\.)?example\.edu$', $scopeElement->nodeValue);

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\Signature;
 
+use Mockery;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Test;
 use SAML2\CertificatesMock;
 use SAML2\Certificate\Key;
@@ -29,6 +31,8 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function setUp(): void
     {
+        parent::setUp();
+
         $this->mockConfiguration = \Mockery::mock(CertificateProvider::class);
         $this->mockSignedElement = \Mockery::mock(SignedElement::class);
     }
@@ -109,11 +113,11 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
 
     /**
-     * @return \SAML2\Certificate\KeyLoader
+     * @return \Mockery\MockInterface
      */
-    private function prepareKeyLoader($returnValue)
+    private function prepareKeyLoader($returnValue): MockInterface
     {
-        return \Mockery::mock(KeyLoader::class)
+        return Mockery::mock(KeyLoader::class)
             ->shouldReceive('extractPublicKeys')
             ->andReturn($returnValue)
             ->getMock();

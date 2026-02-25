@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdrpi;
 
+use Exception;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\mdrpi\PublicationInfo;
 use SAML2\Utils;
@@ -30,6 +31,7 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $publicationInfo->toXML($document->firstChild);
 
+        /** @var \DOMElement[] $publicationInfoElements */
         $publicationInfoElements = Utils::xpQuery(
             $xml,
             '/root/*[local-name()=\'PublicationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
@@ -41,6 +43,7 @@ class PublicationInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('2009-02-13T23:31:30Z', $publicationInfoElement->getAttribute("creationInstant"));
         $this->assertEquals('PublicationIdValue', $publicationInfoElement->getAttribute("publicationId"));
 
+        /** @var \DOMElement[] $usagePolicyElements */
         $usagePolicyElements = Utils::xpQuery(
             $publicationInfoElement,
             './*[local-name()=\'UsagePolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
@@ -93,7 +96,8 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing required attribute "publisher"');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing required attribute "publisher"');
         $publicationInfo = new PublicationInfo($document->firstChild);
     }
 }

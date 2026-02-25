@@ -25,6 +25,8 @@ class ProcessorTest extends MockeryTestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->decrypter = m::mock(Decrypter::class);
         $validator = m::mock(\SAML2\Signature\Validator::class);
         $assertionValidator = m::mock(\SAML2\Assertion\Validation\AssertionValidator::class);

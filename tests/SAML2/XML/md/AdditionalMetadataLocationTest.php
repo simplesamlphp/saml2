@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Exception;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\AdditionalMetadataLocation;
@@ -26,6 +27,7 @@ class AdditionalMetadataLocationTest extends \PHPUnit\Framework\TestCase
         $additionalMetadataLocation->setLocation('TheLocation');
         $additionalMetadataLocationElement = $additionalMetadataLocation->toXML($document->firstChild);
 
+        /** @var \DOMElement[] $additionalMetadataLocationElements */
         $additionalMetadataLocationElements = Utils::xpQuery(
             $additionalMetadataLocationElement,
             '/root/saml_metadata:AdditionalMetadataLocation'
@@ -55,7 +57,8 @@ class AdditionalMetadataLocationTest extends \PHPUnit\Framework\TestCase
             '<md:AdditionalMetadataLocation xmlns:md="' . Constants::NS_MD . '"' .
             '>LocationText</md:AdditionalMetadataLocation>'
         );
-        $this->expectException(\Exception::class, 'Missing namespace attribute on AdditionalMetadataLocation element.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing namespace attribute on AdditionalMetadataLocation element.');
         new AdditionalMetadataLocation($document->firstChild);
     }
 }

@@ -16,7 +16,8 @@ class SOAPTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testRequestParsingEmptyMessage(): void
     {
-        $this->expectException(UnsupportedBindingException::class, 'Invalid message received');
+        $this->expectException(UnsupportedBindingException::class);
+        $this->expectExceptionMessage('Invalid message received');
 
         $stub = $this->getStubWithInput('');
         $stub->receive();

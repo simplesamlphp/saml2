@@ -1,0 +1,7 @@
+parameters:
+	ignoreErrors:
+		-
+			message: '#^Call to an undefined method Mockery\\Expectation\:\:shouldReceive\(\)\.$#'
+			identifier: method.notFound
+			count: 3
+			path: tests/SAML2/Certificate/KeyLoaderTest.php

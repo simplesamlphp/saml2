@@ -22,9 +22,6 @@
         "mockery/mockery": "~1.6",
         "simplesamlphp/simplesamlphp-test-framework": "~1.11"
     },
-    "conflict": {
-        "robrichards/xmlseclibs": "3.1.2"
-    },
     "autoload": {
         "psr-4": {
             "SAML2\\": "src/SAML2"

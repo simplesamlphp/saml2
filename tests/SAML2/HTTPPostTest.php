@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Exception;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Error\Warning;
 use PHPUnit\Framework\TestCase;
@@ -65,7 +66,8 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $_POST = [];
         $_POST = ['non' => 'sense'];
         $hp = new HTTPPost();
-        $this->expectException(\Exception::class, 'Missing SAMLRequest or SAMLResponse parameter');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing SAMLRequest or SAMLResponse parameter');
         $hp->receive();
     }
 
@@ -78,7 +80,8 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     {
         $request = new AuthnRequest();
         $hp = new HTTPPost();
-        $this->expectException('Exception', 'Cannot send message, no destination set.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Cannot send message, no destination set.');
         $hp->send($request);
     }
 

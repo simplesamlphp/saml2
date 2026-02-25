@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Exception;
 use PHPUnit\Framework\Attributes\DataProvider;
 use SAML2\AttributeQuery;
 use SAML2\Constants;
@@ -34,6 +35,7 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
 
         $xml = $aq->toUnsignedXML();
 
+        /** @var \DOMElement[] $nameId_after */
         $nameId_after = Utils::xpQuery($xml, './saml_assertion:Subject/saml_assertion:NameID');
         $this->assertTrue(count($nameId_after) === 1);
         $this->assertEquals('SomeNameIDFormat', $nameId_after[0]->getAttribute("Format"));
@@ -210,14 +212,14 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
             $ts = Utils::xsDateTimeToTimestamp($time);
             $this->assertTrue($shouldPass);
             $this->assertEquals($expectedTs, $ts);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->assertFalse($shouldPass);
         }
     }
 
 
     /**
-     * @return void
+     * @return array
      */
     public static function xsDateTimes(): array
     {
@@ -292,7 +294,8 @@ class UtilsTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($result, '404');
 
         // Exception on invalid value
-        $this->expectException(\Exception::class, "Invalid value of boolean attribute 'anattribute': 'yes'");
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage("Invalid value of boolean attribute 'anattribute' : 'yes'");
 
         $document = DOMDocumentFactory::fromString(
             '<somenode anattribute="yes"></somenode>'

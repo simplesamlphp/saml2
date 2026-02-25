@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdui;
 
+use Exception;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\mdui\Keywords;
 use SAML2\Utils;
@@ -26,6 +27,7 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $keywords->toXML($document->firstChild);
 
+        /** @var \DOMElement[] $keywordElements */
         $keywordElements = Utils::xpQuery(
             $xml,
             '/root/*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']'
@@ -49,7 +51,8 @@ class KeywordsTest extends \PHPUnit\Framework\TestCase
 
         $document = DOMDocumentFactory::fromString('<root />');
 
-        $this->expectException(\Exception::class, 'Keywords may not contain a "+" character');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Keywords may not contain a "+" character');
         $xml = $keywords->toXML($document->firstChild);
     }
 
@@ -85,7 +88,8 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing lang on Keywords');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing lang on Keywords');
         $keywords = new Keywords($document->firstChild);
     }
 
@@ -101,7 +105,8 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing value for Keywords');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing value for Keywords');
         $keywords = new Keywords($document->firstChild);
     }
 }

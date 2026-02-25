@@ -30,6 +30,7 @@ class IndexedEndpointTypeTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
 
+        /** @var \DOMElement[] $indexedEndpointElements */
         $indexedEndpointElements = Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');
         $this->assertCount(1, $indexedEndpointElements);
         $indexedEndpointElement = $indexedEndpointElements[0];
@@ -42,6 +43,8 @@ class IndexedEndpointTypeTest extends \PHPUnit\Framework\TestCase
         $indexedEndpointType->setIsDefault(true);
         $document->loadXML('<root />');
         $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
+
+        /** @var \DOMElement[] $indexedEndpointTypeElement */
         $indexedEndpointTypeElement = Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');
         $this->assertCount(1, $indexedEndpointTypeElement);
         $this->assertEquals('true', $indexedEndpointTypeElement[0]->getAttribute('isDefault'));
@@ -49,6 +52,8 @@ class IndexedEndpointTypeTest extends \PHPUnit\Framework\TestCase
         $indexedEndpointType->setIsDefault(null);
         $document->loadXML('<root />');
         $indexedEndpointTypeElement = $indexedEndpointType->toXML($document->firstChild, 'md:Test');
+
+        /** @var \DOMElement[] $indexedEndpointTypeElement */
         $indexedEndpointTypeElement = Utils::xpQuery($indexedEndpointTypeElement, '/root/saml_metadata:Test');
         $this->assertCount(1, $indexedEndpointTypeElement);
         $this->assertTrue(!$indexedEndpointTypeElement[0]->hasAttribute('isDefault'));
@@ -69,6 +74,7 @@ class IndexedEndpointTypeTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $discoResponseElement = $discoResponse->toXML($document->firstChild, 'idpdisc:DiscoverResponse');
 
+        /** @var \DOMElement[] $discoResponseElements */
         $discoResponseElements = Utils::xpQuery($discoResponseElement, '/root/saml_idpdisc:DiscoveryResponse');
         $this->assertCount(1, $discoResponseElements);
         $discoResponseElement = $discoResponseElements[0];

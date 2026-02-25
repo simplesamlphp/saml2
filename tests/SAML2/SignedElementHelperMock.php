@@ -13,10 +13,8 @@ use SAML2\DOMDocumentFactory;
  */
 class SignedElementHelperMock extends SignedElementHelper
 {
-    /**
-     * @param \DOMElement $xml
-     */
-    public function __construct(DOMElement $xml = null)
+    /** @param \DOMElement|null $xml */
+    public function __construct(?DOMElement $xml = null)
     {
         parent::__construct($xml);
     }

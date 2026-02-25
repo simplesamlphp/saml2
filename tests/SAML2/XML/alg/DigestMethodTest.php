@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\alg;
 
+use Exception;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\alg\DigestMethod;
 use SAML2\Utils;
@@ -27,6 +28,7 @@ class DigestMethodTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $digestMethod->toXML($document->firstChild);
 
+        /** @var \DOMElement[] $digestMethodElements */
         $digestMethodElements = Utils::xpQuery(
             $xml,
             '/root/*[local-name()=\'DigestMethod\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:algsupport\']'
@@ -62,7 +64,8 @@ XML
 <alg:DigestMethod xmlns:alg="urn:oasis:names:tc:SAML:metadata:algsupport" />
 XML
         );
-        $this->expectException(\Exception::class, 'Missing required attribute "Algorithm"');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing required attribute "Algorithm"');
         new DigestMethod($document->firstChild);
     }
 }

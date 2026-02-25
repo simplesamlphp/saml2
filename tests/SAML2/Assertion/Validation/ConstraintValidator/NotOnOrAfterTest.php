@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
+use Mockery;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Test;
+use SAML2\Assertion;
 use SAML2\Assertion\Validation\ConstraintValidator\NotOnOrAfter;
 use SAML2\Assertion\Validation\Result;
 use Test\SAML2\ControlledTimeTestCase;
@@ -17,19 +20,15 @@ use Test\SAML2\ControlledTimeTestCase;
  */
 class NotOnOrAfterTest extends ControlledTimeTestCase
 {
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private $assertion;
+    private MockInterface&Assertion $assertion;
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
         parent::setUp();
-        $this->assertion = \Mockery::mock(\SAML2\Assertion::class);
+        $this->assertion = Mockery::mock(Assertion::class);
     }
 
 

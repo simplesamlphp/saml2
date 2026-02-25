@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\alg;
 
+use Exception;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\alg\SigningMethod;
 use SAML2\Utils;
@@ -27,6 +28,7 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $signingMethod->toXML($document->firstChild);
 
+        /** @var \DOMElement[] $signingMethodElements */
         $signingMethodElements = Utils::xpQuery(
             $xml,
             '/root/*[local-name()=\'SigningMethod\' and ' .
@@ -44,6 +46,7 @@ class SigningMethodTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $signingMethod->toXML($document->firstChild);
 
+        /** @var \DOMElement[] $signingMethodElements */
         $signingMethodElements = Utils::xpQuery(
             $xml,
             '/root/*[local-name()=\'SigningMethod\' and ' .
@@ -87,7 +90,8 @@ XML
                    MaxKeySize="4096" />
 XML
         );
-        $this->expectException(\Exception::class, 'Missing required attribute "Algorithm"');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing required attribute "Algorithm"');
         new SigningMethod($document->firstChild);
     }
 }

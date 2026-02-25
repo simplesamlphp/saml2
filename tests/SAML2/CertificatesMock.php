@@ -131,13 +131,13 @@ UQ==
 
     /**
      * @return XMLSecurityKey
-     */
     public static function getPublicKey3(): XMLSecurityKey
     {
         $publicKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA1, ['type' => 'public']);
         $publicKey->loadKey(self::PUBLIC_KEY_3_PEM);
         return $publicKey;
     }
+     */
 
 
     /**

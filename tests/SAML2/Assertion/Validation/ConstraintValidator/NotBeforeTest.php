@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
+use Mockery;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Test;
 use SAML2\Assertion;
 use SAML2\Assertion\Validation\ConstraintValidator\NotBefore;
@@ -18,24 +20,17 @@ use Test\SAML2\ControlledTimeTestCase;
  */
 class NotBeforeTest extends ControlledTimeTestCase
 {
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private $assertion;
+    private MockInterface&Assertion $assertion;
 
-    /**
-     * @var int
-     */
-    protected $currentTime = 1;
+    protected int $currentTime = 1;
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
         parent::setUp();
-        $this->assertion = \Mockery::mock(Assertion::class);
+        $this->assertion = Mockery::mock(Assertion::class);
     }
 
 

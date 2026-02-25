@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use Exception;
 use SAML2\Response;
 use SAML2\Utils;
 use SAML2\DOMDocumentFactory;
@@ -30,14 +31,17 @@ class StatusResponseTest extends \PHPUnit\Framework\TestCase
         $statusElements = Utils::xpQuery($responseElement, './saml_protocol:Status');
         $this->assertCount(1, $statusElements);
 
+        /** @var \DOMElement[] $statusCodeElements */
         $statusCodeElements = Utils::xpQuery($statusElements[0], './saml_protocol:StatusCode');
         $this->assertCount(1, $statusCodeElements);
         $this->assertEquals('OurStatusCode', $statusCodeElements[0]->getAttribute("Value"));
 
+        /** @var \DOMElement[] $nestedStatusCodeElements */
         $nestedStatusCodeElements = Utils::xpQuery($statusCodeElements[0], './saml_protocol:StatusCode');
         $this->assertCount(1, $nestedStatusCodeElements);
         $this->assertEquals('OurSubStatusCode', $nestedStatusCodeElements[0]->getAttribute("Value"));
 
+        /** @var \DOMElement[] $statusMessageElements */
         $statusMessageElements = Utils::xpQuery($statusElements[0], './saml_protocol:StatusMessage');
         $this->assertCount(1, $statusMessageElements);
         $this->assertEquals('OurMessageText', $statusMessageElements[0]->textContent);
@@ -180,7 +184,8 @@ STATUSXML
      */
     public function testNoStatusElementThrowsException(): void
     {
-        $this->expectException(\Exception::class, 'Missing status code on response');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing status code on response');
 
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
@@ -213,7 +218,8 @@ XML;
      */
     public function testNoStatusCodeThrowsException(): void
     {
-        $this->expectException(\Exception::class, 'Missing status code in status element');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing status code in status element');
 
         $xml = <<<XML
 <samlp:Response xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"

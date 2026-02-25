@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdrpi;
 
+use Exception;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\mdrpi\RegistrationInfo;
 use SAML2\Utils;
@@ -29,6 +30,7 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $registrationInfo->toXML($document->firstChild);
 
+        /** @var \DOMElement[] $registrationInfoElements */
         $registrationInfoElements = Utils::xpQuery(
             $xml,
             '/root/*[local-name()=\'RegistrationInfo\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
@@ -39,6 +41,7 @@ class RegistrationInfoTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('https://ExampleAuthority', $registrationInfoElement->getAttribute("registrationAuthority"));
         $this->assertEquals('2009-02-13T23:31:30Z', $registrationInfoElement->getAttribute("registrationInstant"));
 
+        /** @var \DOMElement[] $usagePolicyElements */
         $usagePolicyElements = Utils::xpQuery(
             $registrationInfoElement,
             './*[local-name()=\'RegistrationPolicy\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:rpi\']'
@@ -95,7 +98,8 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing required attribute "registrationAuthority"');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing required attribute "registrationAuthority"');
         $registrationInfo = new RegistrationInfo($document->firstChild);
     }
 
@@ -110,7 +114,8 @@ XML
 
         $document = DOMDocumentFactory::fromString('<root />');
 
-        $this->expectException(\Exception::class, 'Missing required registration authority.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing required registration authority.');
         $xml = $registrationInfo->toXML($document->firstChild);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2\XML\md;
 
+use Exception;
 use SAML2\Constants;
 use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\ContactPerson;
@@ -193,7 +194,8 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'More than one GivenName in md:ContactPerson');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('More than one GivenName in md:ContactPerson');
 
         $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
     }
@@ -240,7 +242,8 @@ XML
 XML
         );
 
-        $this->expectException(\Exception::class, 'Missing contactType on ContactPerson.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Missing contactType on ContactPerson.');
 
         $contactPerson = new ContactPerson($document->getElementsByTagName('ContactPerson')->item(0));
     }

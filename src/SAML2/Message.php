@@ -575,7 +575,7 @@ abstract class Message extends SignedElement
     /**
      * Retrieve the Extensions.
      *
-     * @return \SAML2\XML\samlp\Extensions[]
+     * @return \SAML2\XML\Chunk[]
      */
     public function getExtensions(): array
     {
@@ -599,9 +599,9 @@ abstract class Message extends SignedElement
      *
      * @param \SAML2\XML\Chunk $extension The Extensions
      */
-    public function addExtension(Extensions $extensions): void
+    public function addExtension(Chunk $extension): void
     {
-        $this->extensions[] = $extensions;
+        $this->extensions[] = $extension;
     }
 
 

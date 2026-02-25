@@ -17,7 +17,8 @@ class FileTest extends \PHPUnit\Framework\TestCase
     #[Test]
     public function whenLoadingNonexistantFileAnExceptionIsThrown(): void
     {
-        $this->expectException(RuntimeException::class, 'File "/foo/bar/baz/quux" does not exist or is not readable');
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('File "/foo/bar/baz/quux" does not exist or is not readable');
         File::getFileContents('/foo/bar/baz/quux');
     }
 

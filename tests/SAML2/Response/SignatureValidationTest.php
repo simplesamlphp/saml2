@@ -52,6 +52,8 @@ class SignatureValidationTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function setUp(): void
     {
+        parent::setUp();
+
         $this->assertionProcessorBuilder = \Mockery::mock('alias:SAML2\Assertion\ProcessorBuilder');
         $this->assertionProcessor = \Mockery::mock(Assertion\Processor::class);
         $this->assertionProcessorBuilder

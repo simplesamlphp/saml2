@@ -15,12 +15,13 @@ use Mockery\Adapter\Phpunit\MockeryTestCase;
  */
 abstract class ControlledTimeTestCase extends MockeryTestCase
 {
-    /** @var int */
-    protected $currentTime = 1;
+    protected int $currentTime = 1;
 
 
     public function setUp(): void
     {
+        parent::setUp();
+
         $timing = \Mockery::mock('alias:\SAML2\Utilities\Temporal');
         $timing->shouldReceive('getTime')->andReturn($this->currentTime);
     }

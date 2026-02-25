@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SAML2\Assertion\Validation\ConstraintValidator;
 
 use Mockery;
+use Mockery\MockInterface;
 use PHPUnit\Framework\Attributes\Test;
 use SAML2\Assertion\Validation\Result;
 use SAML2\Response;
@@ -13,24 +14,14 @@ use SAML2\XML\saml\SubjectConfirmationData;
 
 class SubjectConfirmationResponseToMatchesTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private $subjectConfirmation;
+    private SubjectConfirmation $subjectConfirmation;
 
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private $subjectConfirmationData;
+    private SubjectConfirmationData $subjectConfirmationData;
 
-    /**
-     * @var \Mockery\MockInterface
-     */
-    private $response;
+    private Response&MockInterface $response;
 
 
     /**
-     * @return void
      */
     public function setUp(): void
     {
