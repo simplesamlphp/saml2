@@ -12,9 +12,9 @@ use SimpleSAML\SAML2\Type\ListOfStringsValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XML\TypedTextContentTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function array_key_first;
 
@@ -38,11 +38,11 @@ final class Keywords extends AbstractMduiElement implements
     /**
      * Initialize a Keywords.
      *
-     * @param \SimpleSAML\XMLSchema\Type\LanguageValue $lang
+     * @param \SimpleSAML\XML\Type\LangValue $lang
      * @param \SimpleSAML\SAML2\Type\ListOfStringsValue $keywords
      */
     public function __construct(
-        protected LanguageValue $lang,
+        protected LangValue $lang,
         ListOfStringsValue $keywords,
     ) {
         $this->setContent($keywords);
@@ -52,9 +52,9 @@ final class Keywords extends AbstractMduiElement implements
     /**
      * Collect the value of the lang-property
      *
-     * @return \SimpleSAML\XMLSchema\Type\LanguageValue
+     * @return \SimpleSAML\XML\Type\LangValue
      */
-    public function getLanguage(): LanguageValue
+    public function getLanguage(): LangValue
     {
         return $this->lang;
     }
@@ -74,7 +74,7 @@ final class Keywords extends AbstractMduiElement implements
         Assert::same($xml->namespaceURI, Keywords::NS, InvalidDOMElementException::class);
         Assert::stringNotEmpty($xml->textContent, 'Missing value for Keywords.');
 
-        $lang = self::getAttribute($xml, 'xml:lang', LanguageValue::class);
+        $lang = self::getAttribute($xml, 'xml:lang', LangValue::class);
         $Keywords = ListOfStringsValue::fromString($xml->textContent);
 
         return new static($lang, $Keywords);
@@ -106,7 +106,7 @@ final class Keywords extends AbstractMduiElement implements
         Assert::notEmpty($data, ArrayValidationException::class);
         Assert::count($data, 1, ArrayValidationException::class);
 
-        $lang = LanguageValue::fromString(array_key_first($data));
+        $lang = LangValue::fromString(array_key_first($data));
         $keywords = $data[$lang->getValue()];
 
         Assert::allNotContains($keywords, '+', ProtocolViolationException::class);

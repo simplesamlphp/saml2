@@ -28,7 +28,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XMLSchema\Type\PositiveIntegerValue;
 
 use function dirname;
@@ -80,39 +80,39 @@ final class UIInfoTest extends TestCase
             SAMLAnyURIValue::fromString("https://example.org/idp/images/logo_87x88.png"),
             PositiveIntegerValue::fromInteger(88),
             PositiveIntegerValue::fromInteger(87),
-            LanguageValue::fromString('fy'),
+            LangValue::fromString('fy'),
         );
 
         $uiinfo = new UIInfo(
             displayName: [
                 new DisplayName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('University of Examples'),
                 ),
                 new DisplayName(
-                    LanguageValue::fromString('el'),
+                    LangValue::fromString('el'),
                     SAMLStringValue::fromString('Univërsitä øf Exåmpleß'),
                 ),
             ],
             description: [
                 new Description(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Just an example'),
                 ),
             ],
             informationURL: [
                 new InformationURL(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLAnyURIValue::fromString('http://www.example.edu/en/'),
                 ),
                 new InformationURL(
-                    LanguageValue::fromString('el'),
+                    LangValue::fromString('el'),
                     SAMLAnyURIValue::fromString('http://www.example.edu/'),
                 ),
             ],
             privacyStatementURL: [
                 new PrivacyStatementURL(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLAnyURIValue::fromString('https://example.org/privacy'),
                 ),
             ],
@@ -127,13 +127,13 @@ final class UIInfoTest extends TestCase
         );
 
         $keyword = new Keywords(
-            LanguageValue::fromString('en'),
+            LangValue::fromString('en'),
             ListOfStringsValue::fromString('University Fictional'),
         );
         $uiinfo->addKeyword($keyword);
 
         $keyword = new Keywords(
-            LanguageValue::fromString('fr'),
+            LangValue::fromString('fr'),
             ListOfStringsValue::fromString('Université Fictif'),
         );
         $uiinfo->addKeyword($keyword);
@@ -153,14 +153,14 @@ final class UIInfoTest extends TestCase
     public function testMarshallingChildren(): void
     {
         $keywords = new Keywords(
-            LanguageValue::fromString('nl'),
+            LangValue::fromString('nl'),
             ListOfStringsValue::fromString("voorbeeld+specimen"),
         );
         $logo = new Logo(
             SAMLAnyURIValue::fromString('https://example.edu/logo.png'),
             PositiveIntegerValue::fromInteger(30),
             PositiveIntegerValue::fromInteger(20),
-            LanguageValue::fromString('nl'),
+            LangValue::fromString('nl'),
         );
 
         $discohints = new DiscoHints(
@@ -253,7 +253,7 @@ final class UIInfoTest extends TestCase
 
         // Append another 'en' mdui:Description to the document
         $x = new Description(
-            LanguageValue::fromString('en'),
+            LangValue::fromString('en'),
             SAMLStringValue::fromString('Something'),
         );
         $x->toXML($document->documentElement);
@@ -275,7 +275,7 @@ final class UIInfoTest extends TestCase
 
         // Append another 'en' mdui:DisplayName to the document
         $x = new DisplayName(
-            LanguageValue::fromString('en'),
+            LangValue::fromString('en'),
             SAMLStringValue::fromString('Something'),
         );
         $x->toXML($document->documentElement);
@@ -297,7 +297,7 @@ final class UIInfoTest extends TestCase
 
         // Append another 'en' mdui:Keywords to the document
         $x = new Keywords(
-            LanguageValue::fromString('en'),
+            LangValue::fromString('en'),
             ListOfStringsValue::fromString('Something else'),
         );
         $x->toXML($document->documentElement);
@@ -319,7 +319,7 @@ final class UIInfoTest extends TestCase
 
         // Append another 'en' mdui:InformationURL to the document
         $x = new InformationURL(
-            LanguageValue::fromString('en'),
+            LangValue::fromString('en'),
             SAMLAnyURIValue::fromString('https://example.org'),
         );
         $x->toXML($document->documentElement);
@@ -341,7 +341,7 @@ final class UIInfoTest extends TestCase
 
         // Append another 'en' mdui:PrivacyStatementURL to the document
         $x = new PrivacyStatementURL(
-            LanguageValue::fromString('en'),
+            LangValue::fromString('en'),
             SAMLAnyURIValue::fromString('https://example.org'),
         );
         $x->toXML($document->documentElement);

@@ -12,10 +12,10 @@ use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XML\TypedTextContentTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
 use SimpleSAML\XMLSchema\Type\PositiveIntegerValue;
 
 /**
@@ -44,13 +44,13 @@ final class Logo extends AbstractMduiElement implements
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $url
      * @param \SimpleSAML\XMLSchema\Type\PositiveIntegerValue $height
      * @param \SimpleSAML\XMLSchema\Type\PositiveIntegerValue $width
-     * @param \SimpleSAML\XMLSchema\Type\LanguageValue|null $lang
+     * @param \SimpleSAML\XML\Type\LangValue|null $lang
      */
     public function __construct(
         SAMLAnyURIValue $url,
         protected PositiveIntegerValue $height,
         protected PositiveIntegerValue $width,
-        protected ?LanguageValue $lang = null,
+        protected ?LangValue $lang = null,
     ) {
         $this->setContent($url);
     }
@@ -73,9 +73,9 @@ final class Logo extends AbstractMduiElement implements
     /**
      * Collect the value of the lang-property
      *
-     * @return \SimpleSAML\XMLSchema\Type\LanguageValue|null
+     * @return \SimpleSAML\XML\Type\LangValue|null
      */
-    public function getLanguage(): ?LanguageValue
+    public function getLanguage(): ?LangValue
     {
         return $this->lang;
     }
@@ -120,7 +120,7 @@ final class Logo extends AbstractMduiElement implements
         $Url = SAMLAnyURIValue::fromString($xml->textContent);
         $Width = self::getAttribute($xml, 'width', PositiveIntegerValue::class);
         $Height = self::getAttribute($xml, 'height', PositiveIntegerValue::class);
-        $lang = self::getOptionalAttribute($xml, 'xml:lang', LanguageValue::class, null);
+        $lang = self::getOptionalAttribute($xml, 'xml:lang', LangValue::class, null);
 
         return new static($Url, $Height, $Width, $lang);
     }
@@ -162,7 +162,7 @@ final class Logo extends AbstractMduiElement implements
             SAMLAnyURIValue::fromString($data['url']),
             PositiveIntegerValue::fromInteger($data['height']),
             PositiveIntegerValue::fromInteger($data['width']),
-            $data['lang'] !== null ? LanguageValue::fromString($data['lang']) : null,
+            $data['lang'] !== null ? LangValue::fromString($data['lang']) : null,
         );
     }
 

@@ -42,12 +42,12 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XMLSchema\Constants as C_XSI;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 use SimpleSAML\XMLSchema\Type\AnyURIValue;
 use SimpleSAML\XMLSchema\Type\DurationValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
 use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
@@ -156,19 +156,19 @@ final class RoleDescriptorTest extends TestCase
             new Organization(
                 [
                     new OrganizationName(
-                        LanguageValue::fromString('en'),
+                        LangValue::fromString('en'),
                         SAMLStringValue::fromString('Identity Providers R US'),
                     ),
                 ],
                 [
                     new OrganizationDisplayName(
-                        LanguageValue::fromString('en'),
+                        LangValue::fromString('en'),
                         SAMLStringValue::fromString('Identity Providers R US, a Division of Lerxst Corp.'),
                     ),
                 ],
                 [
                     new OrganizationURL(
-                        LanguageValue::fromString('en'),
+                        LangValue::fromString('en'),
                         SAMLAnyURIValue::fromString('https://IdentityProvider.com'),
                     ),
                 ],

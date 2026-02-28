@@ -9,9 +9,9 @@ use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function array_key_first;
 
@@ -28,11 +28,11 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
     /**
      * LocalizedNameType constructor.
      *
-     * @param \SimpleSAML\XMLSchema\Type\LanguageValue $language The language this string is localized in.
+     * @param \SimpleSAML\XML\Type\LangValue $language The language this string is localized in.
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $content The localized string.
      */
     final public function __construct(
-        protected LanguageValue $language,
+        protected LangValue $language,
         SAMLAnyURIValue $content,
     ) {
         $content = SAMLStringValue::fromString($content->getValue());
@@ -58,7 +58,7 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
         );
 
         return new static(
-            LanguageValue::fromString($xml->getAttributeNS(C::NS_XML, 'lang')),
+            LangValue::fromString($xml->getAttributeNS(C::NS_XML, 'lang')),
             SAMLAnyURIValue::fromString($xml->textContent),
         );
     }
@@ -73,7 +73,7 @@ abstract class AbstractLocalizedURI extends AbstractLocalizedName
     {
         Assert::count($data, 1);
 
-        $lang = LanguageValue::fromString(array_key_first($data));
+        $lang = LangValue::fromString(array_key_first($data));
         $value = SAMLAnyURIValue::fromString(
             $data[$lang->getValue()],
         );

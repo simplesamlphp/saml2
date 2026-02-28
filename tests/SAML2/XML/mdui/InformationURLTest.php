@@ -15,7 +15,7 @@ use SimpleSAML\SAML2\XML\mdui\InformationURL;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
+use SimpleSAML\XML\Type\LangValue;
 
 use function dirname;
 use function strval;
@@ -59,7 +59,7 @@ final class InformationURLTest extends TestCase
     public function testMarshalling(): void
     {
         $name = new InformationURL(
-            LanguageValue::fromString('en'),
+            LangValue::fromString('en'),
             SAMLAnyURIValue::fromString('http://www.example.edu/en/'),
         );
 

@@ -24,8 +24,8 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function dirname;
 use function strval;
@@ -83,11 +83,11 @@ final class RegistrationInfoTest extends TestCase
             SAMLDateTimeValue::fromString('2009-02-13T23:31:30Z'),
             [
                 new RegistrationPolicy(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLAnyURIValue::fromString('http://www.example.org/aai/metadata/en_registration.html'),
                 ),
                 new RegistrationPolicy(
-                    LanguageValue::fromString('de'),
+                    LangValue::fromString('de'),
                     SAMLAnyURIValue::fromString('http://www.example.org/aai/metadata/de_registration.html'),
                 ),
             ],
@@ -127,7 +127,7 @@ XML
 
         // Append another 'en' RegistrationPolicy to the document
         $x = new RegistrationPolicy(
-            LanguageValue::fromString('en'),
+            LangValue::fromString('en'),
             SAMLAnyURIValue::fromString('https://example.org'),
         );
         $x->toXML($document);

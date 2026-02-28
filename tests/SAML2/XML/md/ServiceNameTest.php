@@ -16,8 +16,8 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function dirname;
 use function strval;
@@ -61,7 +61,7 @@ final class ServiceNameTest extends TestCase
     public function testMarshalling(): void
     {
         $name = new ServiceName(
-            LanguageValue::fromString('en'),
+            LangValue::fromString('en'),
             SAMLStringValue::fromString('Academic Journals R US'),
         );
 

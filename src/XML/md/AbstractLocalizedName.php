@@ -10,10 +10,10 @@ use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Constants as C;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XML\TypedTextContentTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function array_key_first;
 
@@ -33,11 +33,11 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
     /**
      * LocalizedNameType constructor.
      *
-     * @param \SimpleSAML\XMLSchema\Type\LanguageValue $language The language this string is localized in.
+     * @param \SimpleSAML\XML\Type\LangValue $language The language this string is localized in.
      * @param \SimpleSAML\SAML2\Type\SAMLStringValue $content The localized string.
      */
     public function __construct(
-        protected LanguageValue $language,
+        protected LangValue $language,
         SAMLStringValue $content,
     ) {
         $this->setContent($content);
@@ -47,9 +47,9 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
     /**
      * Get the language this string is localized in.
      *
-     * @return \SimpleSAML\XMLSchema\Type\LanguageValue
+     * @return \SimpleSAML\XML\Type\LangValue
      */
-    public function getLanguage(): LanguageValue
+    public function getLanguage(): LangValue
     {
         return $this->language;
     }
@@ -72,7 +72,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
         );
 
         return new static(
-            LanguageValue::fromString($xml->getAttributeNS(C::NS_XML, 'lang')),
+            LangValue::fromString($xml->getAttributeNS(C::NS_XML, 'lang')),
             SAMLStringValue::fromString($xml->textContent),
         );
     }
@@ -99,7 +99,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
     {
         Assert::count($data, 1, ArrayValidationException::class);
 
-        $lang = LanguageValue::fromString(array_key_first($data));
+        $lang = LangValue::fromString(array_key_first($data));
         $value = SAMLStringValue::fromString($data[$lang->getValue()]);
 
         return new static($lang, $value);

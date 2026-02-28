@@ -43,11 +43,11 @@ use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 use SimpleSAML\XMLSchema\Type\BooleanValue;
 use SimpleSAML\XMLSchema\Type\DurationValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
 use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
@@ -130,7 +130,7 @@ final class SPSSODescriptorTest extends TestCase
             UnsignedShortValue::fromInteger(0),
             [
                 new ServiceName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Academic Journals R US'),
                 ),
             ],
@@ -141,7 +141,7 @@ final class SPSSODescriptorTest extends TestCase
             UnsignedShortValue::fromInteger(1),
             [
                 new ServiceName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Academic Journals R US'),
                 ),
             ],
@@ -153,7 +153,7 @@ final class SPSSODescriptorTest extends TestCase
                 creationInstant: SAMLDateTimeValue::fromString('2020-02-03T13:46:24Z'),
                 usagePolicy: [
                     new UsagePolicy(
-                        LanguageValue::fromString('en'),
+                        LangValue::fromString('en'),
                         SAMLAnyURIValue::fromString('http://publisher.ra/policy.txt'),
                     ),
                 ],
@@ -168,19 +168,19 @@ final class SPSSODescriptorTest extends TestCase
         $org = new Organization(
             [
                 new OrganizationName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Identity Providers R US'),
                 ),
             ],
             [
                 new OrganizationDisplayName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Identity Providers R US, a Division of Lerxst Corp.'),
                 ),
             ],
             [
                 new OrganizationURL(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLAnyURIValue::fromString('https://IdentityProvider.com'),
                 ),
             ],

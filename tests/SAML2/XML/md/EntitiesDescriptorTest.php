@@ -23,8 +23,8 @@ use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -73,7 +73,7 @@ final class EntitiesDescriptorTest extends TestCase
                 creationInstant: SAMLDateTimeValue::fromString('2020-02-03T13:46:24Z'),
                 usagePolicy: [
                     new UsagePolicy(
-                        LanguageValue::fromString('en'),
+                        LangValue::fromString('en'),
                         SAMLAnyURIValue::fromString('http://publisher.ra/policy.txt'),
                     ),
                 ],

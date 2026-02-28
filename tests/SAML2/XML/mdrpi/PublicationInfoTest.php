@@ -24,8 +24,8 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
 
 use function dirname;
 use function strval;
@@ -82,11 +82,11 @@ final class PublicationInfoTest extends TestCase
             SAMLStringValue::fromString('SomePublicationId'),
             [
                 new UsagePolicy(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLAnyURIValue::fromString('http://TheEnglishUsagePolicy'),
                 ),
                 new UsagePolicy(
-                    LanguageValue::fromString('no'),
+                    LangValue::fromString('no'),
                     SAMLAnyURIValue::fromString('http://TheNorwegianUsagePolicy'),
                 ),
             ],
@@ -139,7 +139,7 @@ XML
 
         // Append another 'en' UsagePolicy to the document
         $x = new UsagePolicy(
-            LanguageValue::fromString('en'),
+            LangValue::fromString('en'),
             SAMLAnyURIValue::fromString('https://example.org'),
         );
         $x->toXML($document);

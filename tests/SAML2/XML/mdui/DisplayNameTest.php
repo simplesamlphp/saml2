@@ -14,7 +14,7 @@ use SimpleSAML\SAML2\XML\mdui\DisplayName;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
+use SimpleSAML\XML\Type\LangValue;
 
 use function dirname;
 use function strval;
@@ -57,7 +57,7 @@ final class DisplayNameTest extends TestCase
     public function testMarshalling(): void
     {
         $name = new DisplayName(
-            LanguageValue::fromString('en'),
+            LangValue::fromString('en'),
             SAMLStringValue::fromString('University of Examples'),
         );
 

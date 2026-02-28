@@ -32,9 +32,9 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
 use SimpleSAML\XMLSchema\Type\PositiveIntegerValue;
 use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
@@ -96,7 +96,7 @@ final class ExtensionsTest extends TestCase
         );
         $uiinfo = new UIInfo([
             new DisplayName(
-                LanguageValue::fromString('en'),
+                LangValue::fromString('en'),
                 SAMLStringValue::fromString('Example'),
             ),
         ]);
