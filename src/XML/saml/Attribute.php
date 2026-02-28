@@ -79,7 +79,7 @@ class Attribute extends AbstractSamlElement implements
                 );
                 break;
             case C::NAMEFORMAT_BASIC:
-                Assert::validNCName(
+                Assert::validName(
                     strval($name),
                     sprintf("Attribute name `%s` does not match its declared format `%s`", $name, $nameFormat),
                 );
