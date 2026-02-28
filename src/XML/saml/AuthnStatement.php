@@ -42,7 +42,6 @@ final class AuthnStatement extends AbstractStatementType implements SchemaValida
         protected ?SAMLStringValue $sessionIndex = null,
         protected ?SubjectLocality $subjectLocality = null,
     ) {
-        Assert::nullOrNotWhitespaceOnly($sessionIndex);
     }
 
 

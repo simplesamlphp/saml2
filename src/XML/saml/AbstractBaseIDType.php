@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 
 /**
@@ -32,8 +31,6 @@ abstract class AbstractBaseIDType extends AbstractSamlElement implements BaseIde
         protected ?SAMLStringValue $NameQualifier = null,
         protected ?SAMLStringValue $SPNameQualifier = null,
     ) {
-        Assert::nullOrNotWhitespaceOnly($NameQualifier);
-        Assert::nullOrNotWhitespaceOnly($SPNameQualifier);
     }
 
 
