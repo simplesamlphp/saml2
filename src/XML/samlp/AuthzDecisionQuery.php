@@ -52,7 +52,7 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery implements SchemaVal
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      */
     public function __construct(
-        IDVaLue $id,
+        IDValue $id,
         Subject $subject,
         SAMLDateTimeValue $issueInstant,
         protected SAMLAnyURIValue $resource,
