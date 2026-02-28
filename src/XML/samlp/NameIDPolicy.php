@@ -6,7 +6,9 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
@@ -19,7 +21,6 @@ use function array_change_key_case;
 use function array_filter;
 use function array_key_exists;
 use function array_keys;
-use function var_export;
 
 /**
  * Class for handling SAML2 NameIDPolicy.
@@ -45,6 +46,22 @@ final class NameIDPolicy extends AbstractSamlpElement implements
         protected ?SAMLStringValue $SPNameQualifier = null,
         protected ?BooleanValue $AllowCreate = null,
     ) {
+        if (
+            $AllowCreate !== null
+            && $Format !== null
+            && $AllowCreate->equals(BooleanValue::fromBoolean(true))
+        ) {
+            // Per Errata E14: AllowCreate
+            Assert::notSame(
+                $Format->getValue(),
+                C::NAMEID_TRANSIENT,
+                sprintf(
+                    'AllowCreate=\"true\" MUST NOT be used in conjunction with the %s <NameID> Format.',
+                    C::NAMEID_TRANSIENT,
+                ),
+                ProtocolViolationException::class,
+            );
+        }
     }
 
 
@@ -125,7 +142,7 @@ final class NameIDPolicy extends AbstractSamlpElement implements
         }
 
         if ($this->getAllowCreate() !== null) {
-            $e->setAttribute('AllowCreate', var_export($this->getAllowCreate()->toBoolean(), true));
+            $e->setAttribute('AllowCreate', $this->getAllowCreate()->getValue());
         }
 
         return $e;
@@ -218,6 +235,12 @@ final class NameIDPolicy extends AbstractSamlpElement implements
             'AllowCreate' => $this->getAllowCreate()?->toBoolean(),
         ];
 
-        return array_filter($data);
+        return array_filter(
+            $data,
+            function ($v, $k) {
+                return $v !== null;
+            },
+            ARRAY_FILTER_USE_BOTH,
+        );
     }
 }

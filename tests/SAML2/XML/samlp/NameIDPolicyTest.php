@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
@@ -45,7 +46,7 @@ final class NameIDPolicyTest extends TestCase
         self::$arrayRepresentation = [
             'Format' => C::NAMEID_TRANSIENT,
             'SPNameQualifier' => 'https://some/qualifier',
-            'AllowCreate' => true,
+            'AllowCreate' => false,
         ];
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -102,5 +103,20 @@ final class NameIDPolicyTest extends TestCase
             strval($nameIdPolicy),
         );
         $this->assertTrue($nameIdPolicy->isEmptyElement());
+    }
+
+
+    /**
+     * Illegal combination of AllowCreate=true and transient NameID format is rejected.
+     */
+    public function testIllegalCombinationThrowsException(): void
+    {
+        $this->expectException(ProtocolViolationException::class);
+
+        new NameIDPolicy(
+            SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),
+            BooleanValue::fromBoolean(true),
+        );
     }
 }
