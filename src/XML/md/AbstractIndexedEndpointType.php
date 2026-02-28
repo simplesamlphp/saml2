@@ -260,6 +260,12 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
         $data['index'] = $this->getIndex()->toInteger();
         $data['isDefault'] = $this->getIsDefault()?->toBoolean();
 
-        return array_filter($data);
+        return array_filter(
+            $data,
+            function ($v, $k) {
+                return $v !== null;
+            },
+            ARRAY_FILTER_USE_BOTH,
+        );
     }
 }
