@@ -6,9 +6,9 @@ namespace SAML2\XML\md;
 
 use Exception;
 use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\AdditionalMetadataLocation;
 use SAML2\Utils;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SAML2\XML\md\AdditionalMetadataLocationTest

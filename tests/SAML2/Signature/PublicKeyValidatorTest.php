@@ -12,13 +12,13 @@ use SAML2\Certificate\Key;
 use SAML2\Certificate\KeyCollection;
 use SAML2\Certificate\KeyLoader;
 use SAML2\Configuration\IdentityProvider;
-use SAML2\DOMDocumentFactory;
 use SAML2\Response;
 use SAML2\SimpleTestLogger;
 use SAML2\Utilities\Certificate;
 use SAML2\Signature\PublicKeyValidator;
 use SAML2\Configuration\CertificateProvider;
 use SAML2\SignedElement;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {

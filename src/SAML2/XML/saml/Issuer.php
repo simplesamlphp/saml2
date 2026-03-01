@@ -6,7 +6,7 @@ namespace SAML2\XML\saml;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class representing the saml:Issuer element.

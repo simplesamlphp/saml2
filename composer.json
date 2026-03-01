@@ -16,6 +16,7 @@
 
         "psr/log": "^2.0 || ^3.0",
         "robrichards/xmlseclibs": "^3.1.4",
+        "simplesamlphp/xml-common": "^2.7",
         "webmozart/assert": "^2.0"
     },
     "require-dev": {
@@ -42,7 +43,8 @@
         "allow-plugins": {
             "composer/package-versions-deprecated": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "phpstan/extension-installer": true
+            "phpstan/extension-installer": true,
+            "simplesamlphp/composer-xmlprovider-installer": true
         }
     }
 }

@@ -12,6 +12,7 @@ use SAML2\Exception\RuntimeException;
 use SAML2\Exception\InvalidArgumentException;
 use SAML2\Exception\UnparseableXmlException;
 use SimpleSAML\Configuration;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
 //use SoapClient as BuiltinSoapClient;

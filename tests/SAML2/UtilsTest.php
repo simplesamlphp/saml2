@@ -8,10 +8,10 @@ use Exception;
 use PHPUnit\Framework\Attributes\DataProvider;
 use SAML2\AttributeQuery;
 use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
 use SAML2\XML\ds\X509Data;
 use SAML2\XML\saml\NameID;
 use SAML2\Utils;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SAML2\UtilsTest

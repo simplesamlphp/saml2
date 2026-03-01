@@ -14,8 +14,8 @@ namespace SAML2\XML\saml;
 use DOMElement;
 use JsonSerializable;
 use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
 use Serializable;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 abstract class NameIDType implements Serializable, JsonSerializable
 {

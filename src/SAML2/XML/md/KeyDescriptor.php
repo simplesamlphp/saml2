@@ -7,8 +7,8 @@ namespace SAML2\XML\md;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
-use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
+use SimpleSAML\XML\Chunk;
 use Webmozart\Assert\Assert;
 
 /**
@@ -37,9 +37,9 @@ class KeyDescriptor
     /**
      * Supported EncryptionMethods.
      *
-     * Array of \SAML2\XML\Chunk objects.
+     * Array of \SimpleSAML\XML\Chunk objects.
      *
-     * @var \SAML2\XML\Chunk[]
+     * @var \SimpleSAML\XML\Chunk[]
      */
     private $EncryptionMethod = [];
 
@@ -119,7 +119,7 @@ class KeyDescriptor
     /**
      * Collect the value of the EncryptionMethod property.
      *
-     * @return \SAML2\XML\Chunk[]
+     * @return \SimpleSAML\XML\Chunk[]
      */
     public function getEncryptionMethod(): array
     {
@@ -130,7 +130,7 @@ class KeyDescriptor
     /**
      * Set the value of the EncryptionMethod property.
      *
-     * @param \SAML2\XML\Chunk[] $encryptionMethod
+     * @param \SimpleSAML\XML\Chunk[] $encryptionMethod
      */
     public function setEncryptionMethod(array $encryptionMethod): void
     {
@@ -141,7 +141,7 @@ class KeyDescriptor
     /**
      * Add the value to the EncryptionMethod property.
      *
-     * @param \SAML2\XML\Chunk $encryptionMethod
+     * @param \SimpleSAML\XML\Chunk $encryptionMethod
      */
     public function addEncryptionMethod(Chunk $encryptionMethod): void
     {

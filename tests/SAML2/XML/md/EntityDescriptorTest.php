@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use Exception;
-use SAML2\DOMDocumentFactory;
 use SAML2\XML\md\EntityDescriptor;
 use SAML2\XML\md\AffiliationDescriptor;
 use SAML2\XML\md\Organization;
 use SAML2\XML\md\AttributeAuthorityDescriptor;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SAML2\XML\md\EntityDescriptorTest

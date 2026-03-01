@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SAML2\XML\mdui;
 
-use SAML2\DOMDocumentFactory;
 use SAML2\XML\mdui\DiscoHints;
 use SAML2\XML\mdui\Keywords;
 use SAML2\Utils;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SAML2\XML\mdrpi\DiscoHintsTest

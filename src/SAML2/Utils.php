@@ -21,6 +21,7 @@ use SAML2\XML\ds\X509Certificate;
 use SAML2\XML\ds\X509Data;
 use SAML2\XML\ds\KeyName;
 use SAML2\XML\md\KeyDescriptor;
+use SimpleSAML\XML\DOMDocumentFactory;
 use Webmozart\Assert\Assert;
 
 /**

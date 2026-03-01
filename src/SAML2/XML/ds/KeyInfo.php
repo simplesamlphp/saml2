@@ -6,7 +6,7 @@ namespace SAML2\XML\ds;
 
 use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
-use SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
 use Webmozart\Assert\Assert;
 
 /**
@@ -27,9 +27,9 @@ class KeyInfo
      * The various key information elements.
      *
      * Array with various elements describing this key.
-     * Unknown elements will be represented by \SAML2\XML\Chunk.
+     * Unknown elements will be represented by \SimpleSAML\XML\Chunk.
      *
-     * @var (\SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[]
+     * @var (\SimpleSAML\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data)[]
      */
     private $info = [];
 
@@ -116,7 +116,7 @@ class KeyInfo
     /**
      * Add the value to the info-property
      *
-     * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data $info
+     * @param \SimpleSAML\XML\Chunk|\SAML2\XML\ds\KeyName|\SAML2\XML\ds\X509Data $info
      * @throws \Exception
      */
     public function addInfo($info): void

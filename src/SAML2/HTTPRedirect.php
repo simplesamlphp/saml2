@@ -6,6 +6,7 @@ namespace SAML2;
 
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SimpleSAML\XML\DOMDocumentFactory;
 use Webmozart\Assert\Assert;
 
 /**

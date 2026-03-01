@@ -7,6 +7,7 @@ namespace SAML2;
 use DOMDocument;
 use SAML2\Exception\Protocol\UnsupportedBindingException;
 use SAML2\XML\ecp\Response as ECPResponse;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class which implements the SOAP binding.

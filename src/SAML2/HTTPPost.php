@@ -7,6 +7,7 @@ namespace SAML2;
 use DOMDocument;
 use DOMElement;
 use Exception;
+use SimpleSAML\XML\DOMDocumentFactory;
 use Webmozart\Assert\Assert;
 
 /**

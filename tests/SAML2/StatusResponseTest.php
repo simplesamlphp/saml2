@@ -7,7 +7,7 @@ namespace SAML2;
 use Exception;
 use SAML2\Response;
 use SAML2\Utils;
-use SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SAML2\StatusResponseTest

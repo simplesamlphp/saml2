@@ -6,10 +6,10 @@ namespace SAML2\XML\md;
 
 use DOMElement;
 use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
 use SAML2\SignedElementHelper;
 use SAML2\Utils;
-use SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
 use Webmozart\Assert\Assert;
 
 /**
@@ -164,7 +164,7 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Collect the value of the Extensions property.
      *
-     * @return \SAML2\XML\Chunk[]
+     * @return \SimpleSAML\XML\Chunk[]
      */
     public function getExtensions(): array
     {
@@ -186,7 +186,7 @@ class EntitiesDescriptor extends SignedElementHelper
     /**
      * Add an Extension.
      *
-     * @param \SAML2\XML\Chunk $extension The Extensions
+     * @param \SimpleSAML\XML\Chunk $extension The Extensions
      */
     public function addExtension(Chunk $extension): void
     {

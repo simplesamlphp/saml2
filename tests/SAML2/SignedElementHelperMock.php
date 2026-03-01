@@ -6,7 +6,7 @@ namespace SAML2;
 
 use DOMElement;
 use SAML2\SignedElementHelper;
-use SAML2\DOMDocumentFactory;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SAML2\SignedElementHelperMock

@@ -6,7 +6,7 @@ namespace SAML2\XML\mdui;
 
 use DOMElement;
 use SAML2\Utils;
-use SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
 use Webmozart\Assert\Assert;
 
 /**
@@ -22,7 +22,7 @@ class UIInfo
      *
      * The elements can be any of the other \SAML2\XML\mdui\* elements.
      *
-     * @var \SAML2\XML\Chunk[]
+     * @var \SimpleSAML\XML\Chunk[]
      */
     private $children = [];
 
@@ -260,7 +260,7 @@ class UIInfo
     /**
      * Collect the value of the children-property
      *
-     * @return \SAML2\XML\Chunk[]
+     * @return \SimpleSAML\XML\Chunk[]
      */
     public function getChildren(): array
     {
@@ -282,7 +282,7 @@ class UIInfo
     /**
      * Add the value to the children-property
      *
-     * @param \SAML2\XML\Chunk $child
+     * @param \SimpleSAML\XML\Chunk $child
      */
     public function addChildren(Chunk $child): void
     {

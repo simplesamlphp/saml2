@@ -9,6 +9,7 @@ use DOMNode;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class handling encrypted assertions.
