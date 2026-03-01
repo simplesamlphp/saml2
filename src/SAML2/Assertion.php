@@ -11,10 +11,10 @@ use RobRichards\XMLSecLibs\XMLSecEnc;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Exception\RuntimeException;
 use SAML2\Utilities\Temporal;
-use SAML2\XML\Chunk;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\saml\NameID;
 use SAML2\XML\saml\SubjectConfirmation;
+use SimpleSAML\XML\Chunk;
 use Webmozart\Assert\Assert;
 
 /**
@@ -143,7 +143,7 @@ class Assertion extends SignedElement
      * See:
      * @url http://docs.oasis-open.org/security/saml/v2.0/saml-authn-context-2.0-os.pdf
      *
-     * @var \SAML2\XML\Chunk|null
+     * @var \SimpleSAML\XML\Chunk|null
      */
     private $authnContextDecl = null;
 
@@ -1123,7 +1123,7 @@ class Assertion extends SignedElement
     /**
      * Set the authentication context declaration.
      *
-     * @param \SAML2\XML\Chunk $authnContextDecl
+     * @param \SimpleSAML\XML\Chunk $authnContextDecl
      * @throws \Exception
      */
     public function setAuthnContextDecl(Chunk $authnContextDecl): void
@@ -1144,7 +1144,7 @@ class Assertion extends SignedElement
      * See:
      * @url http://docs.oasis-open.org/security/saml/v2.0/saml-authn-context-2.0-os.pdf
      *
-     * @return \SAML2\XML\Chunk|null
+     * @return \SimpleSAML\XML\Chunk|null
      */
     public function getAuthnContextDecl(): ?Chunk
     {

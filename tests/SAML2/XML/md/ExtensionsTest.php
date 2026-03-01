@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
 use SAML2\XML\shibmd\Scope;
 use SAML2\XML\alg\DigestMethod;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 /**
  * Class \SAML2\XML\md\ExtensionsTest.
@@ -65,7 +66,7 @@ XML;
             $xml,
             trim($d->saveXML())
         );
-        $this->assertInstanceOf(\SAML2\XML\Chunk::class, $list[0]);
+        $this->assertInstanceOf(Chunk::class, $list[0]);
     }
 
 
@@ -111,7 +112,7 @@ XML
         $this->assertInstanceOf(\SAML2\XML\mdui\DiscoHints::class, $list[5]);
         $this->assertInstanceOf(\SAML2\XML\alg\DigestMethod::class, $list[6]);
         $this->assertInstanceOf(\SAML2\XML\alg\SigningMethod::class, $list[7]);
-        $this->assertInstanceOf(\SAML2\XML\Chunk::class, $list[8]);
+        $this->assertInstanceOf(Chunk::class, $list[8]);
     }
 
 

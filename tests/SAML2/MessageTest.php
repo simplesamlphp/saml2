@@ -6,11 +6,12 @@ namespace SAML2;
 
 use Exception;
 use SAML2\Constants;
-use SAML2\DOMDocumentFactory;
 use SAML2\Message;
 use SAML2\Response;
 use SAML2\Utils;
 use SAML2\XML\saml\Issuer;
+use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\DOMDocumentFactory;
 
 class MessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 {
@@ -189,7 +190,7 @@ AUTHNREQUEST
 
         $message = Message::fromXML($authnRequest->documentElement);
 
-        /** @var \SAML2\XML\Chunk[] $exts */
+        /** @var \SimpleSAML\XML\Chunk[] $exts */
         $exts = $message->getExtensions();
 
         $this->assertCount(2, $exts);
@@ -231,13 +232,13 @@ AUTHNREQUEST
         $exts = $message->getExtensions();
         $this->assertCount(0, $exts);
 
-        $dom = \SAML2\DOMDocumentFactory::create();
+        $dom = DOMDocumentFactory::create();
         $ce = $dom->createElementNS('http://www.example.com/XFoo', 'xfoo:test', 'Test data!');
-        $newexts[] = new \SAML2\XML\Chunk($ce);
+        $newexts[] = new Chunk($ce);
 
         $message->setExtensions($newexts);
 
-        /** @var \SAML2\XML\Chunk[] $exts */
+        /** @var \SimpleSAML\XML\Chunk[] $exts */
         $exts = $message->getExtensions();
         $this->assertCount(1, $exts);
         $this->assertEquals("test", $exts[0]->getLocalName());

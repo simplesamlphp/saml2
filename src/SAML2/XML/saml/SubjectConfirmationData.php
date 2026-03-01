@@ -8,8 +8,8 @@ use DOMElement;
 use RobRichards\XMLSecLibs\XMLSecurityDSig;
 use SAML2\Constants;
 use SAML2\Utils;
-use SAML2\XML\Chunk;
 use SAML2\XML\ds\KeyInfo;
+use SimpleSAML\XML\Chunk;
 use Webmozart\Assert\Assert;
 
 /**
@@ -58,9 +58,9 @@ class SubjectConfirmationData
      * The various key information elements.
      *
      * Array with various elements describing this key.
-     * Unknown elements will be represented by \SAML2\XML\Chunk.
+     * Unknown elements will be represented by \SimpleSAML\XML\Chunk.
      *
-     * @var (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
+     * @var (\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
      */
     private $info = [];
 
@@ -166,7 +166,7 @@ class SubjectConfirmationData
     /**
      * Collect the value of the info-property
      *
-     * @return (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[]
+     * @return (\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[]
      */
     public function getInfo(): array
     {
@@ -177,7 +177,7 @@ class SubjectConfirmationData
     /**
      * Set the value of the info-property
      *
-     * @param (\SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk)[] $info
+     * @param (\SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk)[] $info
      */
     public function setInfo(array $info): void
     {
@@ -188,7 +188,7 @@ class SubjectConfirmationData
     /**
      * Add the value to the info-property
      *
-     * @param \SAML2\XML\Chunk|\SAML2\XML\ds\KeyInfo $info
+     * @param \SimpleSAML\XML\Chunk|\SAML2\XML\ds\KeyInfo $info
      */
     public function addInfo($info): void
     {
@@ -269,7 +269,7 @@ class SubjectConfirmationData
         if ($this->Address !== null) {
             $e->setAttribute('Address', $this->Address);
         }
-        /** @var \SAML2\XML\ds\KeyInfo|\SAML2\XML\Chunk $n */
+        /** @var \SAML2\XML\ds\KeyInfo|\SimpleSAML\XML\Chunk $n */
         foreach ($this->getInfo() as $n) {
             $n->toXML($e);
         }

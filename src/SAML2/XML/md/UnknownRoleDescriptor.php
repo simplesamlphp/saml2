@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SAML2\XML\md;
 
 use DOMElement;
-use SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class representing unknown RoleDescriptors.
@@ -17,7 +17,7 @@ class UnknownRoleDescriptor extends RoleDescriptor
     /**
      * This RoleDescriptor as XML
      *
-     * @var \SAML2\XML\Chunk
+     * @var \SimpleSAML\XML\Chunk
      */
     private $xml;
 

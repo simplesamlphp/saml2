@@ -8,9 +8,9 @@ use DOMElement;
 use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Utilities\Temporal;
-use SAML2\XML\Chunk;
 use SAML2\XML\saml\Issuer;
 use SAML2\XML\samlp\Extensions;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Base class for all SAML 2 messages.
@@ -575,7 +575,7 @@ abstract class Message extends SignedElement
     /**
      * Retrieve the Extensions.
      *
-     * @return \SAML2\XML\Chunk[]
+     * @return \SimpleSAML\XML\Chunk[]
      */
     public function getExtensions(): array
     {
@@ -597,7 +597,7 @@ abstract class Message extends SignedElement
     /**
      * Add an Extension.
      *
-     * @param \SAML2\XML\Chunk $extension The Extensions
+     * @param \SimpleSAML\XML\Chunk $extension The Extensions
      */
     public function addExtension(Chunk $extension): void
     {

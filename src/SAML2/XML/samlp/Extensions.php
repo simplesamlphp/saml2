@@ -7,7 +7,7 @@ namespace SAML2\XML\samlp;
 use DOMElement;
 use SAML2\Constants;
 use SAML2\Utils;
-use SAML2\XML\Chunk;
+use SimpleSAML\XML\Chunk;
 
 /**
  * Class for handling SAML2 extensions.
@@ -38,7 +38,7 @@ class Extensions
      * Add a list of Extensions to the given element.
      *
      * @param \DOMElement $parent The element we should add the extensions to.
-     * @param \SAML2\XML\Chunk[] $extensions List of extension objects.
+     * @param \SimpleSAML\XML\Chunk[] $extensions List of extension objects.
      */
     public static function addList(DOMElement $parent, array $extensions): void
     {
