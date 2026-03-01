@@ -192,6 +192,5 @@ jobs:
           vendor/bin/phpstan analyze -c phpstan.neon
 
       - name: PHPStan (testsuite)
-        continue-on-error: true
         run: |
           vendor/bin/phpstan analyze -c phpstan-dev.neon
