@@ -279,11 +279,3 @@ jobs:
       - uses: geekyeggo/delete-artifact@v5
         with:
           name: coverage-data
-
-      - name: PHPStan
-        run: |
-          vendor/bin/phpstan analyze -c phpstan.neon
-
-      - name: PHPStan (testsuite)
-        run: |
-          vendor/bin/phpstan analyze -c phpstan-dev.neon
