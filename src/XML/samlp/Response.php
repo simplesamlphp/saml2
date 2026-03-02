@@ -49,7 +49,10 @@ class Response extends AbstractStatusResponse implements SchemaValidatableElemen
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
-     * @param (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\EncryptedAssertion)[] $assertions
+     * @param (
+     *   \SimpleSAML\XMLSecurity\XML\SignableElementInterface
+     *   &(\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\EncryptedAssertion)
+     * )[] $assertions
      */
     final public function __construct(
         IDValue $id,
