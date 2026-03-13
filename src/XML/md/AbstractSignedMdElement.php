@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
+use SimpleSAML\SAML2\XML\CanonicalizableElementTrait;
 use SimpleSAML\SAML2\XML\SignableElementTrait;
 use SimpleSAML\SAML2\XML\SignedElementTrait;
+use SimpleSAML\XMLSecurity\XML\CanonicalizableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
@@ -18,9 +20,11 @@ use function method_exists;
  * @package simplesamlphp/saml2
  */
 abstract class AbstractSignedMdElement extends AbstractMdElement implements
+    CanonicalizableElementInterface,
     SignableElementInterface,
     SignedElementInterface
 {
+    use CanonicalizableElementTrait;
     use SignableElementTrait;
     use SignedElementTrait {
         SignedElementTrait::getBlacklistedAlgorithms insteadof SignableElementTrait;

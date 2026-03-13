@@ -8,11 +8,13 @@ use DOMElement;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\CanonicalizableElementTrait;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\SignableElementTrait;
 use SimpleSAML\SAML2\XML\SignedElementTrait;
 use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSecurity\XML\CanonicalizableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
@@ -26,8 +28,12 @@ use function array_pop;
  *
  * @package simplesamlphp/saml2
  */
-abstract class AbstractMessage extends AbstractSamlpElement implements SignableElementInterface, SignedElementInterface
+abstract class AbstractMessage extends AbstractSamlpElement implements
+    CanonicalizableElementInterface,
+    SignableElementInterface,
+    SignedElementInterface
 {
+    use CanonicalizableElementTrait;
     use ExtendableElementTrait;
     use SignableElementTrait;
     use SignedElementTrait {

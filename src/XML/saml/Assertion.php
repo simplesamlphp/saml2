@@ -13,6 +13,7 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\CanonicalizableElementTrait;
 use SimpleSAML\SAML2\XML\EncryptableElementTrait;
 use SimpleSAML\SAML2\XML\SignableElementTrait;
 use SimpleSAML\SAML2\XML\SignedElementTrait;
@@ -23,6 +24,7 @@ use SimpleSAML\XMLSchema\Exception\MissingElementException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
+use SimpleSAML\XMLSecurity\XML\CanonicalizableElementInterface;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
@@ -41,17 +43,17 @@ use function strval;
  * @package simplesamlphp/saml2
  */
 final class Assertion extends AbstractSamlElement implements
+    CanonicalizableElementInterface,
     EncryptableElementInterface,
     SchemaValidatableElementInterface,
     SignableElementInterface,
     SignedElementInterface
 {
+    use CanonicalizableElementTrait;
     use EncryptableElementTrait {
         EncryptableElementTrait::getBlacklistedAlgorithms insteadof SignedElementTrait;
         EncryptableElementTrait::getBlacklistedAlgorithms insteadof SignableElementTrait;
     }
-
-
     use SchemaValidatableElementTrait;
     use SignableElementTrait;
     use SignedElementTrait;
