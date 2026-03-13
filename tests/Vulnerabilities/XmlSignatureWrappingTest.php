@@ -11,7 +11,7 @@ use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XMLSecurity\Exception\ReferenceValidationFailedException;
+use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**
@@ -43,8 +43,8 @@ final class XmlSignatureWrappingTest extends TestCase
      */
     public function testThatASignatureReferencingAnEmbeddedAssertionIsNotValid(): void
     {
-        $this->expectException(ReferenceValidationFailedException::class);
-        $this->expectExceptionMessage('Reference does not point to given element.');
+        $this->expectException(SignatureVerificationFailedException::class);
+        $this->expectExceptionMessage('Failed to verify signature.');
 
         $assertion = $this->getSignedAssertionWithEmbeddedAssertionReferencedInSignature();
         self::$signatureValidator->hasValidSignature($assertion, self::$identityProviderConfiguration);
@@ -55,8 +55,8 @@ final class XmlSignatureWrappingTest extends TestCase
      */
     public function testThatASignatureReferencingAnotherAssertionIsNotValid(): void
     {
-        $this->expectException(ReferenceValidationFailedException::class);
-        $this->expectExceptionMessage('Reference does not point to given element.');
+        $this->expectException(SignatureVerificationFailedException::class);
+        $this->expectExceptionMessage('Failed to verify signature.');
 
         $assertion = $this->getSignedAssertionWithSignatureThatReferencesAnotherAssertion();
         self::$signatureValidator->hasValidSignature($assertion, self::$identityProviderConfiguration);

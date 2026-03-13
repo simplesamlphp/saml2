@@ -14,7 +14,6 @@ use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmInterface;
 use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\Exception\RuntimeException;
 use SimpleSAML\XMLSecurity\Exception\UnsupportedAlgorithmException;
-use SimpleSAML\XMLSecurity\Utils\XML;
 use SimpleSAML\XMLSecurity\XML\ds\CanonicalizationMethod;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
@@ -109,7 +108,7 @@ trait SignableElementTrait
             new Transform(AnyURIValue::fromString($this->c14nAlg)),
         ]);
 
-        $canonicalDocument = XML::processTransforms($transforms, $xml);
+        $canonicalDocument = $this->processTransforms($transforms, $xml);
 
         $signedInfo = new SignedInfo(
             new CanonicalizationMethod(AnyURIValue::fromString($this->c14nAlg)),
