@@ -189,9 +189,9 @@ final class Organization extends AbstractMdElement implements
      * Create a class from an array
      *
      * @param array{
-     *   'OrganizationName': string,
-     *   'OrganizationDisplayName': string,
-     *   'OrganizationURL': string,
+     *   'OrganizationName': array,
+     *   'OrganizationDisplayName': array,
+     *   'OrganizationURL': array,
      *   'Extensions'?: array,
      *   'attributes'?: array,
      * } $data
@@ -215,9 +215,9 @@ final class Organization extends AbstractMdElement implements
      * rationalized keys (casing) and parsed sub-elements.
      *
      * @param array{
-     *   'OrganizationName': string,
-     *   'OrganizationDisplayName': string,
-     *   'OrganizationURL': string,
+     *   'OrganizationName': array,
+     *   'OrganizationDisplayName': array,
+     *   'OrganizationURL': array,
      *   'Extensions'?: array,
      *   'attributes'?: array,
      * } $data
