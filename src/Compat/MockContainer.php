@@ -27,6 +27,7 @@ class MockContainer extends AbstractContainer
 
     /**
      * Get a PSR-3 compatible logger.
+     *
      * @return \Psr\Log\LoggerInterface
      */
     public function getLogger(): LoggerInterface
@@ -45,7 +46,6 @@ class MockContainer extends AbstractContainer
      * - **decrypt** XML that was just decrypted
      *
      * @param \DOMElement|string $message
-     * @param string $type
      */
     public function debugMessage($message, string $type): void
     {
@@ -58,7 +58,6 @@ class MockContainer extends AbstractContainer
      *
      * @param string|null $url
      * @param array $data
-     * @return string
      */
     public function getPOSTRedirectURL(
         /** @scrutinizer ignore-unused */?string $url = null,
@@ -69,7 +68,6 @@ class MockContainer extends AbstractContainer
 
 
     /**
-     * @return string
      */
     public function getTempDir(): string
     {
@@ -105,7 +103,6 @@ class MockContainer extends AbstractContainer
      * Set the system clock
      *
      * @param \Psr\Clock\ClockInterface $clock
-     * @return void
      */
     public function setClock(ClockInterface $clock): void
     {

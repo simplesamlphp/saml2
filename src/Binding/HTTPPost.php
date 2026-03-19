@@ -8,8 +8,10 @@ use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Binding;
+use SimpleSAML\SAML2\Binding\RelayStateTrait;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
@@ -25,8 +27,11 @@ use function base64_encode;
  *
  * @package simplesamlphp/saml2
  */
-class HTTPPost extends Binding
+class HTTPPost extends Binding implements AsynchronousBindingInterface, RelayStateInterface
 {
+    use RelayStateTrait;
+
+
     /**
      * Send a SAML 2 message using the HTTP-POST binding.
      *
@@ -36,7 +41,7 @@ class HTTPPost extends Binding
     public function send(AbstractMessage $message): ResponseInterface
     {
         if ($this->destination === null) {
-            $destination = $message->getDestination();
+            $destination = $message->getDestination()?->getValue();
             if ($destination === null) {
                 throw new Exception('Cannot send message, no destination set.');
             }
@@ -77,6 +82,7 @@ class HTTPPost extends Binding
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
+     *
      * @throws \Exception
      */
     public function receive(ServerRequestInterface $request): AbstractMessage
@@ -108,7 +114,8 @@ class HTTPPost extends Binding
          * message.
          */
         if ($msg->isSigned()) {
-            Assert::notNull($msg->getDestination()); // Validation of the value must be done upstream
+            Assert::notNull($msg->getDestination(), ProtocolViolationException::class);
+            // Validation of the Destination must be done upstream
         }
 
         if (array_key_exists('RelayState', $query)) {

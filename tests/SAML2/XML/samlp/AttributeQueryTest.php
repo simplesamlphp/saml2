@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
-use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\Attribute;
@@ -23,11 +25,14 @@ use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\AbstractSubjectQuery;
 use SimpleSAML\SAML2\XML\samlp\AttributeQuery;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Exception\MissingElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\IntegerValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -61,8 +66,6 @@ final class AttributeQueryTest extends TestCase
     {
         self::$clock = Utils::getContainer()->getClock();
 
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = AttributeQuery::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -75,43 +78,46 @@ final class AttributeQueryTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $nameId = new NameID('urn:example:subject', null, null, C::NAMEID_UNSPECIFIED);
+        $nameId = new NameID(
+            value: SAMLStringValue::fromString('urn:example:subject'),
+            Format: SAMLAnyURIValue::fromString(C::NAMEID_UNSPECIFIED),
+        );
 
         $attributeQuery = new AttributeQuery(
             subject: new Subject($nameId),
             attributes: [
                 new Attribute(
-                    name: 'test1',
+                    name: SAMLStringValue::fromString('test1'),
                     attributeValue: [
-                        new AttributeValue('test1_attrv1'),
-                        new AttributeValue('test1_attrv2'),
+                        new AttributeValue(StringValue::fromString('test1_attrv1')),
+                        new AttributeValue(StringValue::fromString('test1_attrv2')),
                     ],
                 ),
                 new Attribute(
-                    name: 'test2',
+                    name: SAMLStringValue::fromString('test2'),
                     attributeValue: [
-                        new AttributeValue('test2_attrv1'),
-                        new AttributeValue('test2_attrv2'),
-                        new AttributeValue('test2_attrv3'),
+                        new AttributeValue(StringValue::fromString('test2_attrv1')),
+                        new AttributeValue(StringValue::fromString('test2_attrv2')),
+                        new AttributeValue(StringValue::fromString('test2_attrv3')),
                     ],
                 ),
                 new Attribute(
-                    name: 'test3',
+                    name: SAMLStringValue::fromString('test3'),
                 ),
                 new Attribute(
-                    name: 'test4',
+                    name: SAMLStringValue::fromString('test4'),
                     attributeValue: [
-                        new AttributeValue(4),
-                        new AttributeValue(23),
+                        new AttributeValue(IntegerValue::fromInteger(4)),
+                        new AttributeValue(IntegerValue::fromInteger(23)),
                     ],
                 ),
             ],
             issuer: new Issuer(
-                value: 'https://example.org/',
-                Format: C::NAMEID_ENTITY,
+                value: SAMLStringValue::fromString('https://example.org/'),
+                Format: SAMLAnyURIValue::fromString(C::NAMEID_ENTITY),
             ),
-            id: 'aaf23196-1773-2113-474a-fe114412ab72',
-            issueInstant: new DateTimeImmutable('2017-09-06T11:49:27Z'),
+            id: IDValue::fromString('aaf23196-1773-2113-474a-fe114412ab72'),
+            issueInstant: SAMLDateTimeValue::fromString('2017-09-06T11:49:27Z'),
         );
 
         $this->assertEquals(
@@ -123,31 +129,34 @@ final class AttributeQueryTest extends TestCase
 
     public function testAttributeNameFormat(): void
     {
-        $nameId = new NameID('NameIDValue');
+        $nameId = new NameID(
+            SAMLStringValue::fromString('NameIDValue'),
+        );
         $attributeQuery = new AttributeQuery(
+            id: IDValue::fromString('SomeIDValue'),
             subject: new Subject($nameId),
-            issueInstant: self::$clock->now(),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             attributes: [
                 new Attribute(
-                    name: 'test1',
-                    nameFormat: C::NAMEFORMAT_BASIC,
+                    name: SAMLStringValue::fromString('test1'),
+                    nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_BASIC),
                     attributeValue: [
-                        new AttributeValue('test1_attrv1'),
-                        new AttributeValue('test1_attrv2'),
+                        new AttributeValue(StringValue::fromString('test1_attrv1')),
+                        new AttributeValue(StringValue::fromString('test1_attrv2')),
                     ],
                 ),
                 new Attribute(
-                    name: 'test2',
-                    nameFormat: C::NAMEFORMAT_BASIC,
+                    name: SAMLStringValue::fromString('test2'),
+                    nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_BASIC),
                     attributeValue: [
-                        new AttributeValue('test2_attrv1'),
-                        new AttributeValue('test2_attrv2'),
-                        new AttributeValue('test2_attrv3'),
+                        new AttributeValue(StringValue::fromString('test2_attrv1')),
+                        new AttributeValue(StringValue::fromString('test2_attrv2')),
+                        new AttributeValue(StringValue::fromString('test2_attrv3')),
                     ],
                 ),
                 new Attribute(
-                    name: 'test3',
-                    nameFormat: C::NAMEFORMAT_BASIC,
+                    name: SAMLStringValue::fromString('test3'),
+                    nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_BASIC),
                 ),
             ],
         );
@@ -155,7 +164,7 @@ final class AttributeQueryTest extends TestCase
 
         // Test Attribute Names
         $xpCache = XPath::getXPath($attributeQueryElement);
-        /** @psalm-var \DOMElement[] $attributes */
+        /** @var \DOMElement[] $attributes */
         $attributes = XPath::xpQuery($attributeQueryElement, './saml_assertion:Attribute', $xpCache);
         $this->assertCount(3, $attributes);
         $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));
@@ -191,7 +200,7 @@ final class AttributeQueryTest extends TestCase
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $aq = AttributeQuery::fromXML($document->documentElement);
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
+        /** @var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
         $issuer = $aq->getIssuer();
 
         // Sanity check
@@ -231,7 +240,7 @@ XML;
 XML;
         $document = DOMDocumentFactory::fromString($xml);
         $aq = AttributeQuery::fromXML($document->documentElement);
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
+        /** @var \SimpleSAML\SAML2\XML\saml\Issuer $issuer */
         $issuer = $aq->getIssuer();
 
         // Sanity check

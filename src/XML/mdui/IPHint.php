@@ -4,37 +4,21 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdui;
 
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\StringElementTrait;
+use SimpleSAML\SAML2\Type\CIDRValue;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\TypedTextContentTrait;
 
 /**
  * Class implementing IPHint.
  *
  * @package simplesamlphp/saml2
  */
-final class IPHint extends AbstractMduiElement
+final class IPHint extends AbstractMduiElement implements SchemaValidatableElementInterface
 {
-    use StringElementTrait;
+    use SchemaValidatableElementTrait;
+    use TypedTextContentTrait;
 
 
-    /**
-     * @param string $content
-     */
-    public function __construct(string $content)
-    {
-        $this->setContent($content);
-    }
-
-
-    /**
-     * Validate the content of the element.
-     *
-     * @param string $content  The value to go in the XML textContent
-     * @throws \Exception on failure
-     * @return void
-     */
-    protected function validateContent(string $content): void
-    {
-        Assert::notEmpty($content, 'IPHint cannot be empty');
-    }
+    public const string TEXTCONTENT_TYPE = CIDRValue::class;
 }

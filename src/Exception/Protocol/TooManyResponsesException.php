@@ -14,5 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class TooManyResponsesException extends ProtocolViolationException
 {
-    public const DEFAULT_MESSAGE = 'Too many responses.';
+    public const string DEFAULT_MESSAGE = 'Too many responses.';
 }

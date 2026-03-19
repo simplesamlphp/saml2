@@ -35,8 +35,6 @@ final class NameIDFormatTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = NameIDFormat::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -52,7 +50,7 @@ final class NameIDFormatTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $nameIdFormat = new NameIDFormat(C::NAMEID_PERSISTENT);
+        $nameIdFormat = NameIDFormat::fromString(C::NAMEID_PERSISTENT);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

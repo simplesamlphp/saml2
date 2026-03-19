@@ -5,9 +5,13 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\shibmd;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\StringElementTrait;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\TypedTextContentTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
 
 /**
  * Class which represents the Scope element found in Shibboleth metadata.
@@ -15,44 +19,35 @@ use SimpleSAML\XML\StringElementTrait;
  * @link https://wiki.shibboleth.net/confluence/display/SC/ShibMetaExt+V1.0
  * @package simplesamlphp/saml2
  */
-final class Scope extends AbstractShibmdElement
+final class Scope extends AbstractShibmdElement implements SchemaValidatableElementInterface
 {
-    use StringElementTrait;
+    use SchemaValidatableElementTrait;
+    use TypedTextContentTrait;
+
+
+    public const string TEXTCONTENT_TYPE = SAMLStringValue::class;
 
 
     /**
      * Create a Scope.
      *
-     * @param string $scope
-     * @param bool|null $regexp
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue $scope
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $regexp
      */
     public function __construct(
-        string $scope,
-        protected ?bool $regexp = false,
+        SAMLStringValue $scope,
+        protected ?BooleanValue $regexp = null,
     ) {
         $this->setContent($scope);
     }
 
 
     /**
-     * Validate the content of the element.
-     *
-     * @param string $content  The value to go in the XML textContent
-     * @throws \Exception on failure
-     * @return void
-     */
-    protected function validateContent(string $content): void
-    {
-        Assert::notWhitespaceOnly($content);
-    }
-
-
-    /**
      * Collect the value of the regexp-property
      *
-     * @return bool|null
+     * @return \SimpleSAML\XMLSchema\Type\BooleanValue|null
      */
-    public function isRegexpScope(): ?bool
+    public function isRegexpScope(): ?BooleanValue
     {
         return $this->regexp;
     }
@@ -61,10 +56,7 @@ final class Scope extends AbstractShibmdElement
     /**
      * Convert XML into a Scope
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
@@ -72,26 +64,23 @@ final class Scope extends AbstractShibmdElement
         Assert::same($xml->localName, 'Scope', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Scope::NS, InvalidDOMElementException::class);
 
-        $scope = $xml->textContent;
-        $regexp = self::getOptionalBooleanAttribute($xml, 'regexp', null);
-
-        return new static($scope, $regexp);
+        return new static(
+            SAMLStringValue::fromString($xml->textContent),
+            self::getOptionalAttribute($xml, 'regexp', BooleanValue::class, null),
+        );
     }
 
 
     /**
      * Convert this Scope to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this Scope to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->textContent = $this->getContent();
+        $e->textContent = strval($this->getContent());
 
         if ($this->isRegexpScope() !== null) {
-            $e->setAttribute('regexp', $this->isRegexpScope() ? 'true' : 'false');
+            $e->setAttribute('regexp', strval($this->isRegexpScope()));
         }
 
         return $e;

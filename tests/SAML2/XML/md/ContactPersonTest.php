@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\Company;
 use SimpleSAML\SAML2\XML\md\ContactPerson;
@@ -21,10 +22,11 @@ use SimpleSAML\SAML2\XML\md\TelephoneNumber;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Type\StringValue;
 
 use function dirname;
 use function strval;
@@ -43,7 +45,7 @@ final class ContactPersonTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
-    /** @var \DOMDocument */
+
     private static DOMDocument $ext;
 
 
@@ -51,8 +53,6 @@ final class ContactPersonTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = ContactPerson::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -91,21 +91,26 @@ final class ContactPersonTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
-        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', StringValue::fromString('testval1'));
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', StringValue::fromString('testval2'));
 
         $contactPerson = new ContactPerson(
-            'other',
-            new Company('Test Company'),
-            new GivenName('John'),
-            new SurName('Doe'),
+            SAMLStringValue::fromString('other'),
+            Company::fromString('Test Company'),
+            GivenName::fromString('John'),
+            SurName::fromString('Doe'),
             new Extensions(
                 [
                     new Chunk(self::$ext->documentElement),
                 ],
             ),
-            [new EmailAddress('jdoe@test.company'), new EmailAddress('john.doe@test.company')],
-            [new TelephoneNumber('1-234-567-8901')],
+            [
+                EmailAddress::fromString('jdoe@test.company'),
+                EmailAddress::fromString('john.doe@test.company'),
+            ],
+            [
+                TelephoneNumber::fromString('1-234-567-8901'),
+            ],
             [$attr1, $attr2],
         );
 
@@ -125,7 +130,9 @@ final class ContactPersonTest extends TestCase
         $this->expectExceptionMessage(
             'Expected one of: "technical", "support", "administrative", "billing", "other". Got: "wrong"',
         );
-        new ContactPerson('wrong');
+        new ContactPerson(
+            SAMLStringValue::fromString('wrong'),
+        );
     }
 
 
@@ -171,7 +178,6 @@ final class ContactPersonTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $company = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'Company');
         $newCompany = $xmlRepresentation->createElementNS(C::NS_MD, 'Company', 'Alt. Co.');
-        /** @psalm-suppress PossiblyNullPropertyFetch */
         $xmlRepresentation->documentElement->insertBefore($newCompany, $company->item(0)->nextSibling);
 
         $this->expectException(AssertionFailedException::class);
@@ -189,7 +195,6 @@ final class ContactPersonTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $givenName = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'GivenName');
         $newName = $xmlRepresentation->createElementNS(C::NS_MD, 'GivenName', 'New Name');
-        /** @psalm-suppress PossiblyNullPropertyFetch */
         $xmlRepresentation->documentElement->insertBefore($newName, $givenName->item(0)->nextSibling);
 
         $this->expectException(AssertionFailedException::class);
@@ -207,7 +212,6 @@ final class ContactPersonTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $surName = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'SurName');
         $newName = $xmlRepresentation->createElementNS(C::NS_MD, 'SurName', 'New Name');
-        /** @psalm-suppress PossiblyNullPropertyFetch */
         $xmlRepresentation->documentElement->insertBefore($newName, $surName->item(0)->nextSibling);
 
         $this->expectException(AssertionFailedException::class);

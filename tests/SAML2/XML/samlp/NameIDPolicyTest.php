@@ -8,12 +8,16 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
 
 use function dirname;
 use function strval;
@@ -37,14 +41,12 @@ final class NameIDPolicyTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = NameIDPolicy::class;
 
         self::$arrayRepresentation = [
             'Format' => C::NAMEID_TRANSIENT,
             'SPNameQualifier' => 'https://some/qualifier',
-            'AllowCreate' => true,
+            'AllowCreate' => false,
         ];
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -58,9 +60,9 @@ final class NameIDPolicyTest extends TestCase
     public function testMarshalling(): void
     {
         $nameIdPolicy = new NameIDPolicy(
-            'urn:the:format',
-            'urn:x-simplesamlphp:spnamequalifier',
-            true,
+            SAMLAnyURIValue::fromString('urn:the:format'),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),
+            BooleanValue::fromBoolean(true),
         );
 
         $this->assertEquals(
@@ -79,7 +81,7 @@ final class NameIDPolicyTest extends TestCase
         );
 
         $nameIdPolicy = new NameIDPolicy(
-            'urn:the:format',
+            SAMLAnyURIValue::fromString('urn:the:format'),
         );
 
         $this->assertEquals(
@@ -101,5 +103,20 @@ final class NameIDPolicyTest extends TestCase
             strval($nameIdPolicy),
         );
         $this->assertTrue($nameIdPolicy->isEmptyElement());
+    }
+
+
+    /**
+     * Illegal combination of AllowCreate=true and transient NameID format is rejected.
+     */
+    public function testIllegalCombinationThrowsException(): void
+    {
+        $this->expectException(ProtocolViolationException::class);
+
+        new NameIDPolicy(
+            SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
+            SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),
+            BooleanValue::fromBoolean(true),
+        );
     }
 }

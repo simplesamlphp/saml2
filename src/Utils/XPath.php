@@ -19,13 +19,15 @@ class XPath extends \SimpleSAML\XMLSecurity\Utils\XPath
      * Get a DOMXPath object that can be used to search for SAML elements.
      *
      * @param \DOMNode $node The document to associate to the DOMXPath object.
+     * @param bool $autoregister Whether to auto-register all namespaces used in the document
      *
      * @return \DOMXPath A DOMXPath object ready to use in the given document, with several
      *   saml-related namespaces already registered.
      */
-    public static function getXPath(DOMNode $node): DOMXPath
+    public static function getXPath(DOMNode $node, bool $autoregister = false): DOMXPath
     {
-        $xp = parent::getXPath($node);
+        $xp = parent::getXPath($node, $autoregister);
+
         $xp->registerNamespace('saml_protocol', C::NS_SAMLP);
         $xp->registerNamespace('saml_assertion', C::NS_SAML);
         $xp->registerNamespace('saml_metadata', C::NS_MD);

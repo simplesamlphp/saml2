@@ -29,12 +29,11 @@ final class AssertionIDRefTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = AssertionIDRef::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -47,7 +46,7 @@ final class AssertionIDRefTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $assertionIDRef = new AssertionIDRef('_Test');
+        $assertionIDRef = AssertionIDRef::fromString('_Test');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Signature;
 
 use Psr\Log\LoggerInterface;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Certificate\Key;
 use SimpleSAML\SAML2\Certificate\KeyCollection;
 use SimpleSAML\SAML2\Certificate\KeyLoader;
@@ -41,8 +41,6 @@ class PublicKeyValidator extends AbstractChainedValidator
     /**
      * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface $signedElement
      * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
-     *
-     * @return bool
      */
     public function canValidate(
         SignedElementInterface $signedElement,
@@ -57,8 +55,6 @@ class PublicKeyValidator extends AbstractChainedValidator
     /**
      * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface $signedElement
      * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
-     *
-     * @return bool
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */

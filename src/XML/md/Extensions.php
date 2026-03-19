@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\alg\AbstractAlgElement as ALG;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
@@ -24,7 +24,10 @@ use SimpleSAML\SAML2\XML\mdui\DiscoHints;
 use SimpleSAML\SAML2\XML\mdui\UIInfo;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 use function array_key_exists;
 
@@ -33,9 +36,25 @@ use function array_key_exists;
  *
  * @package simplesamlphp/saml2
  */
-final class Extensions extends AbstractMdElement
+final class Extensions extends AbstractMdElement implements SchemaValidatableElementInterface
 {
     use ExtensionsTrait;
+    use SchemaValidatableElementTrait;
+
+
+    /** The namespace-attribute for the xs:any element */
+    public const string XS_ANY_ELT_NAMESPACE = NS::OTHER;
+
+    /**
+     * The exclusions for the xs:any element
+     *
+     * @var array<int, array<int, string>>
+     */
+    public const array XS_ANY_ELT_EXCLUSIONS = [
+        ['urn:oasis:names:tc:SAML:2.0:assertion', '*'],
+        ['urn:oasis:names:tc:SAML:2.0:metadata', '*'],
+        ['urn:oasis:names:tc:SAML:2.0:protocol', '*'],
+    ];
 
 
     /**
@@ -44,10 +63,7 @@ final class Extensions extends AbstractMdElement
      * For those supported extensions, an object of the corresponding class will be created.
      * The rest will be added as a \SimpleSAML\XML\Chunk object.
      *
-     * @param \DOMElement $xml
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static

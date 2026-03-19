@@ -9,11 +9,12 @@ use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use SimpleSAML\Assert\Assert;
 use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Binding;
+use SimpleSAML\SAML2\Binding\RelayStateTrait;
 use SimpleSAML\SAML2\SOAPClient;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -41,11 +42,12 @@ use function var_export;
  *
  * @package simplesamlphp/saml2
  */
-class HTTPArtifact extends Binding
+class HTTPArtifact extends Binding implements AsynchronousBindingInterface, RelayStateInterface
 {
+    use RelayStateTrait;
+
+
     /**
-     * @psalm-suppress UndefinedDocblockClass
-     * @psalm-suppress UndefinedClass
      * @var \SimpleSAML\Configuration
      */
     private Configuration $spMetadata;
@@ -54,16 +56,15 @@ class HTTPArtifact extends Binding
     /**
      * Create the redirect URL for a message.
      *
-     * @param  \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message.
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message.
+     * @return string The URL the user should be redirected to in order to send a message.
+     *
      * @throws \Exception
-     * @return string        The URL the user should be redirected to in order to send a message.
      */
     public function getRedirectURL(AbstractMessage $message): string
     {
-        /** @psalm-suppress UndefinedClass */
         $config = Configuration::getInstance();
 
-        /** @psalm-suppress UndefinedClass */
         $store = StoreFactory::getInstance($config->getString('store.type'));
         if ($store === false) {
             throw new Exception('Unable to send artifact without a datastore configured.');
@@ -93,7 +94,6 @@ class HTTPArtifact extends Binding
             $params['RelayState'] = $relayState;
         }
 
-        /** @psalm-suppress UndefinedClass */
         $httpUtils = new HTTP();
         return $httpUtils->addURLparameters($destination, $params);
     }
@@ -134,7 +134,6 @@ class HTTPArtifact extends Binding
             throw new Exception('Missing SAMLart parameter.');
         }
 
-        /** @psalm-suppress UndefinedClass */
         $metadataHandler = MetaDataStorageHandler::getMetadataHandler(Configuration::getInstance());
 
         $idpMetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
@@ -159,10 +158,6 @@ class HTTPArtifact extends Binding
             "ArtifactResolutionService endpoint being used is := " . $endpoint['Location'],
         );
 
-        /**
-         * @psalm-suppress UndefinedClass
-         * @psalm-suppress DocblockTypeContradiction
-         */
         Assert::notEmpty($this->spMetadata, 'Cannot process received message without SP metadata.');
 
         /**
@@ -174,7 +169,6 @@ class HTTPArtifact extends Binding
         $ar = new ArtifactResolve(new Artifact($artifact), null, $issuer, null, '2.0', $endpoint['Location']);
 
         // sign the request
-        /** @psalm-suppress UndefinedClass */
         MSG::addSign($this->spMetadata, $idpMetadata, $ar); // Shoaib - moved from the SOAPClient.
 
         $soap = new SOAPClient();
@@ -207,8 +201,6 @@ class HTTPArtifact extends Binding
 
     /**
      * @param \SimpleSAML\Configuration $sp
-     *
-     * @psalm-suppress UndefinedClass
      */
     public function setSPMetadata(Configuration $sp): void
     {
@@ -221,7 +213,6 @@ class HTTPArtifact extends Binding
      *
      * @param \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $message
      * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key
-     * @return bool
      */
     public static function validateSignature(ArtifactResponse $message, XMLSecurityKey $key): bool
     {

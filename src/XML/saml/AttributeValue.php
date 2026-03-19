@@ -4,84 +4,80 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DateTimeImmutable;
-use DateTimeInterface;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Exception\RuntimeException;
 use SimpleSAML\XML\AbstractElement;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\Registry\ElementRegistry;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Constants as C_XSI;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Type\DateTimeValue;
+use SimpleSAML\XMLSchema\Type\IntegerValue;
+use SimpleSAML\XMLSchema\Type\Interface\ValueTypeInterface;
+use SimpleSAML\XMLSchema\Type\StringValue;
 
-use function class_exists;
-use function explode;
-use function gettype;
-use function intval;
-use function str_contains;
+use function sprintf;
+use function strval;
 
 /**
  * Serializable class representing an AttributeValue.
  *
  * @package simplesamlphp/saml2
  */
-class AttributeValue extends AbstractSamlElement
+class AttributeValue extends AbstractSamlElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
+
     /**
      * Create an AttributeValue.
      *
-     * The value of this element. Can be one of:
-     *  - string
-     *  - int
-     *  - null
-     *  - \DateTimeInterface
-     *  - \SimpleSAML\XML\AbstractElement
-     *
-     * @param string|int|null|\DateTimeInterface|\SimpleSAML\XML\AbstractElement $value
-     * @throws \SimpleSAML\Assert\AssertionFailedException if the supplied value is neither a string or a DOMElement
+     * @param (
+     *   \SimpleSAML\XMLSchema\Type\Interface\ValueTypeInterface|
+     *   \SimpleSAML\XML\AbstractElement|
+     *   null
+     * ) $value
      */
     final public function __construct(
-        protected string|int|null|DateTimeInterface|AbstractElement $value,
+        protected ValueTypeInterface|AbstractElement|null $value,
     ) {
     }
 
 
     /**
      * Get the XSI type of this attribute value.
-     *
-     * @return string
      */
     public function getXsiType(): string
     {
         $value = $this->getValue();
-        $type = gettype($value);
 
-        switch ($type) {
-            case "integer":
-                return "xs:integer";
-            case "NULL":
-                return "xs:nil";
-            case "object":
-                if ($value instanceof DateTimeInterface) {
-                    return 'xs:dateTime';
-                }
-
-                return sprintf(
-                    '%s:%s',
-                    $value::getNamespacePrefix(),
-                    AbstractElement::getClassName(get_class($value)),
-                );
-            default:
-                return "xs:string";
+        if ($value === null) {
+            return 'xs:nil';
+        } elseif ($value instanceof AbstractElement) {
+            return sprintf(
+                '%s:%s',
+                $value::getNamespacePrefix(),
+                AbstractElement::getClassName(get_class($value)),
+            );
         }
+
+        return $value->getType();
     }
 
 
     /**
      * Get this attribute value.
      *
-     * @return string|int|\SimpleSAML\XML\AbstractElement|null
+     * @return (
+     *   \SimpleSAML\XMLSchema\Type\Interface\ValueTypeInterface|
+     *   \SimpleSAML\XML\AbstractElement|
+     *   null
+     * )
      */
-    public function getValue()
+    public function getValue(): ValueTypeInterface|AbstractElement|null
     {
         return $this->value;
     }
@@ -90,59 +86,45 @@ class AttributeValue extends AbstractSamlElement
     /**
      * Convert XML into a AttributeValue
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
     {
-        Assert::same($xml->localName, 'AttributeValue', InvalidDOMElementException::class);
+        Assert::same($xml->localName, static::getLocalName(), InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AttributeValue::NS, InvalidDOMElementException::class);
 
         if ($xml->childElementCount > 0) {
             $node = $xml->firstElementChild;
 
-            if (str_contains($node->tagName, ':')) {
-                list($prefix, $eltName) = explode(':', $node->tagName);
-                $className = sprintf('\SimpleSAML\SAML2\XML\%s\%s', $prefix, $eltName);
+            $registry = ElementRegistry::getInstance();
+            $handler = $registry->getElementHandler($node->namespaceURI, $node->localName);
 
-                if (class_exists($className)) {
-                    $value = $className::fromXML($node);
-                } else {
-                    $value = Chunk::fromXML($node);
-                }
-            } else {
-                $value = Chunk::fromXML($node);
-            }
-        } elseif (
-            $xml->hasAttributeNS(C::NS_XSI, "type") &&
-            $xml->getAttributeNS(C::NS_XSI, "type") === "xs:integer"
-        ) {
-            Assert::numeric($xml->textContent);
-
-            // we have an integer as value
-            $value = intval($xml->textContent);
-        } elseif (
-            $xml->hasAttributeNS(C::NS_XSI, "type") &&
-            $xml->getAttributeNS(C::NS_XSI, "type") === "xs:dateTime"
-        ) {
-            Assert::validDateTime($xml->textContent);
-
-            // we have a dateTime as value
-            $value = new DateTimeImmutable($xml->textContent);
-        } elseif (
-            // null value
-            $xml->hasAttributeNS(C::NS_XSI, "nil") &&
-            ($xml->getAttributeNS(C::NS_XSI, "nil") === "1" ||
-                $xml->getAttributeNS(C::NS_XSI, "nil") === "true")
-        ) {
+            $value = $handler ? $handler::fromXML($node) : Chunk::fromXML($node);
+        } elseif ($xml->hasAttributeNS(C_XSI::NS_XSI, 'nil')) {
+            Assert::oneOf($xml->getAttributeNS(C_XSI::NS_XSI, 'nil'), ['1', 'true']);
+            Assert::isEmpty($xml->nodeValue);
             Assert::isEmpty($xml->textContent);
 
             $value = null;
+        } elseif ($xml->hasAttributeNS(C_XSI::NS_XSI, 'type')) {
+            $type = $xml->getAttributeNS(C_XSI::NS_XSI, 'type');
+
+            switch ($type) {
+                case 'xs:dateTime':
+                    $value = DateTimeValue::fromString($xml->textContent);
+                    break;
+                case 'xs:integer':
+                    $value = IntegerValue::fromString($xml->textContent);
+                    break;
+                case 'xs:string':
+                    $value = StringValue::fromString($xml->textContent);
+                    break;
+                default:
+                    throw new RuntimeException(sprintf("Cannot process xsi:type '%s'", $type));
+            }
         } else {
-            $value = $xml->textContent;
+            $value = StringValue::fromString($xml->textContent);
         }
 
         return new static($value);
@@ -151,44 +133,24 @@ class AttributeValue extends AbstractSamlElement
 
     /**
      * Append this attribute value to an element.
-     *
-     * @param \DOMElement|null $parent The element we should append this attribute value to.
-     *
-     * @return \DOMElement The generated AttributeValue element.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::instantiateParentElement($parent);
 
         $value = $this->getValue();
-        $type = gettype($value);
-
-        switch ($type) {
-            case "integer":
-                // make sure that the xs namespace is available in the AttributeValue
-                $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C::NS_XSI);
-                $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xs', C::NS_XS);
-                $e->setAttributeNS(C::NS_XSI, 'xsi:type', 'xs:integer');
-                $e->textContent = strval($value);
-                break;
-            case "NULL":
-                $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C::NS_XSI);
-                $e->setAttributeNS(C::NS_XSI, 'xsi:nil', '1');
-                $e->textContent = '';
-                break;
-            case "object":
-                if ($value instanceof DateTimeInterface) {
-                    $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C::NS_XSI);
-                    $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xs', C::NS_XS);
-                    $e->setAttributeNS(C::NS_XSI, 'xsi:type', 'xs:dateTime');
-                    $e->textContent = $value->format(C::DATETIME_FORMAT);
-                } else {
-                    $value->toXML($e);
-                }
-                break;
-            default: // string
-                $e->textContent = $value;
-                break;
+        if ($value === null) {
+            $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C_XSI::NS_XSI);
+            $e->setAttributeNS(C_XSI::NS_XSI, 'xsi:nil', '1');
+        } elseif ($value instanceof AbstractElement) {
+            $value->toXML($e);
+        } elseif ($value instanceof StringValue) {
+            $e->textContent = strval($value);
+        } else {
+            $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xs', C_XSI::NS_XS);
+            $e->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', C_XSI::NS_XSI);
+            $e->setAttributeNS(C_XSI::NS_XSI, 'xsi:type', $value->getType());
+            $e->textContent = strval($value);
         }
 
         return $e;

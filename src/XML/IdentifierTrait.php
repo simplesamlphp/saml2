@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\XML\saml\AbstractBaseID;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
 use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
 use SimpleSAML\SAML2\XML\saml\NameID;
-use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
 use function array_pop;
 
@@ -32,7 +32,7 @@ trait IdentifierTrait
     /**
      * Collect the value of the identifier-property
      *
-     * @return \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null
+     * @return (\SimpleSAML\XML\SerializableElementInterface&\SimpleSAML\SAML2\XML\saml\IdentifierInterface)|null
      */
     public function getIdentifier(): ?IdentifierInterface
     {
@@ -54,9 +54,9 @@ trait IdentifierTrait
     /**
      * Retrieve an identifier of any type from XML
      *
-     * @param \DOMElement $xml
      * @return \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException if too many child-elements of a type are specified
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
+     *   if too many child-elements of a type are specified
      */
     protected static function getIdentifierFromXML(DOMElement $xml): ?IdentifierInterface
     {
@@ -94,7 +94,6 @@ trait IdentifierTrait
             TooManyElementsException::class,
         );
 
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null $identifier */
         $identifier = array_pop($identifiers);
 
         return $identifier;

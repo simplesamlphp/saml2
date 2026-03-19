@@ -1,10 +1,10 @@
-<mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute">
-  <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="attrib1" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
+<mdattr:EntityAttributes xmlns:mdattr="urn:oasis:names:tc:SAML:metadata:attribute" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+  <saml:Attribute Name="attrib1" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:basic">
     <saml:AttributeValue>is</saml:AttributeValue>
     <saml:AttributeValue>really</saml:AttributeValue>
     <saml:AttributeValue>cool</saml:AttributeValue>
   </saml:Attribute>
-  <saml:Assertion xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" ID="_93af655219464fb403b34436cfb0c5cb1d9a5502" IssueInstant="2024-07-23T20:35:34Z" Version="2.0">
+  <saml:Assertion ID="_93af655219464fb403b34436cfb0c5cb1d9a5502" IssueInstant="2024-07-23T20:35:34Z" Version="2.0">
     <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
     <ds:Signature>
       <ds:SignedInfo>

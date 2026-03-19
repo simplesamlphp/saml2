@@ -4,16 +4,20 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\XML\ExtendableAttributesTrait;
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Type\DurationValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function is_null;
@@ -23,21 +27,25 @@ use function is_null;
  *
  * @package simplesamlphp/saml2
  */
-final class EntityDescriptor extends AbstractMetadataDocument
+final class EntityDescriptor extends AbstractMetadataDocument implements SchemaValidatableElementInterface
 {
     use ExtendableAttributesTrait;
+    use SchemaValidatableElementTrait;
+
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**
      * Initialize an EntitiyDescriptor.
      *
-     * @param string $entityId The entityID of the entity described by this descriptor.
-     * @param string|null $id The ID for this document. Defaults to null.
-     * @param \DateTimeImmutable|null $validUntil Unix time of validify for this document. Defaults to null.
-     * @param string|null $cacheDuration Maximum time this document can be cached. Defaults to null.
+     * @param \SimpleSAML\SAML2\Type\EntityIDValue $entityId The entityID of the entity described by this descriptor.
+     * @param \SimpleSAML\XMLSchema\Type\IDValue|null $id The ID for this document. Defaults to null.
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $validUntil Unix time of validify for this document.
+     *   Defaults to null.
+     * @param \SimpleSAML\XMLSchema\Type\DurationValue|null $cacheDuration Maximum time this document can be cached.
+     *   Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions An array of extensions.
      * @param \SimpleSAML\SAML2\XML\md\AbstractRoleDescriptorType[] $roleDescriptor An array of role descriptors.
      * @param \SimpleSAML\SAML2\XML\md\AffiliationDescriptor|null $affiliationDescriptor An affiliation descriptor to
@@ -51,10 +59,10 @@ final class EntityDescriptor extends AbstractMetadataDocument
      * @throws \Exception
      */
     public function __construct(
-        protected string $entityId,
-        ?string $id = null,
-        ?DateTimeImmutable $validUntil = null,
-        ?string $cacheDuration = null,
+        protected EntityIDValue $entityId,
+        ?IDValue $id = null,
+        ?SAMLDateTimeValue $validUntil = null,
+        ?DurationValue $cacheDuration = null,
         ?Extensions $extensions = null,
         protected array $roleDescriptor = [],
         protected ?AffiliationDescriptor $affiliationDescriptor = null,
@@ -68,7 +76,6 @@ final class EntityDescriptor extends AbstractMetadataDocument
             'Must have either one of the RoleDescriptors or an AffiliationDescriptor in EntityDescriptor.',
             ProtocolViolationException::class,
         );
-        SAMLAssert::validEntityID($entityId);
         Assert::maxCount($roleDescriptor, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf(
             $roleDescriptor,
@@ -97,14 +104,11 @@ final class EntityDescriptor extends AbstractMetadataDocument
     /**
      * Convert an existing XML into an EntityDescriptor object
      *
-     * @param \DOMElement $xml An existing EntityDescriptor XML document.
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static
@@ -112,16 +116,12 @@ final class EntityDescriptor extends AbstractMetadataDocument
         Assert::same($xml->localName, 'EntityDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, EntityDescriptor::NS, InvalidDOMElementException::class);
 
-        $validUntil = self::getOptionalAttribute($xml, 'validUntil', null);
-        SAMLAssert::nullOrValidDateTime($validUntil);
-
         $extensions = Extensions::getChildrenOfClass($xml);
         Assert::maxCount($extensions, 1, 'Only one md:Extensions element is allowed.', TooManyElementsException::class);
 
         $signature = Signature::getChildrenOfClass($xml);
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
-        $entityID = self::getAttribute($xml, 'entityID');
         $roleDescriptors = [];
         $affiliationDescriptor = null;
         $organization = null;
@@ -188,10 +188,10 @@ final class EntityDescriptor extends AbstractMetadataDocument
         );
 
         $entity = new static(
-            $entityID,
-            self::getOptionalAttribute($xml, 'ID', null),
-            $validUntil !== null ? new DateTimeImmutable($validUntil) : null,
-            self::getOptionalAttribute($xml, 'cacheDuration', null),
+            self::getAttribute($xml, 'entityID', EntityIDValue::class),
+            self::getOptionalAttribute($xml, 'ID', IDValue::class, null),
+            self::getOptionalAttribute($xml, 'validUntil', SAMLDateTimeValue::class, null),
+            self::getOptionalAttribute($xml, 'cacheDuration', DurationValue::class, null),
             !empty($extensions) ? $extensions[0] : null,
             $roleDescriptors,
             $affiliationDescriptor,
@@ -213,10 +213,9 @@ final class EntityDescriptor extends AbstractMetadataDocument
     /**
      * Collect the value of the entityID property.
      *
-     * @return string
-     * @throws \SimpleSAML\Assert\AssertionFailedException
+     * @return \SimpleSAML\SAML2\Type\EntityIDValue
      */
-    public function getEntityId(): string
+    public function getEntityId(): EntityIDValue
     {
         return $this->entityId;
     }
@@ -280,13 +279,11 @@ final class EntityDescriptor extends AbstractMetadataDocument
     /**
      * Convert this assertion to an unsigned XML document.
      * This method does not sign the resulting XML document.
-     *
-     * @return \DOMElement The root element of the DOM tree
      */
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toUnsignedXML($parent);
-        $e->setAttribute('entityID', $this->getEntityId());
+        $e->setAttribute('entityID', $this->getEntityId()->getValue());
 
         foreach ($this->getAttributesNS() as $attr) {
             $attr->toXML($e);

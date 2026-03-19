@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\EncryptableElementTrait;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
 
@@ -21,61 +25,73 @@ use function array_keys;
  *
  * @package simplesamlphp/saml2
  */
-final class NameID extends NameIDType implements EncryptableElementInterface
+final class NameID extends NameIDType implements
+    EncryptableElementInterface,
+    SchemaValidatableElementInterface
 {
     use EncryptableElementTrait;
+    use SchemaValidatableElementTrait;
+
 
     /**
      * Initialize a saml:NameID
      *
-     * @param string $value
-     * @param string|null $NameQualifier
-     * @param string|null $SPNameQualifier
-     * @param string|null $Format
-     * @param string|null $SPProvidedID
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue $value
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $NameQualifier
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $SPNameQualifier
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $Format
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $SPProvidedID
      */
     public function __construct(
-        string $value,
-        ?string $NameQualifier = null,
-        ?string $SPNameQualifier = null,
-        ?string $Format = null,
-        ?string $SPProvidedID = null,
+        SAMLStringValue $value,
+        ?SAMLStringValue $NameQualifier = null,
+        ?SAMLStringValue $SPNameQualifier = null,
+        ?SAMLAnyURIValue $Format = null,
+        ?SAMLStringValue $SPProvidedID = null,
     ) {
-        switch ($Format) {
-            case C::NAMEID_EMAIL_ADDRESS:
-                Assert::email(
-                    $value,
-                    "The content %s of the NameID was not in the format specified by the Format attribute",
-                );
-                break;
-            case C::NAMEID_ENTITY:
-                /* 8.3.6: he NameQualifier, SPNameQualifier, and SPProvidedID attributes MUST be omitted. */
-                Assert::null($NameQualifier, "Entity Identifier included a disallowed NameQualifier attribute.");
-                Assert::null($SPNameQualifier, "Entity Identifier included a disallowed SPNameQualifier attribute.");
-                Assert::null($SPProvidedID, "Entity Identifier included a disallowed SPProvidedID attribute.");
-                break;
-            case C::NAMEID_PERSISTENT:
-                /* 8.3.7: Persistent name identifier values MUST NOT exceed a length of 256 characters. */
-                Assert::maxLength(
-                    $value,
-                    256,
-                    "Persistent name identifier values MUST NOT exceed a length of 256 characters.",
-                );
-                break;
-            case C::NAMEID_TRANSIENT:
-                /* 8.3.8: Transient name identifier values MUST NOT exceed a length of 256 characters. */
-                Assert::maxLength(
-                    $value,
-                    256,
-                    "Transient name identifier values MUST NOT exceed a length of 256 characters.",
-                );
-                break;
+        if ($Format !== null) {
+            switch ($Format->getValue()) {
+                case C::NAMEID_EMAIL_ADDRESS:
+                    Assert::email(
+                        $value->getValue(),
+                        "The content %s of the NameID was not in the format specified by the Format attribute",
+                    );
+                    break;
+                case C::NAMEID_ENTITY:
+                    /* 8.3.6: the NameQualifier, SPNameQualifier, and SPProvidedID attributes MUST be omitted. */
+                    Assert::null($NameQualifier, "Entity Identifier included a disallowed NameQualifier attribute.");
+                    Assert::null(
+                        $SPNameQualifier,
+                        "Entity Identifier included a disallowed SPNameQualifier attribute.",
+                    );
+                    Assert::null($SPProvidedID, "Entity Identifier included a disallowed SPProvidedID attribute.");
+                    break;
+                case C::NAMEID_PERSISTENT:
+                    /* 8.3.7: Persistent name identifier values MUST NOT exceed a length of 256 characters. */
+                    Assert::maxLength(
+                        $value->getValue(),
+                        256,
+                        "Persistent name identifier values MUST NOT exceed a length of 256 characters.",
+                    );
+                    break;
+                case C::NAMEID_TRANSIENT:
+                    /* 8.3.8: Transient name identifier values MUST NOT exceed a length of 256 characters. */
+                    Assert::maxLength(
+                        $value->getValue(),
+                        256,
+                        "Transient name identifier values MUST NOT exceed a length of 256 characters.",
+                    );
+                    break;
+            }
         }
 
         parent::__construct($value, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);
     }
 
 
+    /**
+     * @return \SimpleSAML\XMLSecurity\Backend\EncryptionBackend
+     */
     public function getEncryptionBackend(): ?EncryptionBackend
     {
         // return the encryption backend you want to use,
@@ -87,19 +103,24 @@ final class NameID extends NameIDType implements EncryptableElementInterface
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'value': string,
+     *   'NameQualifier'?: string,
+     *   'SPNameQualifier'?: string,
+     *   'Format'?: string,
+     *   'SPProvidedID'?: string,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
         $data = self::processArrayContents($data);
 
         return new static(
-            $data['value'],
-            $data['NameQualifier'] ?? null,
-            $data['SPNameQualifier'] ?? null,
-            $data['Format'] ?? null,
-            $data['SPProvidedID'] ?? null,
+            SAMLStringValue::fromString($data['value']),
+            $data['NameQualifier'] ? SAMLStringValue::fromString($data['NameQualifier']) : null,
+            $data['SPNameQualifier'] ? SAMLStringValue::fromString($data['SPNameQualifier']) : null,
+            $data['Format'] ? SAMLAnyURIValue::fromString($data['Format']) : null,
+            $data['SPProvidedID'] ? SAMLStringValue::fromString($data['SPProvidedID']) : null,
         );
     }
 
@@ -108,8 +129,20 @@ final class NameID extends NameIDType implements EncryptableElementInterface
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'value': string,
+     *   'NameQualifier'?: string,
+     *   'SPNameQualifier'?: string,
+     *   'Format'?: string,
+     *   'SPProvidedID'?: string,
+     * } $data
+     * @return array{
+     *   'value': string,
+     *   'NameQualifier'?: string,
+     *   'SPNameQualifier'?: string,
+     *   'Format'?: string,
+     *   'SPProvidedID'?: string,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -159,16 +192,22 @@ final class NameID extends NameIDType implements EncryptableElementInterface
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'value': string,
+     *   'NameQualifier'?: string,
+     *   'SPNameQualifier'?: string,
+     *   'Format'?: string,
+     *   'SPProvidedID'?: string,
+     * }
      */
     public function toArray(): array
     {
         $data = [
-            'value' => $this->getContent(),
-            'Format' => $this->getFormat(),
-            'NameQualifier' => $this->getNameQualifier(),
-            'SPNameQualifier' => $this->getSPNameQualifier(),
-            'SPProvidedID' => $this->getSPProvidedID(),
+            'value' => $this->getContent()->getValue(),
+            'Format' => $this->getFormat()?->getValue(),
+            'NameQualifier' => $this->getNameQualifier()?->getValue(),
+            'SPNameQualifier' => $this->getSPNameQualifier()?->getValue(),
+            'SPProvidedID' => $this->getSPProvidedID()?->getValue(),
         ];
 
         return array_filter($data);

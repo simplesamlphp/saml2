@@ -5,21 +5,25 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 use function array_change_key_case;
 use function array_filter;
 use function array_key_exists;
 use function array_keys;
+use function array_map;
 use function array_pop;
 use function count;
 
@@ -28,19 +32,24 @@ use function count;
  *
  * @package simplesamlphp/saml2
  */
-final class ContactPerson extends AbstractMdElement implements ArrayizableElementInterface
+final class ContactPerson extends AbstractMdElement implements
+    ArrayizableElementInterface,
+    SchemaValidatableElementInterface
 {
     use ExtendableAttributesTrait;
     use ExtendableElementTrait;
+    use SchemaValidatableElementTrait;
+
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
-
+    public const string XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
     /**
      * The several different contact types as defined per specification
+     *
+     * @var string[]
      */
-    public const CONTACT_TYPES = [
+    public const array CONTACT_TYPES = [
         'technical',
         'support',
         'administrative',
@@ -52,17 +61,17 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
     /**
      * ContactPerson constructor.
      *
-     * @param string $contactType
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue $contactType
      * @param \SimpleSAML\SAML2\XML\md\Company|null $company
      * @param \SimpleSAML\SAML2\XML\md\GivenName|null $givenName
      * @param \SimpleSAML\SAML2\XML\md\SurName|null $surName
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @param \SimpleSAML\SAML2\XML\md\EmailAddress[] $emailAddress
      * @param \SimpleSAML\SAML2\XML\md\TelephoneNumber[] $telephoneNumber
-     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttribute
+     * @param \SimpleSAML\XML\Attribute[] $namespacedAttribute
      */
     public function __construct(
-        protected string $contactType,
+        protected SAMLStringValue $contactType,
         protected ?Company $company = null,
         protected ?GivenName $givenName = null,
         protected ?SurName $surName = null,
@@ -71,7 +80,7 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
         protected array $telephoneNumber = [],
         array $namespacedAttribute = [],
     ) {
-        Assert::oneOf($contactType, self::CONTACT_TYPES);
+        Assert::oneOf($contactType->getValue(), self::CONTACT_TYPES);
         Assert::maxCount($emailAddress, C::UNBOUNDED_LIMIT);
         Assert::allIsInstanceOf($emailAddress, EmailAddress::class);
         Assert::maxCount($telephoneNumber, C::UNBOUNDED_LIMIT);
@@ -85,9 +94,9 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
     /**
      * Collect the value of the contactType-property
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue
      */
-    public function getContactType(): string
+    public function getContactType(): SAMLStringValue
     {
         return $this->contactType;
     }
@@ -151,14 +160,11 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
     /**
      * Initialize a ContactPerson element.
      *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static
@@ -166,7 +172,7 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
         Assert::same($xml->localName, 'ContactPerson', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ContactPerson::NS, InvalidDOMElementException::class);
 
-        $contactType = self::getAttribute($xml, 'contactType');
+        $contactType = self::getAttribute($xml, 'contactType', SAMLStringValue::class);
 
         $company = Company::getChildrenOfClass($xml);
         Assert::maxCount($company, 1, 'More than one Company in md:ContactPerson');
@@ -198,16 +204,12 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
 
     /**
      * Convert this ContactPerson to XML.
-     *
-     * @param \DOMElement|null $parent The element we should add this contact to.
-     *
-     * @return \DOMElement The new ContactPerson-element.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        $e->setAttribute('contactType', $this->getContactType());
+        $e->setAttribute('contactType', $this->getContactType()->getValue());
 
         foreach ($this->getAttributesNS() as $attr) {
             $attr->toXML($e);
@@ -233,21 +235,33 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'contactType': string,
+     *   'Company'?: string,
+     *   'GivenName'?: string,
+     *   'SurName'?: string,
+     *   'Extensions'?: array,
+     *   'EmailAddress'?: array,
+     *   'TelephoneNumber'?: array,
+     *   'attributes'?: array,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
         $data = self::processArrayContents($data);
 
         return new static(
-            $data['contactType'],
-            $data['Company'] ?? null,
-            $data['GivenName'] ?? null,
-            $data['SurName'] ?? null,
+            SAMLStringValue::fromString($data['contactType']),
+            $data['Company'] !== null ? new Company(SAMLStringValue::fromString($data['Company'])) : null,
+            $data['GivenName'] !== null ? new GivenName(SAMLStringValue::fromString($data['GivenName'])) : null,
+            $data['SurName'] !== null ? new SurName(SAMLStringValue::fromString($data['SurName'])) : null,
             $data['Extensions'] ?? null,
-            $data['EmailAddress'] ?? [],
-            $data['TelephoneNumber'] ?? [],
+            $data['EmailAddress'] !== null
+                ? array_map([EmailAddress::class, 'fromArray'], [$data['EmailAddress']])
+                : [],
+            $data['TelephoneNumber'] !== null
+                ? array_map([TelephoneNumber::class, 'fromArray'], [$data['TelephoneNumber']])
+                : [],
             $data['attributes'] ?? [],
         );
     }
@@ -257,8 +271,26 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'contactType': string,
+     *   'Company'?: string,
+     *   'GivenName'?: string,
+     *   'SurName'?: string,
+     *   'Extensions'?: array,
+     *   'EmailAddress'?: array,
+     *   'TelephoneNumber'?: array,
+     *   'attributes'?: array,
+     * } $data
+     * @return array{
+     *   'contactType': string,
+     *   'Company'?: string,
+     *   'GivenName'?: string,
+     *   'SurName'?: string,
+     *   'Extensions'?: array,
+     *   'EmailAddress'?: array,
+     *   'TelephoneNumber'?: array,
+     *   'attributes'?: array,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -287,24 +319,24 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
 
         if (array_key_exists('company', $data)) {
             Assert::string($data['company'], ArrayValidationException::class);
-            $retval['Company'] = new Company($data['company']);
+            $retval['Company'] = $data['company'];
         }
 
         if (array_key_exists('givenname', $data)) {
             Assert::string($data['givenname'], ArrayValidationException::class);
-            $retval['GivenName'] = new GivenName($data['givenname']);
+            $retval['GivenName'] = $data['givenname'];
         }
 
         if (array_key_exists('surname', $data)) {
             Assert::string($data['surname'], ArrayValidationException::class);
-            $retval['SurName'] = new SurName($data['surname']);
+            $retval['SurName'] = $data['surname'];
         }
 
         if (array_key_exists('emailaddress', $data)) {
             Assert::isArray($data['emailaddress'], ArrayValidationException::class);
             Assert::allString($data['emailaddress'], ArrayValidationException::class);
             foreach ($data['emailaddress'] as $email) {
-                $retval['EmailAddress'][] = new EmailAddress($email);
+                $retval['EmailAddress'][] = $email;
             }
         }
 
@@ -312,7 +344,7 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
             Assert::isArray($data['telephonenumber'], ArrayValidationException::class);
             Assert::allString($data['telephonenumber'], ArrayValidationException::class);
             foreach ($data['telephonenumber'] as $telephone) {
-                $retval['TelephoneNumber'][] = new TelephoneNumber($telephone);
+                $retval['TelephoneNumber'][] = $telephone;
             }
         }
 
@@ -336,18 +368,27 @@ final class ContactPerson extends AbstractMdElement implements ArrayizableElemen
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'contactType': string,
+     *   'Company'?: string,
+     *   'GivenName'?: string,
+     *   'SurName'?: string,
+     *   'Extensions'?: array,
+     *   'EmailAddress'?: array,
+     *   'TelephoneNumber'?: array,
+     *   'attributes'?: array,
+     * }
      */
     public function toArray(): array
     {
         $data = [
-            'ContactType' => $this->getContactType(),
-            'Company' => $this->getCompany()?->getContent(),
-            'GivenName' => $this->getGivenName()?->getContent(),
-            'SurName' => $this->getSurName()?->getContent(),
+            'ContactType' => $this->getContactType()->getValue(),
+            'Company' => $this->getCompany()?->getContent()->getValue(),
+            'GivenName' => $this->getGivenName()?->getContent()->getValue(),
+            'SurName' => $this->getSurName()?->getContent()->getValue(),
             'EmailAddress' => [],
             'TelephoneNumber' => [],
-            'Extensions' => $this->Extensions?->getList(),
+            'Extensions' => $this->Extensions?->getElements(),
             'attributes' => [],
         ];
 

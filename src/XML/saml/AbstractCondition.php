@@ -5,47 +5,51 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ExtensionPointInterface;
 use SimpleSAML\SAML2\XML\ExtensionPointTrait;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
-
-use function count;
-use function explode;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Constants as C_XSI;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
+use SimpleSAML\XMLSchema\Type\QNameValue;
 
 /**
  * SAML Condition data type.
  *
  * @package simplesamlphp/saml2
  */
-abstract class AbstractCondition extends AbstractConditionType implements ExtensionPointInterface
+abstract class AbstractCondition extends AbstractConditionType implements
+    ExtensionPointInterface,
+    SchemaValidatableElementInterface
 {
     use ExtensionPointTrait;
+    use SchemaValidatableElementTrait;
 
-    /** @var string */
-    public const LOCALNAME = 'Condition';
+
+    public const string LOCALNAME = 'Condition';
 
 
     /**
      * Initialize a custom saml:Condition element.
      *
-     * @param string $type
+     * @param \SimpleSAML\XMLSchema\Type\QNameValue $type
      */
     protected function __construct(
-        protected string $type,
+        protected QNameValue $type,
     ) {
     }
 
 
     /**
-     * @inheritDoc
+     * @return \SimpleSAML\XMLSchema\Type\QNameValue
      */
-    public function getXsiType(): string
+    public function getXsiType(): QNameValue
     {
         return $this->type;
     }
@@ -54,10 +58,7 @@ abstract class AbstractCondition extends AbstractConditionType implements Extens
     /**
      * Convert an XML element into a Condition.
      *
-     * @param \DOMElement $xml The root XML element
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
@@ -65,24 +66,12 @@ abstract class AbstractCondition extends AbstractConditionType implements Extens
         Assert::same($xml->localName, 'Condition', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, C::NS_SAML, InvalidDOMElementException::class);
         Assert::true(
-            $xml->hasAttributeNS(C::NS_XSI, 'type'),
+            $xml->hasAttributeNS(C_XSI::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:Condition> element.',
             SchemaViolationException::class,
         );
 
-        $type = $xml->getAttributeNS(C::NS_XSI, 'type');
-        Assert::validQName($type, SchemaViolationException::class);
-
-        // first, try to resolve the type to a full namespaced version
-        $qname = explode(':', $type, 2);
-        if (count($qname) === 2) {
-            list($prefix, $element) = $qname;
-        } else {
-            $prefix = null;
-            list($element) = $qname;
-        }
-        $ns = $xml->lookupNamespaceUri($prefix);
-        $type = ($ns === null) ? $element : implode(':', [$ns, $element]);
+        $type = QNameValue::fromDocument($xml->getAttributeNS(C_XSI::NS_XSI, 'type'), $xml);
 
         // now check if we have a handler registered for it
         $handler = Utils::getContainer()->getExtensionHandler($type);
@@ -102,9 +91,6 @@ abstract class AbstractCondition extends AbstractConditionType implements Extens
 
     /**
      * Convert this Condition to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this Condition.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -112,10 +98,10 @@ abstract class AbstractCondition extends AbstractConditionType implements Extens
         $e->setAttributeNS(
             'http://www.w3.org/2000/xmlns/',
             'xmlns:' . static::getXsiTypePrefix(),
-            static::getXsiTypeNamespaceURI(),
+            static::getXsiTypeNamespaceURI()->getValue(),
         );
 
-        $type = new XMLAttribute(C::NS_XSI, 'xsi', 'type', $this->getXsiType());
+        $type = new XMLAttribute(C_XSI::NS_XSI, 'xsi', 'type', $this->getXsiType());
         $type->toXML($e);
 
         return $e;

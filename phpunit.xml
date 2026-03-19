@@ -8,6 +8,7 @@
   <testsuites>
     <testsuite name="Test Suite">
       <directory>./tests/SAML2</directory>
+      <directory>./tests/Vulnerabilities</directory>
     </testsuite>
   </testsuites>
   <logging/>

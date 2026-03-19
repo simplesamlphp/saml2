@@ -12,7 +12,6 @@ use Stringable;
 class Destination implements Stringable
 {
     /**
-     * @param string $destination
      */
     public function __construct(
         private string $destination,
@@ -22,8 +21,6 @@ class Destination implements Stringable
 
     /**
      * @param \SimpleSAML\SAML2\Configuration\Destination $otherDestination
-     *
-     * @return bool
      */
     public function equals(Destination $otherDestination): bool
     {
@@ -32,7 +29,6 @@ class Destination implements Stringable
 
 
     /**
-     * @return string
      */
     public function __toString(): string
     {

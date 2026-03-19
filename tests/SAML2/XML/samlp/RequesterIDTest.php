@@ -31,12 +31,11 @@ final class RequesterIDTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = RequesterID::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -51,7 +50,7 @@ final class RequesterIDTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $requesterId = new RequesterID('urn:some:requester');
+        $requesterId = RequesterID::fromString('urn:some:requester');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

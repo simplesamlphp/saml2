@@ -29,12 +29,11 @@ final class AssertionURIRefTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = AssertionURIRef::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -47,7 +46,7 @@ final class AssertionURIRefTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $assertionURIRef = new AssertionURIRef('urn:x-simplesamlphp:reference');
+        $assertionURIRef = AssertionURIRef::fromString('urn:x-simplesamlphp:reference');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

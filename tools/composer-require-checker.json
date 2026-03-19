@@ -1,5 +1,8 @@
 {
   "symbol-whitelist": [
+    "SoapClient",
+    "SOAP_1_1",
+    "SimpleSAML\\XMLSecurity\\XMLSecurityKey",
     "SimpleSAML\\Configuration",
     "SimpleSAML\\Error\\BadRequest",
     "SimpleSAML\\Error\\Error",

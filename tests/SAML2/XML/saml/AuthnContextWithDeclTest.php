@@ -16,6 +16,7 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\StringValue;
 
 use function dirname;
 use function strval;
@@ -33,10 +34,9 @@ final class AuthnContextWithDeclTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = AuthnContext::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -67,14 +67,16 @@ XML
 
         $authnContextDecl = new AuthnContextDecl(
             [$chunk],
-            [new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'attr1', 'testval1')],
+            [new XMLAttribute('urn:x-simplesamlphp:namespace', 'ssp', 'attr1', StringValue::fromString('testval1'))],
         );
 
         $authnContext = new AuthnContext(
             authnContextClassRef: null,
             authnContextDecl: $authnContextDecl,
             authnContextDeclRef: null,
-            authenticatingAuthorities: [new AuthenticatingAuthority('https://idp.example.com/SAML2')],
+            authenticatingAuthorities: [
+                AuthenticatingAuthority::fromString('https://idp.example.com/SAML2'),
+            ],
         );
 
         $this->assertEquals(

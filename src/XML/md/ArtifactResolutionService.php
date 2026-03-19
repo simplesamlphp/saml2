@@ -4,36 +4,44 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
+use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 
 /**
  * A class implementing the md:ArtifactResolutionService element.
  *
  * @package simplesamlphp/saml2
  */
-final class ArtifactResolutionService extends AbstractIndexedEndpointType
+final class ArtifactResolutionService extends AbstractIndexedEndpointType implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
+
     /**
      * ArtifactResolutionService constructor.
      *
      * This is an endpoint with one restriction: it cannot contain a ResponseLocation.
      *
-     * @param int $index
-     * @param string $binding
-     * @param string $location
-     * @param bool|null $isDefault
-     * @param string|null $unused
+     * @param \SimpleSAML\XMLSchema\Type\UnsignedShortValue $index
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $binding
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $location
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $isDefault
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $unused
      * @param list<\SimpleSAML\XML\Attribute> $attributes
-     * @param array $children
+     * @param \SimpleSAML\XML\SerializableElementInterface[] $children
      *
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function __construct(
-        int $index,
-        string $binding,
-        string $location,
-        ?bool $isDefault = null,
-        ?string $unused = null,
+        UnsignedShortValue $index,
+        SAMLAnyURIValue $binding,
+        SAMLAnyURIValue $location,
+        ?BooleanValue $isDefault = null,
+        ?SAMLAnyURIValue $unused = null,
         array $children = [],
         array $attributes = [],
     ) {

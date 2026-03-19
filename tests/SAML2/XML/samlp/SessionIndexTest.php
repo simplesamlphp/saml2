@@ -29,12 +29,11 @@ final class SessionIndexTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = SessionIndex::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -47,7 +46,7 @@ final class SessionIndexTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $sessionIndex = new SessionIndex('SomeSessionIndex1');
+        $sessionIndex = SessionIndex::fromString('SomeSessionIndex1');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

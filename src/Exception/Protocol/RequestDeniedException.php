@@ -14,5 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class RequestDeniedException extends ProtocolViolationException
 {
-    public const DEFAULT_MESSAGE = 'Request denied.';
+    public const string DEFAULT_MESSAGE = 'Request denied.';
 }

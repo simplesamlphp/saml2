@@ -15,7 +15,7 @@ use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
 /**
- * Tests for SurName.
+ * Tests for TelephoneNumber.
  *
  * @package simplesamlphp/saml2
  */
@@ -33,8 +33,6 @@ final class TelephoneNumberTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = TelephoneNumber::class;
 
         self::$arrayRepresentation = ['+1234567890'];
@@ -49,11 +47,11 @@ final class TelephoneNumberTest extends TestCase
 
 
     /**
-     * Test creating a TelehponeNumber object from scratch.
+     * Test creating a TelephoneNumber object from scratch.
      */
     public function testMarshalling(): void
     {
-        $name = new TelephoneNumber('+1234567890');
+        $name = TelephoneNumber::fromString('+1234567890');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

@@ -34,8 +34,6 @@ final class IPHintTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
-
         self::$testedClass = IPHint::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -52,7 +50,7 @@ final class IPHintTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $hint = new IPHint('130.59.0.0/16');
+        $hint = IPHint::fromString('130.59.0.0/16');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

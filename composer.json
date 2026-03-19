@@ -18,30 +18,32 @@
         }
     ],
     "require": {
-        "php": "^8.1",
+        "php": "^8.3",
         "ext-date": "*",
         "ext-dom": "*",
         "ext-filter": "*",
         "ext-openssl": "*",
         "ext-pcre": "*",
-        "ext-soap": "*",
         "ext-zlib": "*",
 
-        "nyholm/psr7": "^1.8",
-        "psr/clock": "^1.0",
-        "psr/http-message": "^2.0",
-        "psr/log": "^2.0 || ^3.0",
-        "simplesamlphp/assert": "~1.6.0",
-        "simplesamlphp/xml-common": "~1.20.0",
-        "simplesamlphp/xml-security": "~1.10.0",
-        "simplesamlphp/xml-soap": "~1.5.5"
+        "nyholm/psr7": "~1.8",
+        "psr/clock": "~1.0",
+        "psr/http-message": "~2.0",
+        "psr/log": "~3.0",
+        "simplesamlphp/assert": "~2.0",
+        "simplesamlphp/xml-common": "~2.7",
+        "simplesamlphp/xml-security": "~2.3",
+        "simplesamlphp/xml-soap": "~2.3"
     },
     "require-dev": {
         "ext-intl": "*",
 
-        "beste/clock": "^3.0",
-        "mockery/mockery": "^1.6",
-        "simplesamlphp/simplesamlphp-test-framework": "^1.7"
+        "beste/clock": "~3.0",
+        "mockery/mockery": "~1.6",
+        "simplesamlphp/simplesamlphp-test-framework": "~1.11"
+    },
+    "suggest": {
+        "ext-soap": "*"
     },
     "autoload": {
         "psr-4": {
@@ -56,7 +58,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "v6.0.x-dev"
+            "dev-master": "v6.1.x-dev"
         }
     },
     "config": {
@@ -67,5 +69,15 @@
             "phpstan/extension-installer": true,
             "simplesamlphp/composer-xmlprovider-installer": true
         }
+    },
+    "scripts": {
+        "pre-commit": [
+            "vendor/bin/phpcs -p",
+            "vendor/bin/composer-require-checker check --config-file=tools/composer-require-checker.json composer.json",
+            "vendor/bin/phpstan analyze -c phpstan.neon",
+            "vendor/bin/phpstan analyze -c phpstan-dev.neon",
+            "vendor/bin/composer-unused",
+            "vendor/bin/phpunit --no-coverage --testdox"
+        ]
     }
 }

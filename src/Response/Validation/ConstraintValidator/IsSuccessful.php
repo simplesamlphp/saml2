@@ -33,8 +33,6 @@ class IsSuccessful implements ConstraintValidator
 
     /**
      * @param \SimpleSAML\SAML2\XML\samlp\Status $responseStatus
-     *
-     * @return string
      */
     private function buildMessage(Status $responseStatus): string
     {
@@ -44,16 +42,16 @@ class IsSuccessful implements ConstraintValidator
         $codes = $statusCode->getSubCodes();
         if (!empty($codes)) {
             foreach ($codes as $code) {
-                $subCodes[] = $this->truncateStatus($code->getValue());
+                $subCodes[] = $this->truncateStatus($code->getValue()->getValue());
             }
         }
         $statusMessage = $responseStatus->getStatusMessage();
 
         return sprintf(
             '%s%s%s',
-            $this->truncateStatus($statusCode->getValue()),
+            $this->truncateStatus($statusCode->getValue()->getValue()),
             $subCodes ? '/' . implode('/', $subCodes) : '',
-            $statusMessage ? ' ' . $statusMessage->getContent() : '',
+            $statusMessage ? ' ' . $statusMessage->getContent()->getValue() : '',
         );
     }
 
@@ -61,8 +59,6 @@ class IsSuccessful implements ConstraintValidator
     /**
      * Truncate the status if it is prefixed by its urn.
      * @param string $status
-     *
-     * @return string
      */
     private function truncateStatus(string $status): string
     {

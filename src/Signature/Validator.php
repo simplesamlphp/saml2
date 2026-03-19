@@ -28,8 +28,6 @@ class Validator
     /**
      * @param \SimpleSAML\XMLSecurity\XML\SignedElementInterface $signedElement
      * @param \SimpleSAML\SAML2\Configuration\CertificateProvider $configuration
-     *
-     * @return bool
      */
     public function hasValidSignature(
         SignedElementInterface $signedElement,

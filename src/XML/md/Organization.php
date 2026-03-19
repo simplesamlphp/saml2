@@ -5,18 +5,20 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\ExtendableAttributesTrait;
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\MissingElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 use function array_change_key_case;
 use function array_filter;
@@ -29,13 +31,17 @@ use function array_merge;
  *
  * @package simplesamlphp/saml2
  */
-final class Organization extends AbstractMdElement implements ArrayizableElementInterface
+final class Organization extends AbstractMdElement implements
+    ArrayizableElementInterface,
+    SchemaValidatableElementInterface
 {
     use ExtendableAttributesTrait;
     use ExtendableElementTrait;
+    use SchemaValidatableElementTrait;
+
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**
@@ -108,12 +114,9 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
     /**
      * Initialize an Organization element.
      *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
      *   if one of the mandatory child-elements is missing
      */
     public static function fromXML(DOMElement $xml): static
@@ -155,9 +158,6 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
 
     /**
      * Convert this Organization to XML.
-     *
-     * @param \DOMElement|null $parent The element we should add this organization to.
-     * @return \DOMElement This Organization-element.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -188,8 +188,13 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'OrganizationName': array,
+     *   'OrganizationDisplayName': array,
+     *   'OrganizationURL': array,
+     *   'Extensions'?: array,
+     *   'attributes'?: array,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -209,8 +214,20 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'OrganizationName': array,
+     *   'OrganizationDisplayName': array,
+     *   'OrganizationURL': array,
+     *   'Extensions'?: array,
+     *   'attributes'?: array,
+     * } $data
+     * @return array{
+     *   'OrganizationName': string,
+     *   'OrganizationDisplayName': string,
+     *   'OrganizationURL': string,
+     *   'Extensions'?: array,
+     *   'attributes'?: array,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -276,7 +293,13 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'OrganizationName': string,
+     *   'OrganizationDisplayName': string,
+     *   'OrganizationURL': string,
+     *   'Extensions'?: array,
+     *   'attributes'?: array,
+     * }
      */
     public function toArray(): array
     {
@@ -284,7 +307,7 @@ final class Organization extends AbstractMdElement implements ArrayizableElement
             'OrganizationName' => [],
             'OrganizationDisplayName' => [],
             'OrganizationURL' => [],
-            'Extensions' => $this->getExtensions()?->getList(),
+            'Extensions' => $this->getExtensions()?->getElements(),
             'attributes' => [],
         ];
 

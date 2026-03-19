@@ -31,12 +31,11 @@ final class GetCompleteTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = GetComplete::class;
 
         self::$arrayRepresentation = ['https://some/location'];
@@ -51,10 +50,7 @@ final class GetCompleteTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $getComplete = new GetComplete('https://some/location');
-
-        $getCompleteElement = $getComplete->toXML();
-        $this->assertEquals('https://some/location', $getCompleteElement->textContent);
+        $getComplete = GetComplete::fromString('https://some/location');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

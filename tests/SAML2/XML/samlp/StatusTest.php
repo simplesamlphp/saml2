@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\Status;
@@ -36,6 +37,7 @@ final class StatusTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /** @var \DOMDocument $detail */
     private static DOMDocument $detail;
 
@@ -44,8 +46,6 @@ final class StatusTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = Status::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -64,14 +64,14 @@ final class StatusTest extends TestCase
     {
         $status = new Status(
             new StatusCode(
-                C::STATUS_RESPONDER,
+                SAMLAnyURIValue::fromString(C::STATUS_RESPONDER),
                 [
                     new StatusCode(
-                        C::STATUS_REQUEST_DENIED,
+                        SAMLAnyURIValue::fromString(C::STATUS_REQUEST_DENIED),
                     ),
                 ],
             ),
-            new StatusMessage('Something went wrong'),
+            StatusMessage::fromString('Something went wrong'),
             [
                 StatusDetail::fromXML(
                     DOMDocumentFactory::fromFile(
@@ -94,14 +94,14 @@ final class StatusTest extends TestCase
     {
         $status = new Status(
             new StatusCode(
-                C::STATUS_RESPONDER,
+                SAMLAnyURIValue::fromString(C::STATUS_RESPONDER),
                 [
                     new StatusCode(
-                        C::STATUS_REQUEST_DENIED,
+                        SAMLAnyURIValue::fromString(C::STATUS_REQUEST_DENIED),
                     ),
                 ],
             ),
-            new StatusMessage('Something went wrong'),
+            StatusMessage::fromString('Something went wrong'),
             [
                 new StatusDetail([new Chunk(self::$detail->documentElement)]),
             ],
@@ -115,7 +115,7 @@ final class StatusTest extends TestCase
         $this->assertCount(1, $statusElements);
 
         // Test ordering of Status contents
-        /** @psalm-var \DOMElement[] $statusElements */
+        /** @var \DOMElement[] $statusElements */
         $statusElements = XPath::xpQuery($statusElement, './saml_protocol:StatusCode/following-sibling::*', $xpCache);
         $this->assertCount(2, $statusElements);
         $this->assertEquals('samlp:StatusMessage', $statusElements[0]->tagName);

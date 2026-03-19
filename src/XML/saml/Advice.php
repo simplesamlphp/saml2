@@ -5,24 +5,28 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\ExtendableElementTrait;
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 /**
  * Class representing a saml:Advice element.
  *
  * @package simplesaml/saml2
  */
-final class Advice extends AbstractSamlElement
+final class Advice extends AbstractSamlElement implements SchemaValidatableElementInterface
 {
     use ExtendableElementTrait;
+    use SchemaValidatableElementTrait;
+
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ELT_NAMESPACE = NS::OTHER;
 
 
     /**
@@ -30,7 +34,7 @@ final class Advice extends AbstractSamlElement
      * @param \SimpleSAML\SAML2\XML\saml\AssertionURIRef[] $assertionURIRef
      * @param \SimpleSAML\SAML2\XML\saml\Assertion[] $assertion
      * @param \SimpleSAML\SAML2\XML\saml\EncryptedAssertion[] $encryptedAssertion
-     * @param \SimpleSAML\XML\Chunk[] $elements
+     * @param \SimpleSAML\XML\SerializableElementInterface[] $elements
      */
     public function __construct(
         protected array $assertionIDRef = [],
@@ -54,8 +58,6 @@ final class Advice extends AbstractSamlElement
 
     /**
      * Test if an object, at the state it's in, would produce an empty XML-element
-     *
-     * @return bool
      */
     public function isEmptyElement(): bool
     {
@@ -106,10 +108,7 @@ final class Advice extends AbstractSamlElement
     /**
      * Convert XML into an Advice
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   If the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
@@ -139,9 +138,6 @@ final class Advice extends AbstractSamlElement
 
     /**
      * Convert this Advince to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this Condition.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -164,7 +160,6 @@ final class Advice extends AbstractSamlElement
         }
 
         foreach ($this->getElements() as $element) {
-            /** @psalm-var \SimpleSAML\XML\SerializableElementInterface $element */
             $element->toXML($e);
         }
 

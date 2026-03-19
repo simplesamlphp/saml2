@@ -5,72 +5,63 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
-use SimpleSAML\XML\StringElementTrait;
-
-use function trim;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 
 /**
  * Class representing SAML 2 metadata AdditionalMetadataLocation element.
  *
  * @package simplesamlphp/saml2
  */
-final class AdditionalMetadataLocation extends AbstractMdElement
+final class AdditionalMetadataLocation extends AbstractMdElement implements SchemaValidatableElementInterface
 {
-    use StringElementTrait;
+    use SchemaValidatableElementTrait;
 
 
     /**
      * Create a new instance of AdditionalMetadataLocation
      *
-     * @param string $namespace
-     * @param string $location
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $namespace
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $location
      */
     public function __construct(
-        protected string $namespace,
-        string $location,
+        protected SAMLAnyURIValue $namespace,
+        protected SAMLAnyURIValue $location,
     ) {
-        SAMLAssert::validURI($namespace);
-        $this->setContent($location);
     }
 
 
     /**
      * Collect the value of the namespace-property
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue
      */
-    public function getNamespace(): string
+    public function getNamespace(): SAMLAnyURIValue
     {
         return $this->namespace;
     }
 
 
     /**
-     * Validate the content of the element.
+     * Collect the value of the location-property
      *
-     * @param string $content  The value to go in the XML textContent
-     * @throws \Exception on failure
-     * @return void
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue
      */
-    protected function validateContent(string $content): void
+    public function getLocation(): SAMLAnyURIValue
     {
-        SAMLAssert::validURI($content, SchemaViolationException::class); // Covers the empty string
+        return $this->location;
     }
 
 
     /**
      * Initialize an AdditionalMetadataLocation element.
      *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing any of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static
@@ -78,23 +69,21 @@ final class AdditionalMetadataLocation extends AbstractMdElement
         Assert::same($xml->localName, 'AdditionalMetadataLocation', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AdditionalMetadataLocation::NS, InvalidDOMElementException::class);
 
-        $namespace = self::getAttribute($xml, 'namespace');
-
-        return new static($namespace, trim($xml->textContent));
+        return new static(
+            self::getAttribute($xml, 'namespace', SAMLAnyURIValue::class),
+            SAMLAnyURIValue::fromString($xml->textContent),
+        );
     }
 
 
     /**
      * Convert this AdditionalMetadataLocation to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append to.
-     * @return \DOMElement This AdditionalMetadataLocation-element.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->textContent = $this->getContent();
-        $e->setAttribute('namespace', $this->getNamespace());
+        $e->textContent = $this->getLocation()->getValue();
+        $e->setAttribute('namespace', $this->getNamespace()->getValue());
 
         return $e;
     }

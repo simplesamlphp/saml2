@@ -4,18 +4,24 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\Conditions;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\Subject;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Type\BooleanValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
@@ -26,54 +32,55 @@ use function strval;
  *
  * @package simplesamlphp/saml2
  */
-class AuthnRequest extends AbstractRequest
+class AuthnRequest extends AbstractRequest implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
+
     /**
      * Constructor for SAML 2 AuthnRequest
      *
-     * @param \DateTimeImmutable $issueInstant
+     * @param \SimpleSAML\XMLSchema\Type\IDValue $id
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $issueInstant
      * @param \SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext|null $requestedAuthnContext
      * @param \SimpleSAML\SAML2\XML\saml\Subject|null $subject
      * @param \SimpleSAML\SAML2\XML\samlp\NameIDPolicy|null $nameIdPolicy
      * @param \SimpleSAML\SAML2\XML\saml\Conditions|null $conditions
-     * @param bool|null $forceAuthn
-     * @param bool|null $isPassive
-     * @param string|null $assertionConsumerServiceURL
-     * @param int|null $assertionConsumerServiceIndex
-     * @param string|null $protocolBinding
-     * @param int|null $attributeConsumingServiceIndex
-     * @param string|null $providerName
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $forceAuthn
+     * @param \SimpleSAML\XMLSchema\Type\BooleanValue|null $isPassive
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $assertionConsumerServiceURL
+     * @param \SimpleSAML\XMLSchema\Type\UnsignedShortValue|null $assertionConsumerServiceIndex
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $protocolBinding
+     * @param \SimpleSAML\XMLSchema\Type\UnsignedShortValue|null $attributeConsumingServiceIndex
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $providerName
      * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
-     * @param string|null $id
-     * @param string $version
-     * @param string|null $destination
-     * @param string|null $consent
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions|null $extensions
      * @param \SimpleSAML\SAML2\XML\samlp\Scoping|null $scoping
+     *
      * @throws \Exception
      */
     final public function __construct(
-        DateTimeImmutable $issueInstant,
+        IDValue $id,
+        SAMLDateTimeValue $issueInstant,
         protected ?RequestedAuthnContext $requestedAuthnContext = null,
         protected ?Subject $subject = null,
         protected ?NameIDPolicy $nameIdPolicy = null,
         protected ?Conditions $conditions = null,
-        protected ?bool $forceAuthn = null,
-        protected ?bool $isPassive = null,
-        protected ?string $assertionConsumerServiceURL = null,
-        protected ?int $assertionConsumerServiceIndex = null,
-        protected ?string $protocolBinding = null,
-        protected ?int $attributeConsumingServiceIndex = null,
-        protected ?string $providerName = null,
+        protected ?BooleanValue $forceAuthn = null,
+        protected ?BooleanValue $isPassive = null,
+        protected ?SAMLAnyURIValue $assertionConsumerServiceURL = null,
+        protected ?UnsignedShortValue $assertionConsumerServiceIndex = null,
+        protected ?SAMLAnyURIValue $protocolBinding = null,
+        protected ?UnsignedShortValue $attributeConsumingServiceIndex = null,
+        protected ?SAMLStringValue $providerName = null,
         ?Issuer $issuer = null,
-        ?string $id = null,
-        string $version = '2.0',
-        ?string $destination = null,
-        ?string $consent = null,
+        ?SAMLAnyURIValue $destination = null,
+        ?SAMLAnyURIValue $consent = null,
         ?Extensions $extensions = null,
         protected ?Scoping $scoping = null,
     ) {
-        Assert::nullOrNotWhitespaceOnly($providerName);
         Assert::oneOf(
             null,
             [$assertionConsumerServiceURL, $assertionConsumerServiceIndex],
@@ -88,12 +95,8 @@ class AuthnRequest extends AbstractRequest
             . ' please specify one or the other.',
             ProtocolViolationException::class,
         );
-        Assert::nullOrValidURL($assertionConsumerServiceURL);
-        SAMLAssert::nullOrValidURI($protocolBinding);
-        Assert::nullOrRange($attributeConsumingServiceIndex, 0, 65535);
-        Assert::nullOrRange($assertionConsumerServiceIndex, 0, 65535);
 
-        parent::__construct($issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
+        parent::__construct($id, $issuer, $issueInstant, $destination, $consent, $extensions);
     }
 
 
@@ -127,7 +130,6 @@ class AuthnRequest extends AbstractRequest
     /**
      * Retrieve the NameIdPolicy.
      *
-     * @see \SimpleSAML\SAML2\AuthnRequest::setNameIdPolicy()
      * @return \SimpleSAML\SAML2\XML\samlp\NameIDPolicy|null The NameIdPolicy.
      */
     public function getNameIdPolicy(): ?NameIDPolicy
@@ -139,9 +141,9 @@ class AuthnRequest extends AbstractRequest
     /**
      * Retrieve the value of the ForceAuthn attribute.
      *
-     * @return bool|null The ForceAuthn attribute.
+     * @return \SimpleSAML\XMLSchema\Type\BooleanValue|null The ForceAuthn attribute.
      */
-    public function getForceAuthn(): ?bool
+    public function getForceAuthn(): ?BooleanValue
     {
         return $this->forceAuthn;
     }
@@ -150,9 +152,9 @@ class AuthnRequest extends AbstractRequest
     /**
      * Retrieve the value of the ProviderName attribute.
      *
-     * @return string|null The ProviderName attribute.
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue|null The ProviderName attribute.
      */
-    public function getProviderName(): ?string
+    public function getProviderName(): ?SAMLStringValue
     {
         return $this->providerName;
     }
@@ -161,9 +163,9 @@ class AuthnRequest extends AbstractRequest
     /**
      * Retrieve the value of the IsPassive attribute.
      *
-     * @return bool|null The IsPassive attribute.
+     * @return \SimpleSAML\XMLSchema\Type\BooleanValue|null The IsPassive attribute.
      */
-    public function getIsPassive(): ?bool
+    public function getIsPassive(): ?BooleanValue
     {
         return $this->isPassive;
     }
@@ -172,9 +174,9 @@ class AuthnRequest extends AbstractRequest
     /**
      * Retrieve the value of the AssertionConsumerServiceURL attribute.
      *
-     * @return string|null The AssertionConsumerServiceURL attribute.
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null The AssertionConsumerServiceURL attribute.
      */
-    public function getAssertionConsumerServiceURL(): ?string
+    public function getAssertionConsumerServiceURL(): ?SAMLAnyURIValue
     {
         return $this->assertionConsumerServiceURL;
     }
@@ -183,9 +185,9 @@ class AuthnRequest extends AbstractRequest
     /**
      * Retrieve the value of the ProtocolBinding attribute.
      *
-     * @return string|null The ProtocolBinding attribute.
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null The ProtocolBinding attribute.
      */
-    public function getProtocolBinding(): ?string
+    public function getProtocolBinding(): ?SAMLAnyURIValue
     {
         return $this->protocolBinding;
     }
@@ -194,9 +196,9 @@ class AuthnRequest extends AbstractRequest
     /**
      * Retrieve the value of the AttributeConsumingServiceIndex attribute.
      *
-     * @return int|null The AttributeConsumingServiceIndex attribute.
+     * @return \SimpleSAML\XMLSchema\Type\UnsignedShortValue|null The AttributeConsumingServiceIndex attribute.
      */
-    public function getAttributeConsumingServiceIndex(): ?int
+    public function getAttributeConsumingServiceIndex(): ?UnsignedShortValue
     {
         return $this->attributeConsumingServiceIndex;
     }
@@ -205,9 +207,9 @@ class AuthnRequest extends AbstractRequest
     /**
      * Retrieve the value of the AssertionConsumerServiceIndex attribute.
      *
-     * @return int|null The AssertionConsumerServiceIndex attribute.
+     * @return \SimpleSAML\XMLSchema\Type\UnsignedShortValue|null The AssertionConsumerServiceIndex attribute.
      */
-    public function getAssertionConsumerServiceIndex(): ?int
+    public function getAssertionConsumerServiceIndex(): ?UnsignedShortValue
     {
         return $this->assertionConsumerServiceIndex;
     }
@@ -227,14 +229,11 @@ class AuthnRequest extends AbstractRequest
     /**
      * Convert XML into an AuthnRequest
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static
@@ -242,30 +241,9 @@ class AuthnRequest extends AbstractRequest
         Assert::same($xml->localName, 'AuthnRequest', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AuthnRequest::NS, InvalidDOMElementException::class);
 
-        $version = self::getAttribute($xml, 'Version');
-        Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
-        Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
-
-        $id = self::getAttribute($xml, 'ID');
-        Assert::validNCName($id); // Covers the empty string
-
-        $issueInstant = self::getAttribute($xml, 'IssueInstant');
-        // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
-        $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
-
-        SAMLAssert::validDateTime($issueInstant, ProtocolViolationException::class);
-        $issueInstant = new DateTimeImmutable($issueInstant);
-
-        $attributeConsumingServiceIndex = self::getOptionalIntegerAttribute(
-            $xml,
-            'AttributeConsumingServiceIndex',
-            null,
-        );
-        $assertionConsumerServiceIndex = self::getOptionalIntegerAttribute(
-            $xml,
-            'AssertionConsumerServiceIndex',
-            null,
-        );
+        $version = self::getAttribute($xml, 'Version', SAMLStringValue::class);
+        Assert::true(version_compare('2.0', strval($version), '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', strval($version), '>='), RequestVersionTooHighException::class);
 
         $conditions = Conditions::getChildrenOfClass($xml);
         Assert::maxCount(
@@ -317,23 +295,22 @@ class AuthnRequest extends AbstractRequest
         Assert::maxCount($scoping, 1, 'Only one <samlp:Scoping> element is allowed.', TooManyElementsException::class);
 
         $request = new static(
-            $issueInstant,
+            self::getAttribute($xml, 'ID', IDValue::class),
+            self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
             array_pop($requestedAuthnContext),
             array_pop($subject),
             array_pop($nameIdPolicy),
             array_pop($conditions),
-            self::getOptionalBooleanAttribute($xml, 'ForceAuthn', null),
-            self::getOptionalBooleanAttribute($xml, 'IsPassive', null),
-            self::getOptionalAttribute($xml, 'AssertionConsumerServiceURL', null),
-            $assertionConsumerServiceIndex,
-            self::getOptionalAttribute($xml, 'ProtocolBinding', null),
-            $attributeConsumingServiceIndex,
-            self::getOptionalAttribute($xml, 'ProviderName', null),
+            self::getOptionalAttribute($xml, 'ForceAuthn', BooleanValue::class, null),
+            self::getOptionalAttribute($xml, 'IsPassive', BooleanValue::class, null),
+            self::getOptionalAttribute($xml, 'AssertionConsumerServiceURL', SAMLAnyURIValue::class, null),
+            self::getOptionalAttribute($xml, 'AssertionConsumerServiceIndex', UnsignedShortValue::class, null),
+            self::getOptionalAttribute($xml, 'ProtocolBinding', SAMLAnyURIValue::class, null),
+            self::getOptionalAttribute($xml, 'AttributeConsumingServiceIndex', UnsignedShortValue::class, null),
+            self::getOptionalAttribute($xml, 'ProviderName', SAMLStringValue::class, null),
             array_pop($issuer),
-            $id,
-            $version,
-            self::getOptionalAttribute($xml, 'Destination', null),
-            self::getOptionalAttribute($xml, 'Consent', null),
+            self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
+            self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
             array_pop($extensions),
             array_pop($scoping),
         );
@@ -351,33 +328,31 @@ class AuthnRequest extends AbstractRequest
     /**
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
-     *
-     * @return \DOMElement The root element of the DOM tree
      */
     protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $e = parent::toUnsignedXML($parent);
 
         if ($this->getForceAuthn() === true) {
-            $e->setAttribute('ForceAuthn', 'true');
+            $e->setAttribute('ForceAuthn', strval($this->getForceAuthn()));
         }
 
         if ($this->getProviderName() !== null) {
-            $e->setAttribute('ProviderName', $this->getProviderName());
+            $e->setAttribute('ProviderName', strval($this->getProviderName()));
         }
 
         if ($this->getIsPassive() === true) {
-            $e->setAttribute('IsPassive', 'true');
+            $e->setAttribute('IsPassive', strval($this->getIsPassive()));
         }
 
         if ($this->getAssertionConsumerServiceIndex() !== null) {
             $e->setAttribute('AssertionConsumerServiceIndex', strval($this->getAssertionConsumerServiceIndex()));
         } else {
             if ($this->getAssertionConsumerServiceURL() !== null) {
-                $e->setAttribute('AssertionConsumerServiceURL', $this->getAssertionConsumerServiceURL());
+                $e->setAttribute('AssertionConsumerServiceURL', strval($this->getAssertionConsumerServiceURL()));
             }
             if ($this->getProtocolBinding() !== null) {
-                $e->setAttribute('ProtocolBinding', $this->getProtocolBinding());
+                $e->setAttribute('ProtocolBinding', strval($this->getProtocolBinding()));
             }
         }
 

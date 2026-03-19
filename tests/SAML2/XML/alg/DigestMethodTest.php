@@ -7,14 +7,15 @@ namespace SimpleSAML\Test\SAML2\XML\alg;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\alg\AbstractAlgElement;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 
 use function dirname;
 use function strval;
@@ -37,9 +38,6 @@ final class DigestMethodTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5)
-            . '/resources/schemas/sstc-saml-metadata-algsupport-v1.0.xsd';
-
         self::$testedClass = DigestMethod::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -53,7 +51,7 @@ final class DigestMethodTest extends TestCase
     public function testMarshalling(): void
     {
         $digestMethod = new DigestMethod(
-            C::DIGEST_SHA256,
+            SAMLAnyURIValue::fromString(C::DIGEST_SHA256),
             [
                 new Chunk(DOMDocumentFactory::fromString(
                     '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',

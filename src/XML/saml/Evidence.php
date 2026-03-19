@@ -5,18 +5,23 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\SchemaViolationException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
 /**
  * Class representing a saml:Evidence element.
  *
  * @package simplesaml/saml2
  */
-final class Evidence extends AbstractSamlElement
+final class Evidence extends AbstractSamlElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
+
     /**
      * @param \SimpleSAML\SAML2\XML\saml\AssertionIDRef[] $assertionIDRef
      * @param \SimpleSAML\SAML2\XML\saml\AssertionURIRef[] $assertionURIRef
@@ -42,8 +47,6 @@ final class Evidence extends AbstractSamlElement
 
     /**
      * Test if an object, at the state it's in, would produce an empty XML-element
-     *
-     * @return bool
      */
     public function isEmptyElement(): bool
     {
@@ -93,10 +96,7 @@ final class Evidence extends AbstractSamlElement
     /**
      * Convert XML into an Evidence
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   If the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
@@ -125,9 +125,6 @@ final class Evidence extends AbstractSamlElement
 
     /**
      * Convert this Evidence to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this Condition.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

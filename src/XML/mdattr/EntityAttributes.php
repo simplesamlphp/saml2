@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\mdattr;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeStatement;
 use SimpleSAML\SAML2\XML\saml\NameID;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 
 use function array_filter;
 use function array_merge;
@@ -22,10 +24,14 @@ use function sprintf;
  * Class for handling the EntityAttributes metadata extension.
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-metadata-attr-cs-01.pdf
+ *
  * @package simplesamlphp/saml2
  */
-final class EntityAttributes extends AbstractMdattrElement
+final class EntityAttributes extends AbstractMdattrElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
+
     /**
      * Create a EntityAttributes element.
      *
@@ -75,7 +81,7 @@ final class EntityAttributes extends AbstractMdattrElement
             );
 
             Assert::isEmpty(
-                $subject?->getSubjectConfirmation(),
+                $subject->getSubjectConfirmation(),
                 'Every <saml:Assertion> inside a <mdattr:EntityAttributes> must NOT contain any SubjectConfirmation',
                 ProtocolViolationException::class,
             );
@@ -89,7 +95,7 @@ final class EntityAttributes extends AbstractMdattrElement
                 ProtocolViolationException::class,
             );
             Assert::same(
-                $nameId?->getFormat(),
+                $nameId?->getFormat()->getValue(),
                 C::NAMEID_ENTITY,
                 sprintf('The NameID format must be %s', C::NAMEID_ENTITY),
                 ProtocolViolationException::class,
@@ -113,7 +119,7 @@ final class EntityAttributes extends AbstractMdattrElement
      * Add the value to the children-property
      *
      * @param \SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\Attribute $child
-     * @return void
+     *
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function addChild($child): void
@@ -125,10 +131,7 @@ final class EntityAttributes extends AbstractMdattrElement
     /**
      * Convert XML into a EntityAttributes
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
@@ -158,9 +161,6 @@ final class EntityAttributes extends AbstractMdattrElement
 
     /**
      * Convert this EntityAttributes to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

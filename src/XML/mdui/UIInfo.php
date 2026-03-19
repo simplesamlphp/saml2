@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\XML\ArrayizableElementInterface;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableElementTrait;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\SerializableElementInterface;
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 use function array_filter;
 use function array_key_exists;
@@ -28,14 +28,20 @@ use function array_unique;
  * Class for handling the metadata extensions for login and discovery user interface
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
+ *
  * @package simplesamlphp/saml2
  */
-final class UIInfo extends AbstractMduiElement implements ArrayizableElementInterface
+final class UIInfo extends AbstractMduiElement implements
+    ArrayizableElementInterface,
+    SchemaValidatableElementInterface
 {
     use ExtendableElementTrait;
+    use SchemaValidatableElementTrait;
+
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ELT_NAMESPACE = NS::OTHER;
+
 
     /**
      * Create a UIInfo element.
@@ -46,7 +52,7 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
      * @param \SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL[] $privacyStatementURL
      * @param \SimpleSAML\SAML2\XML\mdui\Keywords[] $keywords
      * @param \SimpleSAML\SAML2\XML\mdui\Logo[] $logo
-     * @param \SimpleSAML\XML\Chunk[] $children
+     * @param \SimpleSAML\XML\SerializableElementInterface[] $children
      */
     public function __construct(
         protected array $displayName = [],
@@ -200,9 +206,9 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
     /**
      * Add the value to the elements-property
      *
-     * @param \SimpleSAML\XML\Chunk $child
+     * @param \SimpleSAML\XML\SerializableElementInterface $child
      */
-    public function addChild(Chunk $child): void
+    public function addChild(SerializableElementInterface $child): void
     {
         $this->elements[] = $child;
     }
@@ -215,23 +221,24 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
      */
     public function isEmptyElement(): bool
     {
-        return empty($this->displayName)
-            && empty($this->description)
-            && empty($this->informationURL)
-            && empty($this->privacyStatementURL)
-            && empty($this->keywords)
-            && empty($this->logo)
-            && empty($this->elements);
+        return empty($this->getDisplayName())
+            && empty($this->getDescription())
+            && empty($this->getInformationURL())
+            && empty($this->getPrivacyStatementURL())
+            && empty($this->getKeywords())
+            && empty($this->getLogo())
+            && empty($this->getElements());
     }
 
 
     /**
      * Test localized elements for multiple items with the same language
      *
-     * @param (\SimpleSAML\SAML2\XML\md\AbstractLocalizedURL|
-     *         \SimpleSAML\SAML2\XML\md\AbstractLocalizedName|
-     *         \SimpleSAML\SAML2\XML\mdui\Keywords)[] $elements
-     * @return void
+     * @param (
+     *   \SimpleSAML\SAML2\XML\md\AbstractLocalizedURI|
+     *   \SimpleSAML\SAML2\XML\md\AbstractLocalizedName|
+     *   \SimpleSAML\SAML2\XML\mdui\Keywords
+     * )[] $elements
      */
     private function testLocalizedElements(array $elements)
     {
@@ -258,10 +265,7 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
     /**
      * Convert XML into a UIInfo
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
@@ -275,14 +279,7 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
         $PrivacyStatementURL = PrivacyStatementURL::getChildrenOfClass($xml);
         $Keywords = Keywords::getChildrenOfClass($xml);
         $Logo = Logo::getChildrenOfClass($xml);
-        $children = [];
-
-        /** @var \DOMElement $node */
-        foreach (XPath::xpQuery($xml, './*', XPath::getXPath($xml)) as $node) {
-            if ($node->namespaceURI !== UIInfo::NS) {
-                $children[] = new Chunk($node);
-            }
-        }
+        $children = self::getChildElementsFromXML($xml);
 
         return new static(
             $DisplayName,
@@ -298,9 +295,6 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
 
     /**
      * Convert this UIInfo to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -342,10 +336,15 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
     /**
      * Create a class from an array
      *
-     * NOTE: this method does not support passing additional child-objects
-     *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'DisplayName'?: array,
+     *   'Description'?: array,
+     *   'InformationURL'?: array,
+     *   'PrivacyStatementURL'?: array,
+     *   'Keywords'?: array,
+     *   'Logo'?: array,
+     *   'children'?: array,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -367,8 +366,24 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'DisplayName'?: array,
+     *   'Description'?: array,
+     *   'InformationURL'?: array,
+     *   'PrivacyStatementURL'?: array,
+     *   'Keywords'?: array,
+     *   'Logo'?: array,
+     *   'children'?: array,
+     * } $data
+     * @return array{
+     *   'DisplayName'?: array,
+     *   'Description'?: array,
+     *   'InformationURL'?: array,
+     *   'PrivacyStatementURL'?: array,
+     *   'Keywords'?: array,
+     *   'Logo'?: array,
+     *   'children'?: array,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -444,9 +459,15 @@ final class UIInfo extends AbstractMduiElement implements ArrayizableElementInte
     /**
      * Create an array from this class
      *
-     * NOTE: this method does not support passing additional child-objects
-     *
-     * @return array
+     * @return array{
+     *   'DisplayName'?: array,
+     *   'Description'?: array,
+     *   'InformationURL'?: array,
+     *   'PrivacyStatementURL'?: array,
+     *   'Keywords'?: array,
+     *   'Logo'?: array,
+     *   'children'?: array,
+     * }
      */
     public function toArray(): array
     {

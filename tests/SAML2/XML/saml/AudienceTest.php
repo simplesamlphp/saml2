@@ -31,12 +31,11 @@ final class AudienceTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = Audience::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -49,7 +48,7 @@ final class AudienceTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $audience = new Audience('urn:test:audience1');
+        $audience = Audience::fromString('urn:test:audience1');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

@@ -5,13 +5,15 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\StringElementTrait;
+use SimpleSAML\XML\Type\LangValue;
+use SimpleSAML\XML\TypedTextContentTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 
 use function array_key_first;
 
@@ -22,44 +24,32 @@ use function array_key_first;
  */
 abstract class AbstractLocalizedName extends AbstractMdElement implements ArrayizableElementInterface
 {
-    use StringElementTrait;
+    use TypedTextContentTrait;
+
+
+    public const string TEXTCONTENT_TYPE = SAMLStringValue::class;
 
 
     /**
      * LocalizedNameType constructor.
      *
-     * @param string $language The language this string is localized in.
-     * @param string $value The localized string.
+     * @param \SimpleSAML\XML\Type\LangValue $language The language this string is localized in.
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue $content The localized string.
      */
-    final public function __construct(
-        protected string $language,
-        string $value,
+    public function __construct(
+        protected LangValue $language,
+        SAMLStringValue $content,
     ) {
-        Assert::notEmpty($language, 'xml:lang cannot be empty.');
-
-        $this->setContent($value);
-    }
-
-
-    /**
-     * Validate the content of the element.
-     *
-     * @param string $content  The value to go in the XML textContent
-     * @throws \Exception on failure
-     * @return void
-     */
-    protected function validateContent(string $content): void
-    {
-        Assert::notEmpty($content);
+        $this->setContent($content);
     }
 
 
     /**
      * Get the language this string is localized in.
      *
-     * @return string
+     * @return \SimpleSAML\XML\Type\LangValue
      */
-    public function getLanguage(): string
+    public function getLanguage(): LangValue
     {
         return $this->language;
     }
@@ -68,10 +58,7 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
     /**
      * Create an instance of this object from its XML representation.
      *
-     * @param \DOMElement $xml
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
@@ -84,19 +71,20 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
             MissingAttributeException::class,
         );
 
-        return new static($xml->getAttributeNS(C::NS_XML, 'lang'), $xml->textContent);
+        return new static(
+            LangValue::fromString($xml->getAttributeNS(C::NS_XML, 'lang')),
+            SAMLStringValue::fromString($xml->textContent),
+        );
     }
 
 
     /**
-     * @param \DOMElement|null $parent
-     * @return \DOMElement
      */
     final public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttributeNS(C::NS_XML, 'xml:lang', $this->getLanguage());
-        $e->textContent = $this->getContent();
+        $e->setAttributeNS(C::NS_XML, 'xml:lang', $this->getLanguage()->getValue());
+        $e->textContent = $this->getContent()->getValue();
 
         return $e;
     }
@@ -105,18 +93,14 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array<string, string> $data
      */
     public static function fromArray(array $data): static
     {
         Assert::count($data, 1, ArrayValidationException::class);
 
-        $lang = array_key_first($data);
-        Assert::stringNotEmpty($lang, ArrayValidationException::class);
-
-        $value = $data[$lang];
-        Assert::stringNotEmpty($value, ArrayValidationException::class);
+        $lang = LangValue::fromString(array_key_first($data));
+        $value = SAMLStringValue::fromString($data[$lang->getValue()]);
 
         return new static($lang, $value);
     }
@@ -125,10 +109,10 @@ abstract class AbstractLocalizedName extends AbstractMdElement implements Arrayi
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array<string, string>
      */
     public function toArray(): array
     {
-        return [$this->language => $this->getContent()];
+        return [$this->getLanguage()->getValue() => $this->getContent()->getValue()];
     }
 }

@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XMLSchema\Type\QNameValue;
 
 /**
  * Class for unknown statements.
@@ -16,11 +17,11 @@ final class UnknownStatement extends AbstractStatement
 {
     /**
      * @param \SimpleSAML\XML\Chunk $chunk The whole Statement element as a chunk object.
-     * @param string $type The xsi:type of this statement
+     * @param \SimpleSAML\XMLSchema\Type\QNameValue $type The xsi:type of this statement
      */
     public function __construct(
         protected Chunk $chunk,
-        string $type,
+        QNameValue $type,
     ) {
         parent::__construct($type);
     }
@@ -39,9 +40,6 @@ final class UnknownStatement extends AbstractStatement
 
     /**
      * Convert this unknown statement to XML.
-     *
-     * @param \DOMElement|null $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this unknown statement.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

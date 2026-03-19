@@ -10,6 +10,9 @@ use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\EncryptedID;
@@ -21,10 +24,11 @@ use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\LogoutRequest;
 use SimpleSAML\SAML2\XML\samlp\SessionIndex;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\MissingElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
@@ -47,6 +51,7 @@ final class LogoutRequestTest extends TestCase
     use SerializableElementTestTrait;
     use SignedElementTestTrait;
 
+
     /** @var \Psr\Clock\ClockInterface */
     private static ClockInterface $clock;
 
@@ -57,8 +62,6 @@ final class LogoutRequestTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         self::$clock = Utils::getContainer()->getClock();
-
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
 
         self::$testedClass = LogoutRequest::class;
 
@@ -72,12 +75,18 @@ final class LogoutRequestTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $nameId = new NameID('NameIDValue');
+        $nameId = new NameID(
+            SAMLStringValue::fromString('NameIDValue'),
+        );
 
         $logoutRequest = new LogoutRequest(
+            id: IDValue::fromString('SomeIDValue'),
+            consent: SAMLAnyURIValue::fromString(C::CONSENT_UNSPECIFIED),
             identifier: $nameId,
-            issueInstant: self::$clock->now(),
-            sessionIndexes: [new SessionIndex('SessionIndexValue')],
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+            sessionIndexes: [
+                SessionIndex::fromString('SessionIndexValue'),
+            ],
         );
 
         $logoutRequestElement = $logoutRequest->toXML();
@@ -94,11 +103,18 @@ final class LogoutRequestTest extends TestCase
         $this->assertCount(1, $sessionIndexElements);
         $this->assertEquals('SessionIndexValue', $sessionIndexElements[0]->textContent);
 
-        $nameId = new NameID('NameIDValue');
+        $nameId = new NameID(
+            SAMLStringValue::fromString('NameIDValue'),
+        );
         $logoutRequest = new LogoutRequest(
+            id: IDValue::fromString('SomeIDValue'),
+            consent: SAMLAnyURIValue::fromString(C::CONSENT_UNSPECIFIED),
             identifier: $nameId,
-            issueInstant: self::$clock->now(),
-            sessionIndexes: [new SessionIndex('SessionIndexValue1'), new SessionIndex('SessionIndexValue2')],
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+            sessionIndexes: [
+                SessionIndex::fromString('SessionIndexValue1'),
+                SessionIndex::fromString('SessionIndexValue2'),
+            ],
         );
         $logoutRequestElement = $logoutRequest->toXML();
 
@@ -114,12 +130,18 @@ final class LogoutRequestTest extends TestCase
      */
     public function testMarshallingElementOrdering(): void
     {
-        $nameId = new NameID('NameIDValue');
+        $nameId = new NameID(
+            SAMLStringValue::fromString('NameIDValue'),
+        );
 
         $logoutRequest = new LogoutRequest(
+            id: IDValue::fromString('SomeIDValue'),
+            consent: SAMLAnyURIValue::fromString(C::CONSENT_UNSPECIFIED),
             identifier: $nameId,
-            issueInstant: self::$clock->now(),
-            sessionIndexes: [new SessionIndex('SessionIndexValue')],
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+            sessionIndexes: [
+                SessionIndex::fromString('SessionIndexValue'),
+            ],
         );
 
         $logoutRequestElement = $logoutRequest->toXML();
@@ -130,7 +152,7 @@ final class LogoutRequestTest extends TestCase
         $this->assertCount(1, $logoutRequestElements);
 
         // Test ordering of LogoutRequest contents
-        /** @psalm-var \DOMElement[] $logoutRequestElements */
+        /** @var \DOMElement[] $logoutRequestElements */
         $logoutRequestElements = XPath::xpQuery(
             $logoutRequestElement,
             './saml_assertion:NameID/following-sibling::*',
@@ -160,12 +182,11 @@ final class LogoutRequestTest extends TestCase
 
         $sessionIndexes = $logoutRequest->getSessionIndexes();
         $this->assertCount(2, $sessionIndexes);
-        $this->assertEquals('SomeSessionIndex1', $sessionIndexes[0]->getContent());
-        $this->assertEquals('SomeSessionIndex2', $sessionIndexes[1]->getContent());
+        $this->assertEquals('SomeSessionIndex1', $sessionIndexes[0]->getContent()->getValue());
+        $this->assertEquals('SomeSessionIndex2', $sessionIndexes[1]->getContent()->getValue());
 
-        /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encid->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
+            $encid->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),
         );
         $identifier = $encid->decrypt($decryptor);
@@ -182,7 +203,12 @@ final class LogoutRequestTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedID.xml',
         )->documentElement);
 
-        $logoutRequest = new LogoutRequest($eid, self::$clock->now());
+        $logoutRequest = new LogoutRequest(
+            identifier: $eid,
+            consent: SAMLAnyURIValue::fromString(C::CONSENT_UNSPECIFIED),
+            id: IDValue::fromString('SomeIDValue'),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+        );
         $logoutRequestElement = $logoutRequest->toXML();
         $this->assertCount(
             1,
@@ -292,7 +318,7 @@ XML;
         $logoutRequestElement = $document->documentElement;
 
         $logoutRequest = LogoutRequest::fromXML($logoutRequestElement);
-        $this->assertEquals('2018-11-28T19:33:12Z', $logoutRequest->getNotOnOrAfter()->format(C::DATETIME_FORMAT));
+        $this->assertEquals('2018-11-28T19:33:12Z', $logoutRequest->getNotOnOrAfter()->getValue());
     }
 
 
@@ -300,17 +326,25 @@ XML;
      */
     public function testSetNotOnOrAfter(): void
     {
-        $nameId = new NameID('NameIDValue');
+        $nameId = new NameID(
+            SAMLStringValue::fromString('NameIDValue'),
+        );
 
-        $logoutRequest = new LogoutRequest($nameId, self::$clock->now(), self::$clock->now());
+        $logoutRequest = new LogoutRequest(
+            IDValue::fromString('SomeIDValue'),
+            $nameId,
+            SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+            SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+        );
         $logoutRequestElement = $logoutRequest->toXML();
 
         $logoutRequest2 = LogoutRequest::fromXML($logoutRequestElement);
         $this->assertEquals(
-            self::$clock->now()->format(C::DATETIME_FORMAT),
-            $logoutRequest2->getNotOnOrAfter()->format(C::DATETIME_FORMAT),
+            SAMLDateTimeValue::fromDateTime(self::$clock->now())->getValue(),
+            $logoutRequest2->getNotOnOrAfter()->getValue(),
         );
     }
+
 
     /**
      */
@@ -342,16 +376,23 @@ XML;
      */
     public function testSetReason(): void
     {
-        $reason = "urn:simplesamlphp:reason-test";
-        $nameId = new NameID('NameIDValue');
+        $reason = SAMLStringValue::fromString("urn:simplesamlphp:reason-test");
+        $nameId = new NameID(
+            SAMLStringValue::fromString('NameIDValue'),
+        );
 
-        $logoutRequest = new LogoutRequest($nameId, self::$clock->now(), null, $reason);
+        $logoutRequest = new LogoutRequest(
+            id: IDValue::fromString('SomeIDValue'),
+            identifier: $nameId,
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+            notOnOrAfter: null,
+            reason: $reason,
+        );
         $logoutRequestElement = $logoutRequest->toXML();
 
         $logoutRequest2 = LogoutRequest::fromXML($logoutRequestElement);
         $this->assertEquals($reason, $logoutRequest2->getReason());
     }
-
 
 
     /**
@@ -381,21 +422,25 @@ XML;
      */
     public function testSetSessionIndicesVariants(): void
     {
-        $nameId = new NameID('test');
+        $nameId = new NameID(
+            SAMLStringValue::fromString('test'),
+        );
+
         $sessionIndexes = [
-            new SessionIndex('SessionIndexValue1'),
-            new SessionIndex('SessionIndexValue2'),
+            SessionIndex::fromString('SessionIndexValue1'),
+            SessionIndex::fromString('SessionIndexValue2'),
         ];
 
         $logoutRequest = new LogoutRequest(
-            issueInstant: self::$clock->now(),
+            id: IDValue::fromString('SomeIDValue'),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             identifier: $nameId,
             sessionIndexes: $sessionIndexes,
         );
 
         $sessionIndexes = $logoutRequest->getSessionIndexes();
         $this->assertCount(2, $sessionIndexes);
-        $this->assertEquals('SessionIndexValue1', $sessionIndexes[0]->getContent());
-        $this->assertEquals('SessionIndexValue2', $sessionIndexes[1]->getContent());
+        $this->assertEquals('SessionIndexValue1', $sessionIndexes[0]->getContent()->getValue());
+        $this->assertEquals('SessionIndexValue2', $sessionIndexes[1]->getContent()->getValue());
     }
 }

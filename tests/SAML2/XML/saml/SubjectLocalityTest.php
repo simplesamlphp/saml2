@@ -8,6 +8,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\DomainValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\SubjectLocality;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -30,12 +32,11 @@ final class SubjectLocalityTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = SubjectLocality::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -52,8 +53,8 @@ final class SubjectLocalityTest extends TestCase
     public function testMarshalling(): void
     {
         $subjectLocality = new SubjectLocality(
-            '1.1.1.1',
-            'idp.example.org',
+            SAMLStringValue::fromString('1.1.1.1'),
+            DomainValue::fromString('idp.example.org'),
         );
 
         $this->assertEquals(

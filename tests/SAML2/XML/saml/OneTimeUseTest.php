@@ -31,12 +31,11 @@ final class OneTimeUseTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = OneTimeUse::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(

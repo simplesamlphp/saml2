@@ -8,7 +8,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
 use SimpleSAML\SAML2\XML\alg\SigningMethod;
 use SimpleSAML\SAML2\XML\emd\RepublishRequest;
@@ -31,6 +32,12 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
+use SimpleSAML\XMLSchema\Type\PositiveIntegerValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
+use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 
 use function dirname;
 use function strval;
@@ -55,8 +62,6 @@ final class ExtensionsTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = Extensions::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -73,20 +78,47 @@ final class ExtensionsTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $scope = new Scope('SomeScope');
-        $ra = new RegistrationInfo('SomeAuthority');
-        $pubInfo = new PublicationInfo('SomePublisher');
+        $scope = new Scope(
+            SAMLStringValue::fromString('SomeScope'),
+        );
+        $ra = new RegistrationInfo(
+            SAMLStringValue::fromString('SomeAuthority'),
+        );
+        $pubInfo = new PublicationInfo(
+            SAMLStringValue::fromString('SomePublisher'),
+        );
         $pubPath = new PublicationPath(
             [
-                new Publication('SomePublisher'),
+                new Publication(
+                    SAMLStringValue::fromString('SomePublisher'),
+                ),
             ],
         );
-        $uiinfo = new UIInfo([new DisplayName('en', 'Example')]);
-        $idpdisc = new DiscoveryResponse(1, C::NS_IDPDISC, 'https://example.org/authenticate/sp');
-        $discoHints = new DiscoHints([], [new IPHint('127.0.0.1')]);
-        $digestMethod = new DigestMethod(C::DIGEST_SHA256);
-        $signingMethod = new SigningMethod(C::SIG_RSA_SHA256, 1024, 4096);
-        $republishRequest = new RepublishRequest(new RepublishTarget('http://edugain.org/'));
+        $uiinfo = new UIInfo([
+            new DisplayName(
+                LangValue::fromString('en'),
+                SAMLStringValue::fromString('Example'),
+            ),
+        ]);
+        $idpdisc = new DiscoveryResponse(
+            UnsignedShortValue::fromInteger(1),
+            SAMLAnyURIValue::fromString(C::NS_IDPDISC),
+            SAMLAnyURIValue::fromString('https://example.org/authenticate/sp'),
+        );
+        $discoHints = new DiscoHints([], [
+            IPHint::fromString('127.0.0.0/8'),
+        ]);
+        $digestMethod = new DigestMethod(
+            SAMLAnyURIValue::fromString(C::DIGEST_SHA256),
+        );
+        $signingMethod = new SigningMethod(
+            SAMLAnyURIValue::fromString(C::SIG_RSA_SHA256),
+            PositiveIntegerValue::fromInteger(1024),
+            PositiveIntegerValue::fromInteger(4096),
+        );
+        $republishRequest = new RepublishRequest(
+            RepublishTarget::fromString('http://edugain.org/'),
+        );
 
         $extensions = new Extensions([
             $scope,
@@ -128,8 +160,7 @@ final class ExtensionsTest extends TestCase
      */
     public function testMarshallingWithNonNamespacedExtensions(): void
     {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Extensions MUST NOT include global (non-namespace-qualified) elements.');
+        $this->expectException(SchemaViolationException::class);
 
         new Extensions([new Chunk(DOMDocumentFactory::fromString('<child/>')->documentElement)]);
     }
@@ -140,10 +171,9 @@ final class ExtensionsTest extends TestCase
      */
     public function testMarshallingWithSamlDefinedNamespacedExtensions(): void
     {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Extensions MUST NOT include any SAML-defined namespace elements.');
+        $this->expectException(InvalidDOMElementException::class);
 
-        new Extensions([new AttributeValue('something')]);
+        new Extensions([new AttributeValue(StringValue::fromString('something'))]);
     }
 
 
@@ -176,7 +206,7 @@ final class ExtensionsTest extends TestCase
     <mdui:DisplayName xml:lang="en">Example</mdui:DisplayName>
   </mdui:UIInfo>
   <mdui:DiscoHints>
-    <mdui:IPHint>127.0.0.1</mdui:IPHint>
+    <mdui:IPHint>127.0.0.0/8</mdui:IPHint>
   </mdui:DiscoHints>
   <idpdisc:DiscoveryResponse Binding="urn:oasis:names:tc:SAML:profiles:SSO:idp-discovery-protocol"
     Location="https://example.org/authenticate/sp"
@@ -192,7 +222,7 @@ XML
             ,
         );
         $extensions = Extensions::fromXML($document->documentElement);
-        $list = $extensions->getList();
+        $list = $extensions->getElements();
         $this->assertCount(12, $list);
         $this->assertInstanceOf(Scope::class, $list[0]);
         $this->assertInstanceOf(EntityAttributes::class, $list[1]);
@@ -217,6 +247,6 @@ XML
     {
         $document = DOMDocumentFactory::fromString('<md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"/>');
         $extensions = Extensions::fromXML($document->documentElement);
-        $this->assertEmpty($extensions->getList());
+        $this->assertEmpty($extensions->getElements());
     }
 }

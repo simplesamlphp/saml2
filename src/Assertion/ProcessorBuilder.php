@@ -120,6 +120,7 @@ class ProcessorBuilder
         return $validator;
     }
 
+
     /**
      * @param \Psr\Log\LoggerInterface $logger
      * @param \SimpleSAML\SAML2\Certificate\PrivateKeyLoader $keyLoader

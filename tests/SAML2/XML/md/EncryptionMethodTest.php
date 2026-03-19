@@ -8,14 +8,15 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\EncryptionMethod;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 use SimpleSAML\XMLSecurity\XML\xenc\KeySize;
 use SimpleSAML\XMLSecurity\XML\xenc\OAEPparams;
 
@@ -58,13 +59,17 @@ final class EncryptionMethodTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $alg = C::KEY_TRANSPORT_OAEP_MGF1P;
         $chunkXml = DOMDocumentFactory::fromString(
             '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Value</ssp:Chunk>',
         );
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 
-        $encryptionMethod = new EncryptionMethod($alg, new KeySize(10), new OAEPparams('9lWu3Q=='), [$chunk]);
+        $encryptionMethod = new EncryptionMethod(
+            SAMLAnyURIValue::fromString(C::KEY_TRANSPORT_OAEP_MGF1P),
+            KeySize::fromString('10'),
+            OAEPparams::fromString('9lWu3Q=='),
+            [$chunk],
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -78,7 +83,9 @@ final class EncryptionMethodTest extends TestCase
      */
     public function testMarshallingWithoutOptionalParameters(): void
     {
-        $encryptionMethod = new EncryptionMethod(C::KEY_TRANSPORT_OAEP_MGF1P);
+        $encryptionMethod = new EncryptionMethod(
+            SAMLAnyURIValue::fromString(C::KEY_TRANSPORT_OAEP_MGF1P),
+        );
         $document = DOMDocumentFactory::fromString(sprintf(
             '<md:EncryptionMethod xmlns:md="%s" Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-oaep-mgf1p"/>',
             C::NS_MD,
@@ -91,6 +98,8 @@ final class EncryptionMethodTest extends TestCase
     }
 
 
+    /**
+     */
     public function testMarshallingElementOrdering(): void
     {
         $alg = C::KEY_TRANSPORT_OAEP_MGF1P;
@@ -99,7 +108,12 @@ final class EncryptionMethodTest extends TestCase
         );
         $chunk = Chunk::fromXML($chunkXml->documentElement);
 
-        $em = new EncryptionMethod($alg, new KeySize(10), new OAEPparams('9lWu3Q=='), [$chunk]);
+        $em = new EncryptionMethod(
+            SAMLAnyURIValue::fromString(C::KEY_TRANSPORT_OAEP_MGF1P),
+            KeySize::fromString('10'),
+            OAEPparams::fromString('9lWu3Q=='),
+            [$chunk],
+        );
 
         // Marshall it to a \DOMElement
         $emElement = $em->toXML();
@@ -111,7 +125,7 @@ final class EncryptionMethodTest extends TestCase
         $this->assertEquals('10', $keySizeElements[0]->textContent);
 
         // Test ordering of EncryptionMethod contents
-        /** @psalm-var \DOMElement[] $emElements */
+        /** @var \DOMElement[] $emElements */
         $emElements = XPath::xpQuery($emElement, './xenc:KeySize/following-sibling::*', $xpCache);
 
         $this->assertCount(2, $emElements);

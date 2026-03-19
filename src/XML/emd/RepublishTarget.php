@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\emd;
 
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\XML\StringElementTrait;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\XML\TypedTextContentTrait;
 
 /**
  * Class implementing RepublishTarget.
@@ -15,28 +15,19 @@ use SimpleSAML\XML\StringElementTrait;
  */
 final class RepublishTarget extends AbstractEmdElement
 {
-    use StringElementTrait;
+    use TypedTextContentTrait;
+
+
+    public const string TEXTCONTENT_TYPE = SAMLAnyURIValue::class;
 
 
     /**
-     * @param string $content
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $content
      */
-    public function __construct(string $content)
-    {
+    public function __construct(
+        SAMLAnyURIValue $content,
+    ) {
         $this->setContent($content);
-    }
-
-
-    /**
-     * Validate the content of the element.
-     *
-     * @param string $content  The value to go in the XML textContent
-     * @throws \Exception on failure
-     * @return void
-     */
-    protected function validateContent(string $content): void
-    {
-        SAMLAssert::validURI($content);
-        Assert::same($content, 'http://edugain.org/');
+        Assert::same($content->getValue(), 'http://edugain.org/');
     }
 }

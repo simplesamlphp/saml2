@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\NameIDMappingService;
 use SimpleSAML\Test\SAML2\Constants as C;
@@ -36,8 +37,6 @@ final class NameIDMappingServiceTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = NameIDMappingService::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -54,7 +53,10 @@ final class NameIDMappingServiceTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $nidmsep = new NameIDMappingService(C::BINDING_HTTP_POST, C::LOCATION_A);
+        $nidmsep = new NameIDMappingService(
+            SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+            SAMLAnyURIValue::fromString(C::LOCATION_A),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -72,7 +74,12 @@ final class NameIDMappingServiceTest extends TestCase
         $this->expectExceptionMessage(
             'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.',
         );
-        new NameIDMappingService(C::BINDING_HTTP_POST, C::LOCATION_A, 'https://response.location/');
+
+        new NameIDMappingService(
+            SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+            SAMLAnyURIValue::fromString(C::LOCATION_A),
+            SAMLAnyURIValue::fromString('https://response.location/'),
+        );
     }
 
 

@@ -8,6 +8,8 @@ use DOMDocument;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\Extensions;
 use SimpleSAML\SAML2\XML\md\Organization;
@@ -21,6 +23,8 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 
 use function dirname;
 use function strval;
@@ -39,6 +43,7 @@ final class OrganizationTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /** @var \DOMDocument */
     private static DOMDocument $ext;
 
@@ -47,8 +52,6 @@ final class OrganizationTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = Organization::class;
 
         self::$ext = DOMDocumentFactory::fromString(
@@ -85,15 +88,30 @@ final class OrganizationTest extends TestCase
     public function testMarshalling(): void
     {
         $org = new Organization(
-            [new OrganizationName('en', 'Identity Providers R US')],
-            [new OrganizationDisplayName('en', 'Identity Providers R US, a Division of Lerxst Corp.')],
-            [new OrganizationURL('en', 'https://IdentityProvider.com')],
+            [
+                new OrganizationName(
+                    LangValue::fromString('en'),
+                    SAMLStringValue::fromString('Identity Providers R US'),
+                ),
+            ],
+            [
+                new OrganizationDisplayName(
+                    LangValue::fromString('en'),
+                    SAMLStringValue::fromString('Identity Providers R US, a Division of Lerxst Corp.'),
+                ),
+            ],
+            [
+                new OrganizationURL(
+                    LangValue::fromString('en'),
+                    SAMLAnyURIValue::fromString('https://IdentityProvider.com'),
+                ),
+            ],
             new Extensions(
                 [
                     new Chunk(self::$ext->documentElement),
                 ],
             ),
-            [new XMLAttribute(C::NAMESPACE, 'ssp', 'attr1', 'value1')],
+            [new XMLAttribute(C::NAMESPACE, 'ssp', 'attr1', StringValue::fromString('value1'))],
         );
 
         $this->assertEquals(

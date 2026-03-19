@@ -6,15 +6,20 @@ namespace SimpleSAML\Test\SAML2;
 
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Binding;
+use SimpleSAML\SAML2\Binding\HTTPArtifact;
+use SimpleSAML\SAML2\Binding\HTTPPost;
+use SimpleSAML\SAML2\Binding\HTTPRedirect;
+use SimpleSAML\SAML2\Binding\SOAP;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
-use SimpleSAML\SAML2\Binding\{HTTPArtifact, HTTPPost, HTTPRedirect, SOAP};
 
 /**
  * @package simplesamlphp\saml2
  */
+#[Group('bindings')]
 #[CoversClass(Binding::class)]
 final class BindingTest extends TestCase
 {

@@ -5,11 +5,11 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use InvalidArgumentException;
-use SimpleSAML\SAML2\XML\EncryptedElementTrait;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\SerializableElementInterface;
 use SimpleSAML\XMLSecurity\Alg\Encryption\EncryptionAlgorithmInterface;
-use SimpleSAML\XMLSecurity\XML\EncryptedElementInterface;
 
 use function implode;
 
@@ -18,9 +18,11 @@ use function implode;
  *
  * @package simplesamlphp/saml2
  */
-class EncryptedID extends AbstractSamlElement implements EncryptedElementInterface, IdentifierInterface
+final class EncryptedID extends AbstractEncryptedElement implements
+    IdentifierInterface,
+    SchemaValidatableElementInterface
 {
-    use EncryptedElementTrait;
+    use SchemaValidatableElementTrait;
 
 
     /**

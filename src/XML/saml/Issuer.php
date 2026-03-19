@@ -4,32 +4,39 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 /**
  * Class representing the saml:Issuer element.
  *
  * @package simplesamlphp/saml2
  */
-final class Issuer extends NameIDType
+final class Issuer extends NameIDType implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
+
     /**
      * Initialize a saml:Issuer
      *
-     * @param string $value
-     * @param string|null $NameQualifier
-     * @param string|null $SPNameQualifier
-     * @param string|null $Format
-     * @param string|null $SPProvidedID
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue $value
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $NameQualifier
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $SPNameQualifier
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $Format
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $SPProvidedID
      */
     public function __construct(
-        string $value,
-        ?string $NameQualifier = null,
-        ?string $SPNameQualifier = null,
-        ?string $Format = null,
-        ?string $SPProvidedID = null,
+        SAMLStringValue $value,
+        ?SAMLStringValue $NameQualifier = null,
+        ?SAMLStringValue $SPNameQualifier = null,
+        ?SAMLAnyURIValue $Format = null,
+        ?SAMLStringValue $SPProvidedID = null,
     ) {
         /**
          * The format of this NameIDType.
@@ -52,13 +59,13 @@ final class Issuer extends NameIDType
          * From saml-core-2.0-os 8.3.6, when the entity Format is used: "The NameQualifier, SPNameQualifier, and
          * SPProvidedID attributes MUST be omitted."
          */
-        if ($Format === C::NAMEID_ENTITY || $Format === null) {
+        if ($Format === null || $Format->getValue() === C::NAMEID_ENTITY) {
             Assert::allNull(
                 [$NameQualifier, $SPNameQualifier, $SPProvidedID],
                 'Illegal combination of attributes being used',
             );
 
-            SamlAssert::validEntityID($value);
+            Assert::validEntityID($value->getValue(), ProtocolViolationException::class);
         }
 
         parent::__construct($value, $NameQualifier, $SPNameQualifier, $Format, $SPProvidedID);

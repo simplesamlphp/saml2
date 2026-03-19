@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 
 use DOMDocument;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
@@ -18,6 +19,8 @@ use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Signature\Validator;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\samlp\Response;
@@ -25,6 +28,8 @@ use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSchema\Constants as C_XSI;
+use SimpleSAML\XMLSchema\Type\IDValue;
 
 /**
  * Tests for the SubjectConfirmation validators
@@ -70,7 +75,15 @@ final class SubjectConfirmationValidatorTest extends TestCase
         self::$logger = new NullLogger();
         self::$validator = new Validator(self::$logger);
         self::$destination = new Destination(C::ENTITY_SP);
-        self::$response = new Response(new Status(new StatusCode()), self::$clock->now());
+        self::$response = new Response(
+            id: IDValue::fromString('abc123'),
+            status: new Status(
+                new StatusCode(
+                    SAMLAnyURIValue::fromString(C::STATUS_SUCCESS),
+                ),
+            ),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+        );
 
         self::$identityProviderConfiguration = new IdentityProvider(['entityId' => C::ENTITY_IDP]);
         self::$serviceProviderConfiguration = new ServiceProvider(['entityId' => C::ENTITY_SP]);
@@ -84,8 +97,7 @@ final class SubjectConfirmationValidatorTest extends TestCase
             self::$response,
         );
 
-        $ns_xsi = C::NS_XSI;
-        $ns_xs = C::NS_XS;
+        $ns_xsi = C_XSI::NS_XSI;
         $ns_saml = C::NS_SAML;
         $nameid_persistent = C::NAMEID_PERSISTENT;
         $entity_idp = C::ENTITY_IDP;
@@ -96,7 +108,6 @@ final class SubjectConfirmationValidatorTest extends TestCase
         self::$document = DOMDocumentFactory::fromString(
             <<<XML
     <saml:Assertion xmlns:xsi="{$ns_xsi}"
-                    xmlns:xs="{$ns_xs}"
                     xmlns:saml="{$ns_saml}"
                     ID="_45e42090d8cbbfa52d5a394b01049fc2221e274182"
                     Version="2.0"
@@ -126,16 +137,17 @@ XML
         );
     }
 
+
     /**
      * Verifies that the assertion validator works
      */
+    #[DoesNotPerformAssertions]
     public function testBasicValidation(): void
     {
         $assertion = Assertion::fromXML(self::$document->documentElement);
-
-        $result = self::$assertionProcessor->validateAssertion($assertion);
-        $this->assertNull($result);
+        self::$assertionProcessor->validateAssertion($assertion);
     }
+
 
     /**
      * Verifies that SubjectConfirmation violations are caught

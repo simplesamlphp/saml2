@@ -15,9 +15,7 @@ use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
  */
 final class RegistrationPolicy extends AbstractLocalizedURI
 {
-    /** @var string */
-    public const NS = 'urn:oasis:names:tc:SAML:metadata:rpi';
+    public const string NS = 'urn:oasis:names:tc:SAML:metadata:rpi';
 
-    /** @var string */
-    public const NS_PREFIX = 'mdrpi';
+    public const string NS_PREFIX = 'mdrpi';
 }

@@ -34,8 +34,6 @@ final class GeolocationHintTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
-
         self::$testedClass = GeolocationHint::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -52,7 +50,7 @@ final class GeolocationHintTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $hint = new GeolocationHint('geo:47.37328,8.531126');
+        $hint = GeolocationHint::fromString('geo:47.37328,8.531126');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

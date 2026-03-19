@@ -5,11 +5,13 @@ declare(strict_types=1);
 namespace SimpleSAML\Test\SAML2;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\XML\saml\AbstractStatement;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\Test\SAML2\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Constants as C_XSI;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Type\QNameValue;
 
 /**
  * Example class to demonstrate how Statement can be extended.
@@ -18,14 +20,11 @@ use SimpleSAML\XML\Exception\InvalidDOMElementException;
  */
 final class CustomStatement extends AbstractStatement
 {
-    /** @var string */
-    protected const XSI_TYPE_NAME = 'CustomStatementType';
+    protected const string XSI_TYPE_NAME = 'CustomStatementType';
 
-    /** @var string */
-    protected const XSI_TYPE_NAMESPACE = C::NAMESPACE;
+    protected const string XSI_TYPE_NAMESPACE = C::NAMESPACE;
 
-    /** @var string */
-    protected const XSI_TYPE_PREFIX = 'ssp';
+    protected const string XSI_TYPE_PREFIX = 'ssp';
 
 
     /**
@@ -38,7 +37,11 @@ final class CustomStatement extends AbstractStatement
     ) {
         Assert::allIsInstanceOf($audience, Audience::class);
 
-        parent::__construct(self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME);
+        parent::__construct(
+            QNameValue::fromString(
+                '{' . self::XSI_TYPE_NAMESPACE . '}' . self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME,
+            ),
+        );
     }
 
 
@@ -56,10 +59,7 @@ final class CustomStatement extends AbstractStatement
     /**
      * Convert XML into an Statement
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
@@ -68,12 +68,12 @@ final class CustomStatement extends AbstractStatement
         Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AbstractStatement::NS, InvalidDOMElementException::class);
         Assert::true(
-            $xml->hasAttributeNS(C::NS_XSI, 'type'),
+            $xml->hasAttributeNS(C_XSI::NS_XSI, 'type'),
             'Missing required xsi:type in <saml:Statement> element.',
             InvalidDOMElementException::class,
         );
 
-        $type = $xml->getAttributeNS(C::NS_XSI, 'type');
+        $type = $xml->getAttributeNS(C_XSI::NS_XSI, 'type');
         Assert::same($type, self::XSI_TYPE_PREFIX . ':' . self::XSI_TYPE_NAME);
 
         $audience = Audience::getChildrenOfClass($xml);
@@ -84,9 +84,6 @@ final class CustomStatement extends AbstractStatement
 
     /**
      * Convert this Statement to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this Statement.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

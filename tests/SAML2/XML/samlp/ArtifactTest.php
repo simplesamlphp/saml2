@@ -29,12 +29,11 @@ final class ArtifactTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = Artifact::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -47,7 +46,7 @@ final class ArtifactTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $artifact = new Artifact('AAQAAM0ARI+cUaUKAx19/KC3fOV/vznNj8oE0JKKPQC8nTesXxPke7uRy+8=');
+        $artifact = Artifact::fromString('AAQAAM0ARI+cUaUKAx19/KC3fOV/vznNj8oE0JKKPQC8nTesXxPke7uRy+8=');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

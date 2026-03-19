@@ -6,6 +6,7 @@ namespace SimpleSAML\Test\SAML2\Assertion\Validation;
 
 use DOMDocument;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
@@ -20,6 +21,8 @@ use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\ServiceProvider;
 use SimpleSAML\SAML2\Signature\Validator;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\samlp\Response;
@@ -27,6 +30,7 @@ use SimpleSAML\SAML2\XML\samlp\Status;
 use SimpleSAML\SAML2\XML\samlp\StatusCode;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\Type\IDValue;
 
 /**
  * Tests for the Assertion validators
@@ -77,7 +81,15 @@ final class AssertionValidatorTest extends TestCase
         self::$logger = new NullLogger();
         self::$validator = new Validator(self::$logger);
         self::$destination = new Destination($destination);
-        self::$response = new Response(new Status(new StatusCode()), self::$clock->now());
+        self::$response = new Response(
+            id: IDValue::fromString('abc123'),
+            status: new Status(
+                new StatusCode(
+                    SAMLAnyURIValue::fromString(C::STATUS_SUCCESS),
+                ),
+            ),
+            issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+        );
 
         self::$identityProviderConfiguration = new IdentityProvider(['entityId' => $idpentity]);
         self::$serviceProviderConfiguration  = new ServiceProvider(['entityId' => $spentity]);
@@ -97,7 +109,6 @@ final class AssertionValidatorTest extends TestCase
         self::$document = DOMDocumentFactory::fromString(
             <<<XML
     <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
                     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                     ID="_45e42090d8cbbfa52d5a394b01049fc2221e274182"
                     Version="2.0"
@@ -127,18 +138,17 @@ XML
     /**
      * Verifies that the assertion validator works
      */
+    #[DoesNotPerformAssertions]
     #[PreserveGlobalState(false)]
     #[RunInSeparateProcess]
     public function testBasicValidation(): void
     {
         $assertion = Assertion::fromXML(self::$document->firstChild);
-
-        $result = self::$assertionProcessor->validateAssertion($assertion);
-        $this->assertNull($result);
+        self::$assertionProcessor->validateAssertion($assertion);
     }
 
-    /**
 
+    /**
      * Verifies that violations are caught
      */
     #[PreserveGlobalState(false)]
@@ -152,7 +162,6 @@ XML
         $document = DOMDocumentFactory::fromString(
             <<<XML
     <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
                     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                     ID="_45e42090d8cbbfa52d5a394b01049fc2221e274182"
                     Version="2.0"

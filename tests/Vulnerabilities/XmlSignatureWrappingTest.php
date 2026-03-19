@@ -4,18 +4,20 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Response;
 
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Signature\Validator;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XMLSecurity\Exception\ReferenceValidationFailedException;
+use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**
  * @package simplesamlphp/saml2
  */
+#[Group('vulnerabilities')]
 final class XmlSignatureWrappingTest extends TestCase
 {
     /** @var \SimpleSAML\SAML2\Signature\Validator */
@@ -41,8 +43,8 @@ final class XmlSignatureWrappingTest extends TestCase
      */
     public function testThatASignatureReferencingAnEmbeddedAssertionIsNotValid(): void
     {
-        $this->expectException(ReferenceValidationFailedException::class);
-        $this->expectExceptionMessage('Reference does not point to given element.');
+        $this->expectException(SignatureVerificationFailedException::class);
+        $this->expectExceptionMessage('Failed to verify signature.');
 
         $assertion = $this->getSignedAssertionWithEmbeddedAssertionReferencedInSignature();
         self::$signatureValidator->hasValidSignature($assertion, self::$identityProviderConfiguration);
@@ -53,8 +55,8 @@ final class XmlSignatureWrappingTest extends TestCase
      */
     public function testThatASignatureReferencingAnotherAssertionIsNotValid(): void
     {
-        $this->expectException(ReferenceValidationFailedException::class);
-        $this->expectExceptionMessage('Reference does not point to given element.');
+        $this->expectException(SignatureVerificationFailedException::class);
+        $this->expectExceptionMessage('Failed to verify signature.');
 
         $assertion = $this->getSignedAssertionWithSignatureThatReferencesAnotherAssertion();
         self::$signatureValidator->hasValidSignature($assertion, self::$identityProviderConfiguration);
@@ -66,8 +68,13 @@ final class XmlSignatureWrappingTest extends TestCase
      */
     private function getSignedAssertionWithSignatureThatReferencesAnotherAssertion(): Assertion
     {
-        $doc = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionWithInvalidReferencedId.xml');
-        return Assertion::fromXML($doc->firstChild);
+        $document = DOMDocumentFactory::fromFile(
+            dirname(__DIR__, 1) . '/resources/xml/vulnerabilities/signedAssertionWithInvalidReferencedId.xml',
+        );
+
+        /** @var \DOMElement $element */
+        $element = $document->firstChild;
+        return Assertion::fromXML($element);
     }
 
 
@@ -76,7 +83,12 @@ final class XmlSignatureWrappingTest extends TestCase
      */
     private function getSignedAssertionWithEmbeddedAssertionReferencedInSignature(): Assertion
     {
-        $document = DOMDocumentFactory::fromFile(__DIR__ . '/signedAssertionReferencedEmbeddedAssertion.xml');
-        return Assertion::fromXML($document->firstChild);
+        $document = DOMDocumentFactory::fromFile(
+            dirname(__DIR__, 1) . '/resources/xml/vulnerabilities/signedAssertionReferencedEmbeddedAssertion.xml',
+        );
+
+        /** @var \DOMElement $element */
+        $element = $document->firstChild;
+        return Assertion::fromXML($element);
     }
 }

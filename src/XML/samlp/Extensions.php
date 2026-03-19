@@ -5,20 +5,40 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtensionsTrait;
 use SimpleSAML\XML\Chunk;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 /**
  * Class for handling SAML2 extensions.
  *
  * @package simplesamlphp/saml2
  */
-final class Extensions extends AbstractSamlpElement
+final class Extensions extends AbstractSamlpElement implements SchemaValidatableElementInterface
 {
     use ExtensionsTrait;
+    use SchemaValidatableElementTrait;
+
+
+    /** The namespace-attribute for the xs:any element */
+    public const string XS_ANY_ELT_NAMESPACE = NS::OTHER;
+
+    /**
+     * The exclusions for the xs:any element
+     *
+     * @var array<int, array<int, string>>
+     */
+    public const array XS_ANY_ELT_EXCLUSIONS = [
+        ['urn:oasis:names:tc:SAML:2.0:assertion', '*'],
+        ['urn:oasis:names:tc:SAML:2.0:metadata', '*'],
+        ['urn:oasis:names:tc:SAML:2.0:protocol', '*'],
+    ];
+
 
     /**
      * Create an Extensions object from its samlp:Extensions XML representation.
@@ -26,10 +46,7 @@ final class Extensions extends AbstractSamlpElement
      * For those supported extensions, an object of the corresponding class will be created. The rest will be added
      * as a \SimpleSAML\XML\Chunk object.
      *
-     * @param \DOMElement $xml
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static

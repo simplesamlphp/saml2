@@ -29,12 +29,11 @@ final class StatusMessageTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-protocol-2.0.xsd';
-
         self::$testedClass = StatusMessage::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -47,7 +46,7 @@ final class StatusMessageTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $statusMessage = new StatusMessage('Something went wrong');
+        $statusMessage = StatusMessage::fromString('Something went wrong');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

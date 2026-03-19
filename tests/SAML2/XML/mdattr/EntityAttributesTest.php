@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdattr;
 
-use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\mdattr\AbstractMdattrElement;
 use SimpleSAML\SAML2\XML\mdattr\EntityAttributes;
 use SimpleSAML\SAML2\XML\saml\Assertion;
@@ -24,6 +26,8 @@ use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
@@ -48,8 +52,6 @@ final class EntityAttributesTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-metadata-attr.xsd';
-
         self::$testedClass = EntityAttributes::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -63,25 +65,27 @@ final class EntityAttributesTest extends TestCase
     public function testMarshalling(): void
     {
         $attribute1 = new Attribute(
-            name: 'attrib1',
-            nameFormat: C::NAMEFORMAT_BASIC,
+            name: SAMLStringValue::fromString('attrib1'),
+            nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_BASIC),
             attributeValue: [
-                new AttributeValue('is'),
-                new AttributeValue('really'),
-                new AttributeValue('cool'),
+                new AttributeValue(StringValue::fromString('is')),
+                new AttributeValue(StringValue::fromString('really')),
+                new AttributeValue(StringValue::fromString('cool')),
             ],
         );
 
         // Create an Issuer
-        $issuer = new Issuer('urn:x-simplesamlphp:issuer');
+        $issuer = new Issuer(
+            SAMLStringValue::fromString('urn:x-simplesamlphp:issuer'),
+        );
 
         // Create the conditions
         $conditions = new Conditions(
             condition: [],
             audienceRestriction: [
                 new AudienceRestriction([
-                    new Audience(C::ENTITY_IDP),
-                    new Audience(C::ENTITY_URN),
+                    Audience::fromString(C::ENTITY_IDP),
+                    Audience::fromString(C::ENTITY_URN),
                 ]),
             ],
         );
@@ -89,48 +93,54 @@ final class EntityAttributesTest extends TestCase
         // Create the statements
         $attrStatement = new AttributeStatement([
             new Attribute(
-                name: 'urn:mace:dir:attribute-def:uid',
-                nameFormat: C::NAMEFORMAT_URI,
+                name: SAMLStringValue::fromString('urn:mace:dir:attribute-def:uid'),
+                nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
                 attributeValue: [
-                    new AttributeValue('student2'),
+                    new AttributeValue(StringValue::fromString('student2')),
                 ],
             ),
             new Attribute(
-                name: 'urn:mace:terena.org:attribute-def:schacHomeOrganization',
-                nameFormat: C::NAMEFORMAT_URI,
+                name: SAMLStringValue::fromString('urn:mace:terena.org:attribute-def:schacHomeOrganization'),
+                nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
                 attributeValue: [
-                    new AttributeValue('university.example.org'),
-                    new AttributeValue('bbb.cc'),
+                    new AttributeValue(StringValue::fromString('university.example.org')),
+                    new AttributeValue(StringValue::fromString('bbb.cc')),
                 ],
             ),
             new Attribute(
-                name: 'urn:schac:attribute-def:schacPersonalUniqueCode',
-                nameFormat: C::NAMEFORMAT_URI,
+                name: SAMLStringValue::fromString('urn:schac:attribute-def:schacPersonalUniqueCode'),
+                nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
                 attributeValue: [
-                    new AttributeValue('urn:schac:personalUniqueCode:nl:local:uvt.nl:memberid:524020'),
-                    new AttributeValue('urn:schac:personalUniqueCode:nl:local:surfnet.nl:studentid:12345'),
+                    new AttributeValue(
+                        StringValue::fromString('urn:schac:personalUniqueCode:nl:local:uvt.nl:memberid:524020'),
+                    ),
+                    new AttributeValue(
+                        StringValue::fromString('urn:schac:personalUniqueCode:nl:local:surfnet.nl:studentid:12345'),
+                    ),
                 ],
             ),
             new Attribute(
-                name: 'urn:mace:dir:attribute-def:eduPersonAffiliation',
-                nameFormat: C::NAMEFORMAT_URI,
+                name: SAMLStringValue::fromString('urn:mace:dir:attribute-def:eduPersonAffiliation'),
+                nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
                 attributeValue: [
-                    new AttributeValue('member'),
-                    new AttributeValue('student'),
+                    new AttributeValue(StringValue::fromString('member')),
+                    new AttributeValue(StringValue::fromString('student')),
                 ],
             ),
         ]);
 
-        $subject = new Subject(new NameID(
-            value: 'some:entity',
-            Format: C::NAMEID_ENTITY,
-        ));
+        $subject = new Subject(
+            new NameID(
+                value: SAMLStringValue::fromString('some:entity'),
+                Format: SAMLAnyURIValue::FromString(C::NAMEID_ENTITY),
+            ),
+        );
 
         // Create an assertion
         $unsignedAssertion = new Assertion(
             $issuer,
-            new DateTimeImmutable('2024-07-23T20:35:34Z'),
-            '_93af655219464fb403b34436cfb0c5cb1d9a5502',
+            SAMLDateTimeValue::fromString('2024-07-23T20:35:34Z'),
+            IDValue::fromString('_93af655219464fb403b34436cfb0c5cb1d9a5502'),
             $subject,
             $conditions,
             [$attrStatement],
@@ -145,12 +155,12 @@ final class EntityAttributesTest extends TestCase
         $signedAssertion = Assertion::fromXML($unsignedAssertion->toXML());
 
         $attribute2 = new Attribute(
-            name: 'foo',
-            nameFormat: 'urn:simplesamlphp:v1:simplesamlphp',
+            name: SAMLStringValue::fromString('foo'),
+            nameFormat: SAMLAnyURIValue::fromString('urn:simplesamlphp:v1:simplesamlphp'),
             attributeValue: [
-                new AttributeValue('is'),
-                new AttributeValue('really'),
-                new AttributeValue('cool'),
+                new AttributeValue(StringValue::fromString('is')),
+                new AttributeValue(StringValue::fromString('really')),
+                new AttributeValue(StringValue::fromString('cool')),
             ],
         );
 

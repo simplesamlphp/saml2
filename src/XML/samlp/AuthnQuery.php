@@ -4,23 +4,25 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\Subject;
 use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\MissingElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
-use function preg_replace;
 use function version_compare;
 
 /**
@@ -28,35 +30,36 @@ use function version_compare;
  *
  * @package simplesamlphp/saml2
  */
-final class AuthnQuery extends AbstractSubjectQuery
+final class AuthnQuery extends AbstractSubjectQuery implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
+
     /**
      * Constructor for SAML 2 AuthnQuery.
      *
+     * @param \SimpleSAML\XMLSchema\Type\IDValue $id
      * @param \SimpleSAML\SAML2\XML\saml\Subject $subject
      * @param \SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext|null $requestedAuthnContext
-     * @param string|null $sessionIndex
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $sessionIndex
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
-     * @param string|null $id
-     * @param string $version
-     * @param \DateTimeImmutable $issueInstant
-     * @param string|null $destination
-     * @param string|null $consent
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $issueInstant
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      */
     public function __construct(
+        IDValue $id,
         Subject $subject,
-        DateTimeImmutable $issueInstant,
+        SAMLDateTimeValue $issueInstant,
         protected ?RequestedAuthnContext $requestedAuthnContext = null,
-        protected ?string $sessionIndex = null,
+        protected ?SAMLStringValue $sessionIndex = null,
         ?Issuer $issuer = null,
-        ?string $id = null,
-        string $version = '2.0',
-        ?string $destination = null,
-        ?string $consent = null,
+        ?SAMLAnyURIValue $destination = null,
+        ?SAMLAnyURIValue $consent = null,
         ?Extensions $extensions = null,
     ) {
-        parent::__construct($subject, $issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
+        parent::__construct($id, $subject, $issuer, $issueInstant, $destination, $consent, $extensions);
     }
 
 
@@ -74,9 +77,9 @@ final class AuthnQuery extends AbstractSubjectQuery
     /**
      * Retrieve session index.
      *
-     * @return string|null
+     * @return \SimpleSAML\SAML2\Type\SAMLStringValue|null
      */
-    public function getSessionIndex(): ?string
+    public function getSessionIndex(): ?SAMLStringValue
     {
         return $this->sessionIndex;
     }
@@ -85,16 +88,13 @@ final class AuthnQuery extends AbstractSubjectQuery
     /**
      * Create a class from XML
      *
-     * @param \DOMElement $xml
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
      *   if one of the mandatory child-elements is missing
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static
@@ -103,22 +103,8 @@ final class AuthnQuery extends AbstractSubjectQuery
         Assert::same($xml->namespaceURI, AuthnQuery::NS, InvalidDOMElementException::class);
 
         $version = self::getAttribute($xml, 'Version');
-        Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
-        Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
-
-        $id = self::getAttribute($xml, 'ID');
-        Assert::validNCName($id); // Covers the empty string
-
-        $destination = self::getOptionalAttribute($xml, 'Destination', null);
-        $consent = self::getOptionalAttribute($xml, 'Consent', null);
-        $sessionIndex = self::getOptionalAttribute($xml, 'SessionIndex', null);
-
-        $issueInstant = self::getAttribute($xml, 'IssueInstant');
-        // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
-        $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
-
-        SAMLAssert::validDateTime($issueInstant, ProtocolViolationException::class);
-        $issueInstant = new DateTimeImmutable($issueInstant);
+        Assert::true(version_compare('2.0', $version->getValue(), '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', $version->getValue(), '>='), RequestVersionTooHighException::class);
 
         $requestedAuthnContext = RequestedAuthnContext::getChildrenOfClass($xml);
 
@@ -146,15 +132,14 @@ final class AuthnQuery extends AbstractSubjectQuery
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
         $request = new static(
+            self::getAttribute($xml, 'ID', IDValue::class),
             array_pop($subject),
-            $issueInstant,
+            self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
             array_pop($requestedAuthnContext),
-            $sessionIndex,
+            self::getOptionalAttribute($xml, 'SessionIndex', SAMLStringValue::class, null),
             array_pop($issuer),
-            $id,
-            $version,
-            $destination,
-            $consent,
+            self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
+            self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
             array_pop($extensions),
         );
 
@@ -170,8 +155,6 @@ final class AuthnQuery extends AbstractSubjectQuery
     /**
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
-     *
-     * @return \DOMElement The root element of the DOM tree
      */
     protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
@@ -179,7 +162,7 @@ final class AuthnQuery extends AbstractSubjectQuery
 
         $sessionIndex = $this->getSessionIndex();
         if ($sessionIndex !== null) {
-            $e->setAttribute('SessionIndex', $sessionIndex);
+            $e->setAttribute('SessionIndex', $sessionIndex->getValue());
         }
 
         $this->getRequestedAuthnContext()?->toXML($e);

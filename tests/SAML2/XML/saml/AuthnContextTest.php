@@ -17,7 +17,7 @@ use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDecl;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDeclRef;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
 use function dirname;
 
@@ -52,9 +52,10 @@ final class AuthnContextTest extends TestCase
      */
     public function testMarshallingIllegalCombination(): void
     {
-        $authnContextClassRef = new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT);
+        $authnContextClassRef = AuthnContextClassRef::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT);
         $authnContextDecl = AuthnContextDecl::fromXML(self::$decl->documentElement);
-        $authnContextDeclRef = new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml');
+        $authnContextDeclRef = AuthnContextDeclRef::fromString('https://example.org/relative/path/to/document.xml');
+        $authenticatingAuthority = AuthenticatingAuthority::fromString('https://idp.example.com/SAML2');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Can only have one of AuthnContextDecl/AuthnContextDeclRef');
@@ -63,9 +64,7 @@ final class AuthnContextTest extends TestCase
             $authnContextClassRef,
             $authnContextDecl,
             $authnContextDeclRef,
-            [
-                new AuthenticatingAuthority('https://idp.example.com/SAML2'),
-            ],
+            [$authenticatingAuthority],
         );
     }
 

@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\MissingElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
 use function array_change_key_case;
 use function array_filter;
@@ -23,8 +25,11 @@ use function array_pop;
  *
  * @package simplesamlphp/saml2
  */
-final class IDPList extends AbstractSamlpElement
+final class IDPList extends AbstractSamlpElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
+
     /**
      * Initialize an IDPList element.
      *
@@ -62,14 +67,11 @@ final class IDPList extends AbstractSamlpElement
     /**
      * Convert XML into a IDPList-element
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
      *   if one of the mandatory child-elements is missing
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static
@@ -102,9 +104,6 @@ final class IDPList extends AbstractSamlpElement
 
     /**
      * Convert this IDPList to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this IDPList to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -123,8 +122,10 @@ final class IDPList extends AbstractSamlpElement
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'IDPEntry': string,
+     *   'GetComplete'?: string,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -141,8 +142,14 @@ final class IDPList extends AbstractSamlpElement
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'IDPEntry': string,
+     *   'GetComplete'?: string,
+     * } $data
+     * @return array{
+     *   'IDPEntry': string,
+     *   'GetComplete'?: string,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -178,7 +185,10 @@ final class IDPList extends AbstractSamlpElement
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'IDPEntry': string,
+     *   'GetComplete'?: string,
+     * }
      */
     public function toArray(): array
     {

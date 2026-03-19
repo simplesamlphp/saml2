@@ -5,22 +5,28 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\MissingElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
 use function array_pop;
+use function strval;
 
 /**
  * SAML Status data type.
  *
  * @package simplesamlphp/saml2
  */
-final class Status extends AbstractSamlpElement
+final class Status extends AbstractSamlpElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
+
     /**
      * Initialize a samlp:Status
      *
@@ -34,7 +40,7 @@ final class Status extends AbstractSamlpElement
         protected array $statusDetails = [],
     ) {
         Assert::oneOf(
-            $statusCode->getValue(),
+            strval($statusCode->getValue()),
             [
                 C::STATUS_SUCCESS,
                 C::STATUS_REQUESTER,
@@ -85,14 +91,11 @@ final class Status extends AbstractSamlpElement
     /**
      * Convert XML into a Status
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
-     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
      *   if one of the mandatory child-elements is missing
      */
     public static function fromXML(DOMElement $xml): static
@@ -119,9 +122,6 @@ final class Status extends AbstractSamlpElement
 
     /**
      * Convert this Status to XML.
-     *
-     * @param \DOMElement|null $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this Status.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

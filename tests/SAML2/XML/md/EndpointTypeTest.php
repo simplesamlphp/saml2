@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\md\AbstractEndpointType;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AssertionIDRequestService;
@@ -17,11 +18,12 @@ use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Type\StringValue;
 
 use function dirname;
 use function strval;
@@ -40,7 +42,7 @@ final class EndpointTypeTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
-    /** @var \DOMDocument */
+
     private static DOMDocument $ext;
 
 
@@ -52,8 +54,6 @@ final class EndpointTypeTest extends TestCase
             '<ssp:Chunk xmlns:ssp="urn:x-simplesamlphp:namespace">Some</ssp:Chunk>',
         );
 
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = AttributeService::class;
 
         self::$arrayRepresentation = [
@@ -61,7 +61,14 @@ final class EndpointTypeTest extends TestCase
             'Location' => 'https://whatever/',
             'ResponseLocation' => 'https://foo.bar/',
             'children' => [new Chunk(self::$ext->documentElement)],
-            'attributes' => [(new XMLAttribute('urn:x-simplesamlphp:namespace', 'test', 'attr', 'value'))->toArray()],
+            'attributes' => [
+                (new XMLAttribute(
+                    'urn:x-simplesamlphp:namespace',
+                    'test',
+                    'attr',
+                    StringValue::fromString('value'),
+                ))->toArray(),
+            ],
         ];
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -78,12 +85,12 @@ final class EndpointTypeTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr = new XMLAttribute(C::NAMESPACE, 'test', 'attr', 'value');
+        $attr = new XMLAttribute(C::NAMESPACE, 'test', 'attr', StringValue::fromString('value'));
 
         $endpointType = new AttributeService(
-            C::BINDING_HTTP_POST,
-            'https://whatever/',
-            'https://foo.bar/',
+            SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+            SAMLAnyURIValue::fromString('https://whatever/'),
+            SAMLAnyURIValue::fromString('https://foo.bar/'),
             [new Chunk(self::$ext->documentElement)],
             [$attr],
         );
@@ -96,31 +103,14 @@ final class EndpointTypeTest extends TestCase
 
 
     /**
-     * Test that creating an EndpointType from scratch with an empty Binding fails.
-     */
-    public function testMarshallingWithEmptyBinding(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        new AttributeService('', C::LOCATION_A);
-    }
-
-
-    /**
-     * Test that creating an EndpointType from scratch with an empty Location fails.
-     */
-    public function testMarshallingWithEmptyLocation(): void
-    {
-        $this->expectException(ProtocolViolationException::class);
-        new AttributeService(C::BINDING_HTTP_POST, '');
-    }
-
-
-    /**
      * Test that creating an EndpointType from scratch without optional attributes works.
      */
     public function testMarshallingWithoutOptionalAttributes(): void
     {
-        $endpointType = new AttributeService(C::BINDING_HTTP_POST, C::LOCATION_A);
+        $endpointType = new AttributeService(
+            SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
+            SAMLAnyURIValue::fromString(C::LOCATION_A),
+        );
         $this->assertNull($endpointType->getResponseLocation());
         $this->assertEmpty($endpointType->getAttributesNS());
     }

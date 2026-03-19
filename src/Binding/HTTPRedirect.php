@@ -8,10 +8,12 @@ use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Binding;
+use SimpleSAML\SAML2\Binding\RelayStateTrait;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
@@ -36,8 +38,11 @@ use function urlencode;
  *
  * @package simplesamlphp/saml2
  */
-class HTTPRedirect extends Binding
+class HTTPRedirect extends Binding implements AsynchronousBindingInterface, RelayStateInterface
 {
+    use RelayStateTrait;
+
+
     /**
      * Create the redirect URL for a message.
      *
@@ -50,6 +55,8 @@ class HTTPRedirect extends Binding
             $destination = $message->getDestination();
             if ($destination === null) {
                 throw new Exception('Cannot build a redirect URL, no destination set.');
+            } else {
+                $destination = $destination->getValue();
             }
         } else {
             $destination = $this->destination;
@@ -79,8 +86,11 @@ class HTTPRedirect extends Binding
 
         $signature = $message->getSignature();
         if ($signature !== null) { // add the signature
-            $msg .= '&SigAlg=' . urlencode($signature->getSignedInfo()->getSignatureMethod()->getAlgorithm());
-            $msg .= '&Signature=' . urlencode($signature->getSignatureValue()->getContent());
+            $signatureMethod = $signature->getSignedInfo()->getSignatureMethod();
+            $signatureValue = $signature->getSignatureValue();
+
+            $msg .= '&SigAlg=' . urlencode($signatureMethod->getAlgorithm()->getValue());
+            $msg .= '&Signature=' . urlencode($signatureValue->getValue()->getValue());
         }
 
         if (str_contains($destination, '?')) {
@@ -116,6 +126,7 @@ class HTTPRedirect extends Binding
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
+     *
      * @throws \Exception
      *
      * NPath is currently too high but solving that just moves code around.
@@ -124,6 +135,10 @@ class HTTPRedirect extends Binding
     {
         $query = $request->getQueryParams();
 
+        /**
+         * Put the SAMLRequest/SAMLResponse from the actual query string into $message,
+         * and assert that the result from parseQuery() in $query and the parsing of the SignedQuery in $res agree
+         */
         if (array_key_exists('SAMLRequest', $query)) {
             $message = $query['SAMLRequest'];
             $signedQuery = 'SAMLRequest=' . urlencode($query['SAMLRequest']);
@@ -132,6 +147,10 @@ class HTTPRedirect extends Binding
             $signedQuery = 'SAMLResponse=' . urlencode($query['SAMLResponse']);
         } else {
             throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
+        }
+
+        if (array_key_exists('SAMLRequest', $query) && array_key_exists('SAMLResponse', $query)) {
+            throw new Exception('Both SAMLRequest and SAMLResponse provided.');
         }
 
         if (isset($query['SAMLEncoding']) && $query['SAMLEncoding'] !== C::BINDING_HTTP_REDIRECT_DEFLATE) {
@@ -156,8 +175,8 @@ class HTTPRedirect extends Binding
         $message = MessageFactory::fromXML($document->documentElement);
 
         if (array_key_exists('RelayState', $query)) {
-            $signedQuery .= '&RelayState=' . urlencode($query['RelayState']);
             $this->setRelayState($query['RelayState']);
+            $signedQuery .= '&RelayState=' . urlencode($query['RelayState']);
         }
 
         if (!array_key_exists('Signature', $query)) {
@@ -171,7 +190,8 @@ class HTTPRedirect extends Binding
          * message MUST contain the URL to which the sender has instructed the user agent to deliver the
          * message.
          */
-        Assert::notNull($message->getDestination()); // Validation of the value must be done upstream
+        Assert::notNull($message->getDestination(), ProtocolViolationException::class);
+        // Validation of the Destination must be done upstream
 
         if (!array_key_exists('SigAlg', $query)) {
             throw new Exception('Missing signature algorithm.');

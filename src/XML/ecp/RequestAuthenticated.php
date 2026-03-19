@@ -5,29 +5,32 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\ecp;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SOAP\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingAttributeException;
-
-use function boolval;
-use function strval;
+use SimpleSAML\SOAP11\Constants as C;
+use SimpleSAML\SOAP11\Type\MustUnderstandValue;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 
 /**
  * Class representing the ECP RequestAuthenticated element.
  *
  * @package simplesamlphp/saml2
  */
-final class RequestAuthenticated extends AbstractEcpElement
+final class RequestAuthenticated extends AbstractEcpElement implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
+
     /**
      * Create a ECP RequestAuthenticated element.
      *
-     * @param bool|null $mustUnderstand
+     * @param \SimpleSAML\SOAP11\Type\MustUnderstandValue|null $mustUnderstand
      */
     public function __construct(
-        protected ?bool $mustUnderstand = false,
+        protected ?MustUnderstandValue $mustUnderstand,
     ) {
     }
 
@@ -35,9 +38,9 @@ final class RequestAuthenticated extends AbstractEcpElement
     /**
      * Collect the value of the mustUnderstand-property
      *
-     * @return bool|null
+     * @return \SimpleSAML\SOAP11\Type\MustUnderstandValue|null
      */
-    public function getMustUnderstand(): ?bool
+    public function getMustUnderstand(): ?MustUnderstandValue
     {
         return $this->mustUnderstand;
     }
@@ -47,11 +50,10 @@ final class RequestAuthenticated extends AbstractEcpElement
      * Convert XML into a RequestAuthenticated
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing any of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static
@@ -61,29 +63,19 @@ final class RequestAuthenticated extends AbstractEcpElement
 
         // Assert required attributes
         Assert::true(
-            $xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'actor'),
+            $xml->hasAttributeNS(C::NS_SOAP_ENV, 'actor'),
             'Missing env:actor attribute in <ecp:RequestAuthenticated>.',
             MissingAttributeException::class,
         );
 
         $mustUnderstand = null;
-        if ($xml->hasAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand')) {
-            $mustUnderstand = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'mustUnderstand');
-
-            Assert::nullOrOneOf(
-                $mustUnderstand,
-                ['0', '1'],
-                'Invalid value of env:mustUnderstand attribute in <ecp:RequestAuthenticated>.',
-                ProtocolViolationException::class,
-            );
-
-            $mustUnderstand = boolval($mustUnderstand);
+        if ($xml->hasAttributeNS(C::NS_SOAP_ENV, 'mustUnderstand')) {
+            $mustUnderstand = MustUnderstandValue::fromString($xml->getAttributeNS(C::NS_SOAP_ENV, 'mustUnderstand'));
         }
 
-        $actor = $xml->getAttributeNS(C::NS_SOAP_ENV_11, 'actor');
         Assert::same(
-            $actor,
-            'http://schemas.xmlsoap.org/soap/actor/next',
+            $xml->getAttributeNS(C::NS_SOAP_ENV, 'actor'),
+            C::SOAP_ACTOR_NEXT,
             'Invalid value of env:actor attribute in <ecp:RequestAuthenticated>.',
             ProtocolViolationException::class,
         );
@@ -96,17 +88,16 @@ final class RequestAuthenticated extends AbstractEcpElement
      * Convert this ECP RequestAuthentication to XML.
      *
      * @param \DOMElement|null $parent The element we should append this element to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        if ($this->getMustUnderstand() !== null) {
-            $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:mustUnderstand', strval(intval($this->getMustUnderstand())));
+        if ($this->getMustUnderstand() !== null && $this->getMustUnderstand()->toBoolean() !== false) {
+            $this->getMustUnderstand()->toAttribute()->toXML($e);
         }
 
-        $e->setAttributeNS(C::NS_SOAP_ENV_11, 'env:actor', C::SOAP_ACTOR_NEXT);
+        $e->setAttributeNS(C::NS_SOAP_ENV, 'SOAP-ENV:actor', C::SOAP_ACTOR_NEXT);
 
         return $e;
     }

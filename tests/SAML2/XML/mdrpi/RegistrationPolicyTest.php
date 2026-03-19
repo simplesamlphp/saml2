@@ -7,15 +7,15 @@ namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
 use SimpleSAML\SAML2\XML\mdrpi\AbstractMdrpiElement;
 use SimpleSAML\SAML2\XML\mdrpi\RegistrationPolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
 
 use function dirname;
 use function strval;
@@ -33,7 +33,6 @@ use function strval;
 final class RegistrationPolicyTest extends TestCase
 {
     use ArrayizableElementTestTrait;
-    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
 
@@ -41,8 +40,6 @@ final class RegistrationPolicyTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-metadata-rpi-v1.0.xsd';
-
         self::$testedClass = RegistrationPolicy::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -61,27 +58,14 @@ final class RegistrationPolicyTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = new RegistrationPolicy('en', 'http://www.example.edu/en/');
+        $name = new RegistrationPolicy(
+            LangValue::fromString('en'),
+            SAMLAnyURIValue::fromString('http://www.example.edu/en/'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
-    }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test that creating a RegistrationPolicy with an invalid url throws an exception
-     */
-    public function testUnmarshallingFailsInvalidURL(): void
-    {
-        $document = clone self::$xmlRepresentation;
-        $document->documentElement->textContent = 'https://a⒈com';
-
-        $this->expectException(SchemaViolationException::class);
-        RegistrationPolicy::fromXML($document->documentElement);
     }
 }

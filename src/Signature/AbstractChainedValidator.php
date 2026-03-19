@@ -34,8 +34,6 @@ abstract class AbstractChainedValidator implements ChainedValidator
      * @param \SimpleSAML\SAML2\Utilities\ArrayCollection $pemCandidates
      *
      * @throws \Exception
-     *
-     * @return bool
      */
     protected function validateElementWithKeys(
         SignedElementInterface $element,
@@ -45,7 +43,7 @@ abstract class AbstractChainedValidator implements ChainedValidator
         foreach ($pemCandidates as $index => $candidateKey) {
             $cert = new X509(PEM::fromString($candidateKey->getCertificate()));
             $verifier = (new SignatureAlgorithmFactory([]))->getAlgorithm(
-                $element->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+                $element->getSignature()?->getSignedInfo()->getSignatureMethod()->getAlgorithm()->getValue(),
                 $cert->getPublicKey(),
             );
 

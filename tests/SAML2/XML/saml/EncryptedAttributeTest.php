@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeValue;
@@ -16,6 +17,7 @@ use SimpleSAML\SAML2\XML\saml\EncryptedAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
@@ -35,6 +37,7 @@ final class EncryptedAttributeTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /** @var \SimpleSAML\SAML2\Compat\AbstractContainer */
     private static AbstractContainer $containerBackup;
 
@@ -44,8 +47,6 @@ final class EncryptedAttributeTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         self::$containerBackup = ContainerSingleton::getInstance();
-
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
         self::$testedClass = EncryptedAttribute::class;
 
@@ -75,8 +76,10 @@ final class EncryptedAttributeTest extends TestCase
     public function testMarshalling(): void
     {
         $attribute = new Attribute(
-            name: 'urn:encrypted:attribute',
-            attributeValue: [new AttributeValue('very secret data')],
+            name: SAMLStringValue::fromString('urn:encrypted:attribute'),
+            attributeValue: [
+                new AttributeValue(StringValue::fromString('very secret data')),
+            ],
         );
 
         $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
@@ -100,9 +103,8 @@ final class EncryptedAttributeTest extends TestCase
     {
         $encryptedAttribute = EncryptedAttribute::fromXML(self::$xmlRepresentation->documentElement);
 
-        /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
-            $encryptedAttribute->getEncryptedKey()->getEncryptionMethod()?->getAlgorithm(),
+            $encryptedAttribute->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
 

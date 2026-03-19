@@ -5,16 +5,18 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\ListOfStringsValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
-use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XML\Type\LangValue;
+use SimpleSAML\XML\TypedTextContentTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 
 use function array_key_first;
-use function explode;
-use function implode;
-use function rtrim;
 
 /**
  * Class for handling the Keywords metadata extensions for login and discovery user interface
@@ -22,68 +24,48 @@ use function rtrim;
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
  * @package simplesamlphp/saml2
  */
-final class Keywords extends AbstractMduiElement implements ArrayizableElementInterface
+final class Keywords extends AbstractMduiElement implements
+    ArrayizableElementInterface,
+    SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+    use TypedTextContentTrait;
+
+
+    public const string TEXTCONTENT_TYPE = ListOfStringsValue::class;
+
+
     /**
      * Initialize a Keywords.
      *
-     * @param string $lang
-     * @param string[] $keywords
+     * @param \SimpleSAML\XML\Type\LangValue $lang
+     * @param \SimpleSAML\SAML2\Type\ListOfStringsValue $keywords
      */
     public function __construct(
-        protected string $lang,
-        protected array $keywords = [],
+        protected LangValue $lang,
+        ListOfStringsValue $keywords,
     ) {
-        Assert::maxCount($keywords, C::UNBOUNDED_LIMIT);
-        Assert::allNotContains($keywords, '+', 'Keywords may not contain a "+" character.');
+        $this->setContent($keywords);
     }
 
 
     /**
      * Collect the value of the lang-property
      *
-     * @return string
+     * @return \SimpleSAML\XML\Type\LangValue
      */
-    public function getLanguage(): string
+    public function getLanguage(): LangValue
     {
         return $this->lang;
     }
 
 
     /**
-     * Collect the value of the Keywords-property
-     *
-     * @return string[]
-     */
-    public function getKeywords(): array
-    {
-        return $this->keywords;
-    }
-
-
-    /**
-     * Add the value to the Keywords-property
-     *
-     * @param string $keyword
-     *
-     * @throws \SimpleSAML\Assert\AssertionFailedException if the keyword contains a `+`
-     */
-    public function addKeyword(string $keyword): void
-    {
-        Assert::notContains($keyword, '+', 'Keyword may not contain a "+" character.');
-        $this->keywords[] = $keyword;
-    }
-
-
-    /**
      * Convert XML into a Keywords
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
     public static function fromXML(DOMElement $xml): static
@@ -92,8 +74,8 @@ final class Keywords extends AbstractMduiElement implements ArrayizableElementIn
         Assert::same($xml->namespaceURI, Keywords::NS, InvalidDOMElementException::class);
         Assert::stringNotEmpty($xml->textContent, 'Missing value for Keywords.');
 
-        $lang = self::getAttribute($xml, 'xml:lang');
-        $Keywords = explode('+', $xml->textContent);
+        $lang = self::getAttribute($xml, 'xml:lang', LangValue::class);
+        $Keywords = ListOfStringsValue::fromString($xml->textContent);
 
         return new static($lang, $Keywords);
     }
@@ -102,16 +84,13 @@ final class Keywords extends AbstractMduiElement implements ArrayizableElementIn
     /**
      * Convert this Keywords to XML.
      *
-     * @param \DOMElement|null $parent The element we should append this Keywords to.
      * @throws \Exception
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
-        /** @psalm-var \DOMDocument $e->ownerDocument */
         $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('xml:lang', $this->getLanguage());
-        $e->textContent = rtrim(implode('+', $this->getKeywords()));
+        $e->setAttribute('xml:lang', $this->getLanguage()->getValue());
+        $e->textContent = $this->getContent()->getValue();
 
         return $e;
     }
@@ -120,28 +99,32 @@ final class Keywords extends AbstractMduiElement implements ArrayizableElementIn
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array<string, string> $data
      */
     public static function fromArray(array $data): static
     {
         Assert::notEmpty($data, ArrayValidationException::class);
         Assert::count($data, 1, ArrayValidationException::class);
 
-        $lang = array_key_first($data);
-        $keywords = $data[$lang];
+        $lang = LangValue::fromString(array_key_first($data));
+        $keywords = $data[$lang->getValue()];
 
-        return new static($lang, $keywords);
+        Assert::allNotContains($keywords, '+', ProtocolViolationException::class);
+
+        return new static($lang, ListOfStringsValue::fromArray($keywords));
     }
 
 
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array<string, string>
      */
     public function toArray(): array
     {
-        return [$this->getLanguage() => $this->getKeywords()];
+        /** @var \SimpleSAML\SAML2\Type\ListOfStringsValue $content */
+        $content = $this->getContent();
+
+        return [$this->getLanguage()->getValue() => $content->toArray()];
     }
 }

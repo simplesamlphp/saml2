@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
+use SimpleSAML\SAML2\Type\EntityIDValue;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
@@ -19,10 +22,12 @@ use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Type\NCNameValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
 
@@ -42,6 +47,7 @@ final class SubjectConfirmationTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /** @var \Psr\Clock\ClockInterface */
     private static ClockInterface $clock;
 
@@ -49,8 +55,6 @@ final class SubjectConfirmationTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         self::$clock = Utils::getContainer()->getClock();
-
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
 
         self::$testedClass = SubjectConfirmation::class;
 
@@ -67,25 +71,27 @@ final class SubjectConfirmationTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', 'testval1');
-        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', 'testval2');
+        $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', StringValue::fromString('testval1'));
+        $attr2 = new XMLAttribute('urn:test:something', 'test', 'attr2', StringValue::fromString('testval2'));
 
         $subjectConfirmation = new SubjectConfirmation(
-            C::CM_BEARER,
+            SAMLAnyURIValue::fromString(C::CM_BEARER),
             new NameID(
-                'SomeNameIDValue',
+                SAMLStringValue::fromString('SomeNameIDValue'),
                 null,
-                'https://sp.example.org/authentication/sp/metadata',
-                C::NAMEID_TRANSIENT,
+                SAMLStringValue::fromString('https://sp.example.org/authentication/sp/metadata'),
+                SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
             ),
             new SubjectConfirmationData(
-                new DateTimeImmutable('2001-04-19T04:25:21Z'),
-                new DateTimeImmutable('2009-02-13T23:31:30Z'),
-                C::ENTITY_SP,
-                'SomeRequestID',
-                '127.0.0.1',
+                SAMLDateTimeValue::fromString('2001-04-19T04:25:21Z'),
+                SAMLDateTimeValue::fromString('2009-02-13T23:31:30Z'),
+                EntityIDValue::fromString(C::ENTITY_SP),
+                NCNameValue::fromString('SomeRequestID'),
+                SAMLStringValue::fromString('127.0.0.1'),
                 [
-                    new KeyInfo([new KeyName('SomeKey')]),
+                    new KeyInfo([
+                        KeyName::fromString('SomeKey'),
+                    ]),
                     new Chunk(DOMDocumentFactory::fromString('<some>Arbitrary Element</some>')->documentElement),
                 ],
                 [$attr1, $attr2],
@@ -104,8 +110,10 @@ final class SubjectConfirmationTest extends TestCase
     public function testMarshallingEmptySubjectConfirmationData(): void
     {
         $subjectConfirmation = new SubjectConfirmation(
-            C::CM_BEARER,
-            new NameID('SomeNameIDValue'),
+            SAMLAnyURIValue::fromString(C::CM_BEARER),
+            new NameID(
+                SAMLStringValue::fromString('SomeNameIDValue'),
+            ),
             new SubjectConfirmationData(),
         );
         $ns_saml = C::NS_SAML;
@@ -131,9 +139,13 @@ XML
     public function testMarshallingElementOrdering(): void
     {
         $subjectConfirmation = new SubjectConfirmation(
-            C::CM_BEARER,
-            new NameID('SomeNameIDValue'),
-            new SubjectConfirmationData(self::$clock->now()),
+            SAMLAnyURIValue::fromString(C::CM_BEARER),
+            new NameID(
+                SAMLStringValue::fromString('SomeNameIDValue'),
+            ),
+            new SubjectConfirmationData(
+                SAMLDateTimeValue::fromDateTime(self::$clock->now()),
+            ),
         );
 
         // Marshall it to a \DOMElement
@@ -145,7 +157,7 @@ XML
         $this->assertCount(1, $subjectConfirmationElements);
 
         // Test ordering of SubjectConfirmation contents
-        /** @psalm-var \DOMElement[] $subjectConfirmationElements */
+        /** @var \DOMElement[] $subjectConfirmationElements */
         $subjectConfirmationElements = XPath::xpQuery(
             $subjectConfirmationElement,
             './saml_assertion:NameID/following-sibling::*',
@@ -204,7 +216,7 @@ XML
         $document = DOMDocumentFactory::fromString(
             <<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
-  <saml:BaseID xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="someType">SomeNameIDValue</saml:BaseID>
+  <saml:BaseID xmlns:ssp="urn:x-simplesamlphp:namespace" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ssp:someType">SomeNameIDValue</saml:BaseID>
   <saml:NameID>AnotherNameIDValue</saml:NameID>
   <saml:SubjectConfirmationData/>
 </saml:SubjectConfirmation>
@@ -230,8 +242,8 @@ XML
             <<<XML
 <saml:SubjectConfirmation xmlns:saml="{$samlNamespace}" Method="urn:oasis:names:tc:SAML:2.0:cm:bearer">
   <saml:NameID>SomeNameIDValue</saml:NameID>
-  <saml:SubjectConfirmationData Recipient="Me" />
-  <saml:SubjectConfirmationData Recipient="Someone Else" />
+  <saml:SubjectConfirmationData Recipient="https://simplesamlphp.org/sp/metadata" />
+  <saml:SubjectConfirmationData Recipient="https://example.org/metadata" />
 </saml:SubjectConfirmation>
 XML
             ,

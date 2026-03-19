@@ -7,15 +7,15 @@ namespace SimpleSAML\Test\SAML2\XML\mdui;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedName;
 use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\mdui\PrivacyStatementURL;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\SchemaViolationException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
-use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
 
 use function dirname;
 use function strval;
@@ -33,7 +33,6 @@ use function strval;
 final class PrivacyStatementURLTest extends TestCase
 {
     use ArrayizableElementTestTrait;
-    use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
 
@@ -41,8 +40,6 @@ final class PrivacyStatementURLTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
-
         self::$testedClass = PrivacyStatementURL::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -61,27 +58,14 @@ final class PrivacyStatementURLTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = new PrivacyStatementURL('en', 'https://example.org/privacy');
+        $name = new PrivacyStatementURL(
+            LangValue::fromString('en'),
+            SAMLAnyURIValue::fromString('https://example.org/privacy'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($name),
         );
-    }
-
-
-    // test unmarshalling
-
-
-    /**
-     * Test that creating a PrivacyStatementURL with an invalid url throws an exception
-     */
-    public function testUnmarshallingFailsInvalidURL(): void
-    {
-        $document = clone self::$xmlRepresentation;
-        $document->documentElement->textContent = 'https://a⒈com';
-
-        $this->expectException(SchemaViolationException::class);
-        PrivacyStatementURL::fromXML($document->documentElement);
     }
 }

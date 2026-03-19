@@ -9,11 +9,12 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\XML\ecp\AbstractEcpElement;
 use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
-use SimpleSAML\SOAP\Constants as C;
+use SimpleSAML\SOAP11\Constants as C;
+use SimpleSAML\SOAP11\Type\MustUnderstandValue;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 
 use function dirname;
 use function strval;
@@ -34,8 +35,6 @@ final class RequestAuthenticatedTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-ecp-2.0.xsd';
-
         self::$testedClass = RequestAuthenticated::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -48,7 +47,9 @@ final class RequestAuthenticatedTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $ra = new RequestAuthenticated(false);
+        $ra = new RequestAuthenticated(
+            MustUnderstandValue::fromBoolean(true),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -59,10 +60,23 @@ final class RequestAuthenticatedTest extends TestCase
 
     /**
      */
+    public function testMarshallingMustUnderstandFalseIsIgnored(): void
+    {
+        $ra = new RequestAuthenticated(
+            MustUnderstandValue::fromBoolean(false),
+        );
+
+        $xml = $ra->toXML();
+        $this->assertFalse($xml->hasAttributeNS(C::NS_SOAP_ENV, 'mustUnderstand'));
+    }
+
+
+    /**
+     */
     public function testUnmarshallingWithMissingActorThrowsException(): void
     {
         $document = clone self::$xmlRepresentation->documentElement;
-        $document->removeAttributeNS(C::NS_SOAP_ENV_11, 'actor');
+        $document->removeAttributeNS(C::NS_SOAP_ENV, 'actor');
 
         $this->expectException(MissingAttributeException::class);
         $this->expectExceptionMessage('Missing env:actor attribute in <ecp:RequestAuthenticated>.');

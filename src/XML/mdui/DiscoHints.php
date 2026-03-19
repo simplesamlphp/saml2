@@ -5,16 +5,19 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\mdui;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
-use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\Type\CIDRValue;
+use SimpleSAML\SAML2\Type\DomainValue;
+use SimpleSAML\SAML2\Type\GeolocationValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
-use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\ExtendableElementTrait;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\SerializableElementInterface;
-use SimpleSAML\XML\XsNamespace as NS;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 use function array_filter;
 use function array_key_exists;
@@ -24,20 +27,25 @@ use function array_keys;
  * Class for handling the metadata extensions for login and discovery user interface
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
+ *
  * @package simplesamlphp/saml2
  */
-final class DiscoHints extends AbstractMduiElement implements ArrayizableElementInterface
+final class DiscoHints extends AbstractMduiElement implements
+    ArrayizableElementInterface,
+    SchemaValidatableElementInterface
 {
     use ExtendableElementTrait;
+    use SchemaValidatableElementTrait;
+
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ELT_NAMESPACE = NS::OTHER;
 
 
     /**
      * Create a DiscoHints element.
      *
-     * @param \SimpleSAML\XML\Chunk[] $children
+     * @param \SimpleSAML\XML\SerializableElementInterface[] $children
      * @param \SimpleSAML\SAML2\XML\mdui\IPHint[] $ipHint
      * @param \SimpleSAML\SAML2\XML\mdui\DomainHint[] $domainHint
      * @param \SimpleSAML\SAML2\XML\mdui\GeolocationHint[] $geolocationHint
@@ -95,9 +103,9 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
     /**
      * Add the value to the elements-property
      *
-     * @param \SimpleSAML\XML\Chunk $child
+     * @param \SimpleSAML\XML\SerializableElementInterface $child
      */
-    public function addChild(Chunk $child): void
+    public function addChild(SerializableElementInterface $child): void
     {
         $this->elements[] = $child;
     }
@@ -105,25 +113,20 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
 
     /**
      * Test if an object, at the state it's in, would produce an empty XML-element
-     *
-     * @return bool
      */
     public function isEmptyElement(): bool
     {
-        return empty($this->elements)
-            && empty($this->ipHint)
-            && empty($this->domainHint)
-            && empty($this->geolocationHint);
+        return empty($this->getElements())
+            && empty($this->getIPHint())
+            && empty($this->getDomainHint())
+            && empty($this->getGeolocationHint());
     }
 
 
     /**
      * Convert XML into a DiscoHints
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
@@ -134,13 +137,7 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
         $IPHint = IPHint::getChildrenOfClass($xml);
         $DomainHint = DomainHint::getChildrenOfClass($xml);
         $GeolocationHint = GeolocationHint::getChildrenOfClass($xml);
-        $children = [];
-
-        /** @var \DOMElement[] $nodes */
-        $nodes = XPath::xpQuery($xml, "./*[namespace-uri()!='" . DiscoHints::NS . "']", XPath::getXPath($xml));
-        foreach ($nodes as $node) {
-            $children[] = new Chunk($node);
-        }
+        $children = self::getChildElementsFromXML($xml);
 
         return new static($children, $IPHint, $DomainHint, $GeolocationHint);
     }
@@ -148,9 +145,6 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
 
     /**
      * Convert this DiscoHints to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -180,8 +174,12 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'children'?: array,
+     *   'IPHint'?: array,
+     *   'DomainHint'?: array,
+     *   'GeolocationHint'?: array,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -200,8 +198,18 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'children'?: array,
+     *   'IPHint'?: array,
+     *   'DomainHint'?: array,
+     *   'GeolocationHint'?: array,
+     * } $data
+     * @return array{
+     *   'children'?: array,
+     *   'IPHint'?: array,
+     *   'DomainHint'?: array,
+     *   'GeolocationHint'?: array,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -225,7 +233,9 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
             Assert::isArray($data['iphint'], ArrayValidationException::class);
             Assert::allString($data['iphint'], ArrayValidationException::class);
             foreach ($data['iphint'] as $hint) {
-                $retval['IPHint'][] = new IPHint($hint);
+                $retval['IPHint'][] = new IPHint(
+                    CIDRValue::fromString($hint),
+                );
             }
         }
 
@@ -233,7 +243,9 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
             Assert::isArray($data['domainhint'], ArrayValidationException::class);
             Assert::allString($data['domainhint'], ArrayValidationException::class);
             foreach ($data['domainhint'] as $hint) {
-                $retval['DomainHint'][] = new DomainHint($hint);
+                $retval['DomainHint'][] = new DomainHint(
+                    DomainValue::fromString($hint),
+                );
             }
         }
 
@@ -241,7 +253,9 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
             Assert::isArray($data['geolocationhint'], ArrayValidationException::class);
             Assert::allString($data['geolocationhint'], ArrayValidationException::class);
             foreach ($data['geolocationhint'] as $hint) {
-                $retval['GeolocationHint'][] = new GeolocationHint($hint);
+                $retval['GeolocationHint'][] = new GeolocationHint(
+                    GeolocationValue::fromString($hint),
+                );
             }
         }
 
@@ -262,7 +276,12 @@ final class DiscoHints extends AbstractMduiElement implements ArrayizableElement
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'children'?: array,
+     *   'IPHint'?: array,
+     *   'DomainHint'?: array,
+     *   'GeolocationHint'?: array,
+     * }
      */
     public function toArray(): array
     {

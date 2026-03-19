@@ -13,6 +13,7 @@ use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\NonNegativeIntegerValue;
 
 use function dirname;
 use function strval;
@@ -30,12 +31,11 @@ final class ProxyRestrictionTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = ProxyRestriction::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -53,10 +53,10 @@ final class ProxyRestrictionTest extends TestCase
     {
         $condition = new ProxyRestriction(
             [
-                new Audience('urn:test:audience1'),
-                new Audience('urn:test:audience2'),
+                Audience::fromString('urn:test:audience1'),
+                Audience::fromString('urn:test:audience2'),
             ],
-            2,
+            NonNegativeIntegerValue::fromInteger(2),
         );
 
         $this->assertEquals(

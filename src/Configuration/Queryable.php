@@ -11,9 +11,6 @@ interface Queryable
 {
     /**
      * Query for whether or not the configuration has a value for the key
-     *
-     * @param string $key
-     * @return bool
      */
     public function has(string $key): bool;
 
@@ -22,7 +19,6 @@ interface Queryable
      * Query to get the value in the configuration for the given key. If no value is present the default value is
      * returned
      *
-     * @param string     $key
      * @param null|mixed $defaultValue
      *
      * @return mixed

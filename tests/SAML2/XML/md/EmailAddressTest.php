@@ -34,8 +34,6 @@ final class EmailAddressTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = EmailAddress::class;
 
         self::$arrayRepresentation = ['mailto:john.doe@example.org'];
@@ -54,7 +52,7 @@ final class EmailAddressTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $email = new EmailAddress('john.doe@example.org');
+        $email = EmailAddress::fromString('john.doe@example.org');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -69,7 +67,7 @@ final class EmailAddressTest extends TestCase
     {
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Expected a value to be a valid e-mail address. Got: "not so valid"');
-        new EmailAddress('not so valid');
+        EmailAddress::fromString('not so valid');
     }
 
 

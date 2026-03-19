@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\Configuration;
 
 use RuntimeException;
+use SimpleSAML\XMLSecurity\Constants as C;
 
 use function array_filter;
 use function array_pop;
@@ -26,7 +27,6 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
 
 
     /**
-     * @return string|null
      */
     public function getCertificateData(): ?string
     {
@@ -35,7 +35,6 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
 
 
     /**
-     * @return string|null
      */
     public function getCertificateFile(): ?string
     {
@@ -53,7 +52,6 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
 
 
     /**
-     * @return bool|null
      */
     public function isAssertionEncryptionRequired(): ?bool
     {
@@ -62,16 +60,14 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
 
 
     /**
-     * @return string|null
      */
     public function getSharedKey(): ?string
     {
         return $this->get('sharedKey');
     }
 
+
     /**
-     * @param string $name
-     * @param bool $required
      * @return mixed|null
      */
     public function getPrivateKey(string $name, ?bool $required = null)
@@ -107,12 +103,11 @@ final class IdentityProvider extends ArrayAdapter implements CertificateProvider
      */
     public function getBlacklistedAlgorithms(): ?array
     {
-        return $this->get('blacklistedEncryptionAlgorithms');
+        return $this->get('blacklistedEncryptionAlgorithms', [C::KEY_TRANSPORT_RSA_1_5]);
     }
 
 
     /**
-     * @return string|null
      */
     public function getEntityId(): ?string
     {

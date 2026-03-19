@@ -10,16 +10,18 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use SimpleSAML\SAML2\Binding;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\ecp\RequestAuthenticated;
 use SimpleSAML\SAML2\XML\ecp\Response as ECPResponse;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SAML2\XML\samlp\Response as SAML2_Response;
-use SimpleSAML\SOAP\Utils\XPath;
-use SimpleSAML\SOAP\XML\env_200106\Body;
-use SimpleSAML\SOAP\XML\env_200106\Envelope;
-use SimpleSAML\SOAP\XML\env_200106\Header;
+use SimpleSAML\SOAP11\Type\MustUnderstandValue;
+use SimpleSAML\SOAP11\Utils\XPath;
+use SimpleSAML\SOAP11\XML\Body;
+use SimpleSAML\SOAP11\XML\Envelope;
+use SimpleSAML\SOAP11\XML\Header;
 use SimpleSAML\XML\DOMDocumentFactory;
 
 use function file_get_contents;
@@ -29,14 +31,15 @@ use function file_get_contents;
  *
  * @package simplesamlphp/saml2
  */
-class SOAP extends Binding
+class SOAP extends Binding implements SynchronousBindingInterface
 {
     /**
      * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message
-     * @throws \Exception
      * @return string|false The XML or false on error
+     *
+     * @throws \Exception
      */
-    public function getOutputToSend(AbstractMessage $message)
+    public function getOutputToSend(AbstractMessage $message): string|false
     {
         $header = new Header();
 
@@ -44,13 +47,15 @@ class SOAP extends Binding
         // containing another message (e.g. a Response), however in the ECP
         // profile, this is the Response itself.
         if ($message instanceof SAML2_Response) {
-            $requestAuthenticated = new RequestAuthenticated(true);
+            $requestAuthenticated = new RequestAuthenticated(
+                MustUnderstandValue::fromBoolean(true),
+            );
 
-            $destination = $this->destination ?: $message->getDestination();
+            $destination = $this->destination ?: $message->getDestination()?->getValue();
             if ($destination === null) {
                 throw new Exception('No destination available for SOAP message.');
             }
-            $response = new ECPResponse($destination);
+            $response = new ECPResponse(SAMLAnyURIValue::fromString($destination));
             $header = new Header([$requestAuthenticated, $response]);
         }
 
@@ -113,7 +118,7 @@ class SOAP extends Binding
     /**
      * @return string|false
      */
-    protected function getInputStream()
+    protected function getInputStream(): string|false
     {
         return file_get_contents('php://input');
     }

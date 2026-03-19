@@ -4,18 +4,21 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdui;
 
-use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
 use SimpleSAML\SAML2\XML\mdui\Logo;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XML\Exception\MissingAttributeException;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
+use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
+use SimpleSAML\XMLSchema\Type\PositiveIntegerValue;
 
 use function dirname;
 use function strval;
@@ -35,21 +38,17 @@ final class LogoTest extends TestCase
     use SerializableElementTestTrait;
 
 
-    /** @var string */
-    private const DATA = <<<IMG
+    private const string DATA = <<<IMG
 data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=
 IMG;
 
-    /** @var string */
-    private const URL = 'https://static.example.org/images/logos/logo300x200.png';
+    private const string URL = 'https://static.example.org/images/logos/logo300x200.png';
 
 
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
-
         self::$testedClass = Logo::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -70,7 +69,12 @@ IMG;
      */
     public function testMarshalling(): void
     {
-        $logo = new Logo(self::URL, 200, 300, "nl");
+        $logo = new Logo(
+            SAMLAnyURIValue::fromString(self::URL),
+            PositiveIntegerValue::fromInteger(200),
+            PositiveIntegerValue::fromInteger(300),
+            LangValue::fromString('nl'),
+        );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -89,12 +93,16 @@ IMG;
 
         $logo = Logo::fromXML($xmlRepresentation);
         $this->assertNull($logo->getLanguage());
-        $this->assertEquals(200, $logo->getHeight());
-        $this->assertEquals(300, $logo->getWidth());
+        $this->assertEquals(200, $logo->getHeight()->toInteger());
+        $this->assertEquals(300, $logo->getWidth()->toInteger());
         $this->assertEquals(self::URL, $logo->getContent());
         $this->assertEquals(
             $logo->toArray(),
-            ['url' => $logo->getContent(), 'width' => $logo->getWidth(), 'height' => $logo->getHeight()],
+            [
+                'url' => $logo->getContent()->getValue(),
+                'width' => $logo->getWidth()->toInteger(),
+                'height' => $logo->getHeight()->toInteger(),
+            ],
         );
     }
 
@@ -110,9 +118,9 @@ IMG;
         $document->documentElement->setAttribute('width', '1');
 
         $logo = Logo::fromXML($document->documentElement);
-        $this->assertEquals(1, $logo->getHeight());
-        $this->assertEquals(1, $logo->getWidth());
-        $this->assertEquals(self::DATA, $logo->getContent());
+        $this->assertEquals(1, $logo->getHeight()->toInteger());
+        $this->assertEquals(1, $logo->getWidth()->toInteger());
+        $this->assertEquals(self::DATA, $logo->getContent()->getValue());
     }
 
 
@@ -138,8 +146,8 @@ IMG;
         $document = clone self::$xmlRepresentation;
         $document->documentElement->textContent = 'this is no url';
 
-        $this->expectException(InvalidArgumentException::class);
-        $this->expectExceptionMessage('mdui:Logo is not a valid URL.');
+        $this->expectException(ProtocolViolationException::class);
+        $this->expectExceptionMessage('"this is no url" is not a SAML2-compliant URI');
         Logo::fromXML($document->documentElement);
     }
 

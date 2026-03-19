@@ -19,6 +19,7 @@ use SimpleSAML\Test\SAML2\CustomCondition;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Constants as C_XSI;
 
 use function dirname;
 use function strval;
@@ -51,7 +52,7 @@ final class ConditionTest extends TestCase
 
         self::$schemaFile = dirname(__FILE__, 4) . '/resources/schemas/simplesamlphp.xsd';
 
-        self::$testedClass = CustomCondition::class;
+        self::$testedClass = AbstractCondition::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Condition.xml',
@@ -78,9 +79,9 @@ final class ConditionTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $condition = new CustomCondition(
-            [new Audience('urn:some:audience')],
-        );
+        $condition = new CustomCondition([
+            Audience::fromString('urn:some:audience'),
+        ]);
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -97,12 +98,15 @@ final class ConditionTest extends TestCase
     public function testUnmarshallingUnregistered(): void
     {
         $element = clone self::$xmlRepresentation->documentElement;
-        $element->setAttributeNS(C::NS_XSI, 'xsi:type', 'ssp:UnknownConditionType');
+        $element->setAttributeNS(C_XSI::NS_XSI, 'xsi:type', 'ssp:UnknownConditionType');
 
         $condition = AbstractCondition::fromXML($element);
 
         $this->assertInstanceOf(UnknownCondition::class, $condition);
-        $this->assertEquals('urn:x-simplesamlphp:namespace:UnknownConditionType', $condition->getXsiType());
+        $this->assertEquals(
+            '{urn:x-simplesamlphp:namespace}ssp:UnknownConditionType',
+            $condition->getXsiType()->getRawValue(),
+        );
 
         $chunk = $condition->getRawCondition();
         $this->assertEquals('saml', $chunk->getPrefix());

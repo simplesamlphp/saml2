@@ -7,6 +7,7 @@ namespace SimpleSAML\Test\SAML2\XML\mdui;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\SAML2\Type\ListOfStringsValue;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
 use SimpleSAML\SAML2\XML\mdui\DiscoHints;
@@ -19,6 +20,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
 
 use function dirname;
 use function strval;
@@ -42,8 +44,6 @@ final class DiscoHintsTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
-
         self::$testedClass = DiscoHints::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -64,11 +64,17 @@ final class DiscoHintsTest extends TestCase
     public function testMarshalling(): void
     {
         $discoHints = new DiscoHints(
-            ipHint: [new IPHint("130.59.0.0/16"), new IPHint("2001:620::0/96")],
-            domainHint: [new DomainHint("example.com"), new DomainHint("www.example.com")],
+            ipHint: [
+                IPHint::fromString("130.59.0.0/16"),
+                IPHint::fromString("2001:620::0/96"),
+            ],
+            domainHint: [
+                DomainHint::fromString("example.com"),
+                DomainHint::fromString("www.example.com"),
+            ],
             geolocationHint: [
-                new GeolocationHint("geo:47.37328,8.531126"),
-                new GeolocationHint("geo:19.34343,12.342514"),
+                GeolocationHint::fromString("geo:47.37328,8.531126"),
+                GeolocationHint::fromString("geo:19.34343,12.342514"),
             ],
         );
 
@@ -99,7 +105,10 @@ final class DiscoHintsTest extends TestCase
      */
     public function testMarshallingChildren(): void
     {
-        $keywords = new Keywords("nl", ["voorbeeld", "specimen"]);
+        $keywords = new Keywords(
+            LangValue::fromString("nl"),
+            ListOfStringsValue::fromString("voorbeeld+specimen"),
+        );
         $discoHints = new DiscoHints();
         $discoHints->addChild(new Chunk($keywords->toXML()));
         $this->assertCount(1, $discoHints->getElements());
@@ -140,7 +149,7 @@ XML
         $disco = DiscoHints::fromXML($document->documentElement);
 
         $this->assertCount(1, $disco->getGeolocationHint());
-        $this->assertEquals('geo:47.37328,8.531126', $disco->getGeolocationHint()[0]->getContent());
+        $this->assertEquals('geo:47.37328,8.531126', $disco->getGeolocationHint()[0]->getContent()->getValue());
         $this->assertCount(1, $disco->getElements());
         /** @var \SimpleSAML\XML\Chunk[] $elements */
         $elements = $disco->getElements();

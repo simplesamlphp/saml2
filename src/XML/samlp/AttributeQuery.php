@@ -4,20 +4,24 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DateTimeImmutable;
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\Subject;
-use SimpleSAML\XML\Constants as C;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\Exception\MissingElementException;
-use SimpleSAML\XML\Exception\TooManyElementsException;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\MissingElementException;
+use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
+use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function array_pop;
@@ -38,30 +42,31 @@ use function in_array;
  *
  * @package simplesamlphp/saml2
  */
-class AttributeQuery extends AbstractSubjectQuery
+class AttributeQuery extends AbstractSubjectQuery implements SchemaValidatableElementInterface
 {
+    use SchemaValidatableElementTrait;
+
+
     /**
      * Constructor for SAML 2 AttributeQuery.
      *
+     * @param \SimpleSAML\XMLSchema\Type\IDValue $id
      * @param \SimpleSAML\SAML2\XML\saml\Subject $subject
-     * @param DateTimeImmutable $issueInstant
+     * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue $issueInstant
      * @param \SimpleSAML\SAML2\XML\saml\Attribute[] $attributes
      * @param \SimpleSAML\SAML2\XML\saml\Issuer $issuer
-     * @param string|null $id
-     * @param string $version
-     * @param string|null $destination
-     * @param string|null $consent
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
      */
     final public function __construct(
+        IDValue $id,
         Subject $subject,
-        DateTimeImmutable $issueInstant,
+        SAMLDateTimeValue $issueInstant,
         protected array $attributes = [],
         ?Issuer $issuer = null,
-        ?string $id = null,
-        string $version = '2.0',
-        ?string $destination = null,
-        ?string $consent = null,
+        ?SAMLAnyURIValue $destination = null,
+        ?SAMLAnyURIValue $consent = null,
         ?Extensions $extensions = null,
     ) {
         Assert::maxCount($attributes, C::UNBOUNDED_LIMIT);
@@ -70,7 +75,7 @@ class AttributeQuery extends AbstractSubjectQuery
         $cache = [];
         foreach ($attributes as $attribute) {
             $name = $attribute->getName();
-            $nameFormat = $attribute->getNameFormat();
+            $nameFormat = $attribute->getNameFormat()?->getValue() ?? C::NAMEFORMAT_UNSPECIFIED;
 
             if (isset($cache[$nameFormat])) {
                 Assert::true(
@@ -83,7 +88,7 @@ class AttributeQuery extends AbstractSubjectQuery
         }
         unset($cache);
 
-        parent::__construct($subject, $issuer, $id, $version, $issueInstant, $destination, $consent, $extensions);
+        parent::__construct($id, $subject, $issuer, $issueInstant, $destination, $consent, $extensions);
     }
 
 
@@ -101,16 +106,13 @@ class AttributeQuery extends AbstractSubjectQuery
     /**
      * Create a class from XML
      *
-     * @param \DOMElement $xml
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
-     * @throws \SimpleSAML\XML\Exception\MissingAttributeException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
-     * @throws \SimpleSAML\XML\Exception\MissingElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
      *   if one of the mandatory child-elements is missing
-     * @throws \SimpleSAML\XML\Exception\TooManyElementsException
+     * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
     public static function fromXML(DOMElement $xml): static
@@ -118,22 +120,9 @@ class AttributeQuery extends AbstractSubjectQuery
         Assert::same($xml->localName, 'AttributeQuery', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AttributeQuery::NS, InvalidDOMElementException::class);
 
-        $version = self::getAttribute($xml, 'Version');
-        Assert::true(version_compare('2.0', $version, '<='), RequestVersionTooLowException::class);
-        Assert::true(version_compare('2.0', $version, '>='), RequestVersionTooHighException::class);
-
-        $id = self::getAttribute($xml, 'ID');
-        Assert::validNCName($id); // Covers the empty string
-
-        $destination = self::getOptionalAttribute($xml, 'Destination', null);
-        $consent = self::getOptionalAttribute($xml, 'Consent', null);
-
-        $issueInstant = self::getAttribute($xml, 'IssueInstant');
-        // Strip sub-seconds - See paragraph 1.3.3 of SAML core specifications
-        $issueInstant = preg_replace('/([.][0-9]+Z)$/', 'Z', $issueInstant, 1);
-
-        SAMLAssert::validDateTime($issueInstant, ProtocolViolationException::class);
-        $issueInstant = new DateTimeImmutable($issueInstant);
+        $version = self::getAttribute($xml, 'Version', SAMLStringValue::class);
+        Assert::true(version_compare('2.0', strval($version), '<='), RequestVersionTooLowException::class);
+        Assert::true(version_compare('2.0', strval($version), '>='), RequestVersionTooHighException::class);
 
         $issuer = Issuer::getChildrenOfClass($xml);
         Assert::countBetween($issuer, 0, 1);
@@ -159,14 +148,13 @@ class AttributeQuery extends AbstractSubjectQuery
         Assert::maxCount($signature, 1, 'Only one ds:Signature element is allowed.', TooManyElementsException::class);
 
         $request = new static(
+            self::getAttribute($xml, 'ID', IDValue::class),
             array_pop($subject),
-            $issueInstant,
+            self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
             Attribute::getChildrenOfClass($xml),
             array_pop($issuer),
-            $id,
-            $version,
-            $destination,
-            $consent,
+            self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
+            self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
             array_pop($extensions),
         );
 
@@ -182,8 +170,6 @@ class AttributeQuery extends AbstractSubjectQuery
     /**
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
-     *
-     * @return \DOMElement The root element of the DOM tree
      */
     protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {

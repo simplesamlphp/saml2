@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DateTimeImmutable;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\AbstractMetadataDocument;
 use SimpleSAML\SAML2\XML\md\AbstractSignedMdElement;
@@ -21,6 +23,8 @@ use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
+use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -47,8 +51,6 @@ final class EntitiesDescriptorTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-metadata-2.0.xsd';
-
         self::$testedClass = EntitiesDescriptor::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -67,9 +69,14 @@ final class EntitiesDescriptorTest extends TestCase
     {
         $extensions = new Extensions([
             new PublicationInfo(
-                publisher: 'http://publisher.ra/',
-                creationInstant: new DateTimeImmutable('2020-02-03T13:46:24Z'),
-                usagePolicy: [new UsagePolicy('en', 'http://publisher.ra/policy.txt')],
+                publisher: SAMLStringValue::fromString('http://publisher.ra/'),
+                creationInstant: SAMLDateTimeValue::fromString('2020-02-03T13:46:24Z'),
+                usagePolicy: [
+                    new UsagePolicy(
+                        LangValue::fromString('en'),
+                        SAMLAnyURIValue::fromString('http://publisher.ra/policy.txt'),
+                    ),
+                ],
             ),
         ]);
         $entitiesdChildElement = self::$xmlRepresentation->documentElement->getElementsByTagNameNS(
@@ -81,18 +88,16 @@ final class EntitiesDescriptorTest extends TestCase
             'EntityDescriptor',
         );
 
-        /** @psalm-suppress PossiblyNullArgument */
         $childEntitiesd = EntitiesDescriptor::fromXML($entitiesdChildElement->item(0));
 
-        /** @psalm-suppress PossiblyNullArgument */
         $childEntityd = EntityDescriptor::fromXML($entitydElement->item(1));
 
         $entitiesd = new EntitiesDescriptor(
             entityDescriptors: [$childEntityd],
             entitiesDescriptors: [$childEntitiesd],
-            Name: 'Federation',
+            Name: SAMLStringValue::fromString('Federation'),
             extensions: $extensions,
-            ID: 'phpunit',
+            ID: IDValue::fromString('phpunit'),
         );
 
         $this->assertEquals(
@@ -111,7 +116,6 @@ final class EntitiesDescriptorTest extends TestCase
             C::NS_MD,
             'EntityDescriptor',
         );
-        /** @psalm-suppress PossiblyNullArgument */
         $childEntityd = EntityDescriptor::fromXML($entitydElement->item(1));
         $entitiesd = new EntitiesDescriptor([$childEntityd]);
         $this->assertNull($entitiesd->getName());
@@ -128,7 +132,6 @@ final class EntitiesDescriptorTest extends TestCase
             C::NS_MD,
             'EntitiesDescriptor',
         );
-        /** @psalm-suppress PossiblyNullArgument */
         $childEntitiesd = EntitiesDescriptor::fromXML($entitiesdChildElement->item(0));
         $entitiesd = new EntitiesDescriptor(
             [],
@@ -167,18 +170,6 @@ final class EntitiesDescriptorTest extends TestCase
 
 
     /**
-     * Test that creating an EntitiesDescriptor with an empty Name from XML works.
-     */
-    public function testUnmarshallingWithEmptyName(): void
-    {
-        $xmlRepresentation = clone self::$xmlRepresentation;
-        $xmlRepresentation->documentElement->setAttribute('Name', '');
-        $entitiesd = EntitiesDescriptor::fromXML($xmlRepresentation->documentElement);
-        $this->assertEquals('', $entitiesd->getName());
-    }
-
-
-    /**
      * Test that creating an EntitiesDescriptor without nested EntitiesDescriptor elements from XML works.
      */
     public function testUnmarshallingWithoutEntities(): void
@@ -188,7 +179,6 @@ final class EntitiesDescriptorTest extends TestCase
             C::NS_MD,
             'EntitiesDescriptor',
         );
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($entities->item(0));
         $entitiesd = EntitiesDescriptor::fromXML($xmlRepresentation->documentElement);
         $this->assertEquals([], $entitiesd->getEntitiesDescriptors());
@@ -212,7 +202,6 @@ final class EntitiesDescriptorTest extends TestCase
          *  the child of the parent EntitiesDescriptor.
          */
 
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($entity->item(1));
         $entitiesd = EntitiesDescriptor::fromXML($xmlRepresentation->documentElement);
         $this->assertEquals([], $entitiesd->getEntityDescriptors());
@@ -231,7 +220,6 @@ final class EntitiesDescriptorTest extends TestCase
             C::NS_MD,
             'EntitiesDescriptor',
         );
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($entities->item(0));
 
         // remove child EntityDescriptor
@@ -239,7 +227,6 @@ final class EntitiesDescriptorTest extends TestCase
             C::NS_MD,
             'EntityDescriptor',
         );
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($entity->item(0));
 
         $this->expectException(ProtocolViolationException::class);

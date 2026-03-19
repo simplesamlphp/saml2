@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ['8.2']
+        php-versions: ['8.5']
 
     steps:
       - name: Setup PHP, with composer and extensions
@@ -47,10 +47,10 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Cache composer dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: $(composer config cache-files-dir)
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
@@ -69,7 +69,7 @@ jobs:
 
       - name: Cache metadata
         id: cache-metadata
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: /tmp/metadata
           key: ${{ runner.os }}-metadata-${{ env.date }}
@@ -80,8 +80,21 @@ jobs:
         run: |
             mkdir -p /tmp/metadata
             wget https://mds.edugain.org/edugain-v2.xml -O /tmp/metadata/edugain.xml
-            wget https://technical.edugain.org/mds-v2.cer -O /tmp/metadataedugain-pub.crt
+            wget https://technical.edugain.org/mds-v2.cer -O /tmp/metadata/edugain-pub.crt
 
+      - name: Download eduID metadata & public key
+        if: steps.cache-metadata.outputs.cache-hit != 'true'
+        run: |
+            mkdir -p /tmp/metadata
+            wget https://metadata.eduid.cz/entities/eduid -O /tmp/metadata/eduid.xml
+            wget https://www.eduid.cz/docs/eduid/metadata/metadata.eduid.cz.crt.pem -O /tmp/metadata/eduid.crt
+
+      - name: Download eduID metadata & public key
+        if: steps.cache-metadata.outputs.cache-hit != 'true'
+        run: |
+            mkdir -p /tmp/metadata
+            wget https://metadata.eduid.cz/entities/eduid -O /tmp/metadata/eduid.xml
+            wget https://www.eduid.cz/docs/eduid/metadata/metadata.eduid.cz.crt.pem -O /tmp/metadata/eduid.crt
 
       - name: Download GRNET metadata
         if: steps.cache-metadata.outputs.cache-hit != 'true'

@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\AttributeStatement;
@@ -15,6 +16,7 @@ use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\IntegerValue;
 
 use function dirname;
 use function strval;
@@ -32,12 +34,11 @@ final class AttributeStatementTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     /**
      */
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = AttributeStatement::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -56,16 +57,22 @@ final class AttributeStatementTest extends TestCase
         $attrStatement = new AttributeStatement(
             [
                 new Attribute(
-                    name: 'urn:ServiceID',
-                    attributeValue: [new AttributeValue(1)],
+                    name: SAMLStringValue::fromString('urn:ServiceID'),
+                    attributeValue: [
+                        new AttributeValue(IntegerValue::fromInteger(1)),
+                    ],
                 ),
                 new Attribute(
-                    name: 'urn:EntityConcernedID',
-                    attributeValue: [new AttributeValue(1)],
+                    name: SAMLStringValue::fromString('urn:EntityConcernedID'),
+                    attributeValue: [
+                        new AttributeValue(IntegerValue::fromInteger(1)),
+                    ],
                 ),
                 new Attribute(
-                    name: 'urn:EntityConcernedSubID',
-                    attributeValue: [new AttributeValue(1)],
+                    name: SAMLStringValue::fromString('urn:EntityConcernedSubID'),
+                    attributeValue: [
+                        new AttributeValue(IntegerValue::fromInteger(1)),
+                    ],
                 ),
             ],
         );

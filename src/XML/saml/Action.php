@@ -5,10 +5,16 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
-use SimpleSAML\SAML2\Assert\Assert as SAMLAssert;
-use SimpleSAML\XML\Exception\InvalidDOMElementException;
-use SimpleSAML\XML\StringElementTrait;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\XML\TypedTextContentTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+
+use function array_column;
+use function strval;
 
 /**
  * Class representing SAML2 Action
@@ -17,20 +23,49 @@ use SimpleSAML\XML\StringElementTrait;
  */
 final class Action extends AbstractSamlElement
 {
-    use StringElementTrait;
+    use TypedTextContentTrait;
+
+
+    public const string TEXTCONTENT_TYPE = SAMLStringValue::class;
 
 
     /**
      * Initialize an Action.
      *
-     * @param string $namespace  This attribute was marked REQUIRED in the 2012 SAML errata (E36)
-     * @param string $content
+     * NOTE: The namespace-attribute was marked REQUIRED in the 2012 SAML errata (E36)
+     *
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $namespace
+     * @param \SimpleSAML\SAML2\Type\SAMLStringValue $content
      */
     public function __construct(
-        protected string $namespace,
-        string $content,
+        protected SAMLAnyURIValue $namespace,
+        SAMLStringValue $content,
     ) {
-        SAMLAssert::validURI($namespace);
+        if ($namespace->equals(C::ACTION_RWEDC)) {
+            Assert::oneOf(
+                $content->getValue(),
+                array_column(RWEDCEnum::cases(), 'value'),
+                ProtocolViolationException::class,
+            );
+        } elseif ($namespace->equals(C::ACTION_RWEDC_NEGATION)) {
+            Assert::oneOf(
+                $content->getValue(),
+                array_column(RWEDCNegationEnum::cases(), 'value'),
+                ProtocolViolationException::class,
+            );
+        } elseif ($namespace->equals(C::ACTION_GHPP)) {
+            Assert::oneOf(
+                $content->getValue(),
+                array_column(GHPPEnum::cases(), 'value'),
+                ProtocolViolationException::class,
+            );
+        } elseif ($namespace->equals(C::ACTION_UNIX)) {
+            Assert::regex(
+                $content->getValue(),
+                '/^[0-7]{4}$/',
+                ProtocolViolationException::class,
+            );
+        }
 
         $this->setContent($content);
     }
@@ -39,9 +74,9 @@ final class Action extends AbstractSamlElement
     /**
      * Collect the value of the namespace-property
      *
-     * @return string
+     * @return \SimpleSAML\SAML2\Type\SAMLAnyURIValue
      */
-    public function getNamespace(): string
+    public function getNamespace(): SAMLAnyURIValue
     {
         return $this->namespace;
     }
@@ -50,36 +85,30 @@ final class Action extends AbstractSamlElement
     /**
      * Convert XML into a Action
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
-     * @throws \SimpleSAML\XML\Exception\InvalidDOMElementException
+     * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static
     {
-        Assert::same($xml->localName, 'Action', InvalidDOMElementException::class);
+        Assert::same($xml->localName, static::getLocalName(), InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Action::NS, InvalidDOMElementException::class);
 
         return new self(
-            self::getAttribute($xml, 'Namespace'),
-            $xml->textContent,
+            self::getAttribute($xml, 'Namespace', SAMLAnyURIValue::class),
+            SAMLStringValue::fromString($xml->textContent),
         );
     }
 
 
     /**
      * Convert this Action to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this Action to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
         $e = $this->instantiateParentElement($parent);
 
-        $e->setAttribute('Namespace', $this->getNamespace());
-        $e->textContent = $this->getContent();
+        $e->setAttribute('Namespace', strval($this->getNamespace()));
+        $e->textContent = strval($this->getContent());
 
         return $e;
     }

@@ -8,9 +8,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Certificate\PrivateKey;
 use SimpleSAML\SAML2\Certificate\PrivateKeyLoader;
 use SimpleSAML\SAML2\Configuration\PrivateKey as ConfPrivateKey;
+use SimpleSAML\XMLSecurity\Key\PrivateKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**
@@ -42,11 +42,6 @@ final class PrivateKeyLoaderTest extends TestCase
         $resultingKey = self::$privateKeyLoader->loadPrivateKey($configuredKey);
 
         $this->assertInstanceOf(PrivateKey::class, $resultingKey);
-        $this->assertEquals(
-            trim($resultingKey->getKeyAsString()),
-            PEMCertificatesMock::loadPlainKeyFile(PEMCertificatesMock::BROKEN_PRIVATE_KEY),
-        );
-        $this->assertEquals($resultingKey->getPassphrase(), $configuredKey->getPassPhrase());
     }
 
 
@@ -58,24 +53,18 @@ final class PrivateKeyLoaderTest extends TestCase
     public static function privateKeyTestProvider(): array
     {
         return [
-            'no passphrase' => [
-                new ConfPrivateKey(
-                    PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::BROKEN_PRIVATE_KEY),
-                    ConfPrivateKey::NAME_DEFAULT,
-                ),
-            ],
             'with passphrase' => [
                 new ConfPrivateKey(
-                    PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::BROKEN_PRIVATE_KEY),
+                    PEMCertificatesMock::buildKeysPath(PEMCertificatesMock::PRIVATE_KEY),
                     ConfPrivateKey::NAME_DEFAULT,
-                    'foo bar baz',
+                    '1234',
                 ),
             ],
             'private key as contents' => [
                 new ConfPrivateKey(
-                    PEMCertificatesMock::loadPlainKeyFile(PEMCertificatesMock::BROKEN_PRIVATE_KEY),
+                    PEMCertificatesMock::loadPlainKeyFile(PEMCertificatesMock::PRIVATE_KEY),
                     ConfPrivateKey::NAME_DEFAULT,
-                    '',
+                    '1234',
                     false,
                 ),
             ],

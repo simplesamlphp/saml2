@@ -6,7 +6,10 @@ namespace SimpleSAML\SAML2;
 
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use SimpleSAML\SAML2\Binding\{HTTPArtifact, HTTPPost, HTTPRedirect, SOAP};
+use SimpleSAML\SAML2\Binding\HTTPArtifact;
+use SimpleSAML\SAML2\Binding\HTTPPost;
+use SimpleSAML\SAML2\Binding\HTTPRedirect;
+use SimpleSAML\SAML2\Binding\SOAP;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\UnsupportedBindingException;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;

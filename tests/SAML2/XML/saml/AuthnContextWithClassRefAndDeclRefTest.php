@@ -33,10 +33,9 @@ final class AuthnContextWithClassRefAndDeclRefTest extends TestCase
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
+
     public static function setUpBeforeClass(): void
     {
-        self::$schemaFile = dirname(__FILE__, 5) . '/resources/schemas/saml-schema-assertion-2.0.xsd';
-
         self::$testedClass = AuthnContext::class;
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
@@ -53,10 +52,12 @@ final class AuthnContextWithClassRefAndDeclRefTest extends TestCase
     public function testMarshalling(): void
     {
         $authnContext = new AuthnContext(
-            authnContextClassRef: new AuthnContextClassRef(C::AC_PASSWORD_PROTECTED_TRANSPORT),
-            authnContextDeclRef: new AuthnContextDeclRef('https://example.org/relative/path/to/document.xml'),
+            authnContextClassRef: AuthnContextClassRef::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT),
+            authnContextDeclRef: AuthnContextDeclRef::fromString('https://example.org/relative/path/to/document.xml'),
             authnContextDecl: null,
-            authenticatingAuthorities: [new AuthenticatingAuthority('https://idp.example.com/SAML2')],
+            authenticatingAuthorities: [
+                AuthenticatingAuthority::fromString('https://idp.example.com/SAML2'),
+            ],
         );
 
         $this->assertEquals(

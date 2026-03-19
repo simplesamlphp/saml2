@@ -59,8 +59,8 @@ Example:
     // Create Issuer
     $issuer = new \SimpleSAML\SAML2\XML\saml\Issuer('https://sp.example.edu');
 
-    // Instantiate XML Random utils
-    $randomUtils = new \SimpleSAML\XML\Utils\Random();
+    // Instantiate SAML2 Random utils
+    $randomUtils = new \SimpleSAML\SAML2\Utils\Random();
 
     // Set up an AuthnRequest
     $request = new \SimpleSAML\SAML2\XML\samlp\AuthnRequest(

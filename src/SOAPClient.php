@@ -10,10 +10,10 @@ use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
-use SimpleSAML\SOAP\Utils\XPath;
-use SimpleSAML\SOAP\XML\env_200106\Body;
-use SimpleSAML\SOAP\XML\env_200106\Envelope;
-use SimpleSAML\SOAP\XML\env_200106\Fault;
+use SimpleSAML\SOAP11\Utils\XPath;
+use SimpleSAML\SOAP11\XML\Body;
+use SimpleSAML\SOAP11\XML\Envelope;
+use SimpleSAML\SOAP11\XML\Fault;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
 use SimpleSAML\XML\Chunk;
@@ -44,8 +44,6 @@ class SOAPClient
      * @param \SimpleSAML\Configuration $dstMetadata The metadata of the destination of the message.
      * @throws \Exception
      * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The response we received.
-     *
-     * @psalm-suppress UndefinedClass
      */
     public function send(
         AbstractMessage $msg,
@@ -243,7 +241,6 @@ class SOAPClient
     {
         $container = ContainerSingleton::getInstance();
 
-        /** @psalm-suppress PossiblyNullArgument */
         $keyInfo = openssl_pkey_get_details($key->key);
         if ($keyInfo === false) {
             throw new Exception('Unable to get key details from XMLSecurityKey.');
@@ -266,11 +263,10 @@ class SOAPClient
      * Extracts the SOAP Fault from SOAP message
      *
      * @param \DOMDocument $soapMessage Soap response needs to be type DOMDocument
-     * @return \SimpleSAML\SOAP\XML\env_200106\Fault|null
+     * @return \SimpleSAML\SOAP11\XML\Fault|null
      */
     private function getSOAPFault(DOMDocument $soapMessage): ?Fault
     {
-        /** @psalm-suppress PossiblyNullArgument */
         $soapFault = XPath::xpQuery(
             $soapMessage->firstChild,
             '/env:Envelope/env:Body/env:Fault',

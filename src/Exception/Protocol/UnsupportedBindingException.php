@@ -14,5 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class UnsupportedBindingException extends ProtocolViolationException
 {
-    public const DEFAULT_MESSAGE = 'Unsupported binding.';
+    public const string DEFAULT_MESSAGE = 'Unsupported binding.';
 }

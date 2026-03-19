@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML;
 
 use DOMElement;
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSchema\Type\AnyURIValue;
+use SimpleSAML\XMLSchema\Type\Base64BinaryValue;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmInterface;
 use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\Exception\RuntimeException;
 use SimpleSAML\XMLSecurity\Exception\UnsupportedAlgorithmException;
-use SimpleSAML\XMLSecurity\Utils\XML;
 use SimpleSAML\XMLSecurity\XML\ds\CanonicalizationMethod;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
@@ -61,8 +62,6 @@ trait SignableElementTrait
         Assert::oneOf(
             $canonicalizationAlg,
             [
-                C::C14N_INCLUSIVE_WITH_COMMENTS,
-                C::C14N_INCLUSIVE_WITHOUT_COMMENTS,
                 C::C14N_EXCLUSIVE_WITH_COMMENTS,
                 C::C14N_EXCLUSIVE_WITHOUT_COMMENTS,
             ],
@@ -105,26 +104,36 @@ trait SignableElementTrait
              * 5.4.1: SAML assertions and protocols MUST use enveloped signatures when
              * signing assertions and protocol messages
              */
-            new Transform(C::XMLDSIG_ENVELOPED),
-            new Transform($this->c14nAlg),
+            new Transform(AnyURIValue::fromString(C::XMLDSIG_ENVELOPED)),
+            new Transform(AnyURIValue::fromString($this->c14nAlg)),
         ]);
 
-        $canonicalDocument = XML::processTransforms($transforms, $xml);
+        $canonicalDocument = $this->processTransforms($transforms, $xml);
 
         $signedInfo = new SignedInfo(
-            new CanonicalizationMethod($this->c14nAlg),
-            new SignatureMethod($algorithm),
+            new CanonicalizationMethod(AnyURIValue::fromString($this->c14nAlg)),
+            new SignatureMethod(AnyURIValue::fromString($algorithm)),
             [$this->getReference($digest, $transforms, $xml, $canonicalDocument)],
         );
 
         $signingData = $signedInfo->canonicalize($this->c14nAlg);
         $signedData = base64_encode($this->signer->sign($signingData));
 
-        $this->signature = new Signature($signedInfo, new SignatureValue($signedData), $this->keyInfo);
+        $this->signature = new Signature(
+            $signedInfo,
+            new SignatureValue(
+                Base64BinaryValue::fromString($signedData),
+            ),
+            $this->keyInfo,
+        );
+
         return DOMDocumentFactory::fromString($canonicalDocument)->documentElement;
     }
 
 
+    /**
+     * @return array|null
+     */
     public function getBlacklistedAlgorithms(): ?array
     {
         $container = ContainerSingleton::getInstance();

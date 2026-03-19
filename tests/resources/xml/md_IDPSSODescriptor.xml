@@ -1,6 +1,6 @@
-<md:IDPSSODescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" ID="phpunit" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" WantAuthnRequestsSigned="true">
+<md:IDPSSODescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" ID="phpunit" protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol" WantAuthnRequestsSigned="true">
   <md:KeyDescriptor use="signing">
-    <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+    <ds:KeyInfo>
       <ds:KeyName>IdentityProvider.com SSO Key</ds:KeyName>
     </ds:KeyInfo>
   </md:KeyDescriptor>
@@ -19,8 +19,8 @@
   <md:AssertionIDRequestService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://IdentityProvider.com/SAML/SSO/Browser"/>
   <md:AttributeProfile>urn:attribute:profile1</md:AttributeProfile>
   <md:AttributeProfile>urn:attribute:profile2</md:AttributeProfile>
-  <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.6" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" FriendlyName="eduPersonPrincipalName"></saml:Attribute>
-  <saml:Attribute xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.1" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" FriendlyName="eduPersonAffiliation">
+  <saml:Attribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.6" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" FriendlyName="eduPersonPrincipalName"></saml:Attribute>
+  <saml:Attribute Name="urn:oid:1.3.6.1.4.1.5923.1.1.1.1" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri" FriendlyName="eduPersonAffiliation">
     <saml:AttributeValue>member</saml:AttributeValue>
     <saml:AttributeValue>student</saml:AttributeValue>
     <saml:AttributeValue>faculty</saml:AttributeValue>

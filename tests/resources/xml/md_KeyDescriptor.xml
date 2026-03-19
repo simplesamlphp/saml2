@@ -1,5 +1,5 @@
-<md:KeyDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" use="signing">
-  <ds:KeyInfo xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+<md:KeyDescriptor xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:ds="http://www.w3.org/2000/09/xmldsig#" use="signing">
+  <ds:KeyInfo>
     <ds:KeyName>IdentityProvider.com SSO Key</ds:KeyName>
   </ds:KeyInfo>
   <md:EncryptionMethod Algorithm="http://www.w3.org/2001/04/xmlenc#rsa-1_5"/>

@@ -4,27 +4,20 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Configuration;
 
-use SimpleSAML\Assert\Assert;
+use SimpleSAML\SAML2\Assert\Assert;
 
 /**
  * Configuration of a private key.
  */
 class PrivateKey extends ArrayAdapter
 {
-    /** @var string */
-    public const NAME_NEW = 'new';
+    public const string NAME_NEW = 'new';
 
-    /** @var string */
-    public const NAME_DEFAULT = 'default';
+    public const string NAME_DEFAULT = 'default';
 
 
     /**
      * Constructor for PrivateKey.
-     *
-     * @param string $filePathOrContents
-     * @param string $name
-     * @param string $passphrase
-     * @param bool $isFile
      */
     public function __construct(
         private string $filePathOrContents,
@@ -36,8 +29,6 @@ class PrivateKey extends ArrayAdapter
 
 
     /**
-     * @return string
-     *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function getFilePath(): string
@@ -49,7 +40,6 @@ class PrivateKey extends ArrayAdapter
 
 
     /**
-     * @return bool
      */
     public function hasPassPhrase(): bool
     {
@@ -58,7 +48,6 @@ class PrivateKey extends ArrayAdapter
 
 
     /**
-     * @return string
      */
     public function getPassPhrase(): string
     {
@@ -67,16 +56,14 @@ class PrivateKey extends ArrayAdapter
 
 
     /**
-     * @return string
      */
     public function getName(): string
     {
         return $this->name;
     }
 
+
     /**
-     * @return string
-     *
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
     public function getContents(): string
@@ -86,8 +73,8 @@ class PrivateKey extends ArrayAdapter
         return $this->filePathOrContents;
     }
 
+
     /**
-     * @return bool
      */
     public function isFile(): bool
     {

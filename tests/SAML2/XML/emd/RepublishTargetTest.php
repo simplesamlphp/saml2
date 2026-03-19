@@ -46,7 +46,7 @@ final class RepublishTargetTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $republishTarget = new RepublishTarget('http://edugain.org/');
+        $republishTarget = RepublishTarget::fromString('http://edugain.org/');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -64,6 +64,6 @@ final class RepublishTargetTest extends TestCase
             'Expected a value identical to "http://edugain.org/". Got: "http://example.org/"',
         );
 
-        new RepublishTarget('http://example.org/');
+        RepublishTarget::fromString('http://example.org/');
     }
 }

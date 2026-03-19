@@ -65,6 +65,7 @@ class Processor
         return $decrypted;
     }
 
+
     /**
      * @param \SimpleSAML\SAML2\Utilities\ArrayCollection $assertions Collection of decrypted assertions
      * @return \SimpleSAML\SAML2\Utilities\ArrayCollection Collection of processed assertions
