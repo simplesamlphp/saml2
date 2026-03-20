@@ -78,7 +78,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ env.COMPOSER_CACHE }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
@@ -141,7 +141,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ env.COMPOSER_CACHE }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
@@ -179,7 +179,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ env.COMPOSER_CACHE }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Validate composer.json and composer.lock
@@ -233,7 +233,7 @@ jobs:
         uses: actions/cache@v5
         with:
           path: ${{ env.COMPOSER_CACHE }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
