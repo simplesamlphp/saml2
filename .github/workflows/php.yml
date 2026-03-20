@@ -115,7 +115,8 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: ctype, date, dom, filter, hash, intl, mbstring, openssl, pcre, soap, sodium, spl, xml
+          extensions: ctype, date, dom, filter, hash, intl, mbstring, openssl, pcre,\
+            soap, sodium, spl, xml, zip
           tools: composer
           ini-values: error_reporting=E_ALL
           coverage: none
