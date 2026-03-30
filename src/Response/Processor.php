@@ -153,7 +153,7 @@ class Processor
         );
 
         if (!$this->responseIsSigned) {
-            foreach ($assertions as $assertion) {
+            foreach ($decryptedAssertions as $assertion) {
                 if (!$assertion->wasSignedAtConstruction()) {
                     throw new UnsignedResponseException(
                         'Both the response and the assertion it contains are not signed.',
