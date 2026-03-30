@@ -167,7 +167,10 @@ class HTTPRedirect extends Binding implements AsynchronousBindingInterface, Rela
             throw new Exception('Error while inflating SAML message.');
         }
 
-        $document = DOMDocumentFactory::fromString($message);
+        $document = DOMDocumentFactory::fromString(
+            xml: $message,
+            schemaFile: $this->getSchemaValidation() ? self::$schemaFile : null,
+        );
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
         $message = MessageFactory::fromXML($document->documentElement);
 
