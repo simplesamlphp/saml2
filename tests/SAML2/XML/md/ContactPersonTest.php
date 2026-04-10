@@ -64,7 +64,7 @@ final class ContactPersonTest extends TestCase
         );
 
         self::$arrayRepresentation = [
-            'ContactType' => 'administrative',
+            'contactType' => 'administrative',
             'Company' => 'SimpleSAMLphp',
             'GivenName' => 'Lead',
             'SurName' => 'Developer',

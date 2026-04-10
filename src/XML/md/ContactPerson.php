@@ -382,7 +382,7 @@ final class ContactPerson extends AbstractMdElement implements
     public function toArray(): array
     {
         $data = [
-            'ContactType' => $this->getContactType()->getValue(),
+            'contactType' => $this->getContactType()->getValue(),
             'Company' => $this->getCompany()?->getContent()->getValue(),
             'GivenName' => $this->getGivenName()?->getContent()->getValue(),
             'SurName' => $this->getSurName()?->getContent()->getValue(),
