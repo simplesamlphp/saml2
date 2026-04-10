@@ -10,6 +10,8 @@ use SimpleSAML\XML\AbstractElement;
 /**
  * Abstract class to be implemented by all the classes in this namespace
  *
+ * @link: https://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
+ *
  * @package simplesamlphp/saml2
  */
 abstract class AbstractMdattrElement extends AbstractElement
