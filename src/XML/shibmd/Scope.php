@@ -6,12 +6,18 @@ namespace SimpleSAML\SAML2\XML\shibmd;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\XML\ArrayizableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\TypedTextContentTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Type\BooleanValue;
+
+use function array_change_key_case;
+use function array_key_exists;
+use function array_keys;
 
 /**
  * Class which represents the Scope element found in Shibboleth metadata.
@@ -19,7 +25,9 @@ use SimpleSAML\XMLSchema\Type\BooleanValue;
  * @link https://wiki.shibboleth.net/confluence/display/SC/ShibMetaExt+V1.0
  * @package simplesamlphp/saml2
  */
-final class Scope extends AbstractShibmdElement implements SchemaValidatableElementInterface
+final class Scope extends AbstractShibmdElement implements
+    ArrayizableElementInterface,
+    SchemaValidatableElementInterface
 {
     use SchemaValidatableElementTrait;
     use TypedTextContentTrait;
@@ -84,5 +92,85 @@ final class Scope extends AbstractShibmdElement implements SchemaValidatableElem
         }
 
         return $e;
+    }
+
+
+    /**
+     * Create a class from an array
+     *
+     * @param array{
+     *   'scope': string,
+     *   'isRegexpScope'?: boolean,
+     * } $data
+     */
+    public static function fromArray(array $data): static
+    {
+        $data = self::processArrayContents($data);
+
+        return new static(
+            SAMLStringValue::fromString($data['scope']),
+            $data['isRegexpScope'] !== null ? BooleanValue::fromBoolean($data['isRegexpScope']) : null,
+        );
+    }
+
+
+    /**
+     * Validates an array representation of this object and returns the same array with
+     * rationalized keys (casing) and parsed sub-elements.
+     *
+     * @param array{
+     *   'scope': string,
+     *   'isRegexpScope'?: boolean,
+     * } $data
+     * @return array{
+     *   'scope': string,
+     *   'isRegexpScope'?: boolean,
+     * }
+     */
+    private static function processArrayContents(array $data): array
+    {
+        $data = array_change_key_case($data, CASE_LOWER);
+
+        // Make sure the array keys are known for this kind of object
+        Assert::allOneOf(
+            array_keys($data),
+            [
+                'scope',
+                'isregexpscope',
+            ],
+            ArrayValidationException::class,
+        );
+
+        Assert::keyExists($data, 'scope', ArrayValidationException::class);
+        Assert::string($data['scope'], ArrayValidationException::class);
+
+        $retval = [
+            'scope' => $data['scope'],
+        ];
+
+        if (array_key_exists('isregexpscope', $data)) {
+            Assert::boolean($data['isregexpscope'], ArrayValidationException::class);
+            $retval['isRegexpScope'] = $data['isregexpscope'];
+        }
+
+        return $retval;
+    }
+
+
+    /**
+     * Create an array from this class
+     *
+     * @return array{
+     *   'scope': string,
+     *   'isRegexpScope'?: bool,
+     * }
+     */
+    public function toArray(): array
+    {
+        $isRegexpScope = $this->isRegexpScope()?->toBoolean();
+
+        return [
+            'scope' => $this->getContent()->getValue(),
+        ] + (isset($isRegexpScope) ? ['isRegexpScope' => $isRegexpScope] : []);
     }
 }
