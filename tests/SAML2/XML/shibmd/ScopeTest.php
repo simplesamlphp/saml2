@@ -12,6 +12,7 @@ use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\shibmd\AbstractShibmdElement;
 use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Type\BooleanValue;
@@ -29,6 +30,7 @@ use function strval;
 #[CoversClass(AbstractShibmdElement::class)]
 final class ScopeTest extends TestCase
 {
+    use ArrayizableElementTestTrait;
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
@@ -42,6 +44,11 @@ final class ScopeTest extends TestCase
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/shibmd_Scope.xml',
         );
+
+        self::$arrayRepresentation = [
+            'scope' => '^(.*\.)?example\.edu$',
+            'isRegexpScope' => true,
+        ];
     }
 
 
