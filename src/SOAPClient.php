@@ -6,8 +6,10 @@ namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use Exception;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SOAP11\Utils\XPath;
@@ -18,7 +20,6 @@ use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
 use SoapClient as BuiltinSoapClient;
 
 use function chunk_split;
@@ -26,6 +27,7 @@ use function file_exists;
 use function openssl_pkey_get_details;
 use function openssl_pkey_get_public;
 use function sha1;
+use function sprintf;
 use function stream_context_create;
 use function stream_context_get_options;
 
@@ -146,8 +148,8 @@ class SOAPClient
 
         $action = 'http://www.oasis-open.org/committees/security';
         /* Perform SOAP Request over HTTP */
-        $x = new BuiltinSoapClient(null, $options);
-        $soapresponsexml = $x->__doRequest($request, $destination, $action, SOAP_1_1, false);
+        $x = $this->createSoapClient($options);
+        $soapresponsexml = $this->doSoapRequest($x, $request, $destination, $action);
         if (empty($soapresponsexml)) {
             throw new Exception('Empty SOAP response, check peer certificate.');
         }
@@ -181,6 +183,42 @@ class SOAPClient
         $container->getLogger()->debug("Valid ArtifactResponse received from IdP");
 
         return $samlresponse;
+    }
+
+
+    /**
+     * Factory method to create the built-in SoapClient. Overridable for testing.
+     *
+     * @param array $options
+     * @return \SoapClient
+     */
+    protected function createSoapClient(array $options): BuiltinSoapClient
+    {
+        return new BuiltinSoapClient(null, $options);
+    }
+
+
+    /**
+     * Wrapper around __doRequest(), overridable for testing.
+     *
+     * @param \SoapClient $client
+     * @param string|null $request
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $destination
+     * @param string $action
+     * @return string
+     */
+    protected function doSoapRequest(
+        BuiltinSoapClient $client,
+        ?string $request,
+        SAMLAnyURIValue $destination,
+        string $action,
+    ): string {
+        return (string) $client->__doRequest(
+            $request,
+            (string)$destination,
+            $action,
+            SOAP_1_1,
+        );
     }
 
 
@@ -223,14 +261,19 @@ class SOAPClient
      * Validate a SOAP message against the certificate on the SSL connection.
      *
      * @param string $data The public key that was used on the connection.
-     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key The key we should validate the certificate against.
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should validate the certificate against.
      * @throws \Exception
      */
     public static function validateSSL(string $data, XMLSecurityKey $key): void
     {
         $container = ContainerSingleton::getInstance();
 
-        $keyInfo = openssl_pkey_get_details($key->key);
+        try {
+            $keyInfo = openssl_pkey_get_details($key->key);
+        } catch (\TypeError $e) {
+            throw new \Exception('Unable to get key details from XMLSecurityKey.', 0, $e);
+        }
+
         if ($keyInfo === false) {
             throw new Exception('Unable to get key details from XMLSecurityKey.');
         }
@@ -240,8 +283,7 @@ class SOAPClient
         }
 
         if ($keyInfo['key'] !== $data) {
-            $container->getLogger()->debug('Key on SSL connection did not match key we validated against.');
-            return;
+            throw new Exception('Key on SSL connection did not match key we validated against.');
         }
 
         $container->getLogger()->debug('Message validated based on SSL certificate.');

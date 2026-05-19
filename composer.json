@@ -33,14 +33,18 @@
         "simplesamlphp/assert": "~2.0",
         "simplesamlphp/xml-common": "~2.8",
         "simplesamlphp/xml-security": "~2.3",
-        "simplesamlphp/xml-soap": "~2.3"
+        "simplesamlphp/xml-soap": "~2.3",
+        "robrichards/xmlseclibs": "^3.1"
     },
     "require-dev": {
         "ext-intl": "*",
 
         "beste/clock": "~3.0",
         "mockery/mockery": "~1.6",
-        "simplesamlphp/simplesamlphp-test-framework": "~1.11"
+        "simplesamlphp/simplesamlphp": "2.5.*",
+        "simplesamlphp/simplesamlphp-test-framework": "~1.11",
+        "maglnet/composer-require-checker": "^4.20",
+        "icanhazstring/composer-unused": "^0.9.6"
     },
     "suggest": {
         "ext-soap": "*"

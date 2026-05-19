@@ -9,12 +9,12 @@ use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Binding;
-use SimpleSAML\SAML2\Binding\RelayStateTrait;
 use SimpleSAML\SAML2\SOAPClient;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -24,7 +24,6 @@ use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
 use SimpleSAML\Store\StoreFactory;
 use SimpleSAML\Utils\HTTP;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
 
 use function array_key_exists;
 use function base64_decode;
@@ -134,7 +133,7 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             throw new Exception('Missing SAMLart parameter.');
         }
 
-        $metadataHandler = MetaDataStorageHandler::getMetadataHandler(Configuration::getInstance());
+        $metadataHandler = MetaDataStorageHandler::getMetadataHandler();
 
         $idpMetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
 
@@ -212,7 +211,7 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
      * A validator which returns true if the ArtifactResponse was signed with the given key
      *
      * @param \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $message
-     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key
+     * @param \RobRichards\XMLSecLibs\XMLSecurityKey  $key
      */
     public static function validateSignature(ArtifactResponse $message, XMLSecurityKey $key): bool
     {
