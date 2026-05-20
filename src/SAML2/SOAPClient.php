@@ -13,9 +13,10 @@ use SAML2\Exception\InvalidArgumentException;
 use SAML2\Exception\UnparseableXmlException;
 use SimpleSAML\Configuration;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSchema\Type\AnyURIValue;
 use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
-//use SoapClient as BuiltinSoapClient;
+use SoapClient as BuiltinSoapClient;
 use SOAP_1_1;
 
 /**
@@ -141,7 +142,8 @@ class SOAPClient
         }
 
         /* Perform SOAP Request over HTTP */
-        $soapresponsexml = $x->__doRequest($request, $destination, $action, SOAP_1_1);
+        $x = $this->createSoapClient($options);
+        $soapresponsexml = $this->doSoapRequest($x, $request, $destination, $action);
         if (empty($soapresponsexml)) {
             throw new Exception('Empty SOAP response, check peer certificate.');
         }
@@ -175,6 +177,45 @@ class SOAPClient
         $container->getLogger()->debug("Valid ArtifactResponse received from IdP");
 
         return $samlresponse;
+    }
+
+
+    /**
+     * Factory method to create the built-in SoapClient. Overridable for testing.
+     *
+     * @param array $options
+     * @return \SoapClient
+     */
+    protected function createSoapClient(array $options): BuiltinSoapClient
+    {
+        return new BuiltinSoapClient(null, $options);
+    }
+
+
+    /**
+     * Wrapper around __doRequest(), overridable for testing.
+     *
+     * NOTE: $destination is a generic xs:anyURI value (XMLSchema), since the SOAP endpoint URI
+     * is transport-level and not necessarily subject to SAML-layer URI restrictions.
+     *
+     * @param \SoapClient $client
+     * @param string|null $request
+     * @param string $destination
+     * @param string $action
+     * @return string
+     */
+    protected function doSoapRequest(
+        BuiltinSoapClient $client,
+        ?string $request,
+        string $destination,
+        string $action,
+    ): string {
+        return (string) $client->__doRequest(
+            $request,
+            $destination,
+            $action,
+            SOAP_1_1,
+        );
     }
 
 
@@ -235,10 +276,8 @@ class SOAPClient
             throw new Exception('Missing key in public key details.');
         }
 
-        if ($keyInfo['key'] !== $data) {
-            $container->getLogger()->debug('Key on SSL connection did not match key we validated against.');
-
-            return;
+        if (trim($keyInfo['key']) !== trim($data)) {
+            throw new Exception('Key on SSL connection did not match key we validated against.');
         }
 
         $container->getLogger()->debug('Message validated based on SSL certificate.');
