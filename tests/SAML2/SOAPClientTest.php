@@ -14,6 +14,7 @@ use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\SOAPClient;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\XMLSchema\Type\AnyURIValue;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**
@@ -134,7 +135,7 @@ final class SOAPClientTest extends TestCase
             protected function doSoapRequest(
                 \SoapClient $client,
                 ?string $request,
-                SAMLAnyURIValue $destination,
+                AnyURIValue $destination,
                 string $action,
             ): string {
                 throw new \LogicException('doSoapRequest() should not be called when destination is missing.');
@@ -159,6 +160,11 @@ final class SOAPClientTest extends TestCase
     #[DataProvider('provideBadSoapResponses')]
     public function testSendThrowsOnEmptySoapResponseOrSoapFault(string $soapResponse, string $expectedMessage): void
     {
+        /**
+         * Use SAMLAnyURIValue here because AbstractMessage::getDestination() is typed to return it, and PHPUnit
+         * enforces return-type compatibility on stubs. SAMLAnyURIValue still works for SOAP transport because
+         * it extends AnyURIValue.
+         */
         $destination = SAMLAnyURIValue::fromString('https://example.org/soap-endpoint');
 
         $client = new class ($soapResponse) extends SOAPClient {
@@ -182,7 +188,7 @@ final class SOAPClientTest extends TestCase
             protected function doSoapRequest(
                 \SoapClient $client,
                 ?string $request,
-                SAMLAnyURIValue $destination,
+                AnyURIValue $destination,
                 string $action,
             ): string {
                 return $this->soapResponse;
