@@ -9,7 +9,6 @@ use Exception;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\SOAP11\Utils\XPath;
@@ -20,6 +19,7 @@ use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSchema\Type\AnyURIValue;
 use SoapClient as BuiltinSoapClient;
 
 use function chunk_split;
@@ -201,21 +201,24 @@ class SOAPClient
     /**
      * Wrapper around __doRequest(), overridable for testing.
      *
+     * NOTE: $destination is a generic xs:anyURI value (XMLSchema), since the SOAP endpoint URI
+     * is transport-level and not necessarily subject to SAML-layer URI restrictions.
+     *
      * @param \SoapClient $client
      * @param string|null $request
-     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $destination
+     * @param \SimpleSAML\XMLSchema\Type\AnyURIValue $destination
      * @param string $action
      * @return string
      */
     protected function doSoapRequest(
         BuiltinSoapClient $client,
         ?string $request,
-        SAMLAnyURIValue $destination,
+        AnyURIValue $destination,
         string $action,
     ): string {
         return (string) $client->__doRequest(
             $request,
-            (string)$destination,
+            (string) $destination,
             $action,
             SOAP_1_1,
         );
