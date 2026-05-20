@@ -14,12 +14,17 @@ use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\SOAPClient;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**
- * Tests for {@see \SimpleSAML\SAML2\SOAPClient} SSL validator behavior and send() fail-fast behavior.
+ * Tests for {@see \SimpleSAML\SAML2\SOAPClient}:
+ * - SSL peer key validation behavior ({@see \SimpleSAML\SAML2\SOAPClient::validateSSL()})
+ * - send() fail-fast and error handling behavior
  *
  * Notes:
- * - SSL validation tests use deterministic public key PEM fixtures to avoid probabilistic assumptions.
+ * - SSL validation tests use deterministic PEM fixtures from simplesamlphp/xml-security
+ *   (via {@see \SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock}) to avoid depending on
+ *   runtime-generated keys.
  * - send() tests avoid network I/O by overriding {@see \SimpleSAML\SAML2\SOAPClient::doSoapRequest()}.
  */
 #[CoversClass(SOAPClient::class)]
@@ -38,20 +43,21 @@ final class SOAPClientTest extends TestCase
 
 
     /**
-     * Use case: the SSL validator must be fail-closed.
+     * Use case: the SSL peer key validator must be fail-closed.
      *
-     * - If the TLS peer public key matches the key being validated, validation succeeds (no exception).
+     * - If the peer key material provided to {@see SOAPClient::validateSSL()} matches the key being validated,
+     *   validation succeeds (no exception).
      * - If it does not match, validation must throw (reject).
      *
-     * This test uses deterministic PEM fixtures:
-     * - resources/keys/ssl_validator_key_1_public.pem
-     * - resources/keys/ssl_validator_key_2_public.pem
+     * This test reuses deterministic key fixtures from simplesamlphp/xml-security via {@see PEMCertificatesMock}.
+     *
+     * @param bool $shouldMatch Whether the peer key material and the XMLSecurityKey should match.
      */
     #[DataProvider('provideSslKeyMatchCases')]
     public function testValidateSslThrowsOnMismatchAndPassesOnMatch(bool $shouldMatch): void
     {
-        $tlsPublicKeyPem = $this->loadPublicKeyFixturePem('ssl_validator_key_1_public.pem');
-        $otherPublicKeyPem = $this->loadPublicKeyFixturePem('ssl_validator_key_2_public.pem');
+        $tlsPublicKeyPem = PEMCertificatesMock::getPlainPublicKey();
+        $otherPublicKeyPem = PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY);
 
         $xmlPublicKeyPem = $shouldMatch ? $tlsPublicKeyPem : $otherPublicKeyPem;
         $key = $this->buildXmlSecurityPublicKey($xmlPublicKeyPem);
@@ -62,34 +68,18 @@ final class SOAPClientTest extends TestCase
         }
 
         SOAPClient::validateSSL($tlsPublicKeyPem, $key);
+
+        if ($shouldMatch) {
+            $this->addToAssertionCount(1);
+        }
     }
 
 
     /**
-     * Load a PEM-encoded public key fixture from this test directory.
+     * Build an {@see XMLSecurityKey} from a PEM-encoded public key, for use with
+     * {@see SOAPClient::validateSSL()}.
      *
-     * Fixture location (relative to this file):
-     *   resources/keys/<filename>
-     *
-     * @param string $filename The fixture filename (e.g. 'ssl_validator_key_1_public.pem').
-     * @return string PEM-encoded public key.
-     */
-    private function loadPublicKeyFixturePem(string $filename): string
-    {
-        $path = __DIR__ . '/../resources/keys/' . $filename;
-
-        $pem = file_get_contents($path);
-        $this->assertNotFalse($pem, 'Unable to read fixture: ' . $path);
-        $this->assertNotSame('', trim($pem), 'Empty fixture: ' . $path);
-
-        return $pem;
-    }
-
-
-    /**
-     * Build an {@see XMLSecurityKey} instance holding a public key suitable for {@see SOAPClient::validateSSL()}.
-     *
-     * @param string $publicKeyPem PEM-encoded public key.
+     * @param string $publicKeyPem PEM-encoded public key (e.g. "-----BEGIN PUBLIC KEY----- ...").
      */
     private function buildXmlSecurityPublicKey(string $publicKeyPem): XMLSecurityKey
     {

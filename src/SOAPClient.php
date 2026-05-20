@@ -282,7 +282,7 @@ class SOAPClient
             throw new Exception('Missing key in public key details.');
         }
 
-        if ($keyInfo['key'] !== $data) {
+        if (trim($keyInfo['key']) !== trim($data)) {
             throw new Exception('Key on SSL connection did not match key we validated against.');
         }
 
