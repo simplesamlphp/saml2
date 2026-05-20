@@ -268,11 +268,7 @@ class SOAPClient
     {
         $container = ContainerSingleton::getInstance();
 
-        try {
-            $keyInfo = openssl_pkey_get_details($key->key);
-        } catch (\TypeError $e) {
-            throw new \Exception('Unable to get key details from XMLSecurityKey.', 0, $e);
-        }
+        $keyInfo = openssl_pkey_get_details($key->key);
 
         if ($keyInfo === false) {
             throw new Exception('Unable to get key details from XMLSecurityKey.');
