@@ -148,8 +148,8 @@ class SOAPClient
 
         $action = 'http://www.oasis-open.org/committees/security';
         /* Perform SOAP Request over HTTP */
-        $x = new BuiltinSoapClient(null, $options);
-        $soapresponsexml = $x->__doRequest($request, $destination, $action, SOAP_1_1, false);
+        $x = $this->createSoapClient($options);
+        $soapresponsexml = $this->doSoapRequest($x, $request, $destination, $action);
         if (empty($soapresponsexml)) {
             throw new Exception('Empty SOAP response, check peer certificate.');
         }
@@ -183,6 +183,42 @@ class SOAPClient
         $container->getLogger()->debug("Valid ArtifactResponse received from IdP");
 
         return $samlresponse;
+    }
+
+
+    /**
+     * Factory method to create the built-in SoapClient. Overridable for testing.
+     *
+     * @param array $options
+     * @return \SoapClient
+     */
+    protected function createSoapClient(array $options): BuiltinSoapClient
+    {
+        return new BuiltinSoapClient(null, $options);
+    }
+
+
+    /**
+     * Wrapper around __doRequest(), overridable for testing.
+     *
+     * @param \SoapClient $client
+     * @param string|null $request
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $destination
+     * @param string $action
+     * @return string
+     */
+    protected function doSoapRequest(
+        BuiltinSoapClient $client,
+        ?string $request,
+        SAMLAnyURIValue $destination,
+        string $action,
+    ): string {
+        return (string) $client->__doRequest(
+            $request,
+            (string)$destination,
+            $action,
+            SOAP_1_1,
+        );
     }
 
 
@@ -232,8 +268,12 @@ class SOAPClient
     {
         $container = ContainerSingleton::getInstance();
 
-        /** @psalm-suppress PossiblyNullArgument */
-        $keyInfo = openssl_pkey_get_details($key->key);
+        try {
+            $keyInfo = openssl_pkey_get_details($key->key);
+        } catch (\TypeError $e) {
+            throw new \Exception('Unable to get key details from XMLSecurityKey.', 0, $e);
+        }
+
         if ($keyInfo === false) {
             throw new Exception('Unable to get key details from XMLSecurityKey.');
         }
@@ -243,8 +283,7 @@ class SOAPClient
         }
 
         if ($keyInfo['key'] !== $data) {
-            $container->getLogger()->debug('Key on SSL connection did not match key we validated against.');
-            return;
+            throw new Exception('Key on SSL connection did not match key we validated against.');
         }
 
         $container->getLogger()->debug('Message validated based on SSL certificate.');
