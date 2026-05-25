@@ -43,7 +43,6 @@
         "mockery/mockery": "~1.6",
         "simplesamlphp/simplesamlphp": "2.5.*",
         "simplesamlphp/simplesamlphp-test-framework": "~1.11",
-        "maglnet/composer-require-checker": "^4.20",
         "icanhazstring/composer-unused": "^0.9.6"
     },
     "suggest": {
