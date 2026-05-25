@@ -71,6 +71,35 @@ class Utils
         $signatureElement = $signatureElement[0];
         $objXMLSecDSig->sigNode = $signatureElement;
 
+        /** Locate the XMLDSig Transform elements */
+        /** @var \DOMElement[] $transformElement */
+        $transformElement = self::xpQuery($signatureElement, './ds:SignedInfo/ds:Reference/ds:Transforms/ds:Transform');
+        if (count($transformElement) > 2) {
+            throw new Exception('XMLSec: more than two transform-operations in ds:Reference.');
+        }
+
+        if (count($transformElement) > 0) {
+            /** Check the algorithms in the Transform-elements */
+            /** @var \DOMElement[] $algorithms */
+            $algorithms = self::xpQuery(
+                $signatureElement,
+                sprintf(
+                    "./ds:SignedInfo/ds:Reference/ds:Transforms/ds:Transform["
+                    . "not(@Algorithm='%s') and not(@Algorithm='%s') and not(@Algorithm='%s')]",
+                    XMLSecurityDSig::EXC_C14N,
+                    XMLSecurityDSig::EXC_C14N_COMMENTS,
+                    'http://www.w3.org/2000/09/xmldsig#enveloped-signature',
+                ),
+            );
+
+            if (count($algorithms) > 0) {
+                throw new Exception(
+                    'XMLSec: Signatures in SAML messages SHOULD NOT contain transforms other than the '
+                    . 'enveloped signature transform or the exclusive canonicalization transforms.',
+                );
+            }
+        }
+
         /* Canonicalize the XMLDSig SignedInfo element in the message. */
         $objXMLSecDSig->canonicalizeSignedInfo();
 

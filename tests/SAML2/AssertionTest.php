@@ -1190,6 +1190,40 @@ XML;
 
 
     /**
+     * Try to parse a signed assertion with more than two transforms.
+     */
+    public function testVerifySignedAssertionTooManyTransforms() : void
+    {
+        $doc = new DOMDocument();
+        $doc->load(__DIR__ . '/signedassertion_too_many_transforms.xml');
+
+        $publicKey = CertificatesMock::getPublicKeySha256();
+
+        $this->expectException(Exception::class, 'XMLSec: more than two transform-operations in ds:Reference.');
+        new Assertion($doc->firstChild);
+    }
+
+
+    /**
+     * Try to parse a signed assertion with a transform algorithm that is not allowed.
+     */
+    public function testVerifySignedAssertionProhibitedTransform() : void
+    {
+        $doc = new DOMDocument();
+        $doc->load(__DIR__ . '/signedassertion_prohibited_transform.xml');
+
+        $publicKey = CertificatesMock::getPublicKeySha256();
+
+        $this->expectException(
+            Exception::class,
+            'XMLSec: Signatures in SAML messages SHOULD NOT contain transforms other than the enveloped signature '
+            . 'transform or the exclusive canonicalization transforms.',
+        );
+        new Assertion($doc->firstChild);
+    }
+
+
+    /**
      * Calling validate on an unsigned assertion must return
      * false, not an exception.
      */
