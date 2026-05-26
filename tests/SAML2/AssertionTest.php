@@ -1199,7 +1199,8 @@ XML;
 
         $publicKey = CertificatesMock::getPublicKeySha256();
 
-        $this->expectException(Exception::class, 'XMLSec: more than two transform-operations in ds:Reference.');
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('XMLSec: more than two transform-operations in ds:Reference.');
         new Assertion($doc->firstChild);
     }
 
@@ -1214,8 +1215,8 @@ XML;
 
         $publicKey = CertificatesMock::getPublicKeySha256();
 
-        $this->expectException(
-            Exception::class,
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
             'XMLSec: Signatures in SAML messages SHOULD NOT contain transforms other than the enveloped signature '
             . 'transform or the exclusive canonicalization transforms.',
         );
