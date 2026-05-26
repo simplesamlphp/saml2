@@ -1192,7 +1192,7 @@ XML;
     /**
      * Try to parse a signed assertion with more than two transforms.
      */
-    public function testVerifySignedAssertionTooManyTransforms() : void
+    public function testVerifySignedAssertionTooManyTransforms(): void
     {
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '/signedassertion_too_many_transforms.xml');
@@ -1207,7 +1207,7 @@ XML;
     /**
      * Try to parse a signed assertion with a transform algorithm that is not allowed.
      */
-    public function testVerifySignedAssertionProhibitedTransform() : void
+    public function testVerifySignedAssertionProhibitedTransform(): void
     {
         $doc = new DOMDocument();
         $doc->load(__DIR__ . '/signedassertion_prohibited_transform.xml');
