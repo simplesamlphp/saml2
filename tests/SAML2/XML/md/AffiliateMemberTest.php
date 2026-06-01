@@ -52,9 +52,10 @@ final class AffiliateMemberTest extends TestCase
     {
         $affiliateMember = AffiliateMember::fromString('https://some.entity.org/id');
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($affiliateMember),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($affiliateMember);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

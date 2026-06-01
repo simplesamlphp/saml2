@@ -65,9 +65,10 @@ final class OrganizationURLTest extends TestCase
             SAMLAnyURIValue::fromString('https://IdentityProvider.com'),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($name);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

@@ -43,4 +43,7 @@ $logoutRequest = new LogoutRequest(
 
 $logoutRequest = $logoutRequest->toXML();
 
-echo $logoutRequest->ownerDocument->saveXML();
+/** @var \Dom\XMLDocument $ownerDocument */
+$ownerDocument = $logoutRequest->ownerDocument;
+
+echo $ownerDocument->saveXML();

@@ -61,10 +61,11 @@ final class AttributeValueTest extends TestCase
         $this->assertEquals(2, $av->getValue()->toInteger());
         $this->assertEquals('xs:integer', $av->getXsiType());
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($av),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($av);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -166,7 +167,7 @@ XML;
 
 
     /**
-     * Verifies that we can create an AttributeValue containing a NameID from a DOMElement.
+     * Verifies that we can create an AttributeValue containing a NameID from a Dom\Element.
      *
      * @return void
      */

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Test\SAML2\XML\saml;
 
-use DOMDocument;
+use Dom;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -35,14 +35,14 @@ final class AdviceTest extends TestCase
     use SerializableElementTestTrait;
 
 
-    /** @var \DOMDocument $assertionIDRef */
-    private static DOMDocument $assertionIDRef;
+    /** @var \Dom\XMLDocument $assertionIDRef */
+    private static Dom\XMLDocument $assertionIDRef;
 
-    /** @var \DOMDocument $assertionURIRef */
-    private static DOMDocument $assertionURIRef;
+    /** @var \Dom\XMLDocument $assertionURIRef */
+    private static Dom\XMLDocument $assertionURIRef;
 
-    /** @var \DOMDocument $assertion */
-    private static DOMDocument $assertion;
+    /** @var \Dom\XMLDocument $assertion */
+    private static Dom\XMLDocument $assertion;
 
 
     /**
@@ -88,10 +88,11 @@ final class AdviceTest extends TestCase
 
         $this->assertFalse($advice->isEmptyElement());
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($advice),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($advice);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 

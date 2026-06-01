@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\IdentifierTrait;
@@ -74,7 +74,7 @@ final class SubjectConfirmation extends AbstractSamlElement implements SchemaVal
      * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'SubjectConfirmation', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SubjectConfirmation::NS, InvalidDOMElementException::class);
@@ -98,7 +98,7 @@ final class SubjectConfirmation extends AbstractSamlElement implements SchemaVal
     /**
      * Convert this element to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Method', $this->getMethod()->getValue());

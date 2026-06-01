@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
@@ -87,7 +87,7 @@ final class UnknownRoleDescriptor extends AbstractRoleDescriptor
     /**
      * Convert this RoleDescriptor to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         return $this->getRawRoleDescriptor()->toXML($parent);
     }

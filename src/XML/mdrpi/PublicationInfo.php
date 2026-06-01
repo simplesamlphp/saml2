@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdrpi;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
@@ -120,7 +120,7 @@ final class PublicationInfo extends AbstractMdrpiElement implements
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'PublicationInfo', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, PublicationInfo::NS, InvalidDOMElementException::class);
@@ -137,7 +137,7 @@ final class PublicationInfo extends AbstractMdrpiElement implements
     /**
      * Convert this element to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('publisher', $this->getPublisher()->getValue());

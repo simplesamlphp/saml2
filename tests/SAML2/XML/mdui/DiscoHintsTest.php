@@ -78,10 +78,11 @@ final class DiscoHintsTest extends TestCase
             ],
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($discoHints),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($discoHints);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -116,7 +117,7 @@ final class DiscoHintsTest extends TestCase
         $document = DOMDocumentFactory::fromString('<root />');
         $xml = $discoHints->toXML($document->documentElement);
 
-        /** @var \DOMElement[] $discoElements */
+        /** @var \Dom\Element[] $discoElements */
         $discoElements = XPath::xpQuery(
             $xml,
             '/root/*[local-name()=\'DiscoHints\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',

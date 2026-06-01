@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\XML\ExtendableElementTrait;
 
 /**
@@ -49,10 +49,10 @@ trait ExtensionsTrait
     /**
      * Convert this object into its md:Extensions XML representation.
      *
-     * @param \DOMElement|null $parent The element we should add this Extensions element to.
-     * @return \DOMElement The new md:Extensions XML element.
+     * @param \Dom\Element|null $parent The element we should add this Extensions element to.
+     * @return \Dom\Element The new md:Extensions XML element.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
 
@@ -70,5 +70,5 @@ trait ExtensionsTrait
 
     /**
      */
-    abstract public function instantiateParentElement(?DOMElement $parent = null): DOMElement;
+    abstract public function instantiateParentElement(?Dom\Element $parent = null): Dom\Element;
 }

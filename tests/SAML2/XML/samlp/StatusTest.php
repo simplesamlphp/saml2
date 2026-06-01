@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
-use DOMDocument;
+use Dom;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -38,8 +38,8 @@ final class StatusTest extends TestCase
     use SerializableElementTestTrait;
 
 
-    /** @var \DOMDocument $detail */
-    private static DOMDocument $detail;
+    /** @var \Dom\XMLDocument $detail */
+    private static Dom\XMLDocument $detail;
 
 
     /**
@@ -81,10 +81,11 @@ final class StatusTest extends TestCase
             ],
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($status),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($status);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -115,7 +116,7 @@ final class StatusTest extends TestCase
         $this->assertCount(1, $statusElements);
 
         // Test ordering of Status contents
-        /** @var \DOMElement[] $statusElements */
+        /** @var \Dom\Element[] $statusElements */
         $statusElements = XPath::xpQuery($statusElement, './saml_protocol:StatusCode/following-sibling::*', $xpCache);
         $this->assertCount(2, $statusElements);
         $this->assertEquals('samlp:StatusMessage', $statusElements[0]->tagName);

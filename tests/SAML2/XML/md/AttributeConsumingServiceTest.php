@@ -94,10 +94,11 @@ final class AttributeConsumingServiceTest extends TestCase
             ],
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($acs),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($acs);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -124,16 +125,18 @@ final class AttributeConsumingServiceTest extends TestCase
             'ServiceDescription',
         );
 
-        /** @var \DOMElement $space */
+        /** @var \Dom\Element $space */
         $space = $descr->item(0)->previousSibling;
 
         $xmlRepresentation->documentElement->removeChild($descr->item(0));
         $xmlRepresentation->documentElement->removeChild($space);
         $xmlRepresentation->documentElement->setAttribute('isDefault', 'false');
-        $this->assertEquals(
-            $xmlRepresentation->saveXML($xmlRepresentation->documentElement),
-            strval($acs),
-        );
+
+        $expectedXml = $xmlRepresentation->saveXml($xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($acs);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -160,10 +163,10 @@ final class AttributeConsumingServiceTest extends TestCase
         );
         $xmlRepresentation = clone self::$xmlRepresentation;
         $xmlRepresentation->documentElement->removeAttribute('isDefault');
-        $this->assertEquals(
-            $xmlRepresentation->saveXML($xmlRepresentation->documentElement),
-            strval($acs),
-        );
+
+        $expectedXml = $xmlRepresentation->saveXml($xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($acs);
     }
 
 

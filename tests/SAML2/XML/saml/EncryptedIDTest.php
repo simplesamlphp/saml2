@@ -130,10 +130,11 @@ final class EncryptedIDTest extends TestCase
         );
         $eid = new EncryptedID($ed, [$ek]);
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($eid),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($eid);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -185,7 +186,7 @@ final class EncryptedIDTest extends TestCase
         $this->assertCount(1, $eidElements);
 
         // Test ordering of EncryptedID contents
-        /** @var \DOMElement[] $eidElements */
+        /** @var \Dom\Element[] $eidElements */
         $eidElements = XPath::xpQuery($eidElement, './xenc:EncryptedData/following-sibling::*', $xpCache);
         $this->assertCount(1, $eidElements);
         $this->assertEquals('xenc:EncryptedKey', $eidElements[0]->tagName);

@@ -45,4 +45,7 @@ $authnRequest = new AuthnRequest(
 
 $authnRequest = $authnRequest->toXML();
 
-echo $authnRequest->ownerDocument->saveXML();
+/** @var \Dom\XMLDocument $ownerDocument */
+$ownerDocument = $authnRequest->ownerDocument;
+
+echo $ownerDocument->saveXML();

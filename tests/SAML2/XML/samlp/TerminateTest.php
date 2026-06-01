@@ -48,9 +48,10 @@ final class TerminateTest extends TestCase
     {
         $terminate = new Terminate();
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($terminate),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($terminate);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

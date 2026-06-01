@@ -120,10 +120,11 @@ final class AttributeQueryTest extends TestCase
             issueInstant: SAMLDateTimeValue::fromString('2017-09-06T11:49:27Z'),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($attributeQuery),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($attributeQuery);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -164,7 +165,7 @@ final class AttributeQueryTest extends TestCase
 
         // Test Attribute Names
         $xpCache = XPath::getXPath($attributeQueryElement);
-        /** @var \DOMElement[] $attributes */
+        /** @var \Dom\Element[] $attributes */
         $attributes = XPath::xpQuery($attributeQueryElement, './saml_assertion:Attribute', $xpCache);
         $this->assertCount(3, $attributes);
         $this->assertEquals('test1', $attributes[0]->getAttribute('Name'));

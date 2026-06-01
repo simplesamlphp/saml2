@@ -58,14 +58,15 @@ final class RegistrationPolicyTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = new RegistrationPolicy(
+        $rp = new RegistrationPolicy(
             LangValue::fromString('en'),
             SAMLAnyURIValue::fromString('http://www.example.edu/en/'),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($rp);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

@@ -72,7 +72,7 @@ final class XmlSignatureWrappingTest extends TestCase
             dirname(__DIR__, 1) . '/resources/xml/vulnerabilities/signedAssertionWithInvalidReferencedId.xml',
         );
 
-        /** @var \DOMElement $element */
+        /** @var \Dom\Element $element */
         $element = $document->firstChild;
         return Assertion::fromXML($element);
     }
@@ -87,7 +87,7 @@ final class XmlSignatureWrappingTest extends TestCase
             dirname(__DIR__, 1) . '/resources/xml/vulnerabilities/signedAssertionReferencedEmbeddedAssertion.xml',
         );
 
-        /** @var \DOMElement $element */
+        /** @var \Dom\Element $element */
         $element = $document->firstChild;
         return Assertion::fromXML($element);
     }

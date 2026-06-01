@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
@@ -122,7 +122,7 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
      * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'LogoutRequest', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, LogoutRequest::NS, InvalidDOMElementException::class);
@@ -187,7 +187,7 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
      */
-    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = parent::toUnsignedXML($parent);
 

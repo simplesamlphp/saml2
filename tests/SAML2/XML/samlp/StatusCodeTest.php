@@ -58,9 +58,10 @@ final class StatusCodeTest extends TestCase
             ],
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($statusCode),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($statusCode);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

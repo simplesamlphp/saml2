@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\ecp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SOAP11\Constants as C;
@@ -49,14 +49,14 @@ final class RequestAuthenticated extends AbstractEcpElement implements SchemaVal
     /**
      * Convert XML into a RequestAuthenticated
      *
-     * @param \DOMElement $xml The XML element we should load
+     * @param \Dom\Element $xml The XML element we should load
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing any of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'RequestAuthenticated', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, RequestAuthenticated::NS, InvalidDOMElementException::class);
@@ -89,7 +89,7 @@ final class RequestAuthenticated extends AbstractEcpElement implements SchemaVal
      *
      * @param \DOMElement|null $parent The element we should append this element to.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
 

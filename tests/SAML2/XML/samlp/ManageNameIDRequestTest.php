@@ -79,9 +79,10 @@ final class ManageNameIDRequestTest extends TestCase
             destination: SAMLAnyURIValue::fromString('https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO'),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($manageNameIdRequest),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($manageNameIdRequest);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

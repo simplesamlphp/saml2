@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Test\SAML2\XML\saml;
 
-use DOMDocument;
+use Dom;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -43,14 +43,14 @@ final class EvidenceTest extends TestCase
     use SerializableElementTestTrait;
 
 
-    /** @var \DOMDocument $assertionIDRef */
-    private static DOMDocument $assertionIDRef;
+    /** @var \Dom\XMLDocument $assertionIDRef */
+    private static Dom\XMLDocument $assertionIDRef;
 
-    /** @var \DOMDocument $assertionURIRef */
-    private static DOMDocument $assertionURIRef;
+    /** @var \Dom\XMLDocument $assertionURIRef */
+    private static Dom\XMLDocument $assertionURIRef;
 
-    /** @var \DOMDocument $assertion */
-    private static DOMDocument $assertion;
+    /** @var \Dom\XMLDocument $assertion */
+    private static Dom\XMLDocument $assertion;
 
     /** @var \SimpleSAML\SAML2\XML\saml\EncryptedAssertion $encryptedAssertion */
     private static EncryptedAssertion $encryptedAssertion;
@@ -119,10 +119,11 @@ final class EvidenceTest extends TestCase
 
         $this->assertFalse($evidence->isEmptyElement());
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($evidence),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($evidence);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 

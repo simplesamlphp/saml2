@@ -110,4 +110,7 @@ $entityAttributes = new EntityAttributes([
     ),
 ]);
 
-echo $entityAttributes->toXML()->ownerDocument?->saveXML();
+/** @var \Dom\XMLDocument $ownerDocument */
+$ownerDocument = $entityAttributes->toXML()->ownerDocument;
+
+echo $ownerDocument->saveXML();

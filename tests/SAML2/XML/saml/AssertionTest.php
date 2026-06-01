@@ -202,10 +202,11 @@ final class AssertionTest extends TestCase
             [$authnStatement, $attrStatement],
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($assertion),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($assertion);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -1152,7 +1153,7 @@ XML;
             statements: [$authnStatement],
         );
 
-        // Marshall it to a \DOMElement
+        // Marshall it to a \Dom\Element
         $assertionElement = $assertion->toXML()->ownerDocument?->saveXML();
 
         $assertionToVerify = Assertion::fromXML(DOMDocumentFactory::fromString($assertionElement)->documentElement);
@@ -1245,7 +1246,7 @@ XML;
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
 
-        // Marshall it to a \DOMElement
+        // Marshall it to a \Dom\Element
         $assertion->sign($signer);
         $assertionElement = $assertion->toXML();
 
@@ -1256,7 +1257,7 @@ XML;
         $this->assertEquals('urn:x-simplesamlphp:issuer', $issuerElements[0]->textContent);
 
         // Test ordering of Assertion contents
-        /** @var \DOMElement[] $assertionElements */
+        /** @var \Dom\Element[] $assertionElements */
         $assertionElements = XPath::xpQuery(
             $assertionElement,
             './saml_assertion:Issuer/following-sibling::*',

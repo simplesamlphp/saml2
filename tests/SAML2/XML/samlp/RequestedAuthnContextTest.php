@@ -61,10 +61,11 @@ final class RequestedAuthnContextTest extends TestCase
             AuthnContextComparisonTypeValue::fromEnum(AuthnContextComparisonTypeEnum::Exact),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($requestedAuthnContext),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($requestedAuthnContext);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 

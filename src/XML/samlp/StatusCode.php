@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
@@ -69,7 +69,7 @@ final class StatusCode extends AbstractSamlpElement implements SchemaValidatable
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'StatusCode', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, StatusCode::NS, InvalidDOMElementException::class);
@@ -84,7 +84,7 @@ final class StatusCode extends AbstractSamlpElement implements SchemaValidatable
     /**
      * Convert this StatusCode to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Value', strval($this->getValue()));

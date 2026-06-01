@@ -58,9 +58,10 @@ final class GeolocationHintTest extends TestCase
     {
         $hint = GeolocationHint::fromString('geo:47.37328,8.531126');
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($hint),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($hint);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

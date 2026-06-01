@@ -112,10 +112,11 @@ final class AuthnRequestTest extends TestCase
             destination: SAMLAnyURIValue::fromString('https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO'),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authnRequest),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($authnRequest);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -201,7 +202,7 @@ final class AuthnRequestTest extends TestCase
         $this->assertCount(1, $authnRequestElements);
 
         // Test ordering of AuthnRequest contents
-        /** @var \DOMElement[] $authnRequestElements */
+        /** @var \Dom\Element[] $authnRequestElements */
         $authnRequestElements = XPath::xpQuery(
             $authnRequestElement,
             './saml_assertion:Subject/following-sibling::*',

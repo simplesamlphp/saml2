@@ -50,9 +50,10 @@ final class AuthnContextClassRefTest extends TestCase
     {
         $authnContextClassRef = AuthnContextClassRef::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT);
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authnContextClassRef),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($authnContextClassRef);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }
