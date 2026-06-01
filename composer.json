@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php": "^8.3",
+        "php": "^8.5",
         "ext-date": "*",
         "ext-dom": "*",
         "ext-filter": "*",
@@ -61,7 +61,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "v6.1.x-dev"
+            "dev-master": "v7.0.x-dev"
         }
     },
     "config": {
