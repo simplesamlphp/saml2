@@ -124,7 +124,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          extensions: ctype, date, dom, filter, hash, intl, mbstring, openssl, pcre,\
+          extensions: ctype, date, dom, fileinfo, filter, hash, intl, mbstring, openssl, pcre,\
             soap, sodium, spl, xml, zip
           tools: composer
           ini-values: error_reporting=E_ALL
@@ -147,13 +147,14 @@ jobs:
         run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$env:GITHUB_ENV"
 
       - name: Get COMPOSER_ROOT_VERSION from composer.json branch alias
+        shell: bash
         run: |
             ROOT_VERSION=$(composer config extra.branch-alias.dev-master)
             if [ -z "$ROOT_VERSION" ]; then
               echo "Could not read extra.branch-alias.dev-master from composer.json" >&2
               exit 1
             fi
-            echo "COMPOSER_ROOT_VERSION=$ROOT_VERSION" >> "$GITHUB_ENV"
+            echo "COMPOSER_ROOT_VERSION=$ROOT_VERSION" >> "$env:GITHUB_ENV"
 
       - name: Cache composer dependencies
         uses: actions/cache@v5
