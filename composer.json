@@ -34,14 +34,13 @@
         "simplesamlphp/xml-common": "dev-feature/dom-migration-php84",
         "simplesamlphp/xml-security": "dev-feature/dom-migration-php84",
         "simplesamlphp/xml-soap": "dev-feature/dom-migration-php84",
-        "robrichards/xmlseclibs": "^3.1"
     },
     "require-dev": {
         "ext-intl": "*",
 
         "beste/clock": "~3.0",
         "mockery/mockery": "~1.6",
-        "simplesamlphp/simplesamlphp": "2.5.*",
+        "simplesamlphp/simplesamlphp": "^2.5",
         "simplesamlphp/simplesamlphp-test-framework": "~1.11",
         "icanhazstring/composer-unused": "^0.9.6"
     },
