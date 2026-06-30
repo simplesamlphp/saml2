@@ -33,8 +33,7 @@
         "simplesamlphp/assert": "~2.0",
         "simplesamlphp/xml-common": "~2.8",
         "simplesamlphp/xml-security": "~2.3",
-        "simplesamlphp/xml-soap": "~2.3",
-        "robrichards/xmlseclibs": "^3.1"
+        "simplesamlphp/xml-soap": "~2.3"
     },
     "require-dev": {
         "ext-intl": "*",
