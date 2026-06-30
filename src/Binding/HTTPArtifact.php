@@ -9,12 +9,12 @@ use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Binding;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\SOAPClient;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -24,6 +24,8 @@ use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
 use SimpleSAML\Store\StoreFactory;
 use SimpleSAML\Utils\HTTP;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 use function array_key_exists;
 use function base64_decode;
@@ -173,8 +175,10 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
         $soap = new SOAPClient();
 
         // Send message through SoapClient
-        /** @var \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $artifactResponse */
         $artifactResponse = $soap->send($ar, $this->spMetadata, $idpMetadata);
+        if (!($artifactResponse instanceof ArtifactResponse)) {
+            throw new Exception('Invalid message received in response to our ArtifactResolve.');
+        }
 
         if (!$artifactResponse->isSuccess()) {
             throw new Exception('Received error from ArtifactResolutionService.');
@@ -183,18 +187,27 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
         $samlResponse = $artifactResponse->getMessage();
         if ($samlResponse === null) {
             /* Empty ArtifactResponse - possibly because of Artifact replay? */
-
             throw new Exception('Empty ArtifactResponse received, maybe a replay?');
         }
-
-        $samlResponse->addValidator([get_class($this), 'validateSignature'], $artifactResponse);
 
         $query = $request->getQueryParams();
         if (isset($query['RelayState'])) {
             $this->setRelayState($query['RelayState']);
         }
 
-        return $samlResponse;
+        if (!$samlResponse->isSigned()) {
+            return $samlResponse;
+        }
+
+        $container = ContainerSingleton::getInstance();
+        $blacklist = $container->getBlacklistedEncryptionAlgorithms();
+        $verifier = (new SignatureAlgorithmFactory($blacklist))->getAlgorithm(
+            $samlResponse->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
+            // TODO:  Need to use the key from the metadata
+            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
+        );
+
+        return $samlResponse->verify($verifier);
     }
 
 
@@ -204,18 +217,5 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
     public function setSPMetadata(Configuration $sp): void
     {
         $this->spMetadata = $sp;
-    }
-
-
-    /**
-     * A validator which returns true if the ArtifactResponse was signed with the given key
-     *
-     * @param \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $message
-     * @param \RobRichards\XMLSecLibs\XMLSecurityKey  $key
-     */
-    public static function validateSignature(ArtifactResponse $message, XMLSecurityKey $key): bool
-    {
-        // @todo verify if this works and/or needs to do anything more. Ref. HTTPRedirect binding
-        return $message->validate($key);
     }
 }
