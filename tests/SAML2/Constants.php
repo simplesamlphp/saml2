@@ -11,7 +11,7 @@ namespace SimpleSAML\Test\SAML2;
  */
 class Constants extends \SimpleSAML\SAML2\Constants
 {
-    public const string  ENTITY_IDP = 'https://simplesamlphp.org/idp/metadata';
+    public const string ENTITY_IDP = 'https://simplesamlphp.org/idp/metadata';
 
     public const string ENTITY_SP = 'https://simplesamlphp.org/sp/metadata';
 

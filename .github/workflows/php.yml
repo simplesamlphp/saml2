@@ -21,7 +21,8 @@ jobs:
       matrix:
         php-version: ['8.3', '8.4', '8.5']
 
-    uses: simplesamlphp/simplesamlphp-test-framework/.github/workflows/reusable_phplinter.yml@v1.11.5
+    uses: simplesamlphp/simplesamlphp-test-framework/.github/workflows/reusable_phplinter.yml@v1
+    secrets: inherit
     with:
       php-version: ${{ matrix.php-version }}
 
@@ -30,7 +31,8 @@ jobs:
     strategy:
       fail-fast: false
 
-    uses: simplesamlphp/simplesamlphp-test-framework/.github/workflows/reusable_linter.yml@v1.11.5
+    uses: simplesamlphp/simplesamlphp-test-framework/.github/workflows/reusable_linter.yml@v1
+    secrets: inherit
     with:
       enable_eslinter: false
       enable_jsonlinter: true
@@ -69,7 +71,7 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Get composer cache directory
         run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$GITHUB_ENV"
@@ -84,7 +86,7 @@ jobs:
             echo "COMPOSER_ROOT_VERSION=$ROOT_VERSION" >> "$GITHUB_ENV"
 
       - name: Cache composer dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ${{ env.COMPOSER_CACHE }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
@@ -141,7 +143,7 @@ jobs:
           git config --global core.autocrlf false
           git config --global core.eol lf
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Get composer cache directory
         run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$env:GITHUB_ENV"
@@ -157,7 +159,7 @@ jobs:
             echo "COMPOSER_ROOT_VERSION=$ROOT_VERSION" >> "$env:GITHUB_ENV"
 
       - name: Cache composer dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ${{ env.COMPOSER_CACHE }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**\composer.json') }}
@@ -189,7 +191,7 @@ jobs:
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Get composer cache directory
         run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$GITHUB_ENV"
@@ -204,7 +206,7 @@ jobs:
             echo "COMPOSER_ROOT_VERSION=$ROOT_VERSION" >> "$GITHUB_ENV"
 
       - name: Cache composer dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ${{ env.COMPOSER_CACHE }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
@@ -252,7 +254,7 @@ jobs:
       - name: Setup problem matchers for PHP
         run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
 
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Get composer cache directory
         run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$GITHUB_ENV"
@@ -267,7 +269,7 @@ jobs:
             echo "COMPOSER_ROOT_VERSION=$ROOT_VERSION" >> "$GITHUB_ENV"
 
       - name: Cache composer dependencies
-        uses: actions/cache@v5
+        uses: actions/cache@v6
         with:
           path: ${{ env.COMPOSER_CACHE }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.json') }}
@@ -290,7 +292,7 @@ jobs:
     runs-on: [ubuntu-latest]
     needs: [unit-tests-linux]
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: actions/download-artifact@v8
         with:
@@ -298,7 +300,7 @@ jobs:
           path: ${{ github.workspace }}/build
 
       - name: Codecov
-        uses: codecov/codecov-action@v6
+        uses: codecov/codecov-action@v7
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           fail_ci_if_error: true

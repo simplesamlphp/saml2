@@ -3,16 +3,6 @@ parameters:
 		-
 			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\samlp\\AbstractMessage\:\:addValidator\(\)\.$#'
 			identifier: method.notFound
-			path: src/Binding/HTTPArtifact.php
-
-		-
-			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\samlp\\ArtifactResponse\:\:validate\(\)\.$#'
-			identifier: method.notFound
-			path: src/Binding/HTTPArtifact.php
-
-		-
-			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\samlp\\AbstractMessage\:\:addValidator\(\)\.$#'
-			identifier: method.notFound
 			path: src/SOAPClient.php
 		-
 			message: '#^Unsafe usage of new static\(\)\.$#'
