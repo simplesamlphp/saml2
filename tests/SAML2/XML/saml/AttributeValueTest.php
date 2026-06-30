@@ -189,7 +189,9 @@ XML
 
         $this->assertEquals('abcd-some-value-xyz', $value->getContent());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $value->getFormat());
-        $this->assertXmlStringEqualsXmlString($document->saveXML(), $av->toXML()->ownerDocument?->saveXML());
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $av->toXML()->ownerDocument;
+        $this->assertXmlStringEqualsXmlString($document->saveXML(), $ownerDocument->saveXML());
     }
 
 

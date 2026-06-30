@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Assertion\Transformer;
 
-use DOMDocument;
+use Dom;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
 use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\TestCase;
@@ -52,8 +52,8 @@ final class NameIdDecryptionTransformerTest extends TestCase
     /** @var \Psr\Clock\ClockInterface */
     protected static ClockInterface $clock;
 
-    /** @var \DOMDocument */
-    protected static DOMDocument $document;
+    /** @var \Dom\Document */
+    protected static Dom\Document $document;
 
     /** @var \SimpleSAML\SAML2\Assertion\Processor */
     protected static Processor $assertionProcessor;

@@ -121,7 +121,7 @@ final class SubjectConfirmation extends AbstractEcpElement implements SchemaVali
     /**
      * Convert this ECP SubjectConfirmation to XML.
      *
-     * @param \DOMElement|null $parent The element we should append this element to.
+     * @param \Dom\Element|null $parent The element we should append this element to.
      */
     public function toXML(?Dom\Element $parent = null): Dom\Element
     {

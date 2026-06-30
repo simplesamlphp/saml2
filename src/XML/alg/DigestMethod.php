@@ -80,7 +80,7 @@ final class DigestMethod extends AbstractAlgElement implements SchemaValidatable
     /**
      * Convert this element to XML.
      *
-     * @param \DOMElement|null $parent The element we should append to.
+     * @param \Dom\Element|null $parent The element we should append to.
      */
     public function toXML(?Dom\Element $parent = null): Dom\Element
     {

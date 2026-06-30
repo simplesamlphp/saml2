@@ -317,7 +317,9 @@ final class AssertionTest extends TestCase
             statements: $statements,
         );
 
-        $assertionElement = $assertion->toXML()->ownerDocument?->saveXML();
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $assertion->toXML()->ownerDocument;
+        $assertionElement = $ownerDocument->saveXML();
 
         $assertionToVerify = Assertion::fromXML(DOMDocumentFactory::fromString($assertionElement)->documentElement);
         $conditions = $assertionToVerify->getConditions();
@@ -590,7 +592,10 @@ XML;
         $this->assertEquals('abcd-some-value-xyz', $oValue->getContent());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $mValue->getFormat());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $oValue->getFormat());
-        $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument?->saveXML());
+
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $assertion->toXML()->ownerDocument;
+        $this->assertXmlStringEqualsXmlString($xml, $ownerDocument->saveXML());
     }
 
 
@@ -693,7 +698,9 @@ XML;
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $firstValue->getFormat());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $secondValue->getFormat());
 
-        $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument?->saveXML());
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $assertion->toXML()->ownerDocument;
+        $this->assertXmlStringEqualsXmlString($xml, $ownerDocument->saveXML());
     }
 
 
@@ -1154,7 +1161,9 @@ XML;
         );
 
         // Marshall it to a \Dom\Element
-        $assertionElement = $assertion->toXML()->ownerDocument?->saveXML();
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $assertion->toXML()->ownerDocument;
+        $assertionElement = $ownerDocument->saveXML();
 
         $assertionToVerify = Assertion::fromXML(DOMDocumentFactory::fromString($assertionElement)->documentElement);
 

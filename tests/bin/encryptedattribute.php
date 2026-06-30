@@ -30,6 +30,6 @@ $attribute = new Attribute(
 $encAttribute = new EncryptedAttribute($attribute->encrypt($encryptor));
 
 /** @var \Dom\XMLDocument $ownerDocument */
-$ownerDocument= $encAttribute->toXML()->ownerDocument;
+$ownerDocument = $encAttribute->toXML()->ownerDocument;
 
 echo $ownerDocument->saveXML();

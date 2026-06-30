@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2;
 
-use DOMElement;
+use Dom;
 use Exception;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
@@ -26,10 +26,10 @@ final class EntitiesDescriptorTest extends TestCase
 
 
     /**
-     * @param \DOMElement $metadata;
+     * @param \Dom\Element $metadata;
      */
     #[DataProvider('provideMetadata')]
-    public function testUnmarshalling(DOMElement $metadata): void
+    public function testUnmarshalling(Dom\Element $metadata): void
     {
         $this->failures = 0;
 
@@ -40,9 +40,8 @@ final class EntitiesDescriptorTest extends TestCase
 
 
     /**
-     *
      */
-    private function parseMetadata(DOMElement $metadata): void
+    private function parseMetadata(Dom\Element $metadata): void
     {
         $xpCache = XPath::getXPath($metadata);
         if ($metadata->localName === 'EntitiesDescriptor') {
@@ -52,11 +51,11 @@ final class EntitiesDescriptorTest extends TestCase
             $descriptors = array_merge($entityDescriptorElements, $entitiesDescriptorElements);
 
             foreach ($descriptors as $descriptor) {
-                /** @var \DOMElement $descriptor */
+                /** @var \Dom\Element $descriptor */
                 $this->parseMetadata($descriptor);
             }
         } elseif ($metadata->localName === 'EntityDescriptor') {
-            /** @var \DOMAttr[] $entityID */
+            /** @var \Dom\Attr[] $entityID */
             $entityID = XPath::xpQuery($metadata, './@entityID', $xpCache);
 
             try {

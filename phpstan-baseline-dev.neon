@@ -31,12 +31,6 @@ parameters:
 			path: tests/SAML2/Assertion/Validation/AssertionValidatorTest.php
 
 		-
-			message: '#^Parameter \#1 \$xml of static method SimpleSAML\\SAML2\\XML\\saml\\Assertion\:\:fromXML\(\) expects DOMElement, DOMNode\|null given\.$#'
-			identifier: argument.type
-			count: 2
-			path: tests/SAML2/Assertion/Validation/AssertionValidatorTest.php
-
-		-
 			message: '#^Result of method SimpleSAML\\SAML2\\Assertion\\Processor\:\:validateAssertion\(\) \(void\) is used\.$#'
 			identifier: method.void
 			count: 1

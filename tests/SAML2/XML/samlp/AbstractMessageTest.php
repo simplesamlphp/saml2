@@ -164,6 +164,7 @@ AUTHNREQUEST
         $xml = $response->toXML();
         $xpCache = XPath::getXPath($xml);
         $xml_issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
+        /** @var \Dom\Element $xml_issuer */
         $xml_issuer = $xml_issuer[0];
 
         $this->assertFalse($xml_issuer->hasAttributes());

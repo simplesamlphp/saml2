@@ -297,7 +297,9 @@ final class RoleDescriptorTest extends TestCase
         $this->assertEquals('urn:x-simplesamlphp:namespace', $extensions[0]->getNamespaceURI());
         $this->assertEquals('Chunk', $extensions[0]->getLocalName());
 
-        $this->assertEquals($element->ownerDocument?->saveXML($element), strval($descriptor));
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $element->ownerDocument;
+        $this->assertEquals($ownerDocument->saveXML($element), strval($descriptor));
     }
 
 

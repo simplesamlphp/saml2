@@ -114,8 +114,8 @@ final class RequestedAuthnContext extends AbstractSamlpElement implements Schema
     /**
      * Convert this RequestedAuthnContext to XML.
      *
-     * @param \DOMElement|null $parent The element we should append this RequestedAuthnContext to.
-     * @return \DOMElement
+     * @param \Dom\Element|null $parent The element we should append this RequestedAuthnContext to.
+     * @return \Dom\Element
      */
     public function toXML(?Dom\Element $parent = null): Dom\Element
     {

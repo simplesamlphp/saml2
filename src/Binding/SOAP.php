@@ -63,7 +63,9 @@ class SOAP extends Binding implements SynchronousBindingInterface
             new Body([$message]),
             $header,
         );
-        return $env->toXML()->ownerDocument?->saveXML();
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $env->toXML()->ownerDocument;
+        return $ownerDocument->saveXML();
     }
 
 
