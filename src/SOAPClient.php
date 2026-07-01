@@ -6,7 +6,7 @@ namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use Exception;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
+use OpenSSLAsymmetricKey;
 use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
@@ -24,12 +24,17 @@ use SoapClient as BuiltinSoapClient;
 
 use function chunk_split;
 use function file_exists;
+use function is_object;
+use function is_string;
+use function method_exists;
 use function openssl_pkey_get_details;
 use function openssl_pkey_get_public;
+use function property_exists;
 use function sha1;
 use function sprintf;
 use function stream_context_create;
 use function stream_context_get_options;
+use function trim;
 
 /**
  * Implementation of the SAML 2.0 SOAP binding.
@@ -251,7 +256,7 @@ class SOAPClient
             return;
         }
 
-        if (!isset($keyInfo['key'])) {
+        if (!isset($keyInfo['key']) || !is_string($keyInfo['key'])) {
             $container->getLogger()->warning('Missing key in public key details.');
             return;
         }
@@ -263,29 +268,88 @@ class SOAPClient
     /**
      * Validate a SOAP message against the certificate on the SSL connection.
      *
-     * @param string $data The public key that was used on the connection.
-     * @param \RobRichards\XMLSecLibs\XMLSecurityKey $key The key we should validate the certificate against.
+     * @param string $data The public key (PEM) that was used on the connection.
+     * @param mixed $key The key we should validate the certificate against.
      * @throws \Exception
      */
-    public static function validateSSL(string $data, XMLSecurityKey $key): void
+    public static function validateSSL(string $data, mixed $key): void
     {
         $container = ContainerSingleton::getInstance();
 
-        $keyInfo = openssl_pkey_get_details($key->key);
+        $pem = self::extractPublicKeyPem($key);
 
-        if ($keyInfo === false) {
-            throw new Exception('Unable to get key details from XMLSecurityKey.');
-        }
-
-        if (!isset($keyInfo['key'])) {
-            throw new Exception('Missing key in public key details.');
-        }
-
-        if (trim($keyInfo['key']) !== trim($data)) {
+        if (trim($pem) !== trim($data)) {
             throw new Exception('Key on SSL connection did not match key we validated against.');
         }
 
         $container->getLogger()->debug('Message validated based on SSL certificate.');
+    }
+
+
+    /**
+     * Extract a PEM-encoded public key from different key representations.
+     *
+     * This avoids coupling to a specific XML security backend.
+     *
+     * @param mixed $key
+     * @throws \Exception
+     */
+    private static function extractPublicKeyPem(mixed $key): string
+    {
+        // If the validating key is already PEM, normalize it by re-loading through OpenSSL.
+        if (is_string($key)) {
+            $opensslKey = openssl_pkey_get_public($key);
+            if ($opensslKey === false) {
+                throw new Exception('Unable to load validating public key from PEM string.');
+            }
+
+            $keyInfo = openssl_pkey_get_details($opensslKey);
+            if ($keyInfo === false || !isset($keyInfo['key']) || !is_string($keyInfo['key'])) {
+                throw new Exception('Unable to get key details from validating PEM key.');
+            }
+
+            return $keyInfo['key'];
+        }
+
+        // Some key implementations may expose PEM via a method.
+        if (is_object($key)) {
+            foreach (['getPublicKeyPem', 'getPem', 'toPEM', 'toPem'] as $method) {
+                if (method_exists($key, $method)) {
+                    /** @var mixed $pem */
+                    $pem = $key->{$method}();
+                    if (is_string($pem) && $pem !== '') {
+                        return self::extractPublicKeyPem($pem);
+                    }
+                }
+            }
+
+            // Common compatibility case: an object wraps an OpenSSL key or PEM in a public "key" property.
+            if (property_exists($key, 'key')) {
+                /** @var mixed $inner */
+                $inner = $key->key;
+
+                if (is_string($inner)) {
+                    return self::extractPublicKeyPem($inner);
+                }
+
+                if ($inner instanceof OpenSSLAsymmetricKey) {
+                    $keyInfo = openssl_pkey_get_details($inner);
+                    if ($keyInfo !== false && isset($keyInfo['key']) && is_string($keyInfo['key'])) {
+                        return $keyInfo['key'];
+                    }
+                }
+            }
+        }
+
+        // Last attempt: OpenSSL might accept the value directly (OpenSSLAsymmetricKey).
+        if ($key instanceof OpenSSLAsymmetricKey) {
+            $keyInfo = openssl_pkey_get_details($key);
+            if ($keyInfo !== false && isset($keyInfo['key']) && is_string($keyInfo['key'])) {
+                return $keyInfo['key'];
+            }
+        }
+
+        throw new Exception('Unable to extract public key PEM from validating key.');
     }
 
 
