@@ -18,7 +18,7 @@ use function array_change_key_case;
 use function array_filter;
 use function array_key_exists;
 use function array_keys;
-use function array_pop;
+use function array_last;
 
 /**
  * Class for handling SAML2 IDPList.
@@ -97,7 +97,7 @@ final class IDPList extends AbstractSamlpElement implements SchemaValidatableEle
 
         return new static(
             $idpEntry,
-            empty($getComplete) ? null : array_pop($getComplete),
+            array_last($getComplete),
         );
     }
 

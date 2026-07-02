@@ -24,7 +24,7 @@ use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSchema\Type\NCNameValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
-use function array_pop;
+use function array_last;
 use function strval;
 
 /**
@@ -117,13 +117,13 @@ class NameIDMappingResponse extends AbstractStatusResponse implements SchemaVali
         $response = new static(
             self::getIdentifierFromXML($xml),
             self::getAttribute($xml, 'ID', IDValue::class),
-            array_pop($status),
+            array_last($status),
             self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
-            empty($issuer) ? null : array_pop($issuer),
+            array_last($issuer),
             self::getOptionalAttribute($xml, 'InResponseTo', NCNameValue::class, null),
             self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
             self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
-            empty($extensions) ? null : array_pop($extensions),
+            array_last($extensions),
         );
 
         if (!empty($signature)) {

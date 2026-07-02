@@ -14,7 +14,7 @@ use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Exception\MissingElementException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
-use function array_pop;
+use function array_last;
 
 /**
  * Class representing a SAML2 AuthnStatement
@@ -131,11 +131,11 @@ final class AuthnStatement extends AbstractStatementType implements SchemaValida
         $subjectLocality = SubjectLocality::getChildrenOfClass($xml);
 
         return new static(
-            array_pop($authnContext),
+            array_last($authnContext),
             self::getAttribute($xml, 'AuthnInstant', SAMLDateTimeValue::class),
             self::getOptionalAttribute($xml, 'SessionNotOnOrAfter', SAMLDateTimeValue::class, null),
             self::getOptionalAttribute($xml, 'SessionIndex', SAMLStringValue::class, null),
-            array_pop($subjectLocality),
+            array_last($subjectLocality),
         );
     }
 

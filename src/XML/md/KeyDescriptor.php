@@ -15,7 +15,7 @@ use SimpleSAML\XMLSchema\Exception\MissingElementException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 
-use function array_pop;
+use function array_last;
 
 /**
  * Class representing a KeyDescriptor element.
@@ -97,7 +97,7 @@ final class KeyDescriptor extends AbstractMdElement implements SchemaValidatable
         Assert::maxCount($keyInfo, 1, 'Too many ds:KeyInfo in the KeyDescriptor.', TooManyElementsException::class);
 
         return new static(
-            array_pop($keyInfo),
+            array_last($keyInfo),
             self::getOptionalAttribute($xml, 'use', KeyTypesValue::class, null),
             EncryptionMethod::getChildrenOfClass($xml),
         );

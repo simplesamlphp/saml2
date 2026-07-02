@@ -53,6 +53,7 @@ use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
+use function array_last;
 use function dirname;
 use function strval;
 
@@ -430,7 +431,7 @@ XML
         $attributes = $entityDescriptor->getAttributesNS();
         $this->assertCount(1, $attributes);
 
-        $attribute = array_pop($attributes);
+        $attribute = array_last($attributes);
         $this->assertEquals(
             [
                 'namespaceURI' => 'urn:test:something',
