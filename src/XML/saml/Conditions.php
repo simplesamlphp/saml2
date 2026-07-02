@@ -13,7 +13,7 @@ use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 
-use function array_pop;
+use function array_last;
 
 /**
  * Class representing SAML 2 Conditions element.
@@ -173,8 +173,8 @@ final class Conditions extends AbstractSamlElement implements SchemaValidatableE
             self::getOptionalAttribute($xml, 'NotOnOrAfter', SAMLDateTimeValue::class, null),
             $condition,
             $audienceRestriction,
-            array_pop($oneTimeUse),
-            array_pop($proxyRestriction),
+            array_last($oneTimeUse),
+            array_last($proxyRestriction),
         );
     }
 

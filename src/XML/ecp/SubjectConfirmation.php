@@ -17,6 +17,8 @@ use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
+use function array_last;
+
 /**
  * Class representing the ECP SubjectConfirmation element.
  *
@@ -113,7 +115,7 @@ final class SubjectConfirmation extends AbstractEcpElement implements SchemaVali
 
         return new static(
             self::getAttribute($xml, 'Method', SAMLAnyURIValue::class),
-            array_pop($subjectConfirmationData),
+            array_last($subjectConfirmationData),
         );
     }
 

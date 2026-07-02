@@ -14,7 +14,7 @@ use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Exception\MissingElementException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
-use function array_pop;
+use function array_last;
 use function strval;
 
 /**
@@ -113,8 +113,8 @@ final class Status extends AbstractSamlpElement implements SchemaValidatableElem
         $statusDetails = StatusDetail::getChildrenOfClass($xml);
 
         return new static(
-            array_pop($statusCode),
-            array_pop($statusMessage),
+            array_last($statusCode),
+            array_last($statusMessage),
             $statusDetails,
         );
     }

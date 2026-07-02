@@ -12,7 +12,7 @@ use SimpleSAML\SAML2\XML\saml\IdentifierInterface;
 use SimpleSAML\SAML2\XML\saml\NameID;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
-use function array_pop;
+use function array_last;
 
 /**
  * Trait grouping common functionality for elements that can hold identifiers.
@@ -94,7 +94,7 @@ trait IdentifierTrait
             TooManyElementsException::class,
         );
 
-        $identifier = array_pop($identifiers);
+        $identifier = array_last($identifiers);
 
         return $identifier;
     }

@@ -26,7 +26,7 @@ use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
-use function array_pop;
+use function array_last;
 
 /**
  * Class for SAML 2 logout request messages.
@@ -167,10 +167,10 @@ final class LogoutRequest extends AbstractRequest implements SchemaValidatableEl
             $notOnOrAfter,
             self::getOptionalAttribute($xml, 'Reason', SAMLStringValue::class, null),
             $sessionIndex,
-            array_pop($issuer),
+            array_last($issuer),
             self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
             self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
-            array_pop($extensions),
+            array_last($extensions),
         );
 
         if (!empty($signature)) {

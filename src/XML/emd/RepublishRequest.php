@@ -14,7 +14,7 @@ use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 
-use function array_pop;
+use function array_last;
 
 /**
  * Class implementing RepublishRequest.
@@ -71,7 +71,7 @@ final class RepublishRequest extends AbstractEmdElement implements
             SchemaViolationException::class,
         );
 
-        return new static(array_pop($republishTarget));
+        return new static(array_last($republishTarget));
     }
 
 

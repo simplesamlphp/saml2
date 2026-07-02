@@ -18,7 +18,7 @@ use SimpleSAML\XMLSecurity\XML\CanonicalizableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
-use function array_pop;
+use function array_last;
 
 /**
  * Base class for all SAML 2 messages.
@@ -220,7 +220,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements
 
             // Test for an Issuer
             $messageElements = XPath::xpQuery($signedXML, './saml_assertion:Issuer', XPath::getXPath($signedXML));
-            $issuer = array_pop($messageElements);
+            $issuer = array_last($messageElements);
 
             $signedXML->insertBefore($this->signature?->toXML($signedXML), $issuer->nextSibling);
             return $signedXML;

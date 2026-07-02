@@ -31,8 +31,8 @@ use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
 use function array_filter;
+use function array_last;
 use function array_merge;
-use function array_pop;
 use function array_values;
 use function count;
 use function strval;
@@ -315,11 +315,11 @@ final class Assertion extends AbstractSamlElement implements
         $statements = AbstractStatement::getChildrenOfClass($xml);
 
         $assertion = new static(
-            array_pop($issuer),
+            array_last($issuer),
             self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
             self::getAttribute($xml, 'ID', IDValue::class),
-            array_pop($subject),
-            array_pop($conditions),
+            array_last($subject),
+            array_last($conditions),
             array_merge($authnStatement, $attrStatement, $statements),
         );
 
@@ -382,7 +382,7 @@ final class Assertion extends AbstractSamlElement implements
 
             // Test for an Issuer
             $messageElements = XPath::xpQuery($signedXML, './saml_assertion:Issuer', XPath::getXPath($signedXML));
-            $issuer = array_pop($messageElements);
+            $issuer = array_last($messageElements);
 
             $signedXML->insertBefore($this->signature?->toXML($signedXML), $issuer->nextSibling);
             return $signedXML;

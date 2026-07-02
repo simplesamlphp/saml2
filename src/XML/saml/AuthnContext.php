@@ -15,7 +15,7 @@ use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
-use function array_pop;
+use function array_last;
 use function is_null;
 
 /**
@@ -142,9 +142,9 @@ final class AuthnContext extends AbstractSamlElement implements SchemaValidatabl
         $authorities = AuthenticatingAuthority::getChildrenOfClass($xml);
 
         return new static(
-            array_pop($authnContextClassRef),
-            array_pop($authnContextDecl),
-            array_pop($authnContextDeclRef),
+            array_last($authnContextClassRef),
+            array_last($authnContextDecl),
+            array_last($authnContextDeclRef),
             $authorities,
         );
     }

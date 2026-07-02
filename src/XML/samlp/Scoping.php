@@ -12,7 +12,7 @@ use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Type\NonNegativeIntegerValue;
 
-use function array_pop;
+use function array_last;
 use function strval;
 
 /**
@@ -96,7 +96,7 @@ final class Scoping extends AbstractSamlpElement implements SchemaValidatableEle
 
         return new static(
             self::getOptionalAttribute($xml, 'ProxyCount', NonNegativeIntegerValue::class, null),
-            array_pop($idpList),
+            array_last($idpList),
             $requesterId,
         );
     }

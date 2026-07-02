@@ -22,7 +22,7 @@ use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
-use function array_pop;
+use function array_last;
 use function version_compare;
 
 /**
@@ -133,14 +133,14 @@ final class AuthnQuery extends AbstractSubjectQuery implements SchemaValidatable
 
         $request = new static(
             self::getAttribute($xml, 'ID', IDValue::class),
-            array_pop($subject),
+            array_last($subject),
             self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
-            array_pop($requestedAuthnContext),
+            array_last($requestedAuthnContext),
             self::getOptionalAttribute($xml, 'SessionIndex', SAMLStringValue::class, null),
-            array_pop($issuer),
+            array_last($issuer),
             self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
             self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
-            array_pop($extensions),
+            array_last($extensions),
         );
 
         if (!empty($signature)) {
