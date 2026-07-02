@@ -116,13 +116,12 @@ final class LogoutRequestTest extends TestCase
                 SessionIndex::fromString('SessionIndexValue2'),
             ],
         );
-        $logoutRequestElement = $logoutRequest->toXML();
 
-        $xpCache = XPath::getXPath($logoutRequestElement);
-        $sessionIndexElements = XPath::xpQuery($logoutRequestElement, './saml_protocol:SessionIndex', $xpCache);
-        $this->assertCount(2, $sessionIndexElements);
-        $this->assertEquals('SessionIndexValue1', $sessionIndexElements[0]->textContent);
-        $this->assertEquals('SessionIndexValue2', $sessionIndexElements[1]->textContent);
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($logoutRequest);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -152,7 +151,7 @@ final class LogoutRequestTest extends TestCase
         $this->assertCount(1, $logoutRequestElements);
 
         // Test ordering of LogoutRequest contents
-        /** @var \DOMElement[] $logoutRequestElements */
+        /** @var \Dom\Element[] $logoutRequestElements */
         $logoutRequestElements = XPath::xpQuery(
             $logoutRequestElement,
             './saml_assertion:NameID/following-sibling::*',

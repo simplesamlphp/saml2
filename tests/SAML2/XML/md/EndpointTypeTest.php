@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMDocument;
+use Dom;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -43,7 +43,7 @@ final class EndpointTypeTest extends TestCase
     use SerializableElementTestTrait;
 
 
-    private static DOMDocument $ext;
+    private static Dom\XMLDocument $ext;
 
 
     /**
@@ -95,10 +95,11 @@ final class EndpointTypeTest extends TestCase
             [$attr],
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($endpointType),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($endpointType);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
-use DOMDocument;
+use Dom;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -50,8 +50,8 @@ final class AuthzDecisionQueryTest extends TestCase
     use SignedElementTestTrait;
 
 
-    /** @var \DOMDocument */
-    private static DOMDocument $assertion;
+    /** @var \Dom\XMLDocument */
+    private static Dom\XMLDocument $assertion;
 
 
     /**
@@ -106,9 +106,10 @@ final class AuthzDecisionQueryTest extends TestCase
             issueInstant: SAMLDateTimeValue::fromString('2017-09-06T11:49:27Z'),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authzDecisionQuery),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($authzDecisionQuery);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

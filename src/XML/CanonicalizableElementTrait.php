@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\XMLSecurity\Assert\Assert;
 use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\Exception\CanonicalizationFailedException;
@@ -26,7 +26,7 @@ trait CanonicalizableElementTrait
      * Process all transforms specified by a given Reference element.
      *
      * @param \SimpleSAML\XMLSecurity\XML\ds\Transforms $transforms The transforms to apply.
-     * @param \DOMElement $data The data referenced.
+     * @param \Dom\Element $data The data referenced.
      *
      * @return string The canonicalized data after applying all transforms specified by $ref.
      *
@@ -34,7 +34,7 @@ trait CanonicalizableElementTrait
      */
     public function processTransforms(
         Transforms $transforms,
-        DOMElement $data,
+        Dom\Element $data,
     ): string {
         Assert::maxCount(
             $transforms->getTransform(),

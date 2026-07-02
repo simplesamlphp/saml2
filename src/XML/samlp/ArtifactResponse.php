@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
@@ -91,7 +91,7 @@ class ArtifactResponse extends AbstractStatusResponse implements SchemaValidatab
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'ArtifactResponse', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ArtifactResponse::NS, InvalidDOMElementException::class);
@@ -109,7 +109,7 @@ class ArtifactResponse extends AbstractStatusResponse implements SchemaValidatab
         $message = null;
 
         for ($child = $status->nextSibling; $child !== null; $child = $child->nextSibling) {
-            if ($child instanceof DOMElement) {
+            if ($child instanceof Dom\Element) {
                 $message = MessageFactory::fromXML($child);
                 break;
             }
@@ -160,7 +160,7 @@ class ArtifactResponse extends AbstractStatusResponse implements SchemaValidatab
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
      */
-    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = parent::toUnsignedXML($parent);
 

@@ -76,10 +76,11 @@ final class IDPListTest extends TestCase
         $getComplete = GetComplete::fromString('https://some/location');
         $list = new IDPList([$entry1, $entry2], $getComplete);
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($list),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($list);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -110,7 +111,7 @@ final class IDPListTest extends TestCase
         $this->assertCount(2, $listElements);
 
         // Test ordering of IDPList contents
-        /** @var \DOMElement[] $listElements */
+        /** @var \Dom\Element[] $listElements */
         $listElements = XPath::xpQuery($listElement, './saml_protocol:IDPEntry/following-sibling::*', $xpCache);
         $this->assertCount(2, $listElements);
         $this->assertEquals('samlp:IDPEntry', $listElements[0]->tagName);

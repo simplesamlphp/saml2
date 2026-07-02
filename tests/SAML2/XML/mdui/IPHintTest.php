@@ -58,9 +58,10 @@ final class IPHintTest extends TestCase
     {
         $hint = IPHint::fromString('130.59.0.0/16');
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($hint),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($hint);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

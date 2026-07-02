@@ -91,6 +91,12 @@ final class EncryptedAttributeTest extends TestCase
         $encryptedData = $encryptedAttribute->getEncryptedData();
 
         $this->assertEquals(C::XMLENC_ELEMENT, $encryptedData->getType());
+
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($encryptedAttribute);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 

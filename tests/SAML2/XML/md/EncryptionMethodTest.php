@@ -71,10 +71,11 @@ final class EncryptionMethodTest extends TestCase
             [$chunk],
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($encryptionMethod),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($encryptionMethod);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -115,7 +116,7 @@ final class EncryptionMethodTest extends TestCase
             [$chunk],
         );
 
-        // Marshall it to a \DOMElement
+        // Marshall it to a \Dom\Element
         $emElement = $em->toXML();
 
         // Test for a KeySize
@@ -125,7 +126,7 @@ final class EncryptionMethodTest extends TestCase
         $this->assertEquals('10', $keySizeElements[0]->textContent);
 
         // Test ordering of EncryptionMethod contents
-        /** @var \DOMElement[] $emElements */
+        /** @var \Dom\Element[] $emElements */
         $emElements = XPath::xpQuery($emElement, './xenc:KeySize/following-sibling::*', $xpCache);
 
         $this->assertCount(2, $emElements);

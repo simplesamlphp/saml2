@@ -202,10 +202,11 @@ final class AssertionTest extends TestCase
             [$authnStatement, $attrStatement],
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($assertion),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($assertion);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -316,7 +317,9 @@ final class AssertionTest extends TestCase
             statements: $statements,
         );
 
-        $assertionElement = $assertion->toXML()->ownerDocument?->saveXML();
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $assertion->toXML()->ownerDocument;
+        $assertionElement = $ownerDocument->saveXML();
 
         $assertionToVerify = Assertion::fromXML(DOMDocumentFactory::fromString($assertionElement)->documentElement);
         $conditions = $assertionToVerify->getConditions();
@@ -589,7 +592,10 @@ XML;
         $this->assertEquals('abcd-some-value-xyz', $oValue->getContent());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $mValue->getFormat());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $oValue->getFormat());
-        $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument?->saveXML());
+
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $assertion->toXML()->ownerDocument;
+        $this->assertXmlStringEqualsXmlString($xml, $ownerDocument->saveXML());
     }
 
 
@@ -692,7 +698,9 @@ XML;
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $firstValue->getFormat());
         $this->assertEquals('urn:oasis:names:tc:SAML:2.0:nameid-format:persistent', $secondValue->getFormat());
 
-        $this->assertXmlStringEqualsXmlString($xml, $assertion->toXML()->ownerDocument?->saveXML());
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $assertion->toXML()->ownerDocument;
+        $this->assertXmlStringEqualsXmlString($xml, $ownerDocument->saveXML());
     }
 
 
@@ -1152,8 +1160,10 @@ XML;
             statements: [$authnStatement],
         );
 
-        // Marshall it to a \DOMElement
-        $assertionElement = $assertion->toXML()->ownerDocument?->saveXML();
+        // Marshall it to a \Dom\Element
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $assertion->toXML()->ownerDocument;
+        $assertionElement = $ownerDocument->saveXML();
 
         $assertionToVerify = Assertion::fromXML(DOMDocumentFactory::fromString($assertionElement)->documentElement);
 
@@ -1245,7 +1255,7 @@ XML;
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),
         );
 
-        // Marshall it to a \DOMElement
+        // Marshall it to a \Dom\Element
         $assertion->sign($signer);
         $assertionElement = $assertion->toXML();
 
@@ -1256,7 +1266,7 @@ XML;
         $this->assertEquals('urn:x-simplesamlphp:issuer', $issuerElements[0]->textContent);
 
         // Test ordering of Assertion contents
-        /** @var \DOMElement[] $assertionElements */
+        /** @var \Dom\Element[] $assertionElements */
         $assertionElements = XPath::xpQuery(
             $assertionElement,
             './saml_assertion:Issuer/following-sibling::*',

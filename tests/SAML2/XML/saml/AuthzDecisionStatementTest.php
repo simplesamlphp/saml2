@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Test\SAML2\XML\saml;
 
-use DOMDocument;
+use Dom;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -42,14 +42,14 @@ final class AuthzDecisionStatementTest extends TestCase
     use SerializableElementTestTrait;
 
 
-    /** @var \DOMDocument $assertionIDRef */
-    private static DOMDocument $assertionIDRef;
+    /** @var \Dom\XMLDocument $assertionIDRef */
+    private static Dom\XMLDocument $assertionIDRef;
 
-    /** @var \DOMDocument $assertionURIRef */
-    private static DOMDocument $assertionURIRef;
+    /** @var \Dom\XMLDocument $assertionURIRef */
+    private static Dom\XMLDocument $assertionURIRef;
 
-    /** @var \DOMDocument $assertion */
-    private static DOMDocument $assertion;
+    /** @var \Dom\XMLDocument $assertion */
+    private static Dom\XMLDocument $assertion;
 
 
     /**
@@ -102,9 +102,10 @@ final class AuthzDecisionStatementTest extends TestCase
             $evidence,
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authzDecisionStatement),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($authzDecisionStatement);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

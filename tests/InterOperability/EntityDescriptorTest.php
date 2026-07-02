@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2;
 
-use DOMElement;
+use Dom;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
@@ -20,10 +20,10 @@ final class EntityDescriptorTest extends TestCase
 {
     /**
      * @param boolean $shouldPass
-     * @param \DOMElement $metadata;
+     * @param \Dom\Element $metadata;
      */
     #[DataProvider('provideMetadata')]
-    public function testUnmarshalling(bool $shouldPass, DOMElement $metadata): void
+    public function testUnmarshalling(bool $shouldPass, Dom\Element $metadata): void
     {
         try {
             EntityDescriptor::fromXML($metadata);

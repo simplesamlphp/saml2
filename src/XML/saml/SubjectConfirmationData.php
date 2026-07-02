@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\EntityIDValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
@@ -34,7 +34,7 @@ final class SubjectConfirmationData extends AbstractSubjectConfirmationData impl
      * @throws \SimpleSAML\Assert\AssertionFailedException
      *   if NotBefore or NotOnOrAfter contain an invalid date.
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'SubjectConfirmationData', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, SubjectConfirmationData::NS, InvalidDOMElementException::class);

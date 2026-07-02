@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
@@ -172,7 +172,7 @@ abstract class AbstractSubjectConfirmationData extends AbstractAnyType
     /**
      * Convert this element to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
 

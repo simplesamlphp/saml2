@@ -50,11 +50,12 @@ final class CompanyTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = Company::fromString('Company');
+        $company = Company::fromString('Company');
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($company);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

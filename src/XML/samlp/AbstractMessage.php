@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Utils\XPath;
@@ -46,7 +46,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements
     /**
      * The original signed XML
      */
-    protected DOMElement $xml;
+    protected Dom\Element $xml;
 
 
     /**
@@ -143,7 +143,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements
     /**
      * Get the XML element.
      */
-    public function getXML(): DOMElement
+    public function getXML(): Dom\Element
     {
         return $this->xml;
     }
@@ -152,7 +152,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements
     /**
      * Set the XML element.
      */
-    protected function setXML(DOMElement $xml): void
+    protected function setXML(Dom\Element $xml): void
     {
         $this->xml = $xml;
     }
@@ -160,7 +160,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements
 
     /**
      */
-    protected function getOriginalXML(): DOMElement
+    protected function getOriginalXML(): Dom\Element
     {
         return $this->xml ?? $this->toUnsignedXML();
     }
@@ -170,7 +170,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
      */
-    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?Dom\Element $parent = null): Dom\Element
     {
         $root = $this->instantiateParentElement($parent);
 
@@ -200,7 +200,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements
     /**
      * Create XML from this class
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         if ($this->isSigned() === true && $this->signer === null) {
             // We already have a signed document and no signer was set to re-sign it

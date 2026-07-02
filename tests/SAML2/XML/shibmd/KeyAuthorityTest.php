@@ -79,9 +79,10 @@ final class KeyAuthorityTest extends TestCase
         $attr1 = new XMLAttribute('urn:test:something', 'test', 'attr1', SAMLStringValue::fromString('testval1'));
         $keyAuthority = new KeyAuthority($keys, UnsignedByteValue::fromInteger(2), [$attr1]);
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($keyAuthority),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($keyAuthority);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

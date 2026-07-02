@@ -142,7 +142,9 @@ class SOAPClient
 
         // Add soap-envelopes
         $env = (new Envelope(new Body([new Chunk($msg->toXML())])))->toXML();
-        $request = $env->ownerDocument?->saveXML();
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $env->ownerDocument;
+        $request = $ownerDocument->saveXML();
 
         $container->debugMessage($request, 'out');
 
@@ -158,7 +160,9 @@ class SOAPClient
 
         $dom = DOMDocumentFactory::fromString($soapresponsexml);
         $env = Envelope::fromXML($dom->documentElement);
-        $container->debugMessage($env->toXML()->ownerDocument?->saveXML(), 'in');
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $env->toXML()->ownerDocument;
+        $container->debugMessage($ownerDocument->saveXML(), 'in');
 
         $soapfault = $this->getSOAPFault($dom);
         if ($soapfault !== null) {

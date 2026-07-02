@@ -58,10 +58,11 @@ final class AdditionalMetadataLocationTest extends TestCase
             SAMLAnyURIValue::fromString(C::LOCATION_A),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($additionalMetadataLocation),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($additionalMetadataLocation);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 

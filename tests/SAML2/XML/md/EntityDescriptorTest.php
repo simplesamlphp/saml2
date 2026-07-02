@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\md;
 
-use DOMText;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -216,10 +215,11 @@ final class EntityDescriptorTest extends TestCase
             namespacedAttribute: [$attr1],
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($ed),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($ed);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -423,7 +423,7 @@ XML
         $type = new XMLAttribute(C_XSI::NS_XSI, 'xsi', 'type', StringValue::fromString('ssp:UnknownRoleDescriptor'));
         $type->toXML($customd);
 
-        $newline = new DOMText("\n  ");
+        $newline = $pdpd->ownerDocument->createTextNode("\n  ");
         $pdpd->parentNode->insertBefore($customd, $pdpd->nextSibling);
         $pdpd->parentNode->insertBefore($newline, $customd);
         $entityDescriptor = EntityDescriptor::fromXML($xmlRepresentation->documentElement);

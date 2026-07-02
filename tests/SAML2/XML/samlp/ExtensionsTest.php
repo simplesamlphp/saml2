@@ -36,7 +36,7 @@ final class ExtensionsTest extends TestCase
 
 
     /**
-     * Prepare a basic DOMElement to test against
+     * Prepare a basic Dom\Element to test against
      */
     public static function setUpBeforeClass(): void
     {
@@ -69,10 +69,11 @@ XML
             [new Chunk($ext1->documentElement), new Chunk($ext2->documentElement)],
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($extensions),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($extensions);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 

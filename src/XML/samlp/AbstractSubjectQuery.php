@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
@@ -64,7 +64,7 @@ abstract class AbstractSubjectQuery extends AbstractRequest
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
      */
-    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?Dom\Element $parent = null): Dom\Element
     {
         Assert::notEmpty($this->subject, 'Cannot convert SubjectQuery to XML without a Subject set.');
 

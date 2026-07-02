@@ -52,9 +52,10 @@ final class GetCompleteTest extends TestCase
     {
         $getComplete = GetComplete::fromString('https://some/location');
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($getComplete),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($getComplete);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

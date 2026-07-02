@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XMLSchema\Type\QNameValue;
 
@@ -41,7 +41,7 @@ final class UnknownCondition extends AbstractCondition
     /**
      * Convert this unknown condition to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         return $this->getRawCondition()->toXML($parent);
     }

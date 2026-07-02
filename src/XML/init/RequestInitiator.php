@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\init;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
@@ -63,11 +63,11 @@ final class RequestInitiator extends AbstractEndpointType implements SchemaValid
      *
      * Note: this method cannot be used when extending this class, if the constructor has a different signature.
      *
-     * @param \DOMElement $xml The XML element we should load.
+     * @param \Dom\Element $xml The XML element we should load.
      *
      * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         $qualifiedName = static::getClassName(static::class);
         Assert::eq(

@@ -63,9 +63,10 @@ final class OrganizationDisplayNameTest extends TestCase
             SAMLStringValue::fromString('Identity Providers R US, a Division of Lerxst Corp.'),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($name);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

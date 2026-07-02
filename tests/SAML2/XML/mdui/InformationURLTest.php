@@ -58,14 +58,15 @@ final class InformationURLTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = new InformationURL(
+        $url = new InformationURL(
             LangValue::fromString('en'),
             SAMLAnyURIValue::fromString('http://www.example.edu/en/'),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($url);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

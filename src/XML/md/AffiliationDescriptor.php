@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\EntityIDValue;
@@ -115,7 +115,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument implements Sc
      * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'AffiliationDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AffiliationDescriptor::NS, InvalidDOMElementException::class);
@@ -172,7 +172,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument implements Sc
      * Convert this assertion to an unsigned XML document.
      * This method does not sign the resulting XML document.
      */
-    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
+    public function toUnsignedXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = parent::toUnsignedXML($parent);
         $e->setAttribute('affiliationOwnerID', $this->getAffiliationOwnerId()->getValue());

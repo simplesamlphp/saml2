@@ -89,7 +89,7 @@ SOAP);
 <SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"><SOAP-ENV:Body /></SOAP-ENV:Envelope>
 SOAP);
 
-        /** @var \DOMElement $body */
+        /** @var \Dom\Element $body */
         $body = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV, 'Body')->item(0);
         $message->toXML($body);
 
@@ -121,12 +121,12 @@ SOAP);
         );
 
 
-        /** @var \DOMElement $header */
+        /** @var \Dom\Element $header */
         $header = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV, 'Header')->item(0);
         $requestAuthenticated->toXML($header);
         $ecpResponse->toXML($header);
 
-        /** @var \DOMElement $body */
+        /** @var \Dom\Element $body */
         $body = $doc->getElementsByTagNameNS(C::NS_SOAP_ENV, 'Body')->item(0);
         $message->toXML($body);
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 
 /**
@@ -37,7 +37,7 @@ abstract class AbstractBaseIDType extends AbstractSamlElement implements BaseIde
     /**
      * Convert this BaseID to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
 

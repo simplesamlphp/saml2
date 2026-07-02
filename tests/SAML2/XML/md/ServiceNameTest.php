@@ -60,15 +60,16 @@ final class ServiceNameTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = new ServiceName(
+        $serviceName = new ServiceName(
             LangValue::fromString('en'),
             SAMLStringValue::fromString('Academic Journals R US'),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($serviceName);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 

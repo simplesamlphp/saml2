@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
@@ -64,7 +64,7 @@ final class AdditionalMetadataLocation extends AbstractMdElement implements Sche
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing any of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'AdditionalMetadataLocation', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AdditionalMetadataLocation::NS, InvalidDOMElementException::class);
@@ -79,7 +79,7 @@ final class AdditionalMetadataLocation extends AbstractMdElement implements Sche
     /**
      * Convert this AdditionalMetadataLocation to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
         $e->textContent = $this->getLocation()->getValue();

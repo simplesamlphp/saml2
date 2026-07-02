@@ -48,9 +48,10 @@ final class SessionIndexTest extends TestCase
     {
         $sessionIndex = SessionIndex::fromString('SomeSessionIndex1');
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($sessionIndex),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($sessionIndex);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

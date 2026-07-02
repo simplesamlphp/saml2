@@ -41,9 +41,14 @@ $authnRequest = new AuthnRequest(
 
 $unsignedAuthnRequest = $authnRequest->toXML();
 
-echo $unsignedAuthnRequest->ownerDocument->saveXML();
+/** @var \Dom\XMLDocument $ownerDocument */
+$ownerDocument = $unsignedAuthnRequest->ownerDocument;
+echo $ownerDocument->saveXML();
 
 $authnRequest->sign($signer);
 $signedAuthnRequest = $authnRequest->toXML();
 
-echo $signedAuthnRequest->ownerDocument->saveXML();
+/** @var \Dom\XMLDocument $ownerDocument */
+$ownerDocument = $signedAuthnRequest->ownerDocument;
+
+echo $ownerDocument->saveXML();

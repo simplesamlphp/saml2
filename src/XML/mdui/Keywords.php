@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdui;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -68,7 +68,7 @@ final class Keywords extends AbstractMduiElement implements
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'Keywords', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Keywords::NS, InvalidDOMElementException::class);
@@ -86,7 +86,7 @@ final class Keywords extends AbstractMduiElement implements
      *
      * @throws \Exception
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('xml:lang', $this->getLanguage()->getValue());

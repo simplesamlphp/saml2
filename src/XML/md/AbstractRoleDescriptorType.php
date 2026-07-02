@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
@@ -139,7 +139,7 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
     /**
      * Add this RoleDescriptor to an EntityDescriptor.
      */
-    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
+    public function toUnsignedXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = parent::toUnsignedXML($parent);
         $e->setAttribute('protocolSupportEnumeration', $this->getProtocolSupportEnumeration()->getValue());

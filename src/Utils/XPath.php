@@ -4,8 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Utils;
 
-use DOMNode;
-use DOMXPath;
+use Dom;
 use SimpleSAML\SAML2\Constants as C;
 
 /**
@@ -16,15 +15,15 @@ use SimpleSAML\SAML2\Constants as C;
 class XPath extends \SimpleSAML\XMLSecurity\Utils\XPath
 {
     /**
-     * Get a DOMXPath object that can be used to search for SAML elements.
+     * Get a Dom\XPath object that can be used to search for SAML elements.
      *
-     * @param \DOMNode $node The document to associate to the DOMXPath object.
+     * @param \Dom\Node $node The document to associate to the Dom\XPath object.
      * @param bool $autoregister Whether to auto-register all namespaces used in the document
      *
-     * @return \DOMXPath A DOMXPath object ready to use in the given document, with several
+     * @return \Dom\XPath A Dom\XPath object ready to use in the given document, with several
      *   saml-related namespaces already registered.
      */
-    public static function getXPath(DOMNode $node, bool $autoregister = false): DOMXPath
+    public static function getXPath(Dom\Node $node, bool $autoregister = false): Dom\XPath
     {
         $xp = parent::getXPath($node, $autoregister);
 

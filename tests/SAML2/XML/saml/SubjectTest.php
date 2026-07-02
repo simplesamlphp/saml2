@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DOMDocument;
+use Dom;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -51,17 +51,17 @@ final class SubjectTest extends TestCase
     use SerializableElementTestTrait;
 
 
-    /** @var \DOMDocument */
-    private static DOMDocument $subject;
+    /** @var \Dom\XMLDocument */
+    private static Dom\XMLDocument $subject;
 
-    /** @var \DOMDocument */
-    private static DOMDocument $baseId;
+    /** @var \Dom\XMLDocument */
+    private static Dom\XMLDocument $baseId;
 
-    /** @var \DOMDocument */
-    private static DOMDocument $nameId;
+    /** @var \Dom\XMLDocument */
+    private static Dom\XMLDocument $nameId;
 
-    /** @var \DOMDocument */
-    private static DOMDocument $subjectConfirmation;
+    /** @var \Dom\XMLDocument */
+    private static Dom\XMLDocument $subjectConfirmation;
 
 
     public function setup(): void
@@ -141,10 +141,11 @@ XML
             ],
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($subject),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($subject);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -193,7 +194,7 @@ XML
             ],
         );
 
-        // Marshall it to a \DOMElement
+        // Marshall it to a \Dom\Element
         $subjectElement = $subject->toXML();
 
         // Test for a NameID
@@ -202,7 +203,7 @@ XML
         $this->assertCount(1, $subjectElements);
 
         // Test ordering of Subject contents
-        /** @var \DOMElement[] $subjectElements */
+        /** @var \Dom\Element[] $subjectElements */
         $subjectElements = XPath::xpQuery($subjectElement, './saml_assertion:NameID/following-sibling::*', $xpCache);
         $this->assertCount(1, $subjectElements);
         $this->assertEquals('saml:SubjectConfirmation', $subjectElements[0]->tagName);

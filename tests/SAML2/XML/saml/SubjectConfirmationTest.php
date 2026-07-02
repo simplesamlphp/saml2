@@ -98,10 +98,11 @@ final class SubjectConfirmationTest extends TestCase
             ),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($subjectConfirmation),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($subjectConfirmation);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -148,7 +149,7 @@ XML
             ),
         );
 
-        // Marshall it to a \DOMElement
+        // Marshall it to a \Dom\Element
         $subjectConfirmationElement = $subjectConfirmation->toXML();
 
         // Test for a NameID
@@ -157,7 +158,7 @@ XML
         $this->assertCount(1, $subjectConfirmationElements);
 
         // Test ordering of SubjectConfirmation contents
-        /** @var \DOMElement[] $subjectConfirmationElements */
+        /** @var \Dom\Element[] $subjectConfirmationElements */
         $subjectConfirmationElements = XPath::xpQuery(
             $subjectConfirmationElement,
             './saml_assertion:NameID/following-sibling::*',
