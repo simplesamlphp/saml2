@@ -8,7 +8,7 @@ use RuntimeException;
 use SimpleSAML\XMLSecurity\Constants as C;
 
 use function array_filter;
-use function array_pop;
+use function array_last;
 use function count;
 use function sprintf;
 
@@ -102,7 +102,7 @@ class ServiceProvider extends ArrayAdapter implements CertificateProvider, Decry
             return null;
         }
 
-        return array_pop($key);
+        return array_last($key);
     }
 
 

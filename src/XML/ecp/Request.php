@@ -19,6 +19,7 @@ use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSchema\Type\BooleanValue;
 
+use function array_last;
 use function intval;
 use function strval;
 
@@ -140,8 +141,8 @@ final class Request extends AbstractEcpElement implements SchemaValidatableEleme
         $idpList = IDPList::getChildrenOfClass($xml);
 
         return new static(
-            array_pop($issuer),
-            array_pop($idpList),
+            array_last($issuer),
+            array_last($idpList),
             self::getOptionalAttribute($xml, 'ProviderName', SAMLStringValue::class, null),
             self::getOptionalAttribute($xml, 'IsPassive', BooleanValue::class, null),
         );
