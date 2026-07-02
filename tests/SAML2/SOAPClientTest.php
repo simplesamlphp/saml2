@@ -8,6 +8,7 @@ use DOMDocument;
 use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use PHPUnit\Framework\TestCase;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Configuration;
@@ -157,6 +158,7 @@ final class SOAPClientTest extends TestCase
     /**
      * Use case: send() must throw on an empty SOAP response and on a SOAP Fault response.
      */
+    #[RequiresPhpExtension('soap')]
     #[DataProvider('provideBadSoapResponses')]
     public function testSendThrowsOnEmptySoapResponseOrSoapFault(string $soapResponse, string $expectedMessage): void
     {
