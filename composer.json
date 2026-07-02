@@ -33,7 +33,7 @@
         "simplesamlphp/assert": "~2.0",
         "simplesamlphp/xml-common": "dev-feature/dom-migration-php84",
         "simplesamlphp/xml-security": "dev-feature/dom-migration-php84",
-        "simplesamlphp/xml-soap": "dev-feature/dom-migration-php84",
+        "simplesamlphp/xml-soap": "dev-feature/dom-migration-php84"
     },
     "require-dev": {
         "ext-intl": "*",
