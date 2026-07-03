@@ -24,7 +24,6 @@ use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
 use SimpleSAML\Store\StoreFactory;
 use SimpleSAML\Utils\HTTP;
-use SimpleSAML\XMLSchema\Type\AnyURIValue;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Key\PublicKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
@@ -250,8 +249,12 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             throw new Exception('No signing keys found in IdP metadata.');
         }
 
-        $alg = $artifactResponse->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm();
-        $signatureMethod = $alg instanceof AnyURIValue ? $alg->getValue() : (string) $alg;
+        $signatureMethod = $artifactResponse
+            ->getSignature()
+            ->getSignedInfo()
+            ->getSignatureMethod()
+            ->getAlgorithm()
+            ->getValue();
 
         $factory = new SignatureAlgorithmFactory();
 
