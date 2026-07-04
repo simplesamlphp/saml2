@@ -41,7 +41,7 @@
         "beste/clock": "~3.0",
         "mockery/mockery": "~1.6",
         "simplesamlphp/simplesamlphp": "^2.5",
-        "simplesamlphp/simplesamlphp-test-framework": "~1.11",
+        "simplesamlphp/simplesamlphp-test-framework": "~2.0",
         "icanhazstring/composer-unused": "^0.9.6"
     },
     "suggest": {
