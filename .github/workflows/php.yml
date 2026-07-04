@@ -57,7 +57,7 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           extensions: ctype, date, dom, filter, hash, intl, mbstring, openssl, pcre, soap, spl, sodium, xml
           tools: composer
-          ini-values: error_reporting=E_ALL
+          ini-values: error_reporting=E_ALL, display_errors=on
           coverage: pcov
 
       - name: Setup problem matchers for PHP
@@ -129,7 +129,7 @@ jobs:
           extensions: ctype, date, dom, filter, hash, intl, mbstring, openssl, pcre,\
             soap, sodium, spl, xml, zip
           tools: composer
-          ini-values: error_reporting=E_ALL
+          ini-values: error_reporting=E_ALL, display_errors=on
           coverage: none
 
       - name: Setup problem matchers for PHP
