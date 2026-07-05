@@ -20,7 +20,7 @@ use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
-use function array_pop;
+use function array_last;
 
 /**
  * The Artifact is part of the SAML 2.0 IdP code, and it builds an artifact object.
@@ -110,10 +110,10 @@ class ArtifactResolve extends AbstractRequest implements SchemaValidatableElemen
             self::getAttribute($xml, 'ID', IDValue::class),
             $artifact[0],
             self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
-            array_pop($issuer),
+            array_last($issuer),
             self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
             self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
-            array_pop($extensions),
+            array_last($extensions),
         );
 
         if (!empty($signature)) {

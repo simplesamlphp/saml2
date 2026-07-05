@@ -24,7 +24,7 @@ use SimpleSAML\XMLSchema\Type\DurationValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSchema\Type\QNameValue;
 
-use function array_pop;
+use function array_last;
 
 /**
  * Class representing a SAML2 RoleDescriptor element.
@@ -148,10 +148,10 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
                 self::getOptionalAttribute($xml, 'ID', IDValue::class, null),
                 self::getOptionalAttribute($xml, 'validUntil', SAMLDateTimeValue::class, null),
                 self::getOptionalAttribute($xml, 'cacheDuration', DurationValue::class, null),
-                array_pop($extensions),
+                array_last($extensions),
                 self::getOptionalAttribute($xml, 'errorURL', SAMLAnyURIValue::class, null),
                 KeyDescriptor::getChildrenOfClass($xml),
-                array_pop($orgs),
+                array_last($orgs),
                 ContactPerson::getChildrenOfClass($xml),
                 self::getAttributesNSFromXML($xml),
             );

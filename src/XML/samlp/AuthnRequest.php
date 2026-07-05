@@ -24,7 +24,7 @@ use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
-use function array_pop;
+use function array_last;
 use function strval;
 
 /**
@@ -297,10 +297,10 @@ class AuthnRequest extends AbstractRequest implements SchemaValidatableElementIn
         $request = new static(
             self::getAttribute($xml, 'ID', IDValue::class),
             self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
-            array_pop($requestedAuthnContext),
-            array_pop($subject),
-            array_pop($nameIdPolicy),
-            array_pop($conditions),
+            array_last($requestedAuthnContext),
+            array_last($subject),
+            array_last($nameIdPolicy),
+            array_last($conditions),
             self::getOptionalAttribute($xml, 'ForceAuthn', BooleanValue::class, null),
             self::getOptionalAttribute($xml, 'IsPassive', BooleanValue::class, null),
             self::getOptionalAttribute($xml, 'AssertionConsumerServiceURL', SAMLAnyURIValue::class, null),
@@ -308,11 +308,11 @@ class AuthnRequest extends AbstractRequest implements SchemaValidatableElementIn
             self::getOptionalAttribute($xml, 'ProtocolBinding', SAMLAnyURIValue::class, null),
             self::getOptionalAttribute($xml, 'AttributeConsumingServiceIndex', UnsignedShortValue::class, null),
             self::getOptionalAttribute($xml, 'ProviderName', SAMLStringValue::class, null),
-            array_pop($issuer),
+            array_last($issuer),
             self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
             self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
-            array_pop($extensions),
-            array_pop($scoping),
+            array_last($extensions),
+            array_last($scoping),
         );
 
         if (!empty($signature)) {

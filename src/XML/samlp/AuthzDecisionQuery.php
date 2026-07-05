@@ -162,15 +162,15 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery implements SchemaVal
 
         $request = new static(
             self::getAttribute($xml, 'ID', IDValue::class),
-            array_pop($subject),
+            array_last($subject),
             self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
             self::getAttribute($xml, 'Resource', SAMLAnyURIValue::class),
             $action,
-            array_pop($evidence),
-            array_pop($issuer),
+            array_last($evidence),
+            array_last($issuer),
             self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
             self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
-            array_pop($extensions),
+            array_last($extensions),
         );
 
         if (!empty($signature)) {

@@ -16,7 +16,7 @@ use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSchema\Type\AnyURIValue;
 
-use function array_pop;
+use function array_last;
 use function strval;
 
 /**
@@ -128,7 +128,7 @@ final class AuthzDecisionStatement extends AbstractStatementType implements Sche
             self::getAttribute($xml, 'Resource', AnyURIValue::class),
             self::getAttribute($xml, 'Decision', DecisionTypeValue::class),
             $action,
-            array_pop($evidence),
+            array_last($evidence),
         );
     }
 

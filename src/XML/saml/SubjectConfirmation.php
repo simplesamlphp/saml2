@@ -13,7 +13,7 @@ use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
-use function array_pop;
+use function array_last;
 
 /**
  * Class representing SAML 2 SubjectConfirmation element.
@@ -90,7 +90,7 @@ final class SubjectConfirmation extends AbstractSamlElement implements SchemaVal
         return new static(
             self::getAttribute($xml, 'Method', SAMLAnyURIValue::class),
             self::getIdentifierFromXML($xml),
-            array_pop($subjectConfirmationData),
+            array_last($subjectConfirmationData),
         );
     }
 

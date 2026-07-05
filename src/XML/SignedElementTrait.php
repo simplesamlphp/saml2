@@ -11,6 +11,8 @@ use SimpleSAML\XMLSecurity\Exception\ReferenceValidationFailedException;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 use SimpleSAML\XMLSecurity\XML\SignedElementTrait as BaseSignedElementTrait;
 
+use function array_last;
+
 /**
  * Helper trait for processing signed elements.
  *
@@ -37,7 +39,7 @@ trait SignedElementTrait
         $references = $signature->getSignedInfo()->getReferences();
         Assert::count($references, 1, "A signature needs to have exactly one Reference, %d found.");
 
-        $reference = array_pop($references);
+        $reference = array_last($references);
         Assert::notNull($reference->getURI(), "URI attribute not found.", ReferenceValidationFailedException::class);
         Assert::startsWith(
             $reference->getURI()->getValue(),

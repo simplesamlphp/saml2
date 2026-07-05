@@ -24,7 +24,7 @@ use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
-use function array_pop;
+use function array_last;
 use function in_array;
 
 /**
@@ -149,13 +149,13 @@ class AttributeQuery extends AbstractSubjectQuery implements SchemaValidatableEl
 
         $request = new static(
             self::getAttribute($xml, 'ID', IDValue::class),
-            array_pop($subject),
+            array_last($subject),
             self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
             Attribute::getChildrenOfClass($xml),
-            array_pop($issuer),
+            array_last($issuer),
             self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
             self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
-            array_pop($extensions),
+            array_last($extensions),
         );
 
         if (!empty($signature)) {
