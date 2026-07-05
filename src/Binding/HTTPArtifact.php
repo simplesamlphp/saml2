@@ -82,7 +82,7 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             throw new Exception('Cannot get redirect URL, no Issuer set in the message.');
         }
         $artifact = base64_encode(
-            "\x00\x04\x00\x00" . sha1((string)$issuer->getContent(), true) . $generatedId,
+            "\x00\x04\x00\x00" . sha1($issuer->getContent()->getValue(), true) . $generatedId,
         );
         $artifactData = $message->toXML();
         $artifactDataString = $artifactData->ownerDocument?->saveXML($artifactData);
@@ -103,7 +103,7 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
         }
 
         $httpUtils = new HTTP();
-        return $httpUtils->addURLparameters((string)$destination, $params);
+        return $httpUtils->addURLparameters($destination->getValue(), $params);
     }
 
 
@@ -290,7 +290,7 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             try {
                 $verifier = $factory->getAlgorithm($signatureMethod, PublicKey::fromFile($file));
                 return $artifactResponse->verify($verifier);
-            } catch (\Exception $e) {
+            } catch (Exception $e) {
                 $lastException = $e;
             }
         }
