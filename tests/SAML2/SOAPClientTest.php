@@ -6,17 +6,22 @@ namespace SimpleSAML\Test\SAML2;
 
 use DOMDocument;
 use Exception;
+use OpenSSLAsymmetricKey;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\RequiresPhpExtension;
 use PHPUnit\Framework\TestCase;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
+use ReflectionMethod;
 use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\SOAPClient;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\XMLSchema\Type\AnyURIValue;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+
+use function is_string;
+use function openssl_pkey_get_public;
+use function str_contains;
 
 /**
  * Tests for {@see \SimpleSAML\SAML2\SOAPClient}:
@@ -38,8 +43,8 @@ final class SOAPClientTest extends TestCase
     public static function provideSslKeyMatchCases(): array
     {
         return [
-            'tls key matches xml key' => [true],
-            'tls key differs from xml key' => [false],
+            'tls key matches validating key' => [true],
+            'tls key differs from validating key' => [false],
         ];
     }
 
@@ -53,7 +58,7 @@ final class SOAPClientTest extends TestCase
      *
      * This test reuses deterministic key fixtures from simplesamlphp/xml-security via {@see PEMCertificatesMock}.
      *
-     * @param bool $shouldMatch Whether the peer key material and the XMLSecurityKey should match.
+     * @param bool $shouldMatch Whether the peer key material and the validating key should match.
      */
     #[DataProvider('provideSslKeyMatchCases')]
     public function testValidateSslThrowsOnMismatchAndPassesOnMatch(bool $shouldMatch): void
@@ -61,15 +66,15 @@ final class SOAPClientTest extends TestCase
         $tlsPublicKeyPem = PEMCertificatesMock::getPlainPublicKey();
         $otherPublicKeyPem = PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY);
 
-        $xmlPublicKeyPem = $shouldMatch ? $tlsPublicKeyPem : $otherPublicKeyPem;
-        $key = $this->buildXmlSecurityPublicKey($xmlPublicKeyPem);
+        $validatingKeyPem = $shouldMatch ? $tlsPublicKeyPem : $otherPublicKeyPem;
+        $validatingKey = $this->buildOpenSslPublicKey($validatingKeyPem);
 
         if (!$shouldMatch) {
             $this->expectException(Exception::class);
             $this->expectExceptionMessage('Key on SSL connection did not match key we validated against.');
         }
 
-        SOAPClient::validateSSL($tlsPublicKeyPem, $key);
+        SOAPClient::validateSSL($tlsPublicKeyPem, $validatingKey);
 
         if ($shouldMatch) {
             $this->addToAssertionCount(1);
@@ -78,15 +83,17 @@ final class SOAPClientTest extends TestCase
 
 
     /**
-     * Build an {@see XMLSecurityKey} from a PEM-encoded public key, for use with
-     * {@see SOAPClient::validateSSL()}.
+     * Build an OpenSSL public key handle from a PEM-encoded public key, for use with
+     * {@see SOAPClient::validateSSL()} without relying on xmlseclibs types.
      *
      * @param string $publicKeyPem PEM-encoded public key (e.g. "-----BEGIN PUBLIC KEY----- ...").
      */
-    private function buildXmlSecurityPublicKey(string $publicKeyPem): XMLSecurityKey
+    private function buildOpenSslPublicKey(string $publicKeyPem): OpenSSLAsymmetricKey
     {
-        $key = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'public']);
-        $key->loadKey($publicKeyPem, false);
+        $key = openssl_pkey_get_public($publicKeyPem);
+        if ($key === false) {
+            throw new Exception('Unable to load OpenSSL public key from PEM fixture.');
+        }
 
         return $key;
     }
@@ -212,5 +219,105 @@ final class SOAPClientTest extends TestCase
         $this->expectExceptionMessage($expectedMessage);
 
         $client->send($msg, $src, null);
+    }
+
+
+    /**
+     * @return array<string, array{key:mixed, expectedExceptionMessage:?string}>
+     */
+    public static function provideExtractPublicKeyPemCases(): array
+    {
+        $validPem = PEMCertificatesMock::getPlainPublicKey();
+        $otherPem = PEMCertificatesMock::getPlainPublicKey(PEMCertificatesMock::OTHER_PUBLIC_KEY);
+
+        $validOpenSslKey = openssl_pkey_get_public($validPem);
+
+        return [
+            'string: invalid pem => throws unable to load' => [
+                'key' => 'not a pem',
+                'expectedExceptionMessage' => 'Unable to load validating public key from PEM string.',
+            ],
+            'object: getPem() returns invalid => throws unable to load' => [
+                'key' => new class {
+                    public function getPem(): string
+                    {
+                        return 'not a pem';
+                    }
+                },
+                'expectedExceptionMessage' => 'Unable to load validating public key from PEM string.',
+            ],
+            'object: toPem() returns empty => falls through => throws unable to extract' => [
+                'key' => new class {
+                    public function toPem(): string
+                    {
+                        return '';
+                    }
+                },
+                'expectedExceptionMessage' => 'Unable to extract public key PEM from validating key.',
+            ],
+            'object: getPublicKeyPem() returns valid pem => ok' => [
+                'key' => new class ($validPem) {
+                    public function __construct(private readonly string $pem)
+                    {
+                    }
+
+
+                    public function getPublicKeyPem(): string
+                    {
+                        return $this->pem;
+                    }
+                },
+                'expectedExceptionMessage' => null,
+            ],
+            'object: public key property contains pem => ok (and differs from tls key is irrelevant here)' => [
+                'key' => new class ($otherPem) {
+                    public function __construct(public string $key)
+                    {
+                    }
+                },
+                'expectedExceptionMessage' => null,
+            ],
+            'object: public key property contains OpenSSL key => ok' => [
+                'key' => new class ($validOpenSslKey) {
+                    public function __construct(public mixed $key)
+                    {
+                    }
+                },
+                'expectedExceptionMessage' => null,
+            ],
+            'unsupported scalar => throws unable to extract' => [
+                'key' => 123,
+                'expectedExceptionMessage' => 'Unable to extract public key PEM from validating key.',
+            ],
+        ];
+    }
+
+
+    #[DataProvider('provideExtractPublicKeyPemCases')]
+    public function testExtractPublicKeyPemCoversThrowPathsAndSuccessCases(
+        mixed $key,
+        ?string $expectedExceptionMessage,
+    ): void {
+        if ($expectedExceptionMessage !== null) {
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessage($expectedExceptionMessage);
+        }
+
+        $pem = $this->callExtractPublicKeyPem($key);
+
+        if ($expectedExceptionMessage === null) {
+            $this->assertTrue(str_contains($pem, 'BEGIN PUBLIC KEY') || str_contains($pem, 'BEGIN CERTIFICATE'));
+        }
+    }
+
+
+    private function callExtractPublicKeyPem(mixed $key): string
+    {
+        $m = new ReflectionMethod(SOAPClient::class, 'extractPublicKeyPem');
+
+        $result = $m->invoke(null, $key);
+        $this->assertTrue(is_string($result));
+
+        return $result;
     }
 }

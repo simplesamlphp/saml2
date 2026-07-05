@@ -25,13 +25,18 @@ use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
 use SimpleSAML\Store\StoreFactory;
 use SimpleSAML\Utils\HTTP;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PublicKey;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 use function array_key_exists;
 use function base64_decode;
 use function base64_encode;
 use function bin2hex;
+use function chunk_split;
+use function file_exists;
 use function hexdec;
+use function openssl_pkey_get_details;
+use function openssl_pkey_get_public;
 use function openssl_random_pseudo_bytes;
 use function pack;
 use function sha1;
@@ -76,7 +81,9 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
         if ($issuer === null) {
             throw new Exception('Cannot get redirect URL, no Issuer set in the message.');
         }
-        $artifact = base64_encode("\x00\x04\x00\x00" . sha1($issuer->getContent(), true) . $generatedId);
+        $artifact = base64_encode(
+            "\x00\x04\x00\x00" . sha1($issuer->getContent()->getValue(), true) . $generatedId,
+        );
         $artifactData = $message->toXML();
         $artifactDataString = $artifactData->ownerDocument?->saveXML($artifactData);
 
@@ -96,7 +103,7 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
         }
 
         $httpUtils = new HTTP();
-        return $httpUtils->addURLparameters($destination, $params);
+        return $httpUtils->addURLparameters($destination->getValue(), $params);
     }
 
 
@@ -184,6 +191,8 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             throw new Exception('Received error from ArtifactResolutionService.');
         }
 
+        $artifactResponse = $this->verifyArtifactResponseSignature($artifactResponse, $idpMetadata);
+
         $samlResponse = $artifactResponse->getMessage();
         if ($samlResponse === null) {
             /* Empty ArtifactResponse - possibly because of Artifact replay? */
@@ -217,5 +226,75 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
     public function setSPMetadata(Configuration $sp): void
     {
         $this->spMetadata = $sp;
+    }
+
+
+    /**
+     * Verify the ArtifactResponse signature using IdP metadata keys.
+     *
+     * Returns the verified ArtifactResponse instance.
+     *
+     * @throws \Exception When unsigned, when metadata has no signing keys, or when verification fails.
+     */
+    private function verifyArtifactResponseSignature(
+        ArtifactResponse $artifactResponse,
+        Configuration $idpMetadata,
+    ): ArtifactResponse {
+        if ($artifactResponse->isSigned() !== true) {
+            throw new Exception('ArtifactResponse must be signed.');
+        }
+
+        $keys = $idpMetadata->getPublicKeys('signing', true);
+        if (empty($keys)) {
+            throw new Exception('No signing keys found in IdP metadata.');
+        }
+
+        $signatureMethod = $artifactResponse
+            ->getSignature()
+            ->getSignedInfo()
+            ->getSignatureMethod()
+            ->getAlgorithm()
+            ->getValue();
+
+        $factory = new SignatureAlgorithmFactory();
+
+        $lastException = null;
+        foreach ($keys as $k) {
+            if (($k['type'] ?? null) !== 'X509Certificate') {
+                continue;
+            }
+
+            $pemCert = "-----BEGIN CERTIFICATE-----\n" .
+                chunk_split($k['X509Certificate'], 64) .
+                "-----END CERTIFICATE-----\n";
+
+            $opensslKey = openssl_pkey_get_public($pemCert);
+            if ($opensslKey === false) {
+                $lastException = new Exception('Unable to extract public key from X509 certificate.');
+                continue;
+            }
+
+            $keyInfo = openssl_pkey_get_details($opensslKey);
+            if ($keyInfo === false || !isset($keyInfo['key']) || !is_string($keyInfo['key'])) {
+                $lastException = new Exception('Unable to get public key details from X509 certificate.');
+                continue;
+            }
+
+            $pemPublicKey = $keyInfo['key'];
+
+            $file = Utils::getContainer()->getTempDir() . '/' . sha1($pemPublicKey) . '.pem';
+            if (!file_exists($file)) {
+                Utils::getContainer()->writeFile($file, $pemPublicKey);
+            }
+
+            try {
+                $verifier = $factory->getAlgorithm($signatureMethod, PublicKey::fromFile($file));
+                return $artifactResponse->verify($verifier);
+            } catch (Exception $e) {
+                $lastException = $e;
+            }
+        }
+
+        throw $lastException ?? new Exception('Unable to verify ArtifactResponse signature.');
     }
 }
