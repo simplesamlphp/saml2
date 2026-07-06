@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Binding;
 
+use DOMDocument;
 use Exception;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Binding\HTTPArtifact;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
@@ -53,11 +55,9 @@ final class HTTPArtifactTest extends TestCase
         $legacyClass = \SAML2\Message::class;
         $newClass = \SimpleSAML\SAML2\XML\samlp\AbstractMessage::class;
 
-        /** @phpstan-ignore-next-line */
         $this->assertTrue(method_exists($legacyClass, 'validate'));
         $this->assertFalse(method_exists($legacyClass, 'verify'));
 
-        /** @phpstan-ignore-next-line */
         $this->assertTrue(method_exists($newClass, 'verify'));
         $this->assertFalse(method_exists($newClass, 'validate'));
     }

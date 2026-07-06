@@ -140,7 +140,7 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
         }
 
         /** @psalm-suppress UndefinedClass */
-        $metadataHandler = MetaDataStorageHandler::getMetadataHandler(Configuration::getInstance());
+        $metadataHandler = MetaDataStorageHandler::getMetadataHandler();
 
         $idpMetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
 
@@ -245,8 +245,7 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             ->getSignature()
             ->getSignedInfo()
             ->getSignatureMethod()
-            ->getAlgorithm()
-            ->getValue();
+            ->getAlgorithm();
 
         $factory = new SignatureAlgorithmFactory($blacklist);
 
@@ -317,8 +316,7 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             ->getSignature()
             ->getSignedInfo()
             ->getSignatureMethod()
-            ->getAlgorithm()
-            ->getValue();
+            ->getAlgorithm();
 
         $factory = new SignatureAlgorithmFactory();
 
