@@ -26,7 +26,12 @@ parameters:
 			path: src/Binding/HTTPArtifact.php
 
 		-
-			message: "#^Parameter \\$key of method SimpleSAML\\\\SAML2\\\\Binding\\\\HTTPArtifact\\:\\:validateSignature\\(\\) has invalid type SimpleSAML\\\\XMLSecurity\\\\XMLSecurityKey\\.$#"
+			message: "#^Parameter \\$idpMetadata of method SimpleSAML\\\\SAML2\\\\Binding\\\\HTTPArtifact\\:\\:verifyArtifactResponseSignature\\(\\) has invalid type SimpleSAML\\\\Configuration\\.$#"
+			count: 1
+			path: src/Binding/HTTPArtifact.php
+
+		-
+			message: "#^Parameter \\$idpMetadata of method SimpleSAML\\\\SAML2\\\\Binding\\\\HTTPArtifact\\:\\:verifyMessageSignature\\(\\) has invalid type SimpleSAML\\\\Configuration\\.$#"
 			count: 1
 			path: src/Binding/HTTPArtifact.php
 

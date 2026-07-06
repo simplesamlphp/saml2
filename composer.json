@@ -33,6 +33,7 @@
         "beste/clock": "~3.0.0",
         "mockery/mockery": "~1.6.12",
         "simplesamlphp/composer-xmlprovider-installer": "~1.0.2",
+        "simplesamlphp/simplesamlphp": "~2.3.0 | ~2.4.0",
         "simplesamlphp/simplesamlphp-test-framework": "~1.9.2"
     },
     "suggest": {
@@ -50,7 +51,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "v5.0.x-dev"
+            "dev-master": "v5.1.x-dev"
         }
     },
     "config": {
@@ -58,6 +59,7 @@
             "composer/package-versions-deprecated": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
             "phpstan/extension-installer": true,
+            "simplesamlphp/composer-module-installer": true,
             "simplesamlphp/composer-xmlprovider-installer": true
         }
     }

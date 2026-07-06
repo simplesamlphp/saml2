@@ -203,14 +203,14 @@ class SOAPClient
      *
      * @param \SoapClient $client
      * @param string|null $request
-     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $destination
+     * @param string $destination
      * @param string $action
      * @return string
      */
     protected function doSoapRequest(
         BuiltinSoapClient $client,
         ?string $request,
-        SAMLAnyURIValue $destination,
+        string $destination,
         string $action,
     ): string {
         return (string) $client->__doRequest(
