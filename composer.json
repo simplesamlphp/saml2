@@ -72,6 +72,13 @@
             "simplesamlphp/composer-module-installer": false,
             "phpstan/extension-installer": true,
             "simplesamlphp/composer-xmlprovider-installer": true
+        },
+        "policy": {
+            "abandoned": {
+                "ignore": {
+                    "azjezz/psl": "No upgrade-path possible; fixed in next major release."
+                }
+            }
         }
     },
     "scripts": {
