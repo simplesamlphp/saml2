@@ -26,7 +26,6 @@ use SimpleSAML\Store\StoreFactory;
 use SimpleSAML\Utils\HTTP;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Key\PublicKey;
-use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 use function array_key_exists;
 use function base64_decode;
@@ -208,15 +207,7 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             return $samlResponse;
         }
 
-        $container = ContainerSingleton::getInstance();
-        $blacklist = $container->getBlacklistedEncryptionAlgorithms();
-        $verifier = (new SignatureAlgorithmFactory($blacklist))->getAlgorithm(
-            $samlResponse->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm(),
-            // TODO:  Need to use the key from the metadata
-            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
-        );
-
-        return $samlResponse->verify($verifier);
+        return $this->verifyMessageSignature($samlResponse, $idpMetadata);
     }
 
 
@@ -226,6 +217,72 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
     public function setSPMetadata(Configuration $sp): void
     {
         $this->spMetadata = $sp;
+    }
+
+
+    /**
+     * Verify the signature on a signed SAML message using IdP metadata keys.
+     *
+     * Returns the verified message instance.
+     *
+     * @throws \Exception When metadata has no signing keys, or when verification fails.
+     */
+    private function verifyMessageSignature(AbstractMessage $message, Configuration $idpMetadata): AbstractMessage
+    {
+        $container = ContainerSingleton::getInstance();
+        $blacklist = $container->getBlacklistedEncryptionAlgorithms();
+
+        // getPublicKeys(..., $required = true) throws if no signing cert/key material is present in metadata,
+        // so $keys is guaranteed non-empty here (no additional empty($keys) guard needed).
+        $keys = $idpMetadata->getPublicKeys('signing', true);
+
+        $signatureMethod = $message
+            ->getSignature()
+            ->getSignedInfo()
+            ->getSignatureMethod()
+            ->getAlgorithm()
+            ->getValue();
+
+        $factory = new SignatureAlgorithmFactory($blacklist);
+
+        $lastException = null;
+        foreach ($keys as $k) {
+            if (($k['type'] ?? null) !== 'X509Certificate') {
+                continue;
+            }
+
+            $pemCert = "-----BEGIN CERTIFICATE-----\n" .
+                chunk_split($k['X509Certificate'], 64) .
+                "-----END CERTIFICATE-----\n";
+
+            $opensslKey = openssl_pkey_get_public($pemCert);
+            if ($opensslKey === false) {
+                $lastException = new Exception('Unable to extract public key from X509 certificate.');
+                continue;
+            }
+
+            $keyInfo = openssl_pkey_get_details($opensslKey);
+            if ($keyInfo === false || !isset($keyInfo['key']) || !is_string($keyInfo['key'])) {
+                $lastException = new Exception('Unable to get public key details from X509 certificate.');
+                continue;
+            }
+
+            $pemPublicKey = $keyInfo['key'];
+
+            $file = Utils::getContainer()->getTempDir() . '/' . sha1($pemPublicKey) . '.pem';
+            if (!file_exists($file)) {
+                Utils::getContainer()->writeFile($file, $pemPublicKey);
+            }
+
+            try {
+                $verifier = $factory->getAlgorithm($signatureMethod, PublicKey::fromFile($file));
+                return $message->verify($verifier);
+            } catch (Exception $e) {
+                $lastException = $e;
+            }
+        }
+
+        throw $lastException ?? new Exception('Unable to verify message signature.');
     }
 
 
@@ -244,10 +301,9 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             throw new Exception('ArtifactResponse must be signed.');
         }
 
+        // getPublicKeys(..., $required = true) throws if no signing cert/key material is present in metadata,
+        // so $keys is guaranteed non-empty here (no additional empty($keys) guard needed).
         $keys = $idpMetadata->getPublicKeys('signing', true);
-        if (empty($keys)) {
-            throw new Exception('No signing keys found in IdP metadata.');
-        }
 
         $signatureMethod = $artifactResponse
             ->getSignature()
