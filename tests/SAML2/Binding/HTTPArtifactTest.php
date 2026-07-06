@@ -14,6 +14,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Binding\HTTPArtifact;
+use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
@@ -155,6 +156,84 @@ final class HTTPArtifactTest extends TestCase
     }
 
 
+    /**
+     * @return array<
+     *     string,
+     *     array{
+     *         verifyThrowsMessage: ?string,
+     *         idpMetadata: \SimpleSAML\Configuration,
+     *         expectedExceptionMessage: ?string
+     *     }
+     * >
+     */
+    public static function provideVerifyMessageSignatureCases(): array
+    {
+        $base64Cert = PEMCertificatesMock::getPlainCertificateContents();
+
+        $idpMetadataWithSigningKey = Configuration::loadFromArray(
+            [
+                'entityid' => 'https://idp.example.test',
+                'keys' => [
+                    [
+                        'type' => 'X509Certificate',
+                        'signing' => true,
+                        'encryption' => false,
+                        'X509Certificate' => $base64Cert,
+                    ],
+                ],
+            ],
+            '[idp]',
+        );
+
+        $idpMetadataWithoutKeys = Configuration::loadFromArray(
+            [
+                'entityid' => 'https://idp.example.test',
+            ],
+            '[idp]',
+        );
+
+        return [
+            'signed message but metadata has no keys => throws (metadata required)' => [
+                'verifyThrowsMessage' => null,
+                'idpMetadata' => $idpMetadataWithoutKeys,
+                'expectedExceptionMessage' => 'Missing certificate in metadata.',
+            ],
+            'signed message but verification fails => throws verify exception' => [
+                'verifyThrowsMessage' => 'Unable to validate Signature',
+                'idpMetadata' => $idpMetadataWithSigningKey,
+                'expectedExceptionMessage' => 'Unable to validate Signature',
+            ],
+            'signed message and verification ok => returns verified instance' => [
+                'verifyThrowsMessage' => null,
+                'idpMetadata' => $idpMetadataWithSigningKey,
+                'expectedExceptionMessage' => null,
+            ],
+        ];
+    }
+
+
+    #[DataProvider('provideVerifyMessageSignatureCases')]
+    public function testVerifyMessageSignatureBasicScenarios(
+        ?string $verifyThrowsMessage,
+        Configuration $idpMetadata,
+        ?string $expectedExceptionMessage,
+    ): void {
+        $message = $this->buildSignedMessageStub($verifyThrowsMessage);
+
+        if ($expectedExceptionMessage !== null) {
+            $this->expectException(Exception::class);
+            $this->expectExceptionMessage($expectedExceptionMessage);
+        }
+
+        $ha = new HTTPArtifact();
+        $verified = $this->callVerifyMessageSignature($ha, $message, $idpMetadata);
+
+        if ($expectedExceptionMessage === null) {
+            $this->assertSame($message, $verified);
+        }
+    }
+
+
     private function callVerifyArtifactResponseSignature(
         HTTPArtifact $ha,
         ArtifactResponse $artifactResponse,
@@ -163,6 +242,18 @@ final class HTTPArtifactTest extends TestCase
         $m = new ReflectionMethod(HTTPArtifact::class, 'verifyArtifactResponseSignature');
         /** @var \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $result */
         $result = $m->invoke($ha, $artifactResponse, $idpMetadata);
+        return $result;
+    }
+
+
+    private function callVerifyMessageSignature(
+        HTTPArtifact $ha,
+        AbstractMessage $message,
+        Configuration $idpMetadata,
+    ): AbstractMessage {
+        $m = new ReflectionMethod(HTTPArtifact::class, 'verifyMessageSignature');
+        /** @var \SimpleSAML\SAML2\XML\samlp\AbstractMessage $result */
+        $result = $m->invoke($ha, $message, $idpMetadata);
         return $result;
     }
 
@@ -180,6 +271,24 @@ final class HTTPArtifactTest extends TestCase
         } else {
             $stub->method('getSignature')->willReturn(null);
         }
+
+        if ($verifyThrowsMessage !== null) {
+            $stub->method('verify')->willThrowException(new Exception($verifyThrowsMessage));
+        } else {
+            $stub->method('verify')->willReturn($stub);
+        }
+
+        return $stub;
+    }
+
+
+    private function buildSignedMessageStub(?string $verifyThrowsMessage): AbstractMessage
+    {
+        $stub = $this->createStub(AbstractMessage::class);
+
+        $stub->method('getSignature')->willReturn(
+            self::buildMinimalDsSignature('http://www.w3.org/2001/04/xmldsig-more#rsa-sha256'),
+        );
 
         if ($verifyThrowsMessage !== null) {
             $stub->method('verify')->willThrowException(new Exception($verifyThrowsMessage));
