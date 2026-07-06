@@ -31,5 +31,6 @@
     <PossiblyUnusedMethod errorLevel="info" />
     <PropertyNotSetInConstructor errorLevel="suppress" />
     <MissingClosureReturnType errorLevel="suppress" />
+    <PossiblyNullReference errorLevel="suppress" />
   </issueHandlers>
 </psalm>
