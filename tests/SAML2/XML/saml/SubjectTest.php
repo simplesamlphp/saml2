@@ -52,6 +52,9 @@ final class SubjectTest extends TestCase
 
 
     /** @var \Dom\XMLDocument */
+    private static Dom\XMLDocument $xmlRepresentationBaseId;
+
+    /** @var \Dom\XMLDocument */
     private static Dom\XMLDocument $subject;
 
     /** @var \Dom\XMLDocument */
@@ -70,6 +73,10 @@ final class SubjectTest extends TestCase
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Subject.xml',
+        );
+
+        self::$xmlRepresentationBaseId = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/saml_Subject_BaseID.xml',
         );
 
         self::$subject = DOMDocumentFactory::fromString(
@@ -245,7 +252,7 @@ XML
                 new SubjectConfirmation(
                     SAMLAnyURIValue::fromString('urn:oasis:names:tc:SAML:2.0:cm:bearer'),
                     new NameID(
-                        value: SAMLStringValue::fromString('SomeNameIDValue'),
+                        value: SAMLStringValue::fromString('SomeOtherNameIDValue'),
                         SPNameQualifier: SAMLStringValue::fromString(
                             'https://sp.example.org/authentication/sp/metadata',
                         ),
@@ -267,7 +274,7 @@ XML
         SubjectConfirmation::fromXML(self::$subjectConfirmation->documentElement)->toXML($document->documentElement);
 
         $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            self::$xmlRepresentationBaseId->saveXML(self::$xmlRepresentationBaseId->documentElement),
             strval($subject),
         );
     }
