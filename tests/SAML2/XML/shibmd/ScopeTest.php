@@ -89,7 +89,7 @@ final class ScopeTest extends TestCase
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];
 
-        $this->assertEquals('^(.*\.)?example\.edu$', $scopeElement->nodeValue);
+        $this->assertEquals('^(.*\.)?example\.edu$', $scopeElement->textContent);
         $this->assertEquals('urn:mace:shibboleth:metadata:1.0', $scopeElement->namespaceURI);
         $this->assertEquals('true', $scopeElement->getAttribute('regexp'));
     }

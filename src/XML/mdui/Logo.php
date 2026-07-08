@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\Type\LangValue;
@@ -120,7 +121,9 @@ final class Logo extends AbstractMduiElement implements
         $Url = SAMLAnyURIValue::fromString($xml->textContent);
         $Width = self::getAttribute($xml, 'width', PositiveIntegerValue::class);
         $Height = self::getAttribute($xml, 'height', PositiveIntegerValue::class);
-        $lang = self::getOptionalAttribute($xml, 'xml:lang', LangValue::class, null);
+        $lang = $xml->hasAttributeNS(C::NS_XML, 'lang')
+            ? LangValue::fromString($xml->getAttributeNS(C::NS_XML, 'lang'))
+            : null;
 
         return new static($Url, $Height, $Width, $lang);
     }
@@ -137,7 +140,7 @@ final class Logo extends AbstractMduiElement implements
         $e->setAttribute('width', $this->getWidth()->getValue());
 
         if ($this->getLanguage() !== null) {
-            $e->setAttribute('xml:lang', $this->getLanguage()->getValue());
+            $e->setAttributeNS(C::NS_XML, 'xml:lang', $this->getLanguage()->getValue());
         }
 
         return $e;

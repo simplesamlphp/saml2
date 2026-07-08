@@ -414,6 +414,7 @@ XML;
     {
         $xml = <<<XML
 <samlp:MyFantasy
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     ID="something"
     Version="2.0"

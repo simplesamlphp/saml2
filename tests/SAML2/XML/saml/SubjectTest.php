@@ -141,11 +141,10 @@ XML
             ],
         );
 
-        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
-        $this->assertNotFalse($expectedXml);
-        $actualXml = strval($subject);
-
-        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($subject),
+        );
     }
 
 
@@ -267,12 +266,10 @@ XML
         AbstractBaseID::fromXML(self::$baseId->documentElement)->toXML($document->documentElement);
         SubjectConfirmation::fromXML(self::$subjectConfirmation->documentElement)->toXML($document->documentElement);
 
-        // Normalize both documents before comparing
-        $expected = DOMDocumentFactory::normalizeDocument($document);
-        $actualDoc = DOMDocumentFactory::fromString((string) $subject);
-        $actual = DOMDocumentFactory::normalizeDocument($actualDoc);
-
-        $this->assertXmlStringEqualsXmlString($expected->saveXML(), $actual->saveXML());
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($subject),
+        );
     }
 
 

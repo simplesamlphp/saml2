@@ -68,10 +68,9 @@ final class ArtifactResolveTest extends TestCase
             $issuer,
         );
 
-        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
-        $this->assertNotFalse($expectedXml);
-        $actualXml = strval($issuer);
-
-        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
+        $this->assertEquals(
+            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
+            strval($artifactResolve),
+        );
     }
 }

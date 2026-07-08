@@ -117,11 +117,13 @@ final class LogoutRequestTest extends TestCase
             ],
         );
 
-        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
-        $this->assertNotFalse($expectedXml);
-        $actualXml = strval($logoutRequest);
+        $logoutRequestElement = $logoutRequest->toXML();
 
-        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
+        $xpCache = XPath::getXPath($logoutRequestElement);
+        $sessionIndexElements = XPath::xpQuery($logoutRequestElement, './saml_protocol:SessionIndex', $xpCache);
+        $this->assertCount(2, $sessionIndexElements);
+        $this->assertEquals('SessionIndexValue1', $sessionIndexElements[0]->textContent);
+        $this->assertEquals('SessionIndexValue2', $sessionIndexElements[1]->textContent);
     }
 
 

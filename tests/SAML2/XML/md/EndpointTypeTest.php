@@ -64,7 +64,7 @@ final class EndpointTypeTest extends TestCase
             'attributes' => [
                 (new XMLAttribute(
                     'urn:x-simplesamlphp:namespace',
-                    'test',
+                    'ssp',
                     'attr',
                     StringValue::fromString('value'),
                 ))->toArray(),
@@ -85,7 +85,7 @@ final class EndpointTypeTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $attr = new XMLAttribute(C::NAMESPACE, 'test', 'attr', StringValue::fromString('value'));
+        $attr = new XMLAttribute(C::NAMESPACE, 'ssp', 'attr', StringValue::fromString('value'));
 
         $endpointType = new AttributeService(
             SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),

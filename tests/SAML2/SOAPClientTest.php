@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2;
 
-use DOMDocument;
 use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -15,6 +14,7 @@ use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\SOAPClient;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSchema\Type\AnyURIValue;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
@@ -202,7 +202,7 @@ final class SOAPClientTest extends TestCase
         $msg->method('getDestination')->willReturn($destination);
 
         $msg->method('toXML')->willReturnCallback(static function () {
-            $doc = new DOMDocument('1.0', 'UTF-8');
+            $doc = DOMDocumentFactory::create();
             return $doc->appendChild($doc->createElement('TestRequest'));
         });
 

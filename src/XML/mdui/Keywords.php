@@ -10,6 +10,7 @@ use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\ListOfStringsValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\Type\LangValue;
@@ -74,7 +75,7 @@ final class Keywords extends AbstractMduiElement implements
         Assert::same($xml->namespaceURI, Keywords::NS, InvalidDOMElementException::class);
         Assert::stringNotEmpty($xml->textContent, 'Missing value for Keywords.');
 
-        $lang = self::getAttribute($xml, 'xml:lang', LangValue::class);
+        $lang = LangValue::fromString($xml->getAttributeNS(C::NS_XML, 'lang'));
         $Keywords = ListOfStringsValue::fromString($xml->textContent);
 
         return new static($lang, $Keywords);
@@ -89,7 +90,7 @@ final class Keywords extends AbstractMduiElement implements
     public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
-        $e->setAttribute('xml:lang', $this->getLanguage()->getValue());
+        $e->setAttributeNS(C::NS_XML, 'xml:lang', $this->getLanguage()->getValue());
         $e->textContent = $this->getContent()->getValue();
 
         return $e;

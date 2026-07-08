@@ -98,7 +98,7 @@ final class RequestedAuthnContextTest extends TestCase
         $this->expectException(SchemaViolationException::class);
         $this->expectExceptionMessage(
             'Expected an instance of any of "' . AuthnContextClassRef::class . '", "' . AuthnContextDeclRef::class .
-            '". Got: DOMDocument',
+            '". Got: Dom\XMLDocument',
         );
 
         new RequestedAuthnContext(
