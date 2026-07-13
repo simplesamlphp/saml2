@@ -83,10 +83,11 @@ final class ConditionTest extends TestCase
             Audience::fromString('urn:some:audience'),
         ]);
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($condition),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($condition);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -113,6 +114,8 @@ final class ConditionTest extends TestCase
         $this->assertEquals('Condition', $chunk->getLocalName());
         $this->assertEquals(C::NS_SAML, $chunk->getNamespaceURI());
 
-        $this->assertEquals($element->ownerDocument?->saveXML($element), strval($condition));
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $element->ownerDocument;
+        $this->assertEquals($ownerDocument->saveXML($element), strval($condition));
     }
 }

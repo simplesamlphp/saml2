@@ -71,10 +71,11 @@ final class ScopingTest extends TestCase
             ],
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($scoping),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($scoping);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -102,12 +103,12 @@ final class ScopingTest extends TestCase
 
         // Test for an IDPList
         $xpCache = XPath::getXPath($scopingElement);
-        /** @var \DOMElement[] $scopingElements */
+        /** @var \Dom\Element[] $scopingElements */
         $scopingElements = XPath::xpQuery($scopingElement, './saml_protocol:IDPList', $xpCache);
         $this->assertCount(1, $scopingElements);
 
         // Test ordering of Scoping contents
-        /** @var \DOMElement[] $scopingElements */
+        /** @var \Dom\Element[] $scopingElements */
         $scopingElements = XPath::xpQuery($scopingElement, './saml_protocol:IDPList/following-sibling::*', $xpCache);
         $this->assertCount(1, $scopingElements);
         $this->assertEquals('samlp:RequesterID', $scopingElements[0]->tagName);

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -111,7 +111,7 @@ final class EntityDescriptor extends AbstractMetadataDocument implements SchemaV
      * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'EntityDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, EntityDescriptor::NS, InvalidDOMElementException::class);
@@ -129,7 +129,7 @@ final class EntityDescriptor extends AbstractMetadataDocument implements SchemaV
         $additionalMetadataLocation = [];
         foreach ($xml->childNodes as $node) {
             if (
-                !($node instanceof DOMElement)
+                !($node instanceof Dom\Element)
                 || ($node->namespaceURI !== C::NS_MD)
             ) {
                 continue;
@@ -280,7 +280,7 @@ final class EntityDescriptor extends AbstractMetadataDocument implements SchemaV
      * Convert this assertion to an unsigned XML document.
      * This method does not sign the resulting XML document.
      */
-    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
+    public function toUnsignedXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = parent::toUnsignedXML($parent);
         $e->setAttribute('entityID', $this->getEntityId()->getValue());

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
@@ -112,7 +112,7 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery implements SchemaVal
      *   if one of the mandatory child-elements is missing
      * @throws \Exception if the authentication instant is not a valid timestamp.
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'AuthzDecisionQuery', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AuthzDecisionQuery::NS, InvalidDOMElementException::class);
@@ -162,15 +162,15 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery implements SchemaVal
 
         $request = new static(
             self::getAttribute($xml, 'ID', IDValue::class),
-            array_pop($subject),
+            array_last($subject),
             self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
             self::getAttribute($xml, 'Resource', SAMLAnyURIValue::class),
             $action,
-            array_pop($evidence),
-            array_pop($issuer),
+            array_last($evidence),
+            array_last($issuer),
             self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
             self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
-            array_pop($extensions),
+            array_last($extensions),
         );
 
         if (!empty($signature)) {
@@ -186,7 +186,7 @@ final class AuthzDecisionQuery extends AbstractSubjectQuery implements SchemaVal
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
      */
-    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = parent::toUnsignedXML($parent);
         $e->setAttribute('Resource', $this->getResource()->getValue());

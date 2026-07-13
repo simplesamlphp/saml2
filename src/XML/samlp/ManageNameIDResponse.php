@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
@@ -21,7 +21,7 @@ use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSchema\Type\NCNameValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
-use function array_pop;
+use function array_last;
 use function strval;
 
 /**
@@ -79,7 +79,7 @@ class ManageNameIDResponse extends AbstractStatusResponse implements SchemaValid
      * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
      *   if one of the mandatory child-elements is missing
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, static::getLocalName(), InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, static::NS, InvalidDOMElementException::class);
@@ -108,13 +108,13 @@ class ManageNameIDResponse extends AbstractStatusResponse implements SchemaValid
 
         $response = new static(
             self::getAttribute($xml, 'ID', IDValue::class),
-            array_pop($status),
+            array_last($status),
             self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
-            empty($issuer) ? null : array_pop($issuer),
+            array_last($issuer),
             self::getOptionalAttribute($xml, 'InResponseTo', NCNameValue::class, null),
             self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
             self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
-            empty($extensions) ? null : array_pop($extensions),
+            array_last($extensions),
         );
 
         if (!empty($signature)) {

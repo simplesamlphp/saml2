@@ -62,10 +62,11 @@ final class ScopeTest extends TestCase
             BooleanValue::fromBoolean(false),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($scope),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($scope);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -83,12 +84,12 @@ final class ScopeTest extends TestCase
         $scopeElement = $scope->toXML($document->documentElement);
 
         $xpCache = XPath::getXPath($scopeElement);
-        /** @var \DOMElement[] $scopeElements */
+        /** @var \Dom\Element[] $scopeElements */
         $scopeElements = XPath::xpQuery($scopeElement, '/root/shibmd:Scope', $xpCache);
         $this->assertCount(1, $scopeElements);
         $scopeElement = $scopeElements[0];
 
-        $this->assertEquals('^(.*\.)?example\.edu$', $scopeElement->nodeValue);
+        $this->assertEquals('^(.*\.)?example\.edu$', $scopeElement->textContent);
         $this->assertEquals('urn:mace:shibboleth:metadata:1.0', $scopeElement->namespaceURI);
         $this->assertEquals('true', $scopeElement->getAttribute('regexp'));
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -14,7 +14,7 @@ use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Exception\MissingElementException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
-use function array_pop;
+use function array_last;
 use function strval;
 
 /**
@@ -98,7 +98,7 @@ final class Status extends AbstractSamlpElement implements SchemaValidatableElem
      * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
      *   if one of the mandatory child-elements is missing
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'Status', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Status::NS, InvalidDOMElementException::class);
@@ -113,8 +113,8 @@ final class Status extends AbstractSamlpElement implements SchemaValidatableElem
         $statusDetails = StatusDetail::getChildrenOfClass($xml);
 
         return new static(
-            array_pop($statusCode),
-            array_pop($statusMessage),
+            array_last($statusCode),
+            array_last($statusMessage),
             $statusDetails,
         );
     }
@@ -123,7 +123,7 @@ final class Status extends AbstractSamlpElement implements SchemaValidatableElem
     /**
      * Convert this Status to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
 

@@ -48,9 +48,10 @@ final class AssertionIDRefTest extends TestCase
     {
         $assertionIDRef = AssertionIDRef::fromString('_Test');
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($assertionIDRef),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($assertionIDRef);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

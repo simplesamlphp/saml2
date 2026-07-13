@@ -102,9 +102,10 @@ final class ArtifactResponseTest extends TestCase
             message: $authnRequest,
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($artifactResponse),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($artifactResponse);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

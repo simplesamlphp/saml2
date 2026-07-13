@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
@@ -24,7 +24,7 @@ use SimpleSAML\XMLSchema\Type\DurationValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSchema\Type\QNameValue;
 
-use function array_pop;
+use function array_last;
 
 /**
  * Class representing a SAML2 RoleDescriptor element.
@@ -109,7 +109,7 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'RoleDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, C::NS_MD, InvalidDOMElementException::class);
@@ -148,10 +148,10 @@ abstract class AbstractRoleDescriptor extends AbstractRoleDescriptorType impleme
                 self::getOptionalAttribute($xml, 'ID', IDValue::class, null),
                 self::getOptionalAttribute($xml, 'validUntil', SAMLDateTimeValue::class, null),
                 self::getOptionalAttribute($xml, 'cacheDuration', DurationValue::class, null),
-                array_pop($extensions),
+                array_last($extensions),
                 self::getOptionalAttribute($xml, 'errorURL', SAMLAnyURIValue::class, null),
                 KeyDescriptor::getChildrenOfClass($xml),
-                array_pop($orgs),
+                array_last($orgs),
                 ContactPerson::getChildrenOfClass($xml),
                 self::getAttributesNSFromXML($xml),
             );

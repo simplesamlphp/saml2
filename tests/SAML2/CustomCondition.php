@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\XML\saml\AbstractCondition;
 use SimpleSAML\SAML2\XML\saml\Audience;
@@ -62,7 +62,7 @@ final class CustomCondition extends AbstractCondition
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'Condition', InvalidDOMElementException::class);
         Assert::notNull($xml->namespaceURI, InvalidDOMElementException::class);
@@ -85,7 +85,7 @@ final class CustomCondition extends AbstractCondition
     /**
      * Convert this Condition to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = parent::toXML($parent);
 

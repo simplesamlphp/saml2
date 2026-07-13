@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
 use SimpleSAML\SAML2\XML\saml\AuthnContextDecl;
@@ -15,7 +15,7 @@ use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 
-use function array_pop;
+use function array_last;
 use function is_null;
 
 /**
@@ -110,7 +110,7 @@ final class AuthnContext extends AbstractSamlElement implements SchemaValidatabl
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'AuthnContext', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AuthnContext::NS, InvalidDOMElementException::class);
@@ -142,9 +142,9 @@ final class AuthnContext extends AbstractSamlElement implements SchemaValidatabl
         $authorities = AuthenticatingAuthority::getChildrenOfClass($xml);
 
         return new static(
-            array_pop($authnContextClassRef),
-            array_pop($authnContextDecl),
-            array_pop($authnContextDeclRef),
+            array_last($authnContextClassRef),
+            array_last($authnContextDecl),
+            array_last($authnContextDeclRef),
             $authorities,
         );
     }
@@ -153,7 +153,7 @@ final class AuthnContext extends AbstractSamlElement implements SchemaValidatabl
     /**
      * Convert this AuthContextDeclRef to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
 

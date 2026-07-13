@@ -140,10 +140,11 @@ final class UIInfoTest extends TestCase
 
         $uiinfo->addLogo($logo);
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($uiinfo),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($uiinfo);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -210,7 +211,7 @@ final class UIInfoTest extends TestCase
         $this->assertEquals("https://example.edu/logo.png", $logoElements[0]->textContent);
 
         $xpCache = XPath::getXPath($infoElement);
-        /** @var \DOMElement[] $keywordElements */
+        /** @var \Dom\Element[] $keywordElements */
         $keywordElements = XPath::xpQuery(
             $infoElement,
             './*[local-name()=\'Keywords\' and namespace-uri()=\'urn:oasis:names:tc:SAML:metadata:ui\']',

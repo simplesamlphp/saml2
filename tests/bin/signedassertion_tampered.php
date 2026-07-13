@@ -19,4 +19,8 @@ $signer = (new SignatureAlgorithmFactory())->getAlgorithm(
 
 $unsignedAssertion = Assertion::fromXML($document->documentElement);
 $unsignedAssertion->sign($signer);
-echo str_replace('127.0.0.1', '127.0.0.2', strval($unsignedAssertion->toXML()->ownerDocument->saveXML()));
+
+/** @var \Dom\XMLDocument $ownerDocument */
+$ownerDocument = $unsignedAssertion->toXML()->ownerDocument;
+
+echo str_replace('127.0.0.1', '127.0.0.2', strval($ownerDocument->saveXML()));

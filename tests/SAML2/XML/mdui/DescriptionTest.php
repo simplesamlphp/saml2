@@ -56,14 +56,15 @@ final class DescriptionTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = new Description(
+        $description = new Description(
             LangValue::fromString('en'),
             SAMLStringValue::fromString('Just an example'),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($description);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

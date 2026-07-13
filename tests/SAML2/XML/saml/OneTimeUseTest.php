@@ -50,9 +50,10 @@ final class OneTimeUseTest extends TestCase
     {
         $oneTimeUse = new OneTimeUse();
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($oneTimeUse),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($oneTimeUse);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

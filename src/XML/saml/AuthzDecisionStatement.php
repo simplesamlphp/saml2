@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\DecisionTypeValue;
@@ -16,7 +16,7 @@ use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSchema\Type\AnyURIValue;
 
-use function array_pop;
+use function array_last;
 use function strval;
 
 /**
@@ -102,7 +102,7 @@ final class AuthzDecisionStatement extends AbstractStatementType implements Sche
      *   if one of the mandatory child-elements is missing
      * @throws \Exception if the authentication instant is not a valid timestamp.
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'AuthzDecisionStatement', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AuthzDecisionStatement::NS, InvalidDOMElementException::class);
@@ -128,7 +128,7 @@ final class AuthzDecisionStatement extends AbstractStatementType implements Sche
             self::getAttribute($xml, 'Resource', AnyURIValue::class),
             self::getAttribute($xml, 'Decision', DecisionTypeValue::class),
             $action,
-            array_pop($evidence),
+            array_last($evidence),
         );
     }
 
@@ -136,7 +136,7 @@ final class AuthzDecisionStatement extends AbstractStatementType implements Sche
     /**
      * Convert this AuthzDecisionStatement to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
 

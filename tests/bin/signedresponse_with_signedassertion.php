@@ -47,4 +47,8 @@ $responseSigner = (new SignatureAlgorithmFactory())->getAlgorithm(
 );
 
 $unsignedResponse->sign($responseSigner);
-echo $unsignedResponse->toXML()->ownerDocument->saveXML();
+
+/** @var \Dom\XMLDocument $ownerDocument */
+$ownerDocument = $unsignedResponse->toXML()->ownerDocument;
+
+echo $ownerDocument->saveXML();

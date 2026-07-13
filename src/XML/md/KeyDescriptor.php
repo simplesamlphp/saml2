@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\KeyTypesValue;
 use SimpleSAML\XML\Constants as C;
@@ -15,7 +15,7 @@ use SimpleSAML\XMLSchema\Exception\MissingElementException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 
-use function array_pop;
+use function array_last;
 
 /**
  * Class representing a KeyDescriptor element.
@@ -87,7 +87,7 @@ final class KeyDescriptor extends AbstractMdElement implements SchemaValidatable
      * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'KeyDescriptor', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, KeyDescriptor::NS, InvalidDOMElementException::class);
@@ -97,7 +97,7 @@ final class KeyDescriptor extends AbstractMdElement implements SchemaValidatable
         Assert::maxCount($keyInfo, 1, 'Too many ds:KeyInfo in the KeyDescriptor.', TooManyElementsException::class);
 
         return new static(
-            array_pop($keyInfo),
+            array_last($keyInfo),
             self::getOptionalAttribute($xml, 'use', KeyTypesValue::class, null),
             EncryptionMethod::getChildrenOfClass($xml),
         );
@@ -107,7 +107,7 @@ final class KeyDescriptor extends AbstractMdElement implements SchemaValidatable
     /**
      * Convert this KeyDescriptor to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
 

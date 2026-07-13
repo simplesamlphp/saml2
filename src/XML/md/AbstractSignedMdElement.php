@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\XML\CanonicalizableElementTrait;
 use SimpleSAML\SAML2\XML\SignableElementTrait;
 use SimpleSAML\SAML2\XML\SignedElementTrait;
@@ -34,13 +34,13 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements
     /**
      * The original signed XML
      */
-    protected DOMElement $xml;
+    protected Dom\Element $xml;
 
 
     /**
      * Get the XML element.
      */
-    public function getXML(): DOMElement
+    public function getXML(): Dom\Element
     {
         return $this->xml;
     }
@@ -49,7 +49,7 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements
     /**
      * Set the XML element.
      */
-    protected function setXML(DOMElement $xml): void
+    protected function setXML(Dom\Element $xml): void
     {
         $this->xml = $xml;
     }
@@ -58,7 +58,7 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements
     /**
      * @throws \Exception
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         if ($this->isSigned() === true && $this->signer === null) {
             // We already have a signed document and no signer was set to re-sign it
@@ -96,5 +96,5 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements
 
     /**
      */
-    abstract public function toUnsignedXML(?DOMElement $parent = null): DOMElement;
+    abstract public function toUnsignedXML(?Dom\Element $parent = null): Dom\Element;
 }

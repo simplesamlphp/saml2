@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
@@ -20,7 +20,7 @@ use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
-use function array_pop;
+use function array_last;
 
 /**
  * The Artifact is part of the SAML 2.0 IdP code, and it builds an artifact object.
@@ -79,7 +79,7 @@ class ArtifactResolve extends AbstractRequest implements SchemaValidatableElemen
      * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'ArtifactResolve', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, ArtifactResolve::NS, InvalidDOMElementException::class);
@@ -110,10 +110,10 @@ class ArtifactResolve extends AbstractRequest implements SchemaValidatableElemen
             self::getAttribute($xml, 'ID', IDValue::class),
             $artifact[0],
             self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
-            array_pop($issuer),
+            array_last($issuer),
             self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
             self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
-            array_pop($extensions),
+            array_last($extensions),
         );
 
         if (!empty($signature)) {
@@ -129,7 +129,7 @@ class ArtifactResolve extends AbstractRequest implements SchemaValidatableElemen
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
      */
-    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?Dom\Element $parent = null): Dom\Element
     {
         Assert::notEmpty($this->artifact, 'Cannot convert ArtifactResolve to XML without an Artifact set.');
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\XML\Constants as C;
@@ -18,7 +18,7 @@ use function array_change_key_case;
 use function array_filter;
 use function array_key_exists;
 use function array_keys;
-use function array_pop;
+use function array_last;
 
 /**
  * Class for handling SAML2 IDPList.
@@ -74,7 +74,7 @@ final class IDPList extends AbstractSamlpElement implements SchemaValidatableEle
      * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'IDPList', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, IDPList::NS, InvalidDOMElementException::class);
@@ -97,7 +97,7 @@ final class IDPList extends AbstractSamlpElement implements SchemaValidatableEle
 
         return new static(
             $idpEntry,
-            empty($getComplete) ? null : array_pop($getComplete),
+            array_last($getComplete),
         );
     }
 
@@ -105,7 +105,7 @@ final class IDPList extends AbstractSamlpElement implements SchemaValidatableEle
     /**
      * Convert this IDPList to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
 

@@ -83,12 +83,12 @@ final class AbstractStatusResponseTest extends TestCase
         $statusElements = XPath::xpQuery($responseElement, './saml_protocol:Status', $xpCache);
         $this->assertCount(1, $statusElements);
 
-        /** @var \DOMElement[] $statusCodeElements */
+        /** @var \Dom\Element[] $statusCodeElements */
         $statusCodeElements = XPath::xpQuery($statusElements[0], './saml_protocol:StatusCode', $xpCache);
         $this->assertCount(1, $statusCodeElements);
         $this->assertEquals(C::STATUS_SUCCESS, $statusCodeElements[0]->getAttribute("Value"));
 
-        /** @var \DOMElement[] $nestedStatusCodeElements */
+        /** @var \Dom\Element[] $nestedStatusCodeElements */
         $nestedStatusCodeElements = XPath::xpQuery($statusCodeElements[0], './saml_protocol:StatusCode', $xpCache);
         $this->assertCount(1, $nestedStatusCodeElements);
         $this->assertEquals('urn:test:OurSubStatusCode', $nestedStatusCodeElements[0]->getAttribute("Value"));
@@ -146,7 +146,7 @@ final class AbstractStatusResponseTest extends TestCase
         $this->assertCount(1, $responseElements);
 
         // Test ordering of Response contents
-        /** @var \DOMElement[] $responseElements */
+        /** @var \Dom\Element[] $responseElements */
         $responseElements = XPath::xpQuery($responseElement, './saml_assertion:Issuer/following-sibling::*', $xpCache);
         $this->assertCount(3, $responseElements);
         $this->assertEquals('ds:Signature', $responseElements[0]->tagName);

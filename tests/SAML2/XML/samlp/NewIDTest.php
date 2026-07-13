@@ -48,9 +48,10 @@ final class NewIDTest extends TestCase
     {
         $newID = NewID::fromString('simplesamlphp');
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($newID),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($newID);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

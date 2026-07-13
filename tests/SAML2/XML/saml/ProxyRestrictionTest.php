@@ -59,9 +59,10 @@ final class ProxyRestrictionTest extends TestCase
             NonNegativeIntegerValue::fromInteger(2),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($condition),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($condition);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

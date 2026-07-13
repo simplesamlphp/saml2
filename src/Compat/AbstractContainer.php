@@ -142,7 +142,7 @@ abstract class AbstractContainer
      * - **encrypt** XML that is about to be encrypted
      * - **decrypt** XML that was just decrypted
      *
-     * @param \DOMElement|string $message
+     * @param \Dom\Element|string $message
      */
     abstract public function debugMessage($message, string $type): void;
 

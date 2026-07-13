@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
@@ -26,7 +26,7 @@ final class Terminate extends AbstractSamlpElement implements SchemaValidatableE
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'Terminate', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Terminate::NS, InvalidDOMElementException::class);
@@ -38,7 +38,7 @@ final class Terminate extends AbstractSamlpElement implements SchemaValidatableE
     /**
      * Convert this Terminate to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         return $this->instantiateParentElement($parent);
     }

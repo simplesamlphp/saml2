@@ -58,9 +58,10 @@ final class DomainHintTest extends TestCase
     {
         $hint = DomainHint::fromString('www.example.com');
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($hint),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($hint);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

@@ -48,9 +48,10 @@ final class AssertionURIRefTest extends TestCase
     {
         $assertionURIRef = AssertionURIRef::fromString('urn:x-simplesamlphp:reference');
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($assertionURIRef),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($assertionURIRef);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

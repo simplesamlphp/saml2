@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\mdrpi;
 
-use DOMDocument;
+use Dom;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -45,8 +45,8 @@ final class PublicationInfoTest extends TestCase
     use SerializableElementTestTrait;
 
 
-    /** @var \DOMDocument */
-    private static DOMDocument $affiliationDescriptor;
+    /** @var \Dom\XMLDocument $affiliationDescriptor */
+    private static Dom\XMLDocument $affiliationDescriptor;
 
 
     /**
@@ -92,10 +92,11 @@ final class PublicationInfoTest extends TestCase
             ],
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($publicationInfo),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($publicationInfo);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 

@@ -99,9 +99,10 @@ final class AssertionConsumerServiceTest extends TestCase
             [self::$attr],
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($idxep),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($idxep);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

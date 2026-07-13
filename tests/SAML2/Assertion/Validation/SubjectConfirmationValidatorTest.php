@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DOMDocument;
+use Dom;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
@@ -42,8 +42,8 @@ final class SubjectConfirmationValidatorTest extends TestCase
     /** @var \Psr\Clock\ClockInterface */
     private static ClockInterface $clock;
 
-    /** @var \DOMDocument */
-    private static DOMDocument $document;
+    /** @var \Dom\XMLDocument */
+    private static Dom\Document $document;
 
     /** @var \SimpleSAML\SAML2\Assertion\Processor */
     private static Processor $assertionProcessor;

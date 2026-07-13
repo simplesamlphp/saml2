@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
@@ -31,8 +31,8 @@ use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
 use function array_filter;
+use function array_last;
 use function array_merge;
-use function array_pop;
 use function array_values;
 use function count;
 use function strval;
@@ -64,7 +64,7 @@ final class Assertion extends AbstractSamlElement implements
     /**
      * The original signed XML
      */
-    protected DOMElement $xml;
+    protected Dom\Element $xml;
 
 
     /**
@@ -230,7 +230,7 @@ final class Assertion extends AbstractSamlElement implements
     /**
      * Get the XML element.
      */
-    public function getXML(): DOMElement
+    public function getXML(): Dom\Element
     {
         return $this->xml;
     }
@@ -239,7 +239,7 @@ final class Assertion extends AbstractSamlElement implements
     /**
      * Set the XML element.
      */
-    private function setXML(DOMElement $xml): void
+    private function setXML(Dom\Element $xml): void
     {
         $this->xml = $xml;
     }
@@ -247,7 +247,7 @@ final class Assertion extends AbstractSamlElement implements
 
     /**
      */
-    protected function getOriginalXML(): DOMElement
+    protected function getOriginalXML(): Dom\Element
     {
         return $this->xml ?? $this->toUnsignedXML();
     }
@@ -278,7 +278,7 @@ final class Assertion extends AbstractSamlElement implements
      *   if too many child-elements of a type are specified
      * @throws \Exception
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'Assertion', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Assertion::NS, InvalidDOMElementException::class);
@@ -315,11 +315,11 @@ final class Assertion extends AbstractSamlElement implements
         $statements = AbstractStatement::getChildrenOfClass($xml);
 
         $assertion = new static(
-            array_pop($issuer),
+            array_last($issuer),
             self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
             self::getAttribute($xml, 'ID', IDValue::class),
-            array_pop($subject),
-            array_pop($conditions),
+            array_last($subject),
+            array_last($conditions),
             array_merge($authnStatement, $attrStatement, $statements),
         );
 
@@ -337,7 +337,7 @@ final class Assertion extends AbstractSamlElement implements
      * Convert this assertion to an unsigned XML document.
      * This method does not sign the resulting XML document.
      */
-    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
 
@@ -362,7 +362,7 @@ final class Assertion extends AbstractSamlElement implements
      *
      * @throws \Exception
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         if ($this->isSigned() === true && $this->signer === null) {
             // We already have a signed document and no signer was set to re-sign it
@@ -382,7 +382,7 @@ final class Assertion extends AbstractSamlElement implements
 
             // Test for an Issuer
             $messageElements = XPath::xpQuery($signedXML, './saml_assertion:Issuer', XPath::getXPath($signedXML));
-            $issuer = array_pop($messageElements);
+            $issuer = array_last($messageElements);
 
             $signedXML->insertBefore($this->signature?->toXML($signedXML), $issuer->nextSibling);
             return $signedXML;

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\alg\AbstractAlgElement as ALG;
@@ -66,7 +66,7 @@ final class Extensions extends AbstractMdElement implements SchemaValidatableEle
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::eq(
             $xml->namespaceURI,
@@ -112,7 +112,7 @@ final class Extensions extends AbstractMdElement implements SchemaValidatableEle
             ],
         ];
 
-        /** @var \DOMElement $node */
+        /** @var \Dom\Element $node */
         foreach (XPath::xpQuery($xml, './*', XPath::getXPath($xml)) as $node) {
             if (
                 array_key_exists($node->namespaceURI, $supported)

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
@@ -34,7 +34,7 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
      *
      * Note: if you extend this class, the constructor must retain its signature. You cannot extend this class and
      * modify the signature of the constructor, unless you implement fromXML() yourself. This class provides
-     * static methods to get its properties from a given \DOMElement for your convenience. Look at the implementation
+     * static methods to get its properties from a given \Dom\Element for your convenience. Look at the implementation
      * of fromXML() to know how to use them.
      *
      * @param \SimpleSAML\XMLSchema\Type\UnsignedShortValue $index
@@ -64,7 +64,7 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
     /**
      * Initialize an IndexedEndpointType.
      *
-     * @param \DOMElement $xml The XML element we should load.
+     * @param \Dom\Element $xml The XML element we should load.
      * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
@@ -72,7 +72,7 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing any of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         $qualifiedName = static::getClassName(static::class);
         Assert::eq(
@@ -97,9 +97,9 @@ abstract class AbstractIndexedEndpointType extends AbstractEndpointType implemen
     /**
      * Add this endpoint to an XML element.
      *
-     * @param \DOMElement $parent The element we should append this endpoint to.
+     * @param \Dom\Element $parent The element we should append this endpoint to.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = parent::instantiateParentElement($parent);
         $e->setAttribute('Binding', $this->getBinding()->getValue());

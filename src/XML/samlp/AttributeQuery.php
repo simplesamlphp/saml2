@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
@@ -24,7 +24,7 @@ use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
-use function array_pop;
+use function array_last;
 use function in_array;
 
 /**
@@ -115,7 +115,7 @@ class AttributeQuery extends AbstractSubjectQuery implements SchemaValidatableEl
      * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'AttributeQuery', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AttributeQuery::NS, InvalidDOMElementException::class);
@@ -149,13 +149,13 @@ class AttributeQuery extends AbstractSubjectQuery implements SchemaValidatableEl
 
         $request = new static(
             self::getAttribute($xml, 'ID', IDValue::class),
-            array_pop($subject),
+            array_last($subject),
             self::getAttribute($xml, 'IssueInstant', SAMLDateTimeValue::class),
             Attribute::getChildrenOfClass($xml),
-            array_pop($issuer),
+            array_last($issuer),
             self::getOptionalAttribute($xml, 'Destination', SAMLAnyURIValue::class, null),
             self::getOptionalAttribute($xml, 'Consent', SAMLAnyURIValue::class, null),
-            array_pop($extensions),
+            array_last($extensions),
         );
 
         if (!empty($signature)) {
@@ -171,7 +171,7 @@ class AttributeQuery extends AbstractSubjectQuery implements SchemaValidatableEl
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
      */
-    protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
+    protected function toUnsignedXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = parent::toUnsignedXML($parent);
 

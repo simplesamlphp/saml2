@@ -80,9 +80,10 @@ final class ManageNameIDResponseTest extends TestCase
             issueInstant: SAMLDateTimeValue::fromString('2021-03-25T16:53:26Z'),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($manageNameIdResponse),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($manageNameIdResponse);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

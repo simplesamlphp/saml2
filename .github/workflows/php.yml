@@ -19,9 +19,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-version: ['8.3', '8.4', '8.5']
+        php-version: ['8.5', '8.6']
 
-    uses: simplesamlphp/simplesamlphp-test-framework/.github/workflows/reusable_phplinter.yml@v1
+    uses: simplesamlphp/simplesamlphp-test-framework/.github/workflows/reusable_phplinter.yml@release-2.x
     secrets: inherit
     with:
       php-version: ${{ matrix.php-version }}
@@ -31,7 +31,7 @@ jobs:
     strategy:
       fail-fast: false
 
-    uses: simplesamlphp/simplesamlphp-test-framework/.github/workflows/reusable_linter.yml@v1
+    uses: simplesamlphp/simplesamlphp-test-framework/.github/workflows/reusable_linter.yml@release-2.x
     secrets: inherit
     with:
       enable_eslinter: false
@@ -47,7 +47,7 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ['8.3', '8.4', '8.5']
+        php-versions: ['8.5', '8.6']
 
     steps:
       - name: Setup PHP, with composer and extensions
@@ -57,7 +57,7 @@ jobs:
           php-version: ${{ matrix.php-versions }}
           extensions: ctype, date, dom, filter, hash, intl, mbstring, openssl, pcre, soap, spl, sodium, xml
           tools: composer
-          ini-values: error_reporting=E_ALL
+          ini-values: error_reporting=E_ALL, display_errors=on
           coverage: pcov
 
       - name: Setup problem matchers for PHP
@@ -75,6 +75,15 @@ jobs:
 
       - name: Get composer cache directory
         run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$GITHUB_ENV"
+
+      - name: Get COMPOSER_ROOT_VERSION from composer.json branch alias
+        run: |
+            ROOT_VERSION=$(composer config extra.branch-alias.dev-master)
+            if [ -z "$ROOT_VERSION" ]; then
+              echo "Could not read extra.branch-alias.dev-master from composer.json" >&2
+              exit 1
+            fi
+            echo "COMPOSER_ROOT_VERSION=$ROOT_VERSION" >> "$GITHUB_ENV"
 
       - name: Cache composer dependencies
         uses: actions/cache@v6
@@ -109,7 +118,7 @@ jobs:
       fail-fast: true
       matrix:
         operating-system: [windows-latest]
-        php-versions: ['8.3', '8.4', '8.5']
+        php-versions: ['8.5', '8.6']
 
     steps:
       - name: Setup PHP, with composer and extensions
@@ -120,7 +129,7 @@ jobs:
           extensions: ctype, date, dom, fileinfo, filter, hash, intl, mbstring, openssl, pcre,\
             soap, sodium, spl, xml, zip
           tools: composer
-          ini-values: error_reporting=E_ALL
+          ini-values: error_reporting=E_ALL, display_errors=on
           coverage: none
 
       - name: Setup problem matchers for PHP
@@ -138,6 +147,15 @@ jobs:
 
       - name: Get composer cache directory
         run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$env:GITHUB_ENV"
+
+      - name: Get COMPOSER_ROOT_VERSION from composer.json branch alias
+        run: |
+            ROOT_VERSION=$(composer config extra.branch-alias.dev-master)
+            if [ -z "$ROOT_VERSION" ]; then
+              echo "Could not read extra.branch-alias.dev-master from composer.json" >&2
+              exit 1
+            fi
+            echo "COMPOSER_ROOT_VERSION=$ROOT_VERSION" >> "$GITHUB_ENV"
 
       - name: Cache composer dependencies
         uses: actions/cache@v6
@@ -176,6 +194,15 @@ jobs:
 
       - name: Get composer cache directory
         run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$GITHUB_ENV"
+
+      - name: Get COMPOSER_ROOT_VERSION from composer.json branch alias
+        run: |
+            ROOT_VERSION=$(composer config extra.branch-alias.dev-master)
+            if [ -z "$ROOT_VERSION" ]; then
+              echo "Could not read extra.branch-alias.dev-master from composer.json" >&2
+              exit 1
+            fi
+            echo "COMPOSER_ROOT_VERSION=$ROOT_VERSION" >> "$GITHUB_ENV"
 
       - name: Cache composer dependencies
         uses: actions/cache@v6
@@ -218,7 +245,7 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           # Should be the lowest supported version
-          php-version: '8.3'
+          php-version: '8.5'
           extensions: ctype, date, dom, filter, hash, intl, mbstring, openssl, pcre, soap, sodium, spl, xml
           tools: composer
           coverage: none
@@ -230,6 +257,15 @@ jobs:
 
       - name: Get composer cache directory
         run: echo COMPOSER_CACHE="$(composer config cache-files-dir)" >> "$GITHUB_ENV"
+
+      - name: Get COMPOSER_ROOT_VERSION from composer.json branch alias
+        run: |
+            ROOT_VERSION=$(composer config extra.branch-alias.dev-master)
+            if [ -z "$ROOT_VERSION" ]; then
+              echo "Could not read extra.branch-alias.dev-master from composer.json" >&2
+              exit 1
+            fi
+            echo "COMPOSER_ROOT_VERSION=$ROOT_VERSION" >> "$GITHUB_ENV"
 
       - name: Cache composer dependencies
         uses: actions/cache@v6
