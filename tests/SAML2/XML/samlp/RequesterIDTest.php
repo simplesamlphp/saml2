@@ -52,9 +52,10 @@ final class RequesterIDTest extends TestCase
     {
         $requesterId = RequesterID::fromString('urn:some:requester');
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($requesterId),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($requesterId);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

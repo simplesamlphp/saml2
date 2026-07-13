@@ -63,7 +63,9 @@ class SOAP extends Binding implements SynchronousBindingInterface
             new Body([$message]),
             $header,
         );
-        return $env->toXML()->ownerDocument?->saveXML();
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $env->toXML()->ownerDocument;
+        return $ownerDocument->saveXML();
     }
 
 
@@ -99,12 +101,12 @@ class SOAP extends Binding implements SynchronousBindingInterface
         }
 
         $document = DOMDocumentFactory::fromString($postText);
-        /** @var \DOMNode $xml */
+        /** @var \Dom\Node $xml */
         $xml = $document->firstChild;
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
 
         $xpCache = XPath::getXPath($document->documentElement);
-        /** @var \DOMElement[] $results */
+        /** @var \Dom\Element[] $results */
         $results = XPath::xpQuery($xml, '/SOAP-ENV:Envelope/SOAP-ENV:Body/*[1]', $xpCache);
 
         return MessageFactory::fromXML($results[0]);

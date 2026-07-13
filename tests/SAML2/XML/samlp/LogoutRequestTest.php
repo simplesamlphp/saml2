@@ -116,6 +116,7 @@ final class LogoutRequestTest extends TestCase
                 SessionIndex::fromString('SessionIndexValue2'),
             ],
         );
+
         $logoutRequestElement = $logoutRequest->toXML();
 
         $xpCache = XPath::getXPath($logoutRequestElement);
@@ -152,7 +153,7 @@ final class LogoutRequestTest extends TestCase
         $this->assertCount(1, $logoutRequestElements);
 
         // Test ordering of LogoutRequest contents
-        /** @var \DOMElement[] $logoutRequestElements */
+        /** @var \Dom\Element[] $logoutRequestElements */
         $logoutRequestElements = XPath::xpQuery(
             $logoutRequestElement,
             './saml_assertion:NameID/following-sibling::*',

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
@@ -109,7 +109,7 @@ final class AuthnStatement extends AbstractStatementType implements SchemaValida
      *   if one of the mandatory child-elements is missing
      * @throws \Exception if the authentication instant is not a valid timestamp.
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'AuthnStatement', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AuthnStatement::NS, InvalidDOMElementException::class);
@@ -143,7 +143,7 @@ final class AuthnStatement extends AbstractStatementType implements SchemaValida
     /**
      * Convert this AuthnStatement to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
 

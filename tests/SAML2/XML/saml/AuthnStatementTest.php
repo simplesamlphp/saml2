@@ -79,10 +79,11 @@ final class AuthnStatementTest extends TestCase
             ),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authnStatement),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($authnStatement);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -108,7 +109,7 @@ final class AuthnStatementTest extends TestCase
             ),
         );
 
-        // Marshall it to a \DOMElement
+        // Marshall it to a \Dom\Element
         $authnStatementElement = $authnStatement->toXML();
 
         // Test for a SubjectLocality
@@ -117,7 +118,7 @@ final class AuthnStatementTest extends TestCase
         $this->assertCount(1, $authnStatementElements);
 
         // Test ordering of AuthnStatement contents
-        /** @var \DOMElement[] $authnStatementElements */
+        /** @var \Dom\Element[] $authnStatementElements */
         $authnStatementElements = XPath::xpQuery(
             $authnStatementElement,
             './saml_assertion:SubjectLocality/following-sibling::*',

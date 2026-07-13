@@ -84,7 +84,9 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             "\x00\x04\x00\x00" . sha1($issuer->getContent()->getValue(), true) . $generatedId,
         );
         $artifactData = $message->toXML();
-        $artifactDataString = $artifactData->ownerDocument?->saveXML($artifactData);
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $artifactData->ownerDocument;
+        $artifactDataString = $ownerDocument->saveXML($artifactData);
 
         $clock = Utils::getContainer()->getClock();
         $store->set('artifact', $artifact, $artifactDataString, $clock->now()->add(new DateInterval('PT15M')));

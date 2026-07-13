@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\ecp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
@@ -97,14 +97,14 @@ final class Request extends AbstractEcpElement implements SchemaValidatableEleme
     /**
      * Convert XML into a Request
      *
-     * @param \DOMElement $xml The XML element we should load
+     * @param \Dom\Element $xml The XML element we should load
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing any of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'Request', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Request::NS, InvalidDOMElementException::class);
@@ -152,9 +152,9 @@ final class Request extends AbstractEcpElement implements SchemaValidatableEleme
     /**
      * Convert this ECP SubjectConfirmation to XML.
      *
-     * @param \DOMElement|null $parent The element we should append this element to.
+     * @param \Dom\Element|null $parent The element we should append this element to.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttributeNS(C::NS_SOAP_ENV, 'SOAP-ENV:mustUnderstand', '1');

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
@@ -120,7 +120,7 @@ final class AttributeConsumingService extends AbstractMdElement implements Schem
      * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
      *   if one of the mandatory child-elements is missing
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'AttributeConsumingService', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AttributeConsumingService::NS, InvalidDOMElementException::class);
@@ -150,7 +150,7 @@ final class AttributeConsumingService extends AbstractMdElement implements Schem
     /**
      * Convert to \DOMElement.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('index', $this->getIndex()->getValue());

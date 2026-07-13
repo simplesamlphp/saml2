@@ -55,9 +55,10 @@ final class ActionTest extends TestCase
             SAMLStringValue::fromString('SomeAction'),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($action),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($action);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

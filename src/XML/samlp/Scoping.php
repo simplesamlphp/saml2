@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
@@ -86,7 +86,7 @@ final class Scoping extends AbstractSamlpElement implements SchemaValidatableEle
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'Scoping', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Scoping::NS, InvalidDOMElementException::class);
@@ -105,7 +105,7 @@ final class Scoping extends AbstractSamlpElement implements SchemaValidatableEle
     /**
      * Convert this Scoping to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
 

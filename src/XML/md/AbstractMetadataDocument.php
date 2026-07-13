@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
@@ -127,7 +127,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 
     /**
      */
-    protected function getOriginalXML(): DOMElement
+    protected function getOriginalXML(): Dom\Element
     {
         return $this->isSigned() ? $this->getXML() : $this->toUnsignedXML();
     }
@@ -135,7 +135,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 
     /**
      */
-    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
+    public function toUnsignedXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
 

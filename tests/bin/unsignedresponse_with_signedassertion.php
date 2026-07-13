@@ -43,4 +43,7 @@ $unsignedResponse = new Response(
     assertions: [$signedAssertion],
 );
 
-echo $unsignedResponse->toXML()->ownerDocument->saveXML();
+/** @var \Dom\XMLDocument $ownerDocument */
+$ownerDocument = $unsignedResponse->toXML()->ownerDocument;
+
+echo $ownerDocument->saveXML();

@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\mdui;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
+use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XML\Type\LangValue;
@@ -111,7 +112,7 @@ final class Logo extends AbstractMduiElement implements
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing one of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'Logo', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, Logo::NS, InvalidDOMElementException::class);
@@ -120,7 +121,9 @@ final class Logo extends AbstractMduiElement implements
         $Url = SAMLAnyURIValue::fromString($xml->textContent);
         $Width = self::getAttribute($xml, 'width', PositiveIntegerValue::class);
         $Height = self::getAttribute($xml, 'height', PositiveIntegerValue::class);
-        $lang = self::getOptionalAttribute($xml, 'xml:lang', LangValue::class, null);
+        $lang = $xml->hasAttributeNS(C::NS_XML, 'lang')
+            ? LangValue::fromString($xml->getAttributeNS(C::NS_XML, 'lang'))
+            : null;
 
         return new static($Url, $Height, $Width, $lang);
     }
@@ -129,7 +132,7 @@ final class Logo extends AbstractMduiElement implements
     /**
      * Convert this Logo to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
         $e->textContent = $this->getContent()->getValue();
@@ -137,7 +140,7 @@ final class Logo extends AbstractMduiElement implements
         $e->setAttribute('width', $this->getWidth()->getValue());
 
         if ($this->getLanguage() !== null) {
-            $e->setAttribute('xml:lang', $this->getLanguage()->getValue());
+            $e->setAttributeNS(C::NS_XML, 'xml:lang', $this->getLanguage()->getValue());
         }
 
         return $e;

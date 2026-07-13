@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\samlp;
 
-use DOMElement;
+use Dom;
 use Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
@@ -164,6 +164,7 @@ AUTHNREQUEST
         $xml = $response->toXML();
         $xpCache = XPath::getXPath($xml);
         $xml_issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
+        /** @var \Dom\Element $xml_issuer */
         $xml_issuer = $xml_issuer[0];
 
         $this->assertFalse($xml_issuer->hasAttributes());
@@ -187,7 +188,7 @@ AUTHNREQUEST
         $xpCache = XPath::getXPath($xml);
         $xml_issuer = XPath::xpQuery($xml, './saml_assertion:Issuer', $xpCache);
         $xml_issuer = $xml_issuer[0];
-        $this->assertInstanceOf(DOMElement::class, $xml_issuer);
+        $this->assertInstanceOf(Dom\Element::class, $xml_issuer);
 
         $this->assertTrue($xml_issuer->hasAttributes());
         $this->assertEquals($issuer->getContent(), $xml_issuer->textContent);
@@ -400,7 +401,7 @@ XML;
         $messageElement = $message->toXML();
         $xp = XPath::xpQuery($messageElement, '.', XPath::getXPath($messageElement));
 
-        /** @var \DOMElement $query */
+        /** @var \Dom\Element $query */
         $query = $xp[0];
         $this->assertEquals('somethingNEW', $query->getAttribute('ID'));
     }
@@ -413,6 +414,7 @@ XML;
     {
         $xml = <<<XML
 <samlp:MyFantasy
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
     xmlns:samlp="urn:oasis:names:tc:SAML:2.0:protocol"
     ID="something"
     Version="2.0"

@@ -58,9 +58,10 @@ final class AuthnContextWithDeclRefTest extends TestCase
             ],
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($authnContext),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($authnContext);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

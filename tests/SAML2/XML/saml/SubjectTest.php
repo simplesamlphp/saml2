@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DOMDocument;
+use Dom;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -51,17 +51,20 @@ final class SubjectTest extends TestCase
     use SerializableElementTestTrait;
 
 
-    /** @var \DOMDocument */
-    private static DOMDocument $subject;
+    /** @var \Dom\XMLDocument */
+    private static Dom\XMLDocument $xmlRepresentationBaseId;
 
-    /** @var \DOMDocument */
-    private static DOMDocument $baseId;
+    /** @var \Dom\XMLDocument */
+    private static Dom\XMLDocument $subject;
 
-    /** @var \DOMDocument */
-    private static DOMDocument $nameId;
+    /** @var \Dom\XMLDocument */
+    private static Dom\XMLDocument $baseId;
 
-    /** @var \DOMDocument */
-    private static DOMDocument $subjectConfirmation;
+    /** @var \Dom\XMLDocument */
+    private static Dom\XMLDocument $nameId;
+
+    /** @var \Dom\XMLDocument */
+    private static Dom\XMLDocument $subjectConfirmation;
 
 
     public function setup(): void
@@ -70,6 +73,10 @@ final class SubjectTest extends TestCase
 
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/saml_Subject.xml',
+        );
+
+        self::$xmlRepresentationBaseId = DOMDocumentFactory::fromFile(
+            dirname(__FILE__, 4) . '/resources/xml/saml_Subject_BaseID.xml',
         );
 
         self::$subject = DOMDocumentFactory::fromString(
@@ -193,7 +200,7 @@ XML
             ],
         );
 
-        // Marshall it to a \DOMElement
+        // Marshall it to a \Dom\Element
         $subjectElement = $subject->toXML();
 
         // Test for a NameID
@@ -202,7 +209,7 @@ XML
         $this->assertCount(1, $subjectElements);
 
         // Test ordering of Subject contents
-        /** @var \DOMElement[] $subjectElements */
+        /** @var \Dom\Element[] $subjectElements */
         $subjectElements = XPath::xpQuery($subjectElement, './saml_assertion:NameID/following-sibling::*', $xpCache);
         $this->assertCount(1, $subjectElements);
         $this->assertEquals('saml:SubjectConfirmation', $subjectElements[0]->tagName);
@@ -245,7 +252,7 @@ XML
                 new SubjectConfirmation(
                     SAMLAnyURIValue::fromString('urn:oasis:names:tc:SAML:2.0:cm:bearer'),
                     new NameID(
-                        value: SAMLStringValue::fromString('SomeNameIDValue'),
+                        value: SAMLStringValue::fromString('SomeOtherNameIDValue'),
                         SPNameQualifier: SAMLStringValue::fromString(
                             'https://sp.example.org/authentication/sp/metadata',
                         ),
@@ -266,12 +273,10 @@ XML
         AbstractBaseID::fromXML(self::$baseId->documentElement)->toXML($document->documentElement);
         SubjectConfirmation::fromXML(self::$subjectConfirmation->documentElement)->toXML($document->documentElement);
 
-        // Normalize both documents before comparing
-        $expected = DOMDocumentFactory::normalizeDocument($document);
-        $actualDoc = DOMDocumentFactory::fromString((string) $subject);
-        $actual = DOMDocumentFactory::normalizeDocument($actualDoc);
-
-        $this->assertXmlStringEqualsXmlString($expected->saveXML(), $actual->saveXML());
+        $this->assertEquals(
+            self::$xmlRepresentationBaseId->saveXML(self::$xmlRepresentationBaseId->documentElement),
+            strval($subject),
+        );
     }
 
 

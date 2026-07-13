@@ -51,11 +51,12 @@ final class TelephoneNumberTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = TelephoneNumber::fromString('+1234567890');
+        $telephoneNumber = TelephoneNumber::fromString('+1234567890');
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($name),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($telephoneNumber);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

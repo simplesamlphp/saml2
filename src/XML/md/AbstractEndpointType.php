@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
@@ -110,14 +110,14 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
      *
      * Note: this method cannot be used when extending this class, if the constructor has a different signature.
      *
-     * @param \DOMElement $xml The XML element we should load.
+     * @param \Dom\Element $xml The XML element we should load.
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the supplied element is missing any of the mandatory attributes
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         $qualifiedName = static::getClassName(static::class);
         Assert::eq(
@@ -140,9 +140,9 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
     /**
      * Add this endpoint to an XML element.
      *
-     * @param \DOMElement $parent The element we should append this endpoint to.
+     * @param \Dom\Element $parent The element we should append this endpoint to.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = parent::instantiateParentElement($parent);
 

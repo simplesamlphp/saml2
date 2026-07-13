@@ -52,9 +52,10 @@ final class NameIDFormatTest extends TestCase
     {
         $nameIdFormat = NameIDFormat::fromString(C::NAMEID_PERSISTENT);
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($nameIdFormat),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($nameIdFormat);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

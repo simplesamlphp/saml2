@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
@@ -83,7 +83,7 @@ final class AssertionIDRequest extends AbstractRequest implements SchemaValidata
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   If the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'AssertionIDRequest', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, AssertionIDRequest::NS, InvalidDOMElementException::class);
@@ -142,7 +142,7 @@ final class AssertionIDRequest extends AbstractRequest implements SchemaValidata
     /**
      * Convert this AssertionIDRequest element to XML.
      */
-    public function toUnsignedXML(?DOMElement $parent = null): DOMElement
+    public function toUnsignedXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = parent::toUnsignedXML($parent);
 

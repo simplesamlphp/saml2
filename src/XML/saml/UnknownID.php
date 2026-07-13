@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XMLSchema\Type\QNameValue;
@@ -46,7 +46,7 @@ final class UnknownID extends AbstractBaseID
     /**
      * Convert this unknown ID to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         return $this->getRawIdentifier()->toXML($parent);
     }

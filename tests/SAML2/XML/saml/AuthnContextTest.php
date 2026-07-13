@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\XML\saml;
 
-use DOMDocument;
+use Dom;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
@@ -31,8 +31,8 @@ use function dirname;
 #[CoversClass(AbstractSamlElement::class)]
 final class AuthnContextTest extends TestCase
 {
-    /** @var \DOMDocument */
-    private static DOMDocument $decl;
+    /** @var \Dom\XMLDocument $decl */
+    private static Dom\XMLDocument $decl;
 
 
     /**

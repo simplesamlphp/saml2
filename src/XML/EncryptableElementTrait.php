@@ -65,13 +65,15 @@ trait EncryptableElementTrait
         }
 
         $xmlRepresentation = $this->toXML();
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $xmlRepresentation->ownerDocument;
 
         return new EncryptedData(
             new CipherData(
                 new CipherValue(
                     Base64BinaryValue::fromString(
                         base64_encode($encryptor->encrypt(
-                            $xmlRepresentation->ownerDocument->saveXML($xmlRepresentation),
+                            $ownerDocument->saveXML($xmlRepresentation),
                         )),
                     ),
                 ),

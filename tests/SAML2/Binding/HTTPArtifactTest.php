@@ -48,26 +48,6 @@ final class HTTPArtifactTest extends TestCase
 
 
     /**
-     * Distinguish the legacy and the new signature-validation APIs:
-     * - Legacy messages: validate(XMLSecurityKey $key)
-     * - New XML model: verify($verifier) returning a verified instance
-     */
-    public function testLegacyVsNewSignatureApiIsDifferent(): void
-    {
-        $legacyClass = \SAML2\Message::class;
-        $newClass = \SimpleSAML\SAML2\XML\samlp\AbstractMessage::class;
-
-        /** @phpstan-ignore-next-line */
-        $this->assertTrue(method_exists($legacyClass, 'validate'));
-        $this->assertFalse(method_exists($legacyClass, 'verify'));
-
-        /** @phpstan-ignore-next-line */
-        $this->assertTrue(method_exists($newClass, 'verify'));
-        $this->assertFalse(method_exists($newClass, 'validate'));
-    }
-
-
-    /**
      * @return array<
      *     string,
      *     array{

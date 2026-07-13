@@ -23,4 +23,7 @@ $encryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
 $nid = new NameID(SAMLStringValue::fromString('very secret'));
 $eid = new EncryptedID($nid->encrypt($encryptor));
 
-echo $eid->toXML()->ownerDocument->saveXML();
+/** @var \DOM\XMLDocument $ownerDocument */
+$ownerDocument = $eid->toXML()->ownerDocument;
+
+echo $ownerDocument->saveXML();

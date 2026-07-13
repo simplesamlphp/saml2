@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\samlp;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
@@ -24,7 +24,7 @@ abstract class MessageFactory
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): AbstractMessage
+    public static function fromXML(Dom\Element $xml): AbstractMessage
     {
         Assert::same(
             $xml->namespaceURI,

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\alg;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\XML\ExtendableElementTrait;
@@ -58,14 +58,14 @@ final class DigestMethod extends AbstractAlgElement implements SchemaValidatable
     /**
      * Convert XML into a DigestMethod
      *
-     * @param \DOMElement $xml The XML element we should load
+     * @param \Dom\Element $xml The XML element we should load
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
      *   if the mandatory Algorithm-attribute is missing
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'DigestMethod', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, DigestMethod::NS, InvalidDOMElementException::class);
@@ -80,9 +80,9 @@ final class DigestMethod extends AbstractAlgElement implements SchemaValidatable
     /**
      * Convert this element to XML.
      *
-     * @param \DOMElement|null $parent The element we should append to.
+     * @param \Dom\Element|null $parent The element we should append to.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         $e = $this->instantiateParentElement($parent);
         $e->setAttribute('Algorithm', $this->getAlgorithm()->getValue());

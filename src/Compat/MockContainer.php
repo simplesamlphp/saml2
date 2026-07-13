@@ -45,7 +45,7 @@ class MockContainer extends AbstractContainer
      * - **encrypt** XML that is about to be encrypted
      * - **decrypt** XML that was just decrypted
      *
-     * @param \DOMElement|string $message
+     * @param \Dom\Element|string $message
      */
     public function debugMessage($message, string $type): void
     {

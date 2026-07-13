@@ -25,4 +25,7 @@ $document = DOMDocumentFactory::fromFile(dirname(__FILE__, 2) . '/resources/xml/
 $assertion = Assertion::fromXML($document->documentElement);
 $eassertion = new EncryptedAssertion($assertion->encrypt($encryptor));
 
-echo $eassertion->toXML()->ownerDocument->saveXML();
+/** @var \Dom\XMLDocument $ownerDocument */
+$ownerDocument = $eassertion->toXML()->ownerDocument;
+
+echo $ownerDocument->saveXML();

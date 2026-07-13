@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Assertion\Validation;
 
-use DOMDocument;
+use Dom;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\PreserveGlobalState;
@@ -43,8 +43,8 @@ final class AssertionValidatorTest extends TestCase
     /** @var \Psr\Clock\ClockInterface */
     protected static ClockInterface $clock;
 
-    /** @var \DOMDocument */
-    protected static DOMDocument $document;
+    /** @var \Dom\XMLDocument */
+    protected static Dom\XMLDocument $document;
 
     /** @var \SimpleSAML\SAML2\Assertion\Processor */
     protected static Processor $assertionProcessor;
@@ -143,7 +143,9 @@ XML
     #[RunInSeparateProcess]
     public function testBasicValidation(): void
     {
-        $assertion = Assertion::fromXML(self::$document->firstChild);
+        /** @var \Dom\Element $firstChild */
+        $firstChild = self::$document->firstChild;
+        $assertion = Assertion::fromXML($firstChild);
         self::$assertionProcessor->validateAssertion($assertion);
     }
 
@@ -186,7 +188,9 @@ XML
             ,
         );
 
-        $assertion = Assertion::fromXML($document->firstChild);
+        /** @var \Dom\Element $firstChild */
+        $firstChild = $document->firstChild;
+        $assertion = Assertion::fromXML($firstChild);
 
         $this->expectException(InvalidAssertionException::class);
         $this->expectExceptionMessage(

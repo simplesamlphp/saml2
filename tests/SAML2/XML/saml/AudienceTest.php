@@ -50,9 +50,10 @@ final class AudienceTest extends TestCase
     {
         $audience = Audience::fromString('urn:test:audience1');
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($audience),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($audience);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

@@ -168,9 +168,10 @@ final class EntityAttributesTest extends TestCase
         $entityAttributes->addChild($signedAssertion);
         $entityAttributes->addChild($attribute2);
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($entityAttributes),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($entityAttributes);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }

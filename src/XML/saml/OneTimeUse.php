@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\saml;
 
-use DOMElement;
+use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
@@ -26,7 +26,7 @@ final class OneTimeUse extends AbstractConditionType implements SchemaValidatabl
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   If the qualified name of the supplied element is wrong
      */
-    public static function fromXML(DOMElement $xml): static
+    public static function fromXML(Dom\Element $xml): static
     {
         Assert::same($xml->localName, 'OneTimeUse', InvalidDOMElementException::class);
         Assert::same($xml->namespaceURI, OneTimeUse::NS, InvalidDOMElementException::class);
@@ -38,7 +38,7 @@ final class OneTimeUse extends AbstractConditionType implements SchemaValidatabl
     /**
      * Convert this OneTimeUse to XML.
      */
-    public function toXML(?DOMElement $parent = null): DOMElement
+    public function toXML(?Dom\Element $parent = null): Dom\Element
     {
         return $this->instantiateParentElement($parent);
     }

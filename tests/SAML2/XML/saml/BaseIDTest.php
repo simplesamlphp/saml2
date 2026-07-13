@@ -88,10 +88,11 @@ final class BaseIDTest extends TestCase
             SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),
         );
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($baseId),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($baseId);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 
 
@@ -143,6 +144,8 @@ final class BaseIDTest extends TestCase
         $this->assertEquals('BaseID', $chunk->getLocalName());
         $this->assertEquals(C::NS_SAML, $chunk->getNamespaceURI());
 
-        $this->assertEquals($element->ownerDocument?->saveXML($element), strval($baseId));
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $element->ownerDocument;
+        $this->assertEquals($ownerDocument->saveXML($element), strval($baseId));
     }
 }

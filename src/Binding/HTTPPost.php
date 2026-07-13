@@ -53,7 +53,9 @@ class HTTPPost extends Binding implements AsynchronousBindingInterface, RelaySta
         $msgStr = $message->toXML();
 
         Utils::getContainer()->debugMessage($msgStr, 'out');
-        $msgStr = $msgStr->ownerDocument?->saveXML($msgStr);
+        /** @var \Dom\XMLDocument $ownerDocument */
+        $ownerDocument = $msgStr->ownerDocument;
+        $msgStr = $ownerDocument?->saveXML($msgStr);
 
         $msgStr = base64_encode($msgStr);
 

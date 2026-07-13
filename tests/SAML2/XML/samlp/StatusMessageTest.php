@@ -48,9 +48,10 @@ final class StatusMessageTest extends TestCase
     {
         $statusMessage = StatusMessage::fromString('Something went wrong');
 
-        $this->assertEquals(
-            self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
-            strval($statusMessage),
-        );
+        $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
+        $this->assertNotFalse($expectedXml);
+        $actualXml = strval($statusMessage);
+
+        $this->assertXmlStringEqualsXmlString($expectedXml, $actualXml);
     }
 }
