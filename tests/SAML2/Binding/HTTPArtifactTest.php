@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Binding;
 
-use DOMDocument;
 use Exception;
 use Nyholm\Psr7\ServerRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -16,11 +15,11 @@ use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Binding\HTTPArtifact;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
+use SimpleSAML\XML\DOMDocumentFactory;;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
 use function htmlspecialchars;
-use function method_exists;
 
 /**
  * @package simplesamlphp\saml2
@@ -299,7 +298,7 @@ final class HTTPArtifactTest extends TestCase
             '<ds:SignatureValue>AA==</ds:SignatureValue>' .
             '</ds:Signature>';
 
-        $doc = new DOMDocument('1.0', 'UTF-8');
+        $doc = DOMDocumentFactory::create('1.0', 'UTF-8');
         $doc->loadXML($xml);
 
         return Signature::fromXML($doc->documentElement);
