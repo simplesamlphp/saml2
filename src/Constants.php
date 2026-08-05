@@ -227,6 +227,11 @@ class Constants extends \SimpleSAML\XMLSecurity\Constants
     public const string NS_ALG = 'urn:oasis:names:tc:SAML:metadata:algsupport';
 
     /**
+     * The namespace for the SAML 2 Asynchronous Single Logout Profile Extension
+     */
+    public const string NS_ASLO = 'urn:oasis:names:tc:SAML:2.0:protocol:ext:async-slo';
+
+    /**
      * The namespace for the ECP protocol.
      */
     public const string NS_ECP = 'urn:oasis:names:tc:SAML:2.0:profiles:SSO:ecp';
