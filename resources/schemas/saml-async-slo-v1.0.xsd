@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<schema xmlns:aslo="urn:oasis:names:tc:SAML:2.0:protocol:ext:async-slo" 
+        xmlns="http://www.w3.org/2001/XMLSchema"  
+        targetNamespace="urn:oasis:names:tc:SAML:2.0:protocol:ext:async-slo"
+        elementFormDefault="qualified">
+    
+    <element name="Asynchronous" type="aslo:AsynchronousType" />
+    <complexType name="AsynchronousType" />
+
+    <attribute name="supportsAsynchronous" type="boolean"/>
+    
+</schema>
