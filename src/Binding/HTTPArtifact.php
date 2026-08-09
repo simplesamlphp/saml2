@@ -187,6 +187,31 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
         /** @var \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $artifactResponse */
         $artifactResponse = $soap->send($ar, $this->spMetadata, $idpMetadata);
 
+        return $this->handleReceivedArtifactResponse($artifactResponse,$query,$idpMetadata);
+    }
+
+
+    /**
+     * Handle the received response of a SAML 2 message sent using the HTTP-Artifact binding.
+     *
+     * Throws an exception if it is unable handle the message.
+     * This method is mainly used by receive(), it can be considered the handling part
+     * of the received message, checking validity and signatures et al before returning
+     * that message for the caller.
+     *
+     * This method is stand alone so that the test suite can mock things up
+     * and test strange combinations for correctness.
+     *
+     * @param \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $artifactResponse The received message
+     * @param array query the QueryParams for the request
+     * @param \SimpleSAML\Configuration $idpMetadata the metadata for the IdP who this artifact was sent to
+     * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
+     *
+     * @throws \Exception
+     * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
+     */
+    public function handleReceivedArtifactResponse(ArtifactResponse $artifactResponse,array $query,?Configuration $idpMetadata): AbstractMessage
+    {
         if (!$artifactResponse->isSuccess()) {
             throw new Exception('Received error from ArtifactResolutionService.');
         }
@@ -205,7 +230,30 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             $this->setRelayState($query['RelayState']);
         }
 
-        return $samlResponse;
+        //
+        // saml response must be signed
+        //
+        if ($samlResponse->isSigned() !== true) {
+            throw new Exception('Received SAML Response which is not signed.');
+        }
+
+        //
+        // signed saml response must claim to be from same IdP
+        // this test is before verifyMessageSignature() so it can run in a test suite
+        // env. Signature verification should not change the IdP from the issuer.
+        //
+        $idpEntity = $idpMetadata->getString('entityid');
+        $samlResponseEntity = $samlResponse->getIssuer()?->getContent()->getValue();
+        if($samlResponseEntity === null) {
+            throw new Exception('Received SAML Response with no entity ID.');
+        }
+        if ($samlResponseEntity !== $idpEntity) {
+            throw new Exception('Received SAML Response from an IdP for another IdP.');
+        }
+
+        $msg = $this->verifyMessageSignature($samlResponse, $idpMetadata);
+
+        return $msg;
     }
 
 
