@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\md;
 
 use Dom;
+use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\aslo\SupportsAsynchronousTrait;
 use SimpleSAML\XMLSchema\Type\BooleanValue;
 
@@ -83,7 +85,7 @@ final class SingleLogoutService extends AbstractEndpointType
      */
     public function toXML(?Dom\Element $parent = null): Dom\Element
     {
-        $e = parent::instantiateParentElement($parent);
+        $e = parent::toXML($parent);
 
         if ($this->getSupportsAsynchronous() !== null) {
             $e->setAttribute('supportsAsynchronous', $this->getSupportsAsynchronous()->getValue());

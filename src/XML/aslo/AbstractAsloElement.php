@@ -13,7 +13,7 @@ use SimpleSAML\XML\AbstractElement;
  * @see https://docs.oasis-open.org/security/saml/Post2.0/saml-async-slo/v1.0/saml-async-slo-v1.0.pdf
  * @package simplesamlphp/saml2
  */
-abstract class AbstractAlgElement extends AbstractElement
+abstract class AbstractAsloElement extends AbstractElement
 {
     public const string NS = C::NS_ASLO;
 
