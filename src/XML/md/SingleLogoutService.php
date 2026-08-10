@@ -46,7 +46,6 @@ final class SingleLogoutService extends AbstractEndpointType
     }
 
 
-
     /**
      * Initialize a SingleLogoutService.
      *
