@@ -8,6 +8,7 @@ use Dom;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\aslo\SupportsAsynchronousTrait;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Type\BooleanValue;
 
 /**
