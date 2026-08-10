@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2;
 
-use DOMDocument;
+use Dom;
 use Exception;
 use OpenSSLAsymmetricKey;
 use SimpleSAML\Configuration;
@@ -363,7 +363,7 @@ class SOAPClient
      * @param \DOMDocument $soapMessage Soap response needs to be type DOMDocument
      * @return \SimpleSAML\SOAP11\XML\Fault|null
      */
-    private function getSOAPFault(DOMDocument $soapMessage): ?Fault
+    private function getSOAPFault(Dom\XMLDocument $soapMessage): ?Fault
     {
         $soapFault = XPath::xpQuery(
             $soapMessage->firstChild,

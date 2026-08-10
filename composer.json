@@ -32,8 +32,8 @@
         "psr/log": "~3.0",
         "simplesamlphp/assert": "~3.0",
         "simplesamlphp/xml-common": "~3.0",
-        "simplesamlphp/xml-security": "~3.0",
-        "simplesamlphp/xml-soap": "~3.0"
+        "simplesamlphp/xml-security": "^3.0",
+        "simplesamlphp/xml-soap": "^3.0"
     },
     "require-dev": {
         "ext-intl": "*",

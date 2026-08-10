@@ -99,7 +99,7 @@ final class NewEncryptedIDTest extends TestCase
             ),
             type: AnyURIValue::fromString(C::XMLENC_ELEMENT),
             encryptionMethod: new EncryptionMethod(
-                AnyURIValue::fromString('http://www.w3.org/2009xmlenc11#aes256-gcm'),
+                AnyURIValue::fromString('http://www.w3.org/2009/xmlenc11#aes256-gcm'),
             ),
             keyInfo: new KeyInfo([
                 new EncryptedKey(

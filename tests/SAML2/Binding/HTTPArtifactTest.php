@@ -299,7 +299,7 @@ final class HTTPArtifactTest extends TestCase
             '</ds:Signature>';
 
         $doc = DOMDocumentFactory::create('1.0', 'UTF-8');
-        $doc->loadXML($xml);
+        $doc = $doc->createFromString($xml);
 
         return Signature::fromXML($doc->documentElement);
     }

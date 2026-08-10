@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
@@ -34,7 +35,7 @@ final class EntityIDTest extends TestCase
         try {
             Assert::validEntityID($entityID);
             $this->assertTrue($shouldPass);
-        } catch (ProtocolViolationException | SchemaViolationException $e) {
+        } catch (AssertionFailedException | ProtocolViolationException | SchemaViolationException $e) {
             $this->assertFalse($shouldPass);
         }
     }

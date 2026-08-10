@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\Type;
 
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
+
+use function sprintf;
 
 /**
  * @package simplesaml/saml2
@@ -27,6 +31,10 @@ class EntityIDValue extends SAMLAnyURIValue
     protected function validateValue(string $value): void
     {
         // Note: value must already be sanitized before validating
-        Assert::validEntityID($this->sanitizeValue($value));
+        try {
+            Assert::validEntityID($this->sanitizeValue($value));
+        } catch (AssertionFailedException $e) {
+            throw new ProtocolViolationException(sprintf('"%s" is not a SAML2-compliant URI', $value));
+        }
     }
 }

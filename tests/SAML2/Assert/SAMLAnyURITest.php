@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
@@ -31,7 +32,7 @@ final class SAMLAnyURITest extends TestCase
         try {
             Assert::validSAMLAnyURI($uri);
             $this->assertTrue($shouldPass);
-        } catch (ProtocolViolationException | SchemaViolationException $e) {
+        } catch (AssertionFailedException | ProtocolViolationException | SchemaViolationException $e) {
             $this->assertFalse($shouldPass);
         }
     }
