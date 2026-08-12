@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\md;
 
-use SimpleSAML\XML\SchemaValidatableElementInterface;
-use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\aslo\SupportsAsynchronousTrait;
+use SimpleSAML\XML\SchemaValidatableElementInterface;
+use SimpleSAML\XML\SchemaValidatableElementTrait;
 
 /**
  * SingleLogoutService element of type EndpointType
