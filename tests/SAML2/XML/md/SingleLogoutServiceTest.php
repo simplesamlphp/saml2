@@ -66,6 +66,7 @@ final class SingleLogoutServiceTest extends TestCase
             SAMLAnyURIValue::fromString(C::BINDING_HTTP_POST),
             SAMLAnyURIValue::fromString(C::LOCATION_A),
             SAMLAnyURIValue::fromString(C::LOCATION_B),
+            [],
             [$supportsAsynchronous],
         );
 

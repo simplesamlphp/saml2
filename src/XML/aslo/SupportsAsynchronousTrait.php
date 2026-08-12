@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SimpleSAML\SAML2\XML\aslo;
 
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\XMLSchema\Type\BooleanValue;
 
 /**
@@ -12,7 +13,7 @@ use SimpleSAML\XMLSchema\Type\BooleanValue;
 trait SupportsAsynchronousTrait
 {
     /** @var \SimpleSAML\XMLSchema\Type\BooleanValue|null */
-    protected ?BooleanValue $supportsAsynchronous;
+    protected ?BooleanValue $supportsAsynchronous = null;
 
 
     /**
@@ -25,10 +26,15 @@ trait SupportsAsynchronousTrait
 
 
     /**
-     * @param \SimpleSAML\XMLSchema\Type\BooleanValue $supportsAsynchronous|null
+     * @param array<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
-    private function setSupportsAsynchronous(?BooleanValue $supportsAsynchronous): void
+    private function setSupportsAsynchronous(array $namespacedAttributes = []): void
     {
-        $this->supportsAsynchronous = $supportsAsynchronous;
+        foreach ($namespacedAttributes as $attr) {
+            if ($attr->getNamespaceURI() === C::NS_ASLO && $attr->getAttrName() === 'supportsAsynchronous') {
+                $this->supportsAsynchronous = BooleanValue::fromString($attr->getAttrValue()->getValue());
+                return;
+            }
+        }
     }
 }
