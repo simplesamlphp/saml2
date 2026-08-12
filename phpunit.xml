@@ -11,6 +11,10 @@
       <directory>./tests/Vulnerabilities</directory>
     </testsuite>
   </testsuites>
+  <php>
+    <!-- This variable enables legacy SHA-1 signatures in RHEL-systems, only in the context of PHPunit -->
+    <env name="OPENSSL_ENABLE_SHA1_SIGNATURES" value="1"/>
+  </php>
   <logging/>
   <source>
     <include>
