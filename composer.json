@@ -40,7 +40,6 @@
 
         "beste/clock": "~3.0",
         "icanhazstring/composer-unused": "^0.9.6",
-        "maglnet/composer-require-checker": "^4.20",
         "mockery/mockery": "~1.6",
         "simplesamlphp/simplesamlphp": "^3.0@dev",
         "simplesamlphp/simplesamlphp-test-framework": "~2.0"
