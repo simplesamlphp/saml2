@@ -32,7 +32,7 @@
         "psr/log": "~3.0",
         "simplesamlphp/assert": "~3.0",
         "simplesamlphp/xml-common": "~3.0",
-        "simplesamlphp/xml-security": "^3.0",
+        "simplesamlphp/xml-security": "dev-feature/private-key-agent",
         "simplesamlphp/xml-soap": "^3.0"
     },
     "require-dev": {
@@ -41,7 +41,7 @@
         "beste/clock": "~3.0",
         "icanhazstring/composer-unused": "^0.9.6",
         "mockery/mockery": "~1.6",
-        "simplesamlphp/simplesamlphp": "^3.0@dev",
+        "simplesamlphp/simplesamlphp": "dev-simplesamlphp-3.0",
         "simplesamlphp/simplesamlphp-test-framework": "~2.0"
     },
     "suggest": {
