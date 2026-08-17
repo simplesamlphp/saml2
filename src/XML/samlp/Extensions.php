@@ -9,6 +9,7 @@ use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\ExtensionsTrait;
 use SimpleSAML\XML\Chunk;
+use SimpleSAML\XML\Registry\ElementRegistry;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
@@ -63,11 +64,18 @@ final class Extensions extends AbstractSamlpElement implements SchemaValidatable
             'Invalid Extensions element \'' . $xml->localName . '\'',
             InvalidDOMElementException::class,
         );
+
+        $registry = ElementRegistry::getInstance();
         $ret = [];
 
         /** @var \Dom\Element $node */
         foreach (XPath::xpQuery($xml, './*', XPath::getXPath($xml)) as $node) {
-            $ret[] = new Chunk($node);
+            $result = $registry->getElementHandler($node->namespaceURI, $node->localName);
+            if ($result !== null) {
+                $ret[] = $result::fromXML($node);
+            } else {
+                $ret[] = new Chunk($node);
+            }
         }
 
         return new static($ret);
