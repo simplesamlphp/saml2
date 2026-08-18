@@ -17,6 +17,7 @@ use SimpleSAML\SAML2\XML\CanonicalizableElementTrait;
 use SimpleSAML\SAML2\XML\EncryptableElementTrait;
 use SimpleSAML\SAML2\XML\SignableElementTrait;
 use SimpleSAML\SAML2\XML\SignedElementTrait;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
@@ -326,7 +327,10 @@ final class Assertion extends AbstractSamlElement implements
         if (!empty($signature)) {
             $assertion->setSignature($signature[0]);
             $assertion->wasSignedAtConstruction = true;
-            $assertion->setXML($xml);
+
+            $doc = DOMDocumentFactory::create();
+            $doc->appendChild($doc->importNode($xml, true));
+            $assertion->setXML($doc->documentElement);
         }
 
         return $assertion;

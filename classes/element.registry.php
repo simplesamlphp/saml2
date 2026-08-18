@@ -3,6 +3,9 @@
 declare(strict_types=1);
 
 return [
+    'urn:oasis:names:tc:SAML:2.0:protocol:ext:async-slo' => [
+        'Asynchronous' => '\SimpleSAML\SAML2\XML\aslo\Asynchronous',
+    ],
     'urn:oasis:names:tc:SAML:metadata:algsupport' => [
         'DigestMethod' => '\SimpleSAML\SAML2\XML\alg\DigestMethod',
         'SigningMethod' => '\SimpleSAML\SAML2\XML\alg\SigningMethod',

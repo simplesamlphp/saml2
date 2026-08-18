@@ -1,0 +1,1 @@
+<md:SingleLogoutService xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata" xmlns:aslo="urn:oasis:names:tc:SAML:2.0:protocol:ext:async-slo" Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://simplesamlphp.org/some/endpoint" ResponseLocation="https://simplesamlphp.org/other/endpoint" aslo:supportsAsynchronous="true"/>

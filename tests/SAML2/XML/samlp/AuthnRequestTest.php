@@ -17,6 +17,7 @@ use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\aslo\Asynchronous;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
@@ -31,6 +32,7 @@ use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\AuthnContextComparisonTypeEnum;
 use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
+use SimpleSAML\SAML2\XML\samlp\Extensions;
 use SimpleSAML\SAML2\XML\samlp\GetComplete;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
@@ -101,6 +103,11 @@ final class AuthnRequestTest extends TestCase
             ),
         );
 
+        $extensions = new Extensions([
+            // Note:  this makes zero sense in an AuthnRequest, but we can't be picky in what extensions we accept
+            new Asynchronous(),
+        ]);
+
         $authnRequest = new AuthnRequest(
             subject: $subject,
             issuer: new Issuer(
@@ -110,6 +117,7 @@ final class AuthnRequestTest extends TestCase
             id: IDValue::fromString('_2b0226190ca1c22de6f66e85f5c95158'),
             issueInstant: SAMLDateTimeValue::fromString('2014-09-22T13:42:00Z'),
             destination: SAMLAnyURIValue::fromString('https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO'),
+            extensions: $extensions,
         );
 
         $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);
@@ -181,6 +189,12 @@ final class AuthnRequestTest extends TestCase
             [$requesterId],
         );
 
+        // Create Extensions
+        $extensions = new Extensions([
+            // Note:  this makes zero sense in an AuthnRequest, but we can't be picky in what extensions we accept
+            new Asynchronous(),
+        ]);
+
         $authnRequest = new AuthnRequest(
             id: IDValue::fromString('SomeIDValue'),
             requestedAuthnContext: $rac,
@@ -192,27 +206,30 @@ final class AuthnRequestTest extends TestCase
                 SAMLStringValue::fromString('https://gateway.stepup.org/saml20/sp/metadata'),
             ),
             scoping: $scoping,
+            extensions: $extensions,
         );
 
         $authnRequestElement = $authnRequest->toXML();
 
         // Test for a Subject
         $xpCache = XPath::getXPath($authnRequestElement);
-        $authnRequestElements = XPath::xpQuery($authnRequestElement, './saml_assertion:Subject', $xpCache);
+        $authnRequestElements = XPath::xpQuery($authnRequestElement, './saml_assertion:Issuer', $xpCache);
         $this->assertCount(1, $authnRequestElements);
 
         // Test ordering of AuthnRequest contents
         /** @var \Dom\Element[] $authnRequestElements */
         $authnRequestElements = XPath::xpQuery(
             $authnRequestElement,
-            './saml_assertion:Subject/following-sibling::*',
+            './saml_assertion:Issuer/following-sibling::*',
             $xpCache,
         );
-        $this->assertCount(4, $authnRequestElements);
-        $this->assertEquals('samlp:NameIDPolicy', $authnRequestElements[0]->tagName);
-        $this->assertEquals('saml:Conditions', $authnRequestElements[1]->tagName);
-        $this->assertEquals('samlp:RequestedAuthnContext', $authnRequestElements[2]->tagName);
-        $this->assertEquals('samlp:Scoping', $authnRequestElements[3]->tagName);
+        $this->assertCount(6, $authnRequestElements);
+        $this->assertEquals('samlp:Extensions', $authnRequestElements[0]->tagName);
+        $this->assertEquals('saml:Subject', $authnRequestElements[1]->tagName);
+        $this->assertEquals('samlp:NameIDPolicy', $authnRequestElements[2]->tagName);
+        $this->assertEquals('saml:Conditions', $authnRequestElements[3]->tagName);
+        $this->assertEquals('samlp:RequestedAuthnContext', $authnRequestElements[4]->tagName);
+        $this->assertEquals('samlp:Scoping', $authnRequestElements[5]->tagName);
     }
 
 
