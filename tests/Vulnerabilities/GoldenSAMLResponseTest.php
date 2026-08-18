@@ -16,16 +16,19 @@ use SimpleSAML\XMLSecurity\Key\PublicKey;
 use function dirname;
 
 /**
- * CVE-2025-66475
- *
  * @package simplesamlphp/saml2
  */
 #[Group('vulnerabilities')]
 final class GoldenSAMLResponseTest extends TestCase
 {
     /**
+     * CVE-2025-66475 / Void Canonicalization ("Golden SAML Response")
+     *
+     * A relative namespace on an ancestor causes libxml2 C14N to fail.
+     * After the fix this must be treated as fatal; the signature must not
+     * be accepted (even though DigestValue is the SHA-256 of the empty string).
      */
-    public function testSignedResponseWithStrayXmlnsThrowsAnException(): void
+    public function testGoldenSAMLResponseWithRelativeXmlnsIsRejected(): void
     {
         $doc = DOMDocumentFactory::fromFile(
             dirname(__DIR__, 1) . '/resources/xml/vulnerabilities/CVE-2025-66475.xml',
@@ -33,23 +36,27 @@ final class GoldenSAMLResponseTest extends TestCase
 
         $response = Response::fromXML($doc->documentElement);
         $assertion = $response->getAssertions()[0];
-        /** @var \SimpleSAML\XMLSecurity\XML\ds\X509Data $data */
-        $data = $assertion->getSignature()->getKeyInfo()->getInfo()[0];
+
+        // Key material taken from the Signature in the fixture
+        /** @var \SimpleSAML\XMLSecurity\XML\ds\X509Data $x509Data */
+        $x509Data = $assertion->getSignature()->getKeyInfo()->getInfo()[0];
+        $cert = $x509Data->getData()[0]->getContent()->getValue();
+
+        $alg = $assertion->getSignature()
+            ->getSignedInfo()
+            ->getSignatureMethod()
+            ->getAlgorithm()
+            ->getValue();
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
-            $assertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm()->getValue(),
+            $alg,
             new PublicKey(
-                new PEM(
-                    PEM::TYPE_PUBLIC_KEY,
-                    $data->getData()[0]->getContent()->getValue(),
-                ),
+                new PEM(PEM::TYPE_PUBLIC_KEY, $cert),
             ),
         );
 
         $this->expectException(CanonicalizationFailedException::class);
 
-        // When PHP 8.5 becomes the minimum:
-        // (void)@$assertion->verify($verifier);
         @$assertion->verify($verifier);
     }
 }
