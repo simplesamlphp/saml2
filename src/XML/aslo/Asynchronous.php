@@ -11,7 +11,7 @@ use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 
 /**
- * Class representing a aslo:Asynchronous element.
+ * Class representing an aslo:Asynchronous element.
  *
  * @package simplesaml/saml2
  */
@@ -21,7 +21,7 @@ final class Asynchronous extends AbstractAsloElement implements SchemaValidatabl
 
 
     /**
-     * Convert XML into a Asynchronous
+     * Convert XML into an Asynchronous
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
