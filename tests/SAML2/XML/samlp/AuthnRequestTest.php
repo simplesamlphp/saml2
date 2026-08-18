@@ -104,6 +104,7 @@ final class AuthnRequestTest extends TestCase
         );
 
         $extensions = new Extensions([
+            // Note:  this makes zero sense in an AuthnRequest, but we can't be picky in what extensions we accept
             new Asynchronous(),
         ]);
 
@@ -190,6 +191,7 @@ final class AuthnRequestTest extends TestCase
 
         // Create Extensions
         $extensions = new Extensions([
+            // Note:  this makes zero sense in an AuthnRequest, but we can't be picky in what extensions we accept
             new Asynchronous(),
         ]);
 
