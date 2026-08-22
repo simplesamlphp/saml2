@@ -176,7 +176,7 @@ class Utils
             throw new Exception('Unsupported signing algorithm.');
         }
 
-        $keyInfo = openssl_pkey_get_details($key->key);
+        $keyInfo = openssl_pkey_get_details(openssl_pkey_get_public($key->key));
         if ($keyInfo === false) {
             throw new Exception('Unable to get key details from XMLSecurityKey.');
         }
@@ -419,6 +419,9 @@ class Utils
         if (!$symmetricKey) {
             throw new Exception('Could not locate key algorithm in encrypted data.');
         }
+
+        // Enable support for RSA 1.5 in the library. If it's blacklisted, we will throw an exception below.0
+        $enc->allowRSA15KeyTransport = true;
 
         $symmetricKeyInfo = $enc->locateKeyInfo($symmetricKey);
         if (!$symmetricKeyInfo) {
