@@ -39,8 +39,8 @@
         "ext-intl": "*",
 
         "beste/clock": "~3.0",
-        "icanhazstring/composer-unused": "^0.9.6",
         "mockery/mockery": "~1.6",
+        "phpunit/phpunit": "^13.3",
         "simplesamlphp/simplesamlphp": "^3.0@dev",
         "simplesamlphp/simplesamlphp-test-framework": "~2.0"
     },
