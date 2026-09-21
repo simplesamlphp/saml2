@@ -67,7 +67,7 @@ final class Logo extends AbstractMduiElement implements
     protected function validateContent(string $content): void
     {
         Assert::validURI($content, SchemaViolationException::class);
-        Assert::regex(self::$scheme_regex, $content, ProtocolViolationException::class);
+        Assert::regex($content, self::$scheme_regex, ProtocolViolationException::class);
     }
 
 
