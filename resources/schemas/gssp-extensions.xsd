@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="urn:mace:surf.nl:stepup:gssp-extensions"
+    xmlns="http://www.w3.org/2001/XMLSchema"
+    xmlns:gssp="urn:mace:surf.nl:stepup:gssp-extensions"
+    xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" 
+    elementFormDefault="unqualified"
+    attributeFormDefault="unqualified" 
+    version="1.0">
+    <xs:import namespace="urn:oasis:names:tc:SAML:2.0:assertion"
+        schemaLocation="saml-schema-assertion-2.0.xsd"/>
+    <xs:annotation>
+        <xs:documentation>
+            SAML Extension for use in the GSSP protocol: https://github.com/OpenConext/Stepup-Gateway/blob/develop/docs/GSSP.md
+            Version 1.0:
+            - Define UserAttributes element for use in AuthnRequest during GSSP enrollemnt 
+        </xs:documentation>
+    </xs:annotation>
+    <xs:element name="UserAttributes" type="gssp:UserAttributesType"/>
+    <xs:complexType name="UserAttributesType">
+        <xs:sequence>
+            <xs:element ref="saml:Attribute" minOccurs="1" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

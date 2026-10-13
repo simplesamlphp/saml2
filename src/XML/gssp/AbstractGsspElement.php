@@ -1,0 +1,22 @@
+<?php
+
+declare(strict_types=1);
+
+namespace SimpleSAML\SAML2\XML\gssp;
+
+use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\XML\AbstractElement;
+
+/**
+ * Abstract class to be implemented by all the classes in this namespace
+ *
+ * @package simplesamlphp/saml2
+ */
+abstract class AbstractGsspElement extends AbstractElement
+{
+    public const string NS = C::NS_GSSP;
+
+    public const string NS_PREFIX = 'gssp';
+
+    public const string SCHEMA = 'resources/schemas/gssp-extensions.xsd';
+}
