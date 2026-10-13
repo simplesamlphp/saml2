@@ -20,6 +20,9 @@ return [
     'http://eduid.cz/schema/metadata/1.0' => [
         'RepublishRequest' => '\SimpleSAML\SAML2\XML\emd\RepublishRequest',
     ],
+    'urn:mace:surf.nl:stepup:gssp-extensions' => [
+        'UserAttributes' => '\SimpleSAML\SAML2\XML\gssp\UserAttributes',
+    ],
     'urn:oasis:names:tc:SAML:2.0:metadata' => [
         'AdditionalMetadataLocation' => '\SimpleSAML\SAML2\XML\md\AdditionalMetadataLocation',
         'AffiliateMember' => '\SimpleSAML\SAML2\XML\md\AffiliateMember',

@@ -1,0 +1,5 @@
+<gssp:UserAttributes xmlns:gssp="urn:mace:surf.nl:stepup:gssp-extensions" xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion">
+  <saml:Attribute Name="urn:mace:dir:attribute-def:mail" NameFormat="urn:oasis:names:tc:SAML:2.0:attrname-format:uri">
+    <saml:AttributeValue>user@example.com</saml:AttributeValue>
+  </saml:Attribute>
+</gssp:UserAttributes>
