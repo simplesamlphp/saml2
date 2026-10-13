@@ -17,7 +17,9 @@ use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
-use SimpleSAML\SAML2\XML\aslo\Asynchronous;
+use SimpleSAML\SAML2\XML\gssp\UserAttributes;
+use SimpleSAML\SAML2\XML\saml\Attribute;
+use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\AudienceRestriction;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
@@ -104,8 +106,15 @@ final class AuthnRequestTest extends TestCase
         );
 
         $extensions = new Extensions([
-            // Note:  this makes zero sense in an AuthnRequest, but we can't be picky in what extensions we accept
-            new Asynchronous(),
+            new UserAttributes([
+                new Attribute(
+                    name: SAMLStringValue::fromString('urn:mace:dir:attribute-def:mail'),
+                    nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
+                    attributeValue: [
+                        new AttributeValue(SAMLStringValue::fromString('user@example.com')),
+                    ],
+                ),
+            ]),
         ]);
 
         $authnRequest = new AuthnRequest(
@@ -191,8 +200,15 @@ final class AuthnRequestTest extends TestCase
 
         // Create Extensions
         $extensions = new Extensions([
-            // Note:  this makes zero sense in an AuthnRequest, but we can't be picky in what extensions we accept
-            new Asynchronous(),
+            new UserAttributes([
+                new Attribute(
+                    name: SAMLStringValue::fromString('urn:mace:dir:attribute-def:mail'),
+                    nameFormat: SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
+                    attributeValue: [
+                        new AttributeValue(SAMLStringValue::fromString('user@example.com')),
+                    ],
+                ),
+            ]),
         ]);
 
         $authnRequest = new AuthnRequest(
