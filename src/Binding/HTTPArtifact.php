@@ -188,7 +188,7 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             throw new Exception('Invalid message received in response to our ArtifactResolve.');
         }
 
-        return $this->handleReceivedArtifactResponse($artifactResponse,$query,$idpMetadata);
+        return $this->handleReceivedArtifactResponse($artifactResponse, $query, $idpMetadata);
     }
 
 
@@ -211,8 +211,11 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
      * @throws \Exception
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
-    public function handleReceivedArtifactResponse(ArtifactResponse $artifactResponse,array $query,?Configuration $idpMetadata): AbstractMessage
-    {
+    public function handleReceivedArtifactResponse(
+        ArtifactResponse $artifactResponse,
+        array $query,
+        ?Configuration $idpMetadata,
+    ): AbstractMessage {
         if (!$artifactResponse->isSuccess()) {
             throw new Exception('Received error from ArtifactResolutionService.');
         }
@@ -243,18 +246,19 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
         //
         $idpEntity = $idpMetadata->getString('entityid');
         $samlResponseEntity = $samlResponse->getIssuer()?->getContent()->getValue();
-        if($samlResponseEntity === null) {
+        if ($samlResponseEntity === null) {
             throw new Exception('Received SAML Response with no entity ID.');
         }
+
         if ($samlResponseEntity !== $idpEntity) {
             throw new Exception('Received SAML Response from an IdP for another IdP.');
         }
-        
+
         $msg = $this->verifyMessageSignature($samlResponse, $idpMetadata);
-        
+
         return $msg;
     }
-    
+
 
     /**
      * @param \SimpleSAML\Configuration $sp

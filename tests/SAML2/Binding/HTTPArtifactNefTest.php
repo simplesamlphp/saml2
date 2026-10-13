@@ -10,17 +10,26 @@ use PHPUnit\Framework\TestCase;
 use ReflectionMethod;
 use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Binding\HTTPArtifact;
+use SimpleSAML\SAML2\Type\SAMLStringValue;
+use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
 use SimpleSAML\SAML2\XML\samlp\Response;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
-use XML\samlp\AbstractMessage;
-use SimpleSAML\SAML2\XML\saml\Issuer;
-use SimpleSAML\SAML2\Type\SAMLStringValue;
 
 /**
  */
 final class HTTPArtifactNefTest extends TestCase
 {
+    private const string MINIMAL_SIG =
+        '<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:SignedInfo>'
+        . '<ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>'
+        . '<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>'
+        . '<ds:Reference URI="#_x"><ds:Transforms>'
+        . '<ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms>'
+        . '<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>AA==</ds:DigestValue>'
+        . '</ds:Reference></ds:SignedInfo><ds:SignatureValue>AA==</ds:SignatureValue></ds:Signature>';
+
+
     private function idpBMetadata(): Configuration
     {
         // "IdP-B": the federated IdP the attacker controls; its signing cert is in metadata,
@@ -36,10 +45,12 @@ final class HTTPArtifactNefTest extends TestCase
         ], '[idp-b]');
     }
 
+
     private function call(HTTPArtifact $ha, string $method, ...$args): mixed
     {
         return (new ReflectionMethod(HTTPArtifact::class, $method))->invoke($ha, ...$args);
     }
+
 
     public function testArtifactResolveUnsigned(): void
     {
@@ -63,15 +74,15 @@ final class HTTPArtifactNefTest extends TestCase
         $outer->method('getSignature')->willReturn(self::sigEl());
         $outer->method('getMessage')->willReturn($embedded);
 
-        $query = array();
+        $query = [];
         $artifactResponse = null;
 
         // if it is not signed then we will stop right there
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Received SAML Response which is not signed.');
-        $reply = $this->call($ha, 'handleReceivedArtifactResponse', $outer,$query,$idpB);
-        
+        $reply = $this->call($ha, 'handleReceivedArtifactResponse', $outer, $query, $idpB);
     }
+
 
     public function testArtifactResolveForImpersonate(): void
     {
@@ -95,25 +106,15 @@ final class HTTPArtifactNefTest extends TestCase
         $outer->method('getSignature')->willReturn(self::sigEl());
         $outer->method('getMessage')->willReturn($embedded);
 
-        $query = array();
+        $query = [];
         $artifactResponse = null;
 
         // if it is signed then we will be rejected because it is not from our entityID
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Received SAML Response from an IdP for another IdP.');
-        $reply = $this->call($ha, 'handleReceivedArtifactResponse', $outer,$query,$idpB);
-        
+        $reply = $this->call($ha, 'handleReceivedArtifactResponse', $outer, $query, $idpB);
     }
-    
 
-    private const MINIMAL_SIG =
-        '<ds:Signature xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:SignedInfo>'
-        . '<ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/>'
-        . '<ds:SignatureMethod Algorithm="http://www.w3.org/2001/04/xmldsig-more#rsa-sha256"/>'
-        . '<ds:Reference URI="#_x"><ds:Transforms>'
-        . '<ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms>'
-        . '<ds:DigestMethod Algorithm="http://www.w3.org/2001/04/xmlenc#sha256"/><ds:DigestValue>AA==</ds:DigestValue>'
-        . '</ds:Reference></ds:SignedInfo><ds:SignatureValue>AA==</ds:SignatureValue></ds:Signature>';
 
     private static function sigEl(): \SimpleSAML\XMLSecurity\XML\ds\Signature
     {
@@ -121,4 +122,3 @@ final class HTTPArtifactNefTest extends TestCase
         return \SimpleSAML\XMLSecurity\XML\ds\Signature::fromXML($doc->documentElement);
     }
 }
-

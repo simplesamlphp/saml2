@@ -15,7 +15,7 @@ use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Binding\HTTPArtifact;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
-use SimpleSAML\XML\DOMDocumentFactory;;
+use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
 
