@@ -21,7 +21,6 @@
         "php": "^8.5",
         "ext-date": "*",
         "ext-dom": "*",
-        "ext-filter": "*",
         "ext-openssl": "*",
         "ext-pcre": "*",
         "ext-zlib": "*",
