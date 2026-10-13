@@ -54,8 +54,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "SimpleSAML\\Test\\SAML2\\": "tests/SAML2/",
-            "SimpleSAML\\TestUtils\\SAML2\\": "tests/TestUtils/"
+            "SimpleSAML\\Test\\SAML2\\": "tests/SAML2/"
         }
     },
     "extra": {
