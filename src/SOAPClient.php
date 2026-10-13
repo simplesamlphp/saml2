@@ -360,7 +360,7 @@ class SOAPClient
     /**
      * Extracts the SOAP Fault from SOAP message
      *
-     * @param \DOMDocument $soapMessage Soap response needs to be type DOMDocument
+     * @param \Dom\XMLDocument $soapMessage Soap response needs to be type DOMDocument
      * @return \SimpleSAML\SOAP11\XML\Fault|null
      */
     private function getSOAPFault(Dom\XMLDocument $soapMessage): ?Fault

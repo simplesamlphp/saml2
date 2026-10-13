@@ -204,7 +204,7 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
      * and test strange combinations for correctness.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $artifactResponse The received message
-     * @param array query the QueryParams for the request
+     * @param array $query the QueryParams for the request
      * @param \SimpleSAML\Configuration $idpMetadata the metadata for the IdP who this artifact was sent to
      * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
      *
