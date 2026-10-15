@@ -196,6 +196,29 @@ XML
 
 
     /**
+     * Verifies that we can parse an AttributeValue with an xsi:type that's using a non-default prefix.
+     *
+     * @return void
+     */
+    public function testUnmarshallingXsiTypeNonStandardPrefix(): void
+    {
+        $nssaml = C::NS_SAML;
+        $nsxsi = C_XSI::NS_XSI;
+
+        $document = DOMDocumentFactory::fromString(
+            <<<XML
+<saml:AttributeValue xmlns:saml="{$nssaml}" xmlns:xsi="{$nsxsi}" xsi:type="xsd:string"/>
+XML
+            ,
+        );
+
+        $av = AttributeValue::fromXML($document->documentElement);
+        $value = $av->getXsiType();
+        $this->assertEquals('xs:string', $value);
+    }
+
+
+    /**
      * Serialize an EncryptedID and unserialize that again.
      * @return void
      */

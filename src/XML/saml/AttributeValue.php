@@ -17,6 +17,7 @@ use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
 use SimpleSAML\XMLSchema\Type\DateTimeValue;
 use SimpleSAML\XMLSchema\Type\IntegerValue;
 use SimpleSAML\XMLSchema\Type\Interface\ValueTypeInterface;
+use SimpleSAML\XMLSchema\Type\QNameValue;
 use SimpleSAML\XMLSchema\Type\StringValue;
 
 use function sprintf;
@@ -108,20 +109,21 @@ class AttributeValue extends AbstractSamlElement implements SchemaValidatableEle
 
             $value = null;
         } elseif ($xml->hasAttributeNS(C_XSI::NS_XSI, 'type')) {
-            $type = $xml->getAttributeNS(C_XSI::NS_XSI, 'type');
+            $typeAttr = $xml->getAttributeNS(C_XSI::NS_XSI, 'type');
+            $type = QNameValue::fromString('{' . C_XSI::NS_XS . '}' . $typeAttr);
 
-            switch ($type) {
-                case 'xs:dateTime':
+            switch (strval($type->getLocalName())) {
+                case 'dateTime':
                     $value = DateTimeValue::fromString($xml->textContent);
                     break;
-                case 'xs:integer':
+                case 'integer':
                     $value = IntegerValue::fromString($xml->textContent);
                     break;
-                case 'xs:string':
+                case 'string':
                     $value = StringValue::fromString($xml->textContent);
                     break;
                 default:
-                    throw new RuntimeException(sprintf("Cannot process xsi:type '%s'", $type));
+                    throw new RuntimeException(sprintf("Cannot process xsi:type '%s'", $typeAttr));
             }
         } else {
             $value = StringValue::fromString($xml->textContent);
