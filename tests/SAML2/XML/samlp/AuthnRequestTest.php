@@ -109,6 +109,9 @@ final class AuthnRequestTest extends TestCase
             id: IDValue::fromString('_2b0226190ca1c22de6f66e85f5c95158'),
             issueInstant: SAMLDateTimeValue::fromString('2014-09-22T13:42:00Z'),
             destination: SAMLAnyURIValue::fromString('https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO'),
+            extensions: $extensions,
+            forceAuthn: BooleanValue::fromBoolean(true),
+            isPassive: BooleanValue::fromBoolean(false),
         );
 
         $this->assertEquals(
