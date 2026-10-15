@@ -118,6 +118,8 @@ final class AuthnRequestTest extends TestCase
             issueInstant: SAMLDateTimeValue::fromString('2014-09-22T13:42:00Z'),
             destination: SAMLAnyURIValue::fromString('https://tiqr.stepup.org/idp/profile/saml2/Redirect/SSO'),
             extensions: $extensions,
+            forceAuthn: BooleanValue::fromBoolean(true),
+            isPassive: BooleanValue::fromBoolean(false),
         );
 
         $expectedXml = self::$xmlRepresentation->saveXml(self::$xmlRepresentation->documentElement);

@@ -333,7 +333,7 @@ class AuthnRequest extends AbstractRequest implements SchemaValidatableElementIn
     {
         $e = parent::toUnsignedXML($parent);
 
-        if ($this->getForceAuthn() === true) {
+        if ($this->getForceAuthn()?->toBoolean() !== null) {
             $e->setAttribute('ForceAuthn', strval($this->getForceAuthn()));
         }
 
@@ -341,7 +341,7 @@ class AuthnRequest extends AbstractRequest implements SchemaValidatableElementIn
             $e->setAttribute('ProviderName', strval($this->getProviderName()));
         }
 
-        if ($this->getIsPassive() === true) {
+        if ($this->getIsPassive()?->toBoolean() !== null) {
             $e->setAttribute('IsPassive', strval($this->getIsPassive()));
         }
 
