@@ -26,12 +26,13 @@ use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use function array_key_exists;
 use function base64_decode;
 use function base64_encode;
+use function explode;
 use function gzdeflate;
 use function gzinflate;
 use function sprintf;
 use function str_contains;
 use function strlen;
-use function urlencode;
+use function urldecode;
 
 /**
  * Class which implements the HTTP-Redirect binding.
@@ -135,18 +136,18 @@ class HTTPRedirect extends Binding implements AsynchronousBindingInterface, Rela
      */
     public function receive(ServerRequestInterface $request): AbstractMessage
     {
-        $query = $request->getQueryParams();
+        $query = $this->getRawQueryParams($request->getUri()->getQuery());
 
         /**
          * Put the SAMLRequest/SAMLResponse from the actual query string into $message,
          * and assert that the result from parseQuery() in $query and the parsing of the SignedQuery in $res agree
          */
         if (array_key_exists('SAMLRequest', $query)) {
-            $message = $query['SAMLRequest'];
-            $signedQuery = 'SAMLRequest=' . urlencode($query['SAMLRequest']);
+            $message = urldecode($query['SAMLRequest']);
+            $signedQuery = 'SAMLRequest=' . $query['SAMLRequest'];
         } elseif (array_key_exists('SAMLResponse', $query)) {
-            $message = $query['SAMLResponse'];
-            $signedQuery = 'SAMLResponse=' . urlencode($query['SAMLResponse']);
+            $message = urldecode($query['SAMLResponse']);
+            $signedQuery = 'SAMLResponse=' . $query['SAMLResponse'];
         } else {
             throw new Exception('Missing SAMLRequest or SAMLResponse parameter.');
         }
@@ -155,8 +156,8 @@ class HTTPRedirect extends Binding implements AsynchronousBindingInterface, Rela
             throw new Exception('Both SAMLRequest and SAMLResponse provided.');
         }
 
-        if (isset($query['SAMLEncoding']) && $query['SAMLEncoding'] !== C::BINDING_HTTP_REDIRECT_DEFLATE) {
-            throw new Exception(sprintf('Unknown SAMLEncoding: %s', $query['SAMLEncoding']));
+        if (isset($query['SAMLEncoding']) && urldecode($query['SAMLEncoding']) !== C::BINDING_HTTP_REDIRECT_DEFLATE) {
+            throw new Exception(sprintf('Unknown SAMLEncoding: %s', urldecode($query['SAMLEncoding'])));
         }
 
         $message = base64_decode($message, true);
@@ -174,8 +175,8 @@ class HTTPRedirect extends Binding implements AsynchronousBindingInterface, Rela
         $message = MessageFactory::fromXML($document->documentElement);
 
         if (array_key_exists('RelayState', $query)) {
-            $this->setRelayState($query['RelayState']);
-            $signedQuery .= '&RelayState=' . urlencode($query['RelayState']);
+            $this->setRelayState(urldecode($query['RelayState']));
+            $signedQuery .= '&RelayState=' . $query['RelayState'];
         }
 
         if (!array_key_exists('Signature', $query)) {
@@ -195,21 +196,45 @@ class HTTPRedirect extends Binding implements AsynchronousBindingInterface, Rela
         if (!array_key_exists('SigAlg', $query)) {
             throw new Exception('Missing signature algorithm.');
         } else {
-            $signedQuery .= '&SigAlg=' . urlencode($query['SigAlg']);
+            $signedQuery .= '&SigAlg=' . $query['SigAlg'];
         }
 
         $container = ContainerSingleton::getInstance();
         $blacklist = $container->getBlacklistedEncryptionAlgorithms();
         $verifier = (new SignatureAlgorithmFactory($blacklist))->getAlgorithm(
-            $query['SigAlg'],
+            urldecode($query['SigAlg']),
             // TODO:  Need to use the key from the metadata
             PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
         );
 
-        if ($verifier->verify($signedQuery, base64_decode($query['Signature'])) === false) {
+        if ($verifier->verify($signedQuery, base64_decode(urldecode($query['Signature']))) === false) {
             throw new SignatureVerificationFailedException('Failed to verify signature.');
         }
 
         return $message;
+    }
+
+
+    /**
+     * @param string $query  The raw and undecoded query string
+     * @return string[]
+     */
+    private function getRawQueryParams(string $query): array
+    {
+        if ($query === '') {
+            return [];
+        }
+
+        $params = [];
+        foreach (explode('&', $query) as $pair) {
+            if ($pair === '') {
+                continue;
+            }
+
+            [$key, $value] = array_pad(explode('=', $pair, 2), 2, '');
+            $params[$key] = $value;
+        }
+
+        return $params;
     }
 }
