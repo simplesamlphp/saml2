@@ -420,7 +420,7 @@ class Utils
             throw new Exception('Could not locate key algorithm in encrypted data.');
         }
 
-        // Enable support for RSA 1.5 in the library. If it's blacklisted, we will throw an exception below.0
+        // Enable support for RSA 1.5 in the library. If it's blacklisted, we will throw an exception below.
         $enc->allowRSA15KeyTransport = true;
 
         $symmetricKeyInfo = $enc->locateKeyInfo($symmetricKey);
