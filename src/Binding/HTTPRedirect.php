@@ -29,6 +29,7 @@ use function base64_encode;
 use function explode;
 use function gzdeflate;
 use function gzinflate;
+use function in_array;
 use function sprintf;
 use function str_contains;
 use function strlen;
@@ -232,7 +233,9 @@ class HTTPRedirect extends Binding implements AsynchronousBindingInterface, Rela
             }
 
             [$key, $value] = array_pad(explode('=', $pair, 2), 2, '');
-            $params[$key] = $value;
+            if (in_array($key, ['SAMLRequest', 'SAMLResponse', 'SAMLEncoding', 'Signature', 'SigAlg', 'RelayState'])) {
+                $params[$key] = $value;
+            }
         }
 
         return $params;
