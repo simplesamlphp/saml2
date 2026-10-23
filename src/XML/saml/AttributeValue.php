@@ -27,7 +27,7 @@ use SimpleSAML\XMLSchema\Type\DurationValue;
 use SimpleSAML\XMLSchema\Type\EntitiesValue;
 use SimpleSAML\XMLSchema\Type\EntityValue;
 use SimpleSAML\XMLSchema\Type\FloatValue;
-use SimpleSAML\XMLSchema\Type\HexDecimalValue;
+use SimpleSAML\XMLSchema\Type\HexBinaryValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
 use SimpleSAML\XMLSchema\Type\IDRefValue;
 use SimpleSAML\XMLSchema\Type\IDRefsValue;
@@ -188,8 +188,8 @@ class AttributeValue extends AbstractSamlElement implements SchemaValidatableEle
                 case 'float':
                     $value = FloatValue::fromString($xml->textContent);
                     break;
-                case 'hexDecimal':
-                    $value = HexDecimalValue::fromString($xml->textContent);
+                case 'hexBinary':
+                    $value = HexBinaryValue::fromString($xml->textContent);
                     break;
                 case 'ID':
                     $value = IDValue::fromString($xml->textContent);
