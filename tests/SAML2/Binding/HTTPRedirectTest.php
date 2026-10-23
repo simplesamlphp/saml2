@@ -15,6 +15,7 @@ use SimpleSAML\SAML2\Binding\HTTPRedirect;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\RuntimeException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
@@ -109,7 +110,6 @@ final class HTTPRedirectTest extends TestCase
         $uri = (new \Nyholm\Psr7\Uri('http://tnyholm.se'))
             ->withQuery($queryString);
 
-//        $request = new ServerRequest('GET', 'http://tnyholm.se');
         $request = new ServerRequest('GET', $uri);
         $request = $request->withQueryParams($q);
 
@@ -409,48 +409,28 @@ final class HTTPRedirectTest extends TestCase
      */
     public function testDuplicateQueryParameters(): void
     {
-        $q = [
-            /** @phpstan-ignore array.duplicateKey */
-            'SAMLRequest' => 'pVJNbxMxEP0rK983+0E3aq0kUmiEiFQgagIHLsixx4kl73jxjKH8e7ybIkoPuXAazcd78+ZpFqR6P8h14jM+wvcExMVT75Hk1FiKFFEGRY4kqh5Ispb79YcH2c5qOcTAQQcvXkCuIxQRRHYBRbHdLMU3c3sHpmmttZ2pjzrHN/bW2rm6aerWzOu2uZkfdW3royi+QKSMXIpMlOFECbZIrJBzqW66smnL+u7QNrJrZdd9FcUmX+NQ8YQ6Mw8kqwrw5BBmlKLVAeGJZ+grle8HZKen4cqZoSKHJw8luROWo971H+n3ASn1EPcQfzgNnx8f/pJnR6zzr9nJ9YOH0Z2qDybl/nDOC8acLrEtlaapasCq5LmkQRS7Z3/fOjRZzXVrj5chku8Ph125+7Q/iNVi5JaTVXH1Pxp7YGUUq1cSF9XLBYvLL33M0rabXfBO/yrehdgrvq58rDhT2mlUJqQBtLMOTDbd+/DzPoJiWAqOCUS1uiz992dXvwE=',
-            'SAMLRequest' => 'hVPLjtpAEPwVa+7GD+wljACJgKIgbbIISA65RI2nvYw0D2d6vNn8fcbGKFYe5GSpu6q7qqa9INCq4evWX8wBv7VIPnrVyhDvG0vWOsMtkCRuQCNxX/Hj+sMjzycpb5z1trKKjSj3GUCEzktrWLTbLtnX8iEDmGdpNoVyLqbzdDpNi3NZlOciq0QhYDYDgfOsqFn0GR0F5pKFQYFO1OLOkAfjQynNH+I0j/M3pzzlZcbT2RcWbYMbacD3rIv3DfEkkaKZaGtjcNVFvuDEqERb0SqcNJcm6Sx0kISkeVZ4lM/myRzRvcgKWbS+yd9YQ61GN3Q+HR5/LRCo7f820PWbx1BRXxVYQ6t8TA2L9kOsb6URQcX9RM9XEPH3p9M+3j8dT2y16GbzPiG3usn6TVFQoNGDAA+LZIxfXC/iY9i02+6tktWP6J11Gvx9IV1Firjuodw7MCTR+BCaUvb7xiF4XLIaFCFLbluGk0PRH2BI1eOrH/SPSxsVLueA9apTMHLCaxTo+hfmMMJzZSEffP11zrX3TwHJn7/F6ic=',
-            'RelayState' => 'https://demo.moo-archive.nl/module.php/debugsp/test/default-sp',
-            'SigAlg' => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
-            'Signature' => 'imAC2OqhtdL8BejmMvZG1+JgAaEo9JbMtaymXRJCkC0MYfKrda+Xfm3ZIJRi7SuCdw6wHLUsc0D2ZPI7DkLsqIQ/G8qZzdaPwLjSI+cEjKuGpLz+rTPofeRplqGhTfT32bQ4bwLEDEhBk6FxUDl63pTnYgo49Fi+3GlXtbmMK2I=',
-        ];
+        $samlRequest1 = 'pVJNbxMxEP0rK983+0E3aq0kUmiEiFQgagIHLsixx4kl73jxjKH8e7ybIkoPuXAazcd78+ZpFqR6P8h14jM+wvcExMVT75Hk1FiKFFEGRY4kqh5Ispb79YcH2c5qOcTAQQcvXkCuIxQRRHYBRbHdLMU3c3sHpmmttZ2pjzrHN/bW2rm6aerWzOu2uZkfd...'; // full value
+        $samlRequest2 = 'hVPLjtpAEPwVa+7GD+wljACJgKIgbbIISA65RI2nvYw0D2d6vNn8fcbGKFYe5GSpu6q7qqa9INCq4evWX8wBv7VIPnrVyhDvG0vWOsMtkCRuQCNxX/Hj+sMjzycpb5z1trKKjSj3GUCEzktrWLTbLtnX8iEDmGdpNoVyLqbzdDpNi3NZlOciq0QhYDYDg...'; // full value
 
-        // Build a proper query string (still encoded)
-        $queryString = http_build_query($q);
+        $relayState = 'https://demo.moo-archive.nl/module.php/debugsp/test/default-sp';
+        $sigAlg     = 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256';
+        $signature  = 'imAC2OqhtdL8BejmMvZG1+JgAaEo9JbMtaymXRJCkC0MYfKrda+Xfm3ZIJRi7SuCdw6wHLUsc0D2ZPI7DkLsqIQ/G8qZzdaPwLjSI+cEjKuGpLz+rTPofeRplqGhTfT32bQ4bwLEDEhBk6FxUDl63pTnYgo49Fi+3GlXtbmMK2I=';
 
-        $uri = (new \Nyholm\Psr7\Uri('http://tnyholm.se'))
-            ->withQuery($queryString);
-
-        $request = new ServerRequest('GET', $uri);
-        $request = $request->withQueryParams($q);
-
-        $hr = new HTTPRedirect();
-        $hr->receive($request);
-
-        $q = [
-            /** @phpstan-ignore array.duplicateKey */
-            'SAMLRequest' => 'pVJNbxMxEP0rK983+0E3aq0kUmiEiFQgagIHLsixx4kl73jxjKH8e7ybIkoPuXAazcd78+ZpFqR6P8h14jM+wvcExMVT75Hk1FiKFFEGRY4kqh5Ispb79YcH2c5qOcTAQQcvXkCuIxQRRHYBRbHdLMU3c3sHpmmttZ2pjzrHN/bW2rm6aerWzOu2uZkfdW3royi+QKSMXIpMlOFECbZIrJBzqW66smnL+u7QNrJrZdd9FcUmX+NQ8YQ6Mw8kqwrw5BBmlKLVAeGJZ+grle8HZKen4cqZoSKHJw8luROWo971H+n3ASn1EPcQfzgNnx8f/pJnR6zzr9nJ9YOH0Z2qDybl/nDOC8acLrEtlaapasCq5LmkQRS7Z3/fOjRZzXVrj5chku8Ph125+7Q/iNVi5JaTVXH1Pxp7YGUUq1cSF9XLBYvLL33M0rabXfBO/yrehdgrvq58rDhT2mlUJqQBtLMOTDbd+/DzPoJiWAqOCUS1uiz992dXvwE=',
-            'SAMLRequest' => 'hVPLjtpAEPwVa+7GD+wljACJgKIgbbIISA65RI2nvYw0D2d6vNn8fcbGKFYe5GSpu6q7qqa9INCq4evWX8wBv7VIPnrVyhDvG0vWOsMtkCRuQCNxX/Hj+sMjzycpb5z1trKKjSj3GUCEzktrWLTbLtnX8iEDmGdpNoVyLqbzdDpNi3NZlOciq0QhYDYDgfOsqFn0GR0F5pKFQYFO1OLOkAfjQynNH+I0j/M3pzzlZcbT2RcWbYMbacD3rIv3DfEkkaKZaGtjcNVFvuDEqERb0SqcNJcm6Sx0kISkeVZ4lM/myRzRvcgKWbS+yd9YQ61GN3Q+HR5/LRCo7f820PWbx1BRXxVYQ6t8TA2L9kOsb6URQcX9RM9XEPH3p9M+3j8dT2y16GbzPiG3usn6TVFQoNGDAA+LZIxfXC/iY9i02+6tktWP6J11Gvx9IV1Firjuodw7MCTR+BCaUvb7xiF4XLIaFCFLbluGk0PRH2BI1eOrH/SPSxsVLueA9apTMHLCaxTo+hfmMMJzZSEffP11zrX3TwHJn7/F6ic=',
-            'RelayState' => 'https://demo.moo-archive.nl/module.php/admin/test/default-sp',
-            'SigAlg' => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
-            'Signature' => 'T8+SG10HcgOkpw4cUFTnoF9WWrlYnllnqKruvmVcyinbiJsdnw7EMxM6Lr/5Mo/Rk3Hd7x8tuQ955Vv96jMRKGfdvq8Dh1gx4PKJPHXFWBSipWOc9UDNT0N3addnk9PiSaQ5YehT9lZ4agoSmKqiWNrE4qpKIcgWdh0GgiYDUto=',
-        ];
-
-        // Build a proper query string (still encoded)
-        $queryString = http_build_query($q);
+        // Real duplicate: same parameter name appears twice
+        $queryString = 'SAMLRequest=' . rawurlencode($samlRequest1)
+            . '&SAMLRequest=' . rawurlencode($samlRequest2)
+            . '&RelayState=' . rawurlencode($relayState)
+            . '&SigAlg=' . rawurlencode($sigAlg)
+            . '&Signature=' . rawurlencode($signature);
 
         $uri = (new \Nyholm\Psr7\Uri('http://tnyholm.se'))
             ->withQuery($queryString);
 
         $request = new ServerRequest('GET', $uri);
-        $request = $request->withQueryParams($q);
 
-        $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Failed to verify signature.');
         $hr = new HTTPRedirect();
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Duplicate parameter.');
         $hr->receive($request);
     }
 

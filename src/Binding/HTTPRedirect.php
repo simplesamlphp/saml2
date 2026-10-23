@@ -14,6 +14,7 @@ use SimpleSAML\SAML2\Binding\RelayStateTrait;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
+use SimpleSAML\SAML2\Exception\RuntimeException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractRequest;
@@ -24,6 +25,7 @@ use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 use function array_key_exists;
+use function array_pad;
 use function base64_decode;
 use function base64_encode;
 use function explode;
@@ -216,10 +218,6 @@ class HTTPRedirect extends Binding implements AsynchronousBindingInterface, Rela
     }
 
 
-    /**
-     * @param string $query  The raw and undecoded query string
-     * @return string[]
-     */
     private function getRawQueryParams(string $query): array
     {
         if ($query === '') {
@@ -227,14 +225,22 @@ class HTTPRedirect extends Binding implements AsynchronousBindingInterface, Rela
         }
 
         $params = [];
+        $allowed = ['SAMLRequest', 'SAMLResponse', 'SAMLEncoding', 'Signature', 'SigAlg', 'RelayState'];
+
         foreach (explode('&', $query) as $pair) {
             if ($pair === '') {
                 continue;
             }
 
-            [$key, $value] = array_pad(explode('=', $pair, 2), 2, '');
-            if (in_array($key, ['SAMLRequest', 'SAMLResponse', 'SAMLEncoding', 'Signature', 'SigAlg', 'RelayState'])) {
-                $params[$key] = $value;
+            [$rawKey, $value] = array_pad(explode('=', $pair, 2), 2, '');
+            $key = urldecode($rawKey);   // ← decode the name
+
+            if (array_key_exists($key, $params)) {
+                throw new RuntimeException('Duplicate parameter.');
+            }
+
+            if (in_array($key, $allowed, true)) {
+                $params[$key] = $value;  // keep value raw (still encoded)
             }
         }
 
