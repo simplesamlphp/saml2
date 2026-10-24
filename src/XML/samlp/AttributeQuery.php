@@ -7,13 +7,13 @@ namespace SimpleSAML\SAML2\XML\samlp;
 use DateTimeImmutable;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooHighException;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\XML\saml\Attribute;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\saml\Subject;
-use SimpleSAML\XML\Constants as C;
 use SimpleSAML\XML\Exception\InvalidDOMElementException;
 use SimpleSAML\XML\Exception\MissingElementException;
 use SimpleSAML\XML\Exception\TooManyElementsException;
@@ -73,7 +73,7 @@ class AttributeQuery extends AbstractSubjectQuery implements SchemaValidatableEl
         $cache = [];
         foreach ($attributes as $attribute) {
             $name = $attribute->getName();
-            $nameFormat = $attribute->getNameFormat();
+            $nameFormat = $attribute->getNameFormat() ?? C::NAMEFORMAT_UNSPECIFIED;
 
             if (isset($cache[$nameFormat])) {
                 Assert::true(
