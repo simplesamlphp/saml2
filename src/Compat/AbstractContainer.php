@@ -118,15 +118,6 @@ abstract class AbstractContainer
 
 
     /**
-     * Set the list of algorithms that are blacklisted for any encryption operation.
-     *
-     * @param string[]|null $algos An array with all algorithm identifiers that are blacklisted,
-     *   or null if we want to use the defaults.
-     */
-    abstract public function setBlacklistedAlgorithms(?array $algos): void;
-
-
-    /**
      * Get a PSR-3 compatible logger.
      * @return \Psr\Log\LoggerInterface
      */

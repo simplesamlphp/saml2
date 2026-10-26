@@ -14,6 +14,7 @@ use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Binding\HTTPRedirect;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\RuntimeException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
@@ -49,8 +50,9 @@ final class HTTPRedirectTest extends TestCase
     {
         self::$containerBackup = ContainerSingleton::getInstance();
 
-        $container = clone self::$containerBackup;
+        $container = new MockContainer();
         $container->setBlacklistedAlgorithms([]);
+        $container->setClock(self::$containerBackup->getClock());
         ContainerSingleton::setContainer($container);
 
         self::$clock = $container->getClock();

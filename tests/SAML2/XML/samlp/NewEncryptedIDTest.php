@@ -10,6 +10,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\AbstractEncryptedElement;
@@ -71,7 +72,8 @@ final class NewEncryptedIDTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/samlp_NewEncryptedID.xml',
         );
 
-        $container = clone self::$containerBackup;
+        $container = new MockContainer();
+        $container->setClock(self::$containerBackup->getClock());
         $container->setBlacklistedAlgorithms(null);
         $container->registerExtensionHandler(CustomBaseID::class);
         ContainerSingleton::setContainer($container);
@@ -247,7 +249,8 @@ final class NewEncryptedIDTest extends TestCase
         $this->assertEquals(strval($customId), strval($id));
 
         // Remove registration by using a clean container
-        $container = clone self::$containerBackup;
+        $container = new MockContainer();
+        $container->setClock(self::$containerBackup->getClock());
         $container->setBlacklistedAlgorithms(null);
         ContainerSingleton::setContainer($container);
 

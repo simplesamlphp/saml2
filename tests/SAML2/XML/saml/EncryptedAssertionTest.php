@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
@@ -75,7 +76,8 @@ final class EncryptedAssertionTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedAssertion.xml',
         );
 
-        $container = clone self::$containerBackup;
+        $container = new MockContainer();
+        $container->setClock(self::$containerBackup->getClock());
         $container->setBlacklistedAlgorithms(null);
         ContainerSingleton::setContainer($container);
 

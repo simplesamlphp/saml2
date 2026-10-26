@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
@@ -59,7 +60,8 @@ final class AttributeTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/saml_Attribute.xml',
         );
 
-        $container = clone self::$containerBackup;
+        $container = new MockContainer();
+        $container->setClock(self::$containerBackup->getClock());
         $container->setBlacklistedAlgorithms(null);
         ContainerSingleton::setContainer($container);
     }

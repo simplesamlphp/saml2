@@ -13,7 +13,9 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use SimpleSAML\SAML2\Assertion\Processor;
 use SimpleSAML\SAML2\Assertion\ProcessorBuilder;
+use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Configuration\Destination;
 use SimpleSAML\SAML2\Configuration\IdentityProvider;
 use SimpleSAML\SAML2\Configuration\PrivateKey;
@@ -23,7 +25,6 @@ use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utilities\ArrayCollection;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Assertion;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
 use SimpleSAML\SAML2\XML\saml\AuthnContextClassRef;
@@ -76,6 +77,9 @@ final class NameIdDecryptionTransformerTest extends TestCase
     /** @var \SimpleSAML\SAML2\XML\samlp\Response */
     protected static Response $response;
 
+    /** @var \SimpleSAML\SAML2\Compat\AbstractContainer */
+    private static AbstractContainer $containerBackup;
+
 
     private const string FRAMEWORK = 'vendor/simplesamlphp/xml-security';
 
@@ -85,11 +89,14 @@ final class NameIdDecryptionTransformerTest extends TestCase
      */
     public static function setUpBeforeClass(): void
     {
-        self::$clock = Utils::getContainer()->getClock();
+        self::$containerBackup = ContainerSingleton::getInstance();
 
-        $container = ContainerSingleton::getInstance();
+        $container = new MockContainer();
+        $container->setClock(self::$containerBackup->getClock());
         $container->setBlacklistedAlgorithms(null);
+        ContainerSingleton::setContainer($container);
 
+        self::$clock = $container->getClock();
         self::$logger = new NullLogger();
         self::$validator = new Validator(self::$logger);
         self::$destination = new Destination(C::ENTITY_SP);
@@ -160,6 +167,14 @@ final class NameIdDecryptionTransformerTest extends TestCase
         );
 
         self::$document = $assertion->toXML()->ownerDocument;
+    }
+
+
+    /**
+     */
+    public static function tearDownAfterClass(): void
+    {
+        ContainerSingleton::setContainer(self::$containerBackup);
     }
 
 

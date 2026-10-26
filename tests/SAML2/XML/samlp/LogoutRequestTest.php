@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
@@ -169,8 +168,8 @@ final class LogoutRequestTest extends TestCase
      */
     public function testUnmarshalling(): void
     {
-        $container = ContainerSingleton::getInstance();
-        $container->setBlacklistedAlgorithms(null);
+//        $container = ContainerSingleton::getInstance();
+//        $container->setBlacklistedAlgorithms(null);
 
         $logoutRequest = LogoutRequest::fromXML(self::$xmlRepresentation->documentElement);
         $issuer = $logoutRequest->getIssuer();

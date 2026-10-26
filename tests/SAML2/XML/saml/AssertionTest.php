@@ -11,13 +11,13 @@ use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Exception\Protocol\RequestVersionTooLowException;
 use SimpleSAML\SAML2\Type\DomainValue;
 use SimpleSAML\SAML2\Type\EntityIDValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
-use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Assertion;
@@ -88,7 +88,7 @@ final class AssertionTest extends TestCase
     {
         self::$containerBackup = ContainerSingleton::getInstance();
 
-        self::$clock = Utils::getContainer()->getClock();
+        self::$clock = self::$containerBackup->getClock();
 
         self::$testedClass = Assertion::class;
 
@@ -96,8 +96,9 @@ final class AssertionTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/saml_Assertion.xml',
         );
 
-        $container = clone self::$containerBackup;
+        $container = new MockContainer();
         $container->setBlacklistedAlgorithms(null);
+        $container->setClock(self::$clock);
         ContainerSingleton::setContainer($container);
     }
 

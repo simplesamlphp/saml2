@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
-use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\AuthnContextComparisonTypeValue;
 use SimpleSAML\SAML2\Type\EntityIDValue;
@@ -306,8 +305,8 @@ AUTHNREQUEST;
 
     public function testThatAnEncryptedNameIdCanBeDecrypted(): void
     {
-        $container = ContainerSingleton::getInstance();
-        $container->setBlacklistedAlgorithms(null);
+//        $container = new MockContainer();
+//        $container->setBlacklistedAlgorithms(null);
 
         $xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/authnrequest/authnrequest_encryptedid.xml',

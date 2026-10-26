@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
+use SimpleSAML\SAML2\Compat\MockContainer;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Attribute;
@@ -54,7 +55,8 @@ final class EncryptedAttributeTest extends TestCase
             dirname(__FILE__, 4) . '/resources/xml/saml_EncryptedAttribute.xml',
         );
 
-        $container = clone self::$containerBackup;
+        $container = new MockContainer();
+        $container->setClock(self::$containerBackup->getClock());
         $container->setBlacklistedAlgorithms(null);
         ContainerSingleton::setContainer($container);
     }
