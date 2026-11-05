@@ -184,4 +184,12 @@ abstract class AbstractContainer
      * Get the system clock, using UTC for a timezone
      */
     abstract public function getClock(): ClockInterface;
+
+
+    /**
+     * A limit on how much data can be returned gzinflate() when processing a message.
+     *
+     * @return int max bytes to decode before considering the message an attack
+     */
+    abstract public function getInflateSizeLimit(): int;
 }
