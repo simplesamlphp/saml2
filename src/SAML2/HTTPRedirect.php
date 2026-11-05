@@ -147,7 +147,8 @@ class HTTPRedirect extends Binding
             throw new Exception('Error while base64 decoding SAML message.');
         }
 
-        $message = gzinflate($message);
+        $container = Utils::getContainer();
+        $message = gzinflate($message, $container->getInflateSizeLimit());
         if ($message === false) {
             throw new Exception('Error while inflating SAML message.');
         }

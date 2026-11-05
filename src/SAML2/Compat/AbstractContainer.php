@@ -73,4 +73,12 @@ abstract class AbstractContainer
      * @param int $mode The permissions to apply to the file. Defaults to 0600.
      */
     abstract public function writeFile(string $filename, string $data, ?int $mode = null): void;
+
+
+    /**
+     * A limit on how much data can be returned gzinflate() when processing a message.
+     *
+     * @return int max bytes to decode before considering the message an attack
+     */
+    abstract public function getInflateSizeLimit(): int;
 }
