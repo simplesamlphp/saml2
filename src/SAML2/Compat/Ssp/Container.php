@@ -132,4 +132,15 @@ class Container extends AbstractContainer
         }
         $this->utilsSystem->writeFile($filename, $data, $mode);
     }
+
+
+    /**
+     * A limit on how much data can be returned gzinflate() when processing a message.
+     *
+     * @return int max bytes to decode before considering the message an attack
+     */
+    public function getInflateSizeLimit(): int
+    {
+        return 8*1024*1024;
+    }
 }
