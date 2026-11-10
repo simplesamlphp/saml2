@@ -11,6 +11,9 @@ use SimpleSAML\Utils\System;
 use SimpleSAML\Utils\XML;
 use SAML2\Compat\AbstractContainer;
 
+/**
+ * @deprecated Please implement your own implementation of the AbstractContainer
+ */
 class Container extends AbstractContainer
 {
     /**
