@@ -141,6 +141,6 @@ class Container extends AbstractContainer
      */
     public function getInflateSizeLimit(): int
     {
-        return 8*1024*1024;
+        return 100 * 1024;
     }
 }
