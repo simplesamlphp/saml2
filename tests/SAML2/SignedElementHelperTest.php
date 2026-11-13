@@ -20,6 +20,7 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      * @var \DOMElement
      */
     private $signedMockElement;
+    private $signedMockElementSha256;
 
 
     /**
@@ -34,6 +35,9 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $mock->setSignatureKey(CertificatesMock::getPrivateKey());
         $mock->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
         $this->signedMockElement = $mock->toSignedXML();
+
+        $mock->setSignatureKey(CertificatesMock::getPrivateKeySha256());
+        $this->signedMockElementSha256 = $mock->toSignedXML();
     }
 
 
@@ -46,10 +50,10 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testValidateWithoutModification(): void
     {
-        $signedMockElementCopy = Utils::copyElement($this->signedMockElement);
+        $signedMockElementCopy = Utils::copyElement($this->signedMockElementSha256);
         $signedMockElementCopy->ownerDocument->appendChild($signedMockElementCopy);
         $tmp = new SignedElementHelperMock($signedMockElementCopy);
-        $this->assertTrue($tmp->validate(CertificatesMock::getPublicKey()));
+        $this->assertTrue($tmp->validate(CertificatesMock::getPublicKeySha256()));
     }
 
 
