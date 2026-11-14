@@ -101,7 +101,7 @@ class PublicKeyValidatorTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $doc = DOMDocumentFactory::fromFile(__DIR__ . '/response.xml');
         $response = new Response($doc->firstChild);
-        $response->setSignatureKey(CertificatesMock::getPrivateKey());
+        $response->setSignatureKey(CertificatesMock::getPrivateKeySha256());
         $response->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
 
         // convert to signed response

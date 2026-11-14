@@ -129,7 +129,7 @@ class HTTPPostTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $response->setIssuer($issuer);
         $response->setRelayState('http://example.org');
         $response->setDestination('http://example.org/login?success=yes');
-        $response->setSignatureKey(CertificatesMock::getPrivateKey());
+        $response->setSignatureKey(CertificatesMock::getPrivateKeySha256());
 
         $hr = new HTTPPost();
         $hr->send($response);

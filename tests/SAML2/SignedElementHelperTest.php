@@ -19,21 +19,24 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     /**
      * @var \DOMElement
      */
-    private $signedMockElement;
+    private static $signedMockElement;
+    private static $signedMockElementSha256;
 
 
     /**
      * Create a mock signed element called 'root'
-     * @return void
      */
-    public function setUp(): void
+    public static function setUpBeforeClass(): void
     {
-        parent::setUp();
+        parent::setUpBeforeClass();
 
         $mock = new SignedElementHelperMock();
-        $mock->setSignatureKey(CertificatesMock::getPrivateKey());
+        $mock->setSignatureKey(CertificatesMock::getPrivateKeySha256());
         $mock->setCertificates([CertificatesMock::PUBLIC_KEY_PEM]);
-        $this->signedMockElement = $mock->toSignedXML();
+        self::$signedMockElement = $mock->toSignedXML();
+
+        $mock->setSignatureKey(CertificatesMock::getPrivateKeySha256());
+        self::$signedMockElementSha256 = $mock->toSignedXML();
     }
 
 
@@ -46,10 +49,10 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
      */
     public function testValidateWithoutModification(): void
     {
-        $signedMockElementCopy = Utils::copyElement($this->signedMockElement);
+        $signedMockElementCopy = Utils::copyElement(self::$signedMockElementSha256);
         $signedMockElementCopy->ownerDocument->appendChild($signedMockElementCopy);
         $tmp = new SignedElementHelperMock($signedMockElementCopy);
-        $this->assertTrue($tmp->validate(CertificatesMock::getPublicKey()));
+        $this->assertTrue($tmp->validate(CertificatesMock::getPublicKeySha256()));
     }
 
 
@@ -60,7 +63,7 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function testValidateWithReferenceTampering(): void
     {
         // Test modification of reference.
-        $signedMockElementCopy = Utils::copyElement($this->signedMockElement);
+        $signedMockElementCopy = Utils::copyElement(self::$signedMockElement);
         $signedMockElementCopy->ownerDocument->appendChild($signedMockElementCopy);
         $digestValueElements = Utils::xpQuery(
             $signedMockElementCopy,
@@ -71,7 +74,7 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $digestValueElements[0]->firstChild->data = 'invalid';
         $tmp = new SignedElementHelperMock($signedMockElementCopy);
         $this->assertFalse(
-            $tmp->validate(CertificatesMock::getPublicKey()),
+            $tmp->validate(CertificatesMock::getPublicKeySha256()),
             'When the DigestValue has been tampered with, a signature should no longer be valid'
         );
     }
@@ -84,7 +87,7 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function testValidateWithValueTampering(): void
     {
         // Test modification of SignatureValue.
-        $signedMockElementCopy = Utils::copyElement($this->signedMockElement);
+        $signedMockElementCopy = Utils::copyElement(self::$signedMockElement);
         $signedMockElementCopy->ownerDocument->appendChild($signedMockElementCopy);
         $digestValueElements = Utils::xpQuery($signedMockElementCopy, '/root/ds:Signature/ds:SignatureValue');
         $this->assertCount(1, $digestValueElements);
@@ -95,7 +98,7 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Unable to validate Signature');
-        $tmp->validate(CertificatesMock::getPublicKey());
+        $tmp->validate(CertificatesMock::getPublicKeySha256());
     }
 
 
@@ -108,7 +111,7 @@ class SignedElementHelperTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
         $certData = XMLSecurityDSig::staticGet509XCerts(CertificatesMock::PUBLIC_KEY_PEM);
         $certData = $certData[0];
 
-        $signedMockElementCopy = Utils::copyElement($this->signedMockElement);
+        $signedMockElementCopy = Utils::copyElement(self::$signedMockElement);
         $signedMockElementCopy->ownerDocument->appendChild($signedMockElementCopy);
         $tmp = new SignedElementHelperMock($signedMockElementCopy);
         $certs = $tmp->getValidatingCertificates();
@@ -134,10 +137,10 @@ r+X+X2Al/n6aDn7qAxXbl0RZuB+saxn+yFR6HFKggwkR1L2pimCuD0gTr6LlrNgf
 edF1YfJgq35hcMMLY9RE/0C0bCI=
 -----END CERTIFICATE-----';
         $mock = new SignedElementHelperMock();
-        $mock->setSignatureKey(CertificatesMock::getPrivateKey());
+        $mock->setSignatureKey(CertificatesMock::getPrivateKeySha256());
         $mock->setCertificates([$tmpCert, CertificatesMock::PUBLIC_KEY_PEM]);
-        $this->signedMockElement = $mock->toSignedXML();
-        $tmp = new SignedElementHelperMock($this->signedMockElement);
+        $signedMockElement = $mock->toSignedXML();
+        $tmp = new SignedElementHelperMock($signedMockElement);
         $certs = $tmp->getValidatingCertificates();
         $this->assertCount(1, $certs);
         $this->assertEquals($certData, $certs[0]);

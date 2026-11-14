@@ -117,6 +117,16 @@ UQ==
         return $privateKey;
     }
 
+    /**
+     * @return XMLSecurityKey
+     */
+    public static function getPrivateKeySha256(): XMLSecurityKey
+    {
+        $privateKey = new XMLSecurityKey(XMLSecurityKey::RSA_SHA256, ['type' => 'private']);
+        $privateKey->loadKey(self::PRIVATE_KEY_PEM);
+        return $privateKey;
+    }
+
 
     /**
      * @return XMLSecurityKey
