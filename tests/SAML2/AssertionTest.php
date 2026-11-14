@@ -734,7 +734,7 @@ XML
 XML
         );
 
-        $privateKey = CertificatesMock::getPrivateKey();
+        $privateKey = CertificatesMock::getPrivateKeySha256();
 
         $unsignedAssertion = new Assertion($document->firstChild);
         $unsignedAssertion->setSignatureKey($privateKey);
@@ -2036,7 +2036,7 @@ XML;
             "name2" => ["value3"],
         ]);
         $assertion->setAttributeNameFormat("urn:oasis:names:tc:SAML:2.0:attrname-format:unspecified");
-        $assertion->setSignatureKey(CertificatesMock::getPrivateKey());
+        $assertion->setSignatureKey(CertificatesMock::getPrivateKeySha256());
 
         $nameId = new NameID();
         $nameId->setValue("just_a_basic_identifier");
