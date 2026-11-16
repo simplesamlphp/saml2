@@ -195,6 +195,11 @@ abstract class AbstractContainer
      * A limit on how much data can be returned gzinflate() when processing a message.
      *
      * @return int max bytes to decode before considering the message an attack
+     *
+     * @deprecated  Implementation for backwards compatibility - will become abstract in a future release
      */
-    abstract public function getInflateSizeLimit(): int;
+    public function getInflateSizeLimit(): int
+    {
+        return 100 * 1024;
+    }
 }
