@@ -166,6 +166,7 @@ jobs:
           restore-keys: ${{ runner.os }}-composer-
 
       - name: Install Composer dependencies
+        shell: bash
         run: composer install --no-progress --prefer-dist --optimize-autoloader
 
       - name: Run unit tests
