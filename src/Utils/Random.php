@@ -18,6 +18,8 @@ class Random extends \SimpleSAML\XML\Utils\Random
      * This results in the maximum of 160 bits entropy specified in paragraph 1.3.4 of the SAML 2.0 core specifications
      *
      * (41 - 1) / 2 = 20 → random_bytes(20) → 160 bits
+     *
+     * @var int
      */
-    public const int ID_LENGTH = 41;
+    public const ID_LENGTH = 41;
 }
