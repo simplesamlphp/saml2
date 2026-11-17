@@ -21,13 +21,13 @@ use function trim;
 class ListOfStringsValue extends SAMLStringValue implements ListTypeInterface
 {
     /** @var string */
-    public const SCHEMA_TYPE = 'ListOfStrings';
+    public const string SCHEMA_TYPE = 'ListOfStrings';
 
     /** @var string */
-    public const SCHEMA_NAMESPACEURI = C::NS_MDUI;
+    public const string SCHEMA_NAMESPACEURI = C::NS_MDUI;
 
     /** @var string */
-    public const SCHEMA_NAMESPACE_PREFIX = 'mdui';
+    public const string SCHEMA_NAMESPACE_PREFIX = 'mdui';
 
 
     /**

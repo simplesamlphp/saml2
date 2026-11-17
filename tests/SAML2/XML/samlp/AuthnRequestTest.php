@@ -31,6 +31,7 @@ use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\AuthnContextComparisonTypeEnum;
 use SimpleSAML\SAML2\XML\samlp\AuthnRequest;
+use SimpleSAML\SAML2\XML\samlp\Extensions;
 use SimpleSAML\SAML2\XML\samlp\GetComplete;
 use SimpleSAML\SAML2\XML\samlp\IDPEntry;
 use SimpleSAML\SAML2\XML\samlp\IDPList;
@@ -38,6 +39,7 @@ use SimpleSAML\SAML2\XML\samlp\NameIDPolicy;
 use SimpleSAML\SAML2\XML\samlp\RequestedAuthnContext;
 use SimpleSAML\SAML2\XML\samlp\RequesterID;
 use SimpleSAML\SAML2\XML\samlp\Scoping;
+use SimpleSAML\SAML2\XML\shibmd\Scope;
 use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
@@ -100,6 +102,11 @@ final class AuthnRequestTest extends TestCase
                 Format: SAMLAnyURIValue::fromString(C::NAMEID_UNSPECIFIED),
             ),
         );
+
+        $extensions = new Extensions([
+            // Note:  this makes zero sense in an AuthnRequest, but we can't be picky in what extensions we accept
+            new Scope(SAMLStringValue::fromString('example.org')),
+        ]);
 
         $authnRequest = new AuthnRequest(
             subject: $subject,

@@ -14,7 +14,7 @@ use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Binding;
-use SimpleSAML\SAML2\Binding\RelayStateTrait;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\SOAPClient;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -24,7 +24,8 @@ use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
 use SimpleSAML\Store\StoreFactory;
 use SimpleSAML\Utils\HTTP;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PublicKey;
 
 use function array_key_exists;
 use function base64_decode;
@@ -48,8 +49,6 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
 
 
     /**
-     * @psalm-suppress UndefinedDocblockClass
-     * @psalm-suppress UndefinedClass
      * @var \SimpleSAML\Configuration
      */
     private Configuration $spMetadata;
@@ -58,16 +57,15 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
     /**
      * Create the redirect URL for a message.
      *
-     * @param  \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message.
+     * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $message The message.
+     * @return string The URL the user should be redirected to in order to send a message.
+     *
      * @throws \Exception
-     * @return string        The URL the user should be redirected to in order to send a message.
      */
     public function getRedirectURL(AbstractMessage $message): string
     {
-        /** @psalm-suppress UndefinedClass */
         $config = Configuration::getInstance();
 
-        /** @psalm-suppress UndefinedClass */
         $store = StoreFactory::getInstance($config->getString('store.type'));
         if ($store === false) {
             throw new Exception('Unable to send artifact without a datastore configured.');
@@ -97,7 +95,6 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             $params['RelayState'] = $relayState;
         }
 
-        /** @psalm-suppress UndefinedClass */
         $httpUtils = new HTTP();
         return $httpUtils->addURLparameters($destination, $params);
     }
@@ -138,8 +135,7 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             throw new Exception('Missing SAMLart parameter.');
         }
 
-        /** @psalm-suppress UndefinedClass */
-        $metadataHandler = MetaDataStorageHandler::getMetadataHandler(Configuration::getInstance());
+        $metadataHandler = MetaDataStorageHandler::getMetadataHandler();
 
         $idpMetadata = $metadataHandler->getMetaDataConfigForSha1($sourceId, 'saml20-idp-remote');
 
@@ -163,10 +159,6 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
             "ArtifactResolutionService endpoint being used is := " . $endpoint['Location'],
         );
 
-        /**
-         * @psalm-suppress UndefinedClass
-         * @psalm-suppress DocblockTypeContradiction
-         */
         Assert::notEmpty($this->spMetadata, 'Cannot process received message without SP metadata.');
 
         /**
@@ -178,16 +170,17 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
         $ar = new ArtifactResolve(new Artifact($artifact), null, $issuer, null, '2.0', $endpoint['Location']);
 
         // sign the request
-        /** @psalm-suppress UndefinedClass */
         MSG::addSign($this->spMetadata, $idpMetadata, $ar); // Shoaib - moved from the SOAPClient.
 
         $soap = new SOAPClient();
 
         // Send message through SoapClient
-        /** @var \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $artifactResponse */
         $artifactResponse = $soap->send($ar, $this->spMetadata, $idpMetadata);
+        if (!($artifactResponse instanceof ArtifactResponse)) {
+            throw new Exception('Invalid message received in response to our ArtifactResolve.');
+        }
 
-        return $this->handleReceivedArtifactResponse($artifactResponse,$query,$idpMetadata);
+        return $this->handleReceivedArtifactResponse($artifactResponse, $query, $idpMetadata);
     }
 
 
@@ -203,15 +196,18 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
      * and test strange combinations for correctness.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $artifactResponse The received message
-     * @param array query the QueryParams for the request
+     * @param array $query the QueryParams for the request
      * @param \SimpleSAML\Configuration $idpMetadata the metadata for the IdP who this artifact was sent to
      * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
      *
      * @throws \Exception
      * @throws \SimpleSAML\Assert\AssertionFailedException if assertions are false
      */
-    public function handleReceivedArtifactResponse(ArtifactResponse $artifactResponse,array $query,?Configuration $idpMetadata): AbstractMessage
-    {
+    public function handleReceivedArtifactResponse(
+        ArtifactResponse $artifactResponse,
+        array $query,
+        ?Configuration $idpMetadata,
+    ): AbstractMessage {
         if (!$artifactResponse->isSuccess()) {
             throw new Exception('Received error from ArtifactResolutionService.');
         }
@@ -219,13 +215,9 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
         $samlResponse = $artifactResponse->getMessage();
         if ($samlResponse === null) {
             /* Empty ArtifactResponse - possibly because of Artifact replay? */
-
             throw new Exception('Empty ArtifactResponse received, maybe a replay?');
         }
 
-        $samlResponse->addValidator([get_class($this), 'validateSignature'], $artifactResponse);
-
-        $query = $request->getQueryParams();
         if (isset($query['RelayState'])) {
             $this->setRelayState($query['RelayState']);
         }
@@ -244,23 +236,19 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
         //
         $idpEntity = $idpMetadata->getString('entityid');
         $samlResponseEntity = $samlResponse->getIssuer()?->getContent()->getValue();
-        if($samlResponseEntity === null) {
+        if ($samlResponseEntity === null) {
             throw new Exception('Received SAML Response with no entity ID.');
         }
         if ($samlResponseEntity !== $idpEntity) {
             throw new Exception('Received SAML Response from an IdP for another IdP.');
         }
 
-        $msg = $this->verifyMessageSignature($samlResponse, $idpMetadata);
-
-        return $msg;
+        return $this->verifyMessageSignature($samlResponse, $idpMetadata);
     }
 
 
     /**
      * @param \SimpleSAML\Configuration $sp
-     *
-     * @psalm-suppress UndefinedClass
      */
     public function setSPMetadata(Configuration $sp): void
     {
@@ -269,15 +257,136 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
 
 
     /**
-     * A validator which returns true if the ArtifactResponse was signed with the given key
+     * Verify the signature on a signed SAML message using IdP metadata keys.
      *
-     * @param \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $message
-     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key
-     * @return bool
+     * Returns the verified message instance.
+     *
+     * @throws \Exception When metadata has no signing keys, or when verification fails.
      */
-    public static function validateSignature(ArtifactResponse $message, XMLSecurityKey $key): bool
+    private function verifyMessageSignature(AbstractMessage $message, Configuration $idpMetadata): AbstractMessage
     {
-        // @todo verify if this works and/or needs to do anything more. Ref. HTTPRedirect binding
-        return $message->validate($key);
+        $container = ContainerSingleton::getInstance();
+        $blacklist = $container->getBlacklistedEncryptionAlgorithms();
+
+        // getPublicKeys(..., $required = true) throws if no signing cert/key material is present in metadata,
+        // so $keys is guaranteed non-empty here (no additional empty($keys) guard needed).
+        $keys = $idpMetadata->getPublicKeys('signing', true);
+
+        $signatureMethod = $message
+            ->getSignature()
+            ->getSignedInfo()
+            ->getSignatureMethod()
+            ->getAlgorithm()
+            ->getValue();
+
+        $factory = new SignatureAlgorithmFactory($blacklist);
+
+        $lastException = null;
+        foreach ($keys as $k) {
+            if (($k['type'] ?? null) !== 'X509Certificate') {
+                continue;
+            }
+
+            $pemCert = "-----BEGIN CERTIFICATE-----\n" .
+                chunk_split($k['X509Certificate'], 64) .
+                "-----END CERTIFICATE-----\n";
+
+            $opensslKey = openssl_pkey_get_public($pemCert);
+            if ($opensslKey === false) {
+                $lastException = new Exception('Unable to extract public key from X509 certificate.');
+                continue;
+            }
+
+            $keyInfo = openssl_pkey_get_details($opensslKey);
+            if ($keyInfo === false || !isset($keyInfo['key']) || !is_string($keyInfo['key'])) {
+                $lastException = new Exception('Unable to get public key details from X509 certificate.');
+                continue;
+            }
+
+            $pemPublicKey = $keyInfo['key'];
+
+            $file = Utils::getContainer()->getTempDir() . '/' . sha1($pemPublicKey) . '.pem';
+            if (!file_exists($file)) {
+                Utils::getContainer()->writeFile($file, $pemPublicKey);
+            }
+
+            try {
+                $verifier = $factory->getAlgorithm($signatureMethod, PublicKey::fromFile($file));
+                return $message->verify($verifier);
+            } catch (Exception $e) {
+                $lastException = $e;
+            }
+        }
+
+        throw $lastException ?? new Exception('Unable to verify message signature.');
+    }
+
+
+    /**
+     * Verify the ArtifactResponse signature using IdP metadata keys.
+     *
+     * Returns the verified ArtifactResponse instance.
+     *
+     * @throws \Exception When unsigned, when metadata has no signing keys, or when verification fails.
+     */
+    private function verifyArtifactResponseSignature(
+        ArtifactResponse $artifactResponse,
+        Configuration $idpMetadata,
+    ): ArtifactResponse {
+        if ($artifactResponse->isSigned() !== true) {
+            throw new Exception('ArtifactResponse must be signed.');
+        }
+
+        // getPublicKeys(..., $required = true) throws if no signing cert/key material is present in metadata,
+        // so $keys is guaranteed non-empty here (no additional empty($keys) guard needed).
+        $keys = $idpMetadata->getPublicKeys('signing', true);
+
+        $signatureMethod = $artifactResponse
+            ->getSignature()
+            ->getSignedInfo()
+            ->getSignatureMethod()
+            ->getAlgorithm()
+            ->getValue();
+
+        $factory = new SignatureAlgorithmFactory();
+
+        $lastException = null;
+        foreach ($keys as $k) {
+            if (($k['type'] ?? null) !== 'X509Certificate') {
+                continue;
+            }
+
+            $pemCert = "-----BEGIN CERTIFICATE-----\n" .
+                chunk_split($k['X509Certificate'], 64) .
+                "-----END CERTIFICATE-----\n";
+
+            $opensslKey = openssl_pkey_get_public($pemCert);
+            if ($opensslKey === false) {
+                $lastException = new Exception('Unable to extract public key from X509 certificate.');
+                continue;
+            }
+
+            $keyInfo = openssl_pkey_get_details($opensslKey);
+            if ($keyInfo === false || !isset($keyInfo['key']) || !is_string($keyInfo['key'])) {
+                $lastException = new Exception('Unable to get public key details from X509 certificate.');
+                continue;
+            }
+
+            $pemPublicKey = $keyInfo['key'];
+
+            $file = Utils::getContainer()->getTempDir() . '/' . sha1($pemPublicKey) . '.pem';
+            if (!file_exists($file)) {
+                Utils::getContainer()->writeFile($file, $pemPublicKey);
+            }
+
+            try {
+                $verifier = $factory->getAlgorithm($signatureMethod, PublicKey::fromFile($file));
+                return $artifactResponse->verify($verifier);
+            } catch (Exception $e) {
+                $lastException = $e;
+            }
+        }
+
+        throw $lastException ?? new Exception('Unable to verify ArtifactResponse signature.');
     }
 }

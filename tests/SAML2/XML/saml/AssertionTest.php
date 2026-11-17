@@ -798,7 +798,7 @@ XML;
         $this->expectException(SignatureVerificationFailedException::class);
         $this->expectExceptionMessage('Failed to verify signature.');
 
-        $assertion->verify($verifier);
+        @$assertion->verify($verifier);
     }
 
 
@@ -819,7 +819,7 @@ XML;
         $this->expectException(Exception::class);
         $this->expectExceptionMessage('Algorithm provided in key does not match algorithm used in signature.');
 
-        $assertion->verify($verifier);
+        @$assertion->verify($verifier);
     }
 
 
@@ -840,7 +840,7 @@ XML;
         $this->expectException(SignatureVerificationFailedException::class);
         $this->expectExceptionMessage('Failed to verify signature.');
 
-        $assertion->verify($verifier);
+        @$assertion->verify($verifier);
     }
 
 

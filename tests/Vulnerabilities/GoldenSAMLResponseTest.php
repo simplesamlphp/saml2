@@ -33,18 +33,23 @@ final class GoldenSAMLResponseTest extends TestCase
 
         $response = Response::fromXML($doc->documentElement);
         $assertion = $response->getAssertions()[0];
+        /** @var \SimpleSAML\XMLSecurity\XML\ds\X509Data $data */
+        $data = $assertion->getSignature()->getKeyInfo()->getInfo()[0];
 
         $verifier = (new SignatureAlgorithmFactory())->getAlgorithm(
             $assertion->getSignature()->getSignedInfo()->getSignatureMethod()->getAlgorithm()->getValue(),
             new PublicKey(
                 new PEM(
                     PEM::TYPE_PUBLIC_KEY,
-                    $assertion->getSignature()->getKeyInfo()->getInfo()[0]->getData()[0]->getContent()->getValue(),
+                    $data->getData()[0]->getContent()->getValue(),
                 ),
             ),
         );
 
         $this->expectException(CanonicalizationFailedException::class);
+
+        // When PHP 8.5 becomes the minimum:
+        // (void)@$assertion->verify($verifier);
         @$assertion->verify($verifier);
     }
 }

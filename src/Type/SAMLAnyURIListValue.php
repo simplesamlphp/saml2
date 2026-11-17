@@ -20,7 +20,7 @@ use function preg_split;
 class SAMLAnyURIListValue extends AnyURIListValue
 {
     /** @var string */
-    public const SCHEMA_TYPE = 'AnyURIList';
+    public const string SCHEMA_TYPE = 'AnyURIList';
 
 
     /**

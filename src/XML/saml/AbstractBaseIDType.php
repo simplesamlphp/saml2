@@ -32,8 +32,6 @@ abstract class AbstractBaseIDType extends AbstractSamlElement implements BaseIde
         protected ?SAMLStringValue $NameQualifier = null,
         protected ?SAMLStringValue $SPNameQualifier = null,
     ) {
-        Assert::nullOrNotWhitespaceOnly($NameQualifier);
-        Assert::nullOrNotWhitespaceOnly($SPNameQualifier);
     }
 
 

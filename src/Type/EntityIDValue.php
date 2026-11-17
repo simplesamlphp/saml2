@@ -15,13 +15,13 @@ use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 class EntityIDValue extends SAMLAnyURIValue
 {
     /** @var string */
-    public const SCHEMA_TYPE = 'entityIDType';
+    public const string SCHEMA_TYPE = 'entityIDType';
 
     /** @var string */
-    public const SCHEMA_NAMESPACEURI = C::NS_MD;
+    public const string SCHEMA_NAMESPACEURI = C::NS_MD;
 
     /** @var string */
-    public const SCHEMA_NAMESPACE_PREFIX = AbstractMdElement::NS_PREFIX;
+    public const string SCHEMA_NAMESPACE_PREFIX = AbstractMdElement::NS_PREFIX;
 
 
     /**

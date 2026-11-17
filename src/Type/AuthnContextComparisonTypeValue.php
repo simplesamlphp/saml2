@@ -17,7 +17,7 @@ use function array_column;
 class AuthnContextComparisonTypeValue extends StringValue
 {
     /** @var string */
-    public const SCHEMA_TYPE = 'authnContextComparisonType';
+    public const string SCHEMA_TYPE = 'authnContextComparisonType';
 
 
     /**

@@ -17,7 +17,7 @@ use function array_column;
 class DecisionTypeValue extends StringValue
 {
     /** @var string */
-    public const SCHEMA_TYPE = 'decisionType';
+    public const string SCHEMA_TYPE = 'decisionType';
 
 
     /**

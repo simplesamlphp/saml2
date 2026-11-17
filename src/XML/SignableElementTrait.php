@@ -111,7 +111,7 @@ trait SignableElementTrait
             new Transform(AnyURIValue::fromString($this->c14nAlg)),
         ]);
 
-        $canonicalDocument = XML::processTransforms($transforms, $xml);
+        $canonicalDocument = $this->processTransforms($transforms, $xml);
 
         $signedInfo = new SignedInfo(
             new CanonicalizationMethod(AnyURIValue::fromString($this->c14nAlg)),
