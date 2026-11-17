@@ -62,7 +62,7 @@ class XmlSignatureWrappingTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
     public function testThatASignatureReferencingAnotherAssertionIsNotValid(): void
     {
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Reference validation failed');
+        $this->expectExceptionMessage('Reference URI does not identify a node');
 
         $assertion = $this->getSignedAssertionWithSignatureThatReferencesAnotherAssertion();
         $this->signatureValidator->hasValidSignature($assertion, $this->identityProviderConfiguration);

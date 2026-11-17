@@ -39,7 +39,7 @@ class MessageTest extends \Mockery\Adapter\Phpunit\MockeryTestCase
 AUTHNREQUEST
         );
 
-        $privateKey = CertificatesMock::getPrivateKey();
+        $privateKey = CertificatesMock::getPrivateKeySha256();
 
         $unsignedMessage = Message::fromXML($authnRequest->documentElement);
         $unsignedMessage->setSignatureKey($privateKey);
@@ -144,7 +144,7 @@ AUTHNREQUEST
         $response = new \DOMDocument();
         $response->load(__DIR__ . '/Response/response.xml');
 
-        $privateKey = CertificatesMock::getPrivateKey();
+        $privateKey = CertificatesMock::getPrivateKeySha256();
 
         $unsignedMessage = Message::fromXML($response->documentElement);
         $unsignedMessage->setSignatureKey($privateKey);
