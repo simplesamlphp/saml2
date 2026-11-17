@@ -68,6 +68,9 @@
             "simplesamlphp/composer-module-installer": false,
             "phpstan/extension-installer": true,
             "simplesamlphp/composer-xmlprovider-installer": true
+        },
+        "audit": {
+            "block-insecure": false
         }
     },
     "scripts": {
