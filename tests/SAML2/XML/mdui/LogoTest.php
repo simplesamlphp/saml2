@@ -16,8 +16,8 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
 use SimpleSAML\XMLSchema\Type\PositiveIntegerValue;
 
 use function dirname;
@@ -38,13 +38,11 @@ final class LogoTest extends TestCase
     use SerializableElementTestTrait;
 
 
-    /** @var string */
-    private const DATA = <<<IMG
+    private const string DATA = <<<IMG
 data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=
 IMG;
 
-    /** @var string */
-    private const URL = 'https://static.example.org/images/logos/logo300x200.png';
+    private const string URL = 'https://static.example.org/images/logos/logo300x200.png';
 
 
     /**
@@ -75,7 +73,7 @@ IMG;
             SAMLAnyURIValue::fromString(self::URL),
             PositiveIntegerValue::fromInteger(200),
             PositiveIntegerValue::fromInteger(300),
-            LanguageValue::fromString('nl'),
+            LangValue::fromString('nl'),
         );
 
         $this->assertEquals(

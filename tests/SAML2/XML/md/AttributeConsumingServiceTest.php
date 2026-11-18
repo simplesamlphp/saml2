@@ -19,10 +19,11 @@ use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 use SimpleSAML\XMLSchema\Exception\MissingElementException;
 use SimpleSAML\XMLSchema\Type\BooleanValue;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 
 use function dirname;
@@ -60,7 +61,9 @@ final class AttributeConsumingServiceTest extends TestCase
             Name: SAMLStringValue::fromString('urn:oid:1.3.6.1.4.1.5923.1.1.1.7'),
             NameFormat: SAMLAnyURIValue::fromString('urn:oasis:names:tc:SAML:2.0:attrname-format:uri'),
             FriendlyName: SAMLStringValue::fromString('eduPersonEntitlement'),
-            AttributeValues: [new AttributeValue('https://ServiceProvider.com/entitlements/123456789')],
+            AttributeValues: [
+                new AttributeValue(StringValue::fromString('https://ServiceProvider.com/entitlements/123456789')),
+            ],
         );
     }
 
@@ -77,7 +80,7 @@ final class AttributeConsumingServiceTest extends TestCase
             UnsignedShortValue::fromInteger(2),
             [
                 new ServiceName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Academic Journals R US'),
                 ),
             ],
@@ -85,7 +88,7 @@ final class AttributeConsumingServiceTest extends TestCase
             BooleanValue::fromBoolean(true),
             [
                 new ServiceDescription(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Academic Journals R US and only us'),
                 ),
             ],
@@ -107,7 +110,7 @@ final class AttributeConsumingServiceTest extends TestCase
             UnsignedShortValue::fromInteger(2),
             [
                 new ServiceName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Academic Journals R US'),
                 ),
             ],
@@ -121,13 +124,9 @@ final class AttributeConsumingServiceTest extends TestCase
             'ServiceDescription',
         );
 
-        /**
-         * @psalm-suppress PossiblyNullPropertyFetch
-         * @var \DOMElement $space
-         */
+        /** @var \DOMElement $space */
         $space = $descr->item(0)->previousSibling;
 
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($descr->item(0));
         $xmlRepresentation->documentElement->removeChild($space);
         $xmlRepresentation->documentElement->setAttribute('isDefault', 'false');
@@ -147,14 +146,14 @@ final class AttributeConsumingServiceTest extends TestCase
             index: UnsignedShortValue::fromInteger(2),
             serviceName: [
                 new ServiceName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Academic Journals R US'),
                 ),
             ],
             requestedAttribute: [self::$requestedAttribute],
             serviceDescription: [
                 new ServiceDescription(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Academic Journals R US and only us'),
                 ),
             ],
@@ -194,7 +193,7 @@ final class AttributeConsumingServiceTest extends TestCase
             UnsignedShortValue::fromInteger(2),
             [
                 new ServiceName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Academic Journals R US'),
                 ),
             ],
@@ -226,7 +225,6 @@ final class AttributeConsumingServiceTest extends TestCase
     {
         $xmlRepresentation = clone self::$xmlRepresentation;
         $name = $xmlRepresentation->documentElement->getElementsByTagNameNS(C::NS_MD, 'ServiceName');
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($name->item(0));
         $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage('Missing at least one ServiceName in AttributeConsumingService.');
@@ -244,7 +242,7 @@ final class AttributeConsumingServiceTest extends TestCase
             C::NS_MD,
             'RequestedAttribute',
         );
-        /** @psalm-suppress PossiblyNullArgument */
+
         $xmlRepresentation->documentElement->removeChild($reqAttr->item(0));
         $this->expectException(MissingElementException::class);
         $this->expectExceptionMessage('Missing at least one RequestedAttribute in AttributeConsumingService.');

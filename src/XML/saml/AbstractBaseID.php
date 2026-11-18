@@ -38,8 +38,7 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
     use SchemaValidatableElementTrait;
 
 
-    /** @var string */
-    public const LOCALNAME = 'BaseID';
+    public const string LOCALNAME = 'BaseID';
 
 
     /**
@@ -69,9 +68,6 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
 
     /**
      * Convert XML into an BaseID
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -111,9 +107,6 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
 
     /**
      * Convert this BaseID to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this BaseID.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -139,6 +132,9 @@ abstract class AbstractBaseID extends AbstractBaseIDType implements
     }
 
 
+    /**
+     * @return \SimpleSAML\XMLSecurity\Backend\EncryptionBackend|null
+     */
     public function getEncryptionBackend(): ?EncryptionBackend
     {
         // return the encryption backend you want to use,

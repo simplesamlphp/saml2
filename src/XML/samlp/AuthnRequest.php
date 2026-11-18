@@ -58,6 +58,7 @@ class AuthnRequest extends AbstractRequest implements SchemaValidatableElementIn
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions|null $extensions
      * @param \SimpleSAML\SAML2\XML\samlp\Scoping|null $scoping
+     *
      * @throws \Exception
      */
     final public function __construct(
@@ -228,9 +229,6 @@ class AuthnRequest extends AbstractRequest implements SchemaValidatableElementIn
     /**
      * Convert XML into an AuthnRequest
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
@@ -330,8 +328,6 @@ class AuthnRequest extends AbstractRequest implements SchemaValidatableElementIn
     /**
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
-     *
-     * @return \DOMElement The root element of the DOM tree
      */
     protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {

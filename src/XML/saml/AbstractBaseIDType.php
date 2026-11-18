@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\saml;
 
 use DOMElement;
-use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 
 /**
@@ -37,9 +36,6 @@ abstract class AbstractBaseIDType extends AbstractSamlElement implements BaseIde
 
     /**
      * Convert this BaseID to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this BaseID.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

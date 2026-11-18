@@ -47,8 +47,6 @@ final class Evidence extends AbstractSamlElement implements SchemaValidatableEle
 
     /**
      * Test if an object, at the state it's in, would produce an empty XML-element
-     *
-     * @return bool
      */
     public function isEmptyElement(): bool
     {
@@ -98,9 +96,6 @@ final class Evidence extends AbstractSamlElement implements SchemaValidatableEle
     /**
      * Convert XML into an Evidence
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   If the qualified name of the supplied element is wrong
      */
@@ -130,9 +125,6 @@ final class Evidence extends AbstractSamlElement implements SchemaValidatableEle
 
     /**
      * Convert this Evidence to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this Condition.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

@@ -73,9 +73,7 @@ final class IDPListTest extends TestCase
             SAMLStringValue::fromString('testName2'),
             SAMLAnyURIValue::fromString('urn:test:testLoc2'),
         );
-        $getComplete = new GetComplete(
-            SAMLAnyURIValue::fromString('https://some/location'),
-        );
+        $getComplete = GetComplete::fromString('https://some/location');
         $list = new IDPList([$entry1, $entry2], $getComplete);
 
         $this->assertEquals(
@@ -112,7 +110,7 @@ final class IDPListTest extends TestCase
         $this->assertCount(2, $listElements);
 
         // Test ordering of IDPList contents
-        /** @psalm-var \DOMElement[] $listElements */
+        /** @var \DOMElement[] $listElements */
         $listElements = XPath::xpQuery($listElement, './saml_protocol:IDPEntry/following-sibling::*', $xpCache);
         $this->assertCount(2, $listElements);
         $this->assertEquals('samlp:IDPEntry', $listElements[0]->tagName);

@@ -54,9 +54,7 @@ final class RequestedAuthnContextTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $authnContextDeclRef = new AuthnContextDeclRef(
-            SAMLAnyURIValue::fromString('https://example.org/relative/path/to/document.xml'),
-        );
+        $authnContextDeclRef = AuthnContextDeclRef::fromString('https://example.org/relative/path/to/document.xml');
 
         $requestedAuthnContext = new RequestedAuthnContext(
             [$authnContextDeclRef],
@@ -74,9 +72,8 @@ final class RequestedAuthnContextTest extends TestCase
      */
     public function testMarshallingWithMixedContextsFails(): void
     {
-        $authnContextDeclRef = new AuthnContextDeclRef(
-            SAMLAnyURIValue::fromString('https://example.org/relative/path/to/document.xml'),
-        );
+        $authnContextDeclRef = AuthnContextDeclRef::fromString('https://example.org/relative/path/to/document.xml');
+
         $authnContextClassRef = new AuthnContextClassRef(
             SAMLAnyURIValue::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT),
         );
@@ -95,9 +92,7 @@ final class RequestedAuthnContextTest extends TestCase
      */
     public function testMarshallingWithInvalidContentFails(): void
     {
-        $authnContextDeclRef = new AuthnContextDeclRef(
-            SAMLAnyURIValue::fromString('https://example.org/relative/path/to/document.xml'),
-        );
+        $authnContextDeclRef = AuthnContextDeclRef::fromString('https://example.org/relative/path/to/document.xml');
 
         $this->expectException(SchemaViolationException::class);
         $this->expectExceptionMessage(

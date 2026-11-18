@@ -16,6 +16,7 @@ use SimpleSAML\SAML2\XML\saml\AttributeValue;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\IntegerValue;
 
 use function dirname;
 use function strval;
@@ -58,19 +59,19 @@ final class AttributeStatementTest extends TestCase
                 new Attribute(
                     name: SAMLStringValue::fromString('urn:ServiceID'),
                     attributeValue: [
-                        new AttributeValue(1),
+                        new AttributeValue(IntegerValue::fromInteger(1)),
                     ],
                 ),
                 new Attribute(
                     name: SAMLStringValue::fromString('urn:EntityConcernedID'),
                     attributeValue: [
-                        new AttributeValue(1),
+                        new AttributeValue(IntegerValue::fromInteger(1)),
                     ],
                 ),
                 new Attribute(
                     name: SAMLStringValue::fromString('urn:EntityConcernedSubID'),
                     attributeValue: [
-                        new AttributeValue(1),
+                        new AttributeValue(IntegerValue::fromInteger(1)),
                     ],
                 ),
             ],

@@ -7,7 +7,6 @@ namespace SimpleSAML\Test\SAML2\XML\saml;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Audience;
 use SimpleSAML\SAML2\XML\saml\ProxyRestriction;
@@ -54,12 +53,8 @@ final class ProxyRestrictionTest extends TestCase
     {
         $condition = new ProxyRestriction(
             [
-                new Audience(
-                    SAMLAnyURIValue::fromString('urn:test:audience1'),
-                ),
-                new Audience(
-                    SAMLAnyURIValue::fromString('urn:test:audience2'),
-                ),
+                Audience::fromString('urn:test:audience1'),
+                Audience::fromString('urn:test:audience2'),
             ],
             NonNegativeIntegerValue::fromInteger(2),
         );

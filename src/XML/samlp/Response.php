@@ -49,7 +49,10 @@ class Response extends AbstractStatusResponse implements SchemaValidatableElemen
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
      * @param \SimpleSAML\SAML2\XML\samlp\Extensions $extensions
-     * @param (\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\EncryptedAssertion)[] $assertions
+     * @param (
+     *   \SimpleSAML\XMLSecurity\XML\SignableElementInterface
+     *   &(\SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\EncryptedAssertion)
+     * )[] $assertions
      */
     final public function __construct(
         IDValue $id,
@@ -91,9 +94,6 @@ class Response extends AbstractStatusResponse implements SchemaValidatableElemen
 
     /**
      * Convert XML into a Response element.
-     *
-     * @param \DOMElement $xml The input message.
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -153,8 +153,6 @@ class Response extends AbstractStatusResponse implements SchemaValidatableElemen
 
     /**
      * Convert the response message to an XML element.
-     *
-     * @return \DOMElement This response.
      */
     protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {

@@ -14,5 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class RequestVersionDeprecatedException extends ProtocolViolationException
 {
-    public const DEFAULT_MESSAGE = 'Deprecated version used.';
+    public const string DEFAULT_MESSAGE = 'Deprecated version used.';
 }

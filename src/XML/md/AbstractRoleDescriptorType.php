@@ -26,7 +26,7 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
 
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**
@@ -138,9 +138,6 @@ abstract class AbstractRoleDescriptorType extends AbstractMetadataDocument
 
     /**
      * Add this RoleDescriptor to an EntityDescriptor.
-     *
-     * @param \DOMElement $parent The EntityDescriptor we should append this endpoint to.
-     * @return \DOMElement
      */
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {

@@ -113,7 +113,7 @@ XML
             SAMLStringValue::fromString('127.0.0.1'),
             [
                 new KeyInfo([
-                    new KeyName(StringValue::fromString('SomeKey')),
+                    KeyName::fromString('SomeKey'),
                 ]),
                 new Chunk($arbitrary->documentElement),
             ],
@@ -165,7 +165,7 @@ XML
             SAMLStringValue::fromString('127.0.0.1'),
             [
                 new KeyInfo([
-                    new KeyName(StringValue::fromString('SomeKey')),
+                    KeyName::fromString('SomeKey'),
                 ]),
                 new Chunk($arbitrary->documentElement),
             ],
@@ -202,7 +202,7 @@ XML
         $this->assertCount(1, $subjectElements);
 
         // Test ordering of Subject contents
-        /** @psalm-var \DOMElement[] $subjectElements */
+        /** @var \DOMElement[] $subjectElements */
         $subjectElements = XPath::xpQuery($subjectElement, './saml_assertion:NameID/following-sibling::*', $xpCache);
         $this->assertCount(1, $subjectElements);
         $this->assertEquals('saml:SubjectConfirmation', $subjectElements[0]->tagName);
@@ -226,7 +226,7 @@ XML
             SAMLStringValue::fromString('127.0.0.1'),
             [
                 new KeyInfo([
-                    new KeyName(StringValue::fromString('SomeKey')),
+                    KeyName::fromString('SomeKey'),
                 ]),
                 new Chunk($arbitrary->documentElement),
             ],
@@ -236,7 +236,7 @@ XML
         $subject = new Subject(
             new CustomBaseID(
                 [
-                    new Audience(EntityIDValue::fromString('urn:some:audience')),
+                    Audience::fromString('urn:some:audience'),
                 ],
                 SAMLStringValue::fromString('urn:x-simplesamlphp:namequalifier'),
                 SAMLStringValue::fromString('urn:x-simplesamlphp:spnamequalifier'),

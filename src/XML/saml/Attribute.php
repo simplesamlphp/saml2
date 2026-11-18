@@ -7,6 +7,7 @@ namespace SimpleSAML\SAML2\XML\saml;
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\EncryptableElementTrait;
@@ -18,6 +19,8 @@ use SimpleSAML\XMLSchema\XML\Constants\NS;
 use SimpleSAML\XMLSecurity\Backend\EncryptionBackend;
 use SimpleSAML\XMLSecurity\XML\EncryptableElementInterface;
 
+use function array_unique;
+use function count;
 use function strval;
 
 /**
@@ -35,7 +38,18 @@ class Attribute extends AbstractSamlElement implements
 
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ATTR_NAMESPACE = NS::OTHER;
+
+    /**
+     * The exclusions for the xs:anyAttribute element
+     *
+     * @var array<int, array<int, string>>
+     */
+    public const array XS_ANY_ATTR_EXCLUSIONS = [
+        ['urn:oasis:names:tc:SAML:2.0:assertion', '*'],
+        ['urn:oasis:names:tc:SAML:2.0:metadata', '*'],
+        ['urn:oasis:names:tc:SAML:2.0:protocol', '*'],
+    ];
 
 
     /**
@@ -45,7 +59,7 @@ class Attribute extends AbstractSamlElement implements
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $nameFormat
      * @param \SimpleSAML\SAML2\Type\SAMLStringValue|null $friendlyName
      * @param \SimpleSAML\SAML2\XML\saml\AttributeValue[] $attributeValue
-     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttribute
+     * @param \SimpleSAML\XML\Attribute[] $namespacedAttribute
      */
     public function __construct(
         protected SAMLStringValue $name,
@@ -55,7 +69,7 @@ class Attribute extends AbstractSamlElement implements
         array $namespacedAttribute = [],
     ) {
         Assert::maxCount($attributeValue, C::UNBOUNDED_LIMIT);
-        Assert::allIsInstanceOf($attributeValue, AttributeValue::class, 'Invalid AttributeValue.');
+        Assert::allIsInstanceOf($attributeValue, AttributeValue::class, InvalidDOMElementException::class);
 
         switch (strval($nameFormat)) {
             case C::NAMEFORMAT_URI:
@@ -65,11 +79,27 @@ class Attribute extends AbstractSamlElement implements
                 );
                 break;
             case C::NAMEFORMAT_BASIC:
-                Assert::validNCName(
+                Assert::validName(
                     strval($name),
                     sprintf("Attribute name `%s` does not match its declared format `%s`", $name, $nameFormat),
                 );
                 break;
+        }
+
+        $types = array_map(
+            function (AttributeValue $av) {
+                return $av->getXsiType();
+            },
+            $attributeValue,
+        );
+
+        if ($types !== []) {
+            Assert::same(
+                count(array_unique($types)),
+                1,
+                "All of the <AttributeValue> elements must have the identical datatype assigned.",
+                ProtocolViolationException::class,
+            );
         }
 
         $this->setAttributesNS($namespacedAttribute);
@@ -120,6 +150,9 @@ class Attribute extends AbstractSamlElement implements
     }
 
 
+    /**
+     * @return \SimpleSAML\XMLSecurity\Backend\EncryptionBackend|null
+     */
     public function getEncryptionBackend(): ?EncryptionBackend
     {
         // return the encryption backend you want to use,
@@ -130,9 +163,6 @@ class Attribute extends AbstractSamlElement implements
 
     /**
      * Convert XML into a Attribute
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -156,9 +186,6 @@ class Attribute extends AbstractSamlElement implements
 
     /**
      * Convert this Attribute to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this Attribute to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

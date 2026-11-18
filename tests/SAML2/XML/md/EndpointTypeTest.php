@@ -43,7 +43,6 @@ final class EndpointTypeTest extends TestCase
     use SerializableElementTestTrait;
 
 
-    /** @var \DOMDocument */
     private static DOMDocument $ext;
 
 

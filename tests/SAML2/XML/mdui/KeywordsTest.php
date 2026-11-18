@@ -15,7 +15,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
+use SimpleSAML\XML\Type\LangValue;
 
 use function dirname;
 use function strval;
@@ -57,7 +57,7 @@ final class KeywordsTest extends TestCase
     public function testMarshalling(): void
     {
         $keywords = new Keywords(
-            LanguageValue::fromString("nl"),
+            LangValue::fromString("nl"),
             ListOfStringsValue::fromString("KLM koninklijke+luchtvaart+maatschappij"),
         );
 
@@ -76,7 +76,7 @@ final class KeywordsTest extends TestCase
         $this->expectException(ProtocolViolationException::class);
 
         new Keywords(
-            LanguageValue::fromString("en"),
+            LangValue::fromString("en"),
             ListOfStringsValue::fromArray(["csharp", "pascal", "c++"]),
         );
     }

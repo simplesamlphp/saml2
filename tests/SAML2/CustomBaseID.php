@@ -22,14 +22,11 @@ use SimpleSAML\XMLSchema\Type\QNameValue;
  */
 final class CustomBaseID extends AbstractBaseID
 {
-    /** @var string */
-    protected const XSI_TYPE_NAME = 'CustomBaseIDType';
+    protected const string XSI_TYPE_NAME = 'CustomBaseIDType';
 
-    /** @var string */
-    protected const XSI_TYPE_NAMESPACE = C::NAMESPACE;
+    protected const string XSI_TYPE_NAMESPACE = C::NAMESPACE;
 
-    /** @var string */
-    protected const XSI_TYPE_PREFIX = 'ssp';
+    protected const string XSI_TYPE_PREFIX = 'ssp';
 
 
     /**
@@ -94,9 +91,6 @@ final class CustomBaseID extends AbstractBaseID
 
     /**
      * Convert this BaseID to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this BaseID.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

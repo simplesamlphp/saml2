@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\emd\AbstractEmdElement;
 use SimpleSAML\SAML2\XML\emd\RepublishTarget;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -47,9 +46,7 @@ final class RepublishTargetTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $republishTarget = new RepublishTarget(
-            SAMLAnyURIValue::fromString('http://edugain.org/'),
-        );
+        $republishTarget = RepublishTarget::fromString('http://edugain.org/');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
@@ -67,6 +64,6 @@ final class RepublishTargetTest extends TestCase
             'Expected a value identical to "http://edugain.org/". Got: "http://example.org/"',
         );
 
-        new RepublishTarget(SAMLAnyURIValue::fromString('http://example.org/'));
+        RepublishTarget::fromString('http://example.org/');
     }
 }

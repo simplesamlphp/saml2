@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
-use SimpleSAML\SAML2\Type\EmailAddressValue;
 use SimpleSAML\SAML2\Type\KeyTypesValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
@@ -44,11 +43,11 @@ use SimpleSAML\Test\SAML2\Constants as C;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 use SimpleSAML\XMLSchema\Type\BooleanValue;
 use SimpleSAML\XMLSchema\Type\DurationValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
 use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
@@ -123,7 +122,7 @@ final class SPSSODescriptorTest extends TestCase
             FriendlyName: SAMLStringValue::fromString('eduPersonEntitlement'),
             AttributeValues: [
                 new AttributeValue(
-                    'https://ServiceProvider.com/entitlements/123456789',
+                    StringValue::fromString('https://ServiceProvider.com/entitlements/123456789'),
                 ),
             ],
         );
@@ -131,7 +130,7 @@ final class SPSSODescriptorTest extends TestCase
             UnsignedShortValue::fromInteger(0),
             [
                 new ServiceName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Academic Journals R US'),
                 ),
             ],
@@ -142,7 +141,7 @@ final class SPSSODescriptorTest extends TestCase
             UnsignedShortValue::fromInteger(1),
             [
                 new ServiceName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Academic Journals R US'),
                 ),
             ],
@@ -154,7 +153,7 @@ final class SPSSODescriptorTest extends TestCase
                 creationInstant: SAMLDateTimeValue::fromString('2020-02-03T13:46:24Z'),
                 usagePolicy: [
                     new UsagePolicy(
-                        LanguageValue::fromString('en'),
+                        LangValue::fromString('en'),
                         SAMLAnyURIValue::fromString('http://publisher.ra/policy.txt'),
                     ),
                 ],
@@ -162,28 +161,26 @@ final class SPSSODescriptorTest extends TestCase
         ]);
         $kd = new KeyDescriptor(
             new KeyInfo([
-                new KeyName(
-                    StringValue::fromString('ServiceProvider.com SSO Key'),
-                ),
+                KeyName::fromString('ServiceProvider.com SSO Key'),
             ]),
             KeyTypesValue::fromEnum(KeyTypesEnum::SIGNING),
         );
         $org = new Organization(
             [
                 new OrganizationName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Identity Providers R US'),
                 ),
             ],
             [
                 new OrganizationDisplayName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Identity Providers R US, a Division of Lerxst Corp.'),
                 ),
             ],
             [
                 new OrganizationURL(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLAnyURIValue::fromString('https://IdentityProvider.com'),
                 ),
             ],
@@ -191,9 +188,7 @@ final class SPSSODescriptorTest extends TestCase
         $contact = new ContactPerson(
             contactType: SAMLStringValue::fromString('other'),
             emailAddress: [
-                new EmailAddress(
-                    EmailAddressValue::fromString('john.doe@test.company'),
-                ),
+                EmailAddress::fromString('john.doe@test.company'),
             ],
         );
         $ars = new ArtifactResolutionService(
@@ -224,9 +219,7 @@ final class SPSSODescriptorTest extends TestCase
             [$slo1, $slo2],
             [$mnids],
             [
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
-                ),
+                NameIDFormat::fromString(C::NAMEID_TRANSIENT),
             ],
         );
 

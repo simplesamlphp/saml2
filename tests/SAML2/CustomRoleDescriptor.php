@@ -37,17 +37,14 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
     use ExtendableElementTrait;
 
 
-    /** @var string */
-    protected const XSI_TYPE_NAME = 'CustomRoleDescriptorType';
+    protected const string XSI_TYPE_NAME = 'CustomRoleDescriptorType';
 
-    /** @var string */
-    protected const XSI_TYPE_NAMESPACE = C::NAMESPACE;
+    protected const string XSI_TYPE_NAMESPACE = C::NAMESPACE;
 
-    /** @var string */
-    protected const XSI_TYPE_PREFIX = 'ssp';
+    protected const string XSI_TYPE_PREFIX = 'ssp';
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ELT_NAMESPACE = NS::OTHER;
 
 
     /**
@@ -70,7 +67,7 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
      *   The organization running this entity. Defaults to null.
      * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contact
      *   An array of contacts for this entity. Defaults to an empty array.
-     * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
+     * @param \SimpleSAML\XML\Attribute[] $namespacedAttributes
      */
     public function __construct(
         protected array $chunk,
@@ -119,9 +116,6 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
 
     /**
      * Convert XML into a RoleDescriptor
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -174,9 +168,6 @@ final class CustomRoleDescriptor extends AbstractRoleDescriptor
 
     /**
      * Convert this RoleDescriptor to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this RoleDescriptor.
      */
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {

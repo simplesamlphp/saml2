@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\EmailAddressValue;
 use SimpleSAML\SAML2\Type\EntityIDValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
@@ -45,12 +44,12 @@ use SimpleSAML\XML\Attribute as XMLAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XMLSchema\Constants as C_XSI;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 use SimpleSAML\XMLSchema\Exception\TooManyElementsException;
 use SimpleSAML\XMLSchema\Type\DurationValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
 use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
@@ -138,19 +137,19 @@ final class EntityDescriptorTest extends TestCase
         $org = new Organization(
             [
                 new OrganizationName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('orgNameTest (en)'),
                 ),
             ],
             [
                 new OrganizationDisplayName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('orgDispNameTest (en)'),
                 ),
             ],
             [
                 new OrganizationURL(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLAnyURIValue::fromString('https://IdentityProvider.com'),
                 ),
             ],
@@ -159,25 +158,19 @@ final class EntityDescriptorTest extends TestCase
             new ContactPerson(
                 contactType: SAMLStringValue::fromString('support'),
                 emailAddress: [
-                    new EmailAddress(
-                        EmailAddressValue::fromString('help@example.edu'),
-                    ),
+                    EmailAddress::fromString('help@example.edu'),
                 ],
             ),
             new ContactPerson(
                 contactType: SAMLStringValue::fromString('technical'),
                 emailAddress: [
-                    new EmailAddress(
-                        EmailAddressValue::fromString('root@example.edu'),
-                    ),
+                    EmailAddress::fromString('root@example.edu'),
                 ],
             ),
             new ContactPerson(
                 contactType: SAMLStringValue::fromString('administrative'),
                 emailAddress: [
-                    new EmailAddress(
-                        EmailAddressValue::fromString('info@example.edu'),
-                    ),
+                    EmailAddress::fromString('info@example.edu'),
                 ],
             ),
         ];
@@ -197,7 +190,7 @@ final class EntityDescriptorTest extends TestCase
                 creationInstant: SAMLDateTimeValue::fromString('2020-02-03T13:46:24Z'),
                 usagePolicy: [
                     new UsagePolicy(
-                        LanguageValue::fromString('en'),
+                        LangValue::fromString('en'),
                         SAMLAnyURIValue::fromString('http://publisher.ra/policy.txt'),
                     ),
                 ],
@@ -280,27 +273,25 @@ XML
         $ad = new AffiliationDescriptor(
             $entityid,
             [
-                new AffiliateMember(
-                    EntityIDValue::fromString(C::ENTITY_OTHER),
-                ),
+                AffiliateMember::fromString(C::ENTITY_OTHER),
             ],
         );
         $org = new Organization(
             [
                 new OrganizationName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('orgNameTest (en)'),
                 ),
             ],
             [
                 new OrganizationDisplayName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('orgDispNameTest (en)'),
                 ),
             ],
             [
                 new OrganizationURL(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLAnyURIValue::fromString('https://IdentityProvider.com'),
                 ),
             ],
@@ -309,25 +300,19 @@ XML
             new ContactPerson(
                 contactType: SAMLStringValue::fromString('support'),
                 emailAddress: [
-                    new EmailAddress(
-                        EmailAddressValue::fromString('help@example.edu'),
-                    ),
+                    EmailAddress::fromString('help@example.edu'),
                 ],
             ),
             new ContactPerson(
                 contactType: SAMLStringValue::fromString('technical'),
                 emailAddress: [
-                    new EmailAddress(
-                        EmailAddressValue::fromString('root@example.edu'),
-                    ),
+                    EmailAddress::fromString('root@example.edu'),
                 ],
             ),
             new ContactPerson(
                 contactType: SAMLStringValue::fromString('administrative'),
                 emailAddress: [
-                    new EmailAddress(
-                        EmailAddressValue::fromString('info@example.edu'),
-                    ),
+                    EmailAddress::fromString('info@example.edu'),
                 ],
             ),
         ];
@@ -347,7 +332,7 @@ XML
                 creationInstant: SAMLDateTimeValue::fromString('2020-02-03T13:46:24Z'),
                 usagePolicy: [
                     new UsagePolicy(
-                        LanguageValue::fromString('en'),
+                        LangValue::fromString('en'),
                         SAMLAnyURIValue::fromString('http://publisher.ra/policy.txt'),
                     ),
                 ],
@@ -402,9 +387,7 @@ XML
         $affiliationDescriptor = new AffiliationDescriptor(
             EntityIDValue::fromString(C::ENTITY_IDP),
             [
-                new AffiliateMember(
-                    EntityIDValue::fromString(C::ENTITY_SP),
-                ),
+                AffiliateMember::fromString(C::ENTITY_SP),
             ],
         );
         $affiliationDescriptor->toXML($xmlRepresentation->documentElement);
@@ -440,10 +423,6 @@ XML
         $type->toXML($customd);
 
         $newline = new DOMText("\n  ");
-        /**
-         * @psalm-suppress PossiblyNullPropertyFetch
-         * @psalm-suppress PossiblyNullReference
-         */
         $pdpd->parentNode->insertBefore($customd, $pdpd->nextSibling);
         $pdpd->parentNode->insertBefore($newline, $customd);
         $entityDescriptor = EntityDescriptor::fromXML($xmlRepresentation->documentElement);

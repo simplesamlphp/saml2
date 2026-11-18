@@ -7,7 +7,6 @@ namespace SimpleSAML\SAML2\Test\SAML2\XML\samlp;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\StatusMessage;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -47,9 +46,7 @@ final class StatusMessageTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $statusMessage = new StatusMessage(
-            SAMLStringValue::fromString('Something went wrong'),
-        );
+        $statusMessage = StatusMessage::fromString('Something went wrong');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

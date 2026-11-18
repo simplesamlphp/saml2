@@ -34,8 +34,6 @@ abstract class AbstractChainedValidator implements ChainedValidator
      * @param \SimpleSAML\SAML2\Utilities\ArrayCollection $pemCandidates
      *
      * @throws \Exception
-     *
-     * @return bool
      */
     protected function validateElementWithKeys(
         SignedElementInterface $element,

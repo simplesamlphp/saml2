@@ -1,4 +1,4 @@
-<saml:Advice xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ssp="urn:x-simplesamlphp:namespace">
+<saml:Advice xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ssp="urn:x-simplesamlphp:namespace">
   <saml:AssertionIDRef>_Test</saml:AssertionIDRef>
   <saml:AssertionURIRef>urn:x-simplesamlphp:reference</saml:AssertionURIRef>
   <saml:Assertion Version="2.0" ID="_93af655219464fb403b34436cfb0c5cb1d9a5502" IssueInstant="1970-01-01T01:33:31Z">

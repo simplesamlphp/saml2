@@ -203,7 +203,7 @@ final class NewEncryptedIDTest extends TestCase
         $this->assertCount(1, $eidElements);
 
         // Test ordering of NewEncryptedID contents
-        /** @psalm-var \DOMElement[] $eidElements */
+        /** @var \DOMElement[] $eidElements */
         $eidElements = XPath::xpQuery($eidElement, './xenc:EncryptedData/following-sibling::*', $xpCache);
         $this->assertCount(1, $eidElements);
         $this->assertEquals('xenc:EncryptedKey', $eidElements[0]->tagName);
@@ -232,17 +232,14 @@ final class NewEncryptedIDTest extends TestCase
         );
 
         $encid = new NewEncryptedID($nameid->encrypt($encryptor));
-        /** @psalm-suppress ArgumentTypeCoercion */
         $doc = DOMDocumentFactory::fromString(strval($encid));
 
         $encid = NewEncryptedID::fromXML($doc->documentElement);
-        /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encid->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             $privKey,
         );
         $id = $encid->decrypt($decryptor);
-        /** @psalm-suppress ArgumentTypeCoercion */
         $this->assertEquals(strval($nameid), strval($id));
 
         // test a custom BaseID that's registered
@@ -257,18 +254,15 @@ final class NewEncryptedIDTest extends TestCase
         );
 
         $encid = new NewEncryptedID($customId->encrypt($encryptor));
-        /** @psalm-suppress ArgumentTypeCoercion */
         $doc = DOMDocumentFactory::fromString(strval($encid));
 
         $encid = NewEncryptedID::fromXML($doc->documentElement);
-        /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encid->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             $privKey,
         );
         $id = $encid->decrypt($decryptor);
         $this->assertInstanceOf(CustomBaseID::class, $id);
-        /** @psalm-suppress ArgumentTypeCoercion */
         $this->assertEquals(strval($customId), strval($id));
 
         // Remove registration by using a clean container
@@ -280,18 +274,15 @@ final class NewEncryptedIDTest extends TestCase
         $unknownId = $customId;
 
         $encid = new NewEncryptedID($unknownId->encrypt($encryptor));
-        /** @psalm-suppress ArgumentTypeCoercion */
         $doc = DOMDocumentFactory::fromString(strval($encid));
 
         $encid = NewEncryptedID::fromXML($doc->documentElement);
-        /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encid->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             $privKey,
         );
         $id = $encid->decrypt($decryptor);
         $this->assertInstanceOf(UnknownID::class, $id);
-        /** @psalm-suppress ArgumentTypeCoercion */
         $this->assertEquals(strval($unknownId), strval($id));
 
         // test with unsupported ID

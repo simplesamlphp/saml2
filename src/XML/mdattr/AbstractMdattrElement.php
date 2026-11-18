@@ -10,16 +10,15 @@ use SimpleSAML\XML\AbstractElement;
 /**
  * Abstract class to be implemented by all the classes in this namespace
  *
+ * @link: https://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-ui/v1.0/sstc-saml-metadata-ui-v1.0.pdf
+ *
  * @package simplesamlphp/saml2
  */
 abstract class AbstractMdattrElement extends AbstractElement
 {
-    /** @var string */
-    public const NS = C::NS_MDATTR;
+    public const string NS = C::NS_MDATTR;
 
-    /** @var string */
-    public const NS_PREFIX = 'mdattr';
+    public const string NS_PREFIX = 'mdattr';
 
-    /** @var string */
-    public const SCHEMA = 'resources/schemas/sstc-metadata-attr.xsd';
+    public const string SCHEMA = 'resources/schemas/sstc-metadata-attr.xsd';
 }

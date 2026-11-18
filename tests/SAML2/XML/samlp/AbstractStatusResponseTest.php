@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\DomainValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
@@ -84,12 +83,12 @@ final class AbstractStatusResponseTest extends TestCase
         $statusElements = XPath::xpQuery($responseElement, './saml_protocol:Status', $xpCache);
         $this->assertCount(1, $statusElements);
 
-        /** @psalm-var \DOMElement[] $statusCodeElements */
+        /** @var \DOMElement[] $statusCodeElements */
         $statusCodeElements = XPath::xpQuery($statusElements[0], './saml_protocol:StatusCode', $xpCache);
         $this->assertCount(1, $statusCodeElements);
         $this->assertEquals(C::STATUS_SUCCESS, $statusCodeElements[0]->getAttribute("Value"));
 
-        /** @psalm-var \DOMElement[] $nestedStatusCodeElements */
+        /** @var \DOMElement[] $nestedStatusCodeElements */
         $nestedStatusCodeElements = XPath::xpQuery($statusCodeElements[0], './saml_protocol:StatusCode', $xpCache);
         $this->assertCount(1, $nestedStatusCodeElements);
         $this->assertEquals('urn:test:OurSubStatusCode', $nestedStatusCodeElements[0]->getAttribute("Value"));
@@ -122,9 +121,7 @@ final class AbstractStatusResponseTest extends TestCase
             SAMLStringValue::fromString('urn:x-simplesamlphp:issuer'),
         );
 
-        $scope = new Scope(
-            DomainValue::fromString('scope.org'),
-        );
+        $scope = Scope::fromString('scope.org');
 
         $extensions = new Extensions([$scope]);
 
@@ -149,7 +146,7 @@ final class AbstractStatusResponseTest extends TestCase
         $this->assertCount(1, $responseElements);
 
         // Test ordering of Response contents
-        /** @psalm-var \DOMElement[] $responseElements */
+        /** @var \DOMElement[] $responseElements */
         $responseElements = XPath::xpQuery($responseElement, './saml_assertion:Issuer/following-sibling::*', $xpCache);
         $this->assertCount(3, $responseElements);
         $this->assertEquals('ds:Signature', $responseElements[0]->tagName);
@@ -276,7 +273,6 @@ XML;
                 Destination="http://somewhere.example.org/simplesaml/saml2/sp/AssertionConsumerService.php">
     <saml:Issuer>urn:x-simplesamlphp:issuer</saml:Issuer>
     <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
                     ID="s2a0da3504aff978b0f8c80f6a62c713c4a2f64c5c"
                     Version="2.0"
                     IssueInstant="2007-12-10T11:39:48Z"

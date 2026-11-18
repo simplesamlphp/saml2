@@ -50,7 +50,6 @@ abstract class AbstractContainer
      * Register a class that can handle a given element.
      *
      * @param string $class The class name of a class extending AbstractElement
-     * @psalm-param class-string $class
      */
     public function registerElementHandler(string $class): void
     {
@@ -64,7 +63,6 @@ abstract class AbstractContainer
      * Register a class that can handle given extension points of the standard.
      *
      * @param string $class The class name of a class extending AbstractElement or implementing ExtensionPointInterface.
-     * @psalm-param class-string $class
      */
     public function registerExtensionHandler(string $class): void
     {
@@ -83,8 +81,7 @@ abstract class AbstractContainer
      * @param \SimpleSAML\XMLSchema\Type\QNameValue $qName The qualified name of the element.
      *
      * @return string|null The fully-qualified name of a class extending \SimpleSAML\XML\AbstractElement and
-     * implementing support for the given element, or null if no such class has been registered before.
-     * @psalm-return class-string|null
+     *   implementing support for the given element, or null if no such class has been registered before.
      */
     public function getElementHandler(QNameValue $qName): ?string
     {
@@ -106,8 +103,7 @@ abstract class AbstractContainer
      *
      * @param \SimpleSAML\XMLSchema\Type\QNameValue $qName The qualified name of the extension.
      * @return string|null The fully-qualified name of a class implementing
-     *  \SimpleSAML\SAML11\XML\saml\ExtensionPointInterface or null if no such class has been registered before.
-     * @psalm-return class-string|null
+     *   \SimpleSAML\SAML11\XML\saml\ExtensionPointInterface or null if no such class has been registered before.
      */
     public function getExtensionHandler(QNameValue $qName): ?string
     {
@@ -125,7 +121,7 @@ abstract class AbstractContainer
      * Set the list of algorithms that are blacklisted for any encryption operation.
      *
      * @param string[]|null $algos An array with all algorithm identifiers that are blacklisted,
-     * or null if we want to use the defaults.
+     *   or null if we want to use the defaults.
      */
     abstract public function setBlacklistedAlgorithms(?array $algos): void;
 
@@ -147,17 +143,12 @@ abstract class AbstractContainer
      * - **decrypt** XML that was just decrypted
      *
      * @param \DOMElement|string $message
-     * @param string $type
      */
     abstract public function debugMessage($message, string $type): void;
 
 
     /**
      * Trigger the user to perform a POST to the given URL with the given data.
-     *
-     * @param string $url
-     * @param array $data
-     * @return string
      */
     abstract public function getPOSTRedirectURL(string $url, array $data = []): string;
 
@@ -165,9 +156,10 @@ abstract class AbstractContainer
     /**
      * This function retrieves the path to a directory where temporary files can be saved.
      *
+     * @return string Path to a temporary directory, without a trailing directory separator.
+     *
      * @throws \Exception If the temporary directory cannot be created or it exists and does not belong
      * to the current user.
-     * @return string Path to a temporary directory, without a trailing directory separator.
      */
     abstract public function getTempDir(): string;
 

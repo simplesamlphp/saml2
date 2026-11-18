@@ -14,12 +14,9 @@ use SimpleSAML\XML\AbstractElement;
  */
 abstract class AbstractEmdElement extends AbstractElement
 {
-    /** @var string */
-    public const NS = C::NS_EMD;
+    public const string NS = C::NS_EMD;
 
-    /** @var string */
-    public const NS_PREFIX = 'emd';
+    public const string NS_PREFIX = 'emd';
 
-    /** @var string */
-    public const SCHEMA = 'resources/schemas/eduidmd.xsd';
+    public const string SCHEMA = 'resources/schemas/eduidmd.xsd';
 }

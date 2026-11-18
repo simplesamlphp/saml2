@@ -15,7 +15,6 @@ interface Collection extends ArrayAccess, Countable, IteratorAggregate
      * Add an element to the collection
      *
      * @param mixed $element
-     *
      */
     public function add($element): void;
 

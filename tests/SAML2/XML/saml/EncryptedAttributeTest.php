@@ -17,6 +17,7 @@ use SimpleSAML\SAML2\XML\saml\EncryptedAttribute;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\Alg\KeyTransport\KeyTransportAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
@@ -77,7 +78,7 @@ final class EncryptedAttributeTest extends TestCase
         $attribute = new Attribute(
             name: SAMLStringValue::fromString('urn:encrypted:attribute'),
             attributeValue: [
-                new AttributeValue('very secret data'),
+                new AttributeValue(StringValue::fromString('very secret data')),
             ],
         );
 
@@ -102,7 +103,6 @@ final class EncryptedAttributeTest extends TestCase
     {
         $encryptedAttribute = EncryptedAttribute::fromXML(self::$xmlRepresentation->documentElement);
 
-        /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encryptedAttribute->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::PRIVATE_KEY),

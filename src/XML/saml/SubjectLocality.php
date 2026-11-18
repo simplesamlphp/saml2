@@ -60,8 +60,6 @@ final class SubjectLocality extends AbstractSamlElement implements SchemaValidat
 
     /**
      * Test if an object, at the state it's in, would produce an empty XML-element
-     *
-     * @return bool
      */
     public function isEmptyElement(): bool
     {
@@ -72,9 +70,6 @@ final class SubjectLocality extends AbstractSamlElement implements SchemaValidat
 
     /**
      * Convert XML into a SubjectLocality
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -93,9 +88,6 @@ final class SubjectLocality extends AbstractSamlElement implements SchemaValidat
 
     /**
      * Convert this SubjectLocality to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this SubjectLocality to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

@@ -20,6 +20,5 @@ final class SurName extends AbstractMdElement implements SchemaValidatableElemen
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = SAMLStringValue::class;
+    public const string TEXTCONTENT_TYPE = SAMLStringValue::class;
 }

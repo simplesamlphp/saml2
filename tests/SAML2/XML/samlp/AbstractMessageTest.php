@@ -272,7 +272,7 @@ AUTHNREQUEST
         $message = MessageFactory::fromXML($authnRequest->documentElement);
         $exts = $message->getExtensions();
         $this->assertInstanceOf(Extensions::class, $exts);
-        $exts = $exts->getList();
+        $exts = $exts->getElements();
         $this->assertCount(2, $exts);
 
         $this->assertInstanceOf(Chunk::class, $exts[0]);
@@ -400,7 +400,7 @@ XML;
         $messageElement = $message->toXML();
         $xp = XPath::xpQuery($messageElement, '.', XPath::getXPath($messageElement));
 
-        /** @psalm-var \DOMElement $query */
+        /** @var \DOMElement $query */
         $query = $xp[0];
         $this->assertEquals('somethingNEW', $query->getAttribute('ID'));
     }

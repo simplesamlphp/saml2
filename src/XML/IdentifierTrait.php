@@ -32,7 +32,7 @@ trait IdentifierTrait
     /**
      * Collect the value of the identifier-property
      *
-     * @return \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null
+     * @return (\SimpleSAML\XML\SerializableElementInterface&\SimpleSAML\SAML2\XML\saml\IdentifierInterface)|null
      */
     public function getIdentifier(): ?IdentifierInterface
     {
@@ -54,7 +54,6 @@ trait IdentifierTrait
     /**
      * Retrieve an identifier of any type from XML
      *
-     * @param \DOMElement $xml
      * @return \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null
      * @throws \SimpleSAML\XMLSchema\Exception\TooManyElementsException
      *   if too many child-elements of a type are specified
@@ -95,7 +94,6 @@ trait IdentifierTrait
             TooManyElementsException::class,
         );
 
-        /** @psalm-var \SimpleSAML\SAML2\XML\saml\IdentifierInterface|null $identifier */
         $identifier = array_pop($identifiers);
 
         return $identifier;

@@ -19,9 +19,6 @@ class SAMLDateTimeValue extends DateTimeValue
 
     /**
      * Validate the value.
-     *
-     * @param string $value
-     * @return void
      */
     protected function validateValue(string $value): void
     {

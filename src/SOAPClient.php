@@ -6,6 +6,7 @@ namespace SimpleSAML\SAML2;
 
 use DOMDocument;
 use Exception;
+use OpenSSLAsymmetricKey;
 use SimpleSAML\Configuration;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\XML\samlp\AbstractMessage;
@@ -18,16 +19,22 @@ use SimpleSAML\Utils\Config;
 use SimpleSAML\Utils\Crypto;
 use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XMLSecurity\XMLSecurityKey;
+use SimpleSAML\XMLSchema\Type\AnyURIValue;
 use SoapClient as BuiltinSoapClient;
 
 use function chunk_split;
 use function file_exists;
+use function is_object;
+use function is_string;
+use function method_exists;
 use function openssl_pkey_get_details;
 use function openssl_pkey_get_public;
+use function property_exists;
 use function sha1;
+use function sprintf;
 use function stream_context_create;
 use function stream_context_get_options;
+use function trim;
 
 /**
  * Implementation of the SAML 2.0 SOAP binding.
@@ -44,8 +51,6 @@ class SOAPClient
      * @param \SimpleSAML\Configuration $dstMetadata The metadata of the destination of the message.
      * @throws \Exception
      * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The response we received.
-     *
-     * @psalm-suppress UndefinedClass
      */
     public function send(
         AbstractMessage $msg,
@@ -148,8 +153,8 @@ class SOAPClient
 
         $action = 'http://www.oasis-open.org/committees/security';
         /* Perform SOAP Request over HTTP */
-        $x = new BuiltinSoapClient(null, $options);
-        $soapresponsexml = $x->__doRequest($request, $destination, $action, SOAP_1_1, false);
+        $x = $this->createSoapClient($options);
+        $soapresponsexml = $this->doSoapRequest($x, $request, $destination, $action);
         if (empty($soapresponsexml)) {
             throw new Exception('Empty SOAP response, check peer certificate.');
         }
@@ -187,6 +192,45 @@ class SOAPClient
 
 
     /**
+     * Factory method to create the built-in SoapClient. Overridable for testing.
+     *
+     * @param array $options
+     * @return \SoapClient
+     */
+    protected function createSoapClient(array $options): BuiltinSoapClient
+    {
+        return new BuiltinSoapClient(null, $options);
+    }
+
+
+    /**
+     * Wrapper around __doRequest(), overridable for testing.
+     *
+     * NOTE: $destination is a generic xs:anyURI value (XMLSchema), since the SOAP endpoint URI
+     * is transport-level and not necessarily subject to SAML-layer URI restrictions.
+     *
+     * @param \SoapClient $client
+     * @param string|null $request
+     * @param \SimpleSAML\XMLSchema\Type\AnyURIValue $destination
+     * @param string $action
+     * @return string
+     */
+    protected function doSoapRequest(
+        BuiltinSoapClient $client,
+        ?string $request,
+        AnyURIValue $destination,
+        string $action,
+    ): string {
+        return (string) $client->__doRequest(
+            $request,
+            (string) $destination,
+            $action,
+            SOAP_1_1,
+        );
+    }
+
+
+    /**
      * Add a signature validator based on a SSL context.
      *
      * @param \SimpleSAML\SAML2\XML\samlp\AbstractMessage $msg The message we should add a validator to.
@@ -212,7 +256,7 @@ class SOAPClient
             return;
         }
 
-        if (!isset($keyInfo['key'])) {
+        if (!isset($keyInfo['key']) || !is_string($keyInfo['key'])) {
             $container->getLogger()->warning('Missing key in public key details.');
             return;
         }
@@ -224,30 +268,88 @@ class SOAPClient
     /**
      * Validate a SOAP message against the certificate on the SSL connection.
      *
-     * @param string $data The public key that was used on the connection.
-     * @param \SimpleSAML\XMLSecurity\XMLSecurityKey $key The key we should validate the certificate against.
+     * @param string $data The public key (PEM) that was used on the connection.
+     * @param mixed $key The key we should validate the certificate against.
      * @throws \Exception
      */
-    public static function validateSSL(string $data, XMLSecurityKey $key): void
+    public static function validateSSL(string $data, mixed $key): void
     {
         $container = ContainerSingleton::getInstance();
 
-        /** @psalm-suppress PossiblyNullArgument */
-        $keyInfo = openssl_pkey_get_details($key->key);
-        if ($keyInfo === false) {
-            throw new Exception('Unable to get key details from XMLSecurityKey.');
-        }
+        $pem = self::extractPublicKeyPem($key);
 
-        if (!isset($keyInfo['key'])) {
-            throw new Exception('Missing key in public key details.');
-        }
-
-        if ($keyInfo['key'] !== $data) {
-            $container->getLogger()->debug('Key on SSL connection did not match key we validated against.');
-            return;
+        if (trim($pem) !== trim($data)) {
+            throw new Exception('Key on SSL connection did not match key we validated against.');
         }
 
         $container->getLogger()->debug('Message validated based on SSL certificate.');
+    }
+
+
+    /**
+     * Extract a PEM-encoded public key from different key representations.
+     *
+     * This avoids coupling to a specific XML security backend.
+     *
+     * @param mixed $key
+     * @throws \Exception
+     */
+    private static function extractPublicKeyPem(mixed $key): string
+    {
+        // If the validating key is already PEM, normalize it by re-loading through OpenSSL.
+        if (is_string($key)) {
+            $opensslKey = openssl_pkey_get_public($key);
+            if ($opensslKey === false) {
+                throw new Exception('Unable to load validating public key from PEM string.');
+            }
+
+            $keyInfo = openssl_pkey_get_details($opensslKey);
+            if ($keyInfo === false || !isset($keyInfo['key']) || !is_string($keyInfo['key'])) {
+                throw new Exception('Unable to get key details from validating PEM key.');
+            }
+
+            return $keyInfo['key'];
+        }
+
+        // Some key implementations may expose PEM via a method.
+        if (is_object($key)) {
+            foreach (['getPublicKeyPem', 'getPem', 'toPEM', 'toPem'] as $method) {
+                if (method_exists($key, $method)) {
+                    /** @var mixed $pem */
+                    $pem = $key->{$method}();
+                    if (is_string($pem) && $pem !== '') {
+                        return self::extractPublicKeyPem($pem);
+                    }
+                }
+            }
+
+            // Common compatibility case: an object wraps an OpenSSL key or PEM in a public "key" property.
+            if (property_exists($key, 'key')) {
+                /** @var mixed $inner */
+                $inner = $key->key;
+
+                if (is_string($inner)) {
+                    return self::extractPublicKeyPem($inner);
+                }
+
+                if ($inner instanceof OpenSSLAsymmetricKey) {
+                    $keyInfo = openssl_pkey_get_details($inner);
+                    if ($keyInfo !== false && isset($keyInfo['key']) && is_string($keyInfo['key'])) {
+                        return $keyInfo['key'];
+                    }
+                }
+            }
+        }
+
+        // Last attempt: OpenSSL might accept the value directly (OpenSSLAsymmetricKey).
+        if ($key instanceof OpenSSLAsymmetricKey) {
+            $keyInfo = openssl_pkey_get_details($key);
+            if ($keyInfo !== false && isset($keyInfo['key']) && is_string($keyInfo['key'])) {
+                return $keyInfo['key'];
+            }
+        }
+
+        throw new Exception('Unable to extract public key PEM from validating key.');
     }
 
 
@@ -259,7 +361,6 @@ class SOAPClient
      */
     private function getSOAPFault(DOMDocument $soapMessage): ?Fault
     {
-        /** @psalm-suppress PossiblyNullArgument */
         $soapFault = XPath::xpQuery(
             $soapMessage->firstChild,
             '/env:Envelope/env:Body/env:Fault',

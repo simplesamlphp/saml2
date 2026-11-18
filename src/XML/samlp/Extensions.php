@@ -12,6 +12,7 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\SchemaValidatableElementInterface;
 use SimpleSAML\XML\SchemaValidatableElementTrait;
 use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\XML\Constants\NS;
 
 /**
  * Class for handling SAML2 extensions.
@@ -24,14 +25,26 @@ final class Extensions extends AbstractSamlpElement implements SchemaValidatable
     use SchemaValidatableElementTrait;
 
 
+    /** The namespace-attribute for the xs:any element */
+    public const string XS_ANY_ELT_NAMESPACE = NS::OTHER;
+
+    /**
+     * The exclusions for the xs:any element
+     *
+     * @var array<int, array<int, string>>
+     */
+    public const array XS_ANY_ELT_EXCLUSIONS = [
+        ['urn:oasis:names:tc:SAML:2.0:assertion', '*'],
+        ['urn:oasis:names:tc:SAML:2.0:metadata', '*'],
+        ['urn:oasis:names:tc:SAML:2.0:protocol', '*'],
+    ];
+
+
     /**
      * Create an Extensions object from its samlp:Extensions XML representation.
      *
      * For those supported extensions, an object of the corresponding class will be created. The rest will be added
      * as a \SimpleSAML\XML\Chunk object.
-     *
-     * @param \DOMElement $xml
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong

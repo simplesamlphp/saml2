@@ -48,13 +48,26 @@ final class RequestAuthenticatedTest extends TestCase
     public function testMarshalling(): void
     {
         $ra = new RequestAuthenticated(
-            MustUnderstandValue::fromBoolean(false),
+            MustUnderstandValue::fromBoolean(true),
         );
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),
             strval($ra),
         );
+    }
+
+
+    /**
+     */
+    public function testMarshallingMustUnderstandFalseIsIgnored(): void
+    {
+        $ra = new RequestAuthenticated(
+            MustUnderstandValue::fromBoolean(false),
+        );
+
+        $xml = $ra->toXML();
+        $this->assertFalse($xml->hasAttributeNS(C::NS_SOAP_ENV, 'mustUnderstand'));
     }
 
 

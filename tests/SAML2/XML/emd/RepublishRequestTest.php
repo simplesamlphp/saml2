@@ -7,7 +7,6 @@ namespace SimpleSAML\Test\SAML2\XML\emd;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\emd\AbstractEmdElement;
 use SimpleSAML\SAML2\XML\emd\RepublishRequest;
 use SimpleSAML\SAML2\XML\emd\RepublishTarget;
@@ -56,9 +55,7 @@ final class RepublishRequestTest extends TestCase
     public function testMarshalling(): void
     {
         $republishRequest = new RepublishRequest(
-            new RepublishTarget(
-                SAMLAnyURIValue::fromString('http://edugain.org/'),
-            ),
+            RepublishTarget::fromString('http://edugain.org/'),
         );
 
         $this->assertEquals(

@@ -90,9 +90,7 @@ final class SubjectConfirmationTest extends TestCase
                 SAMLStringValue::fromString('127.0.0.1'),
                 [
                     new KeyInfo([
-                        new KeyName(
-                            StringValue::fromString('SomeKey'),
-                        ),
+                        KeyName::fromString('SomeKey'),
                     ]),
                     new Chunk(DOMDocumentFactory::fromString('<some>Arbitrary Element</some>')->documentElement),
                 ],
@@ -159,7 +157,7 @@ XML
         $this->assertCount(1, $subjectConfirmationElements);
 
         // Test ordering of SubjectConfirmation contents
-        /** @psalm-var \DOMElement[] $subjectConfirmationElements */
+        /** @var \DOMElement[] $subjectConfirmationElements */
         $subjectConfirmationElements = XPath::xpQuery(
             $subjectConfirmationElement,
             './saml_assertion:NameID/following-sibling::*',

@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\EntityIDValue;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils\XPath;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
@@ -61,17 +60,14 @@ final class ScopingTest extends TestCase
             SAMLStringValue::fromString('testName1'),
             EntityIDValue::fromString('urn:test:testLoc1'),
         );
-        $getComplete = new GetComplete(
-            SAMLAnyURIValue::fromString('https://some/location'),
-        );
+        $getComplete = GetComplete::fromString('https://some/location');
         $list = new IDPList([$entry1], $getComplete);
-        $requesterId = EntityIDValue::fromString('urn:some:requester');
 
         $scoping = new Scoping(
             NonNegativeIntegerValue::fromInteger(2),
             $list,
             [
-                new RequesterID($requesterId),
+                RequesterID::fromString('urn:some:requester'),
             ],
         );
 
@@ -91,17 +87,14 @@ final class ScopingTest extends TestCase
             SAMLStringValue::fromString('testName1'),
             EntityIDValue::fromString('urn:test:testLoc1'),
         );
-        $getComplete = new GetComplete(
-            SAMLAnyURIValue::fromString('https://some/location'),
-        );
+        $getComplete = GetComplete::fromString('https://some/location');
         $list = new IDPList([$entry1], $getComplete);
-        $requesterId = EntityIDValue::fromString('urn:some:requester');
 
         $scoping = new Scoping(
             NonNegativeIntegerValue::fromInteger(2),
             $list,
             [
-                new RequesterID($requesterId),
+                RequesterID::fromString('urn:some:requester'),
             ],
         );
 
@@ -109,12 +102,12 @@ final class ScopingTest extends TestCase
 
         // Test for an IDPList
         $xpCache = XPath::getXPath($scopingElement);
-        /** @psalm-var \DOMElement[] $scopingElements */
+        /** @var \DOMElement[] $scopingElements */
         $scopingElements = XPath::xpQuery($scopingElement, './saml_protocol:IDPList', $xpCache);
         $this->assertCount(1, $scopingElements);
 
         // Test ordering of Scoping contents
-        /** @psalm-var \DOMElement[] $scopingElements */
+        /** @var \DOMElement[] $scopingElements */
         $scopingElements = XPath::xpQuery($scopingElement, './saml_protocol:IDPList/following-sibling::*', $xpCache);
         $this->assertCount(1, $scopingElements);
         $this->assertEquals('samlp:RequesterID', $scopingElements[0]->tagName);

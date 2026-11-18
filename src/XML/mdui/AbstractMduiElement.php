@@ -16,12 +16,9 @@ use SimpleSAML\XML\AbstractElement;
  */
 abstract class AbstractMduiElement extends AbstractElement
 {
-    /** @var string */
-    public const NS = C::NS_MDUI;
+    public const string NS = C::NS_MDUI;
 
-    /** @var string */
-    public const NS_PREFIX = 'mdui';
+    public const string NS_PREFIX = 'mdui';
 
-    /** @var string */
-    public const SCHEMA = 'resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
+    public const string SCHEMA = 'resources/schemas/sstc-saml-metadata-ui-v1.0.xsd';
 }

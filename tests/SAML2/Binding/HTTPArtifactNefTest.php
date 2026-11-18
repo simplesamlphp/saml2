@@ -31,7 +31,6 @@ final class HTTPArtifactNefTest extends TestCase
         . '</ds:Reference></ds:SignedInfo><ds:SignatureValue>AA==</ds:SignatureValue></ds:Signature>';
 
 
-
     private function idpBMetadata(): Configuration
     {
         // "IdP-B": the federated IdP the attacker controls; its signing cert is in metadata,
@@ -76,7 +75,7 @@ final class HTTPArtifactNefTest extends TestCase
         $outer->method('getSignature')->willReturn(self::sigEl());
         $outer->method('getMessage')->willReturn($embedded);
 
-        $query = array();
+        $query = [];
         $artifactResponse = null;
 
         // if it is not signed then we will stop right there
@@ -118,7 +117,7 @@ final class HTTPArtifactNefTest extends TestCase
     }
 
 
-    private static function sigEl(): \SimpleSAML\XMLSecurity\XML\ds\Signature
+    private static function sigEl(): Signature
     {
         $doc = DOMDocumentFactory::fromString(self::MINIMAL_SIG);
         return Signature::fromXML($doc->documentElement);

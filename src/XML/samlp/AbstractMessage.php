@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
-use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Utils\XPath;
@@ -15,6 +14,7 @@ use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\SignableElementTrait;
 use SimpleSAML\SAML2\XML\SignedElementTrait;
 use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSecurity\XML\CanonicalizableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
@@ -28,7 +28,10 @@ use function array_pop;
  *
  * @package simplesamlphp/saml2
  */
-abstract class AbstractMessage extends AbstractSamlpElement implements SignableElementInterface, SignedElementInterface
+abstract class AbstractMessage extends AbstractSamlpElement implements
+    CanonicalizableElementInterface,
+    SignableElementInterface,
+    SignedElementInterface
 {
     use CanonicalizableElementTrait;
     use ExtendableElementTrait;
@@ -38,14 +41,10 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     }
 
 
-    /** @var bool */
     protected bool $messageContainedSignatureUponConstruction = false;
 
     /**
      * The original signed XML
-     *
-     * @var \DOMElement
-     * @psalm-suppress PropertyNotSetInConstructor
      */
     protected DOMElement $xml;
 
@@ -53,8 +52,8 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     /**
      * Initialize a message.
      *
-     * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param \SimpleSAML\XMLSchema\Type\IDValue $id
+     * @param \SimpleSAML\SAML2\XML\saml\Issuer|null $issuer
      * @param \SimpleSAML\SAML2\Type\SAMLDateTimeValue|null $issueInstant
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $destination
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $consent
@@ -134,8 +133,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
     /**
      * Query whether or not the message contained a signature at the root level when the object was constructed.
-     *
-     * @return bool
      */
     public function isMessageConstructedWithSignature(): bool
     {
@@ -145,8 +142,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
     /**
      * Get the XML element.
-     *
-     * @return \DOMElement
      */
     public function getXML(): DOMElement
     {
@@ -156,8 +151,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
     /**
      * Set the XML element.
-     *
-     * @param \DOMElement $xml
      */
     protected function setXML(DOMElement $xml): void
     {
@@ -166,7 +159,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
 
     /**
-     * @return \DOMElement
      */
     protected function getOriginalXML(): DOMElement
     {
@@ -177,16 +169,10 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
     /**
      * Convert this message to an unsigned XML document.
      * This method does not sign the resulting XML document.
-     *
-     * @return \DOMElement The root element of the DOM tree
      */
     protected function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {
         $root = $this->instantiateParentElement($parent);
-
-        /* Ugly hack to add another namespace declaration to the root element. */
-//        $root->setAttributeNS(C::NS_SAML, 'saml:tmp', 'tmp');
-//        $root->removeAttributeNS(C::NS_SAML, 'tmp');
 
         $root->setAttribute('Version', '2.0');
         $root->setAttribute('ID', $this->getId()->getValue());
@@ -196,7 +182,7 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
             $root->setAttribute('Destination', $this->getDestination()->getValue());
         }
 
-        if ($this->getConsent() !== null && $this->getConsent()->getValue() !== C::CONSENT_UNSPECIFIED) {
+        if ($this->getConsent() !== null) {
             $root->setAttribute('Consent', $this->getConsent()->getValue());
         }
 
@@ -213,9 +199,6 @@ abstract class AbstractMessage extends AbstractSamlpElement implements SignableE
 
     /**
      * Create XML from this class
-     *
-     * @param \DOMElement|null $parent
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

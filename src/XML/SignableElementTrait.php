@@ -14,7 +14,6 @@ use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmInterface;
 use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\Exception\RuntimeException;
 use SimpleSAML\XMLSecurity\Exception\UnsupportedAlgorithmException;
-use SimpleSAML\XMLSecurity\Utils\XML;
 use SimpleSAML\XMLSecurity\XML\ds\CanonicalizationMethod;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\Signature;
@@ -63,8 +62,6 @@ trait SignableElementTrait
         Assert::oneOf(
             $canonicalizationAlg,
             [
-                C::C14N_INCLUSIVE_WITH_COMMENTS,
-                C::C14N_INCLUSIVE_WITHOUT_COMMENTS,
                 C::C14N_EXCLUSIVE_WITH_COMMENTS,
                 C::C14N_EXCLUSIVE_WITHOUT_COMMENTS,
             ],
@@ -134,6 +131,9 @@ trait SignableElementTrait
     }
 
 
+    /**
+     * @return array|null
+     */
     public function getBlacklistedAlgorithms(): ?array
     {
         $container = ContainerSingleton::getInstance();

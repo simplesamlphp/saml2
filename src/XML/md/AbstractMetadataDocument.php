@@ -44,7 +44,7 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
         ?Extensions $extensions = null,
     ) {
         if ($extensions !== null) {
-            $exts = $extensions->getList();
+            $exts = $extensions->getElements();
 
             /**
              * MDUI 2.1: this element MUST NOT appear more than once within a given <md:Extensions> element.
@@ -126,7 +126,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 
 
     /**
-     * @return \DOMElement
      */
     protected function getOriginalXML(): DOMElement
     {
@@ -135,9 +134,6 @@ abstract class AbstractMetadataDocument extends AbstractSignedMdElement
 
 
     /**
-     * @param \DOMElement|null $parent
-     *
-     * @return \DOMElement
      */
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {

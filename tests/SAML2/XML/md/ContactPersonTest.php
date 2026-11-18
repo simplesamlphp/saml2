@@ -10,7 +10,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\EmailAddressValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\Company;
@@ -47,7 +46,6 @@ final class ContactPersonTest extends TestCase
     use SerializableElementTestTrait;
 
 
-    /** @var \DOMDocument */
     private static DOMDocument $ext;
 
 
@@ -66,7 +64,7 @@ final class ContactPersonTest extends TestCase
         );
 
         self::$arrayRepresentation = [
-            'ContactType' => 'administrative',
+            'contactType' => 'administrative',
             'Company' => 'SimpleSAMLphp',
             'GivenName' => 'Lead',
             'SurName' => 'Developer',
@@ -98,32 +96,20 @@ final class ContactPersonTest extends TestCase
 
         $contactPerson = new ContactPerson(
             SAMLStringValue::fromString('other'),
-            new Company(
-                SAMLStringValue::fromString('Test Company'),
-            ),
-            new GivenName(
-                SAMLStringValue::fromString('John'),
-            ),
-            new SurName(
-                SAMLStringValue::fromString('Doe'),
-            ),
+            Company::fromString('Test Company'),
+            GivenName::fromString('John'),
+            SurName::fromString('Doe'),
             new Extensions(
                 [
                     new Chunk(self::$ext->documentElement),
                 ],
             ),
             [
-                new EmailAddress(
-                    EmailAddressValue::fromString('jdoe@test.company'),
-                ),
-                new EmailAddress(
-                    EmailAddressValue::fromString('john.doe@test.company'),
-                ),
+                EmailAddress::fromString('jdoe@test.company'),
+                EmailAddress::fromString('john.doe@test.company'),
             ],
             [
-                new TelephoneNumber(
-                    SAMLStringValue::fromString('1-234-567-8901'),
-                ),
+                TelephoneNumber::fromString('1-234-567-8901'),
             ],
             [$attr1, $attr2],
         );
@@ -192,7 +178,6 @@ final class ContactPersonTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $company = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'Company');
         $newCompany = $xmlRepresentation->createElementNS(C::NS_MD, 'Company', 'Alt. Co.');
-        /** @psalm-suppress PossiblyNullPropertyFetch */
         $xmlRepresentation->documentElement->insertBefore($newCompany, $company->item(0)->nextSibling);
 
         $this->expectException(AssertionFailedException::class);
@@ -210,7 +195,6 @@ final class ContactPersonTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $givenName = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'GivenName');
         $newName = $xmlRepresentation->createElementNS(C::NS_MD, 'GivenName', 'New Name');
-        /** @psalm-suppress PossiblyNullPropertyFetch */
         $xmlRepresentation->documentElement->insertBefore($newName, $givenName->item(0)->nextSibling);
 
         $this->expectException(AssertionFailedException::class);
@@ -228,7 +212,6 @@ final class ContactPersonTest extends TestCase
         $xmlRepresentation = clone self::$xmlRepresentation;
         $surName = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'SurName');
         $newName = $xmlRepresentation->createElementNS(C::NS_MD, 'SurName', 'New Name');
-        /** @psalm-suppress PossiblyNullPropertyFetch */
         $xmlRepresentation->documentElement->insertBefore($newName, $surName->item(0)->nextSibling);
 
         $this->expectException(AssertionFailedException::class);

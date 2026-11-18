@@ -31,7 +31,7 @@ final class AffiliationDescriptor extends AbstractMetadataDocument implements Sc
 
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**
@@ -108,9 +108,6 @@ final class AffiliationDescriptor extends AbstractMetadataDocument implements Sc
     /**
      * Initialize a AffiliationDescriptor.
      *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
@@ -174,8 +171,6 @@ final class AffiliationDescriptor extends AbstractMetadataDocument implements Sc
     /**
      * Convert this assertion to an unsigned XML document.
      * This method does not sign the resulting XML document.
-     *
-     * @return \DOMElement The root element of the DOM tree
      */
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {

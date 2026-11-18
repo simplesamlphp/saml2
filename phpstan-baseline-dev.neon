@@ -195,7 +195,7 @@ parameters:
 		-
 			message: '#^Call to method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''SimpleSAML\\\\SAML2\\\\XML\\\\saml\\\\NameID'' and array\<SimpleSAML\\SAML2\\XML\\saml\\AttributeValue\|SimpleSAML\\SAML2\\XML\\saml\\IdentifierInterface\> will always evaluate to false\.$#'
 			identifier: method.impossibleType
-			count: 4
+			count: 2
 			path: tests/SAML2/XML/saml/AssertionTest.php
 
 		-

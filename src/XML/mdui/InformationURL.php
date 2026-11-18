@@ -13,9 +13,7 @@ use SimpleSAML\SAML2\XML\md\AbstractLocalizedURI;
  */
 final class InformationURL extends AbstractLocalizedURI
 {
-    /** @var string */
-    public const NS = 'urn:oasis:names:tc:SAML:metadata:ui';
+    public const string NS = 'urn:oasis:names:tc:SAML:metadata:ui';
 
-    /** @var string */
-    public const NS_PREFIX = 'mdui';
+    public const string NS_PREFIX = 'mdui';
 }

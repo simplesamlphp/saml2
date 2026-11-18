@@ -90,12 +90,8 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             SAMLAnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
             [self::$aidrs],
             [
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
-                ),
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
-                ),
+                NameIDFormat::fromString(C::NAMEID_PERSISTENT),
+                NameIDFormat::fromString(C::NAMEID_TRANSIENT),
             ],
             IDValue::fromString('phpunit'),
         );
@@ -119,12 +115,8 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             SAMLAnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
             [self::$aidrs],
             [
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
-                ),
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
-                ),
+                NameIDFormat::fromString(C::NAMEID_PERSISTENT),
+                NameIDFormat::fromString(C::NAMEID_TRANSIENT),
             ],
         );
     }
@@ -156,12 +148,8 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             SAMLAnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
             [self::$aidrs],
             [
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
-                ),
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
-                ),
+                NameIDFormat::fromString(C::NAMEID_PERSISTENT),
+                NameIDFormat::fromString(C::NAMEID_TRANSIENT),
             ],
         );
     }
@@ -180,12 +168,8 @@ final class AuthnAuthorityDescriptorTest extends TestCase
             SAMLAnyURIListValue::fromArray([C::NS_SAMLP, C::PROTOCOL]),
             [self::$aidrs, ''],
             [
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
-                ),
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
-                ),
+                NameIDFormat::fromString(C::NAMEID_PERSISTENT),
+                NameIDFormat::fromString(C::NAMEID_TRANSIENT),
             ],
         );
     }
@@ -201,7 +185,6 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     {
         $xmlRepresentation = clone self::$xmlRepresentation;
         $aqs = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AuthnQueryService');
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($aqs->item(0));
 
         $this->expectException(AssertionFailedException::class);
@@ -218,7 +201,6 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     {
         $xmlRepresentation = clone self::$xmlRepresentation;
         $nidf = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'NameIDFormat');
-        /** @psalm-suppress PossiblyNullPropertyAssignment */
         $nidf->item(0)->textContent = '';
         $this->expectException(ProtocolViolationException::class);
 
@@ -234,7 +216,6 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     {
         $xmlRepresentation = clone self::$xmlRepresentation;
         $aidrs = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'AssertionIDRequestService');
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($aidrs->item(0));
         AuthnAuthorityDescriptor::fromXML($xmlRepresentation->documentElement);
     }
@@ -248,9 +229,7 @@ final class AuthnAuthorityDescriptorTest extends TestCase
     {
         $xmlRepresentation = clone self::$xmlRepresentation;
         $nidf = $xmlRepresentation->getElementsByTagNameNS(C::NS_MD, 'NameIDFormat');
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($nidf->item(1));
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($nidf->item(0));
         AuthnAuthorityDescriptor::fromXML($xmlRepresentation->documentElement);
     }

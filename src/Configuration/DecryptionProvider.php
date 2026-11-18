@@ -7,13 +7,11 @@ namespace SimpleSAML\SAML2\Configuration;
 interface DecryptionProvider
 {
     /**
-     * @return null|bool
      */
     public function isAssertionEncryptionRequired(): ?bool;
 
 
     /**
-     * @return null|string
      */
     public function getSharedKey(): ?string;
 

@@ -37,6 +37,7 @@ use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Type\BooleanValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
@@ -119,12 +120,8 @@ final class IDPSSODescriptorTest extends TestCase
                 ),
             ],
             attributeProfile: [
-                new AttributeProfile(
-                    SAMLAnyURIValue::fromString('urn:attribute:profile1'),
-                ),
-                new AttributeProfile(
-                    SAMLAnyURIValue::fromString('urn:attribute:profile2'),
-                ),
+                AttributeProfile::fromString('urn:attribute:profile1'),
+                AttributeProfile::fromString('urn:attribute:profile2'),
             ],
             attribute: [
                 new Attribute(
@@ -137,20 +134,18 @@ final class IDPSSODescriptorTest extends TestCase
                     SAMLAnyURIValue::fromString(C::NAMEFORMAT_URI),
                     SAMLStringValue::fromString('eduPersonAffiliation'),
                     [
-                        new AttributeValue('member'),
-                        new AttributeValue('student'),
-                        new AttributeValue('faculty'),
-                        new AttributeValue('employee'),
-                        new AttributeValue('staff'),
+                        new AttributeValue(StringValue::fromString('member')),
+                        new AttributeValue(StringValue::fromString('student')),
+                        new AttributeValue(StringValue::fromString('faculty')),
+                        new AttributeValue(StringValue::fromString('employee')),
+                        new AttributeValue(StringValue::fromString('staff')),
                     ],
                 ),
             ],
             keyDescriptor: [
                 new KeyDescriptor(
                     new KeyInfo([
-                        new KeyName(
-                            SAMLStringValue::fromString('IdentityProvider.com SSO Key'),
-                        ),
+                        KeyName::fromString('IdentityProvider.com SSO Key'),
                     ]),
                     KeyTypesValue::fromEnum(KeyTypesEnum::SIGNING),
                 ),
@@ -181,15 +176,9 @@ final class IDPSSODescriptorTest extends TestCase
                 ),
             ],
             nameIDFormat: [
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_X509_SUBJECT_NAME),
-                ),
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_PERSISTENT),
-                ),
-                new NameIDFormat(
-                    SAMLAnyURIValue::fromString(C::NAMEID_TRANSIENT),
-                ),
+                NameIDFormat::fromString(C::NAMEID_X509_SUBJECT_NAME),
+                NameIDFormat::fromString(C::NAMEID_PERSISTENT),
+                NameIDFormat::fromString(C::NAMEID_TRANSIENT),
             ],
         );
 

@@ -58,7 +58,6 @@ class AttributeStatement extends AbstractStatementType implements SchemaValidata
 
 
     /**
-     * @return bool
      */
     public function hasEncryptedAttributes(): bool
     {
@@ -67,9 +66,6 @@ class AttributeStatement extends AbstractStatementType implements SchemaValidata
 
 
     /**
-     * @param \DOMElement $xml
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
@@ -87,9 +83,6 @@ class AttributeStatement extends AbstractStatementType implements SchemaValidata
 
     /**
      * Convert this Attribute to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this Attribute to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

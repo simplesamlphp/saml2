@@ -67,9 +67,6 @@ final class IDPList extends AbstractSamlpElement implements SchemaValidatableEle
     /**
      * Convert XML into a IDPList-element
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingElementException
@@ -107,9 +104,6 @@ final class IDPList extends AbstractSamlpElement implements SchemaValidatableEle
 
     /**
      * Convert this IDPList to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this IDPList to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -128,8 +122,10 @@ final class IDPList extends AbstractSamlpElement implements SchemaValidatableEle
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'IDPEntry': string,
+     *   'GetComplete'?: string,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -146,8 +142,14 @@ final class IDPList extends AbstractSamlpElement implements SchemaValidatableEle
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'IDPEntry': string,
+     *   'GetComplete'?: string,
+     * } $data
+     * @return array{
+     *   'IDPEntry': string,
+     *   'GetComplete'?: string,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -183,7 +185,10 @@ final class IDPList extends AbstractSamlpElement implements SchemaValidatableEle
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'IDPEntry': string,
+     *   'GetComplete'?: string,
+     * }
      */
     public function toArray(): array
     {

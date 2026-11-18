@@ -23,8 +23,8 @@ use SimpleSAML\SAML2\XML\mdrpi\UsagePolicy;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
 use SimpleSAML\XMLSecurity\TestUtils\SignedElementTestTrait;
 
 use function dirname;
@@ -73,7 +73,7 @@ final class EntitiesDescriptorTest extends TestCase
                 creationInstant: SAMLDateTimeValue::fromString('2020-02-03T13:46:24Z'),
                 usagePolicy: [
                     new UsagePolicy(
-                        LanguageValue::fromString('en'),
+                        LangValue::fromString('en'),
                         SAMLAnyURIValue::fromString('http://publisher.ra/policy.txt'),
                     ),
                 ],
@@ -88,10 +88,8 @@ final class EntitiesDescriptorTest extends TestCase
             'EntityDescriptor',
         );
 
-        /** @psalm-suppress PossiblyNullArgument */
         $childEntitiesd = EntitiesDescriptor::fromXML($entitiesdChildElement->item(0));
 
-        /** @psalm-suppress PossiblyNullArgument */
         $childEntityd = EntityDescriptor::fromXML($entitydElement->item(1));
 
         $entitiesd = new EntitiesDescriptor(
@@ -118,7 +116,6 @@ final class EntitiesDescriptorTest extends TestCase
             C::NS_MD,
             'EntityDescriptor',
         );
-        /** @psalm-suppress PossiblyNullArgument */
         $childEntityd = EntityDescriptor::fromXML($entitydElement->item(1));
         $entitiesd = new EntitiesDescriptor([$childEntityd]);
         $this->assertNull($entitiesd->getName());
@@ -135,7 +132,6 @@ final class EntitiesDescriptorTest extends TestCase
             C::NS_MD,
             'EntitiesDescriptor',
         );
-        /** @psalm-suppress PossiblyNullArgument */
         $childEntitiesd = EntitiesDescriptor::fromXML($entitiesdChildElement->item(0));
         $entitiesd = new EntitiesDescriptor(
             [],
@@ -183,7 +179,6 @@ final class EntitiesDescriptorTest extends TestCase
             C::NS_MD,
             'EntitiesDescriptor',
         );
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($entities->item(0));
         $entitiesd = EntitiesDescriptor::fromXML($xmlRepresentation->documentElement);
         $this->assertEquals([], $entitiesd->getEntitiesDescriptors());
@@ -207,7 +202,6 @@ final class EntitiesDescriptorTest extends TestCase
          *  the child of the parent EntitiesDescriptor.
          */
 
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($entity->item(1));
         $entitiesd = EntitiesDescriptor::fromXML($xmlRepresentation->documentElement);
         $this->assertEquals([], $entitiesd->getEntityDescriptors());
@@ -226,7 +220,6 @@ final class EntitiesDescriptorTest extends TestCase
             C::NS_MD,
             'EntitiesDescriptor',
         );
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($entities->item(0));
 
         // remove child EntityDescriptor
@@ -234,7 +227,6 @@ final class EntitiesDescriptorTest extends TestCase
             C::NS_MD,
             'EntityDescriptor',
         );
-        /** @psalm-suppress PossiblyNullArgument */
         $xmlRepresentation->documentElement->removeChild($entity->item(0));
 
         $this->expectException(ProtocolViolationException::class);

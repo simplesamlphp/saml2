@@ -30,14 +30,11 @@ final class NewEncryptedID extends AbstractEncryptedElement implements
     use SchemaValidatableElementTrait;
 
 
-    /** @var string */
-    public const NS = C::NS_SAMLP;
+    public const string NS = C::NS_SAMLP;
 
-    /** @var string */
-    public const NS_PREFIX = 'samlp';
+    public const string NS_PREFIX = 'samlp';
 
-    /** @var string */
-    public const SCHEMA = 'resources/schemas/saml-schema-protocol-2.0.xsd';
+    public const string SCHEMA = 'resources/schemas/saml-schema-protocol-2.0.xsd';
 
 
     /**

@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Constants as C;
+use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLDateTimeValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\Utils;
@@ -80,10 +81,11 @@ final class LogoutRequestTest extends TestCase
 
         $logoutRequest = new LogoutRequest(
             id: IDValue::fromString('SomeIDValue'),
+            consent: SAMLAnyURIValue::fromString(C::CONSENT_UNSPECIFIED),
             identifier: $nameId,
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             sessionIndexes: [
-                new SessionIndex(SAMLStringValue::fromString('SessionIndexValue')),
+                SessionIndex::fromString('SessionIndexValue'),
             ],
         );
 
@@ -106,11 +108,12 @@ final class LogoutRequestTest extends TestCase
         );
         $logoutRequest = new LogoutRequest(
             id: IDValue::fromString('SomeIDValue'),
+            consent: SAMLAnyURIValue::fromString(C::CONSENT_UNSPECIFIED),
             identifier: $nameId,
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             sessionIndexes: [
-                new SessionIndex(SAMLStringValue::fromString('SessionIndexValue1')),
-                new SessionIndex(SAMLStringValue::fromString('SessionIndexValue2')),
+                SessionIndex::fromString('SessionIndexValue1'),
+                SessionIndex::fromString('SessionIndexValue2'),
             ],
         );
         $logoutRequestElement = $logoutRequest->toXML();
@@ -133,10 +136,11 @@ final class LogoutRequestTest extends TestCase
 
         $logoutRequest = new LogoutRequest(
             id: IDValue::fromString('SomeIDValue'),
+            consent: SAMLAnyURIValue::fromString(C::CONSENT_UNSPECIFIED),
             identifier: $nameId,
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
             sessionIndexes: [
-                new SessionIndex(SAMLStringValue::fromString('SessionIndexValue')),
+                SessionIndex::fromString('SessionIndexValue'),
             ],
         );
 
@@ -148,7 +152,7 @@ final class LogoutRequestTest extends TestCase
         $this->assertCount(1, $logoutRequestElements);
 
         // Test ordering of LogoutRequest contents
-        /** @psalm-var \DOMElement[] $logoutRequestElements */
+        /** @var \DOMElement[] $logoutRequestElements */
         $logoutRequestElements = XPath::xpQuery(
             $logoutRequestElement,
             './saml_assertion:NameID/following-sibling::*',
@@ -181,7 +185,6 @@ final class LogoutRequestTest extends TestCase
         $this->assertEquals('SomeSessionIndex1', $sessionIndexes[0]->getContent()->getValue());
         $this->assertEquals('SomeSessionIndex2', $sessionIndexes[1]->getContent()->getValue());
 
-        /** @psalm-suppress PossiblyNullArgument */
         $decryptor = (new KeyTransportAlgorithmFactory())->getAlgorithm(
             $encid->getEncryptedKeys()[0]->getEncryptionMethod()?->getAlgorithm()->getValue(),
             PEMCertificatesMock::getPrivateKey(PEMCertificatesMock::SELFSIGNED_PRIVATE_KEY),
@@ -202,6 +205,7 @@ final class LogoutRequestTest extends TestCase
 
         $logoutRequest = new LogoutRequest(
             identifier: $eid,
+            consent: SAMLAnyURIValue::fromString(C::CONSENT_UNSPECIFIED),
             id: IDValue::fromString('SomeIDValue'),
             issueInstant: SAMLDateTimeValue::fromDateTime(self::$clock->now()),
         );
@@ -423,8 +427,8 @@ XML;
         );
 
         $sessionIndexes = [
-            new SessionIndex(SAMLStringValue::fromString('SessionIndexValue1')),
-            new SessionIndex(SAMLStringValue::fromString('SessionIndexValue2')),
+            SessionIndex::fromString('SessionIndexValue1'),
+            SessionIndex::fromString('SessionIndexValue2'),
         ];
 
         $logoutRequest = new LogoutRequest(

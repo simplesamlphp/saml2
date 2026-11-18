@@ -12,7 +12,6 @@ namespace SimpleSAML\SAML2\Exception;
 class ProtocolViolationException extends RuntimeException
 {
     /**
-     * @param string|null $message
      */
     public function __construct(?string $message = null)
     {

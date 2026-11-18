@@ -1,4 +1,4 @@
-<saml:AuthzDecisionStatement xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" Resource="urn:x-simplesamlphp:resource" Decision="Permit">
+<saml:AuthzDecisionStatement xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xs="http://www.w3.org/2001/XMLSchema" Resource="urn:x-simplesamlphp:resource" Decision="Permit">
   <saml:Action Namespace="urn:x-simplesamlphp:namespace">SomeAction</saml:Action>
   <saml:Action Namespace="urn:x-simplesamlphp:namespace">OtherAction</saml:Action>
   <saml:Evidence>

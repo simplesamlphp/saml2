@@ -41,8 +41,8 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType implemen
      * @param \SimpleSAML\SAML2\XML\md\Extensions|null $extensions
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $errorURL
      * @param \SimpleSAML\SAML2\XML\md\Organization|null $organization
-     * @param array $keyDescriptor
-     * @param array $contact
+     * @param \SimpleSAML\SAML2\XML\md\KeyDescriptor[] $keyDescriptor
+     * @param \SimpleSAML\SAML2\XML\md\ContactPerson[] $contact
      * @param list<\SimpleSAML\XML\Attribute> $namespacedAttributes
      */
     public function __construct(
@@ -127,9 +127,6 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType implemen
     /**
      * Initialize an IDPSSODescriptor from an existing XML document.
      *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
@@ -198,9 +195,6 @@ final class AuthnAuthorityDescriptor extends AbstractRoleDescriptorType implemen
     /**
      * Add this IDPSSODescriptor to an EntityDescriptor.
      *
-     * @param \DOMElement|null $parent The EntityDescriptor we should append this AuthnAuthorityDescriptor to.
-     *
-     * @return \DOMElement
      * @throws \Exception
      */
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement

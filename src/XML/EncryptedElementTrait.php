@@ -42,7 +42,6 @@ trait EncryptedElementTrait
         /**
          * 6.2: The <EncryptedData> element's Type attribute SHOULD be used and, if it is
          * present, MUST have the value http://www.w3.org/2001/04/xmlenc#Element.
-         *
          */
         Assert::nullOrSame($encryptedData->getType()->getValue(), C::XMLENC_ELEMENT);
 
@@ -60,6 +59,9 @@ trait EncryptedElementTrait
     }
 
 
+    /**
+     * @return array|null
+     */
     public function getBlacklistedAlgorithms(): ?array
     {
         $container = ContainerSingleton::getInstance();
@@ -67,6 +69,9 @@ trait EncryptedElementTrait
     }
 
 
+    /**
+     * @return \SimpleSAML\XMLSecurity\Backend\EncryptionBackend|null
+     */
     public function getEncryptionBackend(): ?EncryptionBackend
     {
         // return the encryption backend you want to use,

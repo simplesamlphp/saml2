@@ -7,7 +7,6 @@ namespace SimpleSAML\SAML2\Test\SAML2\XML\saml;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\saml\AbstractConditionType;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\Audience;
@@ -49,9 +48,7 @@ final class AudienceTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $audience = new Audience(
-            SAMLAnyURIValue::fromString('urn:test:audience1'),
-        );
+        $audience = Audience::fromString('urn:test:audience1');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

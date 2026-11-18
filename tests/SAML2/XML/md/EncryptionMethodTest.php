@@ -17,8 +17,6 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
-use SimpleSAML\XMLSchema\Type\Base64BinaryValue;
-use SimpleSAML\XMLSecurity\Type\KeySizeValue;
 use SimpleSAML\XMLSecurity\XML\xenc\KeySize;
 use SimpleSAML\XMLSecurity\XML\xenc\OAEPparams;
 
@@ -68,12 +66,8 @@ final class EncryptionMethodTest extends TestCase
 
         $encryptionMethod = new EncryptionMethod(
             SAMLAnyURIValue::fromString(C::KEY_TRANSPORT_OAEP_MGF1P),
-            new KeySize(
-                KeySizeValue::fromInteger(10),
-            ),
-            new OAEPparams(
-                Base64BinaryValue::fromString('9lWu3Q=='),
-            ),
+            KeySize::fromString('10'),
+            OAEPparams::fromString('9lWu3Q=='),
             [$chunk],
         );
 
@@ -104,6 +98,8 @@ final class EncryptionMethodTest extends TestCase
     }
 
 
+    /**
+     */
     public function testMarshallingElementOrdering(): void
     {
         $alg = C::KEY_TRANSPORT_OAEP_MGF1P;
@@ -114,12 +110,8 @@ final class EncryptionMethodTest extends TestCase
 
         $em = new EncryptionMethod(
             SAMLAnyURIValue::fromString(C::KEY_TRANSPORT_OAEP_MGF1P),
-            new KeySize(
-                KeySizeValue::fromInteger(10),
-            ),
-            new OAEPparams(
-                Base64BinaryValue::fromString('9lWu3Q=='),
-            ),
+            KeySize::fromString('10'),
+            OAEPparams::fromString('9lWu3Q=='),
             [$chunk],
         );
 
@@ -133,7 +125,7 @@ final class EncryptionMethodTest extends TestCase
         $this->assertEquals('10', $keySizeElements[0]->textContent);
 
         // Test ordering of EncryptionMethod contents
-        /** @psalm-var \DOMElement[] $emElements */
+        /** @var \DOMElement[] $emElements */
         $emElements = XPath::xpQuery($emElement, './xenc:KeySize/following-sibling::*', $xpCache);
 
         $this->assertCount(2, $emElements);

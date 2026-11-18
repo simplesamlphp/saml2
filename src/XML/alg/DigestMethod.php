@@ -17,6 +17,7 @@ use SimpleSAML\XMLSchema\XML\Constants\NS;
  * Class for handling the alg:DigestMethod element.
  *
  * @link http://docs.oasis-open.org/security/saml/Post2.0/sstc-saml-metadata-algsupport.pdf
+ *
  * @package simplesamlphp/saml2
  */
 final class DigestMethod extends AbstractAlgElement implements SchemaValidatableElementInterface
@@ -26,7 +27,7 @@ final class DigestMethod extends AbstractAlgElement implements SchemaValidatable
 
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::ANY;
+    public const string XS_ANY_ELT_NAMESPACE = NS::ANY;
 
 
     /**
@@ -58,7 +59,6 @@ final class DigestMethod extends AbstractAlgElement implements SchemaValidatable
      * Convert XML into a DigestMethod
      *
      * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -81,7 +81,6 @@ final class DigestMethod extends AbstractAlgElement implements SchemaValidatable
      * Convert this element to XML.
      *
      * @param \DOMElement|null $parent The element we should append to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

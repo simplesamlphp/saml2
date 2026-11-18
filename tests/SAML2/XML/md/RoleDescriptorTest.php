@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\EmailAddressValue;
 use SimpleSAML\SAML2\Type\KeyTypesValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIListValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
@@ -43,12 +42,12 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XMLSchema\Constants as C_XSI;
 use SimpleSAML\XMLSchema\Exception\MissingAttributeException;
 use SimpleSAML\XMLSchema\Type\AnyURIValue;
 use SimpleSAML\XMLSchema\Type\DurationValue;
 use SimpleSAML\XMLSchema\Type\IDValue;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
 use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSecurity\XML\ds\KeyInfo;
 use SimpleSAML\XMLSecurity\XML\ds\KeyName;
@@ -138,17 +137,13 @@ final class RoleDescriptorTest extends TestCase
             [
                 new KeyDescriptor(
                     new KeyInfo([
-                        new KeyName(
-                            StringValue::fromString('IdentityProvider.com SSO Signing Key'),
-                        ),
+                        KeyName::fromString('IdentityProvider.com SSO Signing Key'),
                     ]),
                     KeyTypesValue::fromEnum(KeyTypesEnum::SIGNING),
                 ),
                 new KeyDescriptor(
                     new KeyInfo([
-                        new KeyName(
-                            StringValue::fromString('IdentityProvider.com SSO Encryption Key'),
-                        ),
+                        KeyName::fromString('IdentityProvider.com SSO Encryption Key'),
                     ]),
                     KeyTypesValue::fromEnum(KeyTypesEnum::ENCRYPTION),
                     [
@@ -161,19 +156,19 @@ final class RoleDescriptorTest extends TestCase
             new Organization(
                 [
                     new OrganizationName(
-                        LanguageValue::fromString('en'),
+                        LangValue::fromString('en'),
                         SAMLStringValue::fromString('Identity Providers R US'),
                     ),
                 ],
                 [
                     new OrganizationDisplayName(
-                        LanguageValue::fromString('en'),
+                        LangValue::fromString('en'),
                         SAMLStringValue::fromString('Identity Providers R US, a Division of Lerxst Corp.'),
                     ),
                 ],
                 [
                     new OrganizationURL(
-                        LanguageValue::fromString('en'),
+                        LangValue::fromString('en'),
                         SAMLAnyURIValue::fromString('https://IdentityProvider.com'),
                     ),
                 ],
@@ -181,36 +176,22 @@ final class RoleDescriptorTest extends TestCase
             [
                 new ContactPerson(
                     contactType: SAMLStringValue::fromString('other'),
-                    company: new Company(
-                        SAMLStringValue::fromString('Test Company'),
-                    ),
-                    givenName: new GivenName(
-                        SAMLStringValue::fromString('John'),
-                    ),
-                    surName: new SurName(
-                        SAMLStringValue::fromString('Doe'),
-                    ),
+                    company: Company::fromString('Test Company'),
+                    givenName: GivenName::fromString('John'),
+                    surName: SurName::fromString('Doe'),
                     emailAddress: [
-                        new EmailAddress(
-                            EmailAddressValue::fromString('mailto:jdoe@test.company'),
-                        ),
-                        new EmailAddress(
-                            EmailAddressValue::fromString('mailto:john.doe@test.company'),
-                        ),
+                        EmailAddress::fromString('mailto:jdoe@test.company'),
+                        EmailAddress::fromString('mailto:john.doe@test.company'),
                     ],
                     telephoneNumber: [
-                        new TelephoneNumber(
-                            SAMLStringValue::fromString('1-234-567-8901'),
-                        ),
+                        TelephoneNumber::fromString('1-234-567-8901'),
                     ],
                     namespacedAttribute: [$attr_cp_1, $attr_cp_2],
                 ),
                 new ContactPerson(
                     contactType: SAMLStringValue::fromString('technical'),
                     telephoneNumber: [
-                        new TelephoneNumber(
-                            SAMLStringValue::fromString('1-234-567-8901'),
-                        ),
+                        TelephoneNumber::fromString('1-234-567-8901'),
                     ],
                 ),
             ],
@@ -254,7 +235,7 @@ final class RoleDescriptorTest extends TestCase
         $extElement = $descriptor->getExtensions();
         $this->assertInstanceOf(Extensions::class, $extElement);
 
-        $extensions = $extElement->getList();
+        $extensions = $extElement->getElements();
         $this->assertCount(1, $extensions);
         $this->assertInstanceOf(Chunk::class, $extensions[0]);
         $this->assertEquals('urn:x-simplesamlphp:namespace', $extensions[0]->getNamespaceURI());
@@ -309,7 +290,7 @@ final class RoleDescriptorTest extends TestCase
         $extElement = $descriptor->getExtensions();
         $this->assertInstanceOf(Extensions::class, $extElement);
 
-        $extensions = $extElement->getList();
+        $extensions = $extElement->getElements();
         $this->assertCount(1, $extensions);
         $this->assertInstanceOf(Chunk::class, $extensions[0]);
         $this->assertEquals('urn:x-simplesamlphp:namespace', $extensions[0]->getNamespaceURI());

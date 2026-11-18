@@ -26,18 +26,19 @@ final class NameIDMappingService extends AbstractEndpointType implements SchemaV
      *
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $binding
      * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue $location
-     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $unused
-     * @param array $attributes
+     * @param \SimpleSAML\SAML2\Type\SAMLAnyURIValue|null $responseLocation
+     * @param \SimpleSAML\XML\Attribute[] $attributes
+     *
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function __construct(
         SAMLAnyURIValue $binding,
         SAMLAnyURIValue $location,
-        ?SAMLAnyURIValue $unused = null,
+        ?SAMLAnyURIValue $responseLocation = null,
         array $attributes = [],
     ) {
         Assert::null(
-            $unused,
+            $responseLocation,
             'The \'ResponseLocation\' attribute must be omitted for md:NameIDMappingService.',
         );
 

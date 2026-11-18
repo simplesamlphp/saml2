@@ -14,5 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class RequestVersionTooLowException extends ProtocolViolationException
 {
-    public const DEFAULT_MESSAGE = 'Protocol version too low.';
+    public const string DEFAULT_MESSAGE = 'Protocol version too low.';
 }

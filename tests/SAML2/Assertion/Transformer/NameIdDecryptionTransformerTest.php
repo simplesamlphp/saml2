@@ -77,8 +77,7 @@ final class NameIdDecryptionTransformerTest extends TestCase
     protected static Response $response;
 
 
-    /** @var string */
-    private const FRAMEWORK = 'vendor/simplesamlphp/xml-security';
+    private const string FRAMEWORK = 'vendor/simplesamlphp/xml-security';
 
 
     /**

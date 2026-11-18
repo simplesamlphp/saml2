@@ -8,6 +8,7 @@ use DOMElement;
 use SimpleSAML\SAML2\XML\CanonicalizableElementTrait;
 use SimpleSAML\SAML2\XML\SignableElementTrait;
 use SimpleSAML\SAML2\XML\SignedElementTrait;
+use SimpleSAML\XMLSecurity\XML\CanonicalizableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
@@ -19,6 +20,7 @@ use function method_exists;
  * @package simplesamlphp/saml2
  */
 abstract class AbstractSignedMdElement extends AbstractMdElement implements
+    CanonicalizableElementInterface,
     SignableElementInterface,
     SignedElementInterface
 {
@@ -31,16 +33,12 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements
 
     /**
      * The original signed XML
-     *
-     * @var \DOMElement
      */
     protected DOMElement $xml;
 
 
     /**
      * Get the XML element.
-     *
-     * @return \DOMElement
      */
     public function getXML(): DOMElement
     {
@@ -50,8 +48,6 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements
 
     /**
      * Set the XML element.
-     *
-     * @param \DOMElement $xml
      */
     protected function setXML(DOMElement $xml): void
     {
@@ -60,8 +56,6 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements
 
 
     /**
-     * @param \DOMElement|null $parent The EntityDescriptor we should append this SPSSODescriptor to.
-     * @return \DOMElement
      * @throws \Exception
      */
     public function toXML(?DOMElement $parent = null): DOMElement
@@ -101,8 +95,6 @@ abstract class AbstractSignedMdElement extends AbstractMdElement implements
 
 
     /**
-     * @param  \DOMElement|null $parent
-     * @return \DOMElement
      */
     abstract public function toUnsignedXML(?DOMElement $parent = null): DOMElement;
 }

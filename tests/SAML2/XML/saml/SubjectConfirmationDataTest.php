@@ -73,9 +73,7 @@ final class SubjectConfirmationDataTest extends TestCase
             SAMLStringValue::fromString('127.0.0.1'),
             [
                 new KeyInfo([
-                    new KeyName(
-                        StringValue::fromString('SomeKey'),
-                    ),
+                    KeyName::fromString('SomeKey'),
                 ]),
                 new Chunk($arbitrary->documentElement),
             ],
@@ -119,9 +117,7 @@ final class SubjectConfirmationDataTest extends TestCase
             SAMLStringValue::fromString('non-IP'),
             [
                 new KeyInfo([
-                    new KeyName(
-                        StringValue::fromString('SomeKey'),
-                    ),
+                    KeyName::fromString('SomeKey'),
                 ]),
                 new Chunk($arbitrary->documentElement),
             ],

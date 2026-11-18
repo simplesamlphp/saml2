@@ -14,12 +14,9 @@ use SimpleSAML\XML\AbstractElement;
  */
 abstract class AbstractMdElement extends AbstractElement
 {
-    /** @var string */
-    public const NS = C::NS_MD;
+    public const string NS = C::NS_MD;
 
-    /** @var string */
-    public const NS_PREFIX = 'md';
+    public const string NS_PREFIX = 'md';
 
-    /** @var string */
-    public const SCHEMA = 'resources/schemas/saml-schema-metadata-2.0.xsd';
+    public const string SCHEMA = 'resources/schemas/saml-schema-metadata-2.0.xsd';
 }

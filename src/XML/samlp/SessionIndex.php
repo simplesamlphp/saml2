@@ -20,6 +20,5 @@ final class SessionIndex extends AbstractSamlpElement implements SchemaValidatab
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = SAMLStringValue::class;
+    public const string TEXTCONTENT_TYPE = SAMLStringValue::class;
 }

@@ -6,7 +6,9 @@ namespace SimpleSAML\SAML2\XML\samlp;
 
 use DOMElement;
 use SimpleSAML\SAML2\Assert\Assert;
+use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ArrayValidationException;
+use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\XML\ArrayizableElementInterface;
@@ -19,7 +21,6 @@ use function array_change_key_case;
 use function array_filter;
 use function array_key_exists;
 use function array_keys;
-use function var_export;
 
 /**
  * Class for handling SAML2 NameIDPolicy.
@@ -45,6 +46,22 @@ final class NameIDPolicy extends AbstractSamlpElement implements
         protected ?SAMLStringValue $SPNameQualifier = null,
         protected ?BooleanValue $AllowCreate = null,
     ) {
+        if (
+            $AllowCreate !== null
+            && $Format !== null
+            && $AllowCreate->equals(BooleanValue::fromBoolean(true))
+        ) {
+            // Per Errata E14: AllowCreate
+            Assert::notSame(
+                $Format->getValue(),
+                C::NAMEID_TRANSIENT,
+                sprintf(
+                    'AllowCreate=\"true\" MUST NOT be used in conjunction with the %s <NameID> Format.',
+                    C::NAMEID_TRANSIENT,
+                ),
+                ProtocolViolationException::class,
+            );
+        }
     }
 
 
@@ -77,8 +94,6 @@ final class NameIDPolicy extends AbstractSamlpElement implements
 
     /**
      * Test if an object, at the state it's in, would produce an empty XML-element
-     *
-     * @return bool
      */
     public function isEmptyElement(): bool
     {
@@ -90,9 +105,6 @@ final class NameIDPolicy extends AbstractSamlpElement implements
 
     /**
      * Convert XML into a NameIDPolicy
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -116,9 +128,6 @@ final class NameIDPolicy extends AbstractSamlpElement implements
 
     /**
      * Convert this NameIDPolicy to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this NameIDPolicy to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -133,7 +142,7 @@ final class NameIDPolicy extends AbstractSamlpElement implements
         }
 
         if ($this->getAllowCreate() !== null) {
-            $e->setAttribute('AllowCreate', var_export($this->getAllowCreate()->toBoolean(), true));
+            $e->setAttribute('AllowCreate', $this->getAllowCreate()->getValue());
         }
 
         return $e;
@@ -143,8 +152,11 @@ final class NameIDPolicy extends AbstractSamlpElement implements
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'Format'?: string,
+     *   'SPNameQualifier'?: string,
+     *   'AllowCreate'?: string,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -162,8 +174,16 @@ final class NameIDPolicy extends AbstractSamlpElement implements
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'Format'?: string,
+     *   'SPNameQualifier'?: string,
+     *   'AllowCreate'?: string,
+     * } $data
+     * @return array{
+     *   'Format'?: string,
+     *   'SPNameQualifier'?: string,
+     *   'AllowCreate'?: string,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -201,7 +221,11 @@ final class NameIDPolicy extends AbstractSamlpElement implements
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'Format'?: string,
+     *   'SPNameQualifier'?: string,
+     *   'AllowCreate'?: string,
+     * }
      */
     public function toArray(): array
     {
@@ -211,6 +235,12 @@ final class NameIDPolicy extends AbstractSamlpElement implements
             'AllowCreate' => $this->getAllowCreate()?->toBoolean(),
         ];
 
-        return array_filter($data);
+        return array_filter(
+            $data,
+            function ($v, $k) {
+                return $v !== null;
+            },
+            ARRAY_FILTER_USE_BOTH,
+        );
     }
 }

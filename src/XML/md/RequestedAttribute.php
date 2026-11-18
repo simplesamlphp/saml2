@@ -20,14 +20,11 @@ use SimpleSAML\XMLSchema\Type\BooleanValue;
  */
 final class RequestedAttribute extends Attribute
 {
-    /** @var string */
-    public const NS = AbstractMdElement::NS;
+    public const string NS = AbstractMdElement::NS;
 
-    /** @var string */
-    public const NS_PREFIX = AbstractMdElement::NS_PREFIX;
+    public const string NS_PREFIX = AbstractMdElement::NS_PREFIX;
 
-    /** @var string */
-    public const SCHEMA = AbstractMdElement::SCHEMA;
+    public const string SCHEMA = AbstractMdElement::SCHEMA;
 
 
     /**
@@ -64,9 +61,6 @@ final class RequestedAttribute extends Attribute
     /**
      * Convert XML into a RequestedAttribute
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
@@ -89,9 +83,6 @@ final class RequestedAttribute extends Attribute
 
     /**
      * Convert this RequestedAttribute to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this RequestedAttribute to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

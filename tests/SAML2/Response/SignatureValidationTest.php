@@ -46,12 +46,12 @@ final class SignatureValidationTest extends MockeryTestCase
     private ServiceProvider $serviceProviderConfiguration;
 
     /**
-     * @var \Mockery\MockInterface Mock of \SAML2\Assertion\ProcessorBuilder
+     * @var \Mockery\MockInterface Mock of \SimpleSAML\SAML2\Assertion\ProcessorBuilder
      */
     private MockInterface $assertionProcessorBuilder;
 
     /**
-     * @var \Mockery\MockInterface Mock of \SAML2\Assertion\Processor
+     * @var \Mockery\MockInterface Mock of \SimpleSAML\SAML2\Assertion\Processor
      */
     private MockInterface $assertionProcessor;
 

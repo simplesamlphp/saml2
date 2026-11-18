@@ -7,7 +7,6 @@ namespace SimpleSAML\SAML2\Test\SAML2\XML\samlp;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\samlp\AbstractSamlpElement;
 use SimpleSAML\SAML2\XML\samlp\GetComplete;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -51,9 +50,7 @@ final class GetCompleteTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $getComplete = new GetComplete(
-            SAMLAnyURIValue::fromString('https://some/location'),
-        );
+        $getComplete = GetComplete::fromString('https://some/location');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

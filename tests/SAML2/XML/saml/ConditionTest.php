@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\saml\AbstractCondition;
 use SimpleSAML\SAML2\XML\saml\AbstractConditionType;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
@@ -81,9 +80,7 @@ final class ConditionTest extends TestCase
     public function testMarshalling(): void
     {
         $condition = new CustomCondition([
-            new Audience(
-                SAMLAnyURIValue::fromString('urn:some:audience'),
-            ),
+            Audience::fromString('urn:some:audience'),
         ]);
 
         $this->assertEquals(

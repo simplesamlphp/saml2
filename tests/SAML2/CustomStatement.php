@@ -20,14 +20,11 @@ use SimpleSAML\XMLSchema\Type\QNameValue;
  */
 final class CustomStatement extends AbstractStatement
 {
-    /** @var string */
-    protected const XSI_TYPE_NAME = 'CustomStatementType';
+    protected const string XSI_TYPE_NAME = 'CustomStatementType';
 
-    /** @var string */
-    protected const XSI_TYPE_NAMESPACE = C::NAMESPACE;
+    protected const string XSI_TYPE_NAMESPACE = C::NAMESPACE;
 
-    /** @var string */
-    protected const XSI_TYPE_PREFIX = 'ssp';
+    protected const string XSI_TYPE_PREFIX = 'ssp';
 
 
     /**
@@ -62,9 +59,6 @@ final class CustomStatement extends AbstractStatement
     /**
      * Convert XML into an Statement
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      */
@@ -90,9 +84,6 @@ final class CustomStatement extends AbstractStatement
 
     /**
      * Convert this Statement to XML.
-     *
-     * @param \DOMElement $parent The element we are converting to XML.
-     * @return \DOMElement The XML element after adding the data corresponding to this Statement.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

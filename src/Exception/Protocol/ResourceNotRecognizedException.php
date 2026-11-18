@@ -14,5 +14,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class ResourceNotRecognizedException extends ProtocolViolationException
 {
-    public const DEFAULT_MESSAGE = 'Resource not recognized.';
+    public const string DEFAULT_MESSAGE = 'Resource not recognized.';
 }

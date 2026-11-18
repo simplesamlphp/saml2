@@ -25,14 +25,11 @@ final class RequestInitiator extends AbstractEndpointType implements SchemaValid
     use SchemaValidatableElementTrait;
 
 
-    /** @var string */
-    public const NS = 'urn:oasis:names:tc:SAML:profiles:SSO:request-init';
+    public const string NS = 'urn:oasis:names:tc:SAML:profiles:SSO:request-init';
 
-    /** @var string */
-    public const NS_PREFIX = 'init';
+    public const string NS_PREFIX = 'init';
 
-    /** @var string */
-    public const SCHEMA = 'resources/schemas/sstc-request-initiation.xsd';
+    public const string SCHEMA = 'resources/schemas/sstc-request-initiation.xsd';
 
 
     /**
@@ -67,7 +64,7 @@ final class RequestInitiator extends AbstractEndpointType implements SchemaValid
      * Note: this method cannot be used when extending this class, if the constructor has a different signature.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return static
+     *
      * @throws \InvalidArgumentException if the qualified name of the supplied element is wrong
      */
     public static function fromXML(DOMElement $xml): static

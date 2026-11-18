@@ -20,6 +20,5 @@ final class NewID extends AbstractSamlpElement implements SchemaValidatableEleme
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = SAMLStringValue::class;
+    public const string TEXTCONTENT_TYPE = SAMLStringValue::class;
 }

@@ -82,6 +82,7 @@ class HTTPPost extends Binding implements AsynchronousBindingInterface, RelaySta
      *
      * @param \Psr\Http\Message\ServerRequestInterface $request
      * @return \SimpleSAML\SAML2\XML\samlp\AbstractMessage The received message.
+     *
      * @throws \Exception
      */
     public function receive(ServerRequestInterface $request): AbstractMessage

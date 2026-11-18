@@ -7,7 +7,6 @@ namespace SimpleSAML\Test\SAML2\XML\md;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\md\AbstractMdElement;
 use SimpleSAML\SAML2\XML\md\TelephoneNumber;
 use SimpleSAML\XML\DOMDocumentFactory;
@@ -52,9 +51,7 @@ final class TelephoneNumberTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $name = new TelephoneNumber(
-            SAMLStringValue::fromString('+1234567890'),
-        );
+        $name = TelephoneNumber::fromString('+1234567890');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

@@ -7,10 +7,10 @@ namespace SimpleSAML\Test\SAML2\XML\mdui;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\GeolocationValue;
 use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
 use SimpleSAML\SAML2\XML\mdui\GeolocationHint;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
@@ -27,6 +27,7 @@ use function strval;
 #[CoversClass(AbstractMduiElement::class)]
 final class GeolocationHintTest extends TestCase
 {
+    use ArrayizableElementTestTrait;
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
@@ -40,6 +41,10 @@ final class GeolocationHintTest extends TestCase
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/mdui_GeolocationHint.xml',
         );
+
+        self::$arrayRepresentation = [
+            'hint' => 'geo:47.37328,8.531126',
+        ];
     }
 
 
@@ -51,9 +56,7 @@ final class GeolocationHintTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $hint = new GeolocationHint(
-            GeolocationValue::fromString('geo:47.37328,8.531126'),
-        );
+        $hint = GeolocationHint::fromString('geo:47.37328,8.531126');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

@@ -43,10 +43,10 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
 
 
     /** The namespace-attribute for the xs:any element */
-    public const XS_ANY_ELT_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ELT_NAMESPACE = NS::OTHER;
 
     /** The namespace-attribute for the xs:anyAttribute element */
-    public const XS_ANY_ATTR_NAMESPACE = NS::OTHER;
+    public const string XS_ANY_ATTR_NAMESPACE = NS::OTHER;
 
 
     /**
@@ -111,7 +111,6 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
      * Note: this method cannot be used when extending this class, if the constructor has a different signature.
      *
      * @param \DOMElement $xml The XML element we should load.
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -142,7 +141,6 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
      * Add this endpoint to an XML element.
      *
      * @param \DOMElement $parent The element we should append this endpoint to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -173,8 +171,13 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'Binding': string,
+     *   'Location': string,
+     *   'ResponseLocation'?: string,
+     *   'children'?: array,
+     *   'attributes'?: array,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -194,8 +197,20 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'Binding': string,
+     *   'Location': string,
+     *   'ResponseLocation'?: string,
+     *   'children'?: array,
+     *   'attributes'?: array,
+     * } $data
+     * @return array{
+     *   'Binding': string,
+     *   'Location': string,
+     *   'ResponseLocation'?: string,
+     *   'children'?: array,
+     *   'attributes'?: array,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -251,7 +266,13 @@ abstract class AbstractEndpointType extends AbstractMdElement implements Arrayiz
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'Binding': string,
+     *   'Location': string,
+     *   'ResponseLocation'?: string,
+     *   'children'?: array,
+     *   'attributes'?: array,
+     * }
      */
     public function toArray(): array
     {

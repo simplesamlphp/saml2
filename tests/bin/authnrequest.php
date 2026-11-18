@@ -39,7 +39,7 @@ $authnRequest = new AuthnRequest(
     subject: $subject,
     issueInstant: SAMLDateTimeValue::fromDateTime(new DateTimeImmutable('now', new DateTimeZone('Z'))),
     issuer: $issuer,
-    id: IDValue::fromString('123'),
+    id: IDValue::fromString('phpunit'),
     destination: SAMLAnyURIValue::fromString('https://tiqr.example.org/idp/profile/saml2/Redirect/SSO'),
 );
 

@@ -115,9 +115,6 @@ final class PublicationInfo extends AbstractMdrpiElement implements
     /**
      * Convert XML into a PublicationInfo
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
      * @throws \SimpleSAML\XMLSchema\Exception\MissingAttributeException
@@ -139,9 +136,6 @@ final class PublicationInfo extends AbstractMdrpiElement implements
 
     /**
      * Convert this element to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {
@@ -167,8 +161,12 @@ final class PublicationInfo extends AbstractMdrpiElement implements
     /**
      * Create a class from an array
      *
-     * @param array $data
-     * @return static
+     * @param array{
+     *   'publisher': string,
+     *   'creationInstant'?: string,
+     *   'publicationId'?: string,
+     *   'UsagePolicy'?: array,
+     * } $data
      */
     public static function fromArray(array $data): static
     {
@@ -187,8 +185,18 @@ final class PublicationInfo extends AbstractMdrpiElement implements
      * Validates an array representation of this object and returns the same array with
      * rationalized keys (casing) and parsed sub-elements.
      *
-     * @param array $data
-     * @return array $data
+     * @param array{
+     *   'publisher': string,
+     *   'creationInstant'?: string,
+     *   'publicationId'?: string,
+     *   'UsagePolicy'?: array,
+     * } $data
+     * @return array{
+     *   'publisher': string,
+     *   'creationInstant'?: string,
+     *   'publicationId'?: string,
+     *   'UsagePolicy'?: array,
+     * }
      */
     private static function processArrayContents(array $data): array
     {
@@ -229,7 +237,12 @@ final class PublicationInfo extends AbstractMdrpiElement implements
     /**
      * Create an array from this class
      *
-     * @return array
+     * @return array{
+     *   'publisher': string,
+     *   'creationInstant'?: string,
+     *   'publicationId'?: string,
+     *   'UsagePolicy'?: array,
+     * }
      */
     public function toArray(): array
     {

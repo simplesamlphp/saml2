@@ -8,8 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Exception\ProtocolViolationException;
-use SimpleSAML\SAML2\Type\CIDRValue;
 use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\Type\SAMLStringValue;
 use SimpleSAML\SAML2\XML\alg\DigestMethod;
@@ -34,8 +32,11 @@ use SimpleSAML\XML\Chunk;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
+use SimpleSAML\XML\Type\LangValue;
+use SimpleSAML\XMLSchema\Exception\InvalidDOMElementException;
+use SimpleSAML\XMLSchema\Exception\SchemaViolationException;
 use SimpleSAML\XMLSchema\Type\PositiveIntegerValue;
+use SimpleSAML\XMLSchema\Type\StringValue;
 use SimpleSAML\XMLSchema\Type\UnsignedShortValue;
 
 use function dirname;
@@ -95,7 +96,7 @@ final class ExtensionsTest extends TestCase
         );
         $uiinfo = new UIInfo([
             new DisplayName(
-                LanguageValue::fromString('en'),
+                LangValue::fromString('en'),
                 SAMLStringValue::fromString('Example'),
             ),
         ]);
@@ -105,9 +106,7 @@ final class ExtensionsTest extends TestCase
             SAMLAnyURIValue::fromString('https://example.org/authenticate/sp'),
         );
         $discoHints = new DiscoHints([], [
-            new IPHint(
-                CIDRValue::fromString('127.0.0.0/8'),
-            ),
+            IPHint::fromString('127.0.0.0/8'),
         ]);
         $digestMethod = new DigestMethod(
             SAMLAnyURIValue::fromString(C::DIGEST_SHA256),
@@ -118,9 +117,7 @@ final class ExtensionsTest extends TestCase
             PositiveIntegerValue::fromInteger(4096),
         );
         $republishRequest = new RepublishRequest(
-            new RepublishTarget(
-                SAMLAnyURIValue::fromString('http://edugain.org/'),
-            ),
+            RepublishTarget::fromString('http://edugain.org/'),
         );
 
         $extensions = new Extensions([
@@ -163,8 +160,7 @@ final class ExtensionsTest extends TestCase
      */
     public function testMarshallingWithNonNamespacedExtensions(): void
     {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Extensions MUST NOT include global (non-namespace-qualified) elements.');
+        $this->expectException(SchemaViolationException::class);
 
         new Extensions([new Chunk(DOMDocumentFactory::fromString('<child/>')->documentElement)]);
     }
@@ -175,10 +171,9 @@ final class ExtensionsTest extends TestCase
      */
     public function testMarshallingWithSamlDefinedNamespacedExtensions(): void
     {
-        $this->expectException(ProtocolViolationException::class);
-        $this->expectExceptionMessage('Extensions MUST NOT include any SAML-defined namespace elements.');
+        $this->expectException(InvalidDOMElementException::class);
 
-        new Extensions([new AttributeValue('something')]);
+        new Extensions([new AttributeValue(StringValue::fromString('something'))]);
     }
 
 
@@ -227,7 +222,7 @@ XML
             ,
         );
         $extensions = Extensions::fromXML($document->documentElement);
-        $list = $extensions->getList();
+        $list = $extensions->getElements();
         $this->assertCount(12, $list);
         $this->assertInstanceOf(Scope::class, $list[0]);
         $this->assertInstanceOf(EntityAttributes::class, $list[1]);
@@ -252,6 +247,6 @@ XML
     {
         $document = DOMDocumentFactory::fromString('<md:Extensions xmlns:md="urn:oasis:names:tc:SAML:2.0:metadata"/>');
         $extensions = Extensions::fromXML($document->documentElement);
-        $this->assertEmpty($extensions->getList());
+        $this->assertEmpty($extensions->getElements());
     }
 }

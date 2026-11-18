@@ -80,9 +80,6 @@ final class AssertionIDRequest extends AbstractRequest implements SchemaValidata
     /**
      * Convert XML into a AssertionIDRequest element
      *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
-     *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   If the qualified name of the supplied element is wrong
      */
@@ -144,9 +141,6 @@ final class AssertionIDRequest extends AbstractRequest implements SchemaValidata
 
     /**
      * Convert this AssertionIDRequest element to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this AssertionIDRequest element to.
-     * @return \DOMElement
      */
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {

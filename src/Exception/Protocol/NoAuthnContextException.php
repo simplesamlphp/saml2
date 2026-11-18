@@ -13,5 +13,5 @@ use SimpleSAML\SAML2\Exception\ProtocolViolationException;
  */
 class NoAuthnContextException extends ProtocolViolationException
 {
-    public const DEFAULT_MESSAGE = 'None of the requested AuthnContexts can be used.';
+    public const string DEFAULT_MESSAGE = 'None of the requested AuthnContexts can be used.';
 }

@@ -10,8 +10,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\Constants as C;
-use SimpleSAML\SAML2\Type\EntityIDValue;
-use SimpleSAML\SAML2\Type\SAMLAnyURIValue;
 use SimpleSAML\SAML2\XML\saml\AbstractSamlElement;
 use SimpleSAML\SAML2\XML\saml\AuthenticatingAuthority;
 use SimpleSAML\SAML2\XML\saml\AuthnContext;
@@ -54,16 +52,10 @@ final class AuthnContextTest extends TestCase
      */
     public function testMarshallingIllegalCombination(): void
     {
-        $authnContextClassRef = new AuthnContextClassRef(
-            SAMLAnyURIValue::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT),
-        );
+        $authnContextClassRef = AuthnContextClassRef::fromString(C::AC_PASSWORD_PROTECTED_TRANSPORT);
         $authnContextDecl = AuthnContextDecl::fromXML(self::$decl->documentElement);
-        $authnContextDeclRef = new AuthnContextDeclRef(
-            SAMLAnyURIValue::fromString('https://example.org/relative/path/to/document.xml'),
-        );
-        $authenticatingAuthority = new AuthenticatingAuthority(
-            EntityIDValue::fromString('https://idp.example.com/SAML2'),
-        );
+        $authnContextDeclRef = AuthnContextDeclRef::fromString('https://example.org/relative/path/to/document.xml');
+        $authenticatingAuthority = AuthenticatingAuthority::fromString('https://idp.example.com/SAML2');
 
         $this->expectException(AssertionFailedException::class);
         $this->expectExceptionMessage('Can only have one of AuthnContextDecl/AuthnContextDeclRef');

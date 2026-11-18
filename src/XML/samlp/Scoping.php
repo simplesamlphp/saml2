@@ -71,8 +71,6 @@ final class Scoping extends AbstractSamlpElement implements SchemaValidatableEle
 
     /**
      * Test if an object, at the state it's in, would produce an empty XML-element
-     *
-     * @return bool
      */
     public function isEmptyElement(): bool
     {
@@ -84,9 +82,6 @@ final class Scoping extends AbstractSamlpElement implements SchemaValidatableEle
 
     /**
      * Convert XML into a Scoping-element
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -109,9 +104,6 @@ final class Scoping extends AbstractSamlpElement implements SchemaValidatableEle
 
     /**
      * Convert this Scoping to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append this Scoping to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

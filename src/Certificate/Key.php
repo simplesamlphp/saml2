@@ -19,9 +19,9 @@ use function is_string;
 class Key implements ArrayAccess
 {
     // Possible key usages
-    public const USAGE_SIGNING = 'signing';
+    public const string USAGE_SIGNING = 'signing';
 
-    public const USAGE_ENCRYPTION = 'encryption';
+    public const string USAGE_ENCRYPTION = 'encryption';
 
 
     /** @var array */
@@ -43,8 +43,6 @@ class Key implements ArrayAccess
     /**
      * Whether or not the key is configured to be used for usage given
      *
-     * @param string $usage
-     * @return bool
      * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      */
     public function canBeUsedFor(string $usage): bool
@@ -62,8 +60,8 @@ class Key implements ArrayAccess
 
     /**
      * @param mixed $offset
+     *
      * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
-     * @return bool
      */
     public function offsetExists(mixed $offset): bool
     {
@@ -75,9 +73,7 @@ class Key implements ArrayAccess
 
 
     /**
-     * @param mixed $offset
      * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
-     * @return mixed
      */
     public function offsetGet($offset): mixed
     {
@@ -89,8 +85,6 @@ class Key implements ArrayAccess
 
 
     /**
-     * @param mixed $offset
-     * @param mixed $value
      * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      */
     public function offsetSet(mixed $offset, mixed $value): void
@@ -103,7 +97,6 @@ class Key implements ArrayAccess
 
 
     /**
-     * @param mixed $offset
      * @throws \SimpleSAML\SAML2\Exception\InvalidArgumentException
      */
     public function offsetUnset(mixed $offset): void

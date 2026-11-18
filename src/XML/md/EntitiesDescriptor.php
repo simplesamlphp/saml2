@@ -75,14 +75,14 @@ final class EntitiesDescriptor extends AbstractMetadataDocument implements Schem
              * manner, descendant <md:EntitiesDescriptor> and <md:EntityDescriptor> elements MUST
              * NOT contain a <mdrpi:RegistrationInfo> element in their <md:Extensions> element.
              */
-            $toplevel_regInfo = array_values(array_filter($extensions->getList(), function ($ext) {
+            $toplevel_regInfo = array_values(array_filter($extensions->getElements(), function ($ext) {
                 return $ext instanceof RegistrationInfo;
             }));
 
             /**
              * The <mdrpi:PublicationInfo> element SHOULD only be used on the root element of a metadata document.
              */
-            $toplevel_pubInfo = array_values(array_filter($extensions->getList(), function ($ext) {
+            $toplevel_pubInfo = array_values(array_filter($extensions->getElements(), function ($ext) {
                 return $ext instanceof PublicationInfo;
             }));
 
@@ -94,7 +94,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument implements Schem
              * When used in this manner, descendant <md:EntitiesDescriptor> and <md:EntityDescriptor>
              * elements MUST NOT contain a <mdrpi:PublicationPath> element in their <md:Extensions> element.
              */
-            $toplevel_pubPath = array_values(array_filter($extensions->getList(), function ($ext) {
+            $toplevel_pubPath = array_values(array_filter($extensions->getElements(), function ($ext) {
                 return $ext instanceof PublicationPath;
             }));
 
@@ -156,7 +156,7 @@ final class EntitiesDescriptor extends AbstractMetadataDocument implements Schem
     {
         $extensions = [];
         if ($descriptor->getExtensions() !== null) {
-            $extensions = $descriptor->getExtensions()->getList();
+            $extensions = $descriptor->getExtensions()->getElements();
 
             if ($descriptor instanceof EntitiesDescriptor) {
                 $eds = array_merge($descriptor->getEntitiesDescriptors(), $descriptor->getEntityDescriptors());
@@ -205,9 +205,6 @@ final class EntitiesDescriptor extends AbstractMetadataDocument implements Schem
 
     /**
      * Initialize an EntitiesDescriptor from an existing XML document.
-     *
-     * @param \DOMElement $xml The XML element we should load.
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -265,8 +262,6 @@ final class EntitiesDescriptor extends AbstractMetadataDocument implements Schem
     /**
      * Convert this assertion to an unsigned XML document.
      * This method does not sign the resulting XML document.
-     *
-     * @return \DOMElement The root element of the DOM tree
      */
     public function toUnsignedXML(?DOMElement $parent = null): DOMElement
     {

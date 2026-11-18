@@ -7,10 +7,10 @@ namespace SimpleSAML\Test\SAML2\XML\mdui;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use SimpleSAML\SAML2\Type\CIDRValue;
 use SimpleSAML\SAML2\XML\mdui\AbstractMduiElement;
 use SimpleSAML\SAML2\XML\mdui\IPHint;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
 
@@ -27,6 +27,7 @@ use function strval;
 #[CoversClass(AbstractMduiElement::class)]
 final class IPHintTest extends TestCase
 {
+    use ArrayizableElementTestTrait;
     use SchemaValidationTestTrait;
     use SerializableElementTestTrait;
 
@@ -40,6 +41,10 @@ final class IPHintTest extends TestCase
         self::$xmlRepresentation = DOMDocumentFactory::fromFile(
             dirname(__FILE__, 4) . '/resources/xml/mdui_IPHint.xml',
         );
+
+        self::$arrayRepresentation = [
+            'hint' => '10.0.0.0/8',
+        ];
     }
 
 
@@ -51,9 +56,7 @@ final class IPHintTest extends TestCase
      */
     public function testMarshalling(): void
     {
-        $hint = new IPHint(
-            CIDRValue::fromString('130.59.0.0/16'),
-        );
+        $hint = IPHint::fromString('130.59.0.0/16');
 
         $this->assertEquals(
             self::$xmlRepresentation->saveXML(self::$xmlRepresentation->documentElement),

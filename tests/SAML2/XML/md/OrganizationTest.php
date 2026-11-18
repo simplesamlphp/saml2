@@ -23,7 +23,7 @@ use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XML\TestUtils\ArrayizableElementTestTrait;
 use SimpleSAML\XML\TestUtils\SchemaValidationTestTrait;
 use SimpleSAML\XML\TestUtils\SerializableElementTestTrait;
-use SimpleSAML\XMLSchema\Type\LanguageValue;
+use SimpleSAML\XML\Type\LangValue;
 use SimpleSAML\XMLSchema\Type\StringValue;
 
 use function dirname;
@@ -90,19 +90,19 @@ final class OrganizationTest extends TestCase
         $org = new Organization(
             [
                 new OrganizationName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Identity Providers R US'),
                 ),
             ],
             [
                 new OrganizationDisplayName(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLStringValue::fromString('Identity Providers R US, a Division of Lerxst Corp.'),
                 ),
             ],
             [
                 new OrganizationURL(
-                    LanguageValue::fromString('en'),
+                    LangValue::fromString('en'),
                     SAMLAnyURIValue::fromString('https://IdentityProvider.com'),
                 ),
             ],

@@ -1,21 +1,9 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Access to property \$key on an unknown class SimpleSAML\\XMLSecurity\\XMLSecurityKey\.$#'
-			identifier: class.notFound
-			count: 1
-			path: src/SOAPClient.php
-
-		-
 			message: '#^Call to an undefined method SimpleSAML\\SAML2\\XML\\samlp\\AbstractMessage\:\:addValidator\(\)\.$#'
 			identifier: method.notFound
 			count: 1
-			path: src/SOAPClient.php
-
-		-
-			message: '#^Parameter \$key of method SimpleSAML\\SAML2\\SOAPClient\:\:validateSSL\(\) has invalid type SimpleSAML\\XMLSecurity\\XMLSecurityKey\.$#'
-			identifier: class.notFound
-			count: 2
 			path: src/SOAPClient.php
 
 		-
@@ -43,19 +31,19 @@ parameters:
 			path: src/XML/md/AbstractSignedMdElement.php
 
 		-
-			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getList\(\)\.$#'
+			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getElements\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: src/XML/md/ContactPerson.php
 
 		-
-			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getList\(\)\.$#'
+			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getElements\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: src/XML/md/EntitiesDescriptor.php
 
 		-
-			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getList\(\)\.$#'
+			message: '#^Call to an undefined method SimpleSAML\\XML\\AbstractElement\:\:getElements\(\)\.$#'
 			identifier: method.notFound
 			count: 1
 			path: src/XML/md/Organization.php

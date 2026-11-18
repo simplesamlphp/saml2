@@ -20,6 +20,5 @@ final class AuthenticatingAuthority extends AbstractSamlElement implements Schem
     use TypedTextContentTrait;
 
 
-    /** @var string */
-    public const TEXTCONTENT_TYPE = EntityIDValue::class;
+    public const string TEXTCONTENT_TYPE = EntityIDValue::class;
 }

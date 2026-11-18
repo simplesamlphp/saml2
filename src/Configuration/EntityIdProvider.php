@@ -10,7 +10,6 @@ namespace SimpleSAML\SAML2\Configuration;
 interface EntityIdProvider
 {
     /**
-     * @return null|string
      */
     public function getEntityId(): ?string;
 }

@@ -127,8 +127,6 @@ final class Conditions extends AbstractSamlElement implements SchemaValidatableE
 
     /**
      * Test if an object, at the state it's in, would produce an empty XML-element
-     *
-     * @return bool
      */
     public function isEmptyElement(): bool
     {
@@ -143,9 +141,6 @@ final class Conditions extends AbstractSamlElement implements SchemaValidatableE
 
     /**
      * Convert XML into a Conditions object
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -186,9 +181,6 @@ final class Conditions extends AbstractSamlElement implements SchemaValidatableE
 
     /**
      * Convert this element to XML.
-     *
-     * @param  \DOMElement|null $parent The parent element we should append this element to.
-     * @return \DOMElement This element, as XML.
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

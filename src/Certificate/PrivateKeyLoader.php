@@ -30,8 +30,9 @@ class PrivateKeyLoader
     /**
      * @param \SimpleSAML\SAML2\Configuration\DecryptionProvider $identityProvider
      * @param \SimpleSAML\SAML2\Configuration\DecryptionProvider $serviceProvider
-     * @throws \Exception
      * @return \SimpleSAML\SAML2\Utilities\ArrayCollection
+     *
+     * @throws \Exception
      */
     public function loadDecryptionKeys(
         DecryptionProvider $identityProvider,

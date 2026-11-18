@@ -71,9 +71,7 @@ final class RequestTest extends TestCase
             SAMLStringValue::fromString('testName2'),
             SAMLAnyURIValue::fromString('urn:test:testLoc2'),
         );
-        $getComplete = new GetComplete(
-            SAMLAnyURIValue::fromString('https://some/location'),
-        );
+        $getComplete = GetComplete::fromString('https://some/location');
         $idpList = new IDPList([$entry1, $entry2], $getComplete);
 
         $request = new Request(

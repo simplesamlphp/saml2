@@ -24,6 +24,7 @@ use function sprintf;
  * Class for handling the EntityAttributes metadata extension.
  *
  * @link: http://docs.oasis-open.org/security/saml/Post2.0/sstc-metadata-attr-cs-01.pdf
+ *
  * @package simplesamlphp/saml2
  */
 final class EntityAttributes extends AbstractMdattrElement implements SchemaValidatableElementInterface
@@ -118,7 +119,7 @@ final class EntityAttributes extends AbstractMdattrElement implements SchemaVali
      * Add the value to the children-property
      *
      * @param \SimpleSAML\SAML2\XML\saml\Assertion|\SimpleSAML\SAML2\XML\saml\Attribute $child
-     * @return void
+     *
      * @throws \SimpleSAML\Assert\AssertionFailedException
      */
     public function addChild($child): void
@@ -129,9 +130,6 @@ final class EntityAttributes extends AbstractMdattrElement implements SchemaVali
 
     /**
      * Convert XML into a EntityAttributes
-     *
-     * @param \DOMElement $xml The XML element we should load
-     * @return static
      *
      * @throws \SimpleSAML\XMLSchema\Exception\InvalidDOMElementException
      *   if the qualified name of the supplied element is wrong
@@ -163,9 +161,6 @@ final class EntityAttributes extends AbstractMdattrElement implements SchemaVali
 
     /**
      * Convert this EntityAttributes to XML.
-     *
-     * @param \DOMElement|null $parent The element we should append to.
-     * @return \DOMElement
      */
     public function toXML(?DOMElement $parent = null): DOMElement
     {

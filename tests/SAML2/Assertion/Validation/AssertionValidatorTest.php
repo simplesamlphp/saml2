@@ -109,7 +109,6 @@ final class AssertionValidatorTest extends TestCase
         self::$document = DOMDocumentFactory::fromString(
             <<<XML
     <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
                     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                     ID="_45e42090d8cbbfa52d5a394b01049fc2221e274182"
                     Version="2.0"
@@ -163,7 +162,6 @@ XML
         $document = DOMDocumentFactory::fromString(
             <<<XML
     <saml:Assertion xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                    xmlns:xs="http://www.w3.org/2001/XMLSchema"
                     xmlns:saml="urn:oasis:names:tc:SAML:2.0:assertion"
                     ID="_45e42090d8cbbfa52d5a394b01049fc2221e274182"
                     Version="2.0"
