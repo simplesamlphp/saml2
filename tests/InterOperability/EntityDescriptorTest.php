@@ -10,13 +10,21 @@ use PHPUnit\Framework\TestCase;
 use SimpleSAML\Assert\AssertionFailedException;
 use SimpleSAML\SAML2\XML\md\EntityDescriptor;
 use SimpleSAML\XML\DOMDocumentFactory;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\CryptoEncoding\PEM;
 use SimpleSAML\XMLSecurity\Exception\SignatureValidationException;
+use SimpleSAML\XMLSecurity\Key\X509Certificate as X509CertificateKey;
+use SimpleSAML\XMLSecurity\XML\ds\X509Certificate;
+use SimpleSAML\XMLSecurity\XML\ds\X509Data;
 
 /**
  * Interoperability tests for single-entity metadata (EntityDescriptor).
  *
- * Unmarshalling is still tested.  When a signature is present it is verified
+ * Unmarshalling is still tested. When a signature is present it is verified
  * using the certificate that is embedded in the metadata document itself.
+ *
+ * Microsoft Online still signs with RSA-SHA1; for this one test we deliberately
+ * allow that algorithm by constructing the verifier with an empty blacklist.
  *
  * @package simplesamlphp/saml2
  */
@@ -32,17 +40,49 @@ final class EntityDescriptorTest extends TestCase
         try {
             $ed = EntityDescriptor::fromXML($metadata);
 
-            // Verify signature if present – key comes from the document
             $signatureNodes = $metadata->getElementsByTagNameNS(
                 'http://www.w3.org/2000/09/xmldsig#',
                 'Signature',
             );
 
             if ($signatureNodes->length > 0) {
-                // No external key: the library pulls the X509Certificate from KeyInfo
-                $verified = $ed->verify();
+                // Microsoft Online uses the legacy RSA-SHA1 algorithm.
+                // Build a verifier that does NOT blacklist it, using the
+                // certificate that is already present in the document's KeyInfo.
+                $signature = $ed->getSignature();
+                $algId = $signature->getSignedInfo()->getSignatureMethod()->getAlgorithm()->getValue();
+
+                $verifier = null;
+                foreach ($signature->getKeyInfo()?->getInfo() ?? [] as $info) {
+                    if (!$info instanceof X509Data) {
+                        continue;
+                    }
+                    foreach ($info->getData() as $data) {
+                        if (!$data instanceof X509Certificate) {
+                            continue;
+                        }
+
+                        $pem = sprintf(
+                            "-----BEGIN CERTIFICATE-----\n%s\n-----END CERTIFICATE-----",
+                            strval($data->getContent()),
+                        );
+                        $cert = new X509CertificateKey(PEM::fromString($pem));
+
+                        // Empty blacklist → RSA-SHA1 is allowed for this test only
+                        $factory = new SignatureAlgorithmFactory([]);
+                        $verifier = $factory->getAlgorithm($algId, $cert->getPublicKey());
+                        break 2;
+                    }
+                }
+
+                $this->assertNotNull(
+                    $verifier,
+                    'Expected an X509Certificate in the Signature KeyInfo',
+                );
+
+                $verified = $ed->verify($verifier);
                 $this->assertTrue($verified->isSigned());
-                $this->assertNotNull($verified->getValidatingKey());
+                $this->assertNotNull($verified->getVerifyingKey());
             }
 
             $this->assertTrue($shouldPass);
@@ -53,7 +93,6 @@ final class EntityDescriptorTest extends TestCase
         }
     }
 
-
     /**
      * @return array<string, array{bool, \Dom\Element}>
      */
@@ -62,6 +101,7 @@ final class EntityDescriptorTest extends TestCase
         return [
             // Known bug: Microsoft doesn't produce schema-valid XML
             // Reported 2022: TrackingID#2210040050001949
+            // Also still uses RSA-SHA1 signatures.
             'MicrosoftOnline' => [
                 true,
                 DOMDocumentFactory::fromFile('/tmp/metadata/microsoftonline.xml')->documentElement,
