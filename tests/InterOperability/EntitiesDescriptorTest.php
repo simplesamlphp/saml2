@@ -39,6 +39,7 @@ final class EntitiesDescriptorTest extends TestCase
 
     private int $signatureFailures;
 
+
     /**
      * @param \Dom\Element $metadata
      */
@@ -61,6 +62,7 @@ final class EntitiesDescriptorTest extends TestCase
             sprintf('%d signature verification failure(s)', $this->signatureFailures),
         );
     }
+
 
     private function parseMetadata(Dom\Element $metadata): void
     {
@@ -107,6 +109,7 @@ final class EntitiesDescriptorTest extends TestCase
             ));
         }
     }
+
 
     /**
      * Verify the signature on this object only if *this* element is signed.
@@ -178,6 +181,7 @@ final class EntitiesDescriptorTest extends TestCase
             ob_flush();
         }
     }
+
 
     /**
      * @return array<string, array{\Dom\Element}>

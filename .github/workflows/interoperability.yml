@@ -104,8 +104,9 @@ jobs:
 
       - name: Download MicrosoftOnline metadata
         if: steps.cache-metadata.outputs.cache-hit != 'true'
-        run: wget https://nexus.microsoftonline-p.com/federationmetadata/saml20/federationmetadata.xml \
-              -O /tmp/metadata/microsoftonline.xml
+        run: |
+            wget https://nexus.microsoftonline-p.com/federationmetadata/saml20/federationmetadata.xml \
+                -O /tmp/metadata/microsoftonline.xml
 
       - name: Run unit tests
         run: ./vendor/bin/phpunit -c phpunit-interoperability.xml
