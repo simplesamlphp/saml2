@@ -23,7 +23,7 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ['8.5']
+        php-versions: ['8.5', '8.6']
 
     steps:
       - name: Setup PHP, with composer and extensions
@@ -75,33 +75,25 @@ jobs:
           key: ${{ runner.os }}-metadata-${{ env.date }}
           restore-keys: ${{ runner.os }}-metadata-
 
+      - name: Create /tmp/metadata directory
+        run: mkdir -p /tmp/metadata
+
       - name: Download eduGAIN metadata & public key
         if: steps.cache-metadata.outputs.cache-hit != 'true'
-        run: |
-            mkdir -p /tmp/metadata
-            wget https://mds.edugain.org/edugain-v2.xml -O /tmp/metadata/edugain.xml
-            wget https://technical.edugain.org/mds-v2.cer -O /tmp/metadata/edugain-pub.crt
+        run: wget https://mds.edugain.org/edugain-v2.xml -O /tmp/metadata/edugain.xml
 
       - name: Download eduID metadata & public key
         if: steps.cache-metadata.outputs.cache-hit != 'true'
-        run: |
-            mkdir -p /tmp/metadata
-            wget https://metadata.eduid.cz/entities/eduid -O /tmp/metadata/eduid.xml
-            wget https://www.eduid.cz/docs/eduid/metadata/metadata.eduid.cz.crt.pem -O /tmp/metadata/eduid.crt
+        run: wget https://metadata.eduid.cz/entities/eduid -O /tmp/metadata/eduid.xml
 
       - name: Download GRNET metadata
         if: steps.cache-metadata.outputs.cache-hit != 'true'
-        run: |
-            mkdir -p /tmp/metadata
-            wget https://md.aai.grnet.gr/aggregates/grnet-metadata.xml -O /tmp/metadata/grnet.xml
+        run: wget https://md.aai.grnet.gr/aggregates/grnet-metadata.xml -O /tmp/metadata/grnet.xml
 
       - name: Download MicrosoftOnline metadata
         if: steps.cache-metadata.outputs.cache-hit != 'true'
-        run: |
-            mkdir -p /tmp/metadata
-            wget https://nexus.microsoftonline-p.com/federationmetadata/saml20/federationmetadata.xml \
+        run: wget https://nexus.microsoftonline-p.com/federationmetadata/saml20/federationmetadata.xml \
               -O /tmp/metadata/microsoftonline.xml
 
       - name: Run unit tests
-        run: |
-          ./vendor/bin/phpunit -c phpunit-interoperability.xml
+        run: ./vendor/bin/phpunit -c phpunit-interoperability.xml
