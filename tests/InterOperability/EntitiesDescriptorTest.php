@@ -30,6 +30,7 @@ final class EntitiesDescriptorTest extends TestCase
 {
     private int $failures;
 
+
     /**
      * @param \Dom\Element $metadata
      */
@@ -42,6 +43,7 @@ final class EntitiesDescriptorTest extends TestCase
 
         $this->assertEquals(0, $this->failures);
     }
+
 
     private function parseMetadata(Dom\Element $metadata): void
     {
@@ -83,6 +85,7 @@ final class EntitiesDescriptorTest extends TestCase
             ));
         }
     }
+
 
     /**
      * If the element carries a ds:Signature, verify it using the certificate
@@ -127,6 +130,7 @@ final class EntitiesDescriptorTest extends TestCase
             ob_flush();
         }
     }
+
 
     /**
      * @return array<string, array{\Dom\Element}>

@@ -53,6 +53,7 @@ final class EntityDescriptorTest extends TestCase
         }
     }
 
+
     /**
      * @return array<string, array{bool, \Dom\Element}>
      */
