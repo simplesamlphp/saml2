@@ -14,7 +14,7 @@ use SimpleSAML\SAML2\XML\md\EntityDescriptor;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\CryptoEncoding\PEM;
-use SimpleSAML\XMLSecurity\Exception\SignatureValidationException;
+use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
 use SimpleSAML\XMLSecurity\Key\X509Certificate as X509CertificateKey;
 use SimpleSAML\XMLSecurity\XML\ds\X509Certificate;
 use SimpleSAML\XMLSecurity\XML\ds\X509Data;
@@ -171,7 +171,7 @@ final class EntitiesDescriptorTest extends TestCase
                 $verified->getVerifyingKey(),
                 'A verifying key (taken from the document) must be available after verification',
             );
-        } catch (SignatureValidationException $e) {
+        } catch (SignatureVerificationFailedException $e) {
             $this->signatureFailures++;
             echo "Signature verification failed for " . $label . ": " . $e->getMessage() . PHP_EOL;
             ob_flush();

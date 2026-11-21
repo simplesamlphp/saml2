@@ -12,7 +12,7 @@ use SimpleSAML\SAML2\XML\md\EntityDescriptor;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\CryptoEncoding\PEM;
-use SimpleSAML\XMLSecurity\Exception\SignatureValidationException;
+use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
 use SimpleSAML\XMLSecurity\Key\X509Certificate as X509CertificateKey;
 use SimpleSAML\XMLSecurity\XML\ds\X509Certificate;
 use SimpleSAML\XMLSecurity\XML\ds\X509Data;
@@ -86,7 +86,7 @@ final class EntityDescriptorTest extends TestCase
             }
 
             $this->assertTrue($shouldPass);
-        } catch (AssertionFailedException | SignatureValidationException $e) {
+        } catch (AssertionFailedException | SignatureVerificationFailedException $e) {
             fwrite(STDERR, $e->getFile() . '(' . $e->getLine() . '): ' . $e->getMessage() . PHP_EOL);
             fwrite(STDERR, $e->getTraceAsString() . PHP_EOL);
             $this->assertFalse($shouldPass);

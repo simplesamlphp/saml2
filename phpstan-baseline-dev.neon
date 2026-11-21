@@ -1,12 +1,6 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Dead catch \- SimpleSAML\\Assert\\AssertionFailedException is never thrown in the try block\.$#'
-			identifier: catch.neverThrown
-			count: 1
-			path: tests/InterOperability/EntityDescriptorTest.php
-
-		-
 			message: '#^Call to static method PHPUnit\\Framework\\Assert\:\:assertInstanceOf\(\) with ''SimpleSAML\\\\SAML2\\\\Utilities\\\\ArrayCollection'' and SimpleSAML\\SAML2\\Utilities\\ArrayCollection will always evaluate to true\.$#'
 			identifier: staticMethod.alreadyNarrowedType
 			count: 1
