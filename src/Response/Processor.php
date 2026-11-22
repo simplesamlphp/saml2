@@ -70,6 +70,8 @@ class Processor
         Destination $currentDestination,
         Response $response,
     ): ArrayCollection {
+        // Per-message state: a Processor may be reused, so nothing from an earlier message may carry over.
+        $this->responseIsSigned = false;
         $this->preconditionValidator = new PreconditionValidator($currentDestination);
         $this->assertionProcessor = ProcessorBuilder::build(
             $this->logger,
@@ -124,13 +126,14 @@ class Processor
             $response->getId(),
         ));
 
-        $this->responseIsSigned = true;
-
         if (!$this->signatureValidator->hasValidSignature($response, $identityProviderConfiguration)) {
             throw new InvalidResponseException(
                 sprintf('The SAMLResponse with id "%s", does not have a valid signature', $response->getId()),
             );
         }
+
+        // Only a signature that has actually been verified may count as "signed".
+        $this->responseIsSigned = true;
     }
 
 
