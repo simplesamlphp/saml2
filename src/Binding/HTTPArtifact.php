@@ -9,12 +9,12 @@ use Exception;
 use Nyholm\Psr7\Response;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SimpleSAML\Configuration;
 use SimpleSAML\Metadata\MetaDataStorageHandler;
 use SimpleSAML\Module\saml\Message as MSG;
 use SimpleSAML\SAML2\Assert\Assert;
 use SimpleSAML\SAML2\Binding;
+use SimpleSAML\SAML2\Compat\ContainerSingleton;
 use SimpleSAML\SAML2\SOAPClient;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\XML\saml\Issuer;
@@ -24,6 +24,8 @@ use SimpleSAML\SAML2\XML\samlp\ArtifactResolve;
 use SimpleSAML\SAML2\XML\samlp\ArtifactResponse;
 use SimpleSAML\Store\StoreFactory;
 use SimpleSAML\Utils\HTTP;
+use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
+use SimpleSAML\XMLSecurity\Key\PublicKey;
 
 use function array_key_exists;
 use function base64_decode;
@@ -211,11 +213,132 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
      * A validator which returns true if the ArtifactResponse was signed with the given key
      *
      * @param \SimpleSAML\SAML2\XML\samlp\ArtifactResponse $message
-     * @param \RobRichards\XMLSecLibs\XMLSecurityKey  $key
+     * @param \SimpleSAML\Configuration $idpMetadata
      */
-    public static function validateSignature(ArtifactResponse $message, XMLSecurityKey $key): bool
+    public static function validateSignature(ArtifactResponse $message, Configuration $idpMetadata): bool
     {
-        // @todo verify if this works and/or needs to do anything more. Ref. HTTPRedirect binding
-        return $message->validate($key);
+        $container = ContainerSingleton::getInstance();
+        $blacklist = $container->getBlacklistedSignatureAlgorithms();
+
+        // getPublicKeys(..., $required = true) throws if no signing cert/key material is present in metadata,
+        // so $keys is guaranteed non-empty here (no additional empty($keys) guard needed).
+        $keys = $idpMetadata->getPublicKeys('signing', true);
+
+        $signatureMethod = $message
+            ->getSignature()
+            ->getSignedInfo()
+            ->getSignatureMethod()
+            ->getAlgorithm()
+            ->getValue();
+
+        $factory = new SignatureAlgorithmFactory($blacklist);
+
+        $lastException = null;
+        foreach ($keys as $k) {
+            if (($k['type'] ?? null) !== 'X509Certificate') {
+                continue;
+            }
+
+            $pemCert = "-----BEGIN CERTIFICATE-----\n" .
+                chunk_split($k['X509Certificate'], 64) .
+                "-----END CERTIFICATE-----\n";
+
+            $opensslKey = openssl_pkey_get_public($pemCert);
+            if ($opensslKey === false) {
+                $lastException = new Exception('Unable to extract public key from X509 certificate.');
+                continue;
+            }
+
+            $keyInfo = openssl_pkey_get_details($opensslKey);
+            if ($keyInfo === false || !isset($keyInfo['key']) || !is_string($keyInfo['key'])) {
+                $lastException = new Exception('Unable to get public key details from X509 certificate.');
+                continue;
+            }
+
+            $pemPublicKey = $keyInfo['key'];
+
+            $file = Utils::getContainer()->getTempDir() . '/' . sha1($pemPublicKey) . '.pem';
+            if (!file_exists($file)) {
+                Utils::getContainer()->writeFile($file, $pemPublicKey);
+            }
+
+            try {
+                $verifier = $factory->getAlgorithm($signatureMethod, PublicKey::fromFile($file));
+                return $message->verify($verifier);
+            } catch (Exception $e) {
+                $lastException = $e;
+            }
+        }
+
+        throw $lastException ?? new Exception('Unable to verify message signature.');
+    }
+
+
+    /**
+     * Verify the ArtifactResponse signature using IdP metadata keys.
+     *
+     * Returns the verified ArtifactResponse instance.
+     *
+     * @throws \Exception When unsigned, when metadata has no signing keys, or when verification fails.
+     */
+    private function verifyArtifactResponseSignature(
+        ArtifactResponse $artifactResponse,
+        Configuration $idpMetadata,
+    ): ArtifactResponse {
+        if ($artifactResponse->isSigned() !== true) {
+            throw new Exception('ArtifactResponse must be signed.');
+        }
+
+        // getPublicKeys(..., $required = true) throws if no signing cert/key material is present in metadata,
+        // so $keys is guaranteed non-empty here (no additional empty($keys) guard needed).
+        $keys = $idpMetadata->getPublicKeys('signing', true);
+
+        $signatureMethod = $artifactResponse
+            ->getSignature()
+            ->getSignedInfo()
+            ->getSignatureMethod()
+            ->getAlgorithm()
+            ->getValue();
+
+        $factory = new SignatureAlgorithmFactory();
+
+        $lastException = null;
+        foreach ($keys as $k) {
+            if (($k['type'] ?? null) !== 'X509Certificate') {
+                continue;
+            }
+
+            $pemCert = "-----BEGIN CERTIFICATE-----\n" .
+                chunk_split($k['X509Certificate'], 64) .
+                "-----END CERTIFICATE-----\n";
+
+            $opensslKey = openssl_pkey_get_public($pemCert);
+            if ($opensslKey === false) {
+                $lastException = new Exception('Unable to extract public key from X509 certificate.');
+                continue;
+            }
+
+            $keyInfo = openssl_pkey_get_details($opensslKey);
+            if ($keyInfo === false || !isset($keyInfo['key']) || !is_string($keyInfo['key'])) {
+                $lastException = new Exception('Unable to get public key details from X509 certificate.');
+                continue;
+            }
+
+            $pemPublicKey = $keyInfo['key'];
+
+            $file = Utils::getContainer()->getTempDir() . '/' . sha1($pemPublicKey) . '.pem';
+            if (!file_exists($file)) {
+                Utils::getContainer()->writeFile($file, $pemPublicKey);
+            }
+
+            try {
+                $verifier = $factory->getAlgorithm($signatureMethod, PublicKey::fromFile($file));
+                return $artifactResponse->verify($verifier);
+            } catch (Exception $e) {
+                $lastException = $e;
+            }
+        }
+
+        throw $lastException ?? new Exception('Unable to verify ArtifactResponse signature.');
     }
 }
