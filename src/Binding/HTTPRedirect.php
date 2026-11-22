@@ -191,7 +191,7 @@ class HTTPRedirect extends Binding implements AsynchronousBindingInterface, Rela
         }
 
         $container = ContainerSingleton::getInstance();
-        $blacklist = $container->getBlacklistedEncryptionAlgorithms();
+        $blacklist = $container->getBlacklistedSignatureAlgorithms();
         $verifier = (new SignatureAlgorithmFactory($blacklist))->getAlgorithm(
             $query['SigAlg'],
             // TODO:  Need to use the key from the metadata

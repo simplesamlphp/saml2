@@ -28,9 +28,13 @@ abstract class AbstractContainer
 
     /** @var array|null */
     protected ?array $blacklistedEncryptionAlgorithms = [
-        EncryptionAlgorithmFactory::DEFAULT_BLACKLIST,
-        KeyTransportAlgorithmFactory::DEFAULT_BLACKLIST,
-        SignatureAlgorithmFactory::DEFAULT_BLACKLIST,
+        ...EncryptionAlgorithmFactory::DEFAULT_BLACKLIST,
+        ...KeyTransportAlgorithmFactory::DEFAULT_BLACKLIST,
+    ];
+
+    /** @var array|null */
+    protected ?array $blacklistedSignatureAlgorithms = [
+        ...SignatureAlgorithmFactory::DEFAULT_BLACKLIST,
     ];
 
 
@@ -47,7 +51,19 @@ abstract class AbstractContainer
 
 
     /**
-     * Register a class that can handle given extension points of the standard.
+     * Get the list of algorithms that are blacklisted for any signature operation.
+     *
+     * @return string[]|null An array with all algorithm identifiers that are blacklisted, or null if we want to use the
+     * defaults.
+     */
+    public function getBlacklistedSignatureAlgorithms(): ?array
+    {
+        return $this->blacklistedSignatureAlgorithms;
+    }
+
+
+    /**
+     * Register a class that can handle a given element.
      *
      * @param string $class The class name of a class extending AbstractElement or implementing ExtensionPointInterface.
      * @psalm-param class-string $class
