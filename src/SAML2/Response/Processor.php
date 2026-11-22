@@ -73,7 +73,7 @@ class Processor
         ServiceProvider $serviceProviderConfiguration,
         IdentityProvider $identityProviderConfiguration,
         Destination $currentDestination,
-        Response $response,
+        Response $response
     ): ArrayCollection {
         // Per-message state: a Processor may be reused, so nothing from an earlier message may carry over.
         $this->responseIsSigned = false;
