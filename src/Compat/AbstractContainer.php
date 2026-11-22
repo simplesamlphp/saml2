@@ -28,9 +28,13 @@ abstract class AbstractContainer
 
     /** @var array|null */
     protected ?array $blacklistedEncryptionAlgorithms = [
-        EncryptionAlgorithmFactory::DEFAULT_BLACKLIST,
-        KeyTransportAlgorithmFactory::DEFAULT_BLACKLIST,
-        SignatureAlgorithmFactory::DEFAULT_BLACKLIST,
+        ...EncryptionAlgorithmFactory::DEFAULT_BLACKLIST,
+        ...KeyTransportAlgorithmFactory::DEFAULT_BLACKLIST,
+    ];
+
+    /** @var array|null */
+    protected ?array $blacklistedSignatureAlgorithms = [
+        ...SignatureAlgorithmFactory::DEFAULT_BLACKLIST,
     ];
 
 
@@ -43,6 +47,18 @@ abstract class AbstractContainer
     public function getBlacklistedEncryptionAlgorithms(): ?array
     {
         return $this->blacklistedEncryptionAlgorithms;
+    }
+
+
+    /**
+     * Get the list of algorithms that are blacklisted for any signature operation.
+     *
+     * @return string[]|null An array with all algorithm identifiers that are blacklisted, or null if we want to use the
+     * defaults.
+     */
+    public function getBlacklistedSignatureAlgorithms(): ?array
+    {
+        return $this->blacklistedSignatureAlgorithms;
     }
 
 
