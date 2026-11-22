@@ -266,7 +266,7 @@ class HTTPArtifact extends Binding implements AsynchronousBindingInterface, Rela
     private function verifyMessageSignature(AbstractMessage $message, Configuration $idpMetadata): AbstractMessage
     {
         $container = ContainerSingleton::getInstance();
-        $blacklist = $container->getBlacklistedEncryptionAlgorithms();
+        $blacklist = $container->getBlacklistedSignatureAlgorithms();
 
         // getPublicKeys(..., $required = true) throws if no signing cert/key material is present in metadata,
         // so $keys is guaranteed non-empty here (no additional empty($keys) guard needed).

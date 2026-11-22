@@ -68,6 +68,6 @@ trait SignedElementTrait
     public function getBlacklistedAlgorithms(): ?array
     {
         $container = ContainerSingleton::getInstance();
-        return $container->getBlacklistedEncryptionAlgorithms();
+        return $container->getBlacklistedSignatureAlgorithms();
     }
 }
