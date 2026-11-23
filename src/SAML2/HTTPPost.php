@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace SAML2;
 
+use SAML2\DOMDocumentFactory;
 use Webmozart\Assert\Assert;
 
 /**
@@ -76,10 +77,7 @@ class HTTPPost extends Binding
         }
 
         $msgStr = base64_decode($msgStr, true);
-
-        $xml = new \DOMDocument();
-        $xml->loadXML($msgStr);
-        $msgStr = $xml->saveXML();
+        $msgStr = DOMDocumentFactory::fromString($msgStr)->saveXML();
 
         $document = DOMDocumentFactory::fromString($msgStr);
         Utils::getContainer()->debugMessage($document->documentElement, 'in');
