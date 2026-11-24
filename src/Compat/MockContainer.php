@@ -7,7 +7,6 @@ namespace SimpleSAML\SAML2\Compat;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-
 use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 use function chmod;
@@ -122,12 +121,17 @@ class MockContainer extends AbstractContainer
         return $this->clock;
     }
 
-    public function getPublicSigningKeysForEntity($entity): array
+
+    /**
+     * @returns \SimpleSAML\XMLSecurity\Key\PublicKey[]
+     */
+    public function getPublicSigningKeysForEntity(string $entity): array
     {
         $ret = [];
         $ret[] = PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
         return $ret;
     }
+
 
     /**
      * A limit on how much data can be returned gzinflate() when processing a message.

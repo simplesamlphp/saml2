@@ -189,14 +189,15 @@ abstract class AbstractContainer
      */
     abstract public function getClock(): ClockInterface;
 
+
     /**
-     *
-     * @returns array of PublicKey
+     * @returns \SimpleSAML\XMLSecurity\Key\PublicKey[]
      */
-    public function getPublicSigningKeysForEntity($entity): array
+    public function getPublicSigningKeysForEntity(string $entity): array
     {
         return [];
     }
+
 
     /**
      * A limit on how much data can be returned gzinflate() when processing a message.
