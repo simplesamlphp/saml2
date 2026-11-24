@@ -138,7 +138,7 @@ final class HTTPRedirectTest extends TestCase
             'SAMLRequest' => 'hVPLjtpAEPwVa+7GD+wljACJgKIgbbIISA65RI2nvYw0D2d6vNn8fcbGKFYe5GSpu6q7qqa9INCq4evWX8wBv7VIPnrVyhDvG0vWOsMtkCRuQCNxX/Hj+sMjzycpb5z1trKKjSj3GUCEzktrWLTbLtnX8iEDmGdpNoVyLqbzdDpNi3NZlOciq0QhYDYDgfOsqFn0GR0F5pKFQYFO1OLOkAfjQynNH+I0j/M3pzzlZcbT2RcWbYMbacD3rIv3DfEkkaKZaGtjcNVFvuDEqERb0SqcNJcm6Sx0kISkeVZ4lM/myRzRvcgKWbS+yd9YQ61GN3Q+HR5/LRCo7f820PWbx1BRXxVYQ6t8TA2L9kOsb6URQcX9RM9XEPH3p9M+3j8dT2y16GbzPiG3usn6TVFQoNGDAA+LZIxfXC/iY9i02+6tktWP6J11Gvx9IV1Firjuodw7MCTR+BCaUvb7xiF4XLIaFCFLbluGk0PRH2BI1eOrH/SPSxsVLueA9apTMHLCaxTo+hfmMMJzZSEffP11zrX3TwHJn7/F6ic=',
             'RelayState' => 'https://demo.moo-archive.nl/module.php/debugsp/test/default-sp',
             'SigAlg' => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
-            'Signature' => 'imAC2OqhtdL8BejmMvZG1+JgAaEo9JbMtaymXRJCkC0MYfKrda+Xfm3ZIJRi7SuCdw6wHLUsc0D2ZPI7DkLsqIQ/G8qZzdaPwLjSI+cEjKuGpLz+rTPofeRplqGhTfT32bQ4bwLEDEhBk6FxUDl63pTnYgo49Fi+3GlXtbmMK2I=',
+            'Signature' => urlencode('imAC2OqhtdL8BejmMvZG1+JgAaEo9JbMtaymXRJCkC0MYfKrda+Xfm3ZIJRi7SuCdw6wHLUsc0D2ZPI7DkLsqIQ/G8qZzdaPwLjSI+cEjKuGpLz+rTPofeRplqGhTfT32bQ4bwLEDEhBk6FxUDl63pTnYgo49Fi+3GlXtbmMK2I='),
         ];
         $request = new ServerRequest('GET', 'http://tnyholm.se');
         $request = $request->withQueryParams($q);
@@ -202,7 +202,7 @@ final class HTTPRedirectTest extends TestCase
         $q = [
             'SAMLRequest' => 'hVPLjtpAEPwVa+7GD+wljACJgKIgbbIISA65RI2nvYw0D2d6vNn8fcbGKFYe5GSpu6q7qqa9INCq4evWX8wBv7VIPnrVyhDvG0vWOsMtkCRuQCNxX/Hj+sMjzycpb5z1trKKjSj3GUCEzktrWLTbLtnX8iEDmGdpNoVyLqbzdDpNi3NZlOciq0QhYDYDgfOsqFn0GR0F5pKFQYFO1OLOkAfjQynNH+I0j/M3pzzlZcbT2RcWbYMbacD3rIv3DfEkkaKZaGtjcNVFvuDEqERb0SqcNJcm6Sx0kISkeVZ4lM/myRzRvcgKWbS+yd9YQ61GN3Q+HR5/LRCo7f820PWbx1BRXxVYQ6t8TA2L9kOsb6URQcX9RM9XEPH3p9M+3j8dT2y16GbzPiG3usn6TVFQoNGDAA+LZIxfXC/iY9i02+6tktWP6J11Gvx9IV1Firjuodw7MCTR+BCaUvb7xiF4XLIaFCFLbluGk0PRH2BI1eOrH/SPSxsVLueA9apTMHLCaxTo+hfmMMJzZSEffP11zrX3TwHJn7/F6ic=',
             'RelayState' => 'https://demo.moo-archive.nl/module.php/debugsp/test/default-sp',
-            'Signature' => 'imAC2OqhtdL8BejmMvZG1+JgAaEo9JbMtaymXRJCkC0MYfKrda+Xfm3ZIJRi7SuCdw6wHLUsc0D2ZPI7DkLsqIQ/G8qZzdaPwLjSI+cEjKuGpLz+rTPofeRplqGhTfT32bQ4bwLEDEhBk6FxUDl63pTnYgo49Fi+3GlXtbmMK2I=',
+            'Signature' => urlencode('imAC2OqhtdL8BejmMvZG1+JgAaEo9JbMtaymXRJCkC0MYfKrda+Xfm3ZIJRi7SuCdw6wHLUsc0D2ZPI7DkLsqIQ/G8qZzdaPwLjSI+cEjKuGpLz+rTPofeRplqGhTfT32bQ4bwLEDEhBk6FxUDl63pTnYgo49Fi+3GlXtbmMK2I='),
         ];
         $request = new ServerRequest('GET', 'http://tnyholm.se');
         $request = $request->withQueryParams($q);
@@ -352,7 +352,7 @@ final class HTTPRedirectTest extends TestCase
             'SAMLRequest' => 'hVPLjtpAEPwVa+7GD+wljACJgKIgbbIISA65RI2nvYw0D2d6vNn8fcbGKFYe5GSpu6q7qqa9INCq4evWX8wBv7VIPnrVyhDvG0vWOsMtkCRuQCNxX/Hj+sMjzycpb5z1trKKjSj3GUCEzktrWLTbLtnX8iEDmGdpNoVyLqbzdDpNi3NZlOciq0QhYDYDgfOsqFn0GR0F5pKFQYFO1OLOkAfjQynNH+I0j/M3pzzlZcbT2RcWbYMbacD3rIv3DfEkkaKZaGtjcNVFvuDEqERb0SqcNJcm6Sx0kISkeVZ4lM/myRzRvcgKWbS+yd9YQ61GN3Q+HR5/LRCo7f820PWbx1BRXxVYQ6t8TA2L9kOsb6URQcX9RM9XEPH3p9M+3j8dT2y16GbzPiG3usn6TVFQoNGDAA+LZIxfXC/iY9i02+6tktWP6J11Gvx9IV1Firjuodw7MCTR+BCaUvb7xiF4XLIaFCFLbluGk0PRH2BI1eOrH/SPSxsVLueA9apTMHLCaxTo+hfmMMJzZSEffP11zrX3TwHJn7/F6ic=',
             'RelayState' => 'https://demo.moo-archive.nl/module.php/debugsp/test/default-sp',
             'SigAlg' => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
-            'Signature' => 'imAC2OqhtdL8BejmMvZG1+JgAaEo9JbMtaymXRJCkC0MYfKrda+Xfm3ZIJRi7SuCdw6wHLUsc0D2ZPI7DkLsqIQ/G8qZzdaPwLjSI+cEjKuGpLz+rTPofeRplqGhTfT32bQ4bwLEDEhBk6FxUDl63pTnYgo49Fi+3GlXtbmMK2I=',
+            'Signature' => urlencode('imAC2OqhtdL8BejmMvZG1+JgAaEo9JbMtaymXRJCkC0MYfKrda+Xfm3ZIJRi7SuCdw6wHLUsc0D2ZPI7DkLsqIQ/G8qZzdaPwLjSI+cEjKuGpLz+rTPofeRplqGhTfT32bQ4bwLEDEhBk6FxUDl63pTnYgo49Fi+3GlXtbmMK2I='),
         ];
 
         $request = new ServerRequest('GET', 'http://tnyholm.se');
