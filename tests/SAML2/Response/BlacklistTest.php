@@ -4,20 +4,14 @@ declare(strict_types=1);
 
 namespace SimpleSAML\Test\SAML2\Response;
 
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use Psr\Log\NullLogger;
-use SimpleSAML\SAML2\Compat\AbstractContainer;
 use SimpleSAML\SAML2\Compat\ContainerSingleton;
-use SimpleSAML\SAML2\Configuration\IdentityProvider;
-use SimpleSAML\SAML2\Signature\Validator;
-use SimpleSAML\SAML2\XML\saml\Assertion;
-use SimpleSAML\XML\DOMDocumentFactory;
-use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
-use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Constants as C;
 use SimpleSAML\XMLSecurity\Exception\BlacklistedAlgorithmException;
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 /**
  * @package simplesamlphp/saml2
@@ -25,7 +19,6 @@ use SimpleSAML\XMLSecurity\Exception\BlacklistedAlgorithmException;
 #[Group('vulnerabilities')]
 final class BlacklistTest extends TestCase
 {
-
     /**
      */
     public static function setUpBeforeClass(): void
@@ -46,8 +39,10 @@ final class BlacklistTest extends TestCase
         $verifier = $signatureAlgo->getAlgorithm(C::BLOCK_ENC_3DES, $key);
     }
 
+
     /**
      */
+    #[DoesNotPerformAssertions]
     public function testBacklistAddingPasses(): void
     {
         $container = ContainerSingleton::getInstance();
@@ -57,9 +52,9 @@ final class BlacklistTest extends TestCase
         $signatureAlgo = new SignatureAlgorithmFactory($blacklist);
         $key = PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
 
-        $verifier = $signatureAlgo->getAlgorithm(C::SIG_RSA_SHA256, $key);
-        $this->assertNotNull($verifier);
+        $signatureAlgo->getAlgorithm(C::SIG_RSA_SHA256, $key);
     }
+
 
     /**
      */
