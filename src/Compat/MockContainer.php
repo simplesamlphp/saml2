@@ -8,6 +8,8 @@ use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
+use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
+
 use function chmod;
 use function file_put_contents;
 use function strval;
@@ -123,6 +125,12 @@ class MockContainer extends AbstractContainer
         return $this->clock;
     }
 
+    public function getPublicSigningKeysForEntity($entity): array
+    {
+        $ret = [];
+        $ret[] = PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY);
+        return $ret;
+    }
 
     /**
      * A limit on how much data can be returned gzinflate() when processing a message.

@@ -201,6 +201,14 @@ abstract class AbstractContainer
      */
     abstract public function getClock(): ClockInterface;
 
+    /**
+     *
+     * @returns array of PublicKey
+     */
+    public function getPublicSigningKeysForEntity($entity): array
+    {
+        return [];
+    }
 
     /**
      * A limit on how much data can be returned gzinflate() when processing a message.
