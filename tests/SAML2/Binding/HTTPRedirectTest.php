@@ -131,7 +131,7 @@ final class HTTPRedirectTest extends TestCase
             'SAMLRequest' => 'hVLLbttADPwVYe+ylJXsyAvbgBujqIG0MWK3h1wCVkvFC+xDXVJp+/ddywmS9uCeCJAznOGACwJne7Ue+Ojv8ceAxNkvZz2pcbAUQ/QqABlSHhyS4lbt159vlZyUqo+BQxuseEe5zAAijGyCF9l2sxSPjZ41jW5npZxjpWvsrisoZ9ddV8NU6is5nTczXTfTeS2ybxgpMZciLUp0ogG3nhg8p1Ypq7y8ymV1kJUqa1XJB5Ft0jXGA4+sI3NPqiiM7icuhBxiezTPOPG2cEEPFif9sS9OJ5wgBRn/ZHFvnvyd32N8Ni2KbP1q/yZ4GhzGl8nX+9s3AY0u/E+BzlXm0NLY1djBYDmnXmS7l1g/GK+Ti8uJfj+DSH06HHb57m5/EKvFabcaE4qrV1v/OEoOHDJoYFgU7/GL80d8SUrbzS5Y0/7OPobogC8bOXWMzrsRqjiCJ4OeU2jWhp83EYFxKTgOKIrVWfLvv1v9AQ==',
             'RelayState' => 'https://demo.moo-archive.nl/module.php/admin/test/default-sp',
             'SigAlg' => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
-            'Signature' => urlencode('imAC2OqhtdL8BejmMvZG1+JgAaEo9JbMtaymXRJCkC0MYfKrda+Xfm3ZIJRi7SuCdw6wHLUsc0D2ZPI7DkLsqIQ/G8qZzdaPwLjSI+cEjKuGpLz+rTPofeRplqGhTfT32bQ4bwLEDEhBk6FxUDl63pTnYgo49Fi+3GlXtbmMK2I='),
+            'Signature' => urlencode('T8+SG10HcgOkpw4cUFTnoF9WWrlYnllnqKruvmVcyinbiJsdnw7EMxM6Lr/5Mo/Rk3Hd7x8tuQ955Vv96jMRKGfdvq8Dh1gx4PKJPHXFWBSipWOc9UDNT0N3addnk9PiSaQ5YehT9lZ4agoSmKqiWNrE4qpKIcgWdh0GgiYDUto='),
         ];
         $request = new ServerRequest('GET', 'http://tnyholm.se');
         $request = $request->withQueryParams($q);
@@ -315,7 +315,7 @@ final class HTTPRedirectTest extends TestCase
             'SAMLRequest' => 'hVLLbttADPwVYe+ylJXsyAvbgBujqIG0MWK3h1wCVkvFC+xDXVJp+/ddywmS9uCeCJAznOGACwJne7Ue+Ojv8ceAxNkvZz2pcbAUQ/QqABlSHhyS4lbt159vlZyUqo+BQxuseEe5zAAijGyCF9l2sxSPjZ41jW5npZxjpWvsrisoZ9ddV8NU6is5nTczXTfTeS2ybxgpMZciLUp0ogG3nhg8p1Ypq7y8ymV1kJUqa1XJB5Ft0jXGA4+sI3NPqiiM7icuhBxiezTPOPG2cEEPFif9sS9OJ5wgBRn/ZHFvnvyd32N8Ni2KbP1q/yZ4GhzGl8nX+9s3AY0u/E+BzlXm0NLY1djBYDmnXmS7l1g/GK+Ti8uJfj+DSH06HHb57m5/EKvFabcaE4qrV1v/OEoOHDJoYFgU7/GL80d8SUrbzS5Y0/7OPobogC8bOXWMzrsRqjiCJ4OeU2jWhp83EYFxKTgOKIrVWfLvv1v9AQ==',
             'RelayState' => 'https://demo.moo-archive.nl/module.php/admin/test/default-sp',
             'SigAlg' => 'http://www.w3.org/2001/04/xmldsig-more#rsa-sha256',
-            'Signature' => urlencode('imAC2OqhtdL8BejmMvZG1+JgAaEo9JbMtaymXRJCkC0MYfKrda+Xfm3ZIJRi7SuCdw6wHLUsc0D2ZPI7DkLsqIQ/G8qZzdaPwLjSI+cEjKuGpLz+rTPofeRplqGhTfT32bQ4bwLEDEhBk6FxUDl63pTnYgo49Fi+3GlXtbmMK2I='),
+            'Signature' => urlencode('T8+SG10HcgOkpw4cUFTnoF9WWrlYnllnqKruvmVcyinbiJsdnw7EMxM6Lr/5Mo/Rk3Hd7x8tuQ955Vv96jMRKGfdvq8Dh1gx4PKJPHXFWBSipWOc9UDNT0N3addnk9PiSaQ5YehT9lZ4agoSmKqiWNrE4qpKIcgWdh0GgiYDUto='),
         ];
 
         $request = new ServerRequest('GET', 'http://tnyholm.se');

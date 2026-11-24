@@ -193,7 +193,7 @@ class HTTPRedirect extends Binding implements AsynchronousBindingInterface, Rela
         $blacklist = $container->getBlacklistedSignatureAlgorithms();
         $signatureAlgo = new SignatureAlgorithmFactory($blacklist);
 
-        $signingEntity = $message->getIssuer()?->getContent()->getValue();
+        $signingEntity = $message->getIssuer()?->getContent();
         $keys = $container->getPublicSigningKeysForEntity($signingEntity);
 
         $verifiedCount = 0;
