@@ -205,14 +205,28 @@ class HTTPRedirect extends Binding implements AsynchronousBindingInterface, Rela
 
         $container = ContainerSingleton::getInstance();
         $blacklist = $container->getBlacklistedSignatureAlgorithms();
-        $verifier = (new SignatureAlgorithmFactory($blacklist))->getAlgorithm(
-            urldecode($query['SigAlg']),
-            // TODO:  Need to use the key from the metadata
-            PEMCertificatesMock::getPublicKey(PEMCertificatesMock::SELFSIGNED_PUBLIC_KEY),
-        );
+        $signatureAlgo = new SignatureAlgorithmFactory($blacklist);
 
-        if ($verifier->verify($signedQuery, base64_decode(urldecode($query['Signature']))) === false) {
-            throw new SignatureVerificationFailedException('Failed to verify signature.');
+        $signingEntity = $message->getIssuer()?->getContent()->getValue();
+        $keys = $container->getPublicSigningKeysForEntity($signingEntity);
+
+        $verifiedCount = 0;
+
+        foreach ($keys as $k) {
+            // $k is PublicKey
+            $verifier = $signatureAlgo->getAlgorithm(urldecode($query['SigAlg']), $k);
+
+            if ($verifier->verify($signedQuery, base64_decode(urldecode($query['Signature']))) === false) {
+                throw new SignatureVerificationFailedException('Failed to verify signature.');
+            }
+            $verifiedCount++;
+        }
+        if (count($keys) === 0) {
+            throw new SignatureVerificationFailedException('Failed to verify signature. No keys.');
+        }
+        // double check. Should never happen.
+        if ($verifiedCount !== count($keys)) {
+            throw new SignatureVerificationFailedException('Failed to verify all signatures.');
         }
 
         return $message;
