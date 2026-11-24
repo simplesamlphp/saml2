@@ -51,6 +51,8 @@ final class ProcessorReuseTest extends MockeryTestCase
      */
     protected function setUp(): void
     {
+        parent::setUp();
+
         $unsignedAssertion = Assertion::fromXML(
             DOMDocumentFactory::fromFile(
                 dirname(__FILE__, 3) . '/resources/xml/saml_Assertion.xml',

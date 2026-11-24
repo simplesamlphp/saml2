@@ -22,7 +22,6 @@ use SimpleSAML\SAML2\XML\samlp\MessageFactory;
 use SimpleSAML\XML\DOMDocumentFactory;
 use SimpleSAML\XMLSecurity\Alg\Signature\SignatureAlgorithmFactory;
 use SimpleSAML\XMLSecurity\Exception\SignatureVerificationFailedException;
-use SimpleSAML\XMLSecurity\TestUtils\PEMCertificatesMock;
 
 use function array_key_exists;
 use function array_pad;
