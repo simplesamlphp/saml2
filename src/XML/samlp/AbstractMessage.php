@@ -11,11 +11,13 @@ use SimpleSAML\SAML2\Constants as C;
 use SimpleSAML\SAML2\Exception\ProtocolViolationException;
 use SimpleSAML\SAML2\Utils;
 use SimpleSAML\SAML2\Utils\XPath;
+use SimpleSAML\SAML2\XML\CanonicalizableElementTrait;
 use SimpleSAML\SAML2\XML\ExtendableElementTrait;
 use SimpleSAML\SAML2\XML\saml\Issuer;
 use SimpleSAML\SAML2\XML\SignableElementTrait;
 use SimpleSAML\SAML2\XML\SignedElementTrait;
 use SimpleSAML\XML\Utils\Random as RandomUtils;
+use SimpleSAML\XMLSecurity\XML\CanonicalizableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignableElementInterface;
 use SimpleSAML\XMLSecurity\XML\SignedElementInterface;
 
@@ -29,8 +31,12 @@ use function array_pop;
  *
  * @package simplesamlphp/saml2
  */
-abstract class AbstractMessage extends AbstractSamlpElement implements SignableElementInterface, SignedElementInterface
+abstract class AbstractMessage extends AbstractSamlpElement implements
+    CanonicalizableElementInterface,
+    SignableElementInterface,
+    SignedElementInterface
 {
+    use CanonicalizableElementTrait;
     use ExtendableElementTrait;
     use SignableElementTrait;
     use SignedElementTrait {
