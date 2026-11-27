@@ -31,7 +31,7 @@ final class SOAPTest extends MockeryTestCase
         $this->expectException(UnsupportedBindingException::class);
         $this->expectExceptionMessage('Invalid message received');
 
-        $request = new ServerRequest('', '');
+        $request = new ServerRequest('GET', '');
         $stub = $this->getStubWithInput('');
         $stub->receive($request);
     }
@@ -59,7 +59,7 @@ final class SOAPTest extends MockeryTestCase
 </SOAP-ENV:Envelope>
 SOAP);
 
-        $request = new ServerRequest('', '');
+        $request = new ServerRequest('GET', '');
         $message = $stub->receive($request);
 
         $this->assertInstanceOf(ArtifactResolve::class, $message);
